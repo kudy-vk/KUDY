@@ -1,5 +1,7 @@
 name: guard-required-checks
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 permissions:

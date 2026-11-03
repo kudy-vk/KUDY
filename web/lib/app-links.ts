@@ -47,7 +47,7 @@ export const appLinks: AppLinks = {
   playStore: { kind: 'unpublished' },
   deepLinkBase: { kind: 'unpublished' },
   siteOrigin: { kind: 'unpublished' },
-  supportIssuesUrl: 'https://github.com/OWNER/REPO/issues',
+  supportIssuesUrl: 'https://github.com/kudy-vk/KUDY.app/issues',
   fallbackPath: '/app',
 };
 

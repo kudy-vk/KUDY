@@ -26,8 +26,8 @@ const darkValue = (token) => canon.darkTheme.tokens[token] ?? canon.tokens[token
 
 test('the approved spec mirrors the canon and cites the owner decision', () => {
   assert.equal(spec.status, 'accepted');
-  assert.match(spec.issue, /\/issues\/860$/);
-  assert.match(spec.ownerDecision, /\/issues\/860#issuecomment-6449790474$/);
+  assert.equal(spec.issue, '#860');
+  assert.equal(spec.ownerDecision, '#860');
   assert.match(spec.verifiedSha, /^[0-9a-f]{40}$/, 'the compared main SHA must be recorded in full');
   assert.deepEqual(spec.darkTokens, canon.darkTheme.tokens);
   assert.deepEqual(zone.tokens, canon.darkTheme.lightCartographyTokens);
