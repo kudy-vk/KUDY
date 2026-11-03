@@ -1,0 +1,195 @@
+// G04.03 — services/contentRepo contract types.
+// Canonical names are copied verbatim from their sources (implementation-rules 2):
+// tier ∈ {base, extended}, tier_available and AccessReady from ADR
+// G01.03-session-access §3.1–§3.4 (issue #18); route.json field names from the
+// G02.01 schemas (contracts/schemas/route.schema.json) and the G02.05 template.
+// ContentRepo reads verified packages and derives availability; it never issues
+// AccessReady — the only issuer is services/download (09 §6.1) — and never makes
+// purchase decisions from client booleans (18_component_blueprint §services).
+
+export type Tier = 'base' | 'extended';
+
+// One lock.json entry, verbatim field set from `09` §4 (`[{path, bytes,
+// sha256}]`, build-bundle README). The layer's lock never lists itself.
+// parseLockEntry (inventory.ts) shape-checks entries against this contract;
+// the download activation (G04.02.a) consumes the same type.
+export interface LockEntry {
+  path: string;
+  bytes: number;
+  sha256: string;
+}
+
+// route.schema.json:13 — access = free_base | paid (verbatim; TR-3: the old
+// 'free' spelling was never in the schema, and the old reader read schema-valid
+// free_base packages as incomplete).
+export type RouteAccess = 'free_base' | 'paid';
+
+export interface PackageKey {
+  routeId: string;
+  version: string;
+}
+
+// One layer of one bundle: the delivery unit `locale × tier` of
+// route_id@version (`09` §4). Canonical shape lives here; services/download
+// re-exports it as its activation key — one contract, two consumers
+// (implementation-rules 2, 8).
+export interface LayerKey {
+  routeId: string;
+  version: string;
+  locale: string;
+  tier: Tier;
+}
+
+// SHA-256 over raw bytes, hex-encoded. A port because the digest API is a
+// platform facility (node:crypto in the test adapters, expo-crypto on the
+// device — TR-10). Raw bytes only: EOL conversion between checkout and hash
+// is the AR-1 defect class (implementation-rules 4).
+export type Sha256 = (bytes: Uint8Array) => Promise<string>;
+
+// One file lookup. 'absent' and 'unreadable' stay distinct: a declared but
+// missing/empty/unreadable media file is a media error (G04.03 criterion 4,
+// repair offer), while a missing structural file is an incomplete package
+// (criterion 1, start locked). A zero-length media file counts as unreadable:
+// a silent placeholder cannot play, so treating it as present would start a
+// guide with a dead story.
+export type FileFacts =
+  | { kind: 'present'; bytes: Uint8Array }
+  | { kind: 'absent' }
+  | { kind: 'unreadable' };
+
+// Storage seam between this module and the host. The device adapter
+// (expo-file-system) and the node adapter both implement it; paths are
+// package-relative with '/' separators on every platform (validate-package
+// idiom: the fs APIs accept '/' on Windows, so the core stays platform-neutral).
+// The adapter must confine every read to the package root regardless of
+// `rel` — rel values originate in package JSON and are never trusted paths.
+// G04.02 activates packages; ContentRepo only reads them.
+export interface PackageStore {
+  key: PackageKey;
+  readFile(rel: string): Promise<FileFacts>;
+  exists(rel: string): Promise<boolean>;
+}
+
+export interface EvaluateInput {
+  locale: string;
+  tier: Tier;
+  // tier_available per ADR G01.03 §3.1/§3.2: layers the download channel has
+  // verified and granted. Consumed as a fact, never decided here.
+  grantedTiers?: readonly Tier[];
+}
+
+// The readiness card (картка гатоўнасці). Precedence when several apply:
+// structural incompleteness first, then media recovery, then access — a
+// package whose files are damaged cannot start regardless of grants, and a
+// repair offer must not hide behind a purchase prompt.
+export type Readiness =
+  | {
+      status: 'ready';
+      routeId: string;
+      version: string;
+      tier: Tier;
+      // Layers whose completeness is confirmed on disk (and granted where the
+      // route is paid), limited to this evaluation's layers — a base start
+      // evaluates ['base'] only; the card across all tiers is one evaluation
+      // per tier. The durable tier_available and the derived
+      // accessible_stop_ids stay owned by the DB/engine (ADR §3.2); this is the
+      // disk-fact derivation they consume.
+      tierAvailable: Tier[];
+    }
+  | { status: 'incomplete'; missing: string[] }
+  | { status: 'needs-recovery'; media: string[] }
+  | { status: 'access-locked'; tier: Tier };
+
+// Criterion 5: the discovery index is its own read-through concern, separate
+// from AccessReady and from start readiness. A missing or unparseable index
+// yields a null result — the guide stays startable, just without discovery
+// annotations (no fabricated catalogue).
+export interface DiscoveryLookup {
+  revision: string | null;
+  index: Record<string, unknown> | null;
+  fromCache: boolean;
+}
+
+export interface DiscoveryCache {
+  read(store: PackageStore): Promise<DiscoveryLookup>;
+}
+
+// G04.04.a — library inventory (09 §7: «Стан загрузкі — 4, і ўсе
+// паказваюцца»). State names verbatim from 09 §7; 'stale' is the only
+// catalog-derived state — a newer catalog never changes a layer's readiness
+// (ADR G01.03 §3.4: the session pins its version, a catalog update replaces
+// no file).
+export type InventoryState = 'not_downloaded' | 'partial' | 'ready' | 'stale';
+
+// Read-only facts port over the device bundles tree (09 §7 layout:
+// bundles/<route_id>/<version>/<locale>/<tier>/ with the per-layer lock.json
+// inside). The adapter owns confinement — the same contract as PackageStore —
+// and the inventory never writes: sizes are derived per call and never stored
+// (G04.04.a criterion 3; zone B untouched). listDir and statSize answer null
+// for "nothing here": an absent subtree is an empty listing, not a fault.
+export interface BundlesStore {
+  listDir(rel: string): Promise<string[] | null>;
+  readFile(rel: string): Promise<FileFacts>;
+  statSize(rel: string): Promise<number | null>;
+}
+
+// One library row. missingCount: for partial, how many lock-declared files
+// are absent, unreadable or at the wrong size; null where the count is
+// unknowable — not_downloaded, or a lock.json that is missing or unparseable
+// (criterion 4: diagnosed, never thrown).
+// G22.02 (issue #607) — the teaser-audio availability probe handed to
+// readMomentFacts through the required options.audioProbe. true answers one
+// question only: is `rel` a readable, nonempty regular file? A false answer
+// (absent, directory, empty, unreadable, metadata fault) is a normal
+// negative — the reader falls to the next preferred locale and the card
+// renders without Play. The probe grants no access and never reads the
+// media body: a file that disappears after the probe still follows the
+// existing playback error path (the FileFacts note above: a zero-length
+// media file counts as unreadable — a silent placeholder cannot play).
+export type TeaserAudioProbe = (rel: string) => Promise<boolean>;
+
+export interface InventoryEntry {
+  routeId: string;
+  version: string;
+  locale: string;
+  tier: Tier;
+  state: InventoryState;
+  missingCount: number | null;
+  // Criterion 1: bytes from lock.json (declared) and disk facts (onDisk);
+  // null where the source does not exist. Derived per call, never stored.
+  bytes: { declared: number | null; onDisk: number | null };
+  // Corrupt-input diagnostics (criterion 4) in the shared rule vocabulary
+  // (<where>#<rule>): catalog fields, lock entries, size contradictions.
+  diagnostics: string[];
+}
+
+export interface InventoryResult {
+  entries: InventoryEntry[];
+  diagnostics: string[];
+}
+
+// G04.04.c — the trigger of a presence re-check (`09` §4 level 3). 'restart'
+// is the ordinary open: the cheap level-2 check only. The full re-hash runs
+// solely on the three contract conditions, named verbatim: the app version
+// changed, the player or parser reported a decode error, or the user pressed
+// «праверыць загрузку» in My KUDY.
+export type RecheckTrigger = 'restart' | 'app-version-changed' | 'decode-error' | 'user-requested';
+
+// The per-layer answer of the restart presence check (ADR G01.03 §3.7: an
+// absent file after restart leaves the content honestly unavailable — show
+// the recovery offer, never Play; `09` §7 «Пасля абнаўлення дадатку»).
+// 'needs-recovery' carries `missing` — the layer's lock paths that are
+// absent, short or corrupt: exactly the list a re-download request may name.
+// Diagnostics without a path (a shape-faulted lock entry, a lock that cannot
+// be read at all) leave the file set unknowable, so `missing` can be shorter
+// than the fault count — the layer still never reads as verified.
+export type PresenceVerdict =
+  | { status: 'verified'; layer: LayerKey; checked: 'metadata' | 'full' }
+  | {
+      status: 'needs-recovery';
+      layer: LayerKey;
+      checked: 'metadata' | 'full';
+      missing: string[];
+      diagnostics: string[];
+    }
+  | { status: 'invalid-input'; layer: LayerKey; diagnostics: string[] };

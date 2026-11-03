@@ -1,0 +1,542 @@
+# Адзіны візуальны кірунак і кампаненты (G06.07)
+
+Канон дызайнерскіх значэнняў KUDY: колеры, шрыфты з правамі выкарыстання,
+інтэрвалы, тыпы картак, кнопкі, маркеры, панэль Run, дракон і назвы станаў —
+у адным дакуменце. Гэта **адзіная крыніца** візуальных значэнняў для
+production-экранаў G06.01+ і для прататыпа G06.08: асобнага выгляду «на кожную
+задачу» больш няма (backlog `16` §G06, радок 157).
+
+Што замяняе: draft-палітру `:root` у
+`spikes/G06.08-prototype/prototype/styles.css`. Кожны draft-токен мае яўную
+замену — карта supersession у машынным блоку ў канцы дакументу; тэст
+`test/design-tokens.test.mjs` падае пры любым расыходжанні канона, draft-файла
+ці кантрасту.
+
+Ухваленне заснавальніка — крок рэвью PR, які закрые issue #180 (крытэрый 6);
+да мержу дакумент працоўны, пасля мержу — канон.
+
+## 1. Статус і як чытаць гэты дакумент
+
+- Значэнні жывуць у адным машынным JSON-блоку ў канцы дакументу («Дадатак»).
+  Проза тлумачыць правілы выкарыстання і не дублюе значэнні.
+- Кожны токен мае значэнне і правіла выкарыстання (`use`). Гард правярае
+  запаўненне, кантрастныя пары і адпаведнасць draft-файла прататыпа.
+- Крыніцы кантрактаў: `screens.md` пакета G06.08 (станы, a11y-плашка),
+  `docs/design/screens-and-transitions.md` (G06.06), ADR G01.01–G01.03,
+  `06` §1 (дракон), `09` §6.5 (панэль), `11` §3.2/§15, `20` §7 (шкала),
+  `21` §5.4 (delivery). Гэты дакумент не пераўзначае іх — ён фіксуе
+  візуальнае ўвасабленне прынятых кантрактаў.
+
+## 2. Колеры
+
+Адзіны акцэнт для ўсіх галоўных дзеянняў (кнопкі, націснутыя чыпы, фокус,
+прагрэс). Тэкст на акцэнце і на маркерных заліўках —
+`color.accent-ink`; у светлай зоне картаграфіі цёмнай тэмы літара маркера
+бярэ светлае значэнне гэтага токена. Маркеры мапы фарбуюцца строга па
+стане кропкі; збоі
+маюць сваю пару фон/межа (notice — папярэджанне, error — збой). Пазнакі
+`paid/free/mixed/lock` адрозніваюцца фонам, тэкст пазнакі — асноўны
+`color.ink`.
+
+Два паўтоны-полкі кнопак (ухвалена квізам заснавальніка 2026-09-29) —
+цяменшае нацяжэнне існуючых колераў, не новыя брэнд-колеры:
+`color.shelf.accent` выводзіцца з `color.accent`, `color.shelf.line` — з
+`color.line` адным правілам: тон і насычанасць HSL трымаюцца, светлата
+менш на 7 працэнтных пунктаў. Полка — дэкаратыўны пласт пад кнопкай:
+тэкст на ёй не жыве, таму кантрастнай пары для паліў канон не задае
+(правіла §10 пра пары для новых колераў тут не ўжываецца дакладна з
+гэтай прычыны); тэкставая пара `accent-ink`/`accent` застаецца
+нязменнай.
+
+Зярно паперы (`texture.paper-grain`) — згенераваны тайлавы асет
+непразрыстасцю 4–5% паверх `color.paper`; сам тайл не падмяняе токен
+паперы. У цёмнай тэме зярно светлае на цёмным фоне. Дазволенае месца — фон
+спакойных экранаў Explore і My KUDY. Забароненыя месцы: панэль Run,
+мапа і ўсякае размяшчэнне пад шчыльным тэкстам (спісы, табліцы,
+доўгія апісанні). Поўны спіс дазволенага і забароненага — у машынным
+блоку (`paperGrain`).
+
+### Цёмная тэма MVP — рашэнне ўладальніка 2026-10-27
+
+Уладальнік [прыняў цёмную палітру і кантрастныя пары](#860)
+са [спецыфікацыі](dark-theme.md) §4–5. Светлыя значэнні застаюцца ў `tokens`,
+цёмныя — у `darkTheme.tokens` машыннага блока ніжэй. Уся зона картаграфіі
+(`darkTheme.lightCartographyTokens`) застаецца светлай у абедзвюх тэмах;
+літара маркера выкарыстоўвае светлае `color.accent-ink`. Пары
+`contrastPairs` правяраюцца ў абедзвюх тэмах, з гэтым выключэннем для мапы.
+Змена тэмы не змяняе кантэнтныя выявы і не перазапускае Run, GPS або аўдыё.
+
+Уладальнік тым жа рашэннем пакінуў светлую брэндавую заставу ў MVP нават
+пры цёмнай тэме (`darkTheme.splash = light`). Гэта свядомае абмежаванне,
+не падстава перафарбоўваць прыняты асет #429. Runtime-рэалізацыя і
+прыладавая прыёмка належаць #436; ручны выбар — #798.
+
+## 3. Шрыфты і правы на выкарыстанне
+
+- Канонавы стэк — **system-ui, sans-serif**: інтэрфейс малюе сістэмнымі
+  шрыфтамі прылады. Файлаў шрыфтоў у рэпазітары і ў бандле няма, таму
+  ліцэнзійных абавязкаў на дастаўку няма; правы на сістэмныя шрыфты — у
+  вытворцы АС, выкарыстанне праз API інтэрфейсу законнае.
+- Калі з'явіцца брендавы шрыфт, ён трапляе ў гэты канон толькі разам з
+  запісам правоў: ліцэнзія дазваляе ўбудоўванне ў прадукт (лічбавае
+  выкарыстанне), файл self-host у рэпазітары, спасылка на тэкст ліцэнзіі.
+  Убудоўваць шрыфт без такога запісу забаронена.
+- Вагі: звычайны тэкст 400, назвы і загалоўкі 600. Базавы памер 16px,
+  міжрадковая 1.45.
+- **Буйны тэкст** (a11y-плашка `screens.md`: ≥ 1.2× базавага): канонавы
+  множнік 1.25× → 20px. Draft-значэнне 19px (1.1875×) перазапісанае як
+  ніжэй за плашку — гл. «Дадатак», `cssOverrides`.
+
+### Ухвалены шрыфтавы пакет (квіз заснавальніка 2026-09-29)
+
+Да сістэмнага стэку дадаюцца тры сям'і; правілы гэтага раздзела
+дзейнічаюць на іх даслоўна: ліцэнзія дазваляе ўбудоўванне ў прадукт
+(лічбавае выкарыстанне), файлы self-host у рэпазітары і бандляцца з
+дадаткам, знешняе падцягванне (CDN, runtime Google Fonts) забароненае.
+Поўныя запісы правоў — у машынным блоку (`fontLicenses`); гард падае
+пры шрыфтавым токене без запісу правоў. Пакуль файлы не падключаныя
+(G06.10.b), інтэрфейс малюецца сістэмным стэкам — токен `font.family`
+гэтым допісам не мяняецца.
+
+- **Golos Text** — UI-санс усяго інтэрфейсу. Ліцэнзія OFL 1.1,
+  убудоўванне дазволенае. Аўтары Alexandra Korolkova і Vitaly Kuzmin,
+  выпушчана Paratype; афіцыйная крыніца —
+  https://github.com/googlefonts/golos-text, тэкст ліцэнзіі — OFL.txt
+  у тым жа рэпазітары.
+- **Alegreya** — дыплей-серыф, толькі назвы гідаў і гісторый.
+  Ліцэнзія OFL 1.1, убудоўванне дазволенае. Аўтар Juan Pablo del
+  Peral (Huerta Tipográfica); афіцыйная крыніца —
+  https://github.com/huertatipografica/Alegreya, тэкст ліцэнзіі —
+  OFL.txt у тым жа рэпазітары.
+- **Caveat** — голас дракона: толькі рэплікі і падказкі дракона,
+  ніколі інтэрфейсны тэкст. Ліцэнзія OFL 1.1, убудоўванне дазволенае.
+  Аўтар Pablo Impallari (Impallari Type); афіцыйная крыніца —
+  https://github.com/googlefonts/caveat, тэкст ліцэнзіі —
+  OFL.txt у тым жа рэпазітары.
+
+### Брэнд-іконка і splash — запіс правоў (прынята заснавальнікам 2026-10-26)
+
+Канонавы брэнд-асет — «медны дракон з абрамленнем»: нахіленая карычневая
+глава, пясочная мордачка, бурштынавыя рогі, вялікія вочы, дзве лапы над
+краем, крэмавы фон, меднае абрамленне (закруглены квадрат для iOS і
+крам, круглы абадок для Android adaptive). Правы: асет створаны для
+KUDY самім заснавальнікам — майстры згенераваныя ўбудаваным генератарам
+малюнкаў у размове заснавальніка з асістэнтам (умовы інструменту аддаюць
+вывады
+карыстальніку), персанаж вядзе паходжанне ад уласных фотаздымкаў
+фігуркі дракона, што належаць заснавальніку. Тэхнічныя экспарты
+(памеры, профіль колераў) зроблены скрыптамі пакета без перамалёўкі і
+праўкі колераў. Заснавальнік прыняў асет канонавай іконкай дадатка —
+фіксуючы каментар у задачы #429
+ад 2026-10-26; паходжанне і кантрольныя сумы — у пакеце
+`app-icon-copper-framed-v1` (README, `verification.json`, `SHA256SUMS`).
+
+У рэпазітары асет жыве ў `assets/kudy-icon/` (`icon.png`,
+`android-adaptive-foreground.png`, `android-adaptive-background.png`) і
+падключаецца палямі `icon`, `android.adaptiveIcon` і `splash` у
+`app.json`. Splash выкарыстоўвае той самы прыняты экспарт (`icon.png`)
+на крэмавым фоне прынятага пакета `#F5EDDF` (гэта ўласны фон пакета, а
+не токен `color.paper`); асобны splash-малюнак у пакет не
+ўваходзіць. Перамалёўка або перадызайн прынятых экспартаў у задачах
+інтэграцыі забароненыя — новыя варыянты ідуць праз рэгістр рашэнняў.
+
+Удакладненне заснавальніка 2026-10-28: вонкавы крэмавы водступ на
+лаўнчар-іконцы памылковы. Медная круглая рамка павінна супадаць з мяжой
+круглай іконкі; медная квадратная рамка — з мяжой квадратнай. Для гэтага
+экспарты геаметрычна маштабуюцца без перамалёўкі дракона; круглыя і
+квадратныя Android-рэсурсы маюць розныя foreground. Пруф і перазборка —
+`docs/demos/2026-10-28-launcher-icon-bounds.md`.
+
+### Анімаваны экран уваходу — рашэнне ўладальніка 2026-10-28
+
+Пасля сістэмнай заставы праграма паказвае зацверджаны працоўны экран з
+вектарным цмокам: лапы з'яўляюцца на рамцы, падымаецца галава, цмок міргае
+і ў гэты час робіць кароткі рывок убок, затым рухаецца рот. Надпіс KUDY
+з'яўляецца пасля руху цмока; пасля яго праграма адкрывае Explore.
+Пры сістэмнай наладзе паменшанага руху праграма адразу адкрывае Explore.
+Сістэмная застава і іконка з папярэдняга рашэння застаюцца без змен.
+Цяперашні шрыфт надпісу — працоўны; уладальнік можа выбраць іншы асобна.
+Вектарныя контуры захоўваюцца ў `assets/kudy-splash/dragon-paths.json`.
+
+## 4. Інтэрвалы, радыусы і памеры
+
+Шкала інтэрвалаў 4/8/12/16px: 4 — мінімальны зазор у радах, 8 — зазоры сетак
+і радоў, 12 — падшэўка картак і панэляў, 16 — падзел секцый. Радыус 10px для
+картак, кнопак, дыялога і прагрэсу; 99px — пілюлі чыпаў і пазнак. Маркер
+кропкі — круг 34px з белым абводам 2px і цень; кропка пазіцыі карыстальніка —
+18px з белым абводам 3px; паласа прагрэсу — 6px; кнопка шкалы ацэнак — 40px;
+цела панэлі Run — не вышэй за 320px без пракруткі; дыялог — да 400px шырыні;
+ніжняе паветра пад фіксаванай стужкай — 70px.
+
+## 5. Кампаненты
+
+### Карткі — роўна тры віды
+
+1. **Звычайная картка** (`card`): белы фон, межа `color.line`, радыус 10,
+   падшэўка 12 — кантэйнер экранаў Explore, My KUDY, спісаў.
+2. **Картка-падказка R07** (`hintcard`): ЦІХАЯ неаўдыё-картка іншага гіда
+   (`11` §15, G07.04) — сіняваты фон; хаваецца падчас аўдыё/паўзы/камерцыйнага
+   дыялогу; паказу за сесію на гіда.
+3. **Картка Moment** (`momentcard`): тэйзер Moment з яўным Play (ADR
+   G01.02 §3.6) — цёплае адценне.
+
+Іншых відаў картак канон не задае; новы выгляд — гэта допіс у гэты дакумент,
+не мясцовая стылізацыя.
+
+### Кнопкі і чыпы
+
+- Primary: фон `color.accent`, тэкст `color.accent-ink` — адно галоўнае
+  дзеянне на экран (прэв'ю: `Download → Start`, 09 §6.5).
+- Звычайная: фон `color.card`, межа `color.line`.
+- Выключаная: тэкст `color.disabled-ink`, межа `color.disabled-line`, фон
+  празрысты — пара ≥ 4.5:1 (тэкст) і ≥ 3:1 (межа) на падкладцы (папера ці
+  белая картка) па WCAG 1.4.3/1.4.11, без полкі і без празрыстасці-падмены;
+  прычына недаступнасці заўсёды пазначаная побач (`11` §7). Рашэнне ўладара
+  2026-10-03 (issue #430): голае `opacity 0.5` давала ≈2:1 — амаль нябачны
+  стан.
+- Фокус: outline 3px `color.accent` з змяшчэннем 1px — аднолькавы для ўсіх
+  інтэрактыўных элементаў (кнопкі, чыпы, маркеры, кнопкі шкалы).
+- Чып-фільтр: націснуты (`aria-pressed=true`) — фон `color.accent`.
+
+### Панэль Run
+
+Адна паверхня Run: мапа як фонавы рэжым + панэль у трох становішчах
+Peek/Half/Full (09 §6.5, `11` §3.2). Peek-бар: радок now-playing (уладальнік
+`guide` або `moment`), радок 2 — 13px `color.muted`, індыкатар live-паўзы.
+Цела панэлі мае мяжу пракруткі 320px. Паласа прагрэсу — 6px, запаўненне
+`color.accent` на трэку `color.line`.
+
+### Маркеры мапы і кропка пазіцыі
+
+Адзінка маркера — stop; станы і іх умовы — даслоўна ADR G01.01 §4.5:
+`locked` / `playing` / `played` / `available` / `pending`. Візуал: заліўка
+па стане, белая літара першай літары стану, белы абвод 2px, цень. Стан чытаецца
+**не толькі па колеры**: літара, `aria-label` і `title` маркера нясуць назву
+стану. Тап па маркеры адкрывае прэв'ю, ніколі не гук. Кропка пазіцыі —
+`color.person`, без сувязі са станамі кропак.
+
+### Дыялог і стужкі
+
+Дыялог — да 400px, зацміценне backdrop 35% чорнага. Notice-блок — цёплая пара
+фон/межа; error-блок — чырвоная пара; крытычныя паведамленні ніколі не
+mascot-only (a11y-плашка `screens.md`).
+
+## 6. Дракон
+
+- Дракон — **гід і твар брэнда, не лагатып** (06 §1): сцэнарны характар,
+  не чат-бот.
+- Станы асетаў — даслоўна з 06 §1: **спакойны / здзіўлены / кліча /
+  святкуе**. Формат — спрайты або кароткія відэа; асеты жывуць у адным месцы
+  і назвы станаў не перафразоўваюцца.
+- Крытычныя паведамленні ніколі не перадаюцца толькі маскотам: стан збою
+  чытаецца без дракона (a11y-плашка `screens.md`, `11` §7).
+- Правы: гліняная фігурка, фота і лічбавы персанаж — уласнасць заснавальніка
+  KUDY; выкарыстанне асетаў — толькі ў прадукце KUDY і яго матэрыялах.
+  Любы новы асет дракона трапляе у канон разам з запісам права на выкарыстанне.
+
+## 7. Назвы станаў — без новых назваў
+
+Візуальны канон не ўводзіць ніводнай новай назвы стану; ён фарбуе прынятыя:
+
+- Сем'і сумленных станаў: **Пусты / Offline / Denied / Error**
+  (`docs/design/screens-and-transitions.md`, «Кантроль покрыцця станаў»).
+- Маркеры кропкі: `locked / playing / played / available / pending`
+  (ADR G01.01 §4.5).
+- Стан сесіі: `active / paused / finished` (ADR G01.03 §3.1, `screens.md`
+  My KUDY).
+- Дастаўка водгуку: `draft → pending → sending → sent`; збой вяртае
+  `pending`; `409 → conflict`; `401/422 → action_required` (21 §5.4,
+  даслоўна).
+
+Колькі-небудзь «адлюстравання» станаў (напрыклад, жоўты для `pending`) канон
+не дадае: колер маркера = стан з ADR, азначэнне стану жыве ў ADR, не тут.
+
+## 8. Шкала ацэнак 1–5
+
+- Ацэнка 1–5 зорак без загадзя выбранага значэння (20 §7); прапусціць можна
+  заўсёды і нічога не запісваецца (F01).
+- Публічнага сярэдняга, чужых водгукаў і сартавання паводле іх у MVP няма
+  (20, «У MVP няма публічнага рэйтынгу»); уласная форма і ўласная ацэнка
+  бачныя толькі чалавеку.
+- Дасяжнасць: група з пяці кнопак 40px (`role="group"`, `aria-pressed`),
+  фокус па агульным правіле; прычыны — замкнёныя спісы па віду target,
+  максімум 3 унікальныя (20 §7).
+
+## 9. Чытэльнасць на вуліцы
+
+- Кантраст тэксту — WCAG 1.4.3: 4.5:1 для звычайнага тэксту. Кантраст
+  графічных аб'ектаў — WCAG 1.4.11: 3:1 (маркеры на мапе і вуліцах, кропка
+  пазіцыі, фокус і акцэнт, запаўненне прагрэсу на трэку).
+- Пары, якія гард лічыць па рэальных значэннях, — у машынным блоку
+  (`contrastPairs`); змена значэння без перадумірання пар = падзенне тэсту.
+- Буйны тэкст 1.25× (плашка a11y `screens.md`), screen-reader подпісы на
+  кожнай icon-only кнопцы, reduced-motion без пераходаў і аўтапанавання.
+- Тры маркеры і фон падказкі перазапісаныя супраць draft у дакуменце
+  прататыпа дзеля гэтых плашак — гл. «Дадатак» (`cssOverrides` і
+  `supersession` з прычынамі).
+
+## 10. Правілы змены канона
+
+- Новыя значэнні дадаюцца ў JSON-блок і толькі разам з правілам выкарыстання;
+  кантрастныя пары для новых колераў — у тым жа допісе.
+- Draft-файл пратотыпа больш не з'яўляецца крыніцай: змена візуальнага значэння
+  ідзе сюды, пратотыпа і production спажываюць канон.
+- Гард `test/design-tokens.test.mjs` падае пры: пустым значэнні токена,
+  расыходжанні draft-файла з канонам без яўнага перазапісу, парушэнні
+  кантрастнай пары, змене назваў станаў супраць крыніц, выпадзенні тэсту з
+  `npm test`.
+
+## Дадатак: машынныя значэнні токенаў
+
+```json
+{
+  "tokens": {
+    "color.paper":            { "value": "#faf7f2", "use": "фон экрана" },
+    "color.ink":              { "value": "#22262b", "use": "асноўны тэкст" },
+    "color.muted":            { "value": "#6b7280", "use": "другарадны тэкст і подпісы" },
+    "color.accent":           { "value": "#1d6b4f", "use": "галоўныя дзеянні, націснутыя чыпы, фокус, запаўненне прагрэсу" },
+    "color.accent-ink":       { "value": "#ffffff", "use": "тэкст і гліфы на акцэнце і на маркерных заліўках" },
+    "color.card":             { "value": "#ffffff", "use": "фон картак, кнопак, панэлі Run і верхняй стужкі" },
+    "color.line":             { "value": "#d8d2c6", "use": "межы картак, падзяляльнікі табліц, трэк прагрэсу" },
+    "color.shelf.accent":     { "value": "#154f3a", "use": "полка вылепленай primary-кнопкі — цяменшае нацяжэнне color.accent" },
+    "color.shelf.line":       { "value": "#c9c1b1", "use": "полка вылепленай звычайнай кнопкі — цяменшае нацяжэнне color.line" },
+    "color.disabled-ink":     { "value": "#6b7280", "use": "тэкст выключанай кнопкі — прыглушаная чытэльная пара на паперы (§5, issue #430)" },
+    "color.disabled-line":    { "value": "#6b7280", "use": "межа выключанай кнопкі (§5, issue #430)" },
+    "color.map":              { "value": "#eef3ee", "use": "фон мапы Побач і Run" },
+    "color.street":           { "value": "#dfe7df", "use": "вуліцы на мапе" },
+    "color.person":           { "value": "#1f5aa8", "use": "кропка пазіцыі карыстальніка" },
+    "color.warn":             { "value": "#b3331f", "use": "памылковы тэкст і акцэнты збою" },
+    "color.marker.played":    { "value": "#1d6b4f", "use": "маркер played" },
+    "color.marker.playing":   { "value": "#b3331f", "use": "маркер playing" },
+    "color.marker.available": { "value": "#8a610e", "use": "маркер available" },
+    "color.marker.pending":   { "value": "#646c77", "use": "маркер pending" },
+    "color.marker.locked":    { "value": "#67707a", "use": "маркер locked" },
+    "color.notice.bg":        { "value": "#fdf1d7", "use": "фон notice-блока" },
+    "color.notice.border":    { "value": "#e6c98c", "use": "межа notice-блока" },
+    "color.error.bg":         { "value": "#fdeaea", "use": "фон error-блока" },
+    "color.error.border":     { "value": "#e0a2a2", "use": "межа error-блока" },
+    "color.hint.bg":          { "value": "#f6faff", "use": "фон карткі-падказкі R07" },
+    "color.hint.border":      { "value": "#bcd2f0", "use": "межа карткі-падказкі R07" },
+    "color.moment.bg":        { "value": "#fff7ec", "use": "фон карткі Moment" },
+    "color.moment.border":    { "value": "#ecd9b0", "use": "межа карткі Moment" },
+    "color.badge.paid":       { "value": "#fdf1d7", "use": "фон пазнакі paid" },
+    "color.badge.free":       { "value": "#e7f2ec", "use": "фон пазнакі free" },
+    "color.badge.mixed":      { "value": "#ece7f8", "use": "фон пазнакі mixed" },
+    "color.badge.lock":       { "value": "#eceff1", "use": "фон пазнакі замка" },
+    "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі прататыпа" },
+    "font.family":            { "value": "system-ui, sans-serif", "use": "усё тэкставае; правы — раздзел 3" },
+    "font.family-ui":         { "value": "Golos Text, system-ui, sans-serif", "use": "інтэрфейсны тэкст; fallback system-ui да падключэння файлаў; правы — раздзел 3" },
+    "font.family-display":    { "value": "Alegreya, serif", "use": "толькі назвы гідаў і гісторый; правы — раздзел 3" },
+    "font.family-dragon":     { "value": "Caveat, cursive", "use": "толькі рэплікі і падказкі дракона, ніколі інтэрфейсны тэкст; правы — раздзел 3" },
+    "font.base-size":         { "value": "16px", "use": "базавы памер тэксту" },
+    "font.line-height":       { "value": "1.45", "use": "міжрадковая адлегласць" },
+    "font.weight-regular":    { "value": "400", "use": "звычайнае начарканне" },
+    "font.weight-strong":     { "value": "600", "use": "назвы і загалоўкі" },
+    "font.size-title":        { "value": "18px", "use": "назва экрана ў верхняй стужцы" },
+    "font.size-secondary":    { "value": "13px", "use": "другі радок peek-плэера" },
+    "font.size-small":        { "value": "12px", "use": "пазнакі і дэма-стужка" },
+    "font.size-table":        { "value": "14px", "use": "табліцы" },
+    "font.big-text-factor":   { "value": "1.25", "use": "множнік буйнога тэксту; плашка a11y screens.md патрабуе ≥ 1.2" },
+    "space.xs":               { "value": "4px", "use": "мінімальны зазор" },
+    "space.s":                { "value": "8px", "use": "зазоры радоў і сетак" },
+    "space.m":                { "value": "12px", "use": "падшэўка картак і панэляў" },
+    "space.l":                { "value": "16px", "use": "падзел секцый" },
+    "space.safe-bottom":      { "value": "70px", "use": "паветра пад фіксаванай дэма-стужкай" },
+    "radius.base":            { "value": "10px", "use": "карткі, кнопкі, дыялог, кантэйнер прагрэсу" },
+    "radius.pill":            { "value": "99px", "use": "чыпы і пазнакі" },
+    "size.marker":            { "value": "34px", "use": "дыяметр маркера кропкі" },
+    "size.person":            { "value": "18px", "use": "дыяметр кропкі пазіцыі" },
+    "size.progress":          { "value": "6px", "use": "вышыня паласы прагрэсу" },
+    "size.scale-button":      { "value": "40px", "use": "шырыня кнопкі шкалы ацэнак" },
+    "panel.body-max-height":  { "value": "320px", "use": "межа пракруткі цела панэлі Run" },
+    "texture.paper-grain":    { "value": "згенераваны тайлавы асет, непразрыстасць 4–5% паверх color.paper", "use": "фон спакойных экранаў (Explore, My KUDY); дазволеныя і забароненыя месцы — у paperGrain" },
+    "dialog.max-width":       { "value": "400px", "use": "максімальная шырыня дыялога" },
+    "content.max-width":      { "value": "640px", "use": "максімальная шырыня кантэнту экрана на акнах ≥600dp (APR-10.b, зафіксавана 2026-11-02): трымае радок аднакалончнага цела ў межах мэты 45–75 сімвалаў (issue #959, core Line_Length); ніжэй за кап няма эфекту. Двухкалонная сетка гідаў (акно ≥821dp) — зафіксаванае выключэнне (#970): картка ≈295dp — 48.5% унутранай шырыні капа (640dp − 2×16dp), таму радок карткавай анатацыі ≈27–29 сімвалаў, карацей мэты; прыярытэт мае шчыльнасць дзвюх калонак. Вымярэнне 2026-11-02: docs/testing/evidence/2026-11-02-issue959/1280dp-font1-explore.png" }
+  },
+  "darkTheme": {
+    "ownerDecision": "#860",
+    "tokens": {
+      "color.paper": "#171d1c",
+      "color.card": "#232c29",
+      "color.ink": "#f2f1e9",
+      "color.muted": "#c4d0ca",
+      "color.line": "#45534c",
+      "color.accent": "#80d4ad",
+      "color.accent-ink": "#0d2a1e",
+      "color.shelf.accent": "#65cb9c",
+      "color.shelf.line": "#35403a",
+      "color.disabled-ink": "#9aa8a1",
+      "color.disabled-line": "#6d7c72",
+      "color.notice.bg": "#3a3119",
+      "color.notice.border": "#7d6b3a",
+      "color.error.bg": "#3a201b",
+      "color.error.border": "#8a4a42",
+      "color.hint.bg": "#1c2833",
+      "color.hint.border": "#3e5871",
+      "color.moment.bg": "#342a19",
+      "color.moment.border": "#6e5c36",
+      "color.badge.paid": "#493b23",
+      "color.badge.free": "#263b31",
+      "color.badge.mixed": "#332c47",
+      "color.badge.lock": "#2b343b",
+      "color.warn": "#ef8a72",
+      "color.note": "#33301d"
+    },
+    "lightCartographyTokens": [
+      "color.map",
+      "color.street",
+      "color.person",
+      "color.marker.played",
+      "color.marker.playing",
+      "color.marker.available",
+      "color.marker.pending",
+      "color.marker.locked"
+    ],
+    "lightMarkerLetterToken": "color.accent-ink",
+    "splash": "light"
+  },
+  "cardKinds": ["base", "hint", "moment"],
+  "markers": ["locked", "playing", "played", "available", "pending"],
+  "stateFamilies": ["Пусты", "Offline", "Denied", "Error"],
+  "deliveryStates": ["draft", "pending", "sending", "sent", "conflict", "action_required"],
+  "sessionStates": ["active", "paused", "finished"],
+  "ratingScale": { "min": 1, "max": 5, "default": null, "publicAverage": false },
+  "dragonStates": ["спакойны", "здзіўлены", "кліча", "святкуе"],
+  "bigText": {
+    "baseToken": "font.base-size",
+    "factorToken": "font.big-text-factor",
+    "cssClass": ".big-text",
+    "cssValue": "20px"
+  },
+  "contrastPairs": [
+    { "fg": "color.ink", "bg": "color.paper", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.card", "min": 4.5 },
+    { "fg": "color.muted", "bg": "color.paper", "min": 4.5 },
+    { "fg": "color.muted", "bg": "color.card", "min": 4.5 },
+    { "fg": "color.accent-ink", "bg": "color.accent", "min": 4.5 },
+    { "fg": "color.muted", "bg": "color.note", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.notice.bg", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.error.bg", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.hint.bg", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.moment.bg", "min": 4.5 },
+    { "fg": "color.muted", "bg": "color.hint.bg", "min": 4.5 },
+    { "fg": "color.muted", "bg": "color.moment.bg", "min": 4.5 },
+    { "fg": "color.accent-ink", "bg": "color.marker.played", "min": 4.5 },
+    { "fg": "color.accent-ink", "bg": "color.marker.playing", "min": 4.5 },
+    { "fg": "color.accent-ink", "bg": "color.marker.available", "min": 4.5 },
+    { "fg": "color.accent-ink", "bg": "color.marker.pending", "min": 4.5 },
+    { "fg": "color.accent-ink", "bg": "color.marker.locked", "min": 4.5 },
+    { "fg": "color.marker.playing", "bg": "color.map", "min": 3 },
+    { "fg": "color.marker.played", "bg": "color.map", "min": 3 },
+    { "fg": "color.marker.available", "bg": "color.map", "min": 3 },
+    { "fg": "color.marker.pending", "bg": "color.map", "min": 3 },
+    { "fg": "color.marker.locked", "bg": "color.map", "min": 3 },
+    { "fg": "color.marker.playing", "bg": "color.street", "min": 3 },
+    { "fg": "color.marker.played", "bg": "color.street", "min": 3 },
+    { "fg": "color.marker.available", "bg": "color.street", "min": 3 },
+    { "fg": "color.marker.pending", "bg": "color.street", "min": 3 },
+    { "fg": "color.marker.locked", "bg": "color.street", "min": 3 },
+    { "fg": "color.person", "bg": "color.map", "min": 3 },
+    { "fg": "color.accent", "bg": "color.paper", "min": 3 },
+    { "fg": "color.accent", "bg": "color.card", "min": 3 },
+    { "fg": "color.accent", "bg": "color.line", "min": 3 },
+    { "fg": "color.disabled-ink", "bg": "color.paper", "min": 4.5 },
+    { "fg": "color.disabled-ink", "bg": "color.card", "min": 4.5 },
+    { "fg": "color.disabled-line", "bg": "color.paper", "min": 3 },
+    { "fg": "color.disabled-line", "bg": "color.card", "min": 3 },
+    { "fg": "color.ink", "bg": "color.badge.paid", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.badge.free", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.badge.mixed", "min": 4.5 },
+    { "fg": "color.ink", "bg": "color.badge.lock", "min": 4.5 },
+    { "fg": "color.person", "bg": "color.street", "min": 3 },
+    { "fg": "color.warn", "bg": "color.paper", "min": 4.5 },
+    { "fg": "color.warn", "bg": "color.card", "min": 4.5 }
+  ],
+  "supersession": {
+    "--kudy-paper":      { "token": "color.paper" },
+    "--kudy-ink":        { "token": "color.ink" },
+    "--kudy-muted":      { "token": "color.muted" },
+    "--kudy-accent":     { "token": "color.accent" },
+    "--kudy-accent-ink": { "token": "color.accent-ink" },
+    "--kudy-locked":     { "token": "color.marker.locked", "override": true, "draftValue": "#9aa2ab", "reason": "белая літара стану на маркеры (2.58:1) і заліўка на вуліцы (2.05:1) ніжэй за плашкі → 5.03:1 і 3.98:1" },
+    "--kudy-played":     { "token": "color.marker.played" },
+    "--kudy-available":  { "token": "color.marker.available", "override": true, "draftValue": "#b07d1f", "reason": "літара на маркеры (3.62:1) і заліўка на вуліцы (2.87:1) ніжэй за плашкі → 5.53:1 і 4.38:1" },
+    "--kudy-pending":    { "token": "color.marker.pending", "override": true, "draftValue": "#7c8691", "reason": "літара на маркеры (3.70:1) і заліўка на вуліцы (2.93:1) ніжэй за плашкі → 5.31:1 і 4.21:1" },
+    "--kudy-playing":    { "token": "color.marker.playing" },
+    "--kudy-warn":       { "token": "color.warn" },
+    "--kudy-line":       { "token": "color.line" },
+    "--kudy-card":       { "token": "color.card" },
+    "--kudy-note":       { "token": "color.note" },
+    "--kudy-map":        { "token": "color.map" },
+    "--kudy-street":     { "token": "color.street" },
+    "--kudy-person":     { "token": "color.person" },
+    "--kudy-hint-bg":    { "token": "color.hint.bg" },
+    "--kudy-hint-border":  { "token": "color.hint.border" },
+    "--kudy-moment-bg":    { "token": "color.moment.bg" },
+    "--kudy-moment-border": { "token": "color.moment.border" },
+    "--kudy-notice-bg":    { "token": "color.notice.bg" },
+    "--kudy-notice-border": { "token": "color.notice.border" },
+    "--kudy-error-bg":     { "token": "color.error.bg" },
+    "--kudy-error-border":  { "token": "color.error.border" },
+    "--kudy-badge-paid":   { "token": "color.badge.paid" },
+    "--kudy-badge-free":   { "token": "color.badge.free" },
+    "--kudy-badge-mixed":  { "token": "color.badge.mixed" },
+    "--kudy-badge-lock":   { "token": "color.badge.lock" },
+    "--radius":          { "token": "radius.base" }
+  },
+  "cssOverrides": [
+    {
+      "selector": ".hintcard",
+      "property": "background",
+      "token": "color.hint.bg",
+      "draftValue": "#f2f7ff",
+      "reason": "muted-подпіс на падказцы меў 4.49:1 — ніжэй за 4.5:1; на #f6faff — 4.61:1"
+    },
+    {
+      "selector": ".big-text",
+      "property": "font-size",
+      "fromTokens": ["font.base-size", "font.big-text-factor"],
+      "draftValue": "19px",
+      "reason": "19px = 1.1875× базавага — ніжэй за плашку a11y ≥ 1.2×; 20px = 1.25×"
+    }
+  ],
+  "fontLicenses": {
+    "font.family-ui": {
+      "family": "Golos Text",
+      "license": "OFL 1.1",
+      "embedding": "дазволена — убудоўванне ў прадукт (лічбавае выкарыстанне)",
+      "source": "https://github.com/googlefonts/golos-text",
+      "selfHost": "файлы self-host у рэпазітары і бандляцца з дадаткам (G06.10.b); знешняе падцягванне (CDN, runtime Google Fonts) забароненае",
+      "licenseText": "https://github.com/googlefonts/golos-text/blob/main/OFL.txt"
+    },
+    "font.family-display": {
+      "family": "Alegreya",
+      "license": "OFL 1.1",
+      "embedding": "дазволена — убудоўванне ў прадукт (лічбавае выкарыстанне)",
+      "source": "https://github.com/huertatipografica/Alegreya",
+      "selfHost": "файлы self-host у рэпазітары і бандляцца з дадаткам (G06.10.b); знешняе падцягванне (CDN, runtime Google Fonts) забароненае",
+      "licenseText": "https://github.com/huertatipografica/Alegreya/blob/master/OFL.txt"
+    },
+    "font.family-dragon": {
+      "family": "Caveat",
+      "license": "OFL 1.1",
+      "embedding": "дазволена — убудоўванне ў прадукт (лічбавае выкарыстанне)",
+      "source": "https://github.com/googlefonts/caveat",
+      "selfHost": "файлы self-host у рэпазітары і бандляцца з дадаткам (G06.10.b); знешняе падцягванне (CDN, runtime Google Fonts) забароненае",
+      "licenseText": "https://github.com/googlefonts/caveat/blob/main/OFL.txt"
+    }
+  },
+  "paperGrain": {
+    "token": "texture.paper-grain",
+    "opacity": "4–5%",
+    "allowed": [
+      "фон экранаў Explore і My KUDY (паверх color.paper)"
+    ],
+    "forbidden": [
+      "панэль Run",
+      "мапа і картаграфічныя паверхні",
+      "пад шчыльным тэкстам (спісы, табліцы, доўгія апісанні)"
+    ]
+  }
+}
+```

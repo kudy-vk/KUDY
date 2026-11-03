@@ -1,0 +1,62 @@
+// GENERATED FILE — do not edit. Regenerate with:
+//   node --experimental-strip-types tools/i18n/generate-messages.mjs
+//
+// Source of truth: contracts/ui-messages/source.json (the be base text) and
+// contracts/ui-messages/translations/<locale>.json (the reviewed translations).
+// G21.25 (issue #558): the catalogues are generated projections — edit the
+// source/translation data, never this file; the generator's --check mode
+// fails on any hand edit.
+// the nearby guide-hint card's words (G07.05 #284); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 #544), es too (G21.11 #545), fr too (G21.12 #546), cs too (G21.13 #547), sv too (G21.14 #548), zh too (G21.46 #670)
+
+import type { GuideHintStrings } from "../contracts/ui-message-types.ts";
+
+export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh", GuideHintStrings> = {
+  "be": {
+    "dismiss": "Схаваць",
+    "heading": "Побач ёсць гід…",
+    "openHint": "Адкрыць апісанне гіда",
+    "paid": "платны",
+  },
+  "en": {
+    "dismiss": "Hide",
+    "heading": "A guide is nearby…",
+    "openHint": "Open the guide's description",
+    "paid": "paid",
+  },
+  "de": {
+    "dismiss": "Ausblenden",
+    "heading": "In der Nähe gibt es einen Guide…",
+    "openHint": "Guide-Beschreibung öffnen",
+    "paid": "kostenpflichtig",
+  },
+  "es": {
+    "dismiss": "Ocultar",
+    "heading": "Cerca hay una guía…",
+    "openHint": "Abrir la descripción de la guía",
+    "paid": "de pago",
+  },
+  "fr": {
+    "dismiss": "Masquer",
+    "heading": "Il y a un guide à proximité…",
+    "openHint": "Ouvrir la description du guide",
+    "paid": "payant",
+  },
+  "cs": {
+    "dismiss": "Skrýt",
+    "heading": "Poblíž je průvodce…",
+    "openHint": "Otevřít popis průvodce",
+    "paid": "placený",
+  },
+  "sv": {
+    "dismiss": "Dölj",
+    "heading": "Det finns en guide i närheten…",
+    "openHint": "Öppna guidebeskrivningen",
+    "paid": "betald",
+  },
+  "zh": {
+    "dismiss": "\u9690\u85CF",
+    "heading": "\u9644\u8FD1\u6709\u5BFC\u89C8…",
+    "openHint": "\u6253\u5F00\u5BFC\u89C8\u8BF4\u660E",
+    "paid": "\u4ED8\u8D39",
+  },
+};

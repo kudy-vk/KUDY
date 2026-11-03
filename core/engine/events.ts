@@ -1,0 +1,86 @@
+// G05.01.a + G05.01.b + G05.01.c — engine event union. Event names are copied
+// verbatim from 09 §6.1 (implementation-rules 2); field shapes follow 19 §3.1
+// with the moment-variant events 09 §6.1 carries after the G01.02
+// synchronization (b adds the DwellCompleted radius payload, c adds
+// Start.playingNow). Field spelling is the camelCase mapping declared in
+// state.ts.
+
+import type {
+  AcceptedFix,
+  Locale,
+  MomentId,
+  PackageStop,
+  PlayToken,
+  RouteId,
+  SessionId,
+  StoryId,
+  StopId,
+  Tier,
+  VersionId,
+} from './state.ts';
+
+export type RunEvent =
+  // 09 §6.1 names Start without fields; this reducer form (19 §3.1) carries
+  // what Start needs: readiness is verified before the Start transaction
+  // (ADR G01.03 §3.3), so `tier` lists the verified layers, and the pinned
+  // package rides along because pin checks and derived status read it —
+  // the reducer counterpart of run-model start(sessionId, routeStops, …).
+  | {
+      type: 'Start';
+      sessionId: SessionId;
+      routeId: RouteId;
+      version: VersionId;
+      locale: Locale;
+      // ADR G21.20 §3.2: the optional audio pin. Absent = the monolingual
+      // session (the audio layer is the text layer — the pre-G21.21 shape);
+      // null = the text-only session (no audio command is ever proposed);
+      // a locale string = the pinned audio layer. The verified audio layers
+      // ride along like `tier` does for the text (readiness is verified
+      // before the Start transaction, ADR G01.03 §3.3) and seed
+      // audioTierAvailable; a monolingual Start mirrors `tier` automatically.
+      audioLocale?: Locale | null;
+      audioTier?: Tier[];
+      tier: Tier[];
+      accessibleStopIds: StopId[];
+      stops: PackageStop[];
+      // ADR G01.02 §3.3/§3.8: Start never stops a sounding moment and never
+      // mints a guide launch for it — the controller injects the actual player
+      // state (the moment variant) into the fresh session; autoplay then waits
+      // for the player to become free.
+      playingNow?: { momentId: MomentId; storyId: StoryId; seq: number };
+    }
+  | { type: 'Pause' }
+  | { type: 'Resume' }
+  | { type: 'End' }
+  | { type: 'LocationAccepted'; fix: AcceptedFix }
+  // The radius is the trigger radius of the confirmed dwell: the queue cell
+  // keeps {stop_id, radius, at} (09 §6.1) and the deferred play re-checks
+  // distance against 2 × radius (11 §5.3). The payload was deferred to this
+  // slice by G05.01.a (results, «Deferred to the slice that owns them»).
+  | { type: 'DwellCompleted'; stopId: StopId; radius: number }
+  | { type: 'AudioFinished'; sessionId: SessionId; playId: number; storyId?: StoryId }
+  | { type: 'MomentFinished'; token: PlayToken; momentId: MomentId; storyId: StoryId }
+  | { type: 'AudioFailed'; token: PlayToken; reason: string }
+  | { type: 'UserSelectedStop'; stopId: StopId }
+  | { type: 'UserSelectedStory'; stopId: StopId; storyId: StoryId }
+  | { type: 'PlayMoment'; momentId: MomentId; storyId: StoryId; token: PlayToken }
+  | { type: 'UserPausedAudio' }
+  | { type: 'UserStoppedAudio' }
+  | { type: 'FocusLoss' }
+  | { type: 'FocusRegain' }
+  | { type: 'ResumeAudio'; token: PlayToken }
+  // «Працягнуць гід» — the single way back to guide automation (ADR G01.02 §3.6.4).
+  | { type: 'GuideResume' }
+  | { type: 'Timer'; id: string }
+  // Full launch identity (ADR G01.03 §3.5): trusted only through the typed
+  // capability channel of services/download; `issuer` is the descriptive
+  // marker of that channel, not the trust check itself.
+  | {
+      type: 'AccessReady';
+      routeId: RouteId;
+      version: VersionId;
+      locale: Locale;
+      tier: Tier;
+      stopIds: StopId[];
+      issuer: 'services/download';
+    };

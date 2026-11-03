@@ -1,0 +1,929 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { start, step, status, missed } from './run-model.mjs';
+
+const stops = ['a', 'b', 'c'];
+const now = 100_000;
+const fix = (overrides = {}) => ({ at: now, accuracy: 5,
+  distances: { a: 0, b: 0, c: 0, 'stop-crane': 0, 'stop-gate': 0 }, ...overrides });
+const trigger = id => ({ type: 'DwellCompleted', stopId: id, radius: 20 });
+const play = id => ({ type: 'UserSelectedStop', stopId: id });
+const playStory = (stopId, storyId) => ({ type: 'UserSelectedStory', stopId, storyId });
+function fixture() {
+  return step(start('walk-1', stops), { type: 'LocationAccepted', fix: fix() }, now);
+}
+const send = (s, e) => step(s, e, now);
+const finishAudio = s => send(s, { type: 'AudioFinished',
+  sessionId: s.sessionId, playId: s.playing.playId });
+// G01.03 §3.5: the trusted AccessReady identity — issuer, route, version,
+// locale; stopIds/tiers are granted per event. Events never carry defaults.
+const access = (overrides = {}) => ({ type: 'AccessReady', routeId: 'route-1',
+  version: 'v1', locale: 'be', issuer: 'services/download', ...overrides });
+
+// ADR G01.01 variant A fixtures: stop-crane has base + extended stories,
+// stop-gate is paid-only (extended story only, no fake free story).
+const crane = [
+  { id: 'stop-crane', storyBaseId: 'story-crane-base', storyExtendedId: 'story-crane-ext' },
+  { id: 'stop-gate', storyExtendedId: 'story-gate-ext' },
+];
+function craneFixture({ accessibleStopIds = ['stop-crane'], tierAvailable = ['base'] } = {}) {
+  return step(start('session-1', crane, { version: 'v3', accessibleStopIds, tierAvailable }),
+    { type: 'LocationAccepted', fix: fix() }, now);
+}
+// ADR G21.20 §4 fixtures: the mixed session pins fr text and en audio over
+// the same crane walk (the identity §4 names: one route, one version).
+function mixedFixture({ audioLocale = 'en', audioTier = ['base'],
+  accessibleStopIds = ['stop-crane'], tierAvailable = ['base'] } = {}) {
+  return step(start('session-1', crane, { version: 'v3', locale: 'fr', accessibleStopIds,
+    tierAvailable, audioLocale, audioTier }), { type: 'LocationAccepted', fix: fix() }, now);
+}
+
+test('C2: accepted arrival starts audio and spends automatic attempt', () => {
+  const s = send(fixture(), trigger('a'));
+  assert.equal(s.playing?.stopId, 'a');
+  assert.equal(s.playing?.storyId, 'a');
+  assert.deepEqual(s.autoFired, ['a']);
+  assert.equal(s.commands[0]?.type, 'PlayStory');
+});
+
+test('C6: completed automatic stop never autoplays twice; manual replay works', () => {
+  let s = finishAudio(send(fixture(), trigger('a')));
+  s = send(s, trigger('a'));
+  assert.equal(s.playing, null);
+  s = send(s, play('a'));
+  assert.equal(s.playing?.stopId, 'a');
+  assert.equal(s.playing?.playId, 2);
+});
+
+test('C7/C11: interrupted replay preserves heard and finish summary', () => {
+  let s = finishAudio(send(fixture(), trigger('a')));
+  s = send(s, play('a'));
+  s = send(s, { type: 'UserPausedAudio' });
+  assert.equal(status(s, 'a'), 'played');
+  s = send(s, { type: 'End' });
+  assert.deepEqual(missed(s), ['b', 'c']);
+});
+
+test('G01.01.b: base heard stays heard after same-version unlock; no new Play', () => {
+  let s = craneFixture();
+  s = send(s, play('stop-crane'));
+  assert.equal(s.playing?.storyId, 'story-crane-base');
+  s = finishAudio(s);
+  assert.deepEqual(s.heard, ['story-crane-base']);
+  s = send(s, access({ version: 'v3', tiers: ['extended'] }));
+  assert.deepEqual(s.commands, []);
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, ['story-crane-base']);
+  assert.equal(status(s, 'stop-crane'), 'played');
+  assert.deepEqual(missed(s), ['story-crane-ext']);
+  s = send(s, trigger('stop-crane'));
+  assert.equal(s.playing, null);
+  s = send(s, playStory('stop-crane', 'story-crane-ext'));
+  assert.equal(s.playing?.storyId, 'story-crane-ext');
+});
+
+test('G01.01.b: extended is credited only by its own finished playback', () => {
+  let s = craneFixture({ tierAvailable: ['base', 'extended'] });
+  s = finishAudio(send(s, play('stop-crane')));
+  assert.deepEqual(s.heard, ['story-crane-base']);
+  const first = send(s, playStory('stop-crane', 'story-crane-ext'));
+  assert.equal(first.playing?.playId, 2);
+  s = send(first, { type: 'UserPausedAudio' });
+  assert.deepEqual(s.heard, ['story-crane-base']);
+  assert.equal(status(s, 'stop-crane'), 'played');
+  s = send(s, playStory('stop-crane', 'story-crane-ext'));
+  assert.equal(s.playing?.playId, 3);
+  s = finishAudio(s);
+  assert.deepEqual(s.heard, ['story-crane-base', 'story-crane-ext']);
+  assert.equal(status(s, 'stop-crane'), 'played');
+});
+
+test('G01.01.b: paid-only stop stays locked until same-version unlock, then is a normal stop', () => {
+  let s = craneFixture();
+  assert.equal(status(s, 'stop-gate'), 'locked');
+  s = send(s, trigger('stop-gate'));
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.autoFired, []);
+  s = send(s, { type: 'PurchaseSucceeded', stopIds: ['stop-gate'] });
+  s = send(s, playStory('stop-gate', 'story-gate-ext'));
+  assert.equal(s.playing, null);
+  s = send(s, access({ version: 'v3', stopIds: ['stop-gate'], tiers: ['extended'] }));
+  assert.equal(status(s, 'stop-gate'), 'pending');
+  assert.equal(s.playing, null);
+  s = send(s, trigger('stop-gate'));
+  assert.equal(s.playing?.storyId, 'story-gate-ext');
+});
+
+test('G01.01.b: manual primary before approach never autoplays again', () => {
+  let s = craneFixture();
+  s = finishAudio(send(s, play('stop-crane')));
+  assert.deepEqual(s.autoFired, []);
+  s = send(s, trigger('stop-crane'));
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.autoFired, []);
+});
+
+test('G01.01.b: queue does not replay a primary heard manually meanwhile', () => {
+  let s = send(send(fixture(), trigger('a')), trigger('b'));
+  assert.equal(s.queued?.stopId, 'b');
+  s = send(s, play('b'));
+  s = finishAudio(s);
+  assert.deepEqual(s.heard, ['b']);
+  assert.equal(s.queued, null);
+  assert.deepEqual(s.autoFired, ['a', 'b']);
+  assert.equal(s.playing, null);
+  assert.equal(s.commands.some(c => c.type === 'PlayStory'), false);
+});
+
+test('G01.01.b: completion callback naming a foreign story is ignored', () => {
+  let s = craneFixture({ tierAvailable: ['base', 'extended'] });
+  s = send(s, playStory('stop-crane', 'story-crane-ext'));
+  s = send(s, { type: 'AudioFinished', sessionId: s.sessionId,
+    playId: s.playing.playId, storyId: 'story-crane-base' });
+  assert.deepEqual(s.heard, []);
+  assert.equal(s.playing?.storyId, 'story-crane-ext');
+  s = finishAudio(s);
+  assert.deepEqual(s.heard, ['story-crane-ext']);
+});
+
+test('G01.01.b: completion with present-but-empty or null story id is ignored', () => {
+  for (const bad of ['', null]) {
+    let s = craneFixture();
+    s = send(s, play('stop-crane'));
+    s = send(s, { type: 'AudioFinished', sessionId: s.sessionId,
+      playId: s.playing.playId, storyId: bad });
+    assert.deepEqual(s.heard, [], `storyId=${JSON.stringify(bad)}`);
+    assert.equal(s.playing?.storyId, 'story-crane-base');
+    s = finishAudio(s);
+    assert.deepEqual(s.heard, ['story-crane-base']);
+  }
+});
+
+test('G01.01.b: markers are stop-level from the primary; additional unheard stays out of pending', () => {
+  let s = craneFixture({ tierAvailable: ['base', 'extended'] });
+  assert.equal(status(s, 'stop-crane'), 'pending');
+  s = send(s, playStory('stop-crane', 'story-crane-ext'));
+  assert.equal(status(s, 'stop-crane'), 'playing');
+  s = finishAudio(s);
+  assert.equal(status(s, 'stop-crane'), 'pending');
+  s = finishAudio(send(s, play('stop-crane')));
+  assert.equal(status(s, 'stop-crane'), 'played');
+  assert.deepEqual(missed(s), []);
+});
+
+test('G01.01.b: unlock never rewrites the primary of a paid-only stop', () => {
+  let s = craneFixture();
+  s = send(s, access({ version: 'v3', stopIds: ['stop-gate'], tiers: ['extended'] }));
+  s = send(s, trigger('stop-gate'));
+  const first = s.playing?.storyId;
+  assert.equal(first, 'story-gate-ext');
+  s = finishAudio(s);
+  s = send(s, play('stop-gate'));
+  assert.equal(s.playing?.storyId, 'story-gate-ext');
+});
+
+test('C8: queued stop remains eligible and plays after current audio', () => {
+  let s = send(send(fixture(), trigger('a')), trigger('b'));
+  assert.equal(s.queued?.stopId, 'b');
+  assert.equal(status(s, 'b'), 'pending');
+  assert.deepEqual(s.autoFired, ['a']);
+  s = finishAudio(s);
+  assert.equal(s.playing?.stopId, 'b');
+  assert.deepEqual(s.autoFired, ['a', 'b']);
+});
+
+test('C9/C13/C14: paused session ignores arrivals; explicit resume restores eligibility', () => {
+  let s = send(fixture(), { type: 'Pause' });
+  assert.equal(s.state, 'Paused');
+  assert.ok(s.commands.some(c => c.type === 'ClearGeofences'));
+  s = send(s, trigger('b'));
+  assert.deepEqual(s.autoFired, []);
+  s = send(s, { type: 'Resume' });
+  s = send(s, trigger('b'));
+  assert.equal(s.playing?.stopId, 'b');
+});
+
+test('C10: old completion cannot finish a replay of the same story', () => {
+  let s = send(fixture(), play('a'));
+  const old = s.playing.playId;
+  s = send(s, play('a'));
+  s = send(s, { type: 'AudioFinished', sessionId: s.sessionId, playId: old });
+  assert.equal(s.playing?.playId, old + 1);
+  assert.deepEqual(s.heard, []);
+});
+
+test('C10: equal play numbers from different sessions do not collide', () => {
+  const old = send(fixture(), play('a'));
+  let s = send(start('walk-2', stops), play('b'));
+  assert.equal(old.playing.playId, s.playing.playId);
+  s = send(s, { type: 'AudioFinished', sessionId: old.sessionId,
+    playId: old.playing.playId });
+  assert.equal(s.playing?.stopId, 'b');
+  assert.deepEqual(s.heard, []);
+});
+
+test('C12: manually completed stop does not autoplay on later arrival', () => {
+  let s = finishAudio(send(fixture(), play('a')));
+  assert.deepEqual(s.autoFired, []);
+  s = send(s, trigger('a'));
+  assert.equal(s.playing, null);
+});
+
+test('C13: session pause retires queued attempt and stops playback', () => {
+  let s = send(send(fixture(), trigger('a')), trigger('b'));
+  s = send(s, { type: 'Pause' });
+  assert.equal(s.playing, null);
+  assert.equal(s.queued, null);
+  assert.equal(status(s, 'b'), 'available');
+  assert.ok(s.commands.some(c => c.type === 'StopAudio'));
+});
+
+test('C16: ended session cannot resume or accept manual playback', () => {
+  let s = send(fixture(), { type: 'End' });
+  s = send(s, { type: 'Resume' });
+  s = send(s, play('a'));
+  assert.equal(s.state, 'Ended');
+  assert.equal(s.playing, null);
+  const next = start('walk-2', stops);
+  assert.notEqual(next.sessionId, s.sessionId);
+  assert.deepEqual(next.heard, []);
+});
+
+// G01.02.b — audio ownership (ADR G01.02 §3/§4): moment launches, tagged
+// callbacks, live pause and the single 10-minute focus threshold.
+const momentPlay = (seq = 1) => ({ type: 'PlayMoment', momentId: 'moment-9',
+  storyId: 'story-m9', token: { kind: 'moment', ref: 'moment-9', seq } });
+const momentToken = s => ({ kind: 'moment', ref: s.playing.momentId, seq: s.playing.seq });
+const guideToken = s => ({ kind: 'guide', ref: s.sessionId, seq: s.playing.playId });
+const sendAt = (s, e, at) => step(s, e, at);
+
+// C18/C19/C20 (ADR G01.02 §3.4/§3.7): a manual pause and a focus loss are
+// live pauses — the launch and its token survive; only an explicit human
+// action resumes it, arrivals stay blocked until then.
+for (const event of ['UserPausedAudio', 'FocusLoss']) {
+  test(`C18/C19/C20: ${event} is a live pause that blocks arrivals until explicit Play`, () => {
+    let s = send(fixture(), trigger('a'));
+    const token = guideToken(s);
+    s = send(s, { type: event });
+    assert.equal(s.playing?.stopId, 'a');
+    assert.equal(s.playing?.paused, true);
+    assert.deepEqual(s.commands, []); // the player keeps the offset, no stop command
+    s = send(s, trigger('b'));
+    assert.equal(s.playing?.stopId, 'a');
+    assert.equal(s.playing?.paused, true);
+    assert.equal(status(s, 'b'), 'available');
+    assert.deepEqual(s.autoFired, ['a', 'b']);
+    s = send(s, { type: 'ResumeAudio', token });
+    assert.equal(s.playing?.paused, false);
+    assert.equal(s.playing?.playId, token.seq); // same launch, same token
+    assert.equal(s.suspended, false);
+    assert.deepEqual(s.commands, [{ type: 'ResumeAudio', token }]);
+  });
+}
+
+test('G01.02.b: start injects a sounding moment and refuses any other playingNow', () => {
+  assert.throws(() => start('walk-9', stops,
+    { playingNow: { stopId: 'a', storyId: 'a', playId: 1 } }), RangeError);
+  assert.throws(() => start('walk-9', stops,
+    { playingNow: { momentId: 'moment-9', storyId: 'story-m9', seq: 0 } }), RangeError);
+  const s = start('walk-1', stops,
+    { playingNow: { momentId: 'moment-9', storyId: 'story-m9', seq: 7 } });
+  assert.deepEqual(s.playing, { owner: 'moment', momentId: 'moment-9',
+    storyId: 'story-m9', seq: 7, paused: false });
+  assert.equal(s.playSeq, 0); // moment tokens never touch the session counter
+  assert.equal(s.suspended, false); // Start turns automation on, not the player
+});
+
+test('G01.02.b (§4.2): explicit Play Moment takes the player; guide is stopped by command, not heard', () => {
+  let s = send(send(fixture(), trigger('a')), trigger('b'));
+  s = send(s, momentPlay());
+  assert.deepEqual(s.commands, [
+    { type: 'StopAudio', token: { kind: 'guide', ref: 'walk-1', seq: 1 } },
+    { type: 'PlayMoment', momentId: 'moment-9', storyId: 'story-m9',
+      token: { kind: 'moment', ref: 'moment-9', seq: 1 } },
+  ]);
+  assert.deepEqual(s.playing, { owner: 'moment', momentId: 'moment-9',
+    storyId: 'story-m9', seq: 1, paused: false });
+  assert.deepEqual(s.heard, []);
+  assert.equal(status(s, 'a'), 'available');
+  assert.equal(s.queued, null);
+  assert.deepEqual(s.autoFired, ['a', 'b']); // the queue retired to auto_fired
+  assert.equal(s.suspended, true);
+});
+
+test('G01.02.b (§4.3): moment finished frees the player without crediting history or automation', () => {
+  let s = send(send(fixture(), trigger('a')), momentPlay());
+  s = send(s, { type: 'MomentFinished', token: momentToken(s) });
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  assert.equal(s.suspended, true);
+  assert.equal(s.commands.some(c => c.type === 'PlayStory'), false);
+  assert.equal(status(s, 'a'), 'available');
+});
+
+test('G01.02.b (§4.4): a failed moment launch suspends automation and credits nothing', () => {
+  let s = send(send(fixture(), trigger('a')), momentPlay());
+  s = send(s, { type: 'AudioFailed', token: momentToken(s) });
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  assert.equal(s.suspended, true);
+  assert.equal(s.commands.some(c => c.type === 'PlayStory'), false);
+});
+
+test('G01.02.b (§4.5): «Працягнуць гід» restores automation; the stale completion is ignored entirely', () => {
+  let s = send(send(send(fixture(), trigger('a')), trigger('b')), momentPlay());
+  s = send(s, { type: 'MomentFinished', token: momentToken(s) });
+  s = send(s, { type: 'GuideResume' });
+  assert.equal(s.suspended, false);
+  assert.equal(s.playing, null); // nothing sounds by itself after the return
+  s = send(s, { type: 'AudioFinished', sessionId: 'walk-1', playId: 1 });
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  s = send(s, trigger('c'));
+  assert.equal(s.playing?.stopId, 'c'); // the next trigger runs the general conditions
+});
+
+test('G01.02.b (§4.6): focus loss during a moment is a live pause; resume continues the same token', () => {
+  let s = send(fixture(), momentPlay());
+  s = send(s, { type: 'FocusLoss' });
+  assert.equal(s.playing?.paused, true);
+  assert.equal(s.playing?.seq, 1);
+  assert.equal(s.focusLostAt, now);
+  s = send(s, { type: 'FocusRegain' });
+  assert.equal(s.playing?.paused, true);
+  assert.equal(s.playing?.seq, 1);
+  s = send(s, { type: 'ResumeAudio', token: momentToken(s) });
+  assert.equal(s.playing?.paused, false);
+  assert.equal(s.playing?.seq, 1);
+  assert.equal(s.suspended, true); // a moment resume never clears Play Moment's suspension
+  assert.deepEqual(s.commands,
+    [{ type: 'ResumeAudio', token: { kind: 'moment', ref: 'moment-9', seq: 1 } }]);
+});
+
+test('G01.02.b (§4.7): focus regain past 10 minutes closes the launch; the old token is refused', () => {
+  let s = send(fixture(), momentPlay());
+  s = send(s, { type: 'FocusLoss' });
+  s = sendAt(s, { type: 'FocusRegain' }, now + 600_001);
+  assert.equal(s.playing, null);
+  assert.equal(s.focusLostAt, null);
+  s = send(s, { type: 'ResumeAudio', token: { kind: 'moment', ref: 'moment-9', seq: 1 } });
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.commands, []);
+  s = send(s, momentPlay(2));
+  assert.equal(s.playing?.seq, 2); // a repeat is always a fresh launch
+});
+
+test('G01.02.b (§4.8): End during a moment keeps it sounding; late guide completions are rejected', () => {
+  let s = send(send(fixture(), trigger('a')), momentPlay());
+  s = send(s, { type: 'End' });
+  assert.equal(s.state, 'Ended');
+  assert.equal(s.playing?.owner, 'moment'); // manual content is not session property
+  assert.deepEqual(s.heard, []);
+  assert.ok(s.commands.some(c => c.type === 'ReleaseWakelock'));
+  assert.equal(s.commands.some(c => c.type === 'StopAudio'), false);
+  s = send(s, { type: 'AudioFinished', sessionId: 'walk-1', playId: 1 });
+  assert.equal(s.playing?.owner, 'moment');
+  assert.deepEqual(s.heard, []);
+  s = send(s, { type: 'FocusLoss' });
+  s = send(s, { type: 'ResumeAudio', token: momentToken(s) });
+  assert.equal(s.playing?.paused, false);
+  assert.equal(s.state, 'Ended'); // a moment resume never restores the session
+});
+
+test('G01.02.b (§4.9): a session pause touches only the walk; a moment keeps sounding', () => {
+  let s = start('walk-1', stops,
+    { playingNow: { momentId: 'moment-9', storyId: 'story-m9', seq: 3 } });
+  s = send(s, { type: 'LocationAccepted', fix: fix() });
+  s = send(s, { type: 'Pause' });
+  assert.equal(s.state, 'Paused');
+  assert.deepEqual(s.playing, { owner: 'moment', momentId: 'moment-9',
+    storyId: 'story-m9', seq: 3, paused: false });
+  assert.equal(s.commands.some(c => c.type === 'StopAudio'), false);
+  assert.ok(s.commands.some(c => c.type === 'ReleaseWakelock'));
+  s = send(s, { type: 'ResumeAudio', token: momentToken(s) }); // not paused — refused
+  assert.deepEqual(s.commands, []);
+  s = send(s, momentPlay(4)); // an explicit Play Moment works in a paused session
+  assert.equal(s.state, 'Paused');
+  assert.equal(s.playing?.seq, 4);
+  s = send(s, { type: 'Resume' });
+  assert.equal(s.state, 'Active');
+  assert.equal(s.playing?.owner, 'moment');
+  s = send(s, trigger('a'));
+  assert.equal(s.queued?.stopId, 'a'); // autoplay waits for the occupied player
+  assert.equal(s.playing?.owner, 'moment');
+});
+
+test('G01.02.b (§4.10): a new session sees the occupied player and waits for it', () => {
+  send(start('walk-1', stops,
+    { playingNow: { momentId: 'moment-9', storyId: 'story-m9', seq: 5 } }), { type: 'End' });
+  let s = start('walk-2', stops,
+    { playingNow: { momentId: 'moment-9', storyId: 'story-m9', seq: 5 } });
+  s = send(s, { type: 'LocationAccepted', fix: fix() });
+  assert.equal(s.playing?.owner, 'moment');
+  s = send(s, trigger('a'));
+  assert.equal(s.queued?.stopId, 'a');
+  assert.equal(s.playing?.owner, 'moment');
+  s = send(s, { type: 'MomentFinished', token: momentToken(s) });
+  assert.equal(s.playing, null);
+  assert.equal(s.queued?.stopId, 'a'); // the queue waits; a finish never starts it
+  assert.equal(s.commands.some(c => c.type === 'PlayStory'), false);
+});
+
+test('G01.02.b (§4.12): moment → moment leaves one sound; the old token is ignored entirely', () => {
+  let s = send(fixture(), momentPlay(1));
+  s = send(s, momentPlay(2));
+  assert.deepEqual(s.commands, [
+    { type: 'StopAudio', token: { kind: 'moment', ref: 'moment-9', seq: 1 } },
+    { type: 'PlayMoment', momentId: 'moment-9', storyId: 'story-m9',
+      token: { kind: 'moment', ref: 'moment-9', seq: 2 } },
+  ]);
+  s = send(s, { type: 'ResumeAudio', token: { kind: 'moment', ref: 'moment-9', seq: 1 } });
+  assert.equal(s.playing?.seq, 2);
+  assert.deepEqual(s.commands, []); // a stale resume is a refused command
+  s = send(s, { type: 'MomentFinished', token: { kind: 'moment', ref: 'moment-9', seq: 1 } });
+  assert.equal(s.playing?.seq, 2); // the stale completion changed nothing
+  s = send(s, { type: 'MomentFinished', token: { kind: 'moment', ref: 'moment-9', seq: 2 } });
+  assert.equal(s.playing, null);
+});
+
+test('G01.02.b (§4.12): moment → guide hands the player over; the moment token dies', () => {
+  let s = send(fixture(), momentPlay(4));
+  s = send(s, play('a'));
+  assert.deepEqual(s.commands.map(c => c.type), ['StopAudio', 'PlayStory']);
+  assert.deepEqual(s.commands[0].token, { kind: 'moment', ref: 'moment-9', seq: 4 });
+  assert.equal(s.suspended, false); // an explicit guide play is an explicit return
+  s = send(s, { type: 'MomentFinished', token: { kind: 'moment', ref: 'moment-9', seq: 4 } });
+  assert.equal(s.playing?.owner, 'guide');
+  assert.deepEqual(s.heard, []);
+  s = send(s, { type: 'AudioFinished', sessionId: 'walk-1', playId: s.playing.playId });
+  assert.deepEqual(s.heard, ['a']);
+});
+
+test('G01.02.b (§4.15): a failed guide launch is not heard; «Працягнуць гід» re-arms the next trigger', () => {
+  let s = send(fixture(), play('a'));
+  s = send(s, { type: 'AudioFailed', token: guideToken(s) });
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  assert.equal(s.suspended, true);
+  s = send(s, trigger('b'));
+  assert.equal(s.playing, null); // suspended — a failure never starts the next sound
+  assert.deepEqual(s.autoFired, ['b']);
+  s = send(s, { type: 'GuideResume' });
+  s = send(s, trigger('c'));
+  assert.equal(s.playing?.stopId, 'c');
+});
+
+test('G01.02.b (§3.4): a manual audio stop closes the launch and suspends automation', () => {
+  let s = send(fixture(), trigger('a'));
+  s = send(s, { type: 'UserStoppedAudio' });
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  assert.equal(status(s, 'a'), 'available');
+  assert.equal(s.suspended, true);
+  assert.deepEqual(s.commands,
+    [{ type: 'StopAudio', token: { kind: 'guide', ref: 'walk-1', seq: 1 } }]);
+});
+
+test('G01.02.b (§3.4): focus regain past 10 minutes closes a guide launch without crediting it', () => {
+  let s = send(fixture(), trigger('a'));
+  s = send(s, { type: 'FocusLoss' });
+  s = sendAt(s, { type: 'FocusRegain' }, now + 600_001);
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  assert.equal(status(s, 'a'), 'available');
+  assert.equal(s.suspended, true);
+});
+
+test('G01.02.b (§3.7): a manual pause has no 10-minute threshold', () => {
+  let s = send(fixture(), play('a'));
+  const token = guideToken(s);
+  s = send(s, { type: 'UserPausedAudio' });
+  s = sendAt(s, { type: 'FocusRegain' }, now + 900_000);
+  assert.equal(s.playing?.paused, true); // no focus_lost_at was armed
+  s = send(s, { type: 'ResumeAudio', token });
+  assert.equal(s.playing?.paused, false);
+  assert.equal(s.playing?.playId, token.seq);
+});
+
+test('C5/C21: newest queued stop replaces previous without marking it heard', () => {
+  let s = send(send(send(fixture(), trigger('a')), trigger('b')), trigger('c'));
+  assert.equal(status(s, 'b'), 'available');
+  assert.equal(s.heard.includes('b'), false);
+  s = finishAudio(s);
+  assert.equal(s.playing?.stopId, 'c');
+});
+
+for (const [label, location] of [
+  ['missing', null], ['stale', fix({ at: now - 30_001 })],
+  ['inaccurate', fix({ accuracy: 21 })],
+  ['too far', fix({ distances: { a: 0, b: 41, c: 0 } })],
+]) {
+  test(`C22: ${label} position retires queue without playback`, () => {
+    let s = send(send(fixture(), trigger('a')), trigger('b'));
+    s = send(s, { type: 'LocationAccepted', fix: location });
+    s = finishAudio(s);
+    assert.equal(s.playing, null);
+    assert.equal(status(s, 'b'), 'available');
+    assert.deepEqual(s.heard, ['a']);
+  });
+}
+
+test('C22: exact freshness, accuracy and queued distance boundaries are accepted', () => {
+  let s = send(send(fixture(), trigger('a')), trigger('b'));
+  s = send(s, { type: 'LocationAccepted', fix: fix({ at: now - 30_000,
+    accuracy: 20, distances: { b: 40 } }) });
+  assert.equal(finishAudio(s).playing?.stopId, 'b');
+});
+
+test('C24: selecting another stop stops first before playing second', () => {
+  const s = send(send(fixture(), trigger('a')), play('b'));
+  assert.equal(status(s, 'a'), 'available');
+  assert.equal(s.playing?.stopId, 'b');
+  assert.deepEqual(s.commands.map(c => c.type), ['StopAudio', 'PlayStory']);
+});
+
+test('boundary: inactive state takes precedence over suspended autoplay', () => {
+  let s = send(fixture(), { type: 'Pause' });
+  s = send(s, trigger('a'));
+  assert.equal(status(s, 'a'), 'pending');
+  assert.equal(s.queued, null);
+});
+
+test('boundary: stale immediate trigger spends no attempt; fresh retry succeeds', () => {
+  let s = send(fixture(), { type: 'LocationAccepted', fix: fix({ at: 0 }) });
+  s = send(s, trigger('a'));
+  assert.deepEqual(s.autoFired, []);
+  s = send(s, { type: 'LocationAccepted', fix: fix() });
+  assert.equal(send(s, trigger('a')).playing?.stopId, 'a');
+});
+
+test('boundary: replayed queue notification cannot evict itself', () => {
+  let s = send(send(fixture(), trigger('a')), trigger('b'));
+  s = send(s, trigger('b'));
+  assert.equal(status(s, 'b'), 'pending');
+  assert.equal(finishAudio(s).playing?.stopId, 'b');
+});
+
+test('boundary: unknown stop and future timestamp cannot trigger playback', () => {
+  let s = send(fixture(), trigger('unknown'));
+  assert.equal(s.playing, null);
+  s = send(s, { type: 'LocationAccepted', fix: fix({ at: now + 1 }) });
+  s = send(s, trigger('a'));
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.autoFired, []);
+});
+
+test('boundary: unknown story and cross-stop story selection are rejected', () => {
+  let s = send(fixture(), playStory('a', 'nonexistent'));
+  assert.equal(s.playing, null);
+  s = send(s, playStory('a', 'b'));
+  assert.equal(s.playing, null);
+  s = send(s, playStory('a', 'a'));
+  assert.equal(s.playing?.storyId, 'a');
+});
+
+test('reducer does not mutate input state or event', () => {
+  const s = fixture();
+  const event = trigger('a');
+  const original = structuredClone({ s, event });
+  send(s, event);
+  assert.deepEqual({ s, event }, original);
+});
+
+test('C31: every permutation of stop visits works without following suggested order', () => {
+  for (const order of [['a','b','c'], ['a','c','b'], ['b','a','c'],
+    ['b','c','a'], ['c','a','b'], ['c','b','a']]) {
+    let s = fixture();
+    for (const id of order) {
+      s = send(s, trigger(id));
+      assert.equal(s.playing?.stopId, id);
+      s = finishAudio(s);
+    }
+    assert.deepEqual([...s.heard].sort(), stops);
+    assert.equal(s.state, 'Active');
+  }
+});
+
+test('C32: ending after one freely selected stop is a normal session end', () => {
+  const s = send(finishAudio(send(fixture(), trigger('c'))), { type: 'End' });
+  assert.equal(s.state, 'Ended');
+  assert.deepEqual(missed(s), ['a', 'b']);
+  assert.equal(s.commands.some(c => /fail|incomplete/i.test(c.type)), false);
+});
+
+function lockedFixture() {
+  return send(start('walk-1', stops, { version: 'v1', accessibleStopIds: ['a', 'c'] }),
+    { type: 'LocationAccepted', fix: fix() });
+}
+
+test('C33: locked preview is excluded from manual and automatic playback and remaining list', () => {
+  let s = lockedFixture();
+  assert.equal(status(s, 'b'), 'locked');
+  s = send(send(s, trigger('b')), play('b'));
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.autoFired, []);
+  assert.deepEqual(missed(s), ['a', 'c']);
+});
+
+test('C34: verified downloaded access unlocks any nearby stop without restarting progress', () => {
+  let s = finishAudio(send(lockedFixture(), trigger('c')));
+  s = send(s, access({ stopIds: ['b'] }));
+  assert.equal(status(s, 'b'), 'pending');
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, ['c']);
+  s = send(s, trigger('b'));
+  assert.equal(s.playing?.stopId, 'b');
+  assert.equal(s.sessionId, 'walk-1');
+});
+
+test('C35: catalog version change cannot unlock or replace active session content', () => {
+  let s = lockedFixture();
+  s = send(s, access({ version: 'v2', stopIds: ['b'] }));
+  assert.equal(s.version, 'v1');
+  assert.equal(status(s, 'b'), 'locked');
+  assert.deepEqual(s.tierAvailable, ['base']);
+});
+
+test('C33: purchase notification alone is not playable access', () => {
+  let s = lockedFixture();
+  s = send(s, { type: 'PurchaseSucceeded', stopIds: ['b'] });
+  s = send(s, play('b'));
+  assert.equal(s.playing, null);
+  assert.equal(status(s, 'b'), 'locked');
+});
+
+test('boundary: access update is atomic and rejects unknown stops and tiers', () => {
+  let s = send(lockedFixture(), access({ stopIds: ['b', 'unknown'] }));
+  assert.equal(status(s, 'b'), 'locked');
+  s = send(lockedFixture(), access({ tiers: ['extended', 'bogus'] }));
+  assert.equal(status(s, 'b'), 'locked');
+  assert.deepEqual(s.tierAvailable, ['base']);
+});
+
+test('G01.03.b: grant for another route is ignored entirely', () => {
+  let s = lockedFixture();
+  const before = structuredClone(s);
+  before.commands = [];
+  s = send(s, access({ routeId: 'route-2', stopIds: ['b'] }));
+  assert.deepEqual(s, before);
+});
+
+test('G01.03.b: grant for another locale is ignored entirely', () => {
+  let s = lockedFixture();
+  const before = structuredClone(s);
+  before.commands = [];
+  s = send(s, access({ locale: 'en', stopIds: ['b'] }));
+  assert.deepEqual(s, before);
+});
+
+test('G01.03.b: grant from a non-download issuer is ignored entirely', () => {
+  let s = lockedFixture();
+  for (const issuer of ['purchase-flow', undefined]) {
+    const before = structuredClone(s);
+    before.commands = [];
+    s = send(s, access({ issuer, stopIds: ['b'] }));
+    assert.deepEqual(s, before, `issuer=${String(issuer)}`);
+  }
+});
+
+test('G01.03.b: repeated identical AccessReady is a no-op', () => {
+  const event = access({ stopIds: ['b'], tiers: ['extended'] });
+  let s = lockedFixture();
+  s = send(s, event);
+  const once = structuredClone(s);
+  s = send(s, event);
+  assert.deepEqual(s, once);
+  assert.deepEqual(s.commands, []);
+  assert.equal(status(s, 'b'), 'pending');
+});
+
+test('G01.03.b: late grant after End mutates nothing; a session pinning that version still receives it', () => {
+  let ended = send(fixture(), { type: 'End' });
+  const before = structuredClone(ended);
+  before.commands = [];
+  ended = send(ended, access({ stopIds: ['b'] }));
+  assert.deepEqual(ended, before);
+  let fresh = start('walk-2', stops, { version: 'v1' });
+  fresh = send(fresh, access({ stopIds: ['b'] }));
+  assert.equal(status(fresh, 'b'), 'pending');
+  assert.equal(fresh.version, 'v1');
+});
+
+test('G01.03.b: version stays pinned across pause, resume and a foreign-version grant', () => {
+  let s = lockedFixture();
+  s = send(s, { type: 'Pause' });
+  s = send(s, access({ version: 'v2', stopIds: ['b'] }));
+  s = send(s, { type: 'Resume' });
+  assert.equal(s.version, 'v1');
+  assert.deepEqual(s.tierAvailable, ['base']);
+  assert.equal(status(s, 'b'), 'locked');
+});
+
+test('G01.03.b: playSeq is a write-through counter; an old playSeq cannot credit a newer play', () => {
+  let s = fixture();
+  s = send(s, play('a'));
+  const firstPlaySeq = s.playSeq;
+  assert.equal(s.playing.playId, firstPlaySeq);
+  s = send(s, play('b'));
+  assert.equal(s.playSeq, firstPlaySeq + 1);
+  s = send(s, { type: 'AudioFinished', sessionId: s.sessionId, playId: firstPlaySeq });
+  assert.deepEqual(s.heard, []);
+  assert.equal(s.playing?.stopId, 'b');
+});
+
+test('G01.03.b: start refuses a package claiming no verified layer or an unknown layer', () => {
+  assert.throws(() => start('walk-9', stops, { tierAvailable: [] }), RangeError);
+  assert.throws(() => start('walk-9', stops, { tierAvailable: ['premium'] }), RangeError);
+});
+
+test('G01.03.b: start refuses accessibleStopIds naming stops outside the pinned package', () => {
+  assert.throws(() => start('walk-9', stops, { accessibleStopIds: ['a', 'ghost'] }), RangeError);
+});
+
+// ADR G21.20 §4 — the audio-pin acceptance rows of the model (issue #675):
+// the mixed session sounds only through its own unlocked audio tier, every
+// foreign grant is a full ignore, and the text-only presentation emits no
+// audio command while the automatic attempt still burns.
+
+test('G21.20 §4.1: fr text / en audio — Start carries both pins and the audio tier', () => {
+  const s = mixedFixture();
+  assert.equal(s.locale, 'fr');
+  assert.equal(s.audioLocale, 'en');
+  assert.deepEqual(s.tierAvailable, ['base']);
+  assert.deepEqual(s.audioTierAvailable, ['base']);
+  // heard is credited exactly as in the monolingual walk — by the finished
+  // live launch of the mixed session.
+  const finished = finishAudio(send(s, play('stop-crane')));
+  assert.deepEqual(finished.heard, ['story-crane-base']);
+});
+
+test('G21.20 §4.1: PlayStory builds the path from the audio pin, not the text locale', () => {
+  const played = send(mixedFixture(), play('stop-crane'));
+  assert.equal(played.commands[0]?.type, 'PlayStory');
+  assert.equal(played.commands[0]?.path, 'en/base/audio/story-crane-base.m4a');
+});
+
+test('G21.20 §4.1: AccessReady(fr) widens the text layer only; AccessReady(en) the audio layer only', () => {
+  let s = mixedFixture();
+  s = send(s, access({ version: 'v3', locale: 'fr', tier: 'extended', stopIds: ['stop-gate'] }));
+  assert.deepEqual(s.tierAvailable, ['base', 'extended']);
+  assert.deepEqual(s.audioTierAvailable, ['base']);
+  s = send(s, access({ version: 'v3', locale: 'en', tier: 'extended', stopIds: ['stop-gate'] }));
+  assert.deepEqual(s.tierAvailable, ['base', 'extended']);
+  assert.deepEqual(s.audioTierAvailable, ['base', 'extended']);
+  // The pins are immutable through the session (§3.1.4): unlocks never move them.
+  assert.equal(s.locale, 'fr');
+  assert.equal(s.audioLocale, 'en');
+});
+
+test('G21.20 §4.2: text-only — a session without a pin never proposes audio and the automatic attempt burns', () => {
+  let s = mixedFixture({ audioLocale: null });
+  assert.equal(s.audioLocale, null);
+  assert.deepEqual(s.audioTierAvailable, []);
+  s = send(s, trigger('stop-crane'));
+  assert.deepEqual(s.autoFired, ['stop-crane']);
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.commands, []);
+  assert.deepEqual(s.heard, []);
+  // Manual access keeps working; the presentation is text-only.
+  const manual = send(s, play('stop-crane'));
+  assert.equal(manual.playing, null);
+  assert.deepEqual(manual.commands, []);
+  // The text layer still widens; the audio mirror never lives (§3.1.3).
+  const widened = send(manual,
+    access({ version: 'v3', locale: 'fr', tier: 'extended', stopIds: ['stop-gate'] }));
+  assert.deepEqual(widened.tierAvailable, ['base', 'extended']);
+  assert.deepEqual(widened.audioTierAvailable, []);
+});
+
+test('G21.20 §4.3: monolingual — a session without the pin option behaves byte-for-byte as the text layer', () => {
+  const implicit = craneFixture();
+  assert.equal(implicit.audioLocale, 'be');
+  assert.deepEqual(implicit.audioTierAvailable, ['base']);
+  const played = send(implicit, play('stop-crane'));
+  assert.equal(played.commands[0]?.type, 'PlayStory');
+  assert.equal(played.commands[0]?.path, 'be/base/audio/story-crane-base.m4a');
+  // One event widens both mirrors: the audio layer IS the text layer.
+  const widened = send(played,
+    access({ version: 'v3', locale: 'be', tier: 'extended', stopIds: ['stop-gate'] }));
+  assert.deepEqual(widened.tierAvailable, ['base', 'extended']);
+  assert.deepEqual(widened.audioTierAvailable, ['base', 'extended']);
+});
+
+test('G21.20 §4.6: no voice — a story without its own unlocked audio tier gets the text-only presentation', () => {
+  let s = mixedFixture();
+  // fr-extended text unlocked; en-extended audio not: accessible, not audible.
+  s = send(s, access({ version: 'v3', locale: 'fr', tier: 'extended', stopIds: ['stop-gate'] }));
+  const attempt = send(s, trigger('stop-gate'));
+  assert.deepEqual(attempt.autoFired, ['stop-gate']);
+  assert.equal(attempt.playing, null);
+  assert.deepEqual(attempt.commands, []);
+  // en-extended unlocks: the same manual play now sounds the en path.
+  const s2 = send(attempt,
+    access({ version: 'v3', locale: 'en', tier: 'extended', stopIds: ['stop-gate'] }));
+  const audible = send(s2, play('stop-gate'));
+  assert.equal(audible.commands[0]?.type, 'PlayStory');
+  assert.equal(audible.commands[0]?.path, 'en/extended/audio/story-gate-ext.m4a');
+});
+
+test('G21.20 §4.8: a wrong-version pin reaches the model only after the restore drop (§3.4) — the session is text-only', () => {
+  // The controller's restore resolves the saved pin against the pinned
+  // version's availability; an unverifiable pin never reaches start() — the
+  // session begins text-only with progress intact.
+  let s = mixedFixture({ audioLocale: null });
+  s = send(s, trigger('stop-crane'));
+  assert.deepEqual(s.autoFired, ['stop-crane']);
+  assert.equal(s.playing, null);
+  assert.deepEqual(s.heard, []);
+  // Foreign-version bytes stay unread: a v4 grant is a full ignore even for
+  // the audio pin's locale.
+  const foreign = send(s,
+    access({ version: 'v4', locale: 'en', tier: 'base', stopIds: ['stop-crane'] }));
+  assert.deepEqual(foreign.audioTierAvailable, []);
+  assert.deepEqual(foreign.tierAvailable, ['base']);
+  assert.deepEqual(foreign.accessibleStopIds, ['stop-crane']);
+});
+
+test('G21.20 §4.9: unauthorized layer — an en-extended grant opens no fr-extended bytes', () => {
+  const s = mixedFixture();
+  const before = structuredClone(s);
+  const granted = send(s,
+    access({ version: 'v3', locale: 'en', tier: 'extended', stopIds: ['stop-gate'] }));
+  assert.deepEqual(granted.audioTierAvailable, ['base', 'extended']);
+  assert.deepEqual(granted.tierAvailable, before.tierAvailable);
+  assert.deepEqual(granted.accessibleStopIds, before.accessibleStopIds);
+  assert.deepEqual(granted.commands, []);
+  assert.equal(status(granted, 'stop-gate'), 'locked');
+  const attempt = send(granted, play('stop-gate'));
+  assert.equal(attempt.playing, null);
+  assert.deepEqual(attempt.commands, []);
+});
+
+test('G21.20 §3.2: start() validates the pin — malformed locales and unknown audio tiers are refusals; a pin without verified audio tiers is a text-only state', () => {
+  assert.throws(() => start('walk-9', stops, { audioLocale: '' }),
+    /audioLocale must be a non-empty locale code or null/);
+  // The pin is a locale code, never a path segment — separators and
+  // traversal are refused before the path interpolation in PlayStory.
+  for (const malformed of ['../en', 'en/../x', 'en/base', 'a\\b']) {
+    assert.throws(() => start('walk-9', stops, { locale: 'fr', audioLocale: malformed }),
+      /audioLocale must be a non-empty locale code or null/,
+      `malformed pin ${malformed} is a refusal`);
+  }
+  assert.throws(() => start('walk-9', stops, { locale: 'fr', audioLocale: 'en', audioTier: ['premium'] }),
+    /audioTier must list verified layers: base\|extended/);
+  // ADR G21.20 §3.3: a pinned layer with no verified audio tiers yet starts
+  // as text-only — the engine's `audioTier ?? []`, not a refusal.
+  const unready = start('walk-9', stops, { locale: 'fr', audioLocale: 'en' });
+  assert.equal(unready.audioLocale, 'en');
+  assert.deepEqual(unready.audioTierAvailable, []);
+});
+
+test('bounded exploration: invariants across all 4-event sequences (16 choices per step)', () => {
+  let transitions = 0;
+  function explore(s, depth) {
+    if (!depth) return;
+    const currentToken = s.playing
+      ? (s.playing.owner === 'guide'
+        ? { kind: 'guide', ref: s.sessionId, seq: s.playing.playId }
+        : { kind: 'moment', ref: s.playing.momentId, seq: s.playing.seq })
+      : { kind: 'moment', ref: 'moment-9', seq: 0 };
+    const events = [trigger('a'), trigger('b'), play('a'),
+      playStory('a', 'a'),
+      { type: 'AudioFinished', sessionId: s.sessionId, playId: s.playing?.playId ?? -1 },
+      { type: 'PlayMoment', momentId: 'moment-9', storyId: 'story-m9',
+        token: { kind: 'moment', ref: 'moment-9', seq: 1 } },
+      { type: 'MomentFinished', token: currentToken },
+      { type: 'AudioFailed', token: currentToken },
+      { type: 'ResumeAudio', token: currentToken },
+      { type: 'UserPausedAudio' }, { type: 'UserStoppedAudio' },
+      { type: 'GuideResume' },
+      { type: 'FocusLoss' }, { type: 'FocusRegain' },
+      { type: 'Pause' }, { type: 'End' }];
+    for (const event of events) {
+      const snapshot = structuredClone(s);
+      const next = send(s, event);
+      const context = JSON.stringify({ state: s, event });
+      assert.deepEqual(s, snapshot, context);
+      assert.ok(s.heard.every(id => next.heard.includes(id)), context);
+      assert.ok(s.autoFired.every(id => next.autoFired.includes(id)), context);
+      assert.equal(new Set(next.autoFired).size, next.autoFired.length, context);
+      assert.equal(new Set(next.heard).size, next.heard.length, context);
+      // ADR G01.02 §3.4: a sounding guide launch requires a live, unsuspended,
+      // unpaused session; a moment mirror may exist in any session state.
+      assert.ok(!next.playing || next.playing.owner === 'moment'
+        || next.playing.paused
+        || (next.state === 'Active' && !next.suspended), context);
+      if (s.state === 'Ended') assert.equal(next.state, 'Ended', context);
+      assert.ok(next.commands.filter(c => c.type === 'PlayStory').length <= 1, context);
+      assert.ok(next.commands.filter(c => c.type === 'PlayMoment').length <= 1, context);
+      // ADR G01.02 §3.5: a moment launch never credits guide history.
+      if (next.playing?.owner === 'moment') {
+        assert.deepEqual(next.heard.filter(id => !s.heard.includes(id)), [], context);
+      }
+      transitions++;
+      explore(next, depth - 1);
+    }
+  }
+  explore(fixture(), 4);
+  assert.equal(transitions, 69904);
+});

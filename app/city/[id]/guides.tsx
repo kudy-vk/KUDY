@@ -1,0 +1,56 @@
+// G06.01.a (issue #313) — the «Гіды» rubric surface: the full list of the
+// published guides in the canonical order, each exactly once (11 §16.1), Back
+// to the city (NAV9). The rubric exists only with published content — the
+// empty city renders its honest NAV3 message instead of an empty rubric.
+// The [id] route of 19 §2.5 is display-shaped only in the MVP single-city
+// catalog: the surface renders the active city and does not echo an
+// unvalidated param (21 §3.2 — у MVP толькі актыўны Гданьск).
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useCatalogController } from "../../../controllers/catalog/useCatalogController";
+import { useServices, useUiLocale } from "../../_layout";
+import { BackButton } from "../../../components/back-button";
+import { darkTokens, tokens, type ThemeTokens } from "../../../components/design-tokens";
+import { useThemeStyles } from "../../../components/theme";
+import { CityCatalogBody } from "../../../components/guide-card";
+import { uiStrings } from "../../../components/ui-strings";
+
+const createStyles = (palette: ThemeTokens) => StyleSheet.create({
+  screen: {
+    backgroundColor: palette.colorPaper,
+    flex: 1,
+  },
+});
+const lightStyles = createStyles(tokens);
+const darkStyles = createStyles(darkTokens);
+
+export default function Guides() {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const services = useServices();
+  // G14.04.d (issue #305): the words read the switchable display locale —
+  // a switch re-renders them in place, no restart.
+  const locale = useUiLocale();
+  const controller = useCatalogController(services.catalog?.controller);
+  // UX 02 (issue #348): the top inset clears the status bar and notch with
+  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  const insets = useSafeAreaInsets();
+  // G06.05 (issue #280, AC1/AC4): the shared words in the display locale and
+  // the failed load's named retry.
+  const strings = uiStrings(locale);
+  return (
+    <View
+      style={[styles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom }]}
+      testID="screen-Guides"
+    >
+      <CityCatalogBody
+        walk={services.walk}
+        catalog={controller?.surface ?? null}
+        onRetry={controller ? () => void controller.refresh() : undefined}
+        variant="rubric"
+        locale={locale}
+        leading={<BackButton label={strings.backToCity} testID="btn-guides-back" />}
+      />
+    </View>
+  );
+}

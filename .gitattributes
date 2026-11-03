@@ -1,0 +1,55 @@
+# AR-1 (#78): lock.json sha256 values are computed over canonical LF bytes.
+# Pin LF so a CRLF checkout cannot break integrity verification of the fixtures.
+spikes/G00.02-offline-map/source/** eol=lf
+
+# G02.03: build-bundle hashes the author content bytes; no EOL conversion may
+# touch these paths, otherwise the same checkout produces different sha256
+# values on Windows (core.autocrlf=true) and Linux.
+fixtures/content/** -text
+
+# G23.01: the e2e fixture bytes feed the same byte-hashing packager; an EOL
+# conversion would change the sha256 values recorded in lock.json/media.json
+# per checkout (implementation-rules 4).
+fixtures/e2e/** -text
+
+# G06.08: the prototype's test byte-compares the fixture copy against the
+# canonical fixture; both paths must keep identical LF bytes on any checkout,
+# otherwise the guard silently masks or falsely reports drift (rule 4).
+fixtures/discovery-contract/index-valid.json eol=lf
+spikes/G06.08-prototype/data/discovery-index.json eol=lf
+
+# G04.02.a: the download suite hashes committed fixture bytes and compares
+# against sha256 values fixed in the test; no EOL conversion may touch these
+# paths, otherwise a CRLF checkout produces different hashes and the raw-byte
+# hashing guard cannot hold (implementation-rules 4, AR-1).
+services/download/fixtures/** -text
+
+# G21.06 (#539): catalog-discovery-stop-places.json pins the discovery index
+# at 14475 bytes over canonical LF bytes; a CRLF checkout breaks the preview
+# integrity verification. Same class as the index-valid.json pin above.
+fixtures/discovery-contract/index-stop-places.json eol=lf
+
+# G21.06 (#539): the wire-types freshness check compares the committed output
+# byte-wise against what the generator renders; the generator always writes LF.
+contracts/wire/wire-types.ts eol=lf
+controllers/demoCatalog.generated.ts eol=lf
+
+# G21.06 (#539): every committed trace must regenerate byte for byte from its
+# seeded generator; the generator serializes LF.
+tools/simulate/traces/*.json eol=lf
+
+# G21.06 (#539): the committed review reports are regenerated and compared
+# byte-wise against the renderer output, which writes LF.
+authoring/**/review/*.review.md eol=lf
+
+# G20.36: the message generator byte-compares every output against LF text.
+components/*-strings.generated.ts eol=lf
+controllers/**/*-strings.generated.ts eol=lf
+web/lib/i18n/??.ts eol=lf
+
+# Issue 429: the brand icon bytes are checksummed against the owner package SHA256SUMS.
+assets/kudy-icon/** -text
+
+# Issue 921 (DQ-11): the draft fixture bytes carry a sha256 recorded in the
+# fixture provenance.json; no EOL conversion may touch them (rule 4).
+test/fixtures/image-check/** -text

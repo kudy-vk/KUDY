@@ -1,0 +1,66 @@
+// GENERATED FILE — do not edit. Regenerate with:
+//   node --experimental-strip-types tools/i18n/generate-messages.mjs
+//
+// Source of truth: contracts/ui-messages/source.json (the be base text) and
+// contracts/ui-messages/translations/<locale>.json (the reviewed translations).
+// G21.25 (issue #558): the catalogues are generated projections — edit the
+// source/translation data, never this file; the generator's --check mode
+// fails on any hand edit.
+// the web channel's UI words (09 §8: «ніводнага зашытага радка нідзе»; G14.04.d #305)
+
+
+export const sv = {
+  "appBenefitFullRoutes": "Kompletta rutter: alla stopp och allt ljud",
+  "appBenefitGps": "Automatisk uppspelning av berättelser på platsen via GPS",
+  "appBenefitOffline": "Offline: rutterna till hands utan internet",
+  "appPageStores": "Hitta appen:",
+  "appPageTitle": "Fullversionen — i KUDY-appen",
+  "appStoreName": "App Store",
+  "audioAndText": "ljud och text",
+  "audioHeading": "Ljud",
+  "audioUnavailable": "Ljudfilen finns inte i det offentliga paketet; berättelsens text nedan läses som vanligt.",
+  "backToGuide": "Till guidesidan",
+  "brand": "KUDY",
+  "calmOfferCta": "Öppna appen",
+  "calmOfferText": "Hela versionen — i appen: GPS-uppspelning, offline, kompletta rutter.",
+  "catalogTitle": "Stadsguider",
+  "distance": "Avstånd",
+  "duration": "Längd",
+  "homeLink": "Till startsidan",
+  "kilometersShort": "km",
+  "languages": "Språk",
+  "lockedLabel": "stoppet är låst",
+  "mapAttribution": "Kartdata © OpenStreetMap-bidragsgivare (licens ODbL)",
+  "mapError": "Kartan är tillfälligt otillgänglig. Ruttlistan nedan fungerar som vanligt.",
+  "mapIntro": "Översikt över offentliga rutter och stopp. Besökarens position fastställs inte och används inte.",
+  "mapRoutesHeading": "Rutter på kartan",
+  "mapTitle": "Stadskarta",
+  "minutesShort": "min",
+  "nextStop": "Nästa stopp",
+  "playStoreName": "Google Play",
+  "prevStop": "Föregående stopp",
+  "privacyAnalytics": "Analys — bara med uttryckligt samtycke. Händelser skickas till servern först efter att samtycket har getts; ett nekande betyder att loggen bara finns på enheten och att appen fungerar fullt ut. Koordinater, namn och användarinmatad text skickas aldrig.",
+  "privacyAppData": "Appen fungerar utan konto. Den för en lokal händelselogg på enheten (vilka berättelser som öppnades, vilka rutter som laddades ner) och sparar nedladdat innehåll. Loggen innehåller varken namn eller fri text och är knuten till en slumpmässig enhetsidentifierare — det är pseudonymiserade, inte anonymiserade data. Vid installationen utfärdar KUDY-servern en slumpmässig identifierare och en hemlighet till enheten: på servern finns identifieraren och en hash av hemligheten, hemligheten själv sparas bara på enheten och skickas till KUDY-servern med varje enhetsanrop som åtkomstnyckel. För att begränsa anropens frekvens sparar servern en envägs-hash av IP-adressen. Betyg på rutter och platser som ges i appen (betyget och valda skäl, utan fri text) går också till KUDY-servern och sparas där tillsammans med enhetsidentifieraren.",
+  "privacyContact": "Frågor om den här integritetspolicyn kan ställas som issues i projektets offentliga förråd:",
+  "privacyDeletion": "Radering av data: i appen, under avsnittet My KUDY, finns en knapp för att radera enheten — den rensar händelseloggen på servern och enhetens post, tillsammans med den betygsdata på servern och hemligheten på enheten; nedladdat innehåll finns kvar. Brev eller ansökan behövs inte. Knappen raderar inte poster i appbutikerna eller hos RevenueCat: respektive tjänst förvarar och raderar dem enligt sina egna regler.",
+  "privacyIntro": "KUDY är audioguider för stadspromenader. Den här sidan beskriver vilka data projektet behandlar: webbkanalens kostnadsfria skikt och mobilappen.",
+  "privacyLocation": "Positionen används i appen under en aktiv promenad: bakgrundspositionering pågår medan promenaden är aktiv och slutar med den. Appen skickar inte exakta GPS-koordinater till KUDY-servern och sparar dem inte i händelseloggen. Onlinekartan hämtar kartplattor från OpenFreeMap; förfrågningarna visar leverantören det visade kartområdet, även området kring den aktuella positionen när kartföljning är aktiv. Webbversionen fastställer inte besökarens position.",
+  "privacyPurchases": "Köp går via appbutikerna (App Store, Google Play): butiken hanterar betalningsuppgifterna och appen registrerar bara köphändelsen — rutten, varianten, resultatet — utan bankuppgifter. Rättigheterna till det köpta hanteras av en separat tjänst, RevenueCat: appen skickar dit den slumpmässiga enhetsidentifieraren som köparidentifierare och begäranden om köp eller om bekräftelse av tidigare köp; betalningarna går bara via butiken. KUDY-servern för en teknisk förteckning över köphändelser (produkt, butik, giltighetstid) utan betalningsuppgifter.",
+  "privacyRetention": "Lagringstid: råa skickade händelser sparas i 14 månader och raderas sedan av ett schemalagt jobb.",
+  "privacyTitle": "Integritet",
+  "privacyWeb": "Den kostnadsfria webbkanalen samlar inte konton: varken registrering eller inloggning finns, och kontaktuppgifter efterfrågas inte. Sidorna för katalogen, guiderna och kartorna öppnas utan personuppgifter.",
+  "stopListHeading": "Ruttens stopp",
+  "stops": "Stopp",
+  "storeComingSoon": "Kommer snart",
+  "storyTextHeading": "Berättelsens text",
+  "textOnly": "endast text",
+  "versionUnavailable": "Versionen är inte tillgänglig",
+  "catalogEmpty": "Det finns ännu inga guider med text på det här språket.",
+  "textUnavailableTitle": "Guidetext på det här språket är inte tillgänglig ännu",
+  "textUnavailableBody": "Den här guiden har ingen text i det valda gränssnittsspråket. Dess textspråk finns i språklistan i katalogen.",
+  "attributionHeading": "Källor och upphov",
+  "authorPhoto": "Författarens foto",
+  "usageRulesTitle": "Användningsregler",
+  "usageRulesIntro": "Källor till historiskt material anges på guide- och stoppsidorna.",
+  "usageRulesReuse": "Kontrollera rättigheterna hos originalkällan eller kontakta rättighetsinnehavaren innan du återanvänder material.",
+};

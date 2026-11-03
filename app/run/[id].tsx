@@ -1,0 +1,1049 @@
+// G06.02 (issue #278) + G06.03 (issue #279) — the Run surface (11 §6): the
+// route's points on a native map with an honest schematic fallback while
+// tiles load or fail; the offline map decision (ADR G00.02) remains open.
+// The five marker states
+// computed by the engine (ADR G01.01 §4.5), the POI points visually distinct
+// from the audio points, and the ODbL attribution visible and tappable.
+// G06.03 adds the history panel (11 §2): one bottom sheet over the map with
+// three fixed heights — the Peek player bar (the session's anchor), the
+// Half preview and the Full story with the transcript slot. The panel's
+// position and the inspected card are the run controller's UI state: a
+// marker tap opens the card (11 §2), ✕ and Back dismiss one position down
+// and are identical (AC1), the transcript belongs to `inspected` while the
+// bar and its progress track belong to the audible story (AC2), and no
+// panel change dispatches to the audio service (AC3).
+// The walk itself lives in the run controller the composition root built —
+// this surface owns no GPS, no player and no engine (AC4).
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { FlatList, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { runMapView, runMapReason, runMapStrings } from "../../controllers/run/runMap";
+import { useRunState, useRunSurface } from "../../controllers/run/runSurfaceController";
+import { feedbackStrings, useFeedbackState } from "../../controllers/useFeedbackController";
+import { BackButton } from "../../components/back-button";
+import { uiStrings } from "../../components/ui-strings";
+import { GuideHintMount } from "../../components/GuideHintCard";
+import { PressableSurface } from "../../components/pressable-surface";
+import { darkTokens, tokens, type ThemeTokens } from "../../components/design-tokens";
+import { useThemeStyles } from "../../components/theme";
+import { LoadingIndicator } from "../../components/loading-indicator";
+import {
+  ModalDialog,
+  ModalDialogAccept,
+  ModalDialogCancel,
+} from "../../components/modal-dialog";
+import { ScaledText } from "../../components/scaled-text";
+import { WalkProgress } from "../../components/walk-progress";
+import { RunNativeMap } from "../../components/run-native-map";
+import { useServices, useUiLocale } from "../_layout";
+
+const OSM_ATTRIBUTION_URL = "https://www.openstreetmap.org/copyright";
+
+// UX 04 (issue #350): the marker fills are the canon's own marker tokens
+// (color.marker.*), each ≥3:1 against the canon map background (WCAG
+// 1.4.11) — a status is a word first, the color is the second channel
+// (G06.06); test/run-map-contrast.test.mjs guards the configuration.
+const STATUS_COLOR: Record<string, string> = {
+  playing: tokens.colorMarkerPlaying,
+  played: tokens.colorMarkerPlayed,
+  available: tokens.colorMarkerAvailable,
+  pending: tokens.colorMarkerPending,
+  locked: tokens.colorMarkerLocked,
+};
+
+const createStyles = (palette: ThemeTokens) => StyleSheet.create({
+  screen: {
+    backgroundColor: palette.colorPaper,
+    flex: 1,
+    padding: palette.spaceL,
+  },
+  centered: {
+    color: palette.colorMuted,
+    fontSize: palette.fontBaseSize,
+    marginTop: palette.spaceL,
+  },
+  reason: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    marginTop: palette.spaceS,
+  },
+  map: {
+    // UX 04 (issue #350): the canon map background (color.map) — the marker
+    // tokens' contrast pairs are declared against it, not against card white.
+    backgroundColor: tokens.colorMap,
+    borderColor: palette.colorLine,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    flex: 1,
+    overflow: "hidden",
+  },
+  demoRoad: {
+    backgroundColor: "#fffdf7",
+    height: 22,
+    position: "absolute",
+    width: "135%",
+  },
+  demoMapLabel: {
+    backgroundColor: "#fffdf7",
+    borderRadius: 9,
+    color: tokens.colorInk,
+    fontSize: 13,
+    fontWeight: palette.fontWeightStrong,
+    left: 13,
+    overflow: "hidden",
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+    position: "absolute",
+    top: 13,
+  },
+  note: {
+    color: palette.colorMuted,
+    fontSize: 12,
+    marginTop: palette.spaceS,
+  },
+  marker: {
+    alignItems: "center",
+    // APR-04: keep a 48dp marker touch target even if the caption is short.
+    minHeight: 48,
+    position: "absolute",
+    width: 120,
+  },
+  dot: {
+    // UX 04 (issue #350): the canon marker — size.marker diameter, state
+    // fill, white 2px outline, a soft shadow; the fill carries the ≥3:1
+    // figure contrast, the outline is separation only (visual-language.md
+    // «Маркеры мапы»).
+    borderColor: tokens.colorAccentInk,
+    borderRadius: 999,
+    borderWidth: 2,
+    elevation: 2,
+    height: palette.markerSize,
+    shadowColor: tokens.colorInk,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    width: palette.markerSize,
+  },
+  poi: {
+    backgroundColor: tokens.colorBadgeMixed,
+    borderColor: tokens.colorMuted,
+    borderRadius: 4,
+    borderWidth: 1,
+    height: 14,
+    width: 14,
+  },
+  markerLabel: {
+    color: tokens.colorInk,
+    // UX 04 (issue #350, AC5): the readable 12dp floor for map labels.
+    fontSize: 12,
+    marginTop: 2,
+    textAlign: "center",
+  },
+  poiLabel: {
+    color: tokens.colorMuted,
+    // UX 04 (issue #350, AC5): the readable 12dp floor for map labels.
+    fontSize: 12,
+    marginTop: 2,
+    textAlign: "center",
+  },
+  pausedBanner: {
+    backgroundColor: palette.colorNoticeBg,
+    borderColor: palette.colorNoticeBorder,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginBottom: palette.spaceS,
+    padding: palette.spaceM,
+  },
+  pausedText: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+  },
+  // G06.05 (AC4/AC5): the degradation banners share the paused banner's
+  // notice box; their hint lines render muted below the primary word.
+  bannerDetailText: {
+    color: palette.colorMuted,
+    fontSize: palette.fontBaseSize,
+    marginTop: palette.spaceS,
+  },
+  // The card's story-layer switch (AC3): the two tabs read as one group.
+  layerRow: {
+    flexDirection: "row",
+    gap: palette.spaceS,
+    marginTop: palette.spaceS,
+  },
+  layerTab: {
+    alignItems: "center",
+    borderColor: palette.colorLine,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    flex: 1,
+    paddingVertical: palette.spaceS,
+    paddingHorizontal: palette.spaceM,
+  },
+  layerTabActive: {
+    borderColor: palette.colorAccent,
+  },
+  layerLabel: {
+    color: palette.colorAccent,
+    fontSize: palette.fontBaseSize,
+  },
+  // Long action labels must remain reachable at the capped text scale.
+  sessionActions: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: palette.spaceS,
+    marginBottom: palette.spaceS,
+  },
+  sessionButton: {
+    alignItems: "center",
+    borderColor: palette.colorAccent,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    padding: palette.spaceS,
+  },
+  sessionLabel: {
+    color: palette.colorAccent,
+    fontSize: palette.fontBaseSize,
+  },
+  resumeButton: {
+    alignItems: "center",
+    backgroundColor: palette.colorAccent,
+    borderRadius: palette.radiusBase,
+    marginTop: palette.spaceS,
+    padding: palette.spaceM,
+  },
+  resumeLabel: {
+    color: palette.colorAccentInk,
+    fontSize: palette.fontBaseSize,
+    fontWeight: palette.fontWeightStrong,
+  },
+  preview: {
+    backgroundColor: palette.colorCard,
+    borderColor: palette.colorLine,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginBottom: palette.spaceS,
+    padding: palette.spaceM,
+  },
+  previewName: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    fontWeight: palette.fontWeightStrong,
+  },
+  previewStatus: {
+    color: palette.colorMuted,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  closeButton: {
+    alignSelf: "flex-start",
+    marginTop: palette.spaceS,
+  },
+  closeLabel: {
+    color: palette.colorAccent,
+    fontSize: palette.fontBaseSize,
+  },
+  attribution: {
+    alignSelf: "flex-start",
+    marginTop: palette.spaceS,
+  },
+  attributionText: {
+    color: palette.colorMuted,
+    // UX 04 (issue #350, AC5): the readable 12dp floor applies to the
+    // attribution line as well.
+    fontSize: 12,
+  },
+  // The history panel (G06.03): one sheet over the map, three heights.
+  panel: {
+    backgroundColor: palette.colorCard,
+    borderColor: palette.colorLine,
+    borderTopLeftRadius: palette.radiusBase,
+    borderTopRightRadius: palette.radiusBase,
+    borderTopWidth: 1,
+    bottom: 0,
+    left: 0,
+    padding: palette.spaceM,
+    position: "absolute",
+    right: 0,
+  },
+  panelHalf: {
+    height: "45%",
+  },
+  panelFull: {
+    height: "92%",
+  },
+  panelBar: {
+    backgroundColor: palette.colorCard,
+    borderColor: palette.colorLine,
+    borderTopWidth: 1,
+    bottom: 0,
+    left: 0,
+    padding: palette.spaceM,
+    position: "absolute",
+    right: 0,
+  },
+  barTitle: {
+    color: palette.colorInk,
+    flexShrink: 1,
+    fontSize: palette.fontBaseSize,
+    fontWeight: palette.fontWeightStrong,
+  },
+  barRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: palette.spaceS,
+  },
+  barControl: {
+    minHeight: 48,
+    justifyContent: "center",
+    borderColor: palette.colorLine,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    paddingHorizontal: palette.spaceM,
+    paddingVertical: palette.spaceS,
+  },
+  barControlLabel: {
+    color: palette.colorAccent,
+    fontSize: palette.fontBaseSize,
+  },
+  progressGap: {
+    // G06.10.f (issue #406): the strip's canon visuals (6px accent on line,
+    // the muted edge) live in the walk-progress component — the bar keeps
+    // only its own layout gap.
+    marginTop: palette.spaceS,
+  },
+  nowPlayingRow: {
+    minHeight: 48,
+    justifyContent: "center",
+    borderColor: palette.colorNoticeBorder,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginBottom: palette.spaceS,
+    padding: palette.spaceS,
+  },
+  nowPlayingText: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+  },
+  transcriptHeading: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    fontWeight: palette.fontWeightStrong,
+    marginTop: palette.spaceS,
+  },
+  transcriptNote: {
+    color: palette.colorMuted,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  transcriptBody: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    marginTop: 2,
+  },
+  readButton: {
+    alignItems: "center",
+    borderColor: palette.colorAccent,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginTop: palette.spaceS,
+    padding: palette.spaceS,
+  },
+  readLabel: {
+    color: palette.colorAccent,
+    fontSize: palette.fontBaseSize,
+  },
+  // The finish confirmation's words (UX 06, issue #352) — the shell carries
+  // the card and the two action styles.
+  confirmText: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    marginBottom: palette.spaceM,
+  },
+  missedList: { marginTop: palette.spaceS, maxHeight: 180 },
+  missedRow: {
+    borderBottomColor: palette.colorLine,
+    borderBottomWidth: 1,
+    minHeight: 44,
+    padding: palette.spaceS,
+    justifyContent: "center",
+  },
+  missedTitle: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    fontWeight: palette.fontWeightStrong,
+  },
+  // G16.03 (issue #74): the End invitation's quiet card — the invite sits in
+  // the scroll flow under the ended word, never over the map or the controls.
+  feedbackInvite: {
+    backgroundColor: palette.colorCard,
+    borderColor: palette.colorLine,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginBottom: palette.spaceM,
+    marginTop: palette.spaceM,
+    padding: palette.spaceM,
+  },
+  feedbackInviteText: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    marginBottom: palette.spaceS,
+  },
+  feedbackInviteRow: {
+    columnGap: palette.spaceS,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  feedbackInviteButton: {
+    alignSelf: "flex-start",
+    backgroundColor: palette.colorAccent,
+    borderRadius: palette.radiusBase,
+    paddingHorizontal: palette.spaceM,
+    paddingVertical: palette.spaceS,
+  },
+  feedbackInviteButtonLabel: {
+    color: palette.colorAccentInk,
+    fontSize: palette.fontBaseSize,
+  },
+});
+const lightStyles = createStyles(tokens);
+const darkStyles = createStyles(darkTokens);
+
+export default function Run() {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const { id, confirmedSwitch, audio } = useLocalSearchParams<{
+    id: string;
+    confirmedSwitch?: string;
+    audio?: string;
+  }>();
+  const router = useRouter();
+  const services = useServices();
+  // G14.04.d (issue #305): the words read the switchable display locale —
+  // a switch re-renders them in place, no restart.
+  const locale = useUiLocale();
+  const routeId = typeof id === "string" ? id : "";
+  // The §4.1 handover's confirmed flag (G06.04): «Завяршыць і пачаць» on the
+  // preview started this route's surface through the switch-guide
+  // transaction. The cached re-entry (NAV7) ignores the flag.
+  // G21.21: the preview's audio choice rides the same params — the surface
+  // validates it against the pinned version's audio facts.
+  const audioParam = typeof audio === "string" && audio.length > 0 ? audio : null;
+  const surface = useRunSurface(services.run, routeId, confirmedSwitch === "1", audioParam);
+  const ready = surface?.status === "ready" ? surface : null;
+  const run = useRunState(ready?.controller ?? null);
+  const [, setLocationRevision] = useState(0);
+  useEffect(() => {
+    if (ready === null) return;
+    return ready.onLocationStatusChange(() => setLocationRevision((revision) => revision + 1));
+  }, [ready]);
+  // Issue #524: without a ready session the words follow the UI-locale
+  // choice (the #305 store) — the fixed "be" fallback kept Belarusian on
+  // screen after choosing English or Українська. A ready session keeps its
+  // pinned locale (a UI switch never substitutes the active walk's language).
+  const strings = runMapStrings(ready?.locale ?? locale);
+  // G06.10 (issue #432): the back word is the shared chrome catalog's, in the
+  // run session's own display locale — the run map dictionary holds no copy
+  // of it (one back image, one dictionary). The no-session fallback rides
+  // the same UI-locale choice (issue #524).
+  const back = uiStrings(ready?.locale ?? locale).back;
+
+  // UX 02 (issue #348): the frame's top inset — the content starts below the
+  // status bar and the notch with the native header off (AC4). A hook —
+  // before the early returns.
+  const insets = useSafeAreaInsets();
+  // UX 06 (issue #352): the destructive finish asks first — the dialog is a
+  // surface-side gate (a hook, before the early returns); the controller's
+  // end() stays the only session write and runs only on the confirmation.
+  const [endConfirm, setEndConfirm] = useState(false);
+  const [nativeMapReadyRouteId, setNativeMapReadyRouteId] = useState<string | null>(null);
+  // G06.05 (AC3): the card's story-layer switch bookkeeping — the switch
+  // belongs to one card, another opened card starts back on the base story.
+  const [layerByStop, setLayerByStop] = useState<{ stopId: string | null; layer: "base" | "extended" }>({
+    stopId: null,
+    layer: "base",
+  });
+  // G16.03 (issue #74): the once-per-session End invitation — the controller
+  // owns the dedupe and the heard-use guard; the surface only offers the
+  // ended session's own identity (its pinned version/locale, no catalog).
+  const feedbackController = services.feedback?.controller ?? null;
+  const feedbackState = useFeedbackState(feedbackController);
+  const feedbackWords = feedbackStrings(ready?.locale ?? locale);
+  useEffect(() => {
+    if (run === null || run.run.phase !== "Ended") return;
+    feedbackController?.getState().offerEndInvitation({
+      sessionId: run.run.sessionId,
+      routeId: run.run.routeId,
+      version: run.run.version,
+      locale: run.run.locale,
+      heardCount: run.run.heard.length,
+    });
+  }, [feedbackController, run]);
+  const invitation =
+    feedbackState?.invitation !== null && feedbackState?.invitation !== undefined ? feedbackState.invitation : null;
+
+  if (surface === null || surface.status === "unavailable") {
+    return (
+      <View style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
+        <BackButton label={back} testID="btn-run-back" />
+        <ScaledText style={styles.centered} testID="run-unavailable">
+          {strings.unavailableTitle}
+        </ScaledText>
+        {surface !== null ? (
+          <ScaledText style={styles.reason} testID="run-unavailable-reason">
+            {runMapReason(surface.reason, strings)}
+          </ScaledText>
+        ) : null}
+      </View>
+    );
+  }
+  if (surface.status === "loading" || run === null) {
+    return (
+      <View style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
+        {/* UX 02 (issue #348): the loading state keeps the frame — with the
+            native header off there is no other way back (AC2). */}
+        <BackButton label={back} testID="btn-run-back" />
+        <LoadingIndicator style={styles.centered} text={strings.loading} />
+      </View>
+    );
+  }
+  const view = runMapView(run.run, surface.stops, surface.facts, surface.places, [surface.locale, "be", "en"]);
+  // The panel's two pointers (11 §3.2): `inspected` — whose card is open —
+  // and the audible launch the bar mirrors. Independent by design: the card
+  // follows the taps, the bar follows the sound.
+  const session = run.run.phase === "Idle" ? null : run.run;
+  const missed = run.missedStories();
+  const playing = session?.playing ?? null;
+  const playingGuide = playing && playing.owner === "guide" ? playing : null;
+  const playingName = playing
+    ? playingGuide
+      ? (view.markers.find((marker) => marker.stopId === playingGuide.stopId)?.name ?? playingGuide.storyId)
+      : playing.storyId
+    : null;
+  const inspectedMarker = run.inspected
+    ? (view.markers.find((marker) => marker.stopId === run.inspected) ?? null)
+    : null;
+  // The strip's fill is the audible audio's own line (AC2): read from the
+  // audio service's computed state (09 §6.3) — never from the card's data.
+  const playback = surface.playback();
+  const stripProgress =
+    (playback.kind === "playing" || playback.kind === "paused") && playback.durationMs > 0
+      ? Math.min(1, Math.max(0, playback.positionMs / playback.durationMs))
+      : 0;
+  // G06.05 (AC3): the inspected card's transcript — the base story and, when
+  // the stop carries one and the pin has the extended tier, the extended
+  // story behind the card's own switch. A story without a readable
+  // transcript keeps the honest pending note — never invented text.
+  const inspectedStop = inspectedMarker
+    ? (surface.stops.find((stop) => stop.stopId === inspectedMarker.stopId) ?? null)
+    : null;
+  const baseStoryId = inspectedStop?.storyBaseId;
+  const extendedStoryId = inspectedStop?.storyExtendedId;
+  const hasExtended =
+    extendedStoryId !== undefined &&
+    surface.storiesExtended.some((story) => story.storyId === extendedStoryId);
+  const storyLayer = layerByStop.stopId === run.inspected ? layerByStop.layer : "base";
+  const activeLayer = hasExtended ? storyLayer : "base";
+  const activeStoryId = activeLayer === "extended" ? extendedStoryId : baseStoryId;
+  // The engine's own accessibility rule (ADR G01.01 §4.2, core/engine/state):
+  // the stop is accessible and the story's tier is available — the manual
+  // play button renders only for a story the engine would actually launch,
+  // never a silent refusal.
+  const storyPlayable = (storyId: string | undefined): boolean => {
+    if (session === null || storyId === undefined || inspectedMarker === null) return false;
+    const stop = session.stops.find((candidate) => candidate.stopId === inspectedMarker.stopId);
+    if (stop === undefined) return false;
+    const tier = stop.storyExtendedId === storyId ? "extended" : "base";
+    return session.accessibleStopIds.includes(stop.stopId) && session.tierAvailable.includes(tier);
+  };
+  const inspectedTranscript = (() => {
+    if (!inspectedMarker || inspectedMarker.status === "locked") return null;
+    if (activeStoryId === undefined) return null;
+    const source = activeLayer === "extended" ? surface.storiesExtended : surface.stories;
+    return source.find((story) => story.storyId === activeStoryId)?.transcript ?? null;
+  })();
+  // G06.05 (AC4/AC5): the location service's live status — the honest
+  // degradation banners of 11 §7 read it per render.
+  const locationStatus = surface.locationStatus();
+  // ✕ and Back dismiss identically (AC1, 11 §2 — "адно і тое ж"); from Peek
+  // the Back button is the navigation out of Run — it never stops the audio
+  // and never changes the session (AC4).
+  const backOrDismiss = () => {
+    if (run.panel !== "peek") run.dismissPanel();
+    else router.back();
+  };
+  // UX 04 (issue #350, AC3): while the peek bar is up, its absolute
+  // positioning covers the screen's bottom flow — the attribution lives
+  // inside the bar then, never under it.
+  const peekBarOpen = session !== null && session.phase !== "Ended" && run.panel === "peek";
+  // UX 04 (issue #350, AC4): the ODbL duty — a real Pressable link, one
+  // element rendered either in the flow or as the peek bar's last row.
+  const attribution = (
+    <PressableSurface
+      accessibilityRole="link"
+      accessibilityLabel={strings.attribution}
+      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      onPress={() => {
+        // A failed external open has no in-app surface — the failure is
+        // deliberately silent, the attribution text stays readable either way.
+        void Linking.openURL(OSM_ATTRIBUTION_URL).catch(() => undefined);
+      }}
+      style={styles.attribution}
+      testID="map-attribution"
+    >
+      <ScaledText style={styles.attributionText}>{strings.attribution}</ScaledText>
+    </PressableSurface>
+  );
+  return (
+    <View style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
+      {/* UX 02 (issue #348): the one back element; from Peek it is the
+          navigation out of Run, from an open card it dismisses the card —
+          the controller's backOrDismiss (AC2). */}
+      <BackButton label={back} onPress={backOrDismiss} testID="btn-run-back" />
+      {/* G06.05 (AC4/AC5): the honest degradation banners of 11 §7 — every
+          state names itself, carries its manual exit and is announced (a
+          live region), never a modal, never a mascot. */}
+      {run.recovery.status === "restored" ? (
+        <View style={styles.pausedBanner} testID="run-restored" accessibilityLiveRegion="polite">
+          <ScaledText style={styles.pausedText}>{strings.restoredTitle}</ScaledText>
+          {run.recovery.unavailableTiers.length > 0 ? (
+            <ScaledText style={styles.bannerDetailText}>{strings.tierUnavailable}</ScaledText>
+          ) : null}
+        </View>
+      ) : null}
+
+      {locationStatus.state === "stalled" ? (
+        <View style={styles.pausedBanner} testID="run-gps-stalled" accessibilityLiveRegion="polite">
+          <ScaledText style={styles.pausedText}>{strings.gpsStalled}</ScaledText>
+          <ScaledText style={styles.bannerDetailText}>{strings.gpsStalledDetail}</ScaledText>
+        </View>
+      ) : null}
+      {session !== null &&
+      session.phase === "Active" &&
+      session.autoplaySuspended &&
+      locationStatus.state !== "permission-denied" &&
+      locationStatus.state !== "stalled" ? (
+        // The suspended automation (11 §2.1: focus loss, story_play_failed,
+        // a moment's takeover) — the honest note with the manual path.
+        <View style={styles.pausedBanner} testID="run-autoplay-suspended" accessibilityLiveRegion="polite">
+          <ScaledText style={styles.pausedText}>{strings.autoplaySuspendedTitle}</ScaledText>
+          <ScaledText style={styles.bannerDetailText}>{strings.manualPlayHint}</ScaledText>
+          {session.playing?.owner !== "moment" ? (
+            <PressableSurface
+              accessibilityRole="button"
+              accessibilityLabel={strings.resume}
+              onPress={() => run.guideResume()}
+              style={styles.resumeButton}
+              testID="btn-run-continue-guide"
+            >
+              <ScaledText style={styles.resumeLabel}>{strings.resume}</ScaledText>
+            </PressableSurface>
+          ) : null}
+        </View>
+      ) : null}
+      {locationStatus.state === "permission-denied" ? (
+        <View style={styles.pausedBanner} testID="run-gps-denied" accessibilityLiveRegion="polite">
+          <ScaledText style={styles.pausedText}>{strings.deniedGps}</ScaledText>
+          <ScaledText style={styles.bannerDetailText}>{strings.manualPlayHint}</ScaledText>
+        </View>
+      ) : null}
+      {run.run.phase === "Paused" ? (
+        <View style={styles.pausedBanner} testID="run-paused" accessibilityLiveRegion="polite">
+          <ScaledText style={styles.pausedText}>{strings.pausedTitle}</ScaledText>
+          <PressableSurface
+            accessibilityRole="button"
+            accessibilityLabel={strings.resume}
+            onPress={() => run.resumeSession()}
+            style={styles.resumeButton}
+            testID="btn-run-resume"
+          >
+            <ScaledText style={styles.resumeLabel}>{strings.resume}</ScaledText>
+          </PressableSurface>
+        </View>
+      ) : null}
+      {run.run.phase === "Ended" ? (
+        <>
+          <ScaledText style={styles.centered} testID="run-ended" accessibilityLiveRegion="polite">
+            {strings.endedTitle}
+          </ScaledText>
+          {missed.length > 0 ? (
+            <View testID="run-missed-stories">
+              <ScaledText style={styles.missedTitle}>{strings.missedStoriesTitle}</ScaledText>
+              <FlatList
+                style={styles.missedList}
+                data={missed}
+                keyExtractor={(item) => item.storyId}
+                renderItem={({ item: { storyId, stopId } }) => {
+                  const stop = session?.stops.find((candidate) => candidate.stopId === stopId);
+                  const layer = stop?.storyExtendedId === storyId ? "extended" : "base";
+                  const name = view.markers.find((marker) => marker.stopId === stopId)?.name ?? stopId;
+                  const label = `${name} — ${layer === "extended" ? strings.storyExtended : strings.storyBase}`;
+                  return (
+                    <PressableSurface
+                      key={storyId}
+                      testID={`run-missed-story-${storyId}`}
+                      accessibilityRole="button"
+                      accessibilityLabel={label}
+                      style={styles.missedRow}
+                      onPress={() => {
+                        setLayerByStop({ stopId, layer });
+                        run.openCard(stopId);
+                        run.expandPanel();
+                      }}
+                    >
+                      <ScaledText>{label}</ScaledText>
+                    </PressableSurface>
+                  );
+                }}
+              />
+            </View>
+          ) : null}
+        </>
+      ) : null}
+      {run.run.phase === "Ended" && session !== null && invitation !== null && session.sessionId === invitation.sessionId ? (
+        // The End invitation of 20 §7 (G16.03): quiet, non-modal by
+        // construction — a plain card in the flow, the map and Back stay
+        // reachable — and once per session by the controller's guard. Only
+        // this walk's own invitation renders here.
+        <View style={styles.feedbackInvite} testID="run-feedback-invite">
+          <ScaledText style={styles.feedbackInviteText}>{feedbackWords.inviteTitle}</ScaledText>
+          <View style={styles.feedbackInviteRow}>
+            <PressableSurface
+              accessibilityRole="button"
+              accessibilityLabel={feedbackWords.inviteRate}
+              onPress={() => {
+                feedbackController?.getState().dismissInvitation();
+                router.push({
+                  pathname: "/feedback",
+                  params: {
+                    kind: "guide",
+                    id: invitation.target.id,
+                    version: invitation.target.version,
+                    locale: invitation.target.locale,
+                  },
+                });
+              }}
+              style={styles.feedbackInviteButton}
+              testID="btn-run-invite-rate"
+            >
+              <ScaledText style={styles.feedbackInviteButtonLabel}>{feedbackWords.inviteRate}</ScaledText>
+            </PressableSurface>
+            <PressableSurface
+              accessibilityRole="button"
+              accessibilityLabel={feedbackWords.inviteDismiss}
+              onPress={() => feedbackController?.getState().dismissInvitation()}
+              style={styles.feedbackInviteButton}
+              testID="btn-run-invite-dismiss"
+            >
+              <ScaledText style={styles.feedbackInviteButtonLabel}>{feedbackWords.inviteDismiss}</ScaledText>
+            </PressableSurface>
+          </View>
+        </View>
+      ) : null}
+      {session && session.phase !== "Ended" ? (
+        // The session menu of 11 §4.2/§4.3 (G06.04): the whole-walk pause
+        // (not the audio pause) and the finish — the finish is legal at any
+        // moment, even after one story; from Paused the banner's Resume is
+        // the way back. Neither touches the audio's own play/pause.
+        <View style={styles.sessionActions} testID="run-session-actions">
+          {session.phase === "Active" ? (
+            <PressableSurface
+              accessibilityRole="button"
+              accessibilityLabel={strings.pauseWalk}
+              onPress={() => run.pauseSession()}
+              style={styles.sessionButton}
+              testID="btn-run-pause"
+            >
+              <ScaledText style={styles.sessionLabel}>{strings.pauseWalk}</ScaledText>
+            </PressableSurface>
+          ) : null}
+          {/* UX 06 (issue #352) AC3: the destructive finish asks first —
+              the press opens the confirmation, it no longer ends directly. */}
+          <PressableSurface
+            accessibilityRole="button"
+            accessibilityLabel={strings.endWalk}
+            onPress={() => setEndConfirm(true)}
+            style={styles.sessionButton}
+            testID="btn-run-end"
+          >
+            <ScaledText style={styles.sessionLabel}>{strings.endWalk}</ScaledText>
+          </PressableSurface>
+        </View>
+      ) : null}
+      {view.markers.length > 0 ? (
+        <RunNativeMap
+          key={routeId}
+          nativeDisabled={process.env.EXPO_PUBLIC_DEMO_MODE === "1"}
+          view={view}
+          stops={surface.stops}
+          places={surface.places}
+          onMapPosition={surface.onMapPosition}
+          onOpenStop={(stopId) => run.openCard(stopId)}
+          onReadyChange={(ready) => setNativeMapReadyRouteId(ready ? routeId : null)}
+          recenterLabel={strings.recenter}
+          pointsLabel={strings.points}
+          retryLabel={uiStrings(locale).retry}
+          markerHint={strings.markerHint}
+          statusWords={strings.status}
+          statusColors={STATUS_COLOR}
+          poiWords={strings.poiKind}
+          fallback={<View style={styles.map} testID="run-map-schematic">
+          {process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? (
+            <>
+              <View style={[styles.demoRoad, { left: "-15%", top: "23%", transform: [{ rotate: "-16deg" }] }]} />
+              <View style={[styles.demoRoad, { left: "-8%", top: "57%", transform: [{ rotate: "12deg" }] }]} />
+              <View style={[styles.demoRoad, { left: "-16%", top: "83%", transform: [{ rotate: "-9deg" }] }]} />
+              <ScaledText style={styles.demoMapLabel}>{uiStrings(locale).demoRunMapLabel}</ScaledText>
+            </>
+          ) : null}
+          {view.pois.map((poi) => {
+            // UX 05 (issue #351): the label goes through the run strings'
+            // kind dictionary — a kind without an entry renders no label,
+            // the raw value never shows (nothing invented).
+            const poiLabel = strings.poiKind[poi.kind] ?? null;
+            return (
+              <View
+                key={poi.placeId}
+                style={[styles.marker, { left: `${(process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? 0.2 + poi.nx * 0.6 : poi.nx) * 100}%`, top: `${(process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? 0.18 + poi.ny * 0.62 : poi.ny) * 100}%`, transform: [{ translateX: -60 }, { translateY: -9 }] }]}
+                testID={`run-poi-${poi.placeId}`}
+              >
+                <View style={styles.poi} />
+                {poiLabel ? <Text style={styles.poiLabel}>{poiLabel}</Text> : null}
+              </View>
+            );
+          })}
+          {view.markers.map((marker) => (
+            <Pressable
+              key={marker.stopId}
+              accessibilityRole="button"
+              accessibilityHint={strings.markerHint}
+              accessibilityLabel={`${marker.name}, ${strings.status[marker.status]}`}
+              onPress={() => run.openCard(marker.stopId)}
+              style={[
+                styles.marker,
+                // UX 04 (issue #350): the dot centers on the point whatever
+                // the canon markerSize — the label hangs below it.
+                { left: `${(process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? 0.2 + marker.nx * 0.6 : marker.nx) * 100}%`, top: `${(process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? 0.18 + marker.ny * 0.62 : marker.ny) * 100}%`, transform: [{ translateX: -60 }, { translateY: -(tokens.markerSize / 2) }] },
+              ]}
+              testID={`run-marker-${marker.stopId}`}
+            >
+              <View style={[styles.dot, { backgroundColor: STATUS_COLOR[marker.status] }]} />
+              <ScaledText style={styles.markerLabel} testID={`run-status-${marker.stopId}`}>
+                {`${marker.name} — ${strings.status[marker.status]}`}
+              </ScaledText>
+            </Pressable>
+          ))}
+          </View>}
+        />
+      ) : null}
+      {nativeMapReadyRouteId !== routeId ? <ScaledText style={styles.note}>{strings.schematicNote}</ScaledText> : null}
+      {/* UX 04 (issue #350, AC3): the in-flow spot only when the peek bar is
+          down — the bar's own copy replaces it while the bar covers the flow. */}
+      {peekBarOpen ? null : attribution}
+      {peekBarOpen ? (
+        // UX 02 (issue #348): the bar's bottom padding keeps its controls
+        // above the home-indicator area (AC4).
+        <View
+          style={[styles.panelBar, { paddingBottom: tokens.spaceM + insets.bottom }]}
+          testID="run-panel-bar"
+        >
+          <View style={styles.barRow}>
+            <ScaledText style={styles.barTitle} testID="run-bar-title">
+              {playingName ? `${strings.nowPlayingLabel}: ${playingName}` : strings.nothingPlaying}
+            </ScaledText>
+            {playingGuide ? (
+              // The bar's control is the guide launch's only: a moment
+              // launch (G07) resumes through its own path, never through
+              // this button — the controller's guide-token rebuild must not
+              // become a silent no-op behind a visible control.
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={playingGuide.paused ? strings.playAudio : strings.pauseAudio}
+                onPress={() => (playingGuide.paused ? run.resumeCurrentAudio() : run.pauseAudio())}
+                style={styles.barControl}
+                testID="btn-bar-playpause"
+              >
+                <ScaledText style={styles.barControlLabel}>
+                  {playingGuide.paused ? strings.playAudio : strings.pauseAudio}
+                </ScaledText>
+              </Pressable>
+            ) : null}
+          </View>
+          {playing ? (
+            // G06.10.f (issue #406): the living line — the fill eases to
+            // each new value on the reanimated base, and with the system
+            // reduce-motion setting on it lands instantly (canon §9).
+            <WalkProgress
+              fillTestID="run-bar-progress-fill"
+              progress={stripProgress}
+              style={styles.progressGap}
+              testID="run-bar-progress"
+            />
+          ) : null}
+          {/* UX 04 (issue #350, AC3): the ODbL attribution rides the bar —
+              visible and tappable with the bar up, never covered by it. */}
+          {attribution}
+        </View>
+      ) : null}
+      {run.panel !== "peek" ? (
+        // UX 02 (issue #348): the sheet's bottom padding keeps its content
+        // above the home-indicator area (AC4).
+        <View
+          style={[
+            styles.panel,
+            run.panel === "full" ? styles.panelFull : styles.panelHalf,
+            { paddingBottom: tokens.spaceM + insets.bottom },
+          ]}
+          testID={`run-panel-${run.panel}`}
+        >
+          {/* UX 01 (issue #347): the panel's card content scrolls — a long
+              transcript stays readable in Full; the map stays a fixed flex
+              child, never a scroll surface. */}
+          <ScrollView testID="scroll-run-panel">
+            {playingGuide && run.inspected !== playingGuide.stopId ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`${strings.nowPlayingLabel}: ${playingName ?? ""}`}
+                onPress={() => run.openCard(playingGuide.stopId)}
+                style={styles.nowPlayingRow}
+                testID="run-nowplaying-row"
+              >
+                <ScaledText style={styles.nowPlayingText}>
+                  {`${strings.nowPlayingLabel}: ${playingName}`}
+                </ScaledText>
+              </Pressable>
+            ) : null}
+            {inspectedMarker ? (
+              <View style={styles.preview} testID="run-preview">
+                <ScaledText style={styles.previewName}>{inspectedMarker.name}</ScaledText>
+                <ScaledText style={styles.previewStatus}>{strings.status[inspectedMarker.status]}</ScaledText>
+                {inspectedMarker.status === "locked" ? (
+                  // G08.05 (AC5, 11 §16.4): the honest locked state —
+                  // available after purchase, never a content reveal
+                  // (NAV5/N7); no commerce action lives on the Run surface.
+                  <ScaledText style={styles.previewStatus} testID="run-locked-hint">
+                    {strings.lockedHint}
+                  </ScaledText>
+                ) : null}
+                {/* G06.05 (AC4): the manual play — the GPS-denied row's exit
+                    (11 §7: every story plays by hand). The button renders
+                    only for a story the engine would actually launch; the
+                    launch itself is the engine's UserSelectedStory path. */}
+                {session !== null &&
+                session.phase === "Active" &&
+                inspectedMarker.status !== "locked" &&
+                storyPlayable(activeStoryId) ? (
+                  <PressableSurface
+                    accessibilityRole="button"
+                    accessibilityLabel={strings.playAudio}
+                    accessibilityHint={strings.playStoryHint}
+                    onPress={() => activeStoryId !== undefined && run.selectStory(inspectedMarker.stopId, activeStoryId)}
+                    style={styles.readButton}
+                    testID="btn-card-play"
+                  >
+                    <ScaledText style={styles.readLabel}>{strings.playAudio}</ScaledText>
+                  </PressableSurface>
+                ) : null}
+                {run.panel === "full" && hasExtended ? (
+                  // G06.05 (AC3): the story-layer switch — every story's
+                  // transcript is reachable, the base one is not the only
+                  // one. The switch belongs to this card only.
+                  <View style={styles.layerRow} testID="run-story-layers">
+                    <PressableSurface
+                      accessibilityRole="button"
+                      accessibilityLabel={strings.storyBase}
+                      accessibilityState={{ selected: activeLayer === "base" }}
+                      onPress={() => setLayerByStop({ stopId: inspectedMarker.stopId, layer: "base" })}
+                      style={[styles.layerTab, activeLayer === "base" && styles.layerTabActive]}
+                      testID="btn-story-base"
+                    >
+                      <ScaledText style={styles.layerLabel}>{strings.storyBase}</ScaledText>
+                    </PressableSurface>
+                    <PressableSurface
+                      accessibilityRole="button"
+                      accessibilityLabel={strings.storyExtended}
+                      accessibilityState={{ selected: activeLayer === "extended" }}
+                      onPress={() => setLayerByStop({ stopId: inspectedMarker.stopId, layer: "extended" })}
+                      style={[styles.layerTab, activeLayer === "extended" && styles.layerTabActive]}
+                      testID="btn-story-extended"
+                    >
+                      <ScaledText style={styles.layerLabel}>{strings.storyExtended}</ScaledText>
+                    </PressableSurface>
+                  </View>
+                ) : null}
+                {run.panel === "full" ? (
+                  // The transcript belongs to the inspected card (11 §3.2), not
+                  // to the audible story. The pinned layer's stops.json names
+                  // it; a story without a readable transcript keeps the honest
+                  // pending note — never invented text.
+                  <View testID="run-transcript">
+                    <ScaledText style={styles.transcriptHeading}>{strings.transcript}</ScaledText>
+                    <ScaledText style={styles.transcriptBody}>
+                      {inspectedTranscript ?? strings.transcriptPending}
+                    </ScaledText>
+                  </View>
+                ) : null}
+                {run.panel === "half" ? (
+                  <PressableSurface
+                    accessibilityRole="button"
+                    accessibilityLabel={strings.readMore}
+                    onPress={() => run.expandPanel()}
+                    style={styles.readButton}
+                    testID="btn-panel-read"
+                  >
+                    <ScaledText style={styles.readLabel}>{strings.readMore}</ScaledText>
+                  </PressableSurface>
+                ) : null}
+                <PressableSurface
+                  accessibilityRole="button"
+                  accessibilityLabel={strings.close}
+                  onPress={() => run.dismissPanel()}
+                  style={styles.closeButton}
+                  testID="btn-panel-close"
+                >
+                  <ScaledText style={styles.closeLabel}>{strings.close}</ScaledText>
+                </PressableSurface>
+              </View>
+            ) : null}
+          </ScrollView>
+        </View>
+      ) : null}
+      {/* G07.05: the nearby hint belongs to the idle map, not a manual
+          story card or the audible player bar. On Android it used to overlay
+          btn-card-play while Half was open (PR #903 Android E2E artifact),
+          intercepting the user's tap even though the button was accessible.
+          Hiding the mount does not dismiss the hint: closing the card
+          restores it without changing session or audio state. */}
+      {run.panel === "peek" && playing === null ? (
+        <GuideHintMount
+          binding={services.hints}
+          locale={ready?.locale ?? locale}
+          onOpen={(routeId) => router.push(`/route/${routeId}`)}
+        />
+      ) : null}
+      {endConfirm ? (
+        // UX 06 (issue #352) AC3: the confirmation is a real modal — the
+        // decline (and the system Back, the shell's onRequestClose) leaves
+        // the session active and unchanged; the confirmation runs the same
+        // end() the button used to call.
+        <ModalDialog onRequestClose={() => setEndConfirm(false)} testID="end-confirm-dialog">
+          <ScaledText style={styles.confirmText}>{strings.endConfirmTitle}</ScaledText>
+          <ModalDialogAccept
+            label={strings.endConfirmAccept}
+            onPress={() => {
+              setEndConfirm(false);
+              run.end();
+            }}
+            testID="btn-end-confirm-accept"
+          />
+          <ModalDialogCancel
+            label={strings.endConfirmCancel}
+            onPress={() => setEndConfirm(false)}
+            testID="btn-end-confirm-cancel"
+          />
+        </ModalDialog>
+      ) : null}
+    </View>
+  );
+}

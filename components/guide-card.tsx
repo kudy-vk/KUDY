@@ -1,0 +1,463 @@
+// G06.01.a (issue #313) — the shared City/Guides chrome: the guide card, the
+// access badge and the honest-state banner, styled from the canon tokens in
+// components/design-tokens.ts (docs/design/visual-language.md, G06.07).
+// Screens render state — every decision about what exists lives in the catalog
+// controller, nothing is invented here. Lives in components/, not app/:
+// expo-router treats every app/ file as a route (issue #339); the controller
+// types come in as a type-only import (components takes no runtime imports
+// from the other zones).
+import { Link } from "expo-router";
+import type { ReactNode } from "react";
+import { FlatList, StyleSheet, View, useWindowDimensions } from "react-native";
+
+import type { CatalogGuideCard, CatalogSurfaceState } from "../controllers/catalog/catalogController.ts";
+import type { Services } from "../controllers/createServices.ts";
+import { PressableSurface } from "./pressable-surface";
+import { contentWidthStyle } from "./content-width";
+import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
+import { useThemeStyles } from "./theme";
+import { ScaledText } from "./scaled-text";
+import { uiStrings } from "./ui-strings";
+import { LoadingIndicator } from "./loading-indicator";
+import { WalkButton } from "./walk-button";
+
+// MVP active city (21 §3.2: у MVP толькі актыўны Гданьск); the surface shows
+// the city name per NAV3, and the rubric route carries the city id.
+export const CITY_TITLE = "Гданьск";
+export const ACTIVE_CITY_ID = "gdansk";
+
+// G15.03 (issue #70) — the MVP display-locale order for the discovery
+// surfaces' label pick (the same order the composition root passes its
+// services; one value here so the screens never invent a second order).
+export const DISPLAY_LOCALES: readonly string[] = ["be", "en"];
+
+// G21.17 (issue #551) — the one text-locale selection rule of the surfaces
+// (the G21 spec decision: «Паказваць толькі гіды з тэкстам на выбранай мове»):
+// an offer is shown in a UI language only when its published text covers it.
+// The discovery selector applies the same gate over the criteria
+// (core/discovery/selectDiscovery `localeOk` — the core cannot import this
+// zone, so the rule is spelled here for the catalog/nearby/preview
+// projections and names its canon there).
+export function offerShownInTextLocale(textLocales: readonly string[], uiLocale: string): boolean {
+  return Array.isArray(textLocales) && textLocales.includes(uiLocale);
+}
+
+// The scheme's responsive split (screens-and-transitions.md, Explore row):
+// one column below 821 px, two columns at 821 px and above.
+export function isWide(width: number): boolean {
+  return width >= 821;
+}
+
+const createStyles = (palette: ThemeTokens) => StyleSheet.create({
+  card: {
+    backgroundColor: palette.colorCard,
+    borderColor: palette.colorLine,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    padding: palette.spaceM,
+  },
+  cardSummary: {
+    color: palette.colorMuted,
+    fontSize: palette.fontBaseSize,
+    marginBottom: palette.spaceS,
+  },
+  cardTitle: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+    fontWeight: palette.fontWeightStrong,
+    marginBottom: palette.spaceS,
+  },
+  locales: {
+    color: palette.colorMuted,
+    fontSize: palette.fontBaseSize,
+    marginTop: palette.spaceS,
+  },
+  banner: {
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginBottom: palette.spaceM,
+    padding: palette.spaceM,
+  },
+  bannerError: {
+    backgroundColor: palette.colorErrorBg,
+    borderColor: palette.colorErrorBorder,
+  },
+  bannerNotice: {
+    backgroundColor: palette.colorNoticeBg,
+    borderColor: palette.colorNoticeBorder,
+  },
+  bannerText: {
+    color: palette.colorInk,
+    fontSize: palette.fontBaseSize,
+  },
+  bannerDetail: {
+    color: palette.colorMuted,
+    fontSize: 12,
+    marginTop: palette.spaceS,
+  },
+  list: { flex: 1 },
+  // APR-10.b (issue #959): the body keeps the canon content width on wide
+  // windows (contentWidthStyle is inert below the cap).
+  listContent: { paddingHorizontal: palette.spaceL, paddingBottom: palette.spaceL, ...contentWidthStyle },
+  row: { marginBottom: palette.spaceM },
+  columns: {
+    justifyContent: "space-between",
+  },
+  gridColumn: {
+    width: "48.5%",
+  },
+  badge: {
+    alignSelf: "flex-start",
+    backgroundColor: palette.colorBadgeFree,
+    borderRadius: palette.radiusPill,
+    overflow: "hidden",
+    paddingHorizontal: palette.spaceS,
+    paddingVertical: 2,
+  },
+  badgeMixed: { backgroundColor: palette.colorBadgeMixed },
+  badgePaid: { backgroundColor: palette.colorBadgePaid },
+  badgeText: {
+    color: palette.colorInk,
+    fontSize: 12,
+  },
+  // G06.05 (AC4): the named retry of the failed catalog load — the manual
+  // exit styled like the other outlined actions (the walk button's frame).
+  retryButton: {
+    alignSelf: "flex-start",
+    borderColor: palette.colorAccent,
+    borderRadius: palette.radiusBase,
+    borderWidth: 1,
+    marginTop: palette.spaceS,
+    paddingHorizontal: palette.spaceM,
+    paddingVertical: palette.spaceS,
+  },
+  retryLabel: {
+    color: palette.colorAccent,
+    fontSize: palette.fontBaseSize,
+  },
+  // The city surfaces' shared title (the two screens' own style was the
+  // same object — G06.05 moved the body into CityCatalogBody).
+  cityTitle: {
+    color: palette.colorInk,
+    fontSize: palette.fontTitleSize,
+    fontWeight: palette.fontWeightStrong,
+    marginBottom: palette.spaceM,
+  },
+});
+const lightStyles = createStyles(tokens);
+const darkStyles = createStyles(darkTokens);
+
+// G15.03 (issue #70) — the ordinary card style of the canon (visual-language
+// §5 «card»), exported for the discovery surfaces: the same card kind, never
+// a new look (новы выгляд — допіс у канон, не мясцовая стылізацыя).
+export function useCardStyle() {
+  return useThemeStyles(lightStyles, darkStyles).card;
+}
+
+// The city surfaces' shared body (G06.05): one FlatList owns scrolling on
+// both screens. Its header holds the caller's leading slot (brand or Back),
+// walk-mode button, city title, middle slot and catalog state with retry.
+// The list rows keep NAV9's preview source: city or rubric by variant.
+// `middle` stays a prop, not a flag; callers decide their own link chains.
+export function CityCatalogBody({
+  walk,
+  catalog,
+  onRetry,
+  variant,
+  locale,
+  leading = null,
+  middle = null,
+}: {
+  walk?: Services["walk"];
+  catalog: CatalogSurfaceState | null;
+  onRetry?: () => void;
+  variant: "city" | "rubric";
+  locale: string;
+  leading?: ReactNode;
+  middle?: ReactNode;
+}) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const wide = isWide(useWindowDimensions().width);
+  const guides = catalogGuides(catalog, locale);
+  const from = variant === "rubric" ? "rubric" : "city";
+  return (
+    <FlatList
+      key={`${variant}-${wide ? 2 : 1}`}
+      testID={`scroll-${variant === "city" ? "explore" : "guides"}`}
+      style={styles.list}
+      contentContainerStyle={styles.listContent}
+      data={guides}
+      numColumns={wide ? 2 : 1}
+      columnWrapperStyle={wide ? styles.columns : undefined}
+      keyExtractor={(card) => card.routeId}
+      initialNumToRender={12}
+      renderItem={({ item }) => (
+        <View style={[styles.row, wide ? styles.gridColumn : null]}>
+          <GuideCard card={item} from={from} locale={locale} />
+        </View>
+      )}
+      ListHeaderComponent={
+        <>
+          {leading}
+          <WalkButton walk={walk} locale={locale} />
+          <ScaledText style={styles.cityTitle}>{CITY_TITLE}</ScaledText>
+          {middle}
+          <CatalogStateView state={catalog} variant={variant} locale={locale} onRetry={onRetry} />
+        </>
+      }
+    />
+  );
+}
+
+// The tariff is a badge on the card, never a separate rubric (11 §16.1, 20
+// §6). The contract value stays free|paid|mixed (21 §3.2 — schemas, index and
+// the testID are untouched); the label renders it in the interface language
+// per the owner consent recorded in issue #355 — G06.05 adds the EN pair.
+export function AccessBadge({
+  access,
+  locale = "be",
+}: {
+  access: CatalogGuideCard["access"];
+  locale?: string;
+}) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const tone = access === "paid" ? styles.badgePaid : access === "mixed" ? styles.badgeMixed : null;
+  const label = uiStrings(locale).access[access];
+  return (
+    <View
+      style={[styles.badge, tone]}
+      testID={`badge-access-${access}`}
+      accessible={true}
+      accessibilityLabel={label}
+    >
+      <ScaledText style={styles.badgeText}>{label}</ScaledText>
+    </View>
+  );
+}
+
+// The languages line: offer-backed cards split text from audio (the
+// availability facts — L01: text without audio never promises audio);
+// route-only cards state the layer locales without claiming a split nothing
+// published. Shared by the card and the guide preview.
+export function LocalesLine({
+  textLocales,
+  audioLocales,
+  localesKnown,
+  testID,
+  locale = "be",
+}: {
+  textLocales: readonly string[];
+  audioLocales: readonly string[];
+  localesKnown: boolean;
+  testID?: string;
+  locale?: string;
+}) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const strings = uiStrings(locale);
+  if (!localesKnown) {
+    return (
+      <ScaledText style={styles.locales} testID={testID}>
+        {strings.languagesLine(textLocales)}
+      </ScaledText>
+    );
+  }
+  return (
+    <ScaledText style={styles.locales} testID={testID}>
+      {strings.textAudioLine(textLocales, audioLocales)}
+    </ScaledText>
+  );
+}
+
+export function GuideCardLocales({ card, locale = "be" }: { card: CatalogGuideCard; locale?: string }) {
+  return (
+    <LocalesLine
+      textLocales={card.textLocales}
+      audioLocales={card.audioLocales}
+      localesKnown={card.localesKnown}
+      locale={locale}
+    />
+  );
+}
+
+// One guide card (the ordinary card kind of the canon): the same card on the
+// city surface and in the rubric leads to the same preview (D02, 11 §16.1).
+// `from` records the opening surface for NAV9 (11 §16.2: every preview
+// opening has a source surface Back returns to). G06.05: the card is a
+// button to the screen reader, its label names the guide and the access —
+// the badge alone never carries the tariff. G15.03 widens the source set
+// with the discovery surfaces — the same card, the same preview.
+export function GuideCard({
+  card,
+  from,
+  locale = "be",
+}: {
+  card: CatalogGuideCard;
+  from?: "city" | "rubric" | "discovery" | "collection";
+  locale?: string;
+}) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const strings = uiStrings(locale);
+  return (
+    <Link href={{ pathname: `/route/${card.routeId}`, params: from ? { from } : {} }} asChild>
+      <PressableSurface
+        accessibilityRole="button"
+        accessibilityLabel={`${card.title}, ${strings.access[card.access]}`}
+        style={styles.card}
+        testID={`guide-card-${card.routeId}`}
+      >
+        <ScaledText style={styles.cardTitle}>{card.title}</ScaledText>
+        {card.summary ? <ScaledText style={styles.cardSummary}>{card.summary}</ScaledText> : null}
+        <AccessBadge access={card.access} locale={locale} />
+        <GuideCardLocales card={card} locale={locale} />
+      </PressableSurface>
+    </Link>
+  );
+}
+
+// The honest-state banner (the notice/error pairs of the canon): the named
+// state in the primary line, the technical reason (if any) muted below —
+// never mascot-only (a11y-плашка screens.md). G06.05: the banner is a live
+// region — a state change is announced, not silently repainted (AC5).
+export function StateBanner({
+  tone,
+  reason,
+  detail,
+  testID,
+}: {
+  tone: "notice" | "error";
+  reason: string;
+  detail?: string;
+  testID: string;
+}) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  return (
+    <View
+      accessibilityLiveRegion="polite"
+      style={[styles.banner, tone === "error" ? styles.bannerError : styles.bannerNotice]}
+      testID={testID}
+    >
+      <ScaledText style={styles.bannerText}>{reason}</ScaledText>
+      {detail ? <ScaledText style={styles.bannerDetail}>{detail}</ScaledText> : null}
+    </View>
+  );
+}
+
+function GuidesLink({ locale }: { locale: string }) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  return (
+    <Link href={`/city/${ACTIVE_CITY_ID}/guides`} asChild>
+      <PressableSurface
+        accessibilityRole="link"
+        accessibilityLabel={uiStrings(locale).guidesLink}
+        hitSlop={12}
+        testID="link-guides"
+      >
+        <ScaledText style={styles.cardTitle}>{uiStrings(locale).guidesLink}</ScaledText>
+      </PressableSurface>
+    </Link>
+  );
+}
+
+// The city-page body for the states without a rubric: the NAV3 empty city
+// (nothing published) and the no-cache error (21 §3.3 — the normal city page
+// without discovery).
+export function CityMessage({ text }: { text: string }) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  return (
+    <ScaledText style={styles.locales} testID="city-message">
+      {text}
+    </ScaledText>
+  );
+}
+
+// The state mapping both surfaces share, named after the state coverage
+// table of screens-and-transitions.md (Explore row): a null state means the
+// build constructed no catalog service (no loader port) — the honest page
+// with nothing invented; offline shows the «папярэдні валідны кэш» banner
+// (21 §3.3) with the technical reason as a secondary detail; the no-cache
+// error is the normal city page without discovery, its reason muted — never
+// the primary message; the empty ready city is NAV3's «не апублікавана».
+// G06.05 (AC4): the error branch carries the named retry — a failed load is
+// not a dead end, the controller's refresh is one press away.
+export function CatalogStateView({
+  state,
+  variant,
+  locale = "be",
+  onRetry,
+}: {
+  state: CatalogSurfaceState | null;
+  variant: "city" | "rubric";
+  locale?: string;
+  onRetry?: () => void;
+}) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const strings = uiStrings(locale);
+  if (state === null) {
+    return <StateBanner tone="notice" reason={strings.catalogUnavailable} testID="catalog-unavailable" />;
+  }
+  if (state.kind === "loading") return <LoadingIndicator text={strings.loading} testID="city-message" />;
+  if (state.kind === "error") {
+    return (
+      <View testID="catalog-error">
+        <CityMessage text={strings.catalogTemporarilyUnavailable} />
+        <ScaledText style={styles.locales}>{state.reason}</ScaledText>
+        {onRetry ? (
+          <PressableSurface
+            accessibilityRole="button"
+            accessibilityLabel={strings.retry}
+            onPress={onRetry}
+            style={styles.retryButton}
+            testID="catalog-retry"
+          >
+            <ScaledText style={styles.retryLabel}>{strings.retry}</ScaledText>
+          </PressableSurface>
+        ) : null}
+      </View>
+    );
+  }
+  if (state.kind === "offline") {
+    return (
+      <View>
+        <StateBanner
+          tone="notice"
+          reason={strings.validCache}
+          detail={state.reason}
+          testID="catalog-banner"
+        />
+        {(() => {
+          // G21.17 (issue #551): the offline cache filters by the selected UI
+          // language with the same two honest empty states as the ready list.
+          const visible = visibleGuides(state.guides, locale);
+          if (visible.length === 0) {
+            return <CityMessage text={state.guides.length === 0 ? strings.notPublished : strings.textLocaleEmpty} />;
+          }
+          return variant === "city" ? <GuidesLink locale={locale} /> : null;
+        })()}
+      </View>
+    );
+  }
+  // G21.17 (issue #551): the ready list is filtered to the selected UI
+  // language's published text. An empty filtered list is the language
+  // explanation when other languages have guides, and NAV3's «не апублікавана»
+  // when nothing is published at all — neither is a service failure.
+  const visible = visibleGuides(state.guides, locale);
+  if (visible.length === 0) {
+    return <CityMessage text={state.guides.length === 0 ? strings.notPublished : strings.textLocaleEmpty} />;
+  }
+  return variant === "city" ? <GuidesLink locale={locale} /> : null;
+}
+
+function catalogGuides(state: CatalogSurfaceState | null, locale: string): readonly CatalogGuideCard[] {
+  return state?.kind === "ready" || state?.kind === "offline" ? visibleGuides(state.guides, locale) : [];
+}
+
+// The G21.17 projection filter of one city-catalog state: only the guides
+// whose published text covers the selected UI language stay. Exported for the
+// tests' single-spelling assertion (the screens pass the same state through
+// this one function).
+export function visibleGuides(
+  guides: readonly CatalogGuideCard[],
+  uiLocale: string,
+): readonly CatalogGuideCard[] {
+  return guides.filter((card) => offerShownInTextLocale(card.textLocales, uiLocale));
+}

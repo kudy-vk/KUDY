@@ -1,0 +1,383 @@
+import { Stack } from "expo-router";
+import { afterEach, describe, expect, jest, test } from "@jest/globals";
+import { act, render } from "@testing-library/react-native";
+import { fireEvent, renderRouter, screen, within } from "expo-router/testing-library";
+
+import My from "./(tabs)/my";
+import Index from "./index";
+import Run from "./run/[id]";
+import RoutePreview from "./route/[id]";
+import Map from "./map";
+import NotFound from "./+not-found";
+import Explore from "./(tabs)/explore";
+import Guides from "./city/[id]/guides";
+import { ServicesContext } from "./_layout";
+import { createServices } from "../controllers/createServices";
+import { AccessBadge } from "../components/guide-card";
+import { fixtureText, layoutWith, serve, sha256 } from "../test/render-helpers";
+
+// The real production route components, mounted in the real route tree shape
+// (19 §2.5); keys are module paths relative to app/ without the extension —
+// expo-router's in-memory test context resolves modules by that key. Static
+// imports are load-bearing: deleting a route file breaks these tests at the
+// file level (task Proof).
+const routes = {
+  "(tabs)/explore": Explore,
+  "(tabs)/my": My,
+  "city/[id]/guides": Guides,
+  "route/[id]": RoutePreview,
+  "run/[id]": Run,
+  map: Map,
+  "+not-found": NotFound,
+};
+
+// The published fixtures (fixtures/discovery-contract): the catalog pointer
+// declares the index's size and sha256, so the served texts pass the real
+// integrity pin of the catalog service (rule 15: the render tests run the
+// production path, the same service the device build runs).
+const CATALOG_TEXT = fixtureText("catalog-with-discovery.json");
+const INDEX_TEXT = fixtureText("index-valid.json");
+const ROUTE_A1_TEXT = fixtureText("route-guide-route-a1.json");
+const ROUTE_B1_TEXT = fixtureText("route-guide-route-b1.json");
+const POINTER_PATH = "discovery/city-a/r-2026-09-14-1/index.json";
+
+const withCatalogRoutes = (layout: ReturnType<typeof layoutWith>) => ({
+  "_layout": layout,
+  "(tabs)/explore": Explore,
+  "city/[id]/guides": Guides,
+  "route/[id]": RoutePreview,
+  "run/[id]": Run,
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
+describe("route placeholders (19 §2.5)", () => {
+  // G06.04: My KUDY is a real surface now. Without the history member (the
+  // device db adapter is still to land) the root constructs no member and
+  // the screen shows its honest unavailable state — no fake history.
+  test("KUDY without the history member renders its honest unavailable state", async () => {
+    renderRouter({ "_layout": layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
+    const myScreen = await screen.findByTestId("screen-KUDY");
+    expect(myScreen).toBeTruthy();
+    expect(within(myScreen).getByText("Гісторыя недаступная.")).toBeTruthy();
+  });
+
+  // G06.04 criterion 3: the session history — the live walk beside the
+  // finished previous runs, the rows exactly what the durable zone keeps.
+  // UX 05 (issue #351): the row's dates are the user's local calendar day.
+  // The jest workers' zone is pinned to America/Anchorage (jest.config.js),
+  // where 1970-01-01T00:00:05Z is already 1969-12-31 — a revert to the UTC
+  // day fails this (implementation-rules 1).
+  test("KUDY shows the live walk and the previous runs (11 §16.2, 03)", async () => {
+    // G22.06: the port serves pages — the live walk as the full durable row
+    // beside the completed summaries; the heard counts are the derived facts.
+    const sessionHistory = {
+      listPage: async () => ({
+        live: {
+          sessionId: "walk-live",
+          routeId: "route-other",
+          version: "1",
+          locale: "be",
+          audioLocale: null,
+          tier: ["base"],
+          state: "paused" as const,
+          startedAt: 5_000,
+          finishedAt: null,
+          autoFired: ["stop-1"],
+          heard: ["story-1", "story-2"],
+          lastStopId: null,
+          playSeq: 2,
+        },
+        rows: [
+          {
+            sessionId: "walk-old",
+            routeId: "route-map",
+            version: "1",
+            locale: "be",
+            state: "finished" as const,
+            startedAt: 1_000,
+            finishedAt: 2_000,
+            heardCount: 1,
+          },
+        ],
+        nextCursor: null,
+      }),
+    };
+    renderRouter(
+      { "_layout": layoutWith(createServices({ sessionHistory })), "(tabs)/my": My },
+      { initialUrl: "/my" },
+    );
+    expect(await screen.findByTestId("my-live-section")).toBeTruthy();
+    expect(screen.getByTestId("my-session-walk-live")).toBeTruthy();
+    expect(screen.getByTestId("my-live-state-walk-live")).toBeTruthy();
+    expect(screen.queryByTestId("my-history-state-walk-live")).toBeNull();
+    expect(screen.getByTestId("my-history-section")).toBeTruthy();
+    expect(screen.getByTestId("my-session-walk-old")).toBeTruthy();
+    expect(screen.getByTestId("my-history-state-walk-old")).toBeTruthy();
+    expect(screen.queryByTestId("my-live-state-walk-old")).toBeNull();
+    // The row's own facts: the paused state word, the local started day and
+    // the heard count. The catalog is absent here — the raw id stays the
+    // row's title (UX 05, AC2's honest fallback).
+    expect(screen.getByText(/route-other/)).toBeTruthy();
+    expect(screen.getByText(/прыпыненая — з 1969-12-31 — праслышана: 2/)).toBeTruthy();
+  });
+
+  // G06.04 (11 §1, NAV7): the live walk puts «Прагулка» on the section-16
+  // surfaces; pressing it navigates to the walk's Run surface — navigation
+  // only, nothing else runs.
+  test("the live walk shows «Прагулка» on Explore and it returns to the walk's Run", async () => {
+    const services = createServices({
+      runSession: { liveSession: () => ({ routeId: "route-map", title: "Каралеўская" }) },
+    });
+    renderRouter(withCatalogRoutes(layoutWith(services)), { initialUrl: "/explore" });
+    fireEvent.press(await screen.findByTestId("btn-walk-mode"));
+    // The run member is not constructed here (no run ports): the Run screen
+    // renders its honest unavailable state — the navigation itself happened.
+    expect(await screen.findByTestId("screen-Run")).toBeTruthy();
+  });
+
+  test("without a live walk no surface shows «Прагулка» (no fake destination)", async () => {
+    renderRouter(withCatalogRoutes(layoutWith(createServices({}))), { initialUrl: "/explore" });
+    expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
+    expect(screen.queryByTestId("btn-walk-mode")).toBeNull();
+  });
+
+  // G07.01 (issue #281): the Nearby surface is a real surface now. Without
+  // the catalog ports the root constructs no nearby member and the screen
+  // shows its honest unavailable state — no fake offers stand in (the
+  // composition root's rule).
+  // G21.17 (issue #551, AC1/AC2): the guides list filters by the selected UI
+  // language and the switch re-projects the cards — the titles ride the
+  // switched preference through the same refresh-at-every-load reader policy.
+  test("G21.17: the guides list filters and re-projects titles on the UI-language switch", async () => {
+    const index = JSON.parse(INDEX_TEXT) as { offers: Array<{ offer_id: string; availability: { text_locales: string[] }; localized: { title: Record<string, string> } }> };
+    const guide = index.offers.find((offer) => offer.offer_id === "offer-b1-guide");
+    if (guide === undefined) throw new Error("the fixture guide offer exists");
+    guide.availability.text_locales = ["be", "en", "uk", "fr"];
+    guide.localized.title.fr = "Guidé : des douanes au port";
+    const indexText = JSON.stringify(index);
+    const catalog = JSON.parse(CATALOG_TEXT);
+    catalog.discovery_index.sha256 = await sha256(new TextEncoder().encode(indexText));
+    catalog.discovery_index.bytes = new TextEncoder().encode(indexText).length;
+    serve({ "catalog.json": JSON.stringify(catalog), [POINTER_PATH]: indexText, "bundle/guide-route-a1/1/route.json": ROUTE_A1_TEXT, "bundle/guide-route-b1/3/route.json": ROUTE_B1_TEXT });
+    const services = createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 });
+    renderRouter(withCatalogRoutes(layoutWith(services)), { initialUrl: "/city/gdansk/guides" });
+    expect(await screen.findByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
+    act(() => services.uiLocale.set("uk"));
+    expect(await screen.findByText("Історії сукнарів: від митниці до порту")).toBeTruthy();
+    expect(screen.queryByText("Гісторыі сукнараў: ад мытні да порта")).toBeNull();
+    act(() => services.uiLocale.set("en"));
+    expect(await screen.findByText("Cloth Merchants' Stories: from the Customs House to the Port")).toBeTruthy();
+  });
+
+  test("the Nearby surface without the catalog ports renders its honest unavailable state", async () => {
+    renderRouter({ "_layout": layoutWith(createServices({})), map: Map }, { initialUrl: "/map" });
+    const nearby = await screen.findByTestId("screen-Map");
+    expect(nearby).toBeTruthy();
+    expect(within(nearby).getByText("Каталог недаступны")).toBeTruthy();
+  });
+
+  // G06.02: the run surface is a real surface now. Without the run ports the
+  // root constructs no run member and the screen shows its honest unavailable
+  // state — no fake session stands in (the composition root's rule).
+  test("the run surface without the run ports renders its honest unavailable state", async () => {
+    renderRouter({ "_layout": layoutWith(createServices({})), "run/[id]": Run }, { initialUrl: "/run/r1" });
+    const runScreen = await screen.findByTestId("screen-Run");
+    expect(runScreen).toBeTruthy();
+    expect(within(runScreen).getByText("Сесія недаступная")).toBeTruthy();
+  });
+
+  // Issue #427: the unknown path is a styled app screen — the honest
+  // message, the catalog hint, and the one back element that walks to the
+  // catalog. The root layout must wrap the route: the screen reads the
+  // display locale from the composition root (useServices without the root
+  // throws). Reverting the screen to the raw placeholder fails three ways
+  // here — no title word, no hint word, no back button.
+  test("unknown path renders the styled not-found screen, not a crash", async () => {
+    renderRouter({ "_layout": layoutWith(createServices({})), ...routes }, { initialUrl: "/definitely/missing" });
+    const notFound = await screen.findByTestId("screen-Not found");
+    expect(within(notFound).getByText("Такога экрана няма")).toBeTruthy();
+    expect(within(notFound).getByText("Каталог чакае — вяртайцеся да яго кнопкай «Назад».")).toBeTruthy();
+    fireEvent.press(within(notFound).getByTestId("btn-not-found-back"));
+    expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
+  });
+
+  // G06.01.b: the preview is a real surface now; without the catalog ports
+  // it renders its honest unavailable state — no fake content.
+  test("the preview without the catalog ports renders its honest unavailable state", async () => {
+    renderRouter(
+      { "_layout": layoutWith(createServices({})), "route/[id]": RoutePreview },
+      { initialUrl: "/route/r1" },
+    );
+    expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
+    expect(screen.getByText("Каталог недаступны")).toBeTruthy();
+  });
+});
+
+describe("city surface on the published catalog (G06.01.a)", () => {
+  // #339 criterion 1: the cold start opens the catalog, not +not-found — the
+  // index route plays the approved splash (visual-language, 2026-10-28) and
+  // redirects to Explore after 7 s, so the cards are awaited past the splash
+  // window on real timers (10 s ceiling; RTL cleanup unmounts the timers).
+  test("the cold start (/) opens the catalog through the index splash", async () => {
+    serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
+    renderRouter(
+      {
+        ...withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))),
+        index: Index,
+      },
+      { initialUrl: "/" },
+    );
+    expect(await screen.findByTestId("guide-card-guide-route-a1", { timeout: 10_000 })).toBeTruthy();
+  });
+
+  test("the city renders the published guides: one card per guide, canon facts", async () => {
+    serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
+    renderRouter(withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), {
+      initialUrl: "/explore",
+    });
+    // The offer-backed guide card: editorial title, tariff badge, the
+    // availability split (21 §3.2).
+    expect(await screen.findByTestId("guide-card-guide-route-a1")).toBeTruthy();
+    expect(screen.getByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
+    expect(screen.getByTestId("badge-access-paid")).toBeTruthy();
+    expect(screen.getByText("Платна")).toBeTruthy();
+    expect(screen.getByText("Тэкст: be, en, uk; аўдыё: be, en")).toBeTruthy();
+    // The route without an offer stays honest: identifier as the title.
+    expect(await screen.findByTestId("guide-card-guide-route-b1")).toBeTruthy();
+    expect(screen.getByText("guide-route-b1")).toBeTruthy();
+    expect(screen.getByTestId("badge-access-free")).toBeTruthy();
+    expect(screen.getByText("Бясплатна")).toBeTruthy();
+    // The rubric section is the chain's entry to the full list (11 §16.1).
+    expect(screen.getByTestId("link-guides")).toBeTruthy();
+  });
+
+  test("the empty city renders the honest NAV3 message and no rubric (NAV2)", async () => {
+    serve({ "catalog.json": JSON.stringify({ catalog_schema_version: 1, routes: [] }) });
+    renderRouter(withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), {
+      initialUrl: "/explore",
+    });
+    expect(await screen.findByTestId("city-message")).toBeTruthy();
+    expect(screen.getByText("не апублікавана")).toBeTruthy();
+    expect(screen.queryByTestId("link-guides")).toBeNull();
+  });
+
+  // The badge dictionary covers every contract value: the label is Belarusian,
+  // the testID keeps the raw contract value (21 §3.2, owner consent in #355).
+  // The mixed branch has no card on the city/rubric fixtures (collections
+  // render on the collection surface), so the shared component renders here
+  // directly — a reverted dictionary line fails this test.
+  test("the access badge renders every contract value's label (issue #355)", () => {
+    const labels = { free: "Бясплатна", paid: "Платна", mixed: "Змешана" } as const;
+    for (const access of ["free", "paid", "mixed"] as const) {
+      const { getByTestId, getByText, unmount } = render(<AccessBadge access={access} />);
+      expect(getByTestId(`badge-access-${access}`)).toBeTruthy();
+      expect(getByText(labels[access])).toBeTruthy();
+      unmount();
+    }
+  });
+
+  test("a failing catalog shows the named reason (11 §7), never invented cards", async () => {
+    serve({});
+    renderRouter(withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), {
+      initialUrl: "/explore",
+    });
+    // The normal city page without discovery (21 §3.3): the honest message
+    // primary, the technical reason muted below — and no rubric, no cards.
+    expect(await screen.findByTestId("catalog-error")).toBeTruthy();
+    expect(screen.getByText("Каталог часова недаступны")).toBeTruthy();
+    expect(screen.getByText("catalog-loader-404")).toBeTruthy();
+    expect(screen.queryByTestId("link-guides")).toBeNull();
+  });
+
+  test("a build without the catalog ports renders its honest unavailable state", async () => {
+    renderRouter(withCatalogRoutes(layoutWith(createServices({}))), { initialUrl: "/explore" });
+    const notice = await screen.findByTestId("catalog-unavailable");
+    expect(within(notice).getByText("Каталог недаступны")).toBeTruthy();
+    expect(notice.props.accessibilityLiveRegion).toBe("polite");
+    expect(screen.queryByTestId("catalog-retry")).toBeNull();
+  });
+});
+
+describe("rubric surface and the canonical chain (11 §16.1–16.2)", () => {
+  test("the rubric shows the unavailable notice without a catalog service", async () => {
+    renderRouter(withCatalogRoutes(layoutWith(createServices({}))), { initialUrl: "/city/e2e-city/guides" });
+    expect(await screen.findByTestId("screen-Guides")).toBeTruthy();
+    const notice = await screen.findByTestId("catalog-unavailable");
+    expect(within(notice).getByText("Каталог недаступны")).toBeTruthy();
+    expect(screen.queryByTestId("city-message")).toBeNull();
+  });
+
+  test("the rubric lists the published guides and a card leads to the preview", async () => {
+    serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
+    renderRouter(withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), {
+      initialUrl: "/city/gdansk/guides",
+    });
+    expect(await screen.findByTestId("screen-Guides")).toBeTruthy();
+    expect(await screen.findByTestId("guide-card-guide-route-a1")).toBeTruthy();
+    expect(screen.getByTestId("guide-card-guide-route-b1")).toBeTruthy();
+
+    // Card → preview: the same preview every path to the guide opens (D02).
+    fireEvent.press(screen.getByTestId("guide-card-guide-route-a1"));
+    expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
+  });
+
+  test("City → Guides → preview → Back walks the canonical chain back (NAV9)", async () => {
+    serve({
+      "catalog.json": CATALOG_TEXT,
+      [POINTER_PATH]: INDEX_TEXT,
+      "bundle/guide-route-a1/1/route.json": ROUTE_A1_TEXT,
+    });
+    renderRouter(withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), {
+      initialUrl: "/explore",
+    });
+
+    fireEvent.press(await screen.findByTestId("link-guides"));
+    fireEvent.press(await screen.findByTestId("guide-card-guide-route-a1"));
+    expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
+
+    // Back from the preview returns to the surface it was opened from —
+    // the rubric — and the rubric's own back returns to the city.
+    fireEvent.press(screen.getByTestId("btn-preview-back"));
+    expect(await screen.findByTestId("screen-Guides")).toBeTruthy();
+    fireEvent.press(screen.getByTestId("btn-guides-back"));
+    expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
+  });
+
+  test("Back from the rubric returns to the city (NAV9)", async () => {
+    serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
+    renderRouter(withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), {
+      initialUrl: "/explore",
+    });
+    fireEvent.press(await screen.findByTestId("link-guides"));
+    expect(await screen.findByTestId("screen-Guides")).toBeTruthy();
+    fireEvent.press(screen.getByTestId("btn-guides-back"));
+    expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
+  });
+
+  // G07.01 (issue #281): Journey 3's entry — the city surface's «Побач»
+  // button opens the Nearby surface (NAV3: it works from the empty city too).
+  test("the Explore surface's «Побач» button opens the Nearby surface", async () => {
+    serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
+    renderRouter(
+      { ...withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))), map: Map },
+      { initialUrl: "/explore" },
+    );
+    fireEvent.press(await screen.findByTestId("link-nearby"));
+    expect(await screen.findByTestId("screen-Map")).toBeTruthy();
+  });
+
+  // Issue #426: the history surface's one Explore access (NAV3) — the
+  // «KUDY» entry opens /my; removing the link turns this red
+  // (implementation-rules 1).
+  test("the Explore surface's «KUDY» entry opens the history surface", async () => {
+    renderRouter(
+      { _layout: layoutWith(createServices({})), "(tabs)/explore": Explore, "(tabs)/my": My },
+      { initialUrl: "/explore" },
+    );
+    fireEvent.press(await screen.findByTestId("link-kudy"));
+    expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
+  });
+});

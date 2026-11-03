@@ -1,0 +1,1222 @@
+// G20.20 (issue #491) — the free synthetic-package cycle through the
+// production composition (spec V5): catalog → download/hash/activation →
+// Start → Pause → restart → End, plus the explicitly-unavailable purchase.
+// The only stand-ins sit on the Expo/OS boundary (V1): the fake
+// File/Directory classes (fs-test-fixture), the fake location/audio ports,
+// and a stubbed global fetch serving the published documents; the database
+// is the real node:sqlite engine over the production db layer, the digest
+// the real node:crypto — the same bytes the device's expo-crypto hashes.
+// Reverting the composition wiring (the lock write, the readiness gate, the
+// unavailable commerce port) fails the named assertions below.
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { createHash } from 'node:crypto';
+import nodeFs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+
+import { createServices } from './createServices.ts';
+import { createDeviceServicePorts } from './deviceServices.ts';
+import { loadDemoBytes, loadDemoText } from './demoCatalog.ts';
+import { UI_LOCALE_KEY } from './sessionPorts.ts';
+import { nodeSqliteDriver, nodeSqliteFileDriver } from '../services/db/test-fixture.ts';
+import { getLiveSession, setSetting } from '../services/db/db.ts';
+import { secretBox, scriptedTransport, okPut, err503, rawOutbox } from '../tests/feedback/queue-fixture.ts';
+import { FEEDBACK_SYNC_LIMITS } from '../services/feedbackSync.ts';
+import { loadGuideHintValues } from '../services/config.ts';
+import { makeFakeFs, makeFakeFsModule } from '../services/contentRepo/expo/fs-test-fixture.ts';
+import { FakeLocationOsPort } from '../services/location/fake-port.ts';
+import { FakeAudioPlayerPort } from '../services/audio/fake-port.ts';
+import { LocationService } from '../services/location/service.ts';
+import { AudioService } from '../services/audio/service.ts';
+// The synthetic free package documents ride the shared controllers fixture
+// (one restatement, the copy-paste gate's own demand).
+import { enc, PLACES_JSON, ROUTE_JSON } from './test-fixture.ts';
+
+const STOPS_JSON = JSON.stringify([
+  {
+    story_id: 'story-1',
+    place_id: 'place-1',
+    voice_id: 'voice-1',
+    tier: 'base',
+    duration_s: 60,
+    text: 'тэкст',
+    transcript: 'транскрыпт',
+    sources: ['крыніца'],
+  },
+]);
+const MOMENTS_JSON = JSON.stringify([
+  { id: 'moment-1', place_id: 'place-1', story_id: 'story-1', kind: 'teaser', cooldown_min: 0 },
+]);
+const AUDIO = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
+const ORIGIN = 'https://catalog-491.example.invalid';
+const ORIGIN_LAYER = 'bundle/route-491/1/be/base';
+
+const layerFiles: Record<string, Uint8Array> = {
+  'route.json': enc(ROUTE_JSON),
+  'places.json': enc(PLACES_JSON),
+  'stops.json': enc(STOPS_JSON),
+  'moments.json': enc(MOMENTS_JSON),
+  'audio/story-1.m4a': AUDIO,
+};
+const lockEntries = Object.entries(layerFiles)
+  .map(([path, bytes]) => ({ path, bytes: bytes.byteLength, sha256: createHash('sha256').update(bytes).digest('hex') }))
+  .sort((a, b) => (a.path < b.path ? -1 : 1));
+const LOCK_BYTES = enc(JSON.stringify(lockEntries));
+const CATALOG_BYTES = enc(
+  JSON.stringify({
+    catalog_schema_version: 1,
+    generated_at: '2026-10-06T00:00:00Z',
+    routes: [{ route_id: 'route-491', version: '1', locales: ['be'], layers: ['base'], sizes: { base: 1024 } }],
+  }),
+);
+
+function servedDocument(path: string): Uint8Array | null {
+  if (path === 'catalog.json') return CATALOG_BYTES;
+  if (path === 'bundle/route-491/1/route.json') return enc(ROUTE_JSON);
+  if (path === `${ORIGIN_LAYER}/lock.json`) return LOCK_BYTES;
+  const rel = path.slice(`${ORIGIN_LAYER}/`.length);
+  return layerFiles[rel] ?? null;
+}
+
+// The served-document response shape — one spelling for every fetch stub of
+// this file (the copy-paste gate's own demand).
+const serveResponse = (body: Uint8Array | null): Response => {
+  if (body === null) {
+    return { ok: false, status: 404, text: async () => '', arrayBuffer: async () => new ArrayBuffer(0) } as Response;
+  }
+  return {
+    ok: true,
+    status: 200,
+    text: async () => new TextDecoder().decode(body),
+    arrayBuffer: async () => body.slice().buffer,
+  } as Response;
+};
+
+const originalFetch = globalThis.fetch;
+globalThis.fetch = (async (input: RequestInfo | URL) => {
+  const url = String(input instanceof Request ? input.url : input);
+  if (!url.startsWith(`${ORIGIN}/`)) throw new Error(`unexpected-host:${url.split('/')[2]}`);
+  return serveResponse(servedDocument(url.slice(ORIGIN.length + 1)));
+}) as typeof fetch;
+
+const fs = makeFakeFs();
+const fakeFsModule = makeFakeFsModule(fs);
+const wakelockCalls: string[] = [];
+let sessionCounter = 0;
+
+const facilities = (
+  driver: ReturnType<typeof nodeSqliteDriver> = nodeSqliteDriver(),
+  disk = fakeFsModule,
+  wakeCalls: string[] = wakelockCalls,
+) => ({
+  driver,
+  sha256: async (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex'),
+  newSessionId: () => `walk-${String(++sessionCounter).padStart(3, '0')}`,
+  keepAwake: {
+    activate: async (tag: string) => {
+      wakeCalls.push(`activate:${tag}`);
+    },
+    deactivate: (tag: string) => {
+      wakeCalls.push(`deactivate:${tag}`);
+    },
+  },
+  location: new LocationService({
+    port: new FakeLocationOsPort(),
+    clock: { now: () => 0, schedule: () => () => {} },
+    permissions: { foreground: 'fg', background: 'bg' },
+  }),
+  audio: new AudioService({ createPort: () => new FakeAudioPlayerPort() }),
+  fileSystem: {
+    // The fake classes carry only the surface the adapters use; the casts
+    // are the test-side seam (the Expo/OS boundary), typed never upstream.
+    File: disk.File as never,
+    Directory: disk.Directory as never,
+    freeBytes: () => 1_000_000_000,
+  },
+  bundlesRoot: disk.Paths.document as never,
+  origin: ORIGIN,
+});
+
+const settledRun = async (store: { getState(): { status: string } }): Promise<void> => {
+  for (let tries = 0; tries < 200; tries += 1) {
+    if (store.getState().status !== 'loading') return;
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  assert.fail('the run surface never left loading');
+};
+
+const settledPreview = async (store: { getState(): { surface: { kind: string } } }): Promise<void> => {
+  for (let tries = 0; tries < 200; tries += 1) {
+    if (store.getState().surface.kind !== 'loading') return;
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  assert.fail('the preview surface never left loading');
+};
+
+
+const phaseBecomes = async (controller: { getState(): { run: { phase: string } } }, phase: string): Promise<void> => {
+  for (let tries = 0; tries < 200; tries += 1) {
+    if (controller.getState().run.phase === phase) return;
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  assert.fail(`the phase never reached ${phase}`);
+};
+
+
+/** #815: the production root, real run controller and pipeline under a controlled wall clock.
+ * Only the OS ports are fakes; no threshold or candidate handling is mocked.
+ */
+async function controlledDwellWalk() {
+  const clock = { time: 1_000_000 };
+  const osLocation = new FakeLocationOsPort();
+  const location = new LocationService({
+    port: osLocation,
+    clock: { now: () => clock.time, schedule: () => () => {} },
+    permissions: { foreground: 'fg', background: 'bg' },
+  });
+  const device = createDeviceServicePorts({
+    ...facilities(nodeSqliteDriver(), makeFakeFsModule(makeFakeFs()), []),
+    location,
+    runClock: { now: () => clock.time },
+  });
+  const services = createServices(device.ports);
+  const preview = services.preview?.create('route-491');
+  assert.ok(preview, 'the installed preview must exist');
+  await settledPreview(preview);
+  await preview.getState().download();
+  await preview.getState().refresh();
+  assert.equal(await preview.getState().start(), 'handover');
+  const runStore = services.run?.create('route-491', { approvedStart: true });
+  assert.ok(runStore, 'the installed run must exist');
+  await settledRun(runStore);
+  const surface = runStore.getState();
+  assert.equal(surface.status, 'ready');
+  if (surface.status !== 'ready') throw new Error('expected the installed Run surface');
+  const controller = surface.controller;
+  assert.equal(controller.getState().run.phase, 'Active');
+  const startCommand = osLocation.commands.find((command) => command.startsWith('start '));
+  assert.ok(startCommand, 'production Start must arm the OS location subscription');
+  const [place] = JSON.parse(PLACES_JSON) as Array<{ lat: number; lng: number }>;
+  const emit = (elapsedMs: number, northMeters = 0, accuracy = 5) => {
+    clock.time = 1_000_000 + elapsedMs;
+    const currentStart = osLocation.commands.filter((command) => command.startsWith('start ')).at(-1);
+    assert.ok(currentStart, 'the walk must have started a location subscription');
+    osLocation.emitFix(Number(currentStart.slice('start '.length)), {
+      lat: place.lat + northMeters / 111_195,
+      lng: place.lng,
+      accuracy,
+      at: clock.time,
+    });
+  };
+  const state = () => {
+    const run = controller.getState().run;
+    if (run.phase === 'Idle') throw new Error('walk unexpectedly idle');
+    return run;
+  };
+  return { controller, device, emit, state, osLocation };
+}
+
+test('G20.35: canonical dwell uses the active production path; pause and resume require fresh dwell', async () => {
+  const active = await controlledDwellWalk();
+  try {
+    for (let second = 0; second < 6; second += 1) {
+      active.emit(second * 1000);
+      assert.deepEqual(active.state().autoFired, [], 'no trigger on first fix or before dwell threshold');
+      assert.equal(active.state().playing, null);
+    }
+    active.emit(6000);
+    assert.deepEqual(active.state().autoFired, ['stop-1'], 'one trigger at the canonical threshold');
+    assert.equal(active.state().playing?.owner, 'guide', 'positive control must actually launch audio');
+    active.emit(7000);
+    assert.deepEqual(active.state().autoFired, ['stop-1'], 'no duplicate trigger');
+  } finally {
+    active.controller.getState().end();
+    active.device.teardown();
+  }
+
+  const paused = await controlledDwellWalk();
+  try {
+    paused.emit(0);
+    paused.emit(1000);
+    paused.emit(2000);
+    assert.deepEqual(paused.state().autoFired, [], 'two seconds of dwell is insufficient');
+    paused.controller.getState().pauseSession();
+    await phaseBecomes(paused.controller, 'Paused');
+    assert.equal(paused.osLocation.activeSubscriptions(), 0, 'pause must release GPS');
+    for (let second = 3; second <= 60; second += 1) paused.emit(second * 1000);
+    assert.deepEqual(paused.state().autoFired, [], 'stopped GPS fixes do not reach the paused walk');
+    assert.equal(paused.state().playing, null, 'paused walk must not launch audio');
+    paused.controller.getState().resumeSession();
+    await phaseBecomes(paused.controller, 'Active');
+    assert.equal(paused.osLocation.activeSubscriptions(), 1, 'resume must rearm GPS');
+    for (let second = 61; second < 67; second += 1) {
+      paused.emit(second * 1000);
+      assert.deepEqual(paused.state().autoFired, [], 'pause time and pre-pause dwell cannot count');
+      assert.equal(paused.state().playing, null);
+    }
+    paused.emit(67_000);
+    assert.deepEqual(paused.state().autoFired, ['stop-1'], 'fresh continuous dwell eventually triggers');
+    assert.equal(paused.state().playing?.owner, 'guide');
+  } finally {
+    paused.controller.getState().end();
+    paused.device.teardown();
+  }
+});
+
+test('G20.35: departing the radius resets canonical dwell through production composition', async () => {
+  const walk = await controlledDwellWalk();
+  try {
+    walk.emit(0);
+    walk.emit(2000);
+    assert.deepEqual(walk.state().autoFired, []);
+    // Gradual, physically plausible samples pass the speed/accuracy gates.
+    // The 3-fix smoothed latitude moves outside the 30 m stop radius.
+    walk.emit(60_000, 100);
+    walk.emit(61_000, 100);
+    walk.emit(62_000, 100);
+    assert.deepEqual(walk.state().autoFired, [], 'leaving the radius resets the accumulator');
+    walk.emit(122_000);
+    walk.emit(123_000);
+    walk.emit(124_000); // first smoothed fix back within the radius; credits zero time
+    for (let ms = 125_000; ms < 130_000; ms += 1000) {
+      walk.emit(ms);
+      assert.deepEqual(walk.state().autoFired, [], 'time outside must not be credited on re-entry');
+    }
+    walk.emit(130_000);
+    assert.deepEqual(walk.state().autoFired, ['stop-1'], 'trigger only after new continuous dwell');
+  } finally {
+    walk.controller.getState().end();
+    walk.device.teardown();
+  }
+});
+
+test('G20.20: the free synthetic package walks the whole production composition', async () => {
+  const sharedDriver = nodeSqliteDriver();
+  const firstFacilities = { ...facilities(sharedDriver), guideHintValues: loadGuideHintValues(), foreground: () => true };
+  const first = createDeviceServicePorts(firstFacilities);
+  const services = createServices(first.ports);
+  assert.ok(services.discovery, 'the published index must reach the installed composition');
+  assert.ok(services.nearby, 'Nearby must consume the device location service');
+  assert.ok(services.moment, 'Moment Play must consume the device audio service');
+  assert.ok(services.hints, 'the accepted values and durable store must reach the hint controller');
+
+  // 1. Catalog → preview: the served catalog makes the route previewable;
+  //    the disk truth says not_downloaded, so the button offers the download.
+  const preview = services.preview?.create('route-491');
+  if (!preview) throw new Error('the root constructed no preview member');
+  await settledPreview(preview);
+  const before = preview.getState();
+  assert.equal(before.surface.kind, 'ready', JSON.stringify(before.surface).slice(0, 120));
+  if (before.surface.kind !== 'ready') return;
+  assert.equal(before.button.action, 'download');
+
+  // 2. Download/hash/activation: the layer lands in the device store with
+  //    its lock, and the refreshed preview offers the Start.
+  await preview.getState().download();
+  await preview.getState().refresh();
+  const afterDownload = preview.getState();
+  assert.equal(afterDownload.surface.kind, 'ready');
+  if (afterDownload.surface.kind !== 'ready') return;
+  assert.equal(afterDownload.button.action, 'start', afterDownload.downloadError ?? '');
+  // #727 — the enabled bit is the real Start gate: without the wired
+  // evaluateLayer the derivation falls to preview#verify-unavailable and
+  // Start stays disabled even though the action reads start.
+  assert.ok(afterDownload.button.enabled, JSON.stringify(afterDownload.button));
+  assert.ok(fs.files.has('/root/bundles/route-491/1/be/base/lock.json'), 'the layer lock lands on the device');
+  assert.ok(fs.files.has('/root/bundles/route-491/1/be/base/audio/story-1.m4a'));
+  assert.deepEqual(first.ports.guideHints?.points(), [{ guideId: 'route-491', lat: 54.352, lng: 18.648 }]);
+
+  // 3. Start: the per-route readiness gate evaluates the downloaded layer,
+  //    the walk opens Active on the production session store.
+  assert.equal(await preview.getState().start(), 'handover');
+  const runStore = services.run?.create('route-491', { approvedStart: true });
+  if (!runStore) throw new Error('the root constructed no run member');
+  await settledRun(runStore);
+  const surface = runStore.getState();
+  assert.equal(surface.status, 'ready', surface.status === 'unavailable' ? surface.reason : surface.status);
+  if (surface.status !== 'ready') return;
+  const controller = surface.controller;
+  assert.equal(controller.getState().run.phase, 'Active');
+  // The engine state is a union; the Active branch carries the seeded stops.
+  const activeStops = (controller.getState().run as { stops?: ReadonlyArray<{ stopId: string }> }).stops ?? [];
+  assert.deepEqual(
+    activeStops.map((stop) => stop.stopId),
+    ['stop-1'],
+  );
+
+  // 4. Pause: the durable row pauses; the wakelock lease tracks the live
+  //    walk (09 §9: Active holds it, Paused releases it).
+  controller.getState().pauseSession();
+  await phaseBecomes(controller, 'Paused');
+  assert.deepEqual(wakelockCalls, ['activate:kudy-run', 'deactivate:kudy-run']);
+
+  // 5. Restart: a new composition over the SAME driver and disk (the row and
+  //    the files survive, the in-memory caches do not) recovers the paused
+  //    walk through the recovery port.
+  const secondFacilities = { ...facilities(sharedDriver), guideHintValues: loadGuideHintValues(), foreground: () => true };
+  const second = createDeviceServicePorts(secondFacilities);
+  await second.ports.guideHints?.pointsReady;
+  assert.deepEqual(second.ports.guideHints?.points(), [{ guideId: 'route-491', lat: 54.352, lng: 18.648 }],
+    'a new composition restores public points from the installed base layer');
+  const restarted = createServices(second.ports);
+  const reopenedStore = restarted.run?.create('route-491');
+  if (!reopenedStore) throw new Error('the restarted root constructed no run member');
+  await settledRun(reopenedStore);
+  const reopened = reopenedStore.getState();
+  assert.equal(reopened.status, 'ready');
+  if (reopened.status !== 'ready') return;
+  await phaseBecomes(reopened.controller, 'Paused');
+
+  // 6. End: the row finishes, the live read is empty again, the lease stays
+  //    released.
+  reopened.controller.getState().end();
+  await phaseBecomes(reopened.controller, 'Ended');
+  assert.equal(getLiveSession(sharedDriver), null);
+  // One activate for the whole story; the pause and the End each release the
+  // lease — the second release is the idempotent End release (09 §9).
+  assert.deepEqual(wakelockCalls, ['activate:kudy-run', 'deactivate:kudy-run', 'deactivate:kudy-run']);
+
+  // 7. The durable ui-locale switch rides the settings row across restarts.
+  restarted.uiLocale.set('en');
+  assert.equal(second.ports.uiLocalePersistence?.read(), 'en');
+
+  // 8. Purchase/restore stays explicitly unavailable: not-owned, the closed
+  //    unavailable outcome, zero store/grant/paid-byte calls (the port has
+  //    no store behind it at all — G20.21 owns the live path).
+  const commerce = second.ports.commerce;
+  if (!commerce) throw new Error('the root constructed no commerce member');
+  assert.equal(commerce.stateOf('route_491_extended'), 'not-owned');
+  assert.deepEqual(await commerce.purchase('route_491_extended'), { kind: 'unavailable' });
+});
+
+test('G23.05: the installed composition asks before replacing an active or paused guide', async () => {
+  const driver = nodeSqliteDriver();
+  const device = createDeviceServicePorts(facilities(driver));
+  const services = createServices(device.ports);
+  const preview = services.preview?.create('route-491');
+  const sessions = device.ports.run?.session.sessionStore;
+  if (!preview || !sessions) throw new Error('the production preview or session port is absent');
+  await settledPreview(preview);
+  await preview.getState().download();
+  await preview.getState().refresh();
+  assert.equal(preview.getState().button.action, 'start');
+  assert.equal(preview.getState().button.enabled, true);
+
+  assert.deepEqual(sessions.start({
+    sessionId: 'existing-663', routeId: 'another-guide', version: '1', locale: 'be', startedAt: 1,
+  }), { ok: true });
+  assert.equal(services.walk?.liveSession()?.routeId, 'another-guide');
+  assert.equal(await preview.getState().start(), 'confirm');
+  assert.equal(preview.getState().confirm?.liveTitle, 'another-guide');
+  preview.getState().cancelConfirm();
+  assert.equal(preview.getState().confirm, null);
+  assert.equal(getLiveSession(driver)?.sessionId, 'existing-663');
+
+  sessions.pause('existing-663', { heard: ['story-1'] });
+  assert.equal(getLiveSession(driver)?.state, 'paused');
+  assert.equal(await preview.getState().start(), 'confirm');
+  preview.getState().cancelConfirm();
+  assert.equal(preview.getState().confirm, null);
+  const paused = getLiveSession(driver);
+  assert.ok(paused, 'the paused session remains live');
+  assert.equal(paused.sessionId, 'existing-663');
+  assert.equal(paused.state, 'paused');
+  assert.deepEqual(paused.heard, ['story-1']);
+});
+
+// #664: a force-stop loses the Run surface cache, not the SQLite live row.
+// The person can reopen a Place card directly, before opening Run again.
+async function installedActiveWalk(): Promise<ReturnType<typeof nodeSqliteDriver>> {
+  const driver = nodeSqliteDriver();
+  const device = createDeviceServicePorts(facilities(driver));
+  const services = createServices(device.ports);
+  const preview = services.preview?.create('route-491');
+  if (!preview) throw new Error('the fixture has no preview');
+  await settledPreview(preview);
+  await preview.getState().download();
+  await preview.getState().refresh();
+  assert.equal(preview.getState().button.enabled, true);
+  assert.equal(await preview.getState().start(), 'handover');
+  const run = services.run?.create('route-491', { approvedStart: true });
+  if (!run) throw new Error('the fixture has no run');
+  await settledRun(run);
+  assert.equal(run.getState().status, 'ready');
+  assert.equal(getLiveSession(driver)?.state, 'active');
+  services.dispose();
+  device.teardown();
+  return driver;
+}
+
+test('G23.06: Moment Play from Place after restart routes into the persisted Active walk before Run opens', async () => {
+  const driver = await installedActiveWalk();
+  const device = createDeviceServicePorts(facilities(driver));
+  const services = createServices(device.ports);
+  const place = services.place?.create('place-1');
+  if (!place) throw new Error('the restarted root has no Place');
+  for (let tries = 0; tries < 200 && place.store.getState().kind === 'loading'; tries += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  const detail = place.store.getState();
+  assert.equal(detail.kind, 'ready');
+  if (detail.kind !== 'ready') return;
+  assert.equal(detail.moments.length, 1, 'the verified package supplies the Place teaser');
+  const teaser = detail.moments[0];
+  assert.ok(teaser.audioPath);
+  const outcome = services.moment?.play({ momentId: teaser.momentId, storyId: teaser.storyId, path: teaser.audioPath });
+  assert.deepEqual(outcome, { outcome: 'routed' });
+  const run = services.run?.create('route-491');
+  if (!run) throw new Error('the restarted root has no Run');
+  await settledRun(run);
+  const surface = run.getState();
+  assert.equal(surface.status, 'ready');
+  if (surface.status !== 'ready') return;
+  const live = surface.controller.getState().run;
+  assert.equal(live.phase, 'Active');
+  if (live.phase !== 'Active') return;
+  assert.equal(live.playing?.owner, 'moment');
+  assert.equal(live.autoplaySuspended, true, 'the engine suspends guide automation');
+  assert.equal(getLiveSession(driver)?.sessionId, live.sessionId);
+  services.dispose();
+  device.teardown();
+});
+
+test('G23.06: pending cold-start recovery cannot start standalone Moment audio', async () => {
+  const driver = await installedActiveWalk();
+  const device = createDeviceServicePorts(facilities(driver));
+  const services = createServices(device.ports);
+  // Play in the same turn as root construction, before an async recovery
+  // can complete. A refusal is safe; an engine-routed launch is also safe.
+  const result = services.moment?.play({
+    momentId: 'moment-1',
+    storyId: 'story-1',
+    path: 'bundles/route-491/1/be/base/audio/story-1.m4a',
+  });
+  assert.notDeepEqual(result, { outcome: 'started' }, 'a persisted live walk cannot be bypassed during recovery');
+  assert.notEqual(services.moment?.store.getState().kind, 'playing');
+  services.dispose();
+  device.teardown();
+});
+
+test('offline demo supplies the verified discovery surface through device composition', async () => {
+  const device = createDeviceServicePorts({
+    ...facilities(),
+    demoSource: { loadText: loadDemoText, loadBytes: loadDemoBytes },
+  });
+  const services = createServices(device.ports);
+  assert.ok(services.discovery);
+  await services.discovery.controller.getState().refresh();
+  assert.equal(services.discovery.controller.getState().surface.kind, 'ready');
+  device.teardown();
+});
+
+test('G07.01 #809: the composition hands the ONE location service to the Nearby surface', () => {
+  const device = createDeviceServicePorts(facilities());
+  const services = createServices(device.ports);
+  // The instance the run session carries is the same instance the Nearby
+  // binding receives (19 §3.3 — the top-level port is the only path to the
+  // surface's arming guard and its permission question). #809 device pass:
+  // without the top-level field the Nearby view never arms (no OS dialog,
+  // no location note, the manual review list only) — the assertion fails
+  // on the dropped-port revert.
+  const binding = services.nearby?.create();
+  assert.ok(binding?.location, 'the Nearby binding carries no location service');
+  assert.ok(device.ports.run, 'the composition carries no run session ports');
+  assert.equal(binding?.location, device.ports.run?.session.location);
+  device.teardown();
+});
+
+test('closing the service root releases device hint observers', () => {
+  const deviceFacilities = { ...facilities(), guideHintValues: loadGuideHintValues(), foreground: () => true };
+  const released = { fixes: 0, audio: 0 };
+  const onFix = deviceFacilities.location.onRawFix.bind(deviceFacilities.location);
+  deviceFacilities.location.onRawFix = (handler) => {
+    const stop = onFix(handler);
+    return () => { released.fixes += 1; stop(); };
+  };
+  const onAudio = deviceFacilities.audio.onEvent.bind(deviceFacilities.audio);
+  deviceFacilities.audio.onEvent = (handler) => {
+    const stop = onAudio(handler);
+    return () => { released.audio += 1; stop(); };
+  };
+  const device = createDeviceServicePorts(deviceFacilities);
+  const services = createServices(device.ports);
+  assert.ok(services.hints);
+  services.dispose();
+  services.dispose();
+  assert.deepEqual(released, { fixes: 1, audio: 1 });
+  device.teardown();
+});
+
+test('feedback uses the device identity and the real queue through composition', async () => {
+  const secretStore = secretBox(null);
+  let registrations = 0;
+  const transport = scriptedTransport(() => okPut(1));
+  const device = createDeviceServicePorts({
+    ...facilities(),
+    feedback: {
+      baseUrl: 'https://functions.example.invalid/functions/v1',
+      secretStore,
+      transport,
+      registrationTransport: {
+        register: async () => {
+          registrations += 1;
+          return { status: 201, body: {
+            device_id: '11111111-1111-4111-8111-111111111111',
+            device_secret: 'synthetic-device-secret',
+          } };
+        },
+      },
+    },
+  });
+  const controller = createServices(device.ports).feedback?.controller;
+  assert.ok(controller, 'the configured Functions endpoint must make feedback available');
+  controller.getState().openForm({ kind: 'guide', id: 'route-491', version: '1', locale: 'be' });
+  controller.getState().setScore(4);
+  await controller.getState().send();
+  assert.equal(registrations, 1);
+  assert.equal(secretStore.saved, 1);
+  assert.equal(transport.calls.length, 1);
+  const form = controller.getState().form;
+  assert.equal(form.kind, 'open');
+  if (form.kind === 'open') assert.equal(form.delivery.kind, 'sent');
+});
+
+function manualFeedbackClock() {
+  let now = 1_000_000;
+  let timer: { at: number; fire: () => void } | null = null;
+  return {
+    now: () => now,
+    advanceTo: (value: number) => { now = value; },
+    pendingTimer: () => timer,
+    schedule: (delayMs: number, fire: () => void) => {
+      const scheduled = { at: now + delayMs, fire: () => {
+        if (timer === scheduled) timer = null;
+        fire();
+      } };
+      timer = scheduled;
+      return () => { if (timer === scheduled) timer = null; };
+    },
+  };
+}
+
+const registrationOk = () => ({ status: 201, body: {
+  device_id: '11111111-1111-4111-8111-111111111111',
+  device_secret: 'synthetic-device-secret',
+} });
+
+function openGuideFeedback(device: ReturnType<typeof createDeviceServicePorts>, now?: () => number) {
+  const controller = createServices(now ? { ...device.ports, now } : device.ports).feedback?.controller;
+  assert.ok(controller);
+  controller.getState().openForm({ kind: 'guide', id: 'route-491', version: '1', locale: 'be' });
+  controller.getState().setScore(4);
+  return controller;
+}
+
+test('one foreground return before the due time schedules the queued feedback retry', async () => {
+  const driver = nodeSqliteDriver();
+  let foreground: () => void = () => { throw new Error('foreground listener was not registered'); };
+  let stopped = false;
+  const feedbackClock = manualFeedbackClock();
+  const transport = scriptedTransport(({ index }) => index === 1 ? okPut(1) : err503());
+  const device = createDeviceServicePorts({
+    ...facilities(driver),
+    foreground: () => true,
+    feedbackClock,
+    onForeground: (listener) => {
+      foreground = listener;
+      return () => { stopped = true; };
+    },
+    feedback: {
+      baseUrl: 'https://functions.example.invalid/functions/v1',
+      secretStore: secretBox(null),
+      transport,
+      registrationTransport: { register: async () => registrationOk() },
+    },
+  });
+  const controller = openGuideFeedback(device);
+  await controller.getState().send();
+  assert.equal(rawOutbox(driver).length, 1);
+  const mutation = rawOutbox(driver)[0].mutation_id;
+  const due = Number(rawOutbox(driver)[0].next_attempt_at);
+  assert.ok(due > feedbackClock.now());
+  foreground();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.equal(transport.calls.length, 1, 'the foreground event before due does not resend early');
+  const retry = feedbackClock.pendingTimer();
+  assert.ok(retry && retry.at === due, 'the same foreground return arms the due-time retry');
+  feedbackClock.advanceTo(due);
+  retry.fire();
+  for (let i = 0; i < 30 && rawOutbox(driver).length > 0; i += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  assert.equal(rawOutbox(driver).length, 0);
+  assert.equal(transport.calls.length, 2);
+  assert.equal((transport.calls[0].body as { mutation_id: string }).mutation_id, mutation);
+  assert.equal((transport.calls[1].body as { mutation_id: string }).mutation_id, mutation);
+  const afterRetry = controller.getState().form;
+  assert.equal(afterRetry.kind, 'open');
+  if (afterRetry.kind === 'open') assert.equal(afterRetry.delivery.kind, 'sent', 'the still-open form reflects the timed sync');
+  controller.getState().setScore(5);
+  await controller.getState().send();
+  assert.ok(feedbackClock.pendingTimer(), 'a new transient failure arms another retry');
+  device.teardown();
+  assert.equal(stopped, true);
+  assert.equal(feedbackClock.pendingTimer(), null, 'teardown cancels any pending retry');
+});
+
+test('a sending feedback mutation left by a crash retries after composition restart', async () => {
+  const driver = nodeSqliteDriver();
+  const feedbackClock = manualFeedbackClock();
+  const secretStore = secretBox(null);
+  const transport = scriptedTransport(({ index }) => index === 0 ? err503() : okPut(1));
+  const feedback = {
+    baseUrl: 'https://functions.example.invalid/functions/v1',
+    secretStore,
+    transport,
+    registrationTransport: { register: async () => registrationOk() },
+  };
+  const first = createDeviceServicePorts({ ...facilities(driver), foreground: () => true, feedbackClock, feedback });
+  const controller = openGuideFeedback(first);
+  await controller.getState().send();
+  const queued = rawOutbox(driver)[0];
+  assert.ok(queued);
+  const mutation = String(queued.mutation_id);
+  const target = String(queued.target);
+  assert.ok(Number(queued.next_attempt_at) > feedbackClock.now());
+  first.teardown();
+
+  // The process died after claiming this mutation, before the transport
+  // response could update it. There is no foreground transition on relaunch.
+  feedbackClock.advanceTo(Number(queued.next_attempt_at));
+  driver.prepare("UPDATE feedback_outbox SET transport_state = 'sending' WHERE mutation_id = ?").run(mutation);
+  driver.prepare("UPDATE feedback_local SET state = 'sending' WHERE target = ?").run(target);
+  const second = createDeviceServicePorts({ ...facilities(driver), foreground: () => true, feedbackClock, feedback });
+  const retry = feedbackClock.pendingTimer();
+  assert.ok(retry && retry.at === feedbackClock.now() + 1_000, 'boot schedules stranded sending work now');
+  feedbackClock.advanceTo(retry.at);
+  retry.fire();
+  for (let i = 0; i < 30 && rawOutbox(driver).length > 0; i += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  assert.equal(rawOutbox(driver).length, 0);
+  assert.equal(transport.calls.length, 2);
+  assert.equal((transport.calls[1].body as { mutation_id: string }).mutation_id, mutation);
+  second.teardown();
+});
+
+test('an offline first send retries registration after network recovery without backgrounding', async () => {
+  const driver = nodeSqliteDriver();
+  const feedbackClock = manualFeedbackClock();
+  let online = false;
+  let registrations = 0;
+  const transport = scriptedTransport(() => okPut(1));
+  const device = createDeviceServicePorts({
+    ...facilities(driver),
+    foreground: () => true,
+    feedbackClock,
+    feedback: {
+      baseUrl: 'https://functions.example.invalid/functions/v1',
+      secretStore: secretBox(null),
+      transport,
+      registrationTransport: { register: async () => {
+        registrations += 1;
+        if (!online) throw new Error('offline');
+        return registrationOk();
+      } },
+    },
+  });
+  const controller = openGuideFeedback(device);
+  await controller.getState().send();
+  assert.equal(rawOutbox(driver).length, 1);
+  assert.equal(rawOutbox(driver)[0].next_attempt_at, null);
+  assert.equal(transport.calls.length, 0);
+  const retry = feedbackClock.pendingTimer();
+  assert.ok(retry && retry.at === feedbackClock.now() + 30_000);
+  online = true;
+  feedbackClock.advanceTo(retry.at);
+  retry.fire();
+  for (let i = 0; i < 30 && rawOutbox(driver).length > 0; i += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  assert.equal(registrations, 2);
+  assert.equal(rawOutbox(driver).length, 0);
+  assert.equal(transport.calls.length, 1);
+  const form = controller.getState().form;
+  assert.equal(form.kind, 'open');
+  if (form.kind === 'open') {
+    assert.equal(form.delivery.kind, 'sent');
+    assert.equal(form.error, null);
+  }
+  device.teardown();
+});
+
+test('unregistered feedback stops retrying after seven days offline', async () => {
+  const driver = nodeSqliteDriver();
+  const feedbackClock = manualFeedbackClock();
+  let registrations = 0;
+  const device = createDeviceServicePorts({
+    ...facilities(driver),
+    foreground: () => true,
+    feedbackClock,
+    feedback: {
+      baseUrl: 'https://functions.example.invalid/functions/v1',
+      secretStore: secretBox(null),
+      registrationTransport: { register: async () => {
+        registrations += 1;
+        throw new Error('offline');
+      } },
+    },
+  });
+  const controller = openGuideFeedback(device, feedbackClock.now);
+  await controller.getState().send();
+  assert.equal(registrations, 1);
+  assert.equal(rawOutbox(driver)[0].created_at, feedbackClock.now());
+  const retry = feedbackClock.pendingTimer();
+  assert.ok(retry);
+  feedbackClock.advanceTo(feedbackClock.now() + FEEDBACK_SYNC_LIMITS.reconfirmAfterS * 1000 + 1);
+  retry.fire();
+  for (let i = 0; i < 30; i += 1) {
+    const form = controller.getState().form;
+    if (form.kind === 'open' && form.delivery.kind === 'action_required') break;
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  assert.equal(registrations, 1, 'expiry is applied before another registration request');
+  assert.equal(rawOutbox(driver)[0].transport_state, 'action_required');
+  assert.equal(feedbackClock.pendingTimer(), null, 'expired feedback has no automatic timer');
+  const form = controller.getState().form;
+  assert.equal(form.kind, 'open');
+  if (form.kind === 'open') assert.equal(form.delivery.kind, 'action_required');
+  device.teardown();
+});
+
+test('G20.20: without a catalog origin the gate answers null and the root passes the empty port set', async () => {
+  const { catalogOriginFrom } = await import('./deviceServices.ts');
+  // The same pure gate app/_layout.tsx uses (the wiring guard pins the
+  // call site): no origin, no composition call — the surfaces keep their
+  // honest unavailable state.
+  assert.equal(catalogOriginFrom({}), null);
+  assert.equal(catalogOriginFrom({ EXPO_PUBLIC_CATALOG_ORIGIN: undefined }), null);
+  assert.equal(catalogOriginFrom({ EXPO_PUBLIC_CATALOG_ORIGIN: '' }), null);
+  assert.equal(catalogOriginFrom({ EXPO_PUBLIC_CATALOG_ORIGIN: 'https://catalog.example.invalid' }), 'https://catalog.example.invalid');
+});
+
+// G21.15 (issue #549) — the ui-locale choice rides the durable settings row
+// through the production composition (the #491 storage owner): the approved
+// default stands when nothing is stored, a switch survives a close/reopen of
+// the same store file (the force-stop/relaunch cycle), a corrupt stored code
+// reads as no choice, and the next switch writes a valid row again. The file
+// db is the real SQLite engine over the production db layer — the same bytes
+// pattern the device's expo-sqlite driver keeps.
+test('G21.15: the ui-locale choice survives force-stop/relaunch through the production composition', () => {
+  const dir = nodeFs.mkdtempSync(path.join(os.tmpdir(), 'g2115-'));
+  try {
+    const file = path.join(dir, 'kudy.db');
+    const firstDb = nodeSqliteFileDriver(file);
+    const firstServices = createServices(createDeviceServicePorts(facilities(firstDb.driver)).ports);
+    assert.equal(firstServices.uiLocale.current(), 'be');
+    firstServices.uiLocale.set('de');
+    firstDb.close();
+
+    const secondDb = nodeSqliteFileDriver(file);
+    const secondServices = createServices(createDeviceServicePorts(facilities(secondDb.driver)).ports);
+    assert.equal(secondServices.uiLocale.current(), 'de');
+
+    // The corrupt row reads as no choice: the default stands, the next
+    // switch writes a valid value back. The corruption goes through the
+    // exported seam key — renaming the key breaks this test at compile time.
+    setSetting(secondDb.driver, UI_LOCALE_KEY, 'xx');
+    secondDb.close();
+    const thirdDb = nodeSqliteFileDriver(file);
+    const thirdServices = createServices(createDeviceServicePorts(facilities(thirdDb.driver)).ports);
+    assert.equal(thirdServices.uiLocale.current(), 'be');
+    thirdServices.uiLocale.set('en');
+    thirdDb.close();
+
+    const fourthDb = nodeSqliteFileDriver(file);
+    const fourthServices = createServices(createDeviceServicePorts(facilities(fourthDb.driver)).ports);
+    assert.equal(fourthServices.uiLocale.current(), 'en');
+    fourthDb.close();
+  } finally {
+    nodeFs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// G21.15 (issue #549, criterion 4): the UI setting never changes the walk's
+// pinned text/audio identity — the live session row keeps its own locale
+// while the settings row carries the chrome choice (uk-release-scope §4; the
+// store holds no session reference by construction, this pins the durable
+// half). The entitlement port stays the closed unavailable outcome.
+test('G21.15: the ui-locale switch leaves the pinned session locale and entitlement untouched', async () => {
+  const sharedDriver = nodeSqliteDriver();
+  const first = createDeviceServicePorts(facilities(sharedDriver));
+  const services = createServices(first.ports);
+  const sessionStore = first.ports.run?.session.sessionStore;
+  if (!sessionStore) throw new Error('the root constructed no run session store');
+  const started = sessionStore.start({
+    sessionId: 'walk-549',
+    routeId: 'route-549',
+    version: '1',
+    locale: 'be',
+    startedAt: 1,
+  });
+  assert.deepEqual(started, { ok: true });
+
+  services.uiLocale.set('en');
+  const live = getLiveSession(sharedDriver);
+  assert.equal(live?.locale, 'be');
+  assert.equal(first.ports.uiLocalePersistence?.read(), 'en');
+  const commerce = first.ports.commerce;
+  if (!commerce) throw new Error('the root constructed no commerce member');
+  assert.equal(commerce.stateOf('route_549_extended'), 'not-owned');
+  assert.deepEqual(await commerce.purchase('route_549_extended'), { kind: 'unavailable' });
+});
+
+// G21.21 (issue #553, ADR G21.20 §3/§4, owner edits 1–2) — the mixed-language
+// walk through the production composition: the preview's audio chips resolve
+// the pin (the owner default, then the explicit en choice), the download
+// activates both layers, the Start gate verifies the selected audio layer,
+// the engine plays the en path for fr text, and the §3.4 restore carries the
+// pin and the progress across the restart. The stand-ins stay on the Expo/OS
+// boundary — the same rules the G20.20 cycle above follows.
+const ROUTE_553_JSON = JSON.stringify({
+  route_id: 'route-553',
+  version: '1',
+  city_id: 'city-491',
+  access: 'free_base',
+  stops: [
+    {
+      id: 'stop-1',
+      position: 0,
+      place_id: 'place-1',
+      access_tier: 'base',
+      story_base_id: 'story-1',
+      preview: { name: { fr: 'Porte', en: 'Gate' } },
+    },
+  ],
+});
+const STOPS_553 = (text: string, transcript: string) =>
+  JSON.stringify([
+    {
+      story_id: 'story-1',
+      place_id: 'place-1',
+      voice_id: 'voice-1',
+      tier: 'base',
+      duration_s: 60,
+      text,
+      transcript,
+      sources: ['synthetic licensed'],
+    },
+  ]);
+const AUDIO_FR = new Uint8Array([11, 12, 13]);
+const AUDIO_EN = new Uint8Array([21, 22, 23]);
+const ORIGIN_553 = 'https://catalog-553.example.invalid';
+const DISCOVERY_INDEX_553 = JSON.stringify({
+  schema_version: 1,
+  revision: 'r-553',
+  city_id: 'city-491',
+  themes: [],
+  offers: [
+    {
+      offer_id: 'offer-553',
+      ref: { kind: 'guide', route_id: 'route-553', version: '1' },
+      city_id: 'city-491',
+      editorial_order: 1,
+      themes: [],
+      access: 'free',
+      localized: { title: { fr: 'Guide' } },
+      availability: { text_locales: ['fr'], audio_locales: ['fr', 'en'] },
+    },
+  ],
+  collections: [],
+});
+const CATALOG_553_BYTES = enc(
+  JSON.stringify({
+    catalog_schema_version: 1,
+    generated_at: '2026-10-07T00:00:00Z',
+    routes: [{ route_id: 'route-553', version: '1', locales: ['fr'], layers: ['base'], sizes: { base: 1024 } }],
+    discovery_index: {
+      schema_version: 1,
+      revision: 'r-553',
+      path: 'discovery/index.json',
+      bytes: enc(DISCOVERY_INDEX_553).byteLength,
+      // the composition's sha256 port hashes the same bytes this constant pins
+      sha256: createHash('sha256').update(enc(DISCOVERY_INDEX_553)).digest('hex'),
+    },
+  }),
+);
+
+function served553(path: string): Uint8Array | null {
+  if (path === 'catalog.json') return CATALOG_553_BYTES;
+  if (path === 'discovery/index.json') return enc(DISCOVERY_INDEX_553);
+  for (const locale of ['fr', 'en']) {
+    const layer = `bundle/route-553/1/${locale}/base`;
+    if (path === `${layer}/lock.json` || path.startsWith(`${layer}/`)) {
+      const files: Record<string, Uint8Array> = {
+        'route.json': enc(ROUTE_553_JSON),
+        'places.json': enc(PLACES_JSON),
+        'stops.json': enc(STOPS_553(locale === 'fr' ? 'тэкст-fr' : 'тэкст-en', 'транскрыпт')),
+        'audio/story-1.m4a': locale === 'fr' ? AUDIO_FR : AUDIO_EN,
+      };
+      if (path === `${layer}/lock.json`) {
+        const entries = Object.entries(files)
+          .map(([p, bytes]) => ({ path: p, bytes: bytes.byteLength, sha256: createHash('sha256').update(bytes).digest('hex') }))
+          .sort((a, b) => (a.path < b.path ? -1 : 1));
+        return enc(JSON.stringify(entries));
+      }
+      const rel = path.slice(`${layer}/`.length);
+      return files[rel] ?? null;
+    }
+  }
+  return null;
+}
+
+test('G21.21 mixed_language_offline_restart: fr text and en audio through the production composition', async (t) => {
+  // The test's own origin joins the fetch surface for its duration; the
+  // G20.20 documents above stay served for their own tests.
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    const url = String(input instanceof Request ? urlOf(input) : input);
+    if (!url.startsWith(`${ORIGIN_553}/`)) return previousFetch(input);
+    return serveResponse(served553(url.slice(ORIGIN_553.length + 1)));
+  }) as typeof fetch;
+  t.after(() => {
+    globalThis.fetch = previousFetch;
+  });
+
+  const locationPort = new FakeLocationOsPort();
+  const audioPort = new FakeAudioPlayerPort();
+  const clock = { time: 1_000_000 };
+  const sharedDriver = nodeSqliteDriver();
+  const first = createDeviceServicePorts({
+    ...facilities(sharedDriver),
+    origin: ORIGIN_553,
+    // The reader's content preference is fr (the composition default is a
+    // placeholder) — the fresh text pin resolves to the fr layer.
+    preferredLocales: () => ['fr'],
+    location: new LocationService({
+      port: locationPort,
+      clock: { now: () => clock.time, schedule: () => () => {} },
+      permissions: { foreground: 'fg', background: 'bg' },
+    }),
+    runClock: { now: () => clock.time },
+    audio: new AudioService({ createPort: () => audioPort }),
+  });
+  const services = createServices(first.ports);
+  // The reader set the display locale to fr — the fresh text pin follows the
+  // display preference (the pinned-package port reads the ui-locale store).
+  services.uiLocale.set('fr');
+
+  // 1. Preview: the offer's availability names fr+en audio; the owner's
+  //    default rule picks the text locale (fr) — the chips' preselection.
+  const preview = services.preview?.create('route-553');
+  if (!preview) throw new Error('the root constructed no preview member');
+  await settledPreview(preview);
+  const previewReady = preview.getState();
+  assert.equal(
+    previewReady.surface.kind,
+    'ready',
+    previewReady.surface.kind === 'unavailable' ? `preview refused: ${previewReady.surface.reason}` : previewReady.surface.kind,
+  );
+  if (previewReady.surface.kind !== 'ready') return;
+  assert.deepEqual(previewReady.surface.preview.audioLocales, ['fr', 'en']);
+  assert.equal(previewReady.audioChoice, 'fr');
+
+  // 2. The explicit en chip: the en layer is not on disk, the button holds
+  //    Download (owner edit 2 — the download is the wait, no substitution).
+  preview.getState().selectAudio('en');
+  for (let tries = 0; tries < 200; tries += 1) {
+    if (preview.getState().audioChoice === 'en') break;
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  assert.equal(preview.getState().audioChoice, 'en');
+  await preview.getState().download();
+  await preview.getState().refresh();
+  assert.equal(preview.getState().button.action, 'start', preview.getState().downloadError ?? '');
+  // Both layers landed with their locks — the fr text and the en audio.
+  assert.ok(fs.files.has('/root/bundles/route-553/1/fr/base/lock.json'));
+  assert.ok(fs.files.has('/root/bundles/route-553/1/en/base/lock.json'));
+  assert.ok(fs.files.has('/root/bundles/route-553/1/en/base/audio/story-1.m4a'));
+
+  // 3. The handover carries the choice: the walk starts with the en pin.
+  assert.equal(await preview.getState().start(), 'handover');
+  const runStore = services.run?.create('route-553', { approvedStart: true, audio: 'en' });
+  if (!runStore) throw new Error('the root constructed no run member');
+  await settledRun(runStore);
+  const surface = runStore.getState();
+  assert.equal(
+    surface.status,
+    'ready',
+    surface.status === 'unavailable' ? `run surface refused: ${surface.reason}` : surface.status,
+  );
+  if (surface.status !== 'ready') return;
+  const controller = surface.controller;
+  await phaseBecomes(controller, 'Active');
+  const active = controller.getState().run;
+  if (active.phase === 'Idle') throw new Error('no live session');
+  assert.equal(active.audioLocale, 'en', 'the mixed pin');
+  assert.equal(active.locale, 'fr', 'the text pin unchanged');
+  assert.deepEqual(active.audioTierAvailable, ['base']);
+  assert.equal(getLiveSession(sharedDriver)?.audioLocale, 'en', 'the row keeps the pin');
+  assert.equal(surface.audioLocale, 'en', 'the surface exposes the effective pin');
+
+  // 4. The GPS trigger sounds the EN layer for the fr text story.
+  const started = locationPort.commands.filter((command) => command.startsWith('start '));
+  const subscription = Number(started[started.length - 1].slice('start '.length));
+  // Production dwell takes six seconds; the OS and Run use the same clock.
+  for (const offset of [0, 1000, 2000, 3000, 4000, 5000, 6000]) {
+    clock.time = 1_000_000 + offset;
+    locationPort.emitFix(subscription, { lat: 54.352, lng: 18.648, accuracy: 5, at: clock.time });
+  }
+  for (let tries = 0; tries < 200; tries += 1) {
+    if (audioPort.commands.some((command) => command.startsWith('play '))) break;
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  assert.deepEqual(
+    audioPort.commands.filter((command) => command.startsWith('play ')),
+    ['play 1:file:///root/bundles/route-553/1/en/base/audio/story-1.m4a'],
+    'the en layer sounds, never the text locale substitute',
+  );
+  audioPort.finish(1);
+
+  // 5. Pause, then the restart over the same driver and disk: the §3.4
+  //    restore brings the pin and the progress back, nothing sounds itself.
+  controller.getState().pauseSession();
+  await phaseBecomes(controller, 'Paused');
+  const second = createDeviceServicePorts({
+    ...facilities(sharedDriver),
+    location: new LocationService({
+      port: new FakeLocationOsPort(),
+      clock: { now: () => 0, schedule: () => () => {} },
+      permissions: { foreground: 'fg', background: 'bg' },
+    }),
+    audio: new AudioService({ createPort: () => audioPort }),
+  });
+  const restarted = createServices(second.ports);
+  const reopenedStore = restarted.run?.create('route-553');
+  if (!reopenedStore) throw new Error('the restarted root constructed no run member');
+  await settledRun(reopenedStore);
+  const reopened = reopenedStore.getState();
+  assert.equal(reopened.status, 'ready');
+  if (reopened.status !== 'ready') return;
+  await phaseBecomes(reopened.controller, 'Paused');
+  const restored = reopened.controller.getState().run;
+  if (restored.phase === 'Idle') throw new Error('no restored session');
+  assert.equal(restored.audioLocale, 'en', 'the pin restored with the walk');
+  assert.deepEqual(restored.heard, ['story-1'], 'the progress restored');
+  assert.equal(restored.playSeq, 1);
+  assert.deepEqual(reopened.controller.getState().recovery, {
+    status: 'restored',
+    sessionId: restored.sessionId,
+    unavailableTiers: [],
+    audioPin: 'en',
+    droppedAudioPin: null,
+  });
+  assert.deepEqual(
+    audioPort.commands.filter((command) => command.startsWith('play ')),
+    ['play 1:file:///root/bundles/route-553/1/en/base/audio/story-1.m4a'],
+    'nothing sounds by itself after the restore',
+  );
+
+  // 6. End: the finished row keeps the pin as history.
+  reopened.controller.getState().end();
+  await phaseBecomes(reopened.controller, 'Ended');
+  assert.equal(getLiveSession(sharedDriver), null);
+});
+
+test('G21.21 text_only_no_audio: a guide without audio walks text-only through the composition', async (t) => {
+  // A fr text-only layer: no audio directory ships, the availability names
+  // no audio — the owner default resolves to the text-only session and no
+  // audio command is ever proposed.
+  const previousFetch = globalThis.fetch;
+  const origin = 'https://catalog-553-text.example.invalid';
+  const layer = 'bundle/route-553-text/1/fr/base';
+  const files: Record<string, Uint8Array> = {
+    'route.json': enc(JSON.stringify({
+      route_id: 'route-553-text',
+      version: '1',
+      city_id: 'city-491',
+      access: 'free_base',
+      stops: [{
+        id: 'stop-1',
+        position: 0,
+        place_id: 'place-1',
+        access_tier: 'base',
+        story_base_id: 'story-1',
+        preview: { name: { fr: 'Porte' } },
+      }],
+    })),
+    'places.json': enc(PLACES_JSON),
+    'stops.json': enc(STOPS_553('тэкст-fr', 'транскрыпт')),
+  };
+  const lock = enc(JSON.stringify(Object.entries(files).map(([p, bytes]) => ({
+    path: p,
+    bytes: bytes.byteLength,
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+  })).sort((a, b) => (a.path < b.path ? -1 : 1))));
+  const catalog = enc(JSON.stringify({
+    catalog_schema_version: 1,
+    routes: [{ route_id: 'route-553-text', version: '1', locales: ['fr'], layers: ['base'], sizes: { base: 1024 } }],
+  }));
+  globalThis.fetch = (async (input: RequestInfo | URL) => {
+    const url = String(input instanceof Request ? urlOf(input) : input);
+    if (!url.startsWith(`${origin}/`)) return previousFetch(input);
+    const rel = url.slice(origin.length + 1);
+    const body =
+      rel === 'catalog.json' ? catalog : rel === `${layer}/lock.json` ? lock : files[rel.slice(layer.length + 1)] ?? null;
+    return serveResponse(body);
+  }) as typeof fetch;
+  t.after(() => {
+    globalThis.fetch = previousFetch;
+  });
+
+  const audioPort = new FakeAudioPlayerPort();
+  const driver = nodeSqliteDriver();
+  const first = createDeviceServicePorts({
+    ...facilities(driver),
+    origin,
+    preferredLocales: () => ['fr'],
+    audio: new AudioService({ createPort: () => audioPort }),
+  });
+  const services = createServices(first.ports);
+  const preview = services.preview?.create('route-553-text');
+  if (!preview) throw new Error('the root constructed no preview member');
+  await settledPreview(preview);
+  const ready = preview.getState();
+  assert.equal(
+    ready.surface.kind,
+    'ready',
+    ready.surface.kind === 'unavailable' ? `preview refused: ${ready.surface.reason}` : ready.surface.kind,
+  );
+  if (ready.surface.kind !== 'ready') return;
+  assert.deepEqual(ready.surface.preview.audioLocales, [], 'no audio published');
+  assert.equal(ready.audioChoice, null, 'the text-only default');
+  await preview.getState().download();
+  await preview.getState().refresh();
+  assert.equal(preview.getState().button.action, 'start');
+
+  assert.equal(await preview.getState().start(), 'handover');
+  const runStore = services.run?.create('route-553-text', { approvedStart: true });
+  if (!runStore) throw new Error('the root constructed no run member');
+  await settledRun(runStore);
+  const surface = runStore.getState();
+  assert.equal(surface.status, 'ready', surface.status === 'unavailable' ? surface.reason : surface.status);
+  if (surface.status !== 'ready') return;
+  const controller = surface.controller;
+  await phaseBecomes(controller, 'Active');
+  const active = controller.getState().run;
+  if (active.phase === 'Idle') throw new Error('no live session');
+  assert.equal(active.audioLocale, null, 'the text-only session');
+  assert.deepEqual(active.audioTierAvailable, []);
+  // The manual play presents text without any audio command.
+  controller.getState().selectStop('stop-1');
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.deepEqual(audioPort.commands, [], 'no audio command for a text-only walk');
+  const afterSelect = controller.getState().run;
+  if (afterSelect.phase !== 'Idle') assert.equal(afterSelect.playing, null, 'nothing plays text-only');
+  assert.equal(getLiveSession(driver)?.audioLocale, null);
+});
+
+function urlOf(input: Request): string {
+  return input.url;
+}

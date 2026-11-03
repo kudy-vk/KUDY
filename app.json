@@ -1,0 +1,89 @@
+{
+  "expo": {
+    "name": "KUDY",
+    "slug": "kudy",
+    "scheme": "kudy",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "extra": {
+      "locationExplanations": {
+        "foreground": "KUDY uses your location on this device to show where you are and to play the right story when you reach a stop.",
+        "background": "During an active walk KUDY needs location in the background so stories trigger while your phone stays in your pocket. Coordinates never leave this device."
+      },
+      "locationForegroundService": {
+        "notificationTitle": "KUDY walk in progress",
+        "notificationBody": "Location stays on so guide stories play at the right places."
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "by.kudy.app",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio",
+          "location"
+        ]
+      },
+      "icon": "./assets/kudy-icon/icon.png"
+    },
+    "android": {
+      "package": "by.kudy.app",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.FOREGROUND_SERVICE_MICROPHONE",
+        "android.permission.VIBRATE",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.ACCESS_WIFI_STATE"
+      ],
+      "icon": "./assets/kudy-icon/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/kudy-icon/android-adaptive-square-foreground.png",
+        "backgroundImage": "./assets/kudy-icon/android-adaptive-background.png",
+        "backgroundColor": "#F5EDDF"
+      }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "KUDY uses location locally to trigger the selected guide.",
+          "locationAlwaysAndWhenInUsePermission": "KUDY uses location during an active walk; coordinates stay on this device."
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": true,
+          "enableBackgroundRecording": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      "@maplibre/maplibre-react-native",
+      "expo-asset",
+      "expo-router",
+      "expo-font",
+      "expo-system-ui",
+      "expo-sqlite",
+      "./tools/android-build/with-playback-only.cjs",
+      "./tools/android-build/with-shape-aware-icons.cjs"
+    ],
+    "icon": "./assets/kudy-icon/icon.png",
+    "splash": {
+      "image": "./assets/kudy-icon/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5EDDF"
+    }
+  }
+}

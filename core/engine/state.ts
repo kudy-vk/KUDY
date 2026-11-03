@@ -1,0 +1,259 @@
+// G05.01.a + G05.01.b + G05.01.c — engine state types and derived views
+// (docs/agent-tasks/run/G05.01.a.md, G05.01.b.md, G05.01.c.md).
+//
+// Name boundary, declared once for the whole module (19 §3): the canonical
+// contract names are snake_case in 09 §6.1 and the accepted ADRs
+// (docs/architecture/decisions/G01.01/G01.02/G01.03); TypeScript identifiers
+// here are their camelCase mechanical transform — no second contract, and no
+// third spelling anywhere else. Event and command names are copied verbatim
+// from 09 §6.1 (events.ts / commands.ts).
+//
+// 19 §3.1 predates the G01.02 synchronization (canon note in the brief): the
+// `playing` owner variants and `PlayToken` here follow 09 §6.1, which is the
+// name source after that sync.
+//
+// Monotonic sets (`heard`, `auto_fired`, `accessible_stop_ids`, `tier_available`)
+// are stored as add-only arrays: the durable row keeps them as JSON arrays
+// (ADR G01.03 §3.1), and array order keeps deep-equality deterministic for the
+// parity work in G05.01.d.
+
+export type SessionId = string;
+export type RouteId = string;
+export type VersionId = string;
+export type StopId = string;
+export type StoryId = string;
+export type MomentId = string;
+
+// BCP-47 locale from the bundle allowlist (09 §3); the allowlist itself is
+// content-schema territory, not an engine rule.
+export type Locale = string;
+
+export type Tier = 'base' | 'extended';
+
+// Four states, no more (09 §6.1; the forbidden list adds no states).
+export type Phase = 'Idle' | 'Active' | 'Paused' | 'Ended';
+
+// One stop of the pinned package, as Start received it. The primary story is
+// derived, never stored (ADR G01.01 §4.1): base when present, else the
+// paid-only extended story; an unlock never rewrites it.
+export interface PackageStop {
+  stopId: StopId;
+  storyBaseId?: StoryId;
+  storyExtendedId?: StoryId;
+}
+
+// ADR G01.02 §3.2: every launch carries one token; a guide token IS the
+// accepted (session_id, play_id) pair, a moment token carries the controller's
+// moment_id and its process-wide counter.
+export interface PlayToken {
+  kind: 'guide' | 'moment';
+  ref: string;
+  seq: number;
+}
+
+// Mirror of the physical player inside the session (09 §6.1, ADR G01.02 §3.3):
+// the only source of player occupancy for autoplay, queue and cards. The
+// live-pause flag (`paused`, ADR G01.02 §3.4/§3.7) belongs to the launch, not
+// to the session — a manual pause or a focus loss keeps the same token and
+// offset, and only the marker nuance of stopStatus reads it.
+export type Playing =
+  | { owner: 'guide'; stopId: StopId; storyId: StoryId; playId: number; paused: boolean }
+  | { owner: 'moment'; momentId: MomentId; storyId: StoryId; seq: number; paused: boolean };
+
+// One-cell queue of the newest trigger (09 §6.1); filled by G05.01.b.
+export interface QueuedTrigger {
+  stopId: StopId;
+  radius: number;
+  at: number;
+}
+
+// Accepted fix carried by LocationAccepted (19 §3.3): the freshness/accuracy
+// checks of invariant 8 read it from last_fix. G05.01.b consumes it.
+export interface AcceptedFix {
+  lat: number;
+  lng: number;
+  accuracy: number;
+  at: number;
+  distances: Map<StopId, number>;
+}
+
+// Session state: everything 09 §6.1 lists under Active, kept across Paused and
+// Ended. `tier` is the informational start record of verified layers
+// (ADR G01.03 §3.1) — it never grows; runtime availability is `tierAvailable`.
+//
+// The language identity of a guide is two independent pins over one route and
+// version (ADR G21.20 §3.1, approved 2026-10-07): the text pin (`locale`,
+// unchanged) and the optional audio pin (`audioLocale`). `null` is the
+// text-only session — no audio command is ever proposed (§3.1.3); a monolingual
+// session pins the audio to its own text locale and behaves byte-for-byte like
+// the pre-G21.21 engine (§3.1.5, §4 scenario 3). The durable row keeps
+// audio_locale NULL for both a monolingual and a text-only session and the
+// restore resolves it against the pinned version's availability (§3.4).
+export interface RunSessionState {
+  phase: 'Active' | 'Paused' | 'Ended';
+  sessionId: SessionId;
+  routeId: RouteId;
+  // Pinned at Start, immutable until End (ADR G01.03 §3.4).
+  version: VersionId;
+  locale: Locale;
+  // The audio pin: set at Start, immutable until End (ADR G21.20 §3.1.4);
+  // null = text-only reading.
+  audioLocale: Locale | null;
+  tier: Tier[];
+  stops: PackageStop[];
+  // Trusted input from verified availability (ADR G01.01 §4.2): grows only
+  // through AccessReady of the same identity.
+  accessibleStopIds: StopId[];
+  tierAvailable: Tier[];
+  // The audio layer's own readiness (ADR G21.20 §3.2): lives only while the
+  // pin is set and grows only through AccessReady of the pin's locale.
+  audioTierAvailable: Tier[];
+  heard: StoryId[];
+  autoFired: StopId[];
+  playing: Playing | null;
+  queued: QueuedTrigger | null;
+  autoplaySuspended: boolean;
+  lastFix: AcceptedFix | null;
+  focusLostAt: number | null;
+  playSeq: number;
+}
+
+export interface RunIdleState {
+  phase: 'Idle';
+}
+
+export type RunState = RunIdleState | RunSessionState;
+
+export const initialRunState: RunIdleState = { phase: 'Idle' };
+
+export const storiesOf = (stop: PackageStop): StoryId[] =>
+  [stop.storyBaseId, stop.storyExtendedId].filter((id): id is StoryId => id !== undefined);
+
+// Derived primary story (ADR G01.01 §4.1) — base, for paid-only stops extended.
+export const primaryStoryOf = (stop: PackageStop | undefined): StoryId | undefined =>
+  stop && (stop.storyBaseId ?? stop.storyExtendedId);
+
+// The tier a story belongs to inside its stop: the extended story of a stop is
+// the extended-tier one, everything else is base (run-model tierOf parity).
+export const storyTierOf = (stop: PackageStop, storyId: StoryId): Tier =>
+  stop.storyExtendedId === storyId ? 'extended' : 'base';
+
+export const findStop = (state: RunSessionState, stopId: StopId): PackageStop | undefined =>
+  state.stops.find((stop) => stop.stopId === stopId);
+
+// story_accessible (ADR G01.01 §4.2): the story is primary or additional of a
+// stop whose id is in accessible_stop_ids, and its tier is in tier_available.
+export const storyAccessible = (state: RunSessionState, storyId: StoryId): boolean => {
+  const stop = state.stops.find((candidate) => storiesOf(candidate).includes(storyId));
+  return (
+    !!stop &&
+    state.accessibleStopIds.includes(stop.stopId) &&
+    state.tierAvailable.includes(storyTierOf(stop, storyId))
+  );
+};
+
+// The sound predicate of a guide story (ADR G21.20 §3.2): the story's text is
+// accessible in the text layer (storyAccessible — the caller's part) AND the
+// audio pin is set AND the story's tier is in the audio layer's readiness.
+// Audio without accessible text never sounds — the runtime mirror of the
+// audio-without-text ban (09 §3 invariant 1).
+export const storyAudible = (state: RunSessionState, stop: PackageStop, storyId: StoryId): boolean =>
+  state.audioLocale !== null && state.audioTierAvailable.includes(storyTierOf(stop, storyId));
+
+// «Яшчэ можна адкрыць» (ADR G01.01 §4.6): every accessible story of the route
+// stops that is not heard — locked stories excluded, the unit is story_id, an
+// unheard additional story is listed even when the stop marker already says
+// played. Route-stop order, [base, extended] inside a stop (the executable
+// reference: docs/run-model/run-model.mjs missed()).
+export const missedStories = (state: RunSessionState): StoryId[] => [
+  ...new Set(
+    state.stops
+      .flatMap((stop) => storiesOf(stop))
+      .filter((storyId) => storyAccessible(state, storyId) && !state.heard.includes(storyId)),
+  ),
+];
+
+export type StopStatus = 'locked' | 'playing' | 'played' | 'available' | 'pending';
+
+// Stop status is computed, never stored (ADR G01.01 §4.5, 09 §6.1):
+// locked → playing → played → available → pending, first match wins. The
+// playing marker requires the audible guide launch: a live pause keeps the
+// launch but the marker follows the audible state (ADR G01.02 §3.4).
+//
+// E7 (G22.07): the ladder exists once. statusFromLookups is its single
+// spelling; the single-stop stopStatus and the one-pass stopStatusTable
+// both ask it. The lookups reproduce storyAccessible's first-owner find
+// (the first stop whose stories carry a story owns its access and tier),
+// so the batch answers match the single-stop rule stop for stop.
+interface StatusLookups {
+  readonly storyOwner: ReadonlyMap<StoryId, { readonly stopId: StopId; readonly tier: Tier }>;
+  readonly accessibleStops: ReadonlySet<StopId>;
+  readonly tierAvailable: ReadonlySet<Tier>;
+  readonly heard: ReadonlySet<StoryId>;
+  readonly autoFired: ReadonlySet<StopId>;
+}
+
+const statusLookups = (state: RunSessionState): StatusLookups => {
+  const storyOwner = new Map<StoryId, { stopId: StopId; tier: Tier }>();
+  for (const stop of state.stops) {
+    for (const storyId of storiesOf(stop)) {
+      if (!storyOwner.has(storyId)) {
+        storyOwner.set(storyId, { stopId: stop.stopId, tier: storyTierOf(stop, storyId) });
+      }
+    }
+  }
+  return {
+    storyOwner,
+    accessibleStops: new Set(state.accessibleStopIds),
+    tierAvailable: new Set(state.tierAvailable),
+    heard: new Set(state.heard),
+    autoFired: new Set(state.autoFired),
+  };
+};
+
+const statusFromLookups = (
+  state: RunSessionState,
+  stop: PackageStop,
+  lookups: StatusLookups,
+): StopStatus => {
+  const primary = primaryStoryOf(stop);
+  const owner = primary === undefined ? undefined : lookups.storyOwner.get(primary);
+  if (
+    !primary ||
+    !owner ||
+    !lookups.accessibleStops.has(owner.stopId) ||
+    !lookups.tierAvailable.has(owner.tier)
+  ) {
+    return 'locked';
+  }
+  if (
+    state.playing &&
+    state.playing.owner === 'guide' &&
+    !state.playing.paused &&
+    state.playing.stopId === stop.stopId
+  ) {
+    return 'playing';
+  }
+  if (lookups.heard.has(primary)) return 'played';
+  return lookups.autoFired.has(stop.stopId) ? 'available' : 'pending';
+};
+
+export const stopStatus = (state: RunSessionState, stopId: StopId): StopStatus => {
+  const stop = findStop(state, stopId);
+  return stop ? statusFromLookups(state, stop, statusLookups(state)) : 'locked';
+};
+
+// E7 (G22.07) — the projection's derived status table: every stop of the
+// session answered by one pass over the state, work proportional to the
+// stop count. Read-only and ephemeral: the engine keeps owning the heard/
+// access state, the table is rebuilt from the current session state on
+// every projection and is never written back or stored.
+export const stopStatusTable = (state: RunSessionState): ReadonlyMap<StopId, StopStatus> => {
+  const lookups = statusLookups(state);
+  const table = new Map<StopId, StopStatus>();
+  for (const stop of state.stops) {
+    // First occurrence wins, matching findStop's answer for a repeated id.
+    if (!table.has(stop.stopId)) table.set(stop.stopId, statusFromLookups(state, stop, lookups));
+  }
+  return table;
+};

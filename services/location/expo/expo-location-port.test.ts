@@ -1,0 +1,674 @@
+// G20.07 — behavioral tests of the production expo adapter over the real
+// LocationService (the G20.02 pattern: the only mock is the expo modules,
+// replaced with node:test module mocks before the adapter import; the npm
+// test node invocation passes --experimental-test-module-mocks). The merged
+// single permissionState is the defect under test (expo-location-port.ts:
+// one permission answer per scope, runtime.md R4): reverting the scoped
+// tracking or the ask-generation guard turns foreground_granted_background_
+// denied and stale_permission_reply red — the background denial then
+// disarms a live foreground session (implementation-rules 1). Android/iOS
+// dialog behavior and physical background work stay explicitly unverified
+// until device acceptance (criterion 4) — no mock test here claims them.
+import assert from 'node:assert/strict';
+import { test, mock } from 'node:test';
+
+import type { FixInput } from '../types.ts';
+import type { OsLocationObject } from './fix-mapping.ts';
+import type { LocationExtras } from './location-config.ts';
+import { LocationService } from '../service.ts';
+
+// --- the expo module stand-ins ----------------------------------------------
+
+type StatusSpelling = 'granted' | 'denied' | 'undetermined';
+interface PermissionResponseLike {
+  status: StatusSpelling;
+}
+
+interface Deferred<T> {
+  promise: Promise<T>;
+  resolve(value: T): void;
+  reject(error: Error): void;
+}
+
+function deferred<T>(): Deferred<T> {
+  let resolve!: (value: T) => void;
+  let reject!: (error: Error) => void;
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+}
+
+// Every ask hands out its own deferred: the tests hold replies pending and
+// deliver them in whichever order the race under test needs. An already
+// settled promise ignores a second resolve, so a retry needs a fresh ask.
+let foregroundRead: Deferred<PermissionResponseLike>;
+let foregroundAsks: Array<Deferred<PermissionResponseLike>>;
+let backgroundAsks: Array<Deferred<PermissionResponseLike>>;
+let watchStart: Deferred<{ remove(): void }>;
+let backgroundStarted: boolean;
+let startGate: Deferred<void> | null;
+let stopGate: Deferred<void> | null;
+let checkGate: Deferred<boolean> | null;
+
+interface RecordingWatch {
+  callback(location: OsLocationObject): void;
+  onError(error: unknown): void;
+  removeCalls: number;
+}
+const watches: RecordingWatch[] = [];
+// Every background task executor keyed by the registered task name.
+const definedTasks = new Map<string, (event: { data?: { locations: OsLocationObject[] }; error?: unknown }) => void>();
+const locationCalls: string[] = [];
+
+function resetStandIns(): void {
+  foregroundRead = deferred();
+  foregroundAsks = [];
+  backgroundAsks = [];
+  watchStart = deferred();
+  backgroundStarted = false;
+  watches.length = 0;
+  startGate = null;
+  stopGate = null;
+  checkGate = null;
+  locationCalls.length = 0;
+}
+
+mock.module('expo-location', {
+  namedExports: {
+    Accuracy: { High: 3 },
+    getForegroundPermissionsAsync: () => {
+      locationCalls.push('readForeground');
+      return foregroundRead.promise;
+    },
+    requestForegroundPermissionsAsync: () => {
+      locationCalls.push('askForeground');
+      const ask = deferred<PermissionResponseLike>();
+      foregroundAsks.push(ask);
+      return ask.promise;
+    },
+    requestBackgroundPermissionsAsync: () => {
+      locationCalls.push('askBackground');
+      const ask = deferred<PermissionResponseLike>();
+      backgroundAsks.push(ask);
+      return ask.promise;
+    },
+    watchPositionAsync: (
+      _options: unknown,
+      callback: (location: OsLocationObject) => void,
+      onError: (error: unknown) => void,
+    ) => {
+      locationCalls.push('watch');
+      const watch: RecordingWatch = { callback, onError, removeCalls: 0 };
+      watches.push(watch);
+      return watchStart.promise.then((handle) => ({
+        remove: () => {
+          watch.removeCalls += 1;
+          handle.remove();
+        },
+      }));
+    },
+    startLocationUpdatesAsync: (taskName: string) => {
+      locationCalls.push(`startUpdates:${taskName}`);
+      return (startGate?.promise ?? Promise.resolve()).then(() => { backgroundStarted = true; });
+    },
+    hasStartedLocationUpdatesAsync: () => checkGate?.promise ?? Promise.resolve(backgroundStarted),
+    stopLocationUpdatesAsync: () => {
+      locationCalls.push('stopUpdates');
+      return (stopGate?.promise ?? Promise.resolve()).then(() => { backgroundStarted = false; });
+    },
+  },
+});
+mock.module('expo-task-manager', {
+  namedExports: {
+    defineTask: (
+      name: string,
+      executor: (event: { data?: { locations: OsLocationObject[] }; error?: unknown }) => void,
+    ) => {
+      definedTasks.set(name, executor);
+    },
+  },
+});
+mock.module('expo-constants', {
+  defaultExport: { expoConfig: null },
+});
+
+const { ExpoLocationOsPort } = await import('./expo-location-port.ts');
+
+// --- the harness -------------------------------------------------------------
+
+const extras: LocationExtras = {
+  locationExplanations: { foreground: 'fg-why', background: 'bg-why' },
+  locationForegroundService: { notificationTitle: 't', notificationBody: 'b' },
+};
+
+// The watchdog clock never fires — the criteria under test are the
+// permission and scope paths, not the gap watch.
+function setup(): {
+  port: InstanceType<typeof ExpoLocationOsPort>;
+  service: LocationService;
+  fixes: FixInput[];
+} {
+  resetStandIns();
+  const port = new ExpoLocationOsPort(extras);
+  const fixes: FixInput[] = [];
+  const service = new LocationService({
+    port,
+    clock: { now: () => 1000, schedule: () => () => {} },
+    permissions: { foreground: 'fg-why', background: 'bg-why' },
+  });
+  service.onFix((fix) => fixes.push(fix));
+  return { port, service, fixes };
+}
+
+const flush = () => new Promise<void>((resolve) => setImmediate(resolve));
+
+function osFix(at: number): OsLocationObject {
+  return { coords: { latitude: 53.9, longitude: 27.56, accuracy: 5 }, timestamp: 1000 + at };
+}
+
+const TASK = 'KUDY/location-updates';
+const updatesAsked = () => locationCalls.some((call) => call.startsWith('startUpdates'));
+
+test('a granted foreground permission is rechecked without reopening the OS dialog', async () => {
+  const { port } = setup();
+  foregroundRead.resolve({ status: 'granted' });
+  await flush();
+  assert.equal(port.permission(), 'granted');
+
+  port.requestPermission('foreground', 'fg-why');
+  await flush();
+  assert.equal(locationCalls.filter((call) => call === 'readForeground').length, 2);
+  assert.equal(locationCalls.includes('askForeground'), false);
+});
+
+test('foreground_granted_background_denied: a background denial keeps the granted foreground session running', async () => {
+  const { port, service, fixes } = setup();
+  service.setMode('city-surface');
+  foregroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches.length, 1, 'the foreground watch is running');
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 1, 'the fix reaches the controller through the watch');
+  assert.deepEqual(service.status(), { state: 'live' });
+
+  // The Start path carries the subscription over and asks the background
+  // scope; the answer is a denial.
+  service.setMode('active-guide');
+  backgroundAsks[0].resolve({ status: 'denied' });
+  await flush();
+
+  assert.ok(locationCalls.includes('askBackground'), 'the background question was asked');
+  assert.ok(!updatesAsked(), 'no background updates are requested');
+  assert.equal(watches[0].removeCalls, 0, 'the foreground watch is not stopped by the background denial');
+  assert.equal(port.permission(), 'granted', 'the background denial is not passed off as a foreground denial');
+
+  // Reverting the scoped tracking disarms the session here: the denial
+  // reaches the service as a revocation, the watch is removed and this fix
+  // never lands (implementation-rules 1).
+  watches[0].callback(osFix(2));
+  assert.equal(fixes.length, 2, 'foreground fixes keep flowing after the background denial');
+  assert.deepEqual(service.status(), { state: 'live' });
+});
+
+test('background_denied_limited_path: a background-intent start with the scope denied runs the foreground watch', async () => {
+  const { port } = setup();
+  port.requestPermission('foreground', 'fg-why');
+  foregroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  port.requestPermission('background', 'bg-why');
+  backgroundAsks[0].resolve({ status: 'denied' });
+  await flush();
+  assert.equal(port.permission(), 'granted');
+
+  // The limited path (runtime.md R4): the background start happens only
+  // with the needed permission; otherwise the foreground watch carries the
+  // session — and with neither scope granted no watcher starts at all.
+  port.startFixes(1);
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches.length, 1, 'the foreground watch carries the session');
+  assert.ok(!updatesAsked(), 'no background task without the background grant');
+
+  port.stopFixes(1);
+  await flush();
+  assert.equal(watches[0].removeCalls, 1, 'the limited-path watch is stopped cleanly');
+  assert.ok(!updatesAsked());
+});
+
+test('all_permissions_denied: neither watcher starts and the visible permission state stays accurate', async () => {
+  const { port, service } = setup();
+  service.setMode('city-surface');
+  foregroundAsks[0].resolve({ status: 'denied' });
+  await flush();
+
+  assert.equal(port.permission(), 'denied');
+  assert.deepEqual(service.status(), { state: 'permission-denied', reason: 'denied' });
+  assert.equal(watches.length, 0, 'no foreground watch without the foreground grant');
+  assert.ok(!updatesAsked(), 'no background task without the background grant');
+
+  // The Start path asks the background scope on top; both denied — the
+  // visible state holds, nothing starts.
+  service.setMode('active-guide');
+  backgroundAsks[0].resolve({ status: 'denied' });
+  await flush();
+
+  assert.equal(port.permission(), 'denied');
+  assert.deepEqual(service.status(), { state: 'permission-denied', reason: 'denied' });
+  assert.equal(watches.length, 0);
+  assert.ok(!updatesAsked());
+});
+
+test('G23.05: cold Run restore resolves foreground denial after the background answer', async () => {
+  const { port, service } = setup();
+  service.setMode('active-guide');
+  backgroundAsks[0].resolve({ status: 'denied' });
+  await flush();
+  assert.equal(port.permission(), 'undetermined');
+  foregroundRead.resolve({ status: 'denied' });
+  await flush();
+  assert.equal(port.permission(), 'denied');
+  assert.deepEqual(service.status(), { state: 'permission-denied', reason: 'denied' });
+  assert.equal(watches.length, 0);
+});
+
+test('G23.05: a pending background question cannot hide a foreground denial', async () => {
+  const { port, service } = setup();
+  service.setMode('active-guide');
+  foregroundRead.resolve({ status: 'denied' });
+  await flush();
+  assert.equal(port.permission(), 'denied');
+  assert.deepEqual(service.status(), { state: 'permission-denied', reason: 'denied' });
+  assert.equal(watches.length, 0);
+});
+
+test('G23.05: a background grant replaces the foreground watch started during cold restore', async () => {
+  const { service, fixes } = setup();
+  service.setMode('active-guide');
+  foregroundRead.resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches.length, 1);
+  assert.equal(updatesAsked(), false);
+
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  assert.ok(updatesAsked(), 'a later background grant must start background updates');
+  assert.equal(watches[0].removeCalls, 1, 'the superseded foreground watch is removed');
+  definedTasks.get(TASK)?.({ data: { locations: [osFix(1)] } });
+  assert.equal(fixes.length, 1, 'background fixes reach the active guide');
+});
+
+test('G23.05: a pending foreground watch cannot survive the background grant', async () => {
+  const { service } = setup();
+  service.setMode('active-guide');
+  foregroundRead.resolve({ status: 'granted' });
+  await flush();
+  assert.equal(watches.length, 1);
+
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  assert.ok(updatesAsked(), 'background updates start while the foreground watch is pending');
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches[0].removeCalls, 1, 'the late foreground watch is discarded');
+});
+
+
+test('G20.30: city-to-Run keeps foreground fixes until background starts, then rejects late watch callbacks', async () => {
+  const { port, service, fixes } = setup();
+  service.setMode('city-surface');
+  foregroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches.length, 1, 'city location was armed');
+
+  service.setMode('active-guide');
+  startGate = deferred();
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  assert.ok(updatesAsked(), 'grant attempts the native switch without a watchdog tick');
+  assert.equal(watches[0].removeCalls, 0, 'the existing watch lives during pending native startup');
+  watches[0].callback(osFix(2));
+  assert.equal(fixes.length, 1, 'foreground fixes continue while native startup is pending');
+
+  startGate.resolve();
+  await flush();
+  assert.equal(watches[0].removeCalls, 1, 'successful promotion releases the old watch exactly once');
+  watches[0].callback(osFix(3));
+  assert.equal(fixes.length, 1, 'removed foreground callbacks cannot use the still-current service sub');
+  definedTasks.get(TASK)?.({ data: { locations: [osFix(4)] } });
+  assert.equal(fixes.length, 2, 'the promoted native stream delivers');
+
+  port.requestPermission('background', 'bg-why');
+  backgroundAsks[1].resolve({ status: 'granted' });
+  await flush();
+  assert.equal(locationCalls.filter(call => call === 'startUpdates:' + TASK).length, 1, 'repeated grants never start a second native task');
+  service.setMode('paused');
+  await flush();
+  assert.equal(backgroundStarted, false);
+});
+
+test('G20.30: cold Run retains the original foreground watch when background startup fails', async () => {
+  const { service, fixes } = setup();
+  service.setMode('active-guide');
+  foregroundRead.resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches.length, 1);
+
+  startGate = deferred();
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  assert.equal(watches[0].removeCalls, 0, 'no tracking gap while awaiting native start');
+  startGate.reject(new Error('background unavailable'));
+  await flush();
+  assert.equal(watches.length, 1, 'failed promotion must not duplicate the standing watch');
+  assert.equal(watches[0].removeCalls, 0);
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 1, 'the original foreground stream remains usable');
+  service.setMode('idle');
+  await flush();
+  assert.equal(watches[0].removeCalls, 1);
+});
+
+test('G20.30: failed promotion preserves a foreground watch whose native handle is still pending', async () => {
+  const { service, fixes } = setup();
+  service.setMode('active-guide');
+  foregroundRead.resolve({ status: 'granted' });
+  await flush();
+  assert.equal(watches.length, 1);
+
+  startGate = deferred();
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  startGate.reject(new Error('native refused'));
+  await flush();
+  assert.equal(watches.length, 1, 'no parallel fallback while the original watch is unresolved');
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches[0].removeCalls, 0, 'the pending foreground watch is adopted after failure');
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 1);
+  service.setMode('paused');
+  await flush();
+  assert.equal(watches[0].removeCalls, 1);
+});
+
+test('G20.30: pause before a delayed background answer cannot re-arm tracking', async () => {
+  const { service, fixes } = setup();
+  service.setMode('active-guide');
+  foregroundRead.resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  service.setMode('paused');
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  assert.equal(updatesAsked(), false);
+  assert.equal(watches[0].removeCalls, 1);
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 0);
+});
+
+test('G20.30: newer city permission decision supersedes the pending background answer', async () => {
+  const { service, fixes } = setup();
+  service.setMode('city-surface');
+  foregroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  service.setMode('active-guide');
+  service.setMode('city-surface');
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  assert.equal(updatesAsked(), false, 'stale background permission cannot promote a city watch');
+  assert.equal(watches[0].removeCalls, 0);
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 1);
+  service.setMode('idle');
+  await flush();
+});
+
+test('G20.30: pause during native background startup drops both pending streams', async () => {
+  const { service, fixes } = setup();
+  service.setMode('city-surface');
+  foregroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  service.setMode('active-guide');
+  startGate = deferred();
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  service.setMode('paused');
+  assert.equal(watches[0].removeCalls, 1);
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 0);
+  startGate.resolve();
+  await flush();
+  assert.equal(backgroundStarted, false, 'queued native cleanup releases the late task');
+  definedTasks.get(TASK)?.({ data: { locations: [osFix(2)] } });
+  assert.equal(fixes.length, 0, 'late native callbacks cannot resurrect the walk');
+});
+
+test('stale_permission_reply: a superseded ask cannot overwrite a newer capability decision', async () => {
+  const { port, service, fixes } = setup();
+  // Out-of-order asks: the foreground ask goes out with the city surface,
+  // the background ask supersedes it at the Start path, and the replies
+  // arrive in reverse order.
+  service.setMode('city-surface');
+  service.setMode('active-guide');
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+
+  // The background grant implies the foreground capability — the session
+  // starts on the background task.
+  assert.ok(updatesAsked(), 'the background task runs under the granted background scope');
+
+  // The stale foreground reply arrives last. It is a superseded decision:
+  // dropping it keeps the session alive; applying it would merge a denial
+  // over a newer grant and disarm the session (criterion 3).
+  foregroundAsks[0].resolve({ status: 'denied' });
+  await flush();
+  assert.equal(port.permission(), 'granted');
+  assert.deepEqual(service.status(), { state: 'acquiring' });
+
+  definedTasks.get(TASK)?.({ data: { locations: [osFix(1)] } });
+  assert.equal(fixes.length, 1, 'fixes flow through the background task');
+  assert.deepEqual(service.status(), { state: 'live' });
+
+  // Re-arm after the pause: the standing foreground grant carries the fresh
+  // subscription, and the never-answered old ask of the same scope is
+  // simply gone — it cannot win when a newer decision exists.
+  const updatesBeforeReArm = locationCalls.filter((call) => call.startsWith('startUpdates')).length;
+  service.setMode('paused');
+  await flush();
+  service.setMode('city-surface');
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches.length, 1, 'the re-armed surface runs on the foreground watch');
+  assert.equal(
+    locationCalls.filter((call) => call.startsWith('startUpdates')).length,
+    updatesBeforeReArm,
+    'the re-armed surface does not restart the background task',
+  );
+  watches[0].callback(osFix(2));
+  assert.equal(fixes.length, 2);
+  assert.deepEqual(service.status(), { state: 'live' });
+});
+
+test('initial_permission_read_superseded: the constructor read cannot overwrite a newer ask', async () => {
+  const { port, service, fixes } = setup();
+  service.setMode('city-surface');
+  foregroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  watchStart.resolve({ remove() {} });
+  await flush();
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 1);
+
+  // The constructor's initial read lands late: ask generation 0 is
+  // superseded, the live session ignores it. Without the guard the denial
+  // would overwrite the newer grant and disarm the session.
+  foregroundRead.resolve({ status: 'denied' });
+  await flush();
+  assert.equal(port.permission(), 'granted');
+  assert.deepEqual(service.status(), { state: 'live' });
+  watches[0].callback(osFix(2));
+  assert.equal(fixes.length, 2, 'the session keeps flowing past the late read');
+});
+
+test('background_granted_starts_updates: the granted background scope still starts and stops the background task', async () => {
+  const { service } = setup();
+  // Fresh install Start path: the background ask is the first question.
+  service.setMode('active-guide');
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+
+  // The task executor is registered once per process (the first background
+  // start of the suite owns it — stale_permission_reply proves the batch
+  // delivery through it); this test pins the start/stop mechanics.
+  assert.ok(updatesAsked(), 'the background task starts under the granted background scope');
+
+  service.setMode('paused');
+  await flush();
+  assert.ok(locationCalls.includes('stopUpdates'), 'the background task is stopped with the subscription');
+});
+
+async function backgroundPort() {
+  const world = setup();
+  world.port.onPortEvent(event => { if (event.type === 'fix') world.fixes.push(event.fix); });
+  world.port.requestPermission('background', 'bg-why');
+  backgroundAsks[0].resolve({ status: 'granted' });
+  await flush();
+  return world;
+}
+
+test('delayed_start_after_stop: a late native start leaves no background task', async () => {
+  const { port } = await backgroundPort();
+  startGate = deferred();
+  port.startFixes(1);
+  await flush();
+  port.stopFixes(1);
+  await flush();
+  startGate.resolve();
+  await flush();
+  assert.equal(backgroundStarted, false, 'stopped owner must leave zero native tasks');
+});
+
+test('old_stop_new_start: a pending native stop finishes before the replacement starts', async () => {
+  const { port, fixes } = await backgroundPort();
+  port.startFixes(1);
+  await flush();
+  stopGate = deferred();
+  port.stopFixes(1);
+  await flush();
+  port.startFixes(2);
+  await flush();
+  stopGate.resolve();
+  await flush();
+  assert.equal(backgroundStarted, true, 'old cleanup must not stop the replacement');
+  definedTasks.get(TASK)?.({ data: { locations: [osFix(1)] } });
+  assert.equal(fixes.length, 1, 'the current port receives background fixes');
+  port.stopFixes(2);
+  await flush();
+  assert.equal(backgroundStarted, false);
+});
+
+test('pending_stop_check_new_start: a delayed status answer cannot stop the replacement', async () => {
+  const { port } = await backgroundPort();
+  port.startFixes(1);
+  await flush();
+  checkGate = deferred();
+  port.stopFixes(1);
+  await flush();
+  port.startFixes(2);
+  checkGate.resolve(true);
+  await flush();
+  assert.equal(backgroundStarted, true);
+  assert.ok(!locationCalls.includes('stopUpdates'));
+  checkGate = null;
+  port.stopFixes(2);
+  await flush();
+  assert.equal(backgroundStarted, false);
+});
+
+test('start_rejection_after_stop: a rejected obsolete start never creates a fallback watch', async () => {
+  const { port } = await backgroundPort();
+  startGate = deferred();
+  port.startFixes(1);
+  await flush();
+  port.stopFixes(1);
+  startGate.reject(new Error('native start refused'));
+  await flush();
+  assert.equal(watches.length, 0, 'obsolete rejection must not start new work');
+  assert.equal(backgroundStarted, false);
+});
+
+test('current_start_rejection: the foreground fallback remains usable and is released', async () => {
+  const { port, fixes } = await backgroundPort();
+  startGate = deferred();
+  port.startFixes(1);
+  await flush();
+  startGate.reject(new Error('native start refused'));
+  watchStart.resolve({ remove() {} });
+  await flush();
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 1);
+  port.stopFixes(1);
+  await flush();
+  assert.equal(watches[0].removeCalls, 1);
+});
+
+test('obsolete_foreground_callback: an old watcher cannot tag its fix as the new owner', async () => {
+  const { port, fixes } = setup();
+  port.onPortEvent(event => { if (event.type === 'fix') fixes.push(event.fix); });
+  port.startFixes(1);
+  watchStart.resolve({ remove() {} });
+  await flush();
+  port.stopFixes(1);
+  port.startFixes(2);
+  await flush();
+  watches[0].callback(osFix(1));
+  assert.equal(fixes.length, 0, 'old callbacks must be discarded before retagging');
+  watches[1].callback(osFix(2));
+  assert.equal(fixes.length, 1);
+  port.stopFixes(2);
+  await flush();
+  assert.deepEqual(watches.map(w => w.removeCalls), [1, 1]);
+});
+
+test('delayed_foreground_after_stop: a pending foreground handle removes itself', async () => {
+  const { port } = setup();
+  port.startFixes(1);
+  port.stopFixes(1);
+  watchStart.resolve({ remove() {} });
+  await flush();
+  assert.equal(watches[0].removeCalls, 1);
+  assert.equal(backgroundStarted, false);
+});
+
+test('background_to_foreground: a delayed stopped task cannot survive under a city watch', async () => {
+  const { port } = await backgroundPort();
+  startGate = deferred();
+  port.startFixes(1);
+  await flush();
+  port.stopFixes(1);
+  port.requestPermission('foreground', 'fg-why');
+  port.startFixes(2);
+  watchStart.resolve({ remove() {} });
+  startGate.resolve();
+  await flush();
+  assert.equal(backgroundStarted, false, 'the old background task is released');
+  assert.equal(watches[0].removeCalls, 0, 'the city watch remains active');
+  port.stopFixes(2);
+  await flush();
+  assert.equal(watches[0].removeCalls, 1);
+});
