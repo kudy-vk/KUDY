@@ -69,7 +69,7 @@ test('privacy page renders through SiteShell and binds the support link through 
   assert.match(source, /SiteShell/);
   assert.match(source, /appLinks\.supportIssuesUrl/);
   const config = fs.readFileSync(path.join(WEB_ROOT, 'lib/app-links.ts'), 'utf8');
-  assert.match(config, /https:\/\/github\.com\/OWNER\/REPO\/issues/);
+  assert.match(config, /https:\/\/github\.com\/kudy-vk\/KUDY\.app\/issues/);
 });
 
 test('privacy strings exist in both locales, none empty (key-set parity: lib/content/pages.test.ts)', () => {
