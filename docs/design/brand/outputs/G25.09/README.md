@@ -1,7 +1,6 @@
 # G25.09 — шаблоны прэзентацыі брэнда
 
 Кантактны ліст: [contact-sheet.html](contact-sheet.html) (+ растравы захоп [contact-sheet.png](contact-sheet.png)).
-Вынік задачы: [docs/agent-tasks/results/G25.09.md](../../../../agent-tasks/results/G25.09.md).
 
 ## Змесьціва
 

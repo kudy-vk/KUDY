@@ -3,10 +3,9 @@
   "issue": 622,
   "epic": 532,
   "generated_at": "2026-10-06T10:55:00Z",
-  "agent": "zcode (GLM-5.3-Flash)",
+  "agent": "agent session",
   "input_main": "dabf334",
   "report": "docs/reports/chinese/translation-and-voice.md",
-  "result_file": "docs/agent-tasks/results/G21.41.md",
   "cell_labels": {
     "direct-run": "прамы прагон выканаўцы — у гэтай сесіі не было (забаронена брыфам: акаўнт/ключ/аплата)",
     "official-demo": "афіцыйная дэманстрацыя пастаўшчыка — не выяўлена даступнай без акаўнта",

@@ -1,5 +1,5 @@
 // G05.01.c — acceptance suite for the audio-ownership transitions (issue #199,
-// docs/agent-tasks/run/G05.01.c.md, ADR G01.02 §3).
+// task G05.01.c, ADR G01.02 §3).
 // Criteria:
 // 1. `playing` has guide | moment variants and the token is {kind, ref, seq};
 //    a callback with a non-matching token is ignored entirely (no heard, no

@@ -1,5 +1,5 @@
-// G08.05 (issue #292) — the demo script behind docs/demos/2026-09-30-g0805-
-// quiet-commerce-offer.md: the quiet commerce controller over fake ports
+// G08.05 (issue #292) — the demo script behind the G08.05 Showboat
+// demo: the quiet commerce controller over fake ports
 // with deterministic mints and clock (implementation-rules 11 — the captured
 // output carries no timings and no random identifiers). Not a test: it
 // prints the AC walk of the issue — the allowed-place derivation, the

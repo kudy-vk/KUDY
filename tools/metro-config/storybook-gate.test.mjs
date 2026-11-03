@@ -4,7 +4,7 @@
 // disabled branch is pinned against a fake config (the real chain needs a
 // live Metro resolution context); the wiring itself is asserted from source.
 // The end-to-end production proof (expo export + bundle grep) runs in the
-// shipping session and is captured in docs/agent-tasks/results/DQ-13.md.
+// shipping session and is captured in the DQ-13 result.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';

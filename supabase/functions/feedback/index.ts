@@ -4,7 +4,7 @@
 // ./feedback-core.ts + ./registry-import.ts (proven by node --test and the
 // PGlite suites in supabase/tests/feedback/); this file is the
 // Supabase-runtime wiring only, exercised on the Supabase runtime at deploy
-// time and marked not-run in docs/agent-tasks/results/G16.01.md (no
+// time and marked not-run in the G16.01 result (no
 // Supabase project is attached to this repo yet).
 //
 // Environment (fail-closed, the device function's env-gate idiom):

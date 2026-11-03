@@ -4,7 +4,7 @@
 // the thumbnail comes from a local fixture server. The tests named AC1…AC5
 // are the issue's acceptance criteria in order; the proof of AC2 is its
 // revert: swapping the manual-over-automatic preference fails that test
-// (docs/agent-tasks/collection/G17.05.md).
+// (task G17.05).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

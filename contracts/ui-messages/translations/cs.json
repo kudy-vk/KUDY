@@ -3,8 +3,8 @@
   "locale": "cs",
   "provenance": {
     "kind": "authored",
-    "reviewer": "Zcode (GLM-5.3-Flash), сесія G21.13",
-    "evidence": "аўтарскі чэшскі пераклад у задачы G21.13 (#547): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr (G21.10–G21.12); рэгістр — тыканне (ty), адпавядае неафіцыйнаму тону арыгіналу і сям'і de du / fr tu / es tú; кнопкі ў інфінітыве (стандарт чэшскага UI); тэрміны Průvodce/Zastavení (дзеянне — асобнае Zastavit)/Procházka/stáhnout (адзін корань)/nedostupný/nákup/pokračuje z uložené relace занкерваныя на глоссарый G21.19 са слядамі G21.27; пытанне візіту месца — інклюзіўнае «Byl(a) jsi tady?»; сэмантычны рэвью — асобны праход усіх 280 запісаў (адмаўленні, адмена пакупкі, выдаленне/аднаўленне, род і рэгістр), пратакол у docs/agent-tasks/results/G21.13.md Дадатак G21.22 (#554): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
+    "reviewer": "агент-рэцэнзент, сесія G21.13",
+    "evidence": "аўтарскі чэшскі пераклад у задачы G21.13 (#547): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr (G21.10–G21.12); рэгістр — тыканне (ty), адпавядае неафіцыйнаму тону арыгіналу і сям'і de du / fr tu / es tú; кнопкі ў інфінітыве (стандарт чэшскага UI); тэрміны Průvodce/Zastavení (дзеянне — асобнае Zastavit)/Procházka/stáhnout (адзін корань)/nedostupný/nákup/pokračuje z uložené relace занкерваныя на глоссарый G21.19 са слядамі G21.27; пытанне візіту месца — інклюзіўнае «Byl(a) jsi tady?»; сэмантычны рэвью — асобны праход усіх 280 запісаў (адмаўленні, адмена пакупкі, выдаленне/аднаўленне, род і рэгістр) Дадатак G21.22 (#554): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
   },
   "records": [
     {
@@ -2633,7 +2633,7 @@
       "reviewedSourceHash": "262a71e1ab35a50b648afe2d0ff23ef8717a62f70fba6352bd968d683f484fa0",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2642,7 +2642,7 @@
       "reviewedSourceHash": "255e15ab9725891d3876cf7fa0c0e80961748701bb583a51c41bdd5714bb864a",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2651,7 +2651,7 @@
       "reviewedSourceHash": "f3e2ee1e865651348bc54a8a9e679279bd31f087ff6057d72569f85a2b043212",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2660,7 +2660,7 @@
       "reviewedSourceHash": "d2f27dc53f8052c06eb56bac06f8619251d5b371d0f3e4c5c45e9476a0690ff9",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2669,7 +2669,7 @@
       "reviewedSourceHash": "b9dc6996d20d14ad7a565f18f0cb0c1726e49c4ac4d7f8ae1dd3d9f8628ffb94",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     }
   ]

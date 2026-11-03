@@ -69,10 +69,10 @@ G19.08 is owner-input tracking, not a permission for an agent to grant consent o
 
 | Task | Independently reviewable deliverable |
 |---|---|
-| [G19.00](../../agent-tasks/research/G19.00.md) | Documents published and readable in the runner's default-branch checkout |
-| [G19.01](../../agent-tasks/research/G19.01.md) | Validated contracts, synthetic fixtures, dictionaries and test wiring |
-| [G19.02](../../agent-tasks/research/G19.02.md) | Safe immutable article/image packages |
-| [G19.03](../../agent-tasks/research/G19.03.md) | Durable database and restore proof |
+| G19.00 | Documents published and readable in the runner's default-branch checkout |
+| G19.01 | Validated contracts, synthetic fixtures, dictionaries and test wiring |
+| G19.02 | Safe immutable article/image packages |
+| G19.03 | Durable database and restore proof |
 | [G19.04](../../agent-tasks/research/G19.04.md) | Shared budgeted model runner and level-1 annotation |
 | [G19.05](../../agent-tasks/research/G19.05.md) | Search, suggested threads and explicit Case selection |
 | [G19.06](../../agent-tasks/research/G19.06.md) | Case-limited facts/relations with exact quotes |

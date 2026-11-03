@@ -1,5 +1,5 @@
 // G05.01.d — model parity and invariant properties
-// (docs/agent-tasks/run/G05.01.d.md, issue #201).
+// (task G05.01.d, issue #201).
 //
 // Every scenario of the frozen documentation model
 // (docs/run-model/run-model.test.mjs) runs here

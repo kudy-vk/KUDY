@@ -1,5 +1,5 @@
 // G15.01 — acceptance suite for the pure discovery selector (issue #68).
-// Criteria (docs/agent-tasks/discovery/G15.01.md):
+// Criteria (task G15.01):
 // 1. 60 minutes rejects [45,75] from exact; 120 accepts it (cases B-over-time/B-exact).
 // 2. Unknown time becomes an explicitly labeled alternative only (case C).
 // 3. Wrong city or explicit content locale is excluded even from alternatives (case E + D guard).

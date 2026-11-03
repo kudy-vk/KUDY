@@ -1,7 +1,7 @@
 # Ацэнка крыніцы: пераклады інтэрфейсу Android (AOSP)
 
 Задача: [G21.28 (#560)](#560), эпік [G21 (#532)](#532).
-Дата доступу: 2026-10-03/04 UTC. Выканаўца: zcode session (GLM-5.3-Flash).
+Дата доступу: 2026-10-03/04 UTC.
 Спец: `docs/specifications/technical-completion/2026-10-03-single-source-translations.md`.
 Машынны маніфест доказаў: `docs/reports/localization-sources/android.evidence.json`.
 

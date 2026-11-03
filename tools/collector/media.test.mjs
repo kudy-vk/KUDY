@@ -10,7 +10,7 @@ import { openStore, sha256Hex } from './store.mjs';
 import { parseCampaign } from './campaign.mjs';
 import { articleHtml, campaignYaml, gifBytes, jpegBytes, makeTempDir, pngBytes, writeCampaignFile } from './testkit.mjs';
 
-// G17.03 acceptance suite (docs/agent-tasks/collection/G17.03.md) over the
+// G17.03 acceptance suite (task G17.03) over the
 // production pipeline: file:// seed pages whose paragraphs carry <img> tags
 // pointing at crafted fixture images (container headers only — the probe
 // reads dimensions from bytes). Criteria:

@@ -1,5 +1,5 @@
 // G05.02.b — acceptance suite for the location service (issue #211,
-// docs/agent-tasks/run/G05.02.b.md) over the fake OS port and a manual clock.
+// task G05.02.b) over the fake OS port and a manual clock.
 // Criteria:
 // 1. One OS subscription at most — repeated setMode and armed-mode changes
 //    never start a second one; idle/paused hold none (the fake counts).

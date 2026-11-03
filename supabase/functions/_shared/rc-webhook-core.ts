@@ -110,7 +110,7 @@ export interface WebhookPortDeps {
 // (email, ip, country, …) are consumed transiently by the rights effects —
 // computed from the parsed event before the persist — and never reach the
 // durable row. The field -> purpose -> retention -> deletion matrix lives in
-// docs/agent-tasks/results/G20.12.md.
+// the G20.12 result.
 export const WEBHOOK_ACCOUNTING_PAYLOAD_FIELDS = [
   'product_id',
   'environment',

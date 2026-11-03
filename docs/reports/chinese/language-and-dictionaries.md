@@ -4,7 +4,7 @@
 Дата праверак: 2026-10-06. Уваходны main: `07fbb36`.
 Машынны маніфест (лакатары, хэшы, HTTP-лог, батарэя, сінтэтычныя тэксты):
 [language-and-dictionaries-evidence.json](language-and-dictionaries-evidence.json).
-Выніковы запіс задачы: [G21.39.md](../../agent-tasks/results/G21.39.md).
+Выніковы запіс задачы: G21.39.md.
 Правіла спецыфікацыі: [2026-10-05-chinese-research.md](../../specifications/technical-completion/2026-10-05-chinese-research.md).
 
 ## 1. Вердэкт коратка

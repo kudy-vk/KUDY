@@ -4,7 +4,7 @@
 // keeps the block and the schema in sync). `browser_user_data_dir` (optional)
 // is the login-session config the task brief calls for ("reuse an existing
 // browser user-data dir (config in the campaign file)";
-// docs/agent-tasks/collection/G17.02.md Scope). The fence values are the
+// task G17.02 Scope). The fence values are the
 // crawler fence (G17.02 consumes them unchanged): depth counts hops from a
 // seed, extra_domains widens the same-domain rule, delay_s is the
 // [min, max] politeness delay in seconds.

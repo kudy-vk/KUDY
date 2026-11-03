@@ -8,7 +8,7 @@
 // (device-wire). G09.03 pinned that endpoint's success code to 204; the
 // fixture row `cas-delete-device` predates the pin and says 200 — this
 // suite asserts the production contract's 204 (the drift is recorded in
-// docs/agent-tasks/results/G16.01.md), then verifies the fixture's actual
+// the G16.01 result), then verifies the fixture's actual
 // point: the next feedback call on the deleted device answers 401 and
 // cannot re-register.
 import assert from 'node:assert/strict';

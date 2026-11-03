@@ -2,7 +2,7 @@
 // directory: its source files, their exports and their external imports, as
 // deterministic plain text. Line-based heuristic extraction (see
 // tools/arch-surface/README.md); the correctness bar is the hand verification
-// recorded in docs/agent-tasks/results/G18.03.md, not parser completeness.
+// recorded in the G18.03 result, not parser completeness.
 // Live facts generated next to doc 19, never instead of it.
 import fs from 'node:fs';
 import path from 'node:path';

@@ -28,7 +28,7 @@ SecureStore `15.0.8` мае гатовыя XML-файлы выключэння `
 
 ### Фактычны release-маніфест
 
-Правераны [зліты маніфест APR-02](../../testing/evidence/2026-10-18-apr02/AndroidManifest.xml), атрыманы `:app:processReleaseMainManifest` для `by.kudy.app`; паходжанне — [APR-02 README](../../testing/evidence/2026-10-18-apr02/README.md), PR #828. Гэта захаваны release-доказ ад 2026-10-18, а не новая зборка або production AAB.
+Правераны [зліты маніфест APR-02](../../testing/evidence/2026-10-18-apr02/AndroidManifest.xml), атрыманы `:app:processReleaseMainManifest` для `by.kudy.app`; паходжанне — APR-02 README, PR #828. Гэта захаваны release-доказ ад 2026-10-18, а не новая зборка або production AAB.
 
 Ён змяшчае `minSdkVersion=24`, `targetSdkVersion=36`, `android:allowBackup="true"`; атрыбуты `android:fullBackupContent`, `android:dataExtractionRules` і `android:backupAgent` адсутнічаюць. Бягучая канфігурацыя не задае ўласных backup-правілаў. Пры стандартным Android Auto Backup гэта пакідае файлы базы, загрузкі і SharedPreferences у вобласці рэзервавання. Захаваны маніфест не даказвае, што канкрэтны транспарт ужо зрабіў копію.
 
@@ -82,4 +82,4 @@ SecureStore `15.0.8` мае гатовыя XML-файлы выключэння `
 - [Android backup best practices](https://developer.android.com/privacy-and-security/risks/backup-best-practices): выключэнне адчувальных даных і асобная праверка механізмаў backup.
 - [Expo SecureStore](https://docs.expo.dev/versions/latest/sdk/securestore/#android-auto-backup): пасля uninstall зашыфраваныя SharedPreferences без Keystore не расшыфроўваюцца; пры ўласных правілах выключэнне SecureStore належыць дадатку.
 
-Прыладавае backup/restore у APR-09 не выконвалася: гэта доказ наступнага runtime-fix. [Вынік даследавання](../../agent-tasks/results/APR-09.md) фіксуе праверкі і статус рашэння.
+Прыладавае backup/restore у APR-09 не выконвалася: гэта доказ наступнага runtime-fix. Вынік даследавання фіксуе праверкі і статус рашэння.

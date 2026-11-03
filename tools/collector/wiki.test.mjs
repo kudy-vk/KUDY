@@ -8,7 +8,7 @@ import { parseCampaign } from './campaign.mjs';
 import { wikiArticleUrl, wikiTitleFromUrl } from './wiki.mjs';
 import { campaignYaml, makeTempDir, writeCampaignFile } from './testkit.mjs';
 
-// G17.04 acceptance suite (docs/agent-tasks/collection/G17.04.md) over the
+// G17.04 acceptance suite (task G17.04) over the
 // production pipeline: recorded MediaWiki API fixtures behind the injected
 // loadApi boundary — no test touches the network. Criteria:
 // 1. fixture parse responses → raw_records with source_type=wiki and every

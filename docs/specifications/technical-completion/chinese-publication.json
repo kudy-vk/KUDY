@@ -19,7 +19,6 @@
       "issue": 619,
       "url": "#619",
       "title": "G21.43 — Publish the Chinese research specification and task briefs",
-      "brief": "docs/agent-tasks/technical-completion/G21.43.md",
       "blocked_by": [
         565
       ],
@@ -34,7 +33,6 @@
       "issue": 620,
       "url": "#620",
       "title": "G21.39 — Compare Chinese language variants and verified terminology sources",
-      "brief": "docs/agent-tasks/technical-completion/G21.39.md",
       "blocked_by": [
         619
       ],
@@ -49,7 +47,6 @@
       "issue": 621,
       "url": "#621",
       "title": "G21.40 — Prove Chinese glyphs and layouts with app references and a visual probe",
-      "brief": "docs/agent-tasks/technical-completion/G21.40.md",
       "blocked_by": [
         619
       ],
@@ -64,7 +61,6 @@
       "issue": 622,
       "url": "#622",
       "title": "G21.41 — Compare Chinese translation and exportable narration candidates",
-      "brief": "docs/agent-tasks/technical-completion/G21.41.md",
       "blocked_by": [
         619
       ],
@@ -79,7 +75,6 @@
       "issue": 623,
       "url": "#623",
       "title": "G21.42 — Approve the Chinese release scope before implementation",
-      "brief": "docs/agent-tasks/technical-completion/G21.42.md",
       "blocked_by": [
         619,
         620,

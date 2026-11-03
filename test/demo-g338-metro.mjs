@@ -1,7 +1,7 @@
 // Deterministic demo driver for issue #338: prints the committed Metro
 // wiring verdicts (blockList exclusions, node:* → stub resolution) and the
-// stub's call-time-only failure. No server, no timings — the output block in
-// docs/demos/2026-09-27-g338-metro-device-bundle.md is captured from this.
+// stub's call-time-only failure. No server, no timings — the output block of
+// the Showboat demo was captured from this.
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';

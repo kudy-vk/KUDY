@@ -1,5 +1,5 @@
 // G05.02.a — acceptance suite for core/geo (issue #210,
-// docs/agent-tasks/run/G05.02.a.md). The distance function has no contract
+// task G05.02.a). The distance function has no contract
 // number of its own — the pipeline stages (pipeline.test.ts) consume it — so
 // the suite pins the mathematical anchors instead: zero distance, symmetry,
 // and two known arc lengths of the same radius constant the sibling validator

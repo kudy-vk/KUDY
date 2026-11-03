@@ -1,5 +1,5 @@
 // G05.02.a — acceptance suite for the location pipeline (issue #210,
-// docs/agent-tasks/run/G05.02.a.md).
+// task G05.02.a).
 // Criteria:
 // 1. Fixed stage order; every rejection happens before any state mutation —
 //    one deep-equal test per rejecting stage, plus two order-pinning tests

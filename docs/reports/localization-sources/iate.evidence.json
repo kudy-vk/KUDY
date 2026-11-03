@@ -4,7 +4,7 @@
   "epic": "#532",
   "report": "docs/reports/localization-sources/iate.md",
   "accessed_utc": "2026-10-04T09:55Z - 2026-10-04T11:25Z",
-  "executor": "zcode session (GLM-5.3-Flash)",
+  "executor": "agent session",
   "locales_requested": ["be", "en", "uk", "de", "es", "fr", "cs", "sv"],
   "live_system": {
     "version": "IATE 3.2.0",

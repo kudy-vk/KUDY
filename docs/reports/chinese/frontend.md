@@ -190,6 +190,5 @@ android-airplane-s2: `onLine:false`, `KudyMissingFace:false`,
 Проба паўторная адной камандай з `spikes/G21.40-han-layout/README.md`
 (build-subsets.py + лакальны сервер + URL; Android — adb reverse +
 авіярэжым). Каміт-гейты gitguard не адключаліся: CJK у рэпе толькі як
-\uXXXX-эскейпы, рэальныя знакі — у здымках і рэндэры. Дамо
-`docs/demos/2026-10-06-g2140-han-probe.md` (Showboat) мацуе паўторныя
+\uXXXX-эскейпы, рэальныя знакі — у здымках і рэндэры. Дэма Showboat мацавала паўторныя
 каманды.

@@ -1,7 +1,7 @@
 # Ацэнка крыніцы: тэрміналогія IATE (Еўрасаюз)
 
 Задача: [G21.32 (#564)](#564), эпік [G21 (#532)](#532).
-Дата доступу: 2026-10-04 UTC. Выканаўца: zcode session (GLM-5.3-Flash).
+Дата доступу: 2026-10-04 UTC.
 Спец: `docs/specifications/technical-completion/2026-10-03-single-source-translations.md`.
 Машынны маніфест доказаў: `docs/reports/localization-sources/iate.evidence.json`.
 

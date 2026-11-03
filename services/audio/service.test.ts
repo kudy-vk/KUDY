@@ -1,5 +1,5 @@
 // G05.03.a — behavioral tests for the audio service over the fake port. Each
-// acceptance criterion of docs/agent-tasks/run/G05.03.a.md has a suite here;
+// acceptance criterion of task G05.03.a has a suite here;
 // reverting the stop-before-play command, the source-key attribution, the
 // alive-flag dispose guard or the snapshot validation makes them fail
 // (implementation-rules 1). The tests import nothing from core/engine — the

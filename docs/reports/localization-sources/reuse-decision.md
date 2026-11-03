@@ -105,6 +105,4 @@ defer/reject never authorizes import».
 
 ## Спасылкі
 
-- Брыф: `docs/agent-tasks/technical-completion/G21.37.md`
 - Машынны запіс рашэння: [decisions.json](decisions.json), раздзел `reuse_decision`
-- Выніковы запіс задачы: `docs/agent-tasks/results/G21.37.md`

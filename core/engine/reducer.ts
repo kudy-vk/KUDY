@@ -1,9 +1,9 @@
 // G05.01.a + G05.01.b + G05.01.c — the pure reducer: session lifecycle and the
-// AccessReady trust boundary (docs/agent-tasks/run/G05.01.a.md), the
+// AccessReady trust boundary (task G05.01.a), the
 // autotrigger conditions, the one-cell queue and the P01 progress rules
-// (docs/agent-tasks/run/G05.01.b.md), then the audio-ownership transitions —
+// (task G05.01.b), then the audio-ownership transitions —
 // guide/moment playing variants, tagged callbacks, live pause and the 10-minute
-// focus threshold (docs/agent-tasks/run/G05.01.c.md, ADR G01.02 §3).
+// focus threshold (task G05.01.c, ADR G01.02 §3).
 //
 // Pure by contract (09 §6.1): the clock is injected (`now`), there is no I/O
 // and no React Native import — the same input always gives the same state and

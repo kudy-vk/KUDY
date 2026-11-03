@@ -1,7 +1,7 @@
 {
   "task": "G21.29 (issue #561)",
   "generated_at": "2026-10-04T03:55:00Z",
-  "agent": "zcode-cli (GLM-5.3-Flash)",
+  "agent": "agent session",
   "subject": {
     "name": "Microsoft Terminology Collection",
     "hub_page": {

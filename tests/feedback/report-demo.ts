@@ -1,4 +1,4 @@
-// G16.04 — the Showboat demo driver (docs/demos/2026-10-04-g1604-feedback-report.md):
+// G16.04 — the Showboat demo driver:
 // a deterministic trace of the report lifecycle over real Postgres (PGlite) —
 // ratings through the production edge-wire path, the committed report query,
 // an edit collapsing into one vote, the retention sweep and the 409 that

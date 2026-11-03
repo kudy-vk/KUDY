@@ -73,5 +73,5 @@ Android/iOS сістэмны back і native-прадукцыйнасць зас�
 
 Семантыка браўзерных падзей зверыць са
 [спецыфікацыяй Pointer Events](https://www.w3.org/TR/pointerevents3/).
-[Доказ Showboat](../../docs/demos/2026-10-29-map07-tap-drag.md) і
-[вынік](../../docs/agent-tasks/results/MAP-07.md).
+Доказ Showboat і
+вынік.

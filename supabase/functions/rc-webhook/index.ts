@@ -5,7 +5,7 @@
 // rows). The contract logic lives in ../_shared/rc-webhook-core.ts (proven
 // against PGlite by rc-webhook-core.test.ts); this file is the Deno wiring
 // only — it is exercised on the Supabase runtime at deploy time and marked
-// not-run in docs/agent-tasks/results/G08.06.md (G08.01/G08.02 precedent).
+// not-run in the G08.06 result (G08.01/G08.02 precedent).
 //
 // Path mapping: the canonical `POST /v1/rc-webhook` is served by this
 // function at `https://<project-ref>.supabase.co/functions/v1/rc-webhook`.

@@ -14,8 +14,6 @@
 Кантракт мовы дакумента — `web/lib/content/exported-language.ts`; гэта адзіная крыніца
 праўды, нічога яго не дублюе.
 
-- Рэпрадуктар адзіночнай паводзіны (да выпраўлення #591 заканчваецца кодам 1):
-  `node --experimental-strip-types docs/testing/evidence/2026-10-04-retest/reproduce-document-language.mjs`
 - Паводзінныя праверкі кантракту:
   `node --test --experimental-strip-types web/lib/content/exported-language.test.ts`
 - Поўны скан рэндэру ўваходзіць у зборку: `npm --prefix web run build`

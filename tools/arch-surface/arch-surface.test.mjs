@@ -18,7 +18,7 @@ function runSurface(...args) {
 }
 
 // Hand-verified against the fixture sources (comparison recorded in
-// docs/agent-tasks/results/G18.03.md): internal `./` specifiers excluded,
+// the G18.03 result): internal `./` specifiers excluded,
 // `../` escapes and bare packages printed, every export form named.
 const expectedSampleSurface = `# arch-surface: tools/arch-surface/fixtures/sample
 

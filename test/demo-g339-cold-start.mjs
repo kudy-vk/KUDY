@@ -1,8 +1,8 @@
 // Deterministic demo driver for issue #339: the app/ router purity verdict
 // (the same shared classifier the guard suite runs —
 // test/app-router-classifier.mjs) and the index route wiring. No
-// emulator, no server — the output block in
-// docs/demos/2026-09-27-g339-cold-start.md is captured from this.
+// emulator, no server — the output block of
+// the Showboat demo was captured from this.
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

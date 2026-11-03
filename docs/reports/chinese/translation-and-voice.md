@@ -1,7 +1,7 @@
 # G21.41 — Параўнанне кітайскага перакладу і экспартаванай агучкі
 
 Задача: [issue #622](#622) (эпік #532). Дата: 2026-10-06. Уваходны main: `dabf334`.
-Спецыфікацыя: [2026-10-05-chinese-research.md](../../specifications/technical-completion/2026-10-05-chinese-research.md). Машынныя доказы: [translation-voice-evidence.json](translation-voice-evidence.json). Выніковы файл: [G21.41.md](../../agent-tasks/results/G21.41.md).
+Спецыфікацыя: [2026-10-05-chinese-research.md](../../specifications/technical-completion/2026-10-05-chinese-research.md). Машынныя доказы: [translation-voice-evidence.json](translation-voice-evidence.json). Выніковы файл: G21.41.md.
 
 ---
 

@@ -6,7 +6,7 @@
 // in ../_shared/device-wire.ts + ../_shared/device-core.ts (proven by node
 // --test and the PGlite RLS suite); this file is the Supabase-runtime wiring
 // only, exercised on the Supabase runtime at deploy time and marked not-run
-// in docs/agent-tasks/results/G08.01.md and G09.03.md (no Supabase project
+// in the G08.01 and G09.03 results (no Supabase project
 // is attached to this repo yet).
 //
 // Path mapping: the canonical `POST /v1/device` and `DELETE /v1/device` are

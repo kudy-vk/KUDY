@@ -48,7 +48,7 @@ TypeScript-парсера. Абвешчаныя мяжы эўрыстыкі:
 
 Крытэр правільнасці — не паўната парсера, а **рукаверка**: параўнанне вываду з
 кодам запісана ў
-[results G18.03](../../docs/agent-tasks/results/G18.03.md) для
+results G18.03 для
 `core/discovery` і `services/contentRepo`. Калі патрэбныя гарантавана
 поўныя факты — беры dependency-cruiser (`npm run arch:check`,
 [tools/arch](../arch/README.md)); гэты скрыпт пра іншае: хуткі тэкставы зрэз

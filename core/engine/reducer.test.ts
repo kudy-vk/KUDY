@@ -1,5 +1,5 @@
 // G05.01.a — acceptance suite for the session lifecycle and the AccessReady
-// boundary (issue #197, docs/agent-tasks/run/G05.01.a.md).
+// boundary (issue #197, task G05.01.a).
 // Criteria:
 // 1. Names verbatim from 09 §6.1, one snake_case ↔ camelCase mapping (state.ts header) —
 //    the shape test pins the full session field surface.

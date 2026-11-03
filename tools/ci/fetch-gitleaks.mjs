@@ -6,7 +6,7 @@
 // executions. The digest is never taken from the download itself or from the
 // environment: the only production source is the committed constant, and the
 // workflow wiring is pinned by tools/ci/check-required-checks.mjs.
-// Update procedure (recorded in docs/agent-tasks/results/G20.27.md): bump
+// Update procedure (from task G20.27): bump
 // GITLEAKS_VERSION, resolve the new archive sha256 from the release's
 // checksums.txt AND an independent local sha256sum, set both constants in one
 // commit, and let the fixture suite re-prove the four cases.
@@ -20,7 +20,7 @@ import { pathToFileURL } from 'node:url';
 export const GITLEAKS_VERSION = '8.24.3';
 // sha256 of gitleaks_8.24.3_linux_x64.tar.gz, verified 2026-10-02 against the
 // release's checksums.txt and an independent local sha256sum of the downloaded
-// archive (docs/agent-tasks/results/G20.27.md carries both outputs).
+// archive (the G20.27 result recorded both outputs).
 export const GITLEAKS_SHA256 = '9991e0b2903da4c8f6122b5c3186448b927a5da4deef1fe45271c3793f4ee29c';
 
 export function gitleaksArchiveUrl(version = GITLEAKS_VERSION) {

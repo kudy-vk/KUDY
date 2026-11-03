@@ -124,7 +124,7 @@ export interface CatalogPageData {
   cityId: string;
   cards: CatalogCard[];
   // The static /map route exists since the founder's tile-provider decision
-  // (2026-09-21, recorded in docs/agent-tasks/results/G10.01.b.md) — until
+  // (2026-09-21, recorded in the G10.01.b result) — until
   // then the entry stayed hidden (TR-8: a dead link is the worst option).
   mapHref: string;
 }

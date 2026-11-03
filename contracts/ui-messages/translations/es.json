@@ -3,8 +3,8 @@
   "locale": "es",
   "provenance": {
     "kind": "authored",
-    "reviewer": "Zcode (GLM-5.3-Flash), сесія G21.11",
-    "evidence": "аўтарскі іспанскі пераклад у задачы G21.11 (#545): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і нямецкі прэцэдэнт G21.10 (#544); рэгістр — неафіцыйны tú (адпавядае тону арыгіналу), кнопкі ў інфінітыве (стандарт іспанскага UI); тэрміны Guía/Parada/Recorrido/Descargar/no disponible/compra/continuado занкерваныя на глоссарый G21.19 са слядамі G21.27; сэмантычны рэвью — асобны праход усіх запісаў (адмаўленні, адмена пакупкі, выдаленне/аднаўленне, род і рэгістр), пратакол у docs/agent-tasks/results/G21.11.md Дадатак G21.22 (#554): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
+    "reviewer": "агент-рэцэнзент, сесія G21.11",
+    "evidence": "аўтарскі іспанскі пераклад у задачы G21.11 (#545): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і нямецкі прэцэдэнт G21.10 (#544); рэгістр — неафіцыйны tú (адпавядае тону арыгіналу), кнопкі ў інфінітыве (стандарт іспанскага UI); тэрміны Guía/Parada/Recorrido/Descargar/no disponible/compra/continuado занкерваныя на глоссарый G21.19 са слядамі G21.27; сэмантычны рэвью — асобны праход усіх запісаў (адмаўленні, адмена пакупкі, выдаленне/аднаўленне, род і рэгістр) Дадатак G21.22 (#554): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
   },
   "records": [
     {
@@ -2689,7 +2689,7 @@
       "reviewedSourceHash": "262a71e1ab35a50b648afe2d0ff23ef8717a62f70fba6352bd968d683f484fa0",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2698,7 +2698,7 @@
       "reviewedSourceHash": "255e15ab9725891d3876cf7fa0c0e80961748701bb583a51c41bdd5714bb864a",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2707,7 +2707,7 @@
       "reviewedSourceHash": "f3e2ee1e865651348bc54a8a9e679279bd31f087ff6057d72569f85a2b043212",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2716,7 +2716,7 @@
       "reviewedSourceHash": "d2f27dc53f8052c06eb56bac06f8619251d5b371d0f3e4c5c45e9476a0690ff9",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     },
     {
@@ -2725,7 +2725,7 @@
       "reviewedSourceHash": "b9dc6996d20d14ad7a565f18f0cb0c1726e49c4ac4d7f8ae1dd3d9f8628ffb94",
       "review": {
         "outcome": "approved",
-        "note": "Codex translation check for issue #681 against the Belarusian source."
+        "note": "Translation check against the Belarusian source."
       }
     }
   ]

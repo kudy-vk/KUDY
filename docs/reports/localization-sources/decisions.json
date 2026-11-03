@@ -290,8 +290,7 @@
       "kind": "new-backlog",
       "blocked_by": [
         565
-      ],
-      "brief": "docs/agent-tasks/technical-completion/G21.37.md"
+      ]
     },
     {
       "task": "G21.38",
@@ -300,8 +299,7 @@
       "kind": "new-backlog",
       "blocked_by": [
         565
-      ],
-      "brief": "docs/agent-tasks/technical-completion/G21.38.md"
+      ]
     }
   ],
   "registry": {

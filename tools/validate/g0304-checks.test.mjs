@@ -261,7 +261,7 @@ test('criterion 4: built artifacts never claim audio for a text-only locale', as
   // The index availability is the only artifact that claims audio: `en`
   // stays in text_locales (09 §8 publishes text per locale) and cannot
   // appear in audio_locales. The catalog carries no audio field at all; the
-  // demo docs/demos/2026-09-26-g0304-media-moments-checks.md shows the
+  // G03.04 Showboat demo showed the
   // catalog derivation (locales by fact) beside this index.
   assert.deepEqual(guide.availability.audio_locales, ['be'], JSON.stringify(guide.availability));
   assert.ok(guide.availability.text_locales.includes('en'), JSON.stringify(guide.availability));

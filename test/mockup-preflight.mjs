@@ -12,7 +12,7 @@
 // rendered states, `data-key="…"` attributes name the localization keys.
 // A mockup whose component carries accepted states outside the canon lists
 // (MAP-05's drag interactions, accepted with #883 in
-// docs/agent-tasks/results/MAP-05.md) passes them via `states`; the canon
+// the MAP-05 result) passes them via `states`; the canon
 // lists are always allowed on top.
 //
 // Findings are diagnostics, never thrown errors (implementation-rules 14):

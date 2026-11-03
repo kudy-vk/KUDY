@@ -3,7 +3,7 @@
 // SecureStore, never in SQLite, never in an asset). keychainAccessible
 // WHEN_UNLOCKED_THIS_DEVICE_ONLY keeps the secret device-bound and out of
 // backups — an OS-behavior claim proven only on device (see the not-run rows
-// in docs/agent-tasks/results/G08.01.md), not by unit tests.
+// in the G08.01 result), not by unit tests.
 import * as SecureStore from 'expo-secure-store';
 
 import type { SecureSecretStore } from './device.ts';

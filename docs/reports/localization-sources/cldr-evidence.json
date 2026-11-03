@@ -1,7 +1,7 @@
 {
   "task": "G21.30 (issue #562)",
   "generated_at": "2026-10-04T01:01:16Z",
-  "agent": "zcode-cli (GLM-5.3-Flash)",
+  "agent": "agent session",
   "subject": {
     "name": "Unicode Common Locale Data Repository (CLDR)",
     "release": "48.2",

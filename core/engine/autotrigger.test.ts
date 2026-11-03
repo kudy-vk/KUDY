@@ -1,5 +1,5 @@
 // G05.01.b — acceptance suite for the autotrigger, the one-cell queue and the
-// P01 progress rules (issue #198, docs/agent-tasks/run/G05.01.b.md).
+// P01 progress rules (issue #198, task G05.01.b).
 // Criteria:
 // 1. The autotrigger fires only when all six conditions of ADR G01.01 §4.8
 //    hold; each condition has an isolated negative test.

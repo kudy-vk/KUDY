@@ -25,7 +25,7 @@
 
 **Чым небяспечна:** `source/lock.json` захоўвае sha256 па LF-байтах, а git з `core.autocrlf=true` аддае файлы CRLF → любая зборка/праверка пакета на асноўнай хост-машыне падае з `integrity mismatch: index.html` (`lib/package.mjs:16`). Спайк не праходзіць уласную цэласнасць, а праз яго ідзе прэ-праверка прыладавых клетак G00.02.b; той самы клас рызыкі тычыцца будучага bundler'а з праверанымі хэшамі (G02.03).
 
-**Доказ (2026-09-15):** worktree sha256 `d6d21bf7…` (CRLF) ≠ blob `7952b440…` (LF) = значэнне ў `lock.json`; `node scripts/prepare-data.mjs` → `Error: integrity mismatch: index.html`. Блокер ужо быў апісаны ў [`evidence/G00.02.b-device-evidence.md`](../../spikes/G00.02-offline-map/evidence/G00.02.b-device-evidence.md) і [`results/G00.02.b.md`](../agent-tasks/results/G00.02.b.md) — і дагэтуль не вырашаны.
+**Доказ (2026-09-15):** worktree sha256 `d6d21bf7…` (CRLF) ≠ blob `7952b440…` (LF) = значэнне ў `lock.json`; `node scripts/prepare-data.mjs` → `Error: integrity mismatch: index.html`. Блокер ужо быў апісаны ў [`evidence/G00.02.b-device-evidence.md`](../../spikes/G00.02-offline-map/evidence/G00.02.b-device-evidence.md) і `results/G00.02.b.md` — і дагэтуль не вырашаны.
 
 **Выпраўленне:** `.gitattributes` без канверсіі EOL для хэшаваных фікстур (мінімум `spikes/G00.02-offline-map/source/** -text` або `eol=lf`) + рэнармалізацыя дрэва. Рашэнне агульнай палітыкі для production-бандлаў — за G02.03.
 
@@ -59,11 +59,11 @@
 
 **Чым небяспечна:** гэта адно і тое ж пытанне («якая пазіцыя дае права на аўтазапуск»), прычым частковае разыходжанне апраўданае слаямі (мадэль мадэлюе `DwellCompleted` як ужо пацверджаны ўвод), а частковае — проста розныя лікі без заяўленага ўладальніка. [`README.md` мадэлі](../run-model/README.md) сам папярэджвае: «Не падтрымліваць дзве незалежныя рэалізацыі правілаў бясконца». Трэцяя копія ў будучым engine — найдаражэйшы варыянт, якраз тое, што [`17_development_readiness.md`](../17_development_readiness.md) называе галоўнай рызыкай паралельнай працы агентаў.
 
-**Кансалідацыя:** назваць уладальніка ў мапе класаў — па [18 §2](18_component_blueprint.md) гэта `core/pipeline` (адкід дрэннай пазіцыі, dwell) + канфіг engine; канстанты жывуць у адным месцы, а мадэль і спайкі пазначаюць свае значэнні як лакальныя для свайго ўзроўню, не як правілы дадатку. Гэта ўваходзіць у заданне AR-5 (#82): стварыць `19_class_and_module_map.md` па гатовым brief-у [`docs/agent-tasks/architecture-class-map.md`](../agent-tasks/architecture-class-map.md).
+**Кансалідацыя:** назваць уладальніка ў мапе класаў — па [18 §2](18_component_blueprint.md) гэта `core/pipeline` (адкід дрэннай пазіцыі, dwell) + канфіг engine; канстанты жывуць у адным месцы, а мадэль і спайкі пазначаюць свае значэнні як лакальныя для свайго ўзроўню, не як правілы дадатку. Гэта ўваходзіць у заданне AR-5 (#82): стварыць `19_class_and_module_map.md` (выканана).
 
 ### AR-6 [MEDIUM] — `npm test` спайку G00.03 не запускае наборы `tests/` ад G00.03.b — #83
 
-`spikes/G00.03-sandbox-grant/package.json` — `"test": "node --test --test-reporter=spec test/*.test.mjs"`: негатыўны і мутацыйны наборы `tests/` (`negative-grant`, `guard-mutations`, `live-remote`) ідуць толькі праз асобна дакументаваную каманду ([`results/G00.03.b.md:47`](../agent-tasks/results/G00.03.b.md)). `npm test` зялёны, пакуль палова пакрыцця не выконвалася. Live-файл самаскіпаецца без `G00_03_B_LIVE_URL` (`tests/harness.mjs:31`), таму падключыць каталог да скрыпта бяспечна.
+`spikes/G00.03-sandbox-grant/package.json` — `"test": "node --test --test-reporter=spec test/*.test.mjs"`: негатыўны і мутацыйны наборы `tests/` (`negative-grant`, `guard-mutations`, `live-remote`) ідуць толькі праз асобна дакументаваную каманду (`results/G00.03.b.md:47`). `npm test` зялёны, пакуль палова пакрыцця не выконвалася. Live-файл самаскіпаецца без `G00_03_B_LIVE_URL` (`tests/harness.mjs:31`), таму падключыць каталог да скрыпта бяспечна.
 
 ## 3. Што праверана і чыста
 

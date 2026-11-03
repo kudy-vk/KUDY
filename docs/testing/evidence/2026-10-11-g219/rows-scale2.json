@@ -18,7 +18,7 @@
     "metroPort": 8081,
     "note": "font_scale set per run and restored to 1.0 after; app restarted per scale so the RN config is fresh",
     "captureDate": "2026-10-11",
-    "annotation": "Captured by ZCode before the interrupted rebuild; Codex corrected card-open to resumed after inspecting the original screenshots. No new device run is claimed."
+    "annotation": "Captured before the interrupted rebuild; later corrected card-open to resumed after inspecting the original screenshots. No new device run is claimed."
   },
   "surfaces": [
     {

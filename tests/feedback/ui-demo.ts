@@ -4,7 +4,7 @@
 // the offline round's honest pending state, the acked edit and the
 // delete-pending tombstone. The transport is scripted and the clock is fixed
 // — the trace is deterministic. Test-only module; imported by
-// docs/demos/2026-10-04-g1603-rating-ui.md, never by production code.
+// the G16.03 Showboat demo, never by production code.
 import { createFeedbackSync } from '../../services/feedbackSync.ts';
 import type { FeedbackTransportResponse } from '../../services/feedbackSync.ts';
 import * as feedbackRepository from '../../services/feedbackRepository.ts';

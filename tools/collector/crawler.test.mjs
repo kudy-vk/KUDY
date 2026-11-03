@@ -5,7 +5,7 @@
 // is covered separately by its live suite. The six tests named AC1…AC6 are
 // the issue's acceptance criteria in order; the proof of AC1 is its revert:
 // disabling the same-domain check makes the outside-host fetch assertions
-// fail (docs/agent-tasks/collection/G17.02.md).
+// fail (task G17.02).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

@@ -103,7 +103,7 @@ export function createMemoryLookup(entries: Map<string, string>): (secretHash: s
  * Fixed window; the raw IP is never stored — the caller passes only its
  * SHA-256 (`hashIp`). `20` per hour is a defensive implementation choice
  * (registration happens once per install; no canonical number exists in
- * `09`), documented in docs/agent-tasks/results/G08.01.md.
+ * `09`), documented in the G08.01 result.
  */
 export const DEVICE_RATE_WINDOW_MS = 60 * 60 * 1000;
 export const DEVICE_RATE_LIMIT = 20;

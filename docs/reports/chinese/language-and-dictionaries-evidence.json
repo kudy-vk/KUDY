@@ -3,10 +3,9 @@
   "issue": 620,
   "epic": 532,
   "generated_at": "2026-10-06T00:52:33Z",
-  "agent": "zcode (GLM-5.3-Flash)",
+  "agent": "agent session",
   "input_main": "07fbb36",
   "report": "docs/reports/chinese/language-and-dictionaries.md",
-  "result_file": "docs/agent-tasks/results/G21.39.md",
   "locale_tags": {
     "iana": {
       "source": {
