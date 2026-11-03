@@ -262,3 +262,47 @@ test('artifact basenames are separator-checked', () => {
   const ok = driver.artifactPath('dump-case.xml');
   assert.ok(ok.endsWith('dump-case.xml'));
 });
+
+// The hosted-CI emulator occasionally kills the package service mid-install
+// (`cmd: Failure calling service package: Broken pipe (32)`, run 41708894799).
+// The install retry re-runs only that transient failure; the tests override
+// exec — the production retry loop stays the path under test.
+const BROKEN_PIPE = 'adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: cmd: Failure calling service package: Broken pipe (32)';
+
+test('install retries the transient package-service failure and succeeds', async () => {
+  const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
+  tmpDirs.push(artifactsDir);
+  const driver = new E2eDriver({ adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app', installRetryDelayMs: 1 });
+  const attempts = [];
+  driver.exec = async (args) => {
+    attempts.push(args.join(' '));
+    if (attempts.length < 3) throw new DriverError(BROKEN_PIPE);
+    return { stdout: 'Success', stderr: '' };
+  };
+  await driver.install('x.apk');
+  assert.equal(attempts.length, 3);
+});
+
+test('install does not retry a deterministic install failure', async () => {
+  const driver = testDriver();
+  let calls = 0;
+  driver.exec = async () => {
+    calls += 1;
+    throw new DriverError('install did not report Success: (empty stdout)');
+  };
+  await assert.rejects(() => driver.install('x.apk'), /did not report Success/);
+  assert.equal(calls, 1);
+});
+
+test('install still fails after exhausting the transient retries', async () => {
+  const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
+  tmpDirs.push(artifactsDir);
+  const driver = new E2eDriver({ adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app', installRetryDelayMs: 1 });
+  let calls = 0;
+  driver.exec = async () => {
+    calls += 1;
+    throw new DriverError(BROKEN_PIPE);
+  };
+  await assert.rejects(() => driver.install('x.apk'), /Broken pipe/);
+  assert.equal(calls, 3);
+});

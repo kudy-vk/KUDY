@@ -217,7 +217,7 @@ export function describeSelector(selector) {
 // One booted emulator or device. Every device touch of the suite goes
 // through this class — the runner never spawns adb on its own.
 export class E2eDriver {
-  constructor({ adbPath, serial, artifactsDir, pkg } = {}) {
+  constructor({ adbPath, serial, artifactsDir, pkg, installRetryDelayMs = 15000 } = {}) {
     if (typeof adbPath !== 'string' || adbPath.length === 0) throw new DriverError('E2eDriver: adbPath required');
     if (typeof serial !== 'string' || serial.length === 0) throw new DriverError('E2eDriver: serial required');
     if (typeof artifactsDir !== 'string' || artifactsDir.length === 0) {
@@ -227,6 +227,7 @@ export class E2eDriver {
     this.serial = serial;
     this.artifactsDir = artifactsDir;
     this.pkg = pkg;
+    this.installRetryDelayMs = installRetryDelayMs;
     fs.mkdirSync(artifactsDir, { recursive: true });
   }
 
@@ -242,9 +243,23 @@ export class E2eDriver {
   }
 
   async install(apkPath) {
-    const result = await this.exec(['install', '-r', '-g', apkPath], { timeoutMs: INSTALL_TIMEOUT_MS });
-    if (!result.stdout.includes('Success')) {
-      throw new DriverError(`install did not report Success: ${result.stdout.trim() || '(empty stdout)'}`);
+    // A freshly booted emulator occasionally kills the package service
+    // mid-install (`cmd: Failure calling service package: Broken pipe (32)`
+    // on hosted CI 2026-11-03). Only the transient package-service failure
+    // retries; deterministic install failures stay single-shot.
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        const result = await this.exec(['install', '-r', '-g', apkPath], { timeoutMs: INSTALL_TIMEOUT_MS });
+        if (!result.stdout.includes('Success')) {
+          throw new DriverError(`install did not report Success: ${result.stdout.trim() || '(empty stdout)'}`);
+        }
+        return;
+      } catch (error) {
+        const transient = error instanceof DriverError
+          && /Failure calling service package|Broken pipe/.test(error.message);
+        if (!transient || attempt >= 3) throw error;
+        await new Promise((resolve) => setTimeout(resolve, attempt * this.installRetryDelayMs));
+      }
     }
   }
 
