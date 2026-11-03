@@ -256,7 +256,7 @@ export class E2eDriver {
         return;
       } catch (error) {
         const transient = error instanceof DriverError
-          && /Failure calling service package|Broken pipe/.test(error.message);
+          && /Failure calling service package|Broken pipe|Exception occurred while executing/.test(error.message);
         if (!transient || attempt >= 3) throw error;
         await new Promise((resolve) => setTimeout(resolve, attempt * this.installRetryDelayMs));
       }

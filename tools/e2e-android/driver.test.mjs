@@ -268,6 +268,7 @@ test('artifact basenames are separator-checked', () => {
 // The install retry re-runs only that transient failure; the tests override
 // exec — the production retry loop stays the path under test.
 const BROKEN_PIPE = 'adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: cmd: Failure calling service package: Broken pipe (32)';
+const STORAGE_NPE = "adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: Exception occurred while executing 'install':\njava.lang.NullPointerException: Attempt to invoke virtual method 'java.util.List android.os.storage.StorageManager.getVolumes()' on a null object reference";
 
 test('install retries the transient package-service failure and succeeds', async () => {
   const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
@@ -305,4 +306,18 @@ test('install still fails after exhausting the transient retries', async () => {
   };
   await assert.rejects(() => driver.install('x.apk'), /Broken pipe/);
   assert.equal(calls, 3);
+});
+
+test('install retries framework install exceptions (late-boot storage NPE)', async () => {
+  const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
+  tmpDirs.push(artifactsDir);
+  const driver = new E2eDriver({ adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app', installRetryDelayMs: 1 });
+  const attempts = [];
+  driver.exec = async (args) => {
+    attempts.push(args.join(' '));
+    if (attempts.length < 2) throw new DriverError(STORAGE_NPE);
+    return { stdout: 'Success', stderr: '' };
+  };
+  await driver.install('x.apk');
+  assert.equal(attempts.length, 2);
 });
