@@ -54,6 +54,26 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # The 2026-11-03 main run died with ENOSPC during `assembleDebug`: the
+      # preinstalled toolchains this job never uses (dotnet, ghc, swift, boost,
+      # CodeQL, conda, rust, docker images) leave too little room for the
+      # Android SDK, Gradle caches and RN C++ codegen.
+      - name: free runner disk space
+        run: |
+          set -euo pipefail
+          df -h /
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /opt/ghc /usr/local/.ghc /usr/local/.ghcup \
+            /usr/share/swift \
+            /usr/local/share/boost \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/share/miniconda \
+            /usr/local/cargo /usr/local/rustup \
+            /var/lib/apt/lists
+          sudo apt-get clean
+          docker image prune -af || echo 'docker image prune unavailable (non-fatal)'
+          df -h /
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
