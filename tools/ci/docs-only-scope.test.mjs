@@ -1,11 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
+import { tempScopeRepo, runScopeScript } from './temp-scope-repo.mjs';
 import { DOCS_ONLY_PATTERNS, changedFiles, docsOnlyChange } from './docs-only-scope.mjs';
 import { androidE2eNeeded } from './android-e2e-scope.mjs';
 
@@ -53,29 +52,9 @@ test('changedFiles: malformed input is an unknown change set', () => {
 
 test('docs-only scope CLI: true on a md-only diff, false on code, false on unknown', () => {
   const script = path.join(root, 'tools', 'ci', 'docs-only-scope.mjs');
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-docs-scope-'));
-  const git = (...args) => execFileSync('git', ['-C', dir, '-c', 'user.name=t', '-c', 'user.email=t@example.invalid', ...args], { encoding: 'utf8' }).trim();
-  const scope = (base, head) => {
-    const out = path.join(dir, 'github-output');
-    fs.writeFileSync(out, '');
-    const stdout = execFileSync(process.execPath, [script, base, head], { cwd: dir, env: { ...process.env, GITHUB_OUTPUT: out }, encoding: 'utf8' });
-    return { stdout: stdout.trim(), output: fs.readFileSync(out, 'utf8') };
-  };
+  const { dir, base, docs, app, cleanup } = tempScopeRepo();
+  const scope = (base, head) => runScopeScript(dir, script, base, head);
   try {
-    git('init', '-q');
-    fs.mkdirSync(path.join(dir, 'docs'), { recursive: true });
-    fs.writeFileSync(path.join(dir, 'docs', 'a.md'), 'a\n');
-    git('add', '.');
-    git('commit', '-q', '-m', 'base');
-    const base = git('rev-parse', 'HEAD');
-    fs.writeFileSync(path.join(dir, 'docs', 'a.md'), 'b\n');
-    git('commit', '-q', '-am', 'docs');
-    const docs = git('rev-parse', 'HEAD');
-    fs.mkdirSync(path.join(dir, 'app'), { recursive: true });
-    fs.writeFileSync(path.join(dir, 'app', 'x.ts'), 'x\n');
-    git('add', '.');
-    git('commit', '-q', '-m', 'app');
-    const app = git('rev-parse', 'HEAD');
     const docsOnly = scope(base, docs);
     assert.equal(docsOnly.output, 'docs_only=true\n', 'GITHUB_OUTPUT carries the docs_only key');
     assert.match(docsOnly.stdout, /docs-only=true \(1 changed file\(s\)\)/);
@@ -83,7 +62,7 @@ test('docs-only scope CLI: true on a md-only diff, false on code, false on unkno
     assert.equal(scope('', docs).output, 'docs_only=false\n', 'an unknown change set must run the gates');
     assert.equal(scope('c'.repeat(40), docs).output, 'docs_only=false\n', 'a git failure must run the gates');
   } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
+    cleanup();
   }
 });
 
