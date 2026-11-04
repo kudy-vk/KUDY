@@ -1,0 +1,6 @@
+---
+description: Run the local Android E2E rule before every push to a pull-request branch
+alwaysApply: true
+---
+
+Before every push to a pull-request branch, read and follow `docs/agent-rules/android-e2e-local.md`. CI runs only the fast checks; when the change touches project code, the Android E2E suites run on a local emulator, and documentation-only or design-mockup changes skip them.
