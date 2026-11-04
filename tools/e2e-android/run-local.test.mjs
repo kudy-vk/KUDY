@@ -1,0 +1,416 @@
+// #132 criteria 2, 3 and 6 — the rules of `npm run e2e:android:local` and
+// their failing-on-revert tests: the scope short-cut, the summary lines and
+// their distinct exit codes, the host lock (a stale lock is reported, never
+// taken over), the foreign-emulator and busy-port refusals, the SKIP line
+// that is never a pass, and the suite order smoke → walk → discovery with
+// the non-gating visual:check. main() runs against a stub io over fixture
+// SDK/JDK trees, so every test drives the production main, not a
+// re-implementation.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import {
+  EXIT,
+  SUITES,
+  acquireHostLock,
+  findJdk17,
+  foreignEmulatorReason,
+  isJdk17,
+  lockRefusalMessage,
+  main,
+  portBusyReason,
+  readJdkRelease,
+  scopeNeeded,
+  summaryLine,
+} from './run-local.mjs';
+import { acquireLock } from '../android-build/checkout-lock.mjs';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const HEAD = 'a'.repeat(40);
+const BASE = 'b'.repeat(40);
+const RUN_FALSE = 'android-e2e scope: run=false (3 changed file(s))';
+const RUN_TRUE = 'android-e2e scope: run=true (5 changed file(s))';
+
+// A preflight-shaped SDK tree: platform-tools/adb, the emulator binary, the
+// CI system image. resolveAdb and the existence checks run the real code.
+function makeFakeSdk() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-sdk-'));
+  for (const file of [
+    path.join(dir, 'platform-tools', 'adb'),
+    path.join(dir, 'emulator', 'emulator'),
+  ]) {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, '#!/bin/sh\n');
+  }
+  fs.mkdirSync(path.join(dir, 'system-images', 'android-36', 'google_apis', 'x86_64'), { recursive: true });
+  return dir;
+}
+
+function makeFakeJdk() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-jdk-'));
+  fs.writeFileSync(path.join(dir, 'release'), 'JAVA_VERSION="17.0.21"\n');
+  return dir;
+}
+
+// android/gradlew (skips the prebuild step) and the built APK: both live in
+// gitignored paths of the checkout. Only files this fixture creates are
+// removed afterwards — a real android/ from a real run stays.
+function fakeBuildOutputs() {
+  const created = [];
+  const gradlew = path.join(root, 'android', 'gradlew');
+  const apk = path.join(root, 'android', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
+  for (const file of [gradlew, apk]) {
+    if (!fs.existsSync(file)) {
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, '');
+      created.push(file);
+    }
+  }
+  return {
+    restore: () => {
+      for (const file of created) fs.rmSync(file, { force: true });
+    },
+  };
+}
+
+// Every io method main can reach is a failing spy unless a test overrides it,
+// so an unexpected step past the rule under test turns the test red.
+function stubIo(overrides = {}) {
+  const calls = {};
+  const defaults = {
+    git: (args) => (args[0] === 'rev-parse' ? HEAD : BASE),
+    runScopeTool: () => RUN_TRUE,
+    listAvds: () => ['kudy-ci'],
+    kvmWritable: () => true,
+    netBusy: () => false,
+    listBootedDevices: () => [],
+    bootEmulator: () => ({ serial: 'emulator-5554', child: { exitCode: null }, booted: true }),
+    stopEmulator: () => {},
+    runPrebuild: () => ({ status: 0 }),
+    buildApk: () => ({ status: 0 }),
+    runSuite: () => ({ status: 0, output: 'smoke: 12 passed, 0 failed\n' }),
+    runVisualCheck: () => ({ status: 0, output: '' }),
+  };
+  const io = {};
+  for (const [name, impl] of Object.entries({ ...defaults, ...overrides })) {
+    calls[name] = [];
+    io[name] = (...args) => {
+      calls[name].push(args);
+      return impl(...args);
+    };
+  }
+  io.calls = calls;
+  return io;
+}
+
+// --sdk/--jdk make the preflight deterministic on any host (CI has no
+// /usr/lib/jvm JDK 17 or android-36 image guarantee).
+function preflightArgs() {
+  const sdk = makeFakeSdk();
+  const jdk = makeFakeJdk();
+  return {
+    args: ['--sdk', sdk, '--jdk', jdk],
+    restore: () => {
+      fs.rmSync(sdk, { recursive: true, force: true });
+      fs.rmSync(jdk, { recursive: true, force: true });
+    },
+  };
+}
+
+// Every main() run happens under a temp KUDY_ANDROID_ROOT so the tests
+// neither touch the real ~/KUDY-Android nor race a real local run's lock.
+async function withTempRoot(fn) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-root-'));
+  const originalRoot = process.env.KUDY_ANDROID_ROOT;
+  process.env.KUDY_ANDROID_ROOT = dir;
+  const buildOutputs = fakeBuildOutputs();
+  try {
+    return await fn(dir);
+  } finally {
+    if (originalRoot === undefined) delete process.env.KUDY_ANDROID_ROOT;
+    else process.env.KUDY_ANDROID_ROOT = originalRoot;
+    buildOutputs.restore();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+test('the exit codes are distinct and NOT-VERIFIED never reads as a pass', () => {
+  assert.equal(new Set(Object.values(EXIT)).size, Object.keys(EXIT).length);
+  assert.equal(EXIT.passed, 0);
+  assert.equal(EXIT.failed, 1);
+  assert.equal(EXIT.usage, 2);
+  assert.equal(EXIT.notVerified, 3);
+  assert.equal(EXIT.locked, 4);
+});
+
+test('the three outcome lines follow the issue wording', () => {
+  assert.equal(summaryLine('passed', { sha: HEAD }), `Android E2E: passed on ${HEAD}`);
+  assert.equal(summaryLine('failed', { suite: 'walk', sha: HEAD }), `Android E2E: failed (walk) on ${HEAD}`);
+  assert.equal(summaryLine('not-verified', { reason: 'no emulator', sha: HEAD }), 'Android E2E: NOT-VERIFIED (no emulator)');
+  assert.throws(() => summaryLine('skipped'));
+});
+
+test('scope verdict: only run=false is the short-cut; garbage and failure mean run', () => {
+  assert.equal(scopeNeeded(RUN_FALSE), false);
+  assert.equal(scopeNeeded(RUN_TRUE), true);
+  assert.equal(scopeNeeded(''), true, 'a lost scope verdict must run, never skip');
+  assert.equal(scopeNeeded(undefined), true);
+  assert.equal(scopeNeeded('android-e2e scope: run=maybe'), true);
+});
+
+test('scope run=false exits 0 and never builds, boots or locks (criterion 2.1)', async () => {
+  await withTempRoot(async () => {
+    const io = stubIo({
+      runScopeTool: () => RUN_FALSE,
+      netBusy: () => assert.fail('the short-cut must not touch the host'),
+      bootEmulator: () => assert.fail('the short-cut must not boot an emulator'),
+    });
+    const { code, summary } = await main([], io);
+    assert.equal(code, EXIT.passed);
+    assert.equal(summary, `Android E2E: not needed (scope run=false on ${HEAD})`);
+    assert.deepEqual(io.calls.runScopeTool, [[BASE, HEAD]]);
+  });
+});
+
+test('a scope tool failure denies the short-cut and runs the full pipeline', async () => {
+  await withTempRoot(async (tempRoot) => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo({ runScopeTool: () => '' });
+      const { code } = await main(args, io);
+      assert.equal(code, EXIT.passed);
+      assert.equal(io.calls.bootEmulator.length, 1, 'the run continues to the emulator');
+      assert.equal(io.calls.runSuite.length, SUITES.length);
+      assert.equal(fs.existsSync(path.join(tempRoot, 'e2e-android-local.lock')), false, 'the host lock is released');
+    } finally {
+      restore();
+    }
+  });
+});
+
+test('the host lock refuses a live holder (criterion 3)', async () => {
+  await withTempRoot(async (tempRoot) => {
+    const lockFile = path.join(tempRoot, 'e2e-android-local.lock');
+    const holder = acquireLock(lockFile, 'e2e:android:local (other session)');
+    try {
+      const io = stubIo({
+        bootEmulator: () => assert.fail('a locked host must never boot an emulator'),
+      });
+      const { code, summary } = await main([], io);
+      assert.equal(code, EXIT.locked);
+      assert.match(summary, /NOT-VERIFIED/);
+      assert.equal(io.calls.bootEmulator.length, 0);
+      const message = lockRefusalMessage(JSON.parse(fs.readFileSync(lockFile, 'utf8')), false, lockFile);
+      assert.match(message, /already holding the host lock/);
+    } finally {
+      holder.release();
+    }
+    assert.equal(fs.existsSync(lockFile), false, 'the owner releases its own lock');
+  });
+});
+
+test('a stale lock is refused with the manual-removal message (criterion 3)', async () => {
+  await withTempRoot(async (tempRoot) => {
+    const lockFile = path.join(tempRoot, 'e2e-android-local.lock');
+    let deadPid = null;
+    for (let candidate = 100_000; candidate < 500_000 && deadPid === null; candidate += 1) {
+      try {
+        process.kill(candidate, 0);
+      } catch (error) {
+        if (error.code === 'ESRCH') deadPid = candidate;
+      }
+    }
+    assert.notEqual(deadPid, null, 'the test needs a pid that does not run on this host');
+    fs.writeFileSync(lockFile, JSON.stringify({ pid: deadPid, command: 'e2e:android:local', host: os.hostname(), startedAt: new Date().toISOString() }));
+    const io = stubIo({ bootEmulator: () => assert.fail('a stale lock must never be taken over') });
+    const { code, summary } = await main([], io);
+    assert.equal(code, EXIT.locked);
+    assert.match(summary, /NOT-VERIFIED/);
+    assert.equal(io.calls.bootEmulator.length, 0);
+    assert.equal(fs.existsSync(lockFile), true, 'the stale lock stays for a human to remove');
+    const holder = JSON.parse(fs.readFileSync(lockFile, 'utf8'));
+    assert.match(lockRefusalMessage(holder, true, lockFile), /stale host lock/);
+    assert.match(lockRefusalMessage(holder, true, lockFile), /not removed automatically/);
+  });
+});
+
+test('a foreign booted emulator refuses the run and is never killed', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo({
+        listBootedDevices: () => ['emulator-5554', 'emulator-5556'],
+        bootEmulator: () => assert.fail('a foreign emulator must not be reused'),
+      });
+      const { code, summary } = await main(args, io);
+      assert.equal(code, EXIT.notVerified);
+      assert.match(summary, /emulator-5554/);
+      assert.equal(io.calls.stopEmulator.length, 0, 'the runner never kills what it did not start');
+    } finally {
+      restore();
+    }
+  });
+  assert.equal(foreignEmulatorReason([]), null);
+  assert.match(foreignEmulatorReason(['emulator-5554']), /never reuses or kills/);
+});
+
+test('a busy Metro or origin port refuses the run with the named port', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo({ netBusy: (port) => port === 8083 });
+      const { code, summary } = await main(args, io);
+      assert.equal(code, EXIT.notVerified);
+      assert.match(summary, /port 8083 is already listening/);
+    } finally {
+      restore();
+    }
+  });
+  assert.match(portBusyReason(8792), /the runner never kills it/);
+});
+
+test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass', async () => {
+  await withTempRoot(async () => {
+    const noKvm = preflightArgs();
+    try {
+      const io = stubIo({ kvmWritable: () => false });
+      const result = await main(noKvm.args, io);
+      assert.equal(result.code, EXIT.notVerified);
+      assert.match(result.summary, /\/dev\/kvm/);
+    } finally {
+      noKvm.restore();
+    }
+
+    const noAvd = preflightArgs();
+    try {
+      const io = stubIo({ listAvds: () => ['other-avd'] });
+      const result = await main(noAvd.args, io);
+      assert.equal(result.code, EXIT.notVerified);
+      assert.match(result.summary, /no AVD kudy-ci/);
+      assert.match(result.summary, /system-images;android-36;google_apis;x86_64/);
+    } finally {
+      noAvd.restore();
+    }
+  });
+});
+
+test('the suites run in the CI order, then the non-gating visual:check; the emulator it started is stopped', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo();
+      const { code, summary } = await main(args, io);
+      assert.equal(code, EXIT.passed);
+      assert.equal(summary, `Android E2E: passed on ${HEAD}`);
+      assert.deepEqual(io.calls.runSuite.map(([runArgs]) => runArgs.suite), [...SUITES], 'smoke, walk, discovery');
+      assert.equal(io.calls.runVisualCheck.length, 1, 'visual:check runs after the suites');
+      assert.deepEqual(io.calls.stopEmulator.map(([stopArgs]) => stopArgs.serial), ['emulator-5554']);
+    } finally {
+      restore();
+    }
+  });
+});
+
+test('a failing suite stops the run with the failed summary', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo({
+        runSuite: (runArgs) => (runArgs.suite === 'walk' ? { status: 1, output: 'FAIL a case\n' } : { status: 0, output: '' }),
+      });
+      const { code, summary } = await main(args, io);
+      assert.equal(code, EXIT.failed);
+      assert.equal(summary, `Android E2E: failed (walk) on ${HEAD}`);
+      assert.deepEqual(io.calls.runSuite.map(([runArgs]) => runArgs.suite), ['smoke', 'walk'], 'the first failure stops the list');
+      assert.equal(io.calls.runVisualCheck.length, 0);
+      assert.equal(io.calls.stopEmulator.length, 1);
+    } finally {
+      restore();
+    }
+  });
+});
+
+test('a SKIP e2e:android line is never a pass (criterion 2.5)', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo({
+        runSuite: () => ({ status: 0, output: 'SKIP e2e:android smoke — no booted emulator found\n' }),
+      });
+      const { code, summary } = await main(args, io);
+      assert.equal(code, EXIT.notVerified);
+      assert.match(summary, /NOT-VERIFIED/);
+      assert.match(summary, /smoke skipped/);
+      assert.equal(io.calls.runSuite.length, 1, 'a skipped suite stops the list');
+    } finally {
+      restore();
+    }
+  });
+});
+
+test('a failed build is NOT-VERIFIED, not a suite failure', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const io = stubIo({ buildApk: () => ({ status: 1 }) });
+      const { code, summary } = await main(args, io);
+      assert.equal(code, EXIT.notVerified);
+      assert.match(summary, /APK build failed/);
+      assert.equal(io.calls.runSuite.length, 0);
+    } finally {
+      restore();
+    }
+  });
+});
+
+test('JDK 17 is the build JDK: 17 passes, 21 does not, and the finder scans the roots', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-jdk-'));
+  try {
+    const jdk17 = path.join(dir, 'jdk-17.0.21+9');
+    const jdk21 = path.join(dir, 'java-21-openjdk');
+    fs.mkdirSync(jdk17, { recursive: true });
+    fs.mkdirSync(jdk21, { recursive: true });
+    fs.writeFileSync(path.join(jdk17, 'release'), 'JAVA_VERSION="17.0.21"\n');
+    fs.writeFileSync(path.join(jdk21, 'release'), 'JAVA_VERSION="21.0.5"\n');
+    assert.equal(isJdk17(jdk17), true);
+    assert.equal(isJdk17(jdk21), false, 'the system JDK 21 must not build the APK');
+    assert.equal(readJdkRelease(path.join(dir, 'missing')), null);
+    assert.equal(findJdk17([dir]), jdk17);
+    assert.equal(findJdk17([path.join(dir, 'no-such-dir')]), null);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('acquireHostLock reuses the checkout-lock idiom for the host-wide file', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-host-lock-'));
+  const lockFile = path.join(dir, 'e2e-android-local.lock');
+  try {
+    const lock = acquireHostLock(lockFile, 'e2e:android:local');
+    assert.equal(lock.holder, undefined, 'an empty host takes the lock');
+    const second = acquireHostLock(lockFile, 'e2e:android:local', { alive: () => true });
+    assert.notEqual(second.holder, undefined, 'a second run is refused while the holder lives');
+    lock.release();
+    assert.equal(fs.existsSync(lockFile), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('unknown flags exit with the usage code', async () => {
+  const io = stubIo();
+  const { code, summary } = await main(['--unknown-flag'], io);
+  assert.equal(code, EXIT.usage);
+  assert.equal(summary, null);
+  assert.equal(io.calls.git.length, 0);
+});
+
+test('the e2e:android:local script points at the runner (runner wiring is guarded)', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  assert.equal(pkg.scripts['e2e:android:local'], 'node tools/e2e-android/run-local.mjs');
+  assert.match(pkg.scripts.test, /"tools\/e2e-android\/\*\.test\.mjs"/, 'this suite must stay wired into npm test');
+});
