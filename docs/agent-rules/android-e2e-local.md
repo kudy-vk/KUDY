@@ -29,7 +29,12 @@ Use `npm run e2e:android:local` once it exists (issue #124: SDK, emulator and bu
 Until then, on a host with a JDK 17, an Android SDK and the AVD `kudy-ci`:
 
 1. Build the debug APK with the documented procedure in `docs/development_setup.md` («Лакальная debug-зборка Android на Windows»; on Linux, `npx expo prebuild --platform android --no-install` and `./gradlew assembleDebug` in `android/`).
-2. Boot one emulator (`kudy-ci`, `pixel_5`, API 36).
+2. Boot the emulator with the same flags as `.github/workflows/android-e2e.yml` and the visual baselines in `docs/design-qa/baselines/`. Other flags can produce false `visual:check` diffs. Wait until `adb shell getprop sys.boot_completed` prints `1`.
+
+```sh
+emulator -avd kudy-ci -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -memory 2048
+```
+
 3. Run each suite and check that each one exits 0 and prints no `SKIP e2e:android` line:
 
 ```sh
@@ -40,12 +45,14 @@ npm run e2e:android -- --suite discovery
 
 4. For a change to the interface, also run `npm run visual:check -- --out <dir>`. It is a non-gating report for design-QA (`docs/agent-rules/design-qa.md`).
 
-Run only one emulator at a time per host: other agent sessions share the machine. If `adb devices` already lists an emulator you did not start, wait for that run to finish, or pass your own `--serial`. Never kill an emulator, Metro or origin server you did not start.
+Run only one Android E2E run at a time per host: other agent sessions share the machine, and every run uses the same Metro port (8083) and origin port (8792). If `adb devices` already lists an emulator you did not start, or either port is busy, wait for that run to finish. Do not start a second emulator. Never kill an emulator, Metro or origin server you did not start.
 
 ## 3. Act on the result
 
 - Pass: push, and keep the line `Android E2E: passed on <sha> (smoke, walk, discovery)` in the PR body's Verification section.
-- Failure: do not push a change that breaks a suite. Fix it first, or, when the failure is real and outside your change, report it with the failing suite and the artifacts path (`tools/e2e-android/artifacts/`).
+- Failure: run the failing suite again on `origin/main`.
+  - If it passes on `main`, your change broke it. Fix it before you push.
+  - If it fails on `main` too, the failure is not yours. Push, write `Android E2E: failed (<suite>) on <sha>; also fails on main <main-sha>` in the PR body, and link an issue for the failure (open one if none exists). Name the artifacts path (`tools/e2e-android/artifacts/`).
 - No SDK, no emulator, a `SKIP e2e:android` line, or an emulator that does not boot: this is not a pass. Push, and write `Android E2E: NOT-VERIFIED (<reason>)` in the PR body. Reviewers and Judge treat it as an open check, not a green one.
 - `run=false`: write `Android E2E: not needed (scope run=false on <sha>)`.
 
