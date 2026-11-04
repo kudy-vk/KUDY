@@ -18,11 +18,11 @@ import {
   SUITES,
   acquireHostLock,
   findJdk17,
-  foreignEmulatorReason,
   isJdk17,
   lockRefusalMessage,
   main,
   portBusyReason,
+  preExistingSerials,
   readJdkRelease,
   scopeNeeded,
   summaryLine,
@@ -247,24 +247,27 @@ test('a stale lock is refused with the manual-removal message (criterion 3)', as
   });
 });
 
-test('a foreign booted emulator refuses the run and is never killed', async () => {
+test('a coexisting foreign emulator is left alone; the runner pins its own new serial', async () => {
   await withTempRoot(async () => {
     const { args, restore } = preflightArgs();
     try {
+      let boots = 0;
       const io = stubIo({
-        listBootedDevices: () => ['emulator-5554', 'emulator-5556'],
-        bootEmulator: () => assert.fail('a foreign emulator must not be reused'),
+        // A foreign emulator is up before and after this run boots its own.
+        listBootedDevices: () => (boots++ === 0 ? ['emulator-5556'] : ['emulator-5556', 'emulator-5554']),
       });
       const { code, summary } = await main(args, io);
-      assert.equal(code, EXIT.notVerified);
-      assert.match(summary, /emulator-5554/);
-      assert.equal(io.calls.stopEmulator.length, 0, 'the runner never kills what it did not start');
+      assert.equal(code, EXIT.passed, `expected a pass, got ${summary}`);
+      assert.deepEqual(io.calls.runSuite.map(([runArgs]) => runArgs.serial), ['emulator-5554', 'emulator-5554', 'emulator-5554'],
+        'every suite must be pinned to the runner\'s own emulator');
+      assert.deepEqual(io.calls.stopEmulator.map(([stopArgs]) => stopArgs.serial), ['emulator-5554'],
+        'cleanup must touch only the emulator this run started');
+      assert.equal(preExistingSerials(['emulator-5556', 'device-x', 'emulator-5554']).join(','), 'emulator-5556,emulator-5554');
+      assert.deepEqual(preExistingSerials([]), []);
     } finally {
       restore();
     }
   });
-  assert.equal(foreignEmulatorReason([]), null);
-  assert.match(foreignEmulatorReason(['emulator-5554']), /never reuses or kills/);
 });
 
 test('a busy Metro or origin port refuses the run with the named port', async () => {

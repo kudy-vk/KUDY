@@ -47,10 +47,17 @@ const ARTIFACTS_ROOT = path.join(REPO_ROOT, 'tools', 'e2e-android', 'artifacts')
 const SCOPE_TOOL = path.join(REPO_ROOT, 'tools', 'ci', 'android-e2e-scope.mjs');
 const AVD_NAME = 'kudy-ci';
 const SYSTEM_IMAGE_DIR = path.join('system-images', 'android-36', 'google_apis', 'x86_64');
-// CI parity (.github/workflows/android-e2e.yml): the same AVD, the same
-// flags, the same 120 × 5 s boot budget. Other flags produce false
+// CI parity (.github/workflows/android-e2e.yml) with one evidence-based
+// deviation: the guest RAM. At the CI value (2048, auto-raised to 2560 by the
+// emulator) every android-36 google_apis guest on this host ANRs SystemUI
+// within a minute of boot — the ANR dialog is the only dumpable window, so
+// every suite case times out (issue #132 debugging log: three boots on
+// 2026-11-04, and the hosted CI job has never passed an emulator run on these
+// flags either). At 4096 MB the guest boots and stays healthy. RAM does not
+// change rendered pixels, so visual:check baseline parity is unaffected.
+// The other flags stay exactly CI's — other flags can produce false
 // visual:check diffs (android-e2e-local.md §2).
-const EMULATOR_FLAGS = ['-no-window', '-no-audio', '-no-snapshot', '-gpu', 'swiftshader_indirect', '-memory', '2048'];
+const EMULATOR_FLAGS = ['-no-window', '-no-audio', '-no-snapshot', '-gpu', 'swiftshader_indirect', '-memory', '4096'];
 const BOOT_ATTEMPTS = 120;
 const BOOT_POLL_MS = 5000;
 
@@ -100,12 +107,13 @@ export function lockRefusalMessage(holder, stale, file) {
     + 'Wait for that run to finish.';
 }
 
-// The runner never reuses or kills an emulator it did not start: any booted
-// emulator before this run refuses the run with the reason named.
-export function foreignEmulatorReason(bootedSerials) {
-  if (bootedSerials.length === 0) return null;
-  return `emulator ${bootedSerials.join(', ')} is already booted and was not started by this run; `
-    + 'the runner never reuses or kills it. Wait for that run to finish, then rerun.';
+// The runner boots its own emulator and never reuses, never kills one it did
+// not start: a coexisting foreign emulator is left alone (a shared dev host
+// runs several sessions — this runner picks its own fresh serial and pins
+// every suite to it). Real conflicts still refuse the run: the host lock and
+// the 8083/8792 ports.
+export function preExistingSerials(bootedSerials) {
+  return bootedSerials.filter((name) => /^emulator-\d+$/.test(name));
 }
 
 export function portBusyReason(port) {
@@ -176,11 +184,12 @@ function realIo() {
     async listBootedDevices(adbPath) {
       return listBootedDevices(adbPath);
     },
-    // Spawn the CI AVD with the CI flags and poll until sys.boot_completed
-    // prints 1. Never throws: any failure comes back as { booted: false } so
-    // the caller can stop the child it owns. The first emulator serial seen
-    // is sticky — the preflight has already refused foreign emulators.
-    async bootEmulator({ emulatorBinary, adbPath, logPath }) {
+    // Spawn the CI AVD with the flags above (RAM per the evidence note) and
+    // poll until sys.boot_completed prints 1. Never throws: any failure comes
+    // back as { booted: false } so the caller can stop the child it owns.
+    // The first serial that is NEW since the pre-boot list is sticky — a
+    // coexisting foreign emulator must never be adopted.
+    async bootEmulator({ emulatorBinary, adbPath, logPath, knownSerials = [] }) {
       const log = fs.openSync(logPath, 'a');
       const child = spawn(emulatorBinary, ['-avd', AVD_NAME, ...EMULATOR_FLAGS], {
         cwd: REPO_ROOT, detached: true, windowsHide: true, stdio: ['ignore', log, log],
@@ -190,8 +199,10 @@ function realIo() {
       try {
         for (let attempt = 1; attempt <= BOOT_ATTEMPTS && child.exitCode === null; attempt += 1) {
           await sleep(BOOT_POLL_MS);
-          const devices = (await listBootedDevices(adbPath)).filter((name) => /^emulator-\d+$/.test(name));
-          if (serial === null && devices.length > 0) serial = devices[0];
+          const fresh = (await listBootedDevices(adbPath))
+            .filter((name) => /^emulator-\d+$/.test(name))
+            .filter((name) => !knownSerials.includes(name));
+          if (serial === null && fresh.length > 0) serial = fresh[0];
           if (serial !== null) {
             const prop = spawnSync(adbPath, ['-s', serial, 'shell', 'getprop', 'sys.boot_completed'], { encoding: 'utf8' });
             if (prop.status === 0 && prop.stdout.trim() === '1') return { serial, child, booted: true };
@@ -202,9 +213,14 @@ function realIo() {
       }
       return { serial, child, booted: false };
     },
-    // Stop only the emulator this run started: SIGTERM to its process group,
-    // then SIGKILL, then wait until adb no longer lists the serial.
+    // Stop only the emulator this run started: the console kill first (works
+    // even when the child handle went stale — the emulator binary may restart
+    // qemu underneath), then SIGTERM/SIGKILL to the process group, then wait
+    // until adb no longer lists our serial.
     async stopEmulator({ child, adbPath, serial }) {
+      if (serial) {
+        spawnSync(adbPath, ['-s', serial, 'emu', 'kill'], { encoding: 'utf8', timeout: 15_000 });
+      }
       if (child.exitCode !== null || child.signalCode !== null) return;
       try {
         process.kill(-child.pid, 'SIGTERM');
@@ -264,11 +280,11 @@ function realIo() {
         logPath,
       });
     },
-    async runVisualCheck({ outDir, adbPath, logPath }) {
+    async runVisualCheck({ outDir, adbPath, serial, logPath }) {
       return runChild({
         command: process.execPath,
         args: [VISUAL_CHECK_TOOL, '--out', outDir],
-        env: { ...process.env, KUDY_ADB: adbPath },
+        env: { ...process.env, KUDY_ADB: adbPath, KUDY_E2E_SERIAL: serial },
         logPath,
       });
     },
@@ -398,8 +414,10 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     for (const port of [DEFAULT_METRO_PORT, DEFAULT_ORIGIN_PORT]) {
       if (await io.netBusy(port)) return notVerified(portBusyReason(port));
     }
-    const foreign = foreignEmulatorReason((await io.listBootedDevices(adb)).filter((name) => /^emulator-\d+$/.test(name)));
-    if (foreign !== null) return notVerified(foreign);
+    const preBoot = preExistingSerials(await io.listBootedDevices(adb));
+    if (preBoot.length > 0) {
+      console.log(`-- coexisting emulator(s) this run did not start (left alone, never reused or killed): ${preBoot.join(', ')}`);
+    }
 
     // 4. Build the debug APK for the exact HEAD (criterion 2.2) BEFORE the
     // emulator boots: CI's order too — a full Gradle build pegs every core,
@@ -433,7 +451,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
 
     // 5. Emulator (criterion 2.3): the CI AVD with the CI flags, KVM.
     console.log(`-- booting the CI AVD ${AVD_NAME} with KVM (flags: ${EMULATOR_FLAGS.join(' ')})`);
-    const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log') });
+    const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log'), knownSerials: preBoot });
     if (!boot.booted) {
       await io.stopEmulator({ child: boot.child, adbPath: adb, serial: boot.serial });
       return notVerified(`emulator did not boot within ${Math.round((BOOT_ATTEMPTS * BOOT_POLL_MS) / 1000)} s (log: ${path.join(runDir, 'emulator.log')})`);
@@ -452,7 +470,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
 
     // 7. The non-gating visual:check report — its verdict never changes the
     // exit code (DQ-10 parity).
-    const visual = await io.runVisualCheck({ outDir: path.join(runDir, 'visual-check'), adbPath: adb, logPath: path.join(runDir, 'visual-check.log') });
+    const visual = await io.runVisualCheck({ outDir: path.join(runDir, 'visual-check'), adbPath: adb, serial: emulator.serial, logPath: path.join(runDir, 'visual-check.log') });
     console.log(`-- visual:check exit ${visual.status} (non-gating report: ${path.join(runDir, 'visual-check')})`);
 
     return { code: EXIT.passed, summary: summaryLine('passed', { sha: head }) };
