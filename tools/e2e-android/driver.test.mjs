@@ -266,22 +266,41 @@ test('artifact basenames are separator-checked', () => {
 // The hosted-CI emulator occasionally kills the package service mid-install
 // (`cmd: Failure calling service package: Broken pipe (32)`, run 41708894799).
 // The install retry re-runs only that transient failure; the tests override
-// exec — the production retry loop stays the path under test.
+// exec — the production retry loop stays the path under test. The exec stub
+// answers `shell pm path android` (the recovery poll) separately from
+// install calls: args[0] === 'shell'.
 const BROKEN_PIPE = 'adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: cmd: Failure calling service package: Broken pipe (32)';
 const STORAGE_NPE = "adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: Exception occurred while executing 'install':\njava.lang.NullPointerException: Attempt to invoke virtual method 'java.util.List android.os.storage.StorageManager.getVolumes()' on a null object reference";
+const PM_OK = { stdout: 'package:/system/framework/framework-res.apk', stderr: '' };
+const INSTALL_OK = { stdout: 'Success', stderr: '' };
 
-test('install retries the transient package-service failure and succeeds', async () => {
+// testDriver with fast retry/poll timings: production backoff (15 s) and the
+// 3 s recovery poll would slow the suite without adding coverage.
+function installTestDriver() {
   const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
   tmpDirs.push(artifactsDir);
-  const driver = new E2eDriver({ adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app', installRetryDelayMs: 1 });
-  const attempts = [];
+  return new E2eDriver({
+    adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app',
+    installRetryDelayMs: 1, servicePollDelayMs: 1,
+  });
+}
+
+test('install retries the transient package-service failure and succeeds', async () => {
+  const driver = installTestDriver();
+  const installs = [];
+  let polls = 0;
   driver.exec = async (args) => {
-    attempts.push(args.join(' '));
-    if (attempts.length < 3) throw new DriverError(BROKEN_PIPE);
-    return { stdout: 'Success', stderr: '' };
+    if (args[0] === 'shell') {
+      polls += 1;
+      return PM_OK;
+    }
+    installs.push(args.join(' '));
+    if (installs.length < 3) throw new DriverError(BROKEN_PIPE);
+    return INSTALL_OK;
   };
   await driver.install('x.apk');
-  assert.equal(attempts.length, 3);
+  assert.equal(installs.length, 3);
+  assert.ok(polls >= 2, 'each retry must be preceded by a package-service recovery poll');
 });
 
 test('install does not retry a deterministic install failure', async () => {
@@ -296,28 +315,64 @@ test('install does not retry a deterministic install failure', async () => {
 });
 
 test('install still fails after exhausting the transient retries', async () => {
-  const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
-  tmpDirs.push(artifactsDir);
-  const driver = new E2eDriver({ adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app', installRetryDelayMs: 1 });
-  let calls = 0;
-  driver.exec = async () => {
-    calls += 1;
+  const driver = installTestDriver();
+  let installs = 0;
+  driver.exec = async (args) => {
+    if (args[0] === 'shell') return PM_OK;
+    installs += 1;
     throw new DriverError(BROKEN_PIPE);
   };
   await assert.rejects(() => driver.install('x.apk'), /Broken pipe/);
-  assert.equal(calls, 3);
+  assert.equal(installs, 3);
 });
 
 test('install retries framework install exceptions (late-boot storage NPE)', async () => {
-  const artifactsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-e2e-test-'));
-  tmpDirs.push(artifactsDir);
-  const driver = new E2eDriver({ adbPath: 'adb', serial: 'emulator-0000', artifactsDir, pkg: 'by.kudy.app', installRetryDelayMs: 1 });
-  const attempts = [];
+  const driver = installTestDriver();
+  const installs = [];
   driver.exec = async (args) => {
-    attempts.push(args.join(' '));
-    if (attempts.length < 2) throw new DriverError(STORAGE_NPE);
-    return { stdout: 'Success', stderr: '' };
+    if (args[0] === 'shell') return PM_OK;
+    installs.push(args.join(' '));
+    if (installs.length < 2) throw new DriverError(STORAGE_NPE);
+    return INSTALL_OK;
   };
   await driver.install('x.apk');
-  assert.equal(attempts.length, 2);
+  assert.equal(installs.length, 2);
+});
+
+test('install matches the transient classes on a Success-less run stderr too', async () => {
+  const driver = installTestDriver();
+  const calls = [];
+  driver.exec = async (args) => {
+    calls.push(args[0]);
+    if (calls.length === 1) {
+      // exit 0 but no Success: the stderr still carries the transient class
+      return { stdout: 'Performing streamed install\n', stderr: 'adb: failed to install x.apk: cmd: Failure calling service package: Broken pipe (32)' };
+    }
+    return INSTALL_OK;
+  };
+  await driver.install('x.apk');
+  assert.deepEqual(calls, ['install', 'shell', 'install'], 'the stderr-only transient class must trigger the recovery poll and retry');
+});
+
+test('install waits for the package service to recover before retrying', async () => {
+  const driver = installTestDriver();
+  const order = [];
+  let polls = 0;
+  driver.exec = async (args) => {
+    if (args[0] === 'shell') {
+      order.push('poll');
+      polls += 1;
+      if (polls < 3) throw new DriverError('cmd: Failure calling service package: Broken pipe (32)');
+      return PM_OK;
+    }
+    order.push('install');
+    if (order.filter((x) => x === 'install').length < 2) throw new DriverError(BROKEN_PIPE);
+    return INSTALL_OK;
+  };
+  await driver.install('x.apk');
+  assert.deepEqual(
+    order,
+    ['install', 'poll', 'poll', 'poll', 'install'],
+    'the second install must run only after the package service answers again',
+  );
 });
