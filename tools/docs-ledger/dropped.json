@@ -1,3 +1,16 @@
 {
- "entries": []
+ "entries": [
+  {
+   "kind": "code",
+   "value": ".github/workflows/android-e2e.yml:2-13",
+   "reason": "android-e2e.yml gained the concurrency block and the scope job; the design-QA spec cites the shifted line ranges",
+   "replacement": ".github/workflows/android-e2e.yml:2-51"
+  },
+  {
+   "kind": "code",
+   "value": ":51-90",
+   "reason": "android-e2e.yml gained the concurrency block and the scope job; the design-QA spec cites the shifted line ranges",
+   "replacement": ":87-126"
+  }
+ ]
 }

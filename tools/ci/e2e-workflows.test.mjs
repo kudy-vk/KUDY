@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
+import { execFileSync } from 'node:child_process';
+import os from 'node:os';
+import { androidE2eNeeded, changedFiles } from './android-e2e-scope.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const read = (name) => {
@@ -22,7 +25,7 @@ test('web E2E runs on PRs with installed Chromium and the real build/test comman
   assert.ok(!/continue-on-error:\s*true/.test(source));
 });
 
-test('Android E2E runs smoke, walk and discovery for every PR', () => {
+test('Android E2E runs smoke, walk and discovery for every PR that touches the app', () => {
   const { source, workflow } = read('android-e2e.yml');
   assert.deepEqual(workflow.on.pull_request.branches, ['main']);
   assert.equal(workflow.on.pull_request.paths, undefined, 'app changes must trigger Android E2E');
@@ -39,6 +42,84 @@ test('Android E2E runs smoke, walk and discovery for every PR', () => {
   assert.match(source, /SKIP e2e:android/);
   assert.ok(steps.some((step) => step.uses?.startsWith('actions/upload-artifact@') && step.if === 'failure()'));
   assert.match(source, /tools\/e2e-android\/artifacts\//);
+});
+
+test('Android E2E is gated only by the deny-by-default scope job', () => {
+  const { workflow } = read('android-e2e.yml');
+  const job = workflow.jobs['smoke-and-walk'];
+  assert.equal(job.needs, 'scope');
+  assert.equal(job.if, "needs.scope.outputs.run != 'false'", 'an empty scope output must run the suites, not skip them');
+  const scope = workflow.jobs.scope;
+  assert.equal(scope.outputs.run, '${{ steps.scope.outputs.run }}');
+  const checkout = scope.steps.find((step) => step.uses?.startsWith('actions/checkout@'));
+  assert.equal(checkout.with['fetch-depth'], 0, 'the scope diff needs the base commit');
+  const run = scope.steps.find((step) => step.id === 'scope').run;
+  assert.match(run, /pull_request\) node tools\/ci\/android-e2e-scope\.mjs "\$PR_BASE" "\$PR_HEAD"/);
+  assert.match(run, /push\) node tools\/ci\/android-e2e-scope\.mjs "\$PUSH_BEFORE" "\$PUSH_AFTER"/);
+  assert.match(run, /\*\) echo 'run=true' >> "\$GITHUB_OUTPUT"/, 'nightly and manual runs must always run the suites');
+  assert.equal(workflow.concurrency['cancel-in-progress'], "${{ github.event_name == 'pull_request' }}");
+  // A shared group keeps one pending run and cancels the rest even without
+  // cancel-in-progress, so every non-PR run needs its own group.
+  assert.match(workflow.concurrency.group, /github\.event_name == 'pull_request' && format\('pr-\{0\}', github\.event\.pull_request\.number\) \|\| github\.run_id/);
+});
+
+test('scope: docs-only change sets skip, anything else or an unknown set runs', () => {
+  assert.equal(androidE2eNeeded(['docs/16_delivery_backlog.md', 'README.md', 'docs/demos/x.md']), false);
+  assert.equal(androidE2eNeeded(['docs/agent-tasks/web/G10.02.b.md', 'tools/e2e-android/README.md']), false);
+  assert.equal(androidE2eNeeded(['docs/readme.md', 'app/_layout.tsx']), true);
+  assert.equal(androidE2eNeeded(['docs/design-qa/baselines/explore.png']), true, 'visual baselines feed visual:check');
+  assert.equal(androidE2eNeeded(['.github/workflows/android-e2e.yml']), true);
+  assert.equal(androidE2eNeeded(['brand-new-dir/file.ts']), true);
+  assert.equal(androidE2eNeeded([]), true);
+  assert.equal(androidE2eNeeded(undefined), true);
+});
+
+test('scope: missing, zero or malformed SHAs and git failures give an unknown change set', () => {
+  const a = 'a'.repeat(40);
+  const b = 'b'.repeat(40);
+  const neverCalled = () => assert.fail('git must not run for invalid input');
+  assert.equal(changedFiles('', b, neverCalled), null);
+  assert.equal(changedFiles('0'.repeat(40), b, neverCalled), null);
+  assert.equal(changedFiles(a, 'HEAD; rm -rf /', neverCalled), null);
+  assert.equal(changedFiles(a, b, () => { throw new Error('bad object'); }), null);
+  assert.deepEqual(changedFiles(a, b, (cmd, args) => {
+    assert.deepEqual([cmd, args], ['git', ['diff', '--name-only', `${a}...${b}`]]);
+    return 'docs/x.md\napp/y.tsx\n';
+  }), ['docs/x.md', 'app/y.tsx']);
+});
+
+test('scope CLI writes run=false only for a real docs-only diff', () => {
+  const script = path.join(root, 'tools', 'ci', 'android-e2e-scope.mjs');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-scope-'));
+  const git = (...args) => execFileSync('git', ['-C', dir, '-c', 'user.name=t', '-c', 'user.email=t@example.invalid', ...args], { encoding: 'utf8' }).trim();
+  const scope = (base, head) => {
+    const out = path.join(dir, 'github-output');
+    fs.writeFileSync(out, '');
+    execFileSync(process.execPath, [script, base, head], { cwd: dir, env: { ...process.env, GITHUB_OUTPUT: out } });
+    return fs.readFileSync(out, 'utf8');
+  };
+  try {
+    git('init', '-q');
+    fs.mkdirSync(path.join(dir, 'docs'));
+    fs.writeFileSync(path.join(dir, 'docs', 'a.md'), 'a\n');
+    git('add', '.');
+    git('commit', '-q', '-m', 'base');
+    const base = git('rev-parse', 'HEAD');
+    fs.writeFileSync(path.join(dir, 'docs', 'a.md'), 'b\n');
+    git('commit', '-q', '-am', 'docs');
+    const docs = git('rev-parse', 'HEAD');
+    fs.mkdirSync(path.join(dir, 'app'));
+    fs.writeFileSync(path.join(dir, 'app', 'x.ts'), 'x\n');
+    git('add', '.');
+    git('commit', '-q', '-m', 'app');
+    const app = git('rev-parse', 'HEAD');
+    assert.equal(scope(base, docs), 'run=false\n');
+    assert.equal(scope(base, app), 'run=true\n');
+    assert.equal(scope('', docs), 'run=true\n', 'an unknown change set must run the suites');
+    assert.equal(scope('c'.repeat(40), docs), 'run=true\n', 'a git failure must run the suites');
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('visual:check runs after the suites and always uploads its report as a non-gating artifact', () => {
