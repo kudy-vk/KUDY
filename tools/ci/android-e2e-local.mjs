@@ -118,10 +118,19 @@ export function notVerifiedReasons(layout, { exists = fs.existsSync } = {}) {
 export const notVerifiedLine = (reason) => `Android E2E: NOT-VERIFIED (${reason})`;
 
 // checkout-lock.mjs policy mapped to this runner's decisions: a lock owned by
-// a live process means wait; a stale lock is reported and never taken over.
+// a live process means wait; a stale or unreadable lock is reported and never
+// taken over — waiting on an unreadable holder would loop forever because its
+// liveness can never be re-checked.
 export function lockVerdict(lock) {
   if (lock.holder === undefined) return { action: 'acquired' };
-  return { action: lock.stale ? 'stale' : 'wait', holder: lock.holder };
+  if (lock.stale || !Number.isInteger(lock.holder.pid)) return { action: 'stale', holder: lock.holder };
+  return { action: 'wait', holder: lock.holder };
+}
+
+// The deps marker decides the npm ci short-cut; anything unreadable means
+// reinstall (the marker only ever saves time, never correctness).
+export function markerAllowsSkip(marker, lockHash, nodeModulesReady) {
+  return Boolean(nodeModulesReady && marker && marker.lockHash && marker.lockHash === lockHash);
 }
 
 // The scope script's stdout decides the short-cut; anything unreadable keeps
@@ -242,7 +251,7 @@ async function ensureDependencies(layout, sha, env, log) {
   try {
     marker = JSON.parse(fs.readFileSync(markerFile, 'utf8'));
   } catch { /* absent or unreadable marker → reinstall */ }
-  if (nodeModulesReady && marker?.lockHash && marker.lockHash === lockHash) {
+  if (markerAllowsSkip(marker, lockHash, nodeModulesReady)) {
     log({ step: 'deps', decision: 'npm ci skipped', reason: 'package-lock.json unchanged since the last run' });
     return { ok: true };
   }
@@ -273,6 +282,12 @@ async function emulatorAvdName(layout, env, serial) {
   return result.output.split(/\r?\n/)[0]?.trim() ?? '';
 }
 
+async function isBootCompleted(layout, env, serial) {
+  const adb = path.join(layout.sdk, 'platform-tools', exe('adb'));
+  const boot = await runCommand(adb, ['-s', serial, 'shell', 'getprop', 'sys.boot_completed'], { env });
+  return boot.output.trim() === '1';
+}
+
 async function bootEmulator(layout, env, log) {
   const emulator = path.join(layout.sdk, 'emulator', exe('emulator'));
   const accel = spawnSync(emulator, ['-accel-check'], { env, encoding: 'utf8' });
@@ -289,15 +304,13 @@ async function bootEmulator(layout, env, log) {
     { cwd: layout.root, env, detached: true, windowsHide: true,
       stdio: ['ignore', fs.openSync(logFile, 'a'), fs.openSync(logFile, 'a')] });
   child.unref();
-  const adb = path.join(layout.sdk, 'platform-tools', exe('adb'));
   for (let attempt = 0; attempt < 120; attempt += 1) {
     await sleep(5000);
     const serials = await bootedEmulators(layout, env);
     for (const serial of serials) {
       const avd = await emulatorAvdName(layout, env, serial);
       if (avd !== AVD_NAME) continue;
-      const boot = await runCommand(adb, ['-s', serial, 'shell', 'getprop', 'sys.boot_completed'], { env });
-      if (boot.output.trim() === '1') return { ok: true, serial };
+      if (await isBootCompleted(layout, env, serial)) return { ok: true, serial };
     }
   }
   return { ok: false, message: `emulator ${AVD_NAME} did not boot within 10 min (log: ${logFile})` };
@@ -369,9 +382,11 @@ async function main() {
     verdict = lockVerdict(lock);
   }
   if (verdict.action === 'stale') {
+    const cause = verdict.holder.unreadable ? 'unreadable' : 'stale';
     const who = verdict.holder.pid ?? JSON.stringify(verdict.holder);
-    console.error(`Android E2E: stale local-runner lock ${layout.lockFile} left by process ${who} `
-      + `(${verdict.holder.command ?? 'unknown'}, started ${verdict.holder.startedAt ?? 'unknown'}); `
+    console.error(`Android E2E: ${cause} local-runner lock ${layout.lockFile} `
+      + `${verdict.holder.unreadable ? 'cannot be read' : `left by process ${who} `
+        + `(${verdict.holder.command ?? 'unknown'}, started ${verdict.holder.startedAt ?? 'unknown'})`}; `
       + 'it is not removed automatically. If no local E2E run is in progress, delete that file and rerun.');
     log({ step: 'lock', verdict: 'stale-refused', holder: verdict.holder });
     return EXIT.lockStale;
@@ -426,6 +441,20 @@ async function main() {
       return EXIT.fail;
     }
     serial = existing[0];
+    // An adopted emulator may still be mid-boot (a crashed run left it
+    // starting); wait for boot completion instead of handing the suites a
+    // device that cannot answer.
+    let booted = false;
+    for (let attempt = 0; attempt < 12 && !booted; attempt += 1) {
+      booted = await isBootCompleted(layout, env, serial);
+      if (!booted) await sleep(5000);
+    }
+    if (!booted) {
+      console.error(`Android E2E: adopted emulator ${serial} has not finished booting within 60 s; `
+        + 'restart it or wait and rerun — the runner never kills it.');
+      log({ step: 'emulator', verdict: 'adopted-not-booted', serial });
+      return EXIT.fail;
+    }
     log({ step: 'emulator', decision: 'adopted booted emulator', serial });
   } else if (existing.length > 1) {
     console.error(`Android E2E: several emulators are booted ([${existing.join(', ')}]); `

@@ -10,7 +10,7 @@ import { after, describe, it } from 'node:test';
 
 import { acquireLock } from '../android-build/checkout-lock.mjs';
 import {
-  EXIT, driveOf, findJdk17, lockVerdict, notVerifiedLine, notVerifiedReasons,
+  EXIT, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine, notVerifiedReasons,
   probePort, resolveLayout, scopeOutcome, summaryLine,
 } from './android-e2e-local.mjs';
 
@@ -115,6 +115,12 @@ describe('android-e2e-local lock policy', () => {
     assert.equal(lockVerdict({ holder: { pid: 42 }, stale: true }).action, 'stale');
   });
 
+  it('refuses an unreadable lock instead of waiting forever (revert: unreadable → wait loop)', () => {
+    const verdict = lockVerdict({ holder: { unreadable: 'D:\\KUDY-Android\\runner.lock' }, stale: false });
+    assert.equal(verdict.action, 'stale', 'a holder without a pid can never be re-checked as dead');
+    assert.equal(lockVerdict({ holder: { pid: 'not-a-number' }, stale: false }).action, 'stale');
+  });
+
   it('real lock: the second caller sees a holder and never rewrites the file', () => {
     const root = makeTmpRoot();
     const file = path.join(root, 'runner.lock');
@@ -127,6 +133,16 @@ describe('android-e2e-local lock policy', () => {
     assert.equal(onDisk.command, 'e2e:android:local');
     first.release();
     assert.equal(acquireLock(file, 'e2e:android:local').release !== undefined, true, 'lock is reusable after release');
+  });
+});
+
+describe('android-e2e-local npm ci short-cut marker', () => {
+  it('skips only with a matching hash on a ready install (revert: corrupt marker skips npm ci)', () => {
+    assert.equal(markerAllowsSkip({ lockHash: 'abc' }, 'abc', true), true);
+    assert.equal(markerAllowsSkip({ lockHash: 'abc' }, 'abd', true), false, 'hash mismatch must reinstall');
+    assert.equal(markerAllowsSkip(null, 'abc', true), false, 'absent marker must reinstall');
+    assert.equal(markerAllowsSkip({}, 'abc', true), false, 'marker without a hash must reinstall');
+    assert.equal(markerAllowsSkip({ lockHash: 'abc' }, 'abc', false), false, 'no node_modules must reinstall');
   });
 });
 
