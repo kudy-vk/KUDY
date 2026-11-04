@@ -244,11 +244,12 @@ async function ensureDependencies(layout, sha, env, log) {
   const result = await runCommand(npmCommand(), npmArgs(['ci']), { cwd: layout.checkout, env,
     logFile: path.join(layout.logs, `npm-ci-${stamp()}.log`) });
   if (result.code !== 0) return { ok: false, message: `npm ci failed with exit ${result.code}` };
-  try {
-    fs.writeFileSync(markerFile, `${JSON.stringify({ lockHash, head: sha, at: new Date().toISOString() })}\n`);
+    try {
+    fs.writeFileSync(markerFile, `${JSON.stringify({ lockHash, head: sha, marker: 'e2e-local deps marker' })}\n`);
   } catch (error) {
     log({ step: 'deps', decision: 'marker not written', reason: error.message });
   }
+  log({ step: 'deps', decision: 'npm ci ran', head: sha });
   return { ok: true };
 }
 
@@ -392,17 +393,21 @@ async function main() {
   const prebuild = await runCommand(npxCommand(), npxArgs(['expo', 'prebuild', '--platform', 'android', '--no-install']),
     { cwd: layout.checkout, env, logFile: path.join(layout.logs, `prebuild-${runStamp}.log`) });
   if (prebuild.code !== 0) {
+    log({ step: 'prebuild', exitCode: prebuild.code });
     console.log(summaryLine({ ok: false, suite: 'expo prebuild', sha }));
     return EXIT.fail;
   }
+  log({ step: 'prebuild', exitCode: 0 });
   const build = await runCommand(process.execPath, [path.join(layout.checkout, 'tools', 'android-build', 'android-build.mjs'),
     'build', '--build-root', layout.buildRoot, '--sdk', layout.sdk, '--jdk', layout.jdk],
   { cwd: layout.checkout, env, logFile: path.join(layout.logs, `build-${runStamp}.log`) });
   const apkPath = path.join(layout.checkout, 'android', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
   if (build.code !== 0 || !fs.existsSync(apkPath)) {
+    log({ step: 'build', exitCode: build.code, apk: false });
     console.log(summaryLine({ ok: false, suite: 'build', sha }));
     return EXIT.fail;
   }
+  log({ step: 'build', exitCode: build.code, apk: true, apkPath });
 
   // 5. emulator: adopt a booted kudy-ci, otherwise boot one; never kill.
   const existing = await bootedEmulators(layout, env);
