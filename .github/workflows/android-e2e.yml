@@ -9,10 +9,11 @@ on:
     - cron: '17 2 * * *'
 permissions:
   contents: read
-# A newer push to the same PR cancels the superseded run; main pushes,
-# nightly and manual runs are never cancelled.
+# A newer push to the same PR cancels the superseded run. Every other run
+# gets its own group (run_id): a shared group would keep only one pending
+# run and silently cancel a queued main push.
 concurrency:
-  group: android-e2e-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  group: android-e2e-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   # Skips the emulator job only when every changed file is on the
@@ -44,7 +45,8 @@ jobs:
           esac
   smoke-and-walk:
     needs: scope
-    if: needs.scope.outputs.run == 'true'
+    # Fail-safe: only an explicit run=false skips; an empty output runs.
+    if: needs.scope.outputs.run != 'false'
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     env:
