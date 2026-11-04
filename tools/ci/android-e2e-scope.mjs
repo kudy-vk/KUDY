@@ -1,9 +1,11 @@
-// Decides whether a change set needs the Android E2E job (emulator suites +
-// visual:check, ~40 min). Deny by default: the job is skipped only when EVERY
-// changed file matches the explicit allowlist of paths the Android app and
-// its E2E/visual tooling never read. Any other path — including a new
-// directory nobody listed yet — runs the job, and so does an unknown change
-// set (missing SHAs, git failure). Schedule and manual runs never call this.
+// Decides whether a change set needs the Android E2E suites (emulator smoke,
+// walk, discovery + visual:check). Since 2026-11-04 they run on a local
+// emulator before each push (docs/agent-rules/android-e2e-local.md); the
+// hosted workflow is manual-only and does not call this. Deny by default:
+// the suites are skipped only when EVERY changed file matches the explicit
+// allowlist of paths the Android app and its E2E/visual tooling never read.
+// Any other path — including a new directory nobody listed yet — runs them,
+// and so does an unknown change set (missing SHAs, git failure).
 //
 // CLI: node tools/ci/android-e2e-scope.mjs <base-sha> <head-sha>
 // Prints `run=true|false` and appends it to $GITHUB_OUTPUT when set.
