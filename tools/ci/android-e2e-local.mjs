@@ -79,7 +79,7 @@ export function resolveLayout(root) {
     jdk,
   };
   for (const [name, dir] of Object.entries(layout)) {
-    if (name === 'jdk') continue;
+    if (name === 'jdk' || name === 'root') continue; // root is checked above
     if (driveOf(dir) !== 'D:\\') errors.push(`${name} path ${dir} is not on drive D:`);
   }
   return errors.length > 0 ? { errors } : { layout };
