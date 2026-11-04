@@ -81,6 +81,7 @@ function fakeBuildOutputs() {
 // so an unexpected step past the rule under test turns the test red.
 function stubIo(overrides = {}) {
   const calls = {};
+  const order = [];
   const defaults = {
     git: (args) => (args[0] === 'rev-parse' ? HEAD : BASE),
     runScopeTool: () => RUN_TRUE,
@@ -100,11 +101,19 @@ function stubIo(overrides = {}) {
     calls[name] = [];
     io[name] = (...args) => {
       calls[name].push(args);
+      order.push(name);
       return impl(...args);
     };
   }
   io.calls = calls;
+  io.order = order;
   return io;
+}
+
+// Index of an io method's first call in the global invocation order —
+// io.calls.<name> only records that method's arguments.
+function callIndex(io, name) {
+  return io.order.indexOf(name);
 }
 
 // --sdk/--jdk make the preflight deterministic on any host (CI has no
@@ -309,6 +318,13 @@ test('the suites run in the CI order, then the non-gating visual:check; the emul
       assert.deepEqual(io.calls.runSuite.map(([runArgs]) => runArgs.suite), [...SUITES], 'smoke, walk, discovery');
       assert.equal(io.calls.runVisualCheck.length, 1, 'visual:check runs after the suites');
       assert.deepEqual(io.calls.stopEmulator.map(([stopArgs]) => stopArgs.serial), ['emulator-5554']);
+      // CI order: the APK is built before the emulator boots — a guest that
+      // sits through a full Gradle build starves (lmkd thrashing, SystemUI
+      // ANR — the first local run's failure, issue #132 debugging log).
+      assert.ok(
+        callIndex(io, 'buildApk') < callIndex(io, 'bootEmulator'),
+        'the APK build must happen before the emulator boots (CI order)',
+      );
     } finally {
       restore();
     }

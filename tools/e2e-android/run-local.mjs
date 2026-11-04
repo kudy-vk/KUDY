@@ -401,19 +401,14 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     const foreign = foreignEmulatorReason((await io.listBootedDevices(adb)).filter((name) => /^emulator-\d+$/.test(name)));
     if (foreign !== null) return notVerified(foreign);
 
-    // 4. Emulator (criterion 2.3): the CI AVD with the CI flags, KVM.
+    // 4. Build the debug APK for the exact HEAD (criterion 2.2) BEFORE the
+    // emulator boots: CI's order too — a full Gradle build pegs every core,
+    // and a guest sitting through it starves (lmkd thrashing + SystemUI ANR
+    // in the first run — the emulator must not share the host with the
+    // build). Booting is the last step before the suites, like CI.
     const runDir = path.join(ARTIFACTS_ROOT, `${new Date().toISOString().replaceAll(/[:.]/g, '-')}-local`);
     fs.mkdirSync(runDir, { recursive: true });
     console.log(`-- run dir: ${runDir}`);
-    console.log(`-- booting the CI AVD ${AVD_NAME} with KVM (flags: ${EMULATOR_FLAGS.join(' ')})`);
-    const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log') });
-    if (!boot.booted) {
-      await io.stopEmulator({ child: boot.child, adbPath: adb, serial: boot.serial });
-      return notVerified(`emulator did not boot within ${Math.round((BOOT_ATTEMPTS * BOOT_POLL_MS) / 1000)} s (log: ${path.join(runDir, 'emulator.log')})`);
-    }
-    emulator = boot;
-
-    // 5. Build the debug APK for the exact HEAD (criterion 2.2).
     const buildRoot = args['build-root'] ?? path.join(kudyRoot, 'build');
     if (prebuildNeeded()) {
       console.log('-- android/ is missing — running expo prebuild --platform android --no-install');
@@ -435,6 +430,15 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     }
     if (!fs.existsSync(apkPath)) return notVerified(`the built APK is missing: ${apkPath}`);
     console.log(`-- APK: ${apkPath} (sha256 ${sha256(apkPath)})`);
+
+    // 5. Emulator (criterion 2.3): the CI AVD with the CI flags, KVM.
+    console.log(`-- booting the CI AVD ${AVD_NAME} with KVM (flags: ${EMULATOR_FLAGS.join(' ')})`);
+    const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log') });
+    if (!boot.booted) {
+      await io.stopEmulator({ child: boot.child, adbPath: adb, serial: boot.serial });
+      return notVerified(`emulator did not boot within ${Math.round((BOOT_ATTEMPTS * BOOT_POLL_MS) / 1000)} s (log: ${path.join(runDir, 'emulator.log')})`);
+    }
+    emulator = boot;
 
     // 6. The suites (criterion 2.4): smoke, walk, discovery — a SKIP line is
     // never a pass.
