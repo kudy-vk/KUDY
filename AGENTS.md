@@ -14,6 +14,8 @@ Search before adding helpers. On a jscpd fail, refactor or reuse; do not paste a
 
 Local pre-push: `npm run arch:check`, then `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`
 
+Before every push to a pull-request branch, read and follow `docs/agent-rules/android-e2e-local.md`. CI runs only the fast checks; when the change touches project code, the Android E2E suites run on a local emulator, and documentation-only or design-mockup changes skip them.
+
 ## Publish task breakdowns to GitHub Issues
 
 After splitting an approved specification into tasks, create or update the corresponding GitHub Issues in this repository as part of the same work. Local task files alone do not complete the task breakdown. This rule authorizes issue creation and synchronization without another confirmation.
