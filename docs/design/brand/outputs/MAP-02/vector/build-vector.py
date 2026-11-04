@@ -11,6 +11,7 @@ source PNG and library versions; no randomness, no embedded raster.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import cv2
@@ -345,8 +346,17 @@ def build():
     def flat(parts):
         return [line for _, body in parts for line in body]
 
-    streets = [group(f'streets-{name}', flat(stacked(c['streets'] & (region == index), labels,
-                                                     f'street-{name}', details=False)), '    ', layer=False)
+    def street_group(name, lines):
+        # The group carries the common street colour, so recolouring a district's
+        # streets is one attribute; only paths in another colour keep their own fill.
+        fills = [re.search(r' fill="(#[0-9a-f]{6})"', line).group(1) for line in lines]
+        common = max(sorted(set(fills)), key=fills.count)
+        lines = [line.replace(f' fill="{common}"', '', 1) if fill == common else line
+                 for line, fill in zip(lines, fills)]
+        return group(f'streets-{name}', lines, '    ', layer=False, extra=f' fill="{common}"')
+
+    streets = [street_group(name, flat(stacked(c['streets'] & (region == index), labels,
+                                               f'street-{name}', details=False)))
                for index, name in enumerate(region_names)]
     outlines = [group(f'outlines-{name}', flat(stacked(c['ink'] & (region == index), labels,
                                                        f'outline-{name}', details=False)), '    ', layer=False)

@@ -21,11 +21,8 @@ INKSCAPE = '{http://www.inkscape.org/namespaces/inkscape}'
 LAYERS = ['outer-contour', 'water', 'fortifications', 'greenery', 'districts', 'streets',
           'buildings-landmarks', 'trees', 'outlines', 'district-markers']
 EMPTY_BY_DECISION = {'buildings-landmarks', 'district-markers'}
-PIECE_IDS = ['nearby', 'guides', 'discovery', 'reserve-1', 'kudy']
-DISTRICTS = [f'district-{pid}' for pid in PIECE_IDS] + ['district-strips']
 MIN_PATHS = {'water': 20, 'fortifications': 100, 'greenery': 5, 'streets': 100, 'trees': 300, 'outlines': 100}
 PATH_DATA = re.compile(r'^(M[-0-9. ]+Z)+$')
-PAPER = '#faf7f2'
 HIDE_DETAIL = '#outer-contour,#streets,#trees,#outlines{display:none}'
 
 
@@ -39,6 +36,9 @@ def load(name, filename):
 EXPORT = load('export_vector', 'export.py')
 BUILD = EXPORT.load_builder()
 PALETTE = {value for _, _, value in BUILD.PALETTE}
+PIECE_IDS = BUILD.PIECE_IDS
+DISTRICTS = [f'district-{pid}' for pid in PIECE_IDS] + ['district-strips']
+PAPER = EXPORT.PAPER
 
 
 def check_structure(text):
@@ -56,6 +56,7 @@ def check_structure(text):
     assert [g.get('id') for g in layers] == LAYERS, 'layer order or ids changed'
     ids = [node.get('id') for node in root.iter() if node.get('id')]
     assert len(ids) == len(set(ids)), 'duplicate ids'
+    parent = {child: node for node in root.iter() for child in node}
     counts = {}
     for layer in layers:
         lid = layer.get('id')
@@ -69,8 +70,11 @@ def check_structure(text):
         assert counts[lid] >= MIN_PATHS.get(lid, 0), f'{lid}: {counts[lid]} paths, too few'
         for path in paths:
             assert PATH_DATA.match(path.get('d', '')), f"{path.get('id')}: unexpected path data"
-            assert path.get('fill') in PALETTE, f"{path.get('id')}: fill outside the palette"
+            fill = path.get('fill') or parent[path].get('fill')
+            assert fill in PALETTE, f"{path.get('id')}: fill outside the palette"
     assert counts['outer-contour'] == 1, 'outer contour must be one silhouette path'
+    for g in root.find(f"{NS}g[@id='streets']"):
+        assert g.get('fill') in PALETTE, f"{g.get('id')}: street colour must sit on the group"
     districts = root.find(f"{NS}g[@id='districts']")
     assert [g.get('id') for g in districts] == DISTRICTS, 'district groups changed'
     for g in districts:
@@ -220,8 +224,7 @@ def main():
         root = ET.fromstring(committed)
         for pid in PIECE_IDS:
             fill = BUILD.HEX[BUILD.NAMES.index(root.find(f".//{NS}g[@id='district-{pid}']").get('data-fill'))]
-            streets = [p.get('fill') for p in root.find(f".//{NS}g[@id='streets-{pid}']")]
-            street = max(set(streets), key=streets.count)
+            street = root.find(f".//{NS}g[@id='streets-{pid}']").get('fill')
             print(f'  streets-{pid}: {street} on {fill} = {contrast(hex_bgr(street), hex_bgr(fill)):.2f}:1')
     print('MAP-02 vector master: all checks passed (draft; not production-approved).')
 

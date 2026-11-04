@@ -1,0 +1,6 @@
+# Exact versions that reproduce map-master-vector.svg byte for byte
+# (verify-vector.py compares a fresh build with the committed file).
+opencv-python==4.14.0.94
+numpy==2.5.3
+scipy==1.18.1
+scikit-image==0.26.0

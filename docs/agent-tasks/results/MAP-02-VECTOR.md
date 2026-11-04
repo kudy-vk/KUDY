@@ -36,7 +36,7 @@
 
 ```text
 $ python docs/design/brand/outputs/MAP-02/vector/export.py
-svg: map-master-vector.svg (1000 kB) · png (660 kB) · full (656 kB) · small (75 kB) · phone (229 kB)
+svg: map-master-vector.svg (997 kB) · png (660 kB) · full (656 kB) · small (75 kB) · phone (229 kB)
 
 $ python docs/design/brand/outputs/MAP-02/vector/verify-vector.py
 Structure: fully vector, layers outer-contour=1, water=192, fortifications=575, greenery=56,
@@ -56,11 +56,11 @@ MAP-02 vector master: all checks passed (draft; not production-approved).
 
 ΔE — адлегласць колеру ў CIELAB (шкала L 0–100) пасля накладання на паперу. Мяжа «ΔE < 20» азначае, што колер пазнаецца як той самы. Парогі праверкі: IoU ≥ 0,995, сярэдні ΔE ≤ 8 па карце і па кожнай частцы, доля ΔE < 20 ≥ 0,92, 0 празрыстых пікселяў унутры карты.
 
-Асяроддзе: Windows 11, Python 3.14.6, OpenCV 4.14.0, NumPy 2.5.3, SciPy 1.18.1, scikit-image 0.26.0, Node.js 24.13.0, Playwright 1.63.0, Chrome 156.0.8078.80. SVG паўтараецца да байта на гэтых версіях. Іншыя версіі OpenCV або scikit-image могуць даць іншы файл, і тады праверка паўтаральнасці падае.
+Асяроддзе: Windows 11, Python 3.14.6, OpenCV 4.14.0, NumPy 2.5.3, SciPy 1.18.1, scikit-image 0.26.0, Node.js 24.13.0, Playwright 1.63.0, Chrome 156.0.8078.80. SVG паўтараецца да байта на гэтых версіях. Версіі Python-бібліятэк зафіксаваныя ў [requirements.txt](../../design/brand/outputs/MAP-02/vector/requirements.txt); з іншымі версіямі праверка паўтаральнасці можа ўпасці.
 
 ## Абмежаванні і пытанні ўладальніку
 
-- Кантраст вуліц у абранай карце нізкі. Пры 240 px вуліцы чытаюцца як фактура. Змена колеру вуліц — мастацкае рашэнне. Яго трэба прыняць асобна; цяпер гэта адзін атрыбут `fill` у пласце `streets`.
+- Кантраст вуліц у абранай карце нізкі. Пры 240 px вуліцы чытаюцца як фактура. Змена колеру вуліц — мастацкае рашэнне. Яго трэба прыняць асобна. Колер задаецца атрыбутам `fill` на шасці групах `streets-*` (уласны колер маюць толькі 5 масткоў у `streets-discovery`); каб змена перажыла перазборку, яе ўносяць у `build-vector.py`.
 - Плоскія плямы на схілах валоў адрозніваюцца ад мяккіх градыентаў арыгінала (p95 ΔE 21,7 у асноўным на схілах і лініях).
 - Гістарычная дакладнасць і правы не правяраліся і не падмяняюцца перамалёўкай.
 - Прыладавая прыёмка, Showboat і design-QA не патрабуюцца: інтэрфейс аплікацыі і runtime-код не змяняліся.
