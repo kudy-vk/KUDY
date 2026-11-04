@@ -265,7 +265,9 @@ export async function startOriginServer({ port, logPath, outDir, fault, packages
 export const devClientUrl = (metroPort) =>
   `kudy://expo-development-client/?url=${encodeURIComponent(`http://localhost:${metroPort}`)}`;
 
-export async function coldStart(driver, url, { timeoutMs, caseSlug }) {
+// Legacy catalog journeys explicitly warm-link to Explore after verifying the new home.
+// homeOnly keeps home-navigation cases on the real cold-start destination.
+export async function coldStart(driver, url, { timeoutMs, caseSlug, homeOnly = false }) {
   await driver.forceStop(APP_PACKAGE);
   await driver.launchDeepLink(url);
   // Condition wait over fresh dumps. The dev client's one-time onboarding
@@ -275,11 +277,13 @@ export async function coldStart(driver, url, { timeoutMs, caseSlug }) {
   const deadline = Date.now() + timeoutMs;
   let lastDumpPath = null;
   let lastDumpError = null;
+  let menuVerified = false;
+  let catalogOpened = false;
   for (;;) {
     const remainingMs = deadline - Date.now();
     if (remainingMs <= 0) {
       throw new DriverError(
-        `timeout after ${timeoutMs} ms waiting for screen-Explore on cold start; ` +
+        `timeout after ${timeoutMs} ms waiting for screen-Menu${homeOnly?'':' then screen-Explore'} on cold start; ` +
         `last UI dump: ${lastDumpPath ?? '(no successful dump)'}` +
         (lastDumpError ? `; last dump error: ${lastDumpError.message}` : ''),
       );
@@ -294,7 +298,15 @@ export async function coldStart(driver, url, { timeoutMs, caseSlug }) {
     }
     if (dump) {
       const nodes = parseDump(dump.xml);
-      if (findNode(nodes, { testID: 'screen-Explore' })) return;
+      if (findNode(nodes, { testID: 'screen-Menu' })) {
+        menuVerified = true;
+        if (homeOnly) return;
+        if (!catalogOpened) {
+          await driver.launchDeepLink('kudy://explore');
+          catalogOpened = true;
+        }
+      }
+      if (menuVerified && findNode(nodes, { testID: 'screen-Explore' })) return;
       if (findNode(nodes, { text: 'Continue' })) await driver.back();
     }
     await sleep(Math.min(500, Math.max(0, deadline - Date.now())));
@@ -345,9 +357,24 @@ async function backToExplore(driver, caseSlug) {
 async function phaseA(driver, metroPort) {
   const url = devClientUrl(metroPort);
 
-  await runCase('cold start reaches Explore', 'cold-start', driver, () =>
-    coldStart(driver, url, { timeoutMs: FIRST_BUNDLE_TIMEOUT_MS, caseSlug: 'cold-start' }),
+  await runCase('cold start reaches the map menu', 'cold-start', driver, () =>
+    coldStart(driver, url, { timeoutMs: FIRST_BUNDLE_TIMEOUT_MS, caseSlug: 'cold-start', homeOnly: true }),
   );
+
+  await runCase('map menu routes return home and reserved pieces stay disabled', 'map-menu', driver, async () => {
+    await coldStart(driver, url, { timeoutMs: BUNDLE_TIMEOUT_MS, caseSlug: 'map-menu', homeOnly: true });
+    const nodes = parseDump((await driver.dump('dump-map-menu.xml')).xml);
+    for (const id of ['reserve-1', 'kudy']) {
+      const node = findNode(nodes, { testID: `city-menu-access-${id}` });
+      if (!node || node.enabled) throw new DriverError(`reserved map menu piece ${id} must be visible and disabled`);
+    }
+    for (const [id,screen] of [['nearby','screen-Map'],['guides','screen-Guides'],['discovery','screen-Discovery']]) {
+      await driver.tapSelector({ testID: `city-menu-access-${id}` }, { timeoutMs: CASE_TIMEOUT_MS });
+      await driver.waitFor({ testID: screen }, { timeoutMs: CASE_TIMEOUT_MS });
+      await driver.back();
+      await driver.waitFor({ testID: 'screen-Menu' }, { timeoutMs: CASE_TIMEOUT_MS });
+    }
+  });
 
   for (const [name, slug, linkId, screenId] of [
     ['Nearby opens and Back returns to Explore', 'tab-nearby', 'link-nearby', 'screen-Map'],

@@ -121,21 +121,34 @@ test('the Android feedback read times out when the server stalls mid-response', 
   }
 });
 
-test('cold start retries a transient uiautomator failure before Explore', async () => {
+test('cold start verifies the menu before warming the legacy Explore suites', async () => {
   let dumps = 0;
   const calls = [];
   const driver = {
     forceStop: async () => { calls.push('stop'); },
-    launchDeepLink: async () => { calls.push('launch'); },
+    launchDeepLink: async (url) => { calls.push(url); },
     dump: async () => {
       dumps += 1;
       if (dumps === 1) throw new Error('adb timed out during uiautomator dump');
-      return { localPath: '/tmp/fresh-dump.xml', xml: '<node resource-id="screen-Explore" bounds="[0,0][10,10]"/>' };
+      const id=dumps===2?'screen-Menu':'screen-Explore';
+      return { localPath: '/tmp/fresh-dump.xml', xml: `<node resource-id="${id}" bounds="[0,0][10,10]"/>` };
     },
   };
   await coldStart(driver, 'kudy://expo-development-client/', { timeoutMs: 2_000, caseSlug: 'retry' });
-  assert.deepEqual(calls, ['stop', 'launch']);
-  assert.equal(dumps, 2);
+  assert.deepEqual(calls, ['stop', 'kudy://expo-development-client/', 'kudy://explore']);
+  assert.equal(dumps, 3);
+});
+
+test('home-only cold start stays on the new menu', async () => {
+  const launches=[];
+  const driver={forceStop:async()=>{},launchDeepLink:async url=>{launches.push(url);},dump:async()=>({localPath:'menu.xml',xml:'<node resource-id="screen-Menu"/>'})};
+  await coldStart(driver,'kudy://expo-development-client/',{timeoutMs:100,caseSlug:'home',homeOnly:true});
+  assert.deepEqual(launches,['kudy://expo-development-client/']);
+});
+
+test('the old home marker alone cannot satisfy the new cold-start contract', async () => {
+  const driver={forceStop:async()=>{},launchDeepLink:async()=>{},dump:async()=>({localPath:'old.xml',xml:'<node resource-id="screen-Explore"/>'})};
+  await assert.rejects(coldStart(driver,'kudy://expo-development-client/',{timeoutMs:20,caseSlug:'old'}),/waiting for screen-Menu/);
 });
 
 test('cold start reports a persistent dump failure at its deadline', async () => {
@@ -146,7 +159,7 @@ test('cold start reports a persistent dump failure at its deadline', async () =>
   };
   await assert.rejects(
     coldStart(driver, 'kudy://expo-development-client/', { timeoutMs: 20, caseSlug: 'failure' }),
-    /timeout after 20 ms waiting for screen-Explore.*adb still unavailable/,
+    /timeout after 20 ms waiting for screen-Menu.*adb still unavailable/,
   );
 });
 

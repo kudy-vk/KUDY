@@ -44,8 +44,10 @@ UI-крыніца: `2a7980f6f170023e338790e3fc77c8b4a9e6a88f`. Праверкі 
 | `npx jest --runInBand --silent` | PASS: 42 suites, 328 tests; 60.952 s. |
 | `node docs/design/brand/outputs/menu-map-city-only/native/verify-component.mjs app/menu.test.tsx docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.test.tsx` | PASS: 11/11. |
 | `node --no-warnings --experimental-strip-types --test docs/design/brand/outputs/menu-map-city-only/native/model.test.mjs` | PASS: 7/7. |
+| `node --no-warnings --experimental-strip-types --test tools/e2e-android/wiring.test.mjs` | PASS: 14/14. |
+| `npm run tools:check` | PASS: 92 production tool files clean. |
 | `uvx showboat==0.6.1 verify docs/demos/2026-11-04-map-06.md` | PASS; паўторныя вывады супадаюць. |
-| `npm test` | FAIL у Node-частцы: 2933 tests, 2854 passed, 6 failed, 73 skipped; 136429.0881 ms. Каманда не даходзіць да Jest праз `&&`; Jest выкананы асобна вышэй. |
+| `npm test` | FAIL у Node-частцы: 2935 tests, 2856 passed, 6 failed, 73 skipped; 100932.9669 ms. Каманда не даходзіць да Jest праз `&&`; Jest выкананы асобна вышэй. |
 
 Збоі поўнай Node-праверкі не замоўчваюцца. Іх файлы і ўваходныя крыніцы не змененыя гэтай задачай:
 
@@ -59,5 +61,7 @@ UI-крыніца: `2a7980f6f170023e338790e3fc77c8b4a9e6a88f`. Праверкі 
 Першапачатковы прагон дадаткова выявіў няправільна запісаны новы zh-радок і адсутныя web-залежнасці. Escape-памылка выпраўленая, залежнасці ўсталяваныя з існага `web/package-lock.json`; адпаведныя праверкі ў фінальным Node-прагоне прайшлі. Ніякія required checks або asserts не аслабленыя.
 
 Voka: незалежны субагент Codex з чыстым кантэкстам; пасля выпраўлення `assembled-menu-label-overlap` — Crit 0, High 0, Medium 0, Low 0, нявырашаных знаходак няма. Падаючы тэст пасля рэальнай зборкі быў запушчаны да выпраўлення; пасля яго правяраюцца схаваныя подпісы і pointer passthrough. Judge не запускаўся; агульны merge gate не сцвярджаецца зялёным. Скіл `arch-review` недаступны: асобны структурны вердыкт не выдадзены, межы правераныя `arch:check` і Voka.
+
+Перад перадачай дадаткова знойдзены і выпраўлены `stale-android-home-boot-contract`: `coldStart` раней чакаў толькі Explore і не мог прайсці новае меню. Цяпер кожны старт абавязкова бачыць Menu; старыя праверкі каталога затым яўна адкрываюць `/explore`, а home-only smoke правярае самі пункты карты і Back. Новыя тэсты не прымаюць стары Explore як доказ новага галоўнага экрана. Voka паўторна праверыў гэтую змену: нявырашаных знаходак няма. Эмулятарны прагон застаецца NOT-VERIFIED лакальна; наяўнасць гэтага кода не выдаецца за доказ CI-праходу.
 
 Retest focus: запусці дадатак → адкрыецца меню; націсні «Гіды» → Back → зноў разабраная карта. «Хутка» і KUDY не адкрываюць маршрутаў. Пры актыўным Run яго іконка вяртае ў тую самую прагулку.
