@@ -147,6 +147,9 @@ const childEnv = (layout, baseEnv) => {
   env.GRADLE_USER_HOME = path.join(layout.buildRoot, 'gradle-home');
   env.TEMP = layout.tmp;
   env.TMP = layout.tmp;
+  // The emulator's netsim subsystem reads TMPDIR, not TEMP/TMP; without it the
+  // emulator writes netsim.ini into the C: user temp (issue #124 AC 3).
+  env.TMPDIR = layout.tmp;
   env.npm_config_cache = layout.npmCache;
   const pathKey = Object.keys(env).find((key) => key.toLowerCase() === 'path') ?? 'PATH';
   const prepend = [path.join(layout.sdk, 'platform-tools'), layout.jdk ? path.join(layout.jdk, 'bin') : null]
