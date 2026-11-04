@@ -25,12 +25,8 @@ test('web E2E runs on PRs with installed Chromium and the real build/test comman
   assert.ok(!/continue-on-error:\s*true/.test(source));
 });
 
-test('Android E2E runs smoke, walk and discovery for every PR that touches the app', () => {
+test('Android E2E workflow runs smoke, walk and discovery when started manually', () => {
   const { source, workflow } = read('android-e2e.yml');
-  assert.deepEqual(workflow.on.pull_request.branches, ['main']);
-  assert.equal(workflow.on.pull_request.paths, undefined, 'app changes must trigger Android E2E');
-  assert.ok(workflow.on.workflow_dispatch !== undefined);
-  assert.ok(workflow.on.schedule?.length > 0);
   assert.ok(!JSON.stringify(workflow.jobs['smoke-and-walk'].env).includes('${{ runner.'), 'runner context is unavailable in jobs.env');
   const steps = workflow.jobs['smoke-and-walk'].steps;
   assert.ok(steps.some((step) => step.run?.includes('ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"') && step.run.includes('>> "$GITHUB_ENV"')));
@@ -44,23 +40,20 @@ test('Android E2E runs smoke, walk and discovery for every PR that touches the a
   assert.match(source, /tools\/e2e-android\/artifacts\//);
 });
 
-test('Android E2E is gated only by the deny-by-default scope job', () => {
+// Owner decision 2026-11-04: the hosted emulator job (up to 90 min) no
+// longer runs automatically; the PR-time check is the local pre-push rule.
+test('Android E2E starts only manually; the local pre-push rule owns the PR check', () => {
   const { workflow } = read('android-e2e.yml');
-  const job = workflow.jobs['smoke-and-walk'];
-  assert.equal(job.needs, 'scope');
-  assert.equal(job.if, "needs.scope.outputs.run != 'false'", 'an empty scope output must run the suites, not skip them');
-  const scope = workflow.jobs.scope;
-  assert.equal(scope.outputs.run, '${{ steps.scope.outputs.run }}');
-  const checkout = scope.steps.find((step) => step.uses?.startsWith('actions/checkout@'));
-  assert.equal(checkout.with['fetch-depth'], 0, 'the scope diff needs the base commit');
-  const run = scope.steps.find((step) => step.id === 'scope').run;
-  assert.match(run, /pull_request\) node tools\/ci\/android-e2e-scope\.mjs "\$PR_BASE" "\$PR_HEAD"/);
-  assert.match(run, /push\) node tools\/ci\/android-e2e-scope\.mjs "\$PUSH_BEFORE" "\$PUSH_AFTER"/);
-  assert.match(run, /\*\) echo 'run=true' >> "\$GITHUB_OUTPUT"/, 'nightly and manual runs must always run the suites');
-  assert.equal(workflow.concurrency['cancel-in-progress'], "${{ github.event_name == 'pull_request' }}");
-  // A shared group keeps one pending run and cancels the rest even without
-  // cancel-in-progress, so every non-PR run needs its own group.
-  assert.match(workflow.concurrency.group, /github\.event_name == 'pull_request' && format\('pr-\{0\}', github\.event\.pull_request\.number\) \|\| github\.run_id/);
+  assert.deepEqual(Object.keys(workflow.on), ['workflow_dispatch'], 'no pull_request, push or schedule trigger');
+  assert.deepEqual(Object.keys(workflow.jobs), ['smoke-and-walk']);
+  assert.equal(workflow.jobs['smoke-and-walk'].needs, undefined, 'a manual run always runs the suites');
+  const rule = fs.readFileSync(path.join(root, 'docs', 'agent-rules', 'android-e2e-local.md'), 'utf8');
+  assert.match(rule, /node tools\/ci\/android-e2e-scope\.mjs/, 'the rule decides with the shared scope script');
+  for (const suite of ['smoke', 'walk', 'discovery']) assert.match(rule, new RegExp(`--suite ${suite}\\b`), `the rule must run the ${suite} suite`);
+  assert.match(rule, /NOT-VERIFIED/, 'a host without an emulator must report, not pass');
+  for (const entry of ['AGENTS.md', 'CLAUDE.md', path.join('.cursor', 'rules', 'android-e2e-local.mdc')]) {
+    assert.match(fs.readFileSync(path.join(root, entry), 'utf8'), /docs\/agent-rules\/android-e2e-local\.md/, `${entry} must route to the rule`);
+  }
 });
 
 test('scope: docs-only change sets skip, anything else or an unknown set runs', () => {
