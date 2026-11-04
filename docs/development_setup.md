@@ -130,7 +130,7 @@ unavailable-станы гіда, прагулкі, месца, калекцыі 
 лаўнчэр dev-client, а не ў дадатак, таму роўтавыя кейсы ідуць па цёплай схеме
 (спачатку загрузка праз dev-client URL, потым спасылка ў жывы дадатак).
 
-Спынне Metro/origin ідзе па process group (POSIX-ідыёма; праверана на Linux — на Windows групавы kill дэградуе да журнала і порт-полінгу, taskkill-галінка — наступны крок).
+Спынне Metro/origin ідзе па process group (POSIX-ідыёма; праверана на Linux — на Windows групавы kill дэградуе да журнала і порт-полінгу, taskkill-галінка — наступны крок). *Абноўлена 2026-11-04 (issue #124): у `tools/e2e-android/run-e2e.mjs` галінка Windows ужо выкарыстоўвае `taskkill /T /F` з наступным чаканнем закрыцця порта (`waitForPortClosed` кідае памылку, калі порт застаецца адкрытым); акрамя таго, лакальны ронер `npm run e2e:android:local` правярае свабоду портаў перад кожным сьюітам і завяршаецца з памылкай на заняты порт, не забіваючы чужыя серверы.*
 Артефакты няўдач — скрыншот, апошні UI-дамп і журналы працэсаў —
 складваюцца ў git-ігнараваную тэчку `tools/e2e-android/artifacts/`. Без
 `adb`, загружанага эмулятара або APK сюіт бачна SKIP-іць з прычыны і ніколі
@@ -260,6 +260,68 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/android-build/emulator
 папярэдняга прагону ён выдаляе перад новым запісам, а `results.json` і буфер крашаў стварае толькі як новыя файлы.
 Шляхі checkout, `$Sdk`, `$BuildRoot` і APK могуць мець прабелы: шлях да Expo CLI ідзе ў Metro ў двукоссі
 (`Start-Process` сам аргументы ў двукоссе не бярэ), астатнія запускі перадаюць шляхі цэлымі.
+
+## Лакальны Android E2E на адной камандзе (`npm run e2e:android:local`)
+
+Адна каманда правярае змены на лакальным эмулятары: скоп-праверка змен
+(`tools/ci/android-e2e-scope.mjs`), сінхранізацыя дакладнага HEAD выклікальнага
+checkout-а ў build-checkout, зборка debug APK праз
+`tools/android-build/android-build.mjs`, эмулятар AVD `kudy-ci` з апаратным
+паскарэннем, сьюіты `smoke`, `walk`, `discovery` і non-gating `visual:check`.
+Правіла для агентаў — `docs/agent-rules/android-e2e-local.md`: кожны агент
+праганяе гэту каманду перад push-ам змен, якія праходзяць скоп-праверку.
+
+Размяшчэнне (усё на D:, корань можна змяніць зменнай `KUDY_ANDROID_ROOT`):
+
+| Што | Дзе |
+|---|---|
+| Корань | `D:\KUDY-Android` |
+| JDK 17 (Temurin) | `D:\KUDY-Android\java\jdk-17.0.20.1+1` |
+| Android SDK | `D:\KUDY-Android\sdk` |
+| AVD `kudy-ci` (pixel_5) | `D:\KUDY-Android\avd` |
+| Build checkout (клон рэпазітара) | `D:\KUDY-Android\checkout` |
+| Зборка, журналы, visual-справаздачы, npm-кэш, TEMP | пад коранем |
+
+Разавая налада (выканана 2026-11-04):
+
+1. JDK 17: zip-архіў Temurin 17.0.20.1+1 (SHA-256 правераны), распакаваны ў `java\`.
+2. cmdline-tools у `sdk\cmdline-tools\latest`; ліцэнзіі прынятыя; пакеты тыя самыя,
+   што ў CI: `platform-tools`, `platforms;android-36`, `build-tools;36.0.0`,
+   `emulator`, `system-images;android-36;google_apis;x86_64`.
+3. AVD: `avdmanager create avd --name kudy-ci --device pixel_5
+   --package "system-images;android-36;google_apis;x86_64"` пры
+   `ANDROID_AVD_HOME=D:\KUDY-Android\avd`.
+4. Клон: `gh repo clone kudy-vk/KUDY D:\KUDY-Android\checkout`.
+
+Як працуе:
+
+- скоп-праверка: дакументальныя змены — радок «Android E2E: skipped (scope
+  run=false) on <sha>» і выхад 0, зборка і эмулятар не запускаюцца.
+- блакіроўка `runner.lock` па правілах `checkout-lock.mjs`: жывы ўладальнік —
+  чаканне з бачным паведамленнем; састарэлая блакіроўка — паведамленне і код 75,
+  сама ніколі не перахопліваецца.
+- зменныя асяроддзя (`JAVA_HOME`, `ANDROID_HOME`, `ANDROID_SDK_ROOT`,
+  `ANDROID_USER_HOME`, `ANDROID_AVD_HOME`, `GRADLE_USER_HOME`, `TEMP`, `TMP`,
+  `npm_config_cache`) задаюцца толькі працэсам-нашчадкам гэтага прагону;
+  глабальныя налады, `%USERPROFILE%` і `%LOCALAPPDATA%` не кранаюцца.
+- эмулятар: прымае ўжо загружаны `kudy-ci`, у адваротным выпадку запускае свой і
+  пакідае яго працаваць для наступных прагонаў; чужы AVD або некалькі загружаных
+  эмулятараў — памылка (код 1), чужыя працэсы ніколі не забіваюцца.
+- порты Metro (8083) і e2e-origin (8792) правяраюцца перад сьюітамі; заняты
+  порт — памылка, чужы сервер не забіваецца.
+- сьюіт з нулявым выхадам — далей; радок `SKIP e2e:android` або нянулявы выхад —
+  «Android E2E: failed (<сьюіт>) on <sha>» і код 1, астатнія сьюіты не
+  запускаюцца.
+- `visual:check` — non-gating: вынік запісваецца ў `visual\<часавая пазнака>`,
+  на код выхаду не ўплывае.
+- калі нешта адсутнічае — «Android E2E: NOT-VERIFIED (<прычына>)» і код 86;
+  праход ніколі не рэпартуецца без рэальнага прагону.
+- апаратнае паскарэнне: `emulator -accel-check` павінен пацвярджаць WHPX/HVF/KVM;
+  без яго — NOT-VERIFIED (86), `-accel off` забаронены.
+- кожны крок запісваецца ў `logs\run-<часавая пазнака>.jsonl` (крок, рашэнне,
+  прычына) — прагон рэканструюецца па логу без кансолі.
+- выхадныя коды: 0 — праход, 1 — няўдача, 64 — usage, 75 — састарэлая
+  блакіроўка, 86 — NOT-VERIFIED.
 
 ## Профілі і асяроддзі
 
