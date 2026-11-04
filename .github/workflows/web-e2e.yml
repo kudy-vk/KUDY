@@ -7,7 +7,24 @@ on:
 permissions:
   contents: read
 jobs:
+  # Issue #134: the Playwright journeys exercise the web app, so a docs-only
+  # change set (shared deny-by-default scope script) skips them. The web
+  # content guards that read docs/ run inside npm test (web/lib/content/*).
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.docs-only.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: docs-only scope
+        id: docs-only
+        run: node tools/ci/docs-only-scope.mjs "${{ github.event.pull_request.base.sha || github.event.before }}" "${{ github.event.pull_request.head.sha || github.sha }}"
   journeys:
+    needs: [scope]
+    # Issue #134: skipped on docs-only change sets (see the scope job).
+    if: needs.scope.outputs.docs_only != 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
