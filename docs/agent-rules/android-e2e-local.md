@@ -50,7 +50,7 @@ Run only one Android E2E run at a time per host: other agent sessions share the 
 ## 3. Act on the result
 
 - Pass: push, and keep the line `Android E2E: passed on <sha> (smoke, walk, discovery)` in the PR body's Verification section.
-- Failure: run the failing suite again on `origin/main`.
+- Failure: run the failing suite again on `origin/main`, with an APK rebuilt from `origin/main` (step 1 of section 2, or `--apk <main build>`). The runner installs whatever APK is in the checkout, and that file survives `git checkout`. Record the APK SHA-256 that the runner prints for both runs.
   - If it passes on `main`, your change broke it. Fix it before you push.
   - If it fails on `main` too, the failure is not yours. Push, write `Android E2E: failed (<suite>) on <sha>; also fails on main <main-sha>` in the PR body, and link an issue for the failure (open one if none exists). Name the artifacts path (`tools/e2e-android/artifacts/`).
 - No SDK, no emulator, a `SKIP e2e:android` line, or an emulator that does not boot: this is not a pass. Push, and write `Android E2E: NOT-VERIFIED (<reason>)` in the PR body. Reviewers and Judge treat it as an open check, not a green one.
