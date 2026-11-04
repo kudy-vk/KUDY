@@ -232,7 +232,9 @@ async function syncBuildCheckout(layout, sha, log) {
 async function ensureDependencies(layout, sha, env, log) {
   const markerFile = path.join(layout.checkout, '.kudy-e2e-local-deps.json');
   const lockHash = git(layout.checkout, ['rev-parse', 'HEAD:package-lock.json']).out || null;
-  const nodeModulesReady = fs.existsSync(path.join(layout.checkout, 'node_modules', 'package.json'));
+  // npm ci writes node_modules/.package-lock.json (never a root package.json
+  // there), so that artifact is the "install present" marker.
+  const nodeModulesReady = fs.existsSync(path.join(layout.checkout, 'node_modules', '.package-lock.json'));
   let marker = null;
   try {
     marker = JSON.parse(fs.readFileSync(markerFile, 'utf8'));
