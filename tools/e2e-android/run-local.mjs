@@ -405,6 +405,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     const runDir = path.join(ARTIFACTS_ROOT, `${new Date().toISOString().replaceAll(/[:.]/g, '-')}-local`);
     fs.mkdirSync(runDir, { recursive: true });
     console.log(`-- run dir: ${runDir}`);
+    console.log(`-- booting the CI AVD ${AVD_NAME} with KVM (flags: ${EMULATOR_FLAGS.join(' ')})`);
     const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log') });
     if (!boot.booted) {
       await io.stopEmulator({ child: boot.child, adbPath: adb, serial: boot.serial });
