@@ -7,6 +7,13 @@ process.env.TZ = "America/Anchorage";
 
 module.exports = {
   preset: "jest-expo",
+  // #132: under a full npm test run the jest workers contend for CPU and the
+  // heavy render suites (hint-card, discovery, place) exceed jest's 5000 ms
+  // default per-test timeout on the dev host, while the node --test half of
+  // npm test already pins 60000 ms (a stuck file must fail by name, not by a
+  // flaky default). The same 60 s contract applies here; guard:
+  // test/app-jest-wiring.test.mjs.
+  testTimeout: 60000,
   testMatch: ["<rootDir>/app/**/*.test.tsx", "<rootDir>/components/**/*.test.tsx", "<rootDir>/docs/design/brand/outputs/menu-map-city-only/native/**/*.test.tsx"],
   transform: {
     "menu-map-city-only[/\\\\](magnet|amber-light)\\.mjs$": ["babel-jest", {
