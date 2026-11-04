@@ -12,6 +12,7 @@
 import { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
+import RouteIcon from "lucide-react-native/icons/route";
 
 import type { Services } from "../controllers/createServices";
 import { PressableSurface } from "./pressable-surface";
@@ -19,6 +20,8 @@ import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { useThemeStyles } from "./theme";
 import { ScaledText } from "./scaled-text";
 import { uiStrings } from "./ui-strings";
+import { CanonIcon } from "./canon-icon";
+import { useThemeTokens } from "./theme";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   button: {
@@ -37,8 +40,9 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
 const lightStyles = createStyles(tokens);
 const darkStyles = createStyles(darkTokens);
 
-export function WalkButton({ walk, locale = "be" }: { walk?: Services["walk"]; locale?: string }) {
+export function WalkButton({ walk, locale = "be", iconOnly = false }: { walk?: Services["walk"]; locale?: string; iconOnly?: boolean }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   const router = useRouter();
   const [live, setLive] = useState(() => walk?.liveSession() ?? null);
   useFocusEffect(
@@ -56,13 +60,13 @@ export function WalkButton({ walk, locale = "be" }: { walk?: Services["walk"]; l
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={() => router.push(`/run/${live.routeId}`)}
-      style={styles.button}
+      style={[styles.button, iconOnly && { minWidth: 48, minHeight: 48, alignItems: "center", justifyContent: "center", marginBottom: 0 }]}
       // G06.10.d (issue #404): the walk entry is a primary action — the
       // accent shelf of the clay button.
       shelf="accent"
       testID="btn-walk-mode"
     >
-      <ScaledText style={styles.label}>{label}</ScaledText>
+      {iconOnly ? <CanonIcon glyph={RouteIcon} label={label} color={palette.colorAccentInk} /> : <ScaledText style={styles.label}>{label}</ScaledText>}
     </PressableSurface>
   );
 }

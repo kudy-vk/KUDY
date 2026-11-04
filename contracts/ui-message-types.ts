@@ -42,6 +42,7 @@ export interface UiStrings {
   readonly walk: string;
   readonly nearby: string;
   readonly guidesLink: string;
+  readonly comingSoon: string;
   // The KUDY surface's Explore entry (issue #426): the owner's 2026-10-01
   // decision — the history surface is named «KUDY», not «My KUDY».
   readonly kudyLink: string;

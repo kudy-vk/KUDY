@@ -3,6 +3,17 @@
   "source_locale": "be",
   "records": [
     {
+      "id": "native.chrome.comingSoon",
+      "source": "Хутка",
+      "context": "Неактыўны пункт галоўнага меню: раздзел яшчэ недаступны",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#comingSoon"
+      ],
+      "sourceHash": "ddd8d54d445057e907cd788a7e2a70b26423e2dbe88a1f3dbfd8f884ca624750"
+    },
+    {
       "id": "native.chrome.access.free",
       "source": "Бясплатна",
       "context": "Пазнака доступу: бясплатна",

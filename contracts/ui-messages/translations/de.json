@@ -8,6 +8,15 @@
   },
   "records": [
     {
+      "id": "native.chrome.comingSoon",
+      "value": "Bald",
+      "reviewedSourceHash": "ddd8d54d445057e907cd788a7e2a70b26423e2dbe88a1f3dbfd8f884ca624750",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна пераўжытае зацверджанае «хутка» з web.ui.storeComingSoon; новых перакладаў няма."
+      }
+    },
+    {
       "id": "native.chrome.access.free",
       "value": "Kostenlos",
       "reviewedSourceHash": "82e16c5b12218d14ab2c468f999861493c22fd508e1f225f286674ecffbac141",

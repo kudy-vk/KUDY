@@ -1,5 +1,5 @@
 // Accepted working splash (2026-10-28): the cold-start route presents the
-// vector dragon before Explore. The same scene shows arriving paws, a blink
+// vector dragon before the map menu. The same scene shows arriving paws, a blink
 // combined with a quick side move, an animated mouth, then the KUDY word.
 // The font is provisional and deliberately not pinned here.
 import { afterEach, expect, jest, test } from "@jest/globals";
@@ -8,7 +8,7 @@ import { renderRouter, screen } from "expo-router/testing-library";
 import { Path } from "react-native-svg";
 import { nextSplashSampleMs, SPLASH_DURATION_MS } from "../components/animated-splash";
 
-import Explore from "./(tabs)/explore";
+import Menu from "./menu";
 import Index from "./index";
 import { createServices } from "../controllers/createServices";
 import { flatStyle, layoutWith } from "../test/render-helpers";
@@ -18,7 +18,7 @@ function renderColdStart() {
     {
       _layout: layoutWith(createServices({})),
       index: Index,
-      "(tabs)/explore": Explore,
+      menu: Menu,
     },
     { initialUrl: "/" },
   );
@@ -44,12 +44,12 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-test("cold start shows a vector dragon with arriving paws, then opens Explore after the scene", () => {
+test("cold start shows a vector dragon with arriving paws, then opens the map menu after the scene", () => {
   jest.useFakeTimers();
   renderColdStart();
 
   expect(screen.getByTestId("splash-scene")).toBeTruthy();
-  expect(screen.queryByTestId("screen-Explore")).toBeNull();
+  expect(screen.queryByTestId("screen-Menu")).toBeNull();
   expect(screen.getByTestId("splash-head").findAllByType(Path).length).toBeGreaterThan(0);
   expect(screen.getByTestId("splash-paw-left").findAllByType(Path).length).toBeGreaterThan(0);
   expect(screen.getByTestId("splash-paw-right").findAllByType(Path).length).toBeGreaterThan(0);
@@ -60,10 +60,10 @@ test("cold start shows a vector dragon with arriving paws, then opens Explore af
   advance(1_200);
   expect(svgProp("splash-paw-left", "matrix")).not.toEqual(firstLeftPaw);
   expect(svgProp("splash-paw-right", "matrix")).not.toEqual(firstRightPaw);
-  expect(screen.queryByTestId("screen-Explore")).toBeNull();
+  expect(screen.queryByTestId("screen-Menu")).toBeNull();
 
   advance(5_900);
-  expect(screen.getByTestId("screen-Explore")).toBeTruthy();
+  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
 
 test("the side move happens during the blink; the mouth moves before KUDY appears", () => {
@@ -87,7 +87,7 @@ test("the side move happens during the blink; the mouth moves before KUDY appear
   advance(900);
   expect(screen.getByText("KUDY")).toBeTruthy();
   expect(brandVisible()).toBe(true);
-  expect(screen.queryByTestId("screen-Explore")).toBeNull();
+  expect(screen.queryByTestId("screen-Menu")).toBeNull();
 });
 
 // On the emulator the word read "KUD": the brand Text mounted with the
@@ -135,7 +135,7 @@ test("head descends during its own phase, before the blink or side move", () => 
   expect(headDuringDrop).not.toEqual(headAtStart);
   advance(900);
   expect(svgProp("splash-head", "matrix")).not.toEqual(headDuringDrop);
-  expect(screen.queryByTestId("screen-Explore")).toBeNull();
+  expect(screen.queryByTestId("screen-Menu")).toBeNull();
 });
 
 test("phase clock emits fewer scene updates than a fixed 32 ms interval", () => {
