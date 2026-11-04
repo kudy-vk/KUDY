@@ -12,9 +12,9 @@ node --test tools/ci/android-e2e-local.test.mjs 2>&1 | grep '^ℹ' | grep -v dur
 ```
 
 ```output
-ℹ tests 16
-ℹ suites 8
-ℹ pass 16
+ℹ tests 18
+ℹ suites 9
+ℹ pass 18
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
