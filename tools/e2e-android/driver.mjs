@@ -20,11 +20,13 @@ const ADB_TIMEOUT_MS = 15000;
 const INSTALL_TIMEOUT_MS = 300000;
 const INSTALL_SERVICE_WAIT_MS = 90000;
 const INSTALL_SERVICE_POLL_MS = 3000;
-// The three transient install-failure classes (PR #1 body): the run
-// 41731617982 class "cmd: Failure calling service package: Broken pipe (32)"
-// and the equivalent framework exception. Anything else — INSTALL_PARSE_
-// FAILED_…, signature mismatches — is deterministic and stays single-shot.
-const INSTALL_TRANSIENT_RE = /Failure calling service package|Broken pipe|Exception occurred while executing/;
+// The transient install-failure classes (PR #1 body): the run 41731617982
+// class "cmd: Failure calling service package: Broken pipe (32)" and the
+// late-boot storage NPE, matched by its StorageManager.getVolumes() text.
+// The generic "Exception occurred while executing" relay is deliberately not
+// matched — it also wraps deterministic framework failures, so anything
+// else (INSTALL_PARSE_FAILED_…, signature mismatches) stays single-shot.
+const INSTALL_TRANSIENT_RE = /Failure calling service package|Broken pipe|StorageManager\.getVolumes\(\)/;
 const DUMP_TIMEOUT_MS = 15000;
 const DUMP_ATTEMPTS = 5;
 const DUMP_RETRY_DELAY_MS = 400;

@@ -271,6 +271,11 @@ test('artifact basenames are separator-checked', () => {
 // install calls: args[0] === 'shell'.
 const BROKEN_PIPE = 'adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: cmd: Failure calling service package: Broken pipe (32)';
 const STORAGE_NPE = "adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: Exception occurred while executing 'install':\njava.lang.NullPointerException: Attempt to invoke virtual method 'java.util.List android.os.storage.StorageManager.getVolumes()' on a null object reference";
+// The relay text `Exception occurred while executing` also wraps deterministic
+// framework failures, so the matcher pins the storage NPE by its
+// StorageManager.getVolumes() text and leaves every other relayed failure
+// single-shot (voka finding on PR #1).
+const RELAYED_PARSE_FAILURE = "adb exited with code 1: adb install -r -g x.apk\nstderr: adb: failed to install x.apk: Exception occurred while executing 'install':\njava.lang.Exception: INSTALL_PARSE_FAILED_NO_CERTIFICATES: Failed to parse /data/app/x.apk";
 const PM_OK = { stdout: 'package:/system/framework/framework-res.apk', stderr: '' };
 const INSTALL_OK = { stdout: 'Success', stderr: '' };
 
@@ -312,6 +317,18 @@ test('install does not retry a deterministic install failure', async () => {
   };
   await assert.rejects(() => driver.install('x.apk'), /did not report Success/);
   assert.equal(calls, 1);
+});
+
+test('install keeps a relayed deterministic install failure single-shot', async () => {
+  const driver = installTestDriver();
+  let installs = 0;
+  driver.exec = async (args) => {
+    if (args[0] === 'shell') return PM_OK;
+    installs += 1;
+    throw new DriverError(RELAYED_PARSE_FAILURE);
+  };
+  await assert.rejects(() => driver.install('x.apk'), /INSTALL_PARSE_FAILED/);
+  assert.equal(installs, 1);
 });
 
 test('install still fails after exhausting the transient retries', async () => {
