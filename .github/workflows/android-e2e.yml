@@ -9,8 +9,42 @@ on:
     - cron: '17 2 * * *'
 permissions:
   contents: read
+# A newer push to the same PR cancels the superseded run; main pushes,
+# nightly and manual runs are never cancelled.
+concurrency:
+  group: android-e2e-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
+  # Skips the emulator job only when every changed file is on the
+  # docs-only allowlist in tools/ci/android-e2e-scope.mjs; anything else,
+  # an unknown change set, nightly and manual runs keep the full job.
+  scope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.scope.outputs.run }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: scope
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          case "$EVENT" in
+            pull_request) node tools/ci/android-e2e-scope.mjs "$PR_BASE" "$PR_HEAD" ;;
+            push) node tools/ci/android-e2e-scope.mjs "$PUSH_BEFORE" "$PUSH_AFTER" ;;
+            *) echo 'run=true' >> "$GITHUB_OUTPUT" ;;
+          esac
   smoke-and-walk:
+    needs: scope
+    if: needs.scope.outputs.run == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     env:
