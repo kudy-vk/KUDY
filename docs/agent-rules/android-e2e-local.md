@@ -4,6 +4,8 @@ This file is the single source of truth for Codex, Claude Code, Cursor, Zcode an
 
 CI runs only the fast checks. The hosted `android-e2e` workflow starts only by hand (`workflow_dispatch`). On the private repository's 2-core runner it took up to 90 minutes and never passed (owner decision 2026-11-04). The Android E2E suites therefore run on a local emulator before each push to a pull-request branch.
 
+On a docs-only change set (`tools/ci/docs-only-scope.mjs`, deny by default) CI additionally skips the pure code gates — `windows-portable`, `lint`, `server-typecheck`, `engine-regressions`, `web-build`, `jscpd` and `web-e2e` — while `tests`, `gitleaks` and `guard-required-checks` always run (issue #134, owner decision 2026-11-04).
+
 ## 1. Decide whether the push needs it
 
 Run this before every `git push` to a PR branch, and before `gh pr create`:
