@@ -4,8 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
-import { execFileSync } from 'node:child_process';
-import os from 'node:os';
+import { tempScopeRepo, runScopeScript } from './temp-scope-repo.mjs';
 import { androidE2eNeeded, changedFiles } from './android-e2e-scope.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -83,36 +82,33 @@ test('scope: missing, zero or malformed SHAs and git failures give an unknown ch
 
 test('scope CLI writes run=false only for a real docs-only diff', () => {
   const script = path.join(root, 'tools', 'ci', 'android-e2e-scope.mjs');
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-scope-'));
-  const git = (...args) => execFileSync('git', ['-C', dir, '-c', 'user.name=t', '-c', 'user.email=t@example.invalid', ...args], { encoding: 'utf8' }).trim();
-  const scope = (base, head) => {
-    const out = path.join(dir, 'github-output');
-    fs.writeFileSync(out, '');
-    execFileSync(process.execPath, [script, base, head], { cwd: dir, env: { ...process.env, GITHUB_OUTPUT: out } });
-    return fs.readFileSync(out, 'utf8');
-  };
+  const { dir, base, docs, app, cleanup } = tempScopeRepo();
+  const scope = (base, head) => runScopeScript(dir, script, base, head).output;
   try {
-    git('init', '-q');
-    fs.mkdirSync(path.join(dir, 'docs'));
-    fs.writeFileSync(path.join(dir, 'docs', 'a.md'), 'a\n');
-    git('add', '.');
-    git('commit', '-q', '-m', 'base');
-    const base = git('rev-parse', 'HEAD');
-    fs.writeFileSync(path.join(dir, 'docs', 'a.md'), 'b\n');
-    git('commit', '-q', '-am', 'docs');
-    const docs = git('rev-parse', 'HEAD');
-    fs.mkdirSync(path.join(dir, 'app'));
-    fs.writeFileSync(path.join(dir, 'app', 'x.ts'), 'x\n');
-    git('add', '.');
-    git('commit', '-q', '-m', 'app');
-    const app = git('rev-parse', 'HEAD');
     assert.equal(scope(base, docs), 'run=false\n');
     assert.equal(scope(base, app), 'run=true\n');
     assert.equal(scope('', docs), 'run=true\n', 'an unknown change set must run the suites');
     assert.equal(scope('c'.repeat(40), docs), 'run=true\n', 'a git failure must run the suites');
   } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
+    cleanup();
   }
+});
+
+test('Android E2E frees runner disk space before installing the SDK', () => {
+  const { source, workflow } = read('android-e2e.yml');
+  const steps = workflow.jobs['smoke-and-walk'].steps;
+  const freeIndex = steps.findIndex((step) => step.run?.includes('/usr/share/dotnet'));
+  const sdkIndex = steps.findIndex((step) => step.run?.includes('sdkmanager'));
+  assert.ok(freeIndex !== -1, 'disk-free step missing');
+  assert.ok(sdkIndex !== -1, 'SDK install step missing');
+  assert.ok(freeIndex < sdkIndex, 'the disk-free step must run before the SDK install');
+  assert.match(source, /df -h/, 'the disk-free step must log disk usage for evidence');
+});
+
+test('Android E2E waits up to 20 minutes for a fully booted emulator', () => {
+  const { source } = read('android-e2e.yml');
+  assert.match(source, /seq 1 240/, 'the boot wait must allow 20 minutes on slow cold boots');
+  assert.match(source, /pm path android/, 'the boot wait must confirm the package manager answers, not only sys.boot_completed');
 });
 
 test('visual:check runs after the suites and always uploads its report as a non-gating artifact', () => {

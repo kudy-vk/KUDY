@@ -18,6 +18,15 @@ import path from 'node:path';
 
 const ADB_TIMEOUT_MS = 15000;
 const INSTALL_TIMEOUT_MS = 300000;
+const INSTALL_SERVICE_WAIT_MS = 90000;
+const INSTALL_SERVICE_POLL_MS = 3000;
+// The transient install-failure classes (PR #1 body): the run 41731617982
+// class "cmd: Failure calling service package: Broken pipe (32)" and the
+// late-boot storage NPE, matched by its StorageManager.getVolumes() text.
+// The generic "Exception occurred while executing" relay is deliberately not
+// matched — it also wraps deterministic framework failures, so anything
+// else (INSTALL_PARSE_FAILED_…, signature mismatches) stays single-shot.
+const INSTALL_TRANSIENT_RE = /Failure calling service package|Broken pipe|StorageManager\.getVolumes\(\)/;
 const DUMP_TIMEOUT_MS = 15000;
 const DUMP_ATTEMPTS = 5;
 const DUMP_RETRY_DELAY_MS = 400;
@@ -217,7 +226,7 @@ export function describeSelector(selector) {
 // One booted emulator or device. Every device touch of the suite goes
 // through this class — the runner never spawns adb on its own.
 export class E2eDriver {
-  constructor({ adbPath, serial, artifactsDir, pkg } = {}) {
+  constructor({ adbPath, serial, artifactsDir, pkg, installRetryDelayMs = 15000, servicePollDelayMs = INSTALL_SERVICE_POLL_MS } = {}) {
     if (typeof adbPath !== 'string' || adbPath.length === 0) throw new DriverError('E2eDriver: adbPath required');
     if (typeof serial !== 'string' || serial.length === 0) throw new DriverError('E2eDriver: serial required');
     if (typeof artifactsDir !== 'string' || artifactsDir.length === 0) {
@@ -227,6 +236,8 @@ export class E2eDriver {
     this.serial = serial;
     this.artifactsDir = artifactsDir;
     this.pkg = pkg;
+    this.installRetryDelayMs = installRetryDelayMs;
+    this.servicePollDelayMs = servicePollDelayMs;
     fs.mkdirSync(artifactsDir, { recursive: true });
   }
 
@@ -242,9 +253,50 @@ export class E2eDriver {
   }
 
   async install(apkPath) {
-    const result = await this.exec(['install', '-r', '-g', apkPath], { timeoutMs: INSTALL_TIMEOUT_MS });
-    if (!result.stdout.includes('Success')) {
-      throw new DriverError(`install did not report Success: ${result.stdout.trim() || '(empty stdout)'}`);
+    // A freshly booted emulator occasionally kills the package service
+    // mid-install (`cmd: Failure calling service package: Broken pipe (32)`
+    // on hosted CI run 41731617982). Only the transient package-service
+    // failure retries; deterministic install failures stay single-shot.
+    // Both throw paths — a non-zero adb exit and a run without Success —
+    // feed the same matcher, and every retry is logged to driver.log so the
+    // CI artifact shows how many attempts ran.
+    for (let attempt = 1; ; attempt += 1) {
+      let output = '';
+      try {
+        const result = await this.exec(['install', '-r', '-g', apkPath], { timeoutMs: INSTALL_TIMEOUT_MS });
+        output = `${result.stdout}\n${result.stderr}`;
+        if (result.stdout.includes('Success')) return;
+      } catch (error) {
+        output = error instanceof Error ? error.message : String(error);
+      }
+      if (!INSTALL_TRANSIENT_RE.test(output) || attempt >= 3) {
+        throw new DriverError(`install did not report Success: ${output.trim() || '(empty output)'}`);
+      }
+      fs.appendFileSync(
+        this.artifactPath('driver.log'),
+        `install attempt ${attempt} hit a transient package-service failure; recovering before retry\n`,
+      );
+      await this.waitForPackageService();
+      await new Promise((resolve) => setTimeout(resolve, attempt * this.installRetryDelayMs));
+    }
+  }
+
+  // Block until the device-side package service answers again, so a retry
+  // never runs against the dead `pm` binder that produced the failure (the
+  // failed run retried instantly three times and never gave the service a
+  // chance to come back).
+  async waitForPackageService({ timeoutMs = INSTALL_SERVICE_WAIT_MS } = {}) {
+    const deadline = Date.now() + timeoutMs;
+    for (;;) {
+      try {
+        await this.exec(['shell', 'pm', 'path', 'android'], { timeoutMs: ADB_TIMEOUT_MS });
+        return;
+      } catch (error) {
+        if (Date.now() + this.servicePollDelayMs >= deadline) {
+          throw new DriverError(`package service still unresponsive after ${timeoutMs} ms: ${error.message}`);
+        }
+        await new Promise((resolve) => setTimeout(resolve, this.servicePollDelayMs));
+      }
     }
   }
 

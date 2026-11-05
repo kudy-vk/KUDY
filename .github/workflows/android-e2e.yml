@@ -17,6 +17,26 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # The 2026-11-03 main run died with ENOSPC during `assembleDebug`: the
+      # preinstalled toolchains this job never uses (dotnet, ghc, swift, boost,
+      # CodeQL, conda, rust, docker images) leave too little room for the
+      # Android SDK, Gradle caches and RN C++ codegen.
+      - name: free runner disk space
+        run: |
+          set -euo pipefail
+          df -h /
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /opt/ghc /usr/local/.ghc /usr/local/.ghcup \
+            /usr/share/swift \
+            /usr/local/share/boost \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/share/miniconda \
+            /usr/local/cargo /usr/local/rustup \
+            /var/lib/apt/lists
+          sudo apt-get clean
+          docker image prune -af || echo 'docker image prune unavailable (non-fatal)'
+          df -h /
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
@@ -64,8 +84,12 @@ jobs:
             -no-snapshot -gpu swiftshader_indirect -memory 2048 "${emulator_args[@]}" \
             > android-e2e-logs/emulator.log 2>&1 &
           booted=0
-          for attempt in $(seq 1 120); do
-            if [[ "$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; then
+          # 240 x 5s = 20 minutes: a cold-booted hosted emulator has exceeded
+          # the previous 10-minute window (run 41710648773), and a full boot
+          # must also leave the package manager answering before install.
+          for attempt in $(seq 1 240); do
+            if [[ "$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]] \
+               && "$ANDROID_HOME/platform-tools/adb" shell pm path android >/dev/null 2>&1; then
               booted=1
               break
             fi
