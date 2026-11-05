@@ -257,9 +257,40 @@ if (!workflowVersion) {
   );
 }
 
+// Issue #134 revert guard — the docs-only skip wiring is configuration-as-code
+// (implementation-rules 1): losing the shared scope script invocation from a
+// workflow would silently restore the full CI set on docs-only changes, and a
+// partial revert would let the workflows disagree. The classification itself
+// is pinned by tools/ci/docs-only-scope.test.mjs; the tests and gitleaks jobs
+// must never gain the skip — npm test is what guards the documentation and
+// gitleaks scans the prose for secrets.
+const docsOnlyWiring = [
+  ['.github/workflows/required-checks.yml', 5],
+  ['.github/workflows/jscpd.yml', 1],
+  ['.github/workflows/web-e2e.yml', 1],
+];
+for (const [name, count] of docsOnlyWiring) {
+  const source = fs
+    .readFileSync(name, 'utf8')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('#'))
+    .join('\n');
+  const conditions = (source.match(/if:\s*needs\.scope\.outputs\.docs_only != 'true'/g) ?? []).length;
+  if (!/tools\/ci\/docs-only-scope\.mjs/.test(source) || conditions < count) {
+    failures.push(
+      `${name}: docs-only scope wiring incomplete — expected the shared scope script and ${count} skip condition(s)`
+    );
+  }
+}
+const gitleaksJob = text.slice(text.indexOf('\n  gitleaks:'));
+if (/needs:\s*\[scope\]|if:\s*needs\.scope/.test(testsJob + gitleaksJob)) {
+  failures.push('tests and gitleaks must run on every change set — npm test guards the docs, gitleaks scans the prose');
+}
+
 if (failures.length > 0) {
   console.error('guard-required-checks: FAIL');
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log('guard-required-checks: OK — required-checks runs npm ci + npm test + web build + server:typecheck + arch:check + windows portable subset');
+console.log('guard-required-checks: OK — required-checks runs npm ci + npm test + web build + server:typecheck + arch:check + windows portable subset + docs-only scope gates');

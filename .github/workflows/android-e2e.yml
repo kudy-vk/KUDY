@@ -1,52 +1,15 @@
 name: android-e2e
+# Manual only (owner decision 2026-11-04): the emulator job takes up to 90
+# minutes on the hosted 2-core runner, so pull requests, pushes to main and
+# the nightly schedule no longer start it. Before each push, an agent runs
+# the same suites on a local emulator when the change touches project code:
+# docs/agent-rules/android-e2e-local.md, scope in tools/ci/android-e2e-scope.mjs.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: '17 2 * * *'
 permissions:
   contents: read
-# A newer push to the same PR cancels the superseded run. Every other run
-# gets its own group (run_id): a shared group would keep only one pending
-# run and silently cancel a queued main push.
-concurrency:
-  group: android-e2e-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
-  # Skips the emulator job only when every changed file is on the
-  # docs-only allowlist in tools/ci/android-e2e-scope.mjs; anything else,
-  # an unknown change set, nightly and manual runs keep the full job.
-  scope:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    outputs:
-      run: ${{ steps.scope.outputs.run }}
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - id: scope
-        env:
-          EVENT: ${{ github.event_name }}
-          PR_BASE: ${{ github.event.pull_request.base.sha }}
-          PR_HEAD: ${{ github.event.pull_request.head.sha }}
-          PUSH_BEFORE: ${{ github.event.before }}
-          PUSH_AFTER: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          case "$EVENT" in
-            pull_request) node tools/ci/android-e2e-scope.mjs "$PR_BASE" "$PR_HEAD" ;;
-            push) node tools/ci/android-e2e-scope.mjs "$PUSH_BEFORE" "$PUSH_AFTER" ;;
-            *) echo 'run=true' >> "$GITHUB_OUTPUT" ;;
-          esac
   smoke-and-walk:
-    needs: scope
-    # Fail-safe: only an explicit run=false skips; an empty output runs.
-    if: needs.scope.outputs.run != 'false'
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     env:
@@ -54,6 +17,26 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # The 2026-11-03 main run died with ENOSPC during `assembleDebug`: the
+      # preinstalled toolchains this job never uses (dotnet, ghc, swift, boost,
+      # CodeQL, conda, rust, docker images) leave too little room for the
+      # Android SDK, Gradle caches and RN C++ codegen.
+      - name: free runner disk space
+        run: |
+          set -euo pipefail
+          df -h /
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /opt/ghc /usr/local/.ghc /usr/local/.ghcup \
+            /usr/share/swift \
+            /usr/local/share/boost \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/share/miniconda \
+            /usr/local/cargo /usr/local/rustup \
+            /var/lib/apt/lists
+          sudo apt-get clean
+          docker image prune -af || echo 'docker image prune unavailable (non-fatal)'
+          df -h /
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
@@ -101,8 +84,12 @@ jobs:
             -no-snapshot -gpu swiftshader_indirect -memory 2048 "${emulator_args[@]}" \
             > android-e2e-logs/emulator.log 2>&1 &
           booted=0
-          for attempt in $(seq 1 120); do
-            if [[ "$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; then
+          # 240 x 5s = 20 minutes: a cold-booted hosted emulator has exceeded
+          # the previous 10-minute window (run 41710648773), and a full boot
+          # must also leave the package manager answering before install.
+          for attempt in $(seq 1 240); do
+            if [[ "$("$ANDROID_HOME/platform-tools/adb" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]] \
+               && "$ANDROID_HOME/platform-tools/adb" shell pm path android >/dev/null 2>&1; then
               booted=1
               break
             fi
