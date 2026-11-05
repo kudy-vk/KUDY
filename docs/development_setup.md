@@ -187,7 +187,7 @@ google_apis на гэтым хосце ANR-іць SystemUI цягам хвілі
 не парушаецца. Астатнія сцягі — дакладна CI-авыя: іншыя сцягі могуць даць
 ілжывыя дыфы visual:check.
 
-Дэфолтны AVD ранера — `kudy-ci` (парыцец на CI). Сцягам `--avd` (ці
+Каманда `e2e:android:local` — агульны ўваход `tools/ci/android-e2e-local.mjs`: на Windows ідзе шлях #124 (дыск D:, коды 0/1/64/75/86), на Linux ранер дэлегуе ў `tools/e2e-android/run-local.mjs` (коды ніжэй). Дэфолтны AVD ранера — `kudy-ci` (парыцец на CI). Сцягам `--avd` (ці
 зменнай `KUDY_E2E_AVD`) выбіраецца іншы госць: вобраз android-36
 google_apis ANR-іць SystemUI пад нагрузкай дадатку нават пры 4096 (гл.
 дэбаг-лог), а госць android-35 google_apis праходзіць усе тры сюіты —

@@ -24,6 +24,14 @@
 //
 // Exit codes: 0 pass (or scope skip), 1 suite/build/host failure, 64 usage,
 // 75 stale local-runner lock, 86 NOT-VERIFIED.
+//
+// Issue #132 consolidation: one command, two host runners. On win32 this
+// file runs the #124 Windows path below; on every other host it delegates to
+// tools/e2e-android/run-local.mjs (#132: scope short-cut → APK for the exact
+// HEAD → KVM emulator → suites → summary line), passing arguments through
+// and propagating its exit code — 0 pass, 1 failed suite, 2 usage, 3
+// NOT-VERIFIED, 4 the host is locked (documented in that runner's header and
+// docs/development_setup.md). NOT-VERIFIED is never a pass on either host.
 import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import net from 'node:net';
@@ -329,6 +337,15 @@ async function bootEmulator(layout, env, log) {
 // ---------- main ----------
 
 async function main() {
+  // Issue #132 consolidation: the Linux path is #132's runner; arguments
+  // pass through (--jdk/--sdk/--build-root/--avd) and the exit code
+  // propagates (see the header for the per-host exit-code contracts).
+  if (process.platform !== 'win32') {
+    const delegated = spawnSync(process.execPath,
+      [path.join(CALLING_CHECKOUT, 'tools', 'e2e-android', 'run-local.mjs'), ...process.argv.slice(2)],
+      { cwd: CALLING_CHECKOUT, stdio: 'inherit' });
+    return delegated.status ?? 1;
+  }
   if (process.argv.length > 2) {
     console.error('usage: npm run e2e:android:local (no arguments; the host root is KUDY_ANDROID_ROOT or D:\\KUDY-Android)');
     return EXIT.usage;

@@ -1,6 +1,8 @@
-// #132 — the one command behind `npm run e2e:android:local`: the Android E2E
-// suites on a local emulator, on the Linux dev host, as
-// docs/agent-rules/android-e2e-local.md requires. It composes the existing
+// #132 — the Linux implementation behind `npm run e2e:android:local`: the
+// Android E2E suites on a local emulator, on the Linux dev host, as
+// docs/agent-rules/android-e2e-local.md requires. The npm script points at
+// the shared entry tools/ci/android-e2e-local.mjs, which delegates here on
+// non-Windows hosts and runs #124's Windows path on win32. It composes the existing
 // tools verbatim (implementation-rules 2/3) — the scope decision is
 // tools/ci/android-e2e-scope.mjs, the build is
 // tools/android-build/android-build.mjs, every device touch goes through the

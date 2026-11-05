@@ -61,6 +61,14 @@ export function jscpdVersion(workflowFile = path.join(REPO_ROOT, '.github', 'wor
 // carry the npm-ci area ('root' | 'web') that executes once / is deduped.
 export function buildSteps({ jscpd: version = jscpdVersion() } = {}) {
   return [
+    // --- required-checks.yml: scope (the docs-only marker CI jobs read) ---
+    {
+      id: 'scope/docs-only', job: 'scope', workflow: 'required-checks.yml', cwd: '.',
+      cmd: 'node tools/ci/docs-only-scope.mjs "$(git merge-base origin/main HEAD)" "$(git rev-parse HEAD)"',
+      // The CI command's tail is GitHub-context expressions; the script path
+      // prefix is the drift-sensitive part, so coverage matches the prefix.
+      ci: ['node tools/ci/docs-only-scope.mjs'],
+    },
     // --- required-checks.yml: tests ---
     { id: 'tests/install (root)', job: 'tests', workflow: 'required-checks.yml', cmd: 'npm ci', cwd: '.', install: 'root' },
     { id: 'tests/install (web)', job: 'tests', workflow: 'required-checks.yml', cmd: 'npm ci', cwd: 'web', install: 'web' },
@@ -93,6 +101,11 @@ export function buildSteps({ jscpd: version = jscpdVersion() } = {}) {
     // --- required-checks.yml: gitleaks ---
     { id: 'gitleaks', job: 'gitleaks', workflow: 'required-checks.yml', cmd: 'node tools/ci/fetch-gitleaks.mjs', cwd: '.' },
     // --- web-e2e.yml: journeys ---
+    {
+      id: 'journeys/scope (docs-only)', job: 'scope', workflow: 'web-e2e.yml', cwd: '.',
+      cmd: 'node tools/ci/docs-only-scope.mjs "$(git merge-base origin/main HEAD)" "$(git rev-parse HEAD)"',
+      ci: ['node tools/ci/docs-only-scope.mjs'],
+    },
     { id: 'journeys/install (root, deduped)', job: 'journeys', workflow: 'web-e2e.yml', cmd: 'npm ci', cwd: '.', deduped: 'root' },
     { id: 'journeys/install (web, deduped)', job: 'journeys', workflow: 'web-e2e.yml', cmd: 'npm ci', cwd: 'web', deduped: 'web' },
     {
@@ -106,6 +119,11 @@ export function buildSteps({ jscpd: version = jscpdVersion() } = {}) {
     },
     { id: 'journeys/web journeys (build and test)', job: 'journeys', workflow: 'web-e2e.yml', cmd: 'npm run e2e:web', cwd: '.', needsChromium: true },
     // --- jscpd.yml: jscpd ---
+    {
+      id: 'jscpd/scope (docs-only)', job: 'scope', workflow: 'jscpd.yml', cwd: '.',
+      cmd: 'node tools/ci/docs-only-scope.mjs "$(git merge-base origin/main HEAD)" "$(git rev-parse HEAD)"',
+      ci: ['node tools/ci/docs-only-scope.mjs'],
+    },
     {
       id: 'jscpd', job: 'jscpd', workflow: 'jscpd.yml', cwd: '.',
       cmd: `npx --yes jscpd@${version} --config .jscpd.json --no-tips .`,
@@ -171,8 +189,14 @@ export function coverageFailures(workflows, steps) {
       const jobEntries = entries.filter((entry) => entry.job === job);
       for (const command of commands) {
         // One entry can stand in for several workflow commands (the skipped
-        // Windows job, the deduped npm ci), so entries are not consumed.
-        if (!jobEntries.some((entry) => (entry.ci ?? [entry.cmd]).some((covered) => covered === command))) {
+        // Windows job, the deduped npm ci), so entries are not consumed. An
+        // entry's `ci` string matches as a prefix when the workflow command's
+        // tail is CI-context plumbing (the docs-only scope job's GitHub
+        // expressions) — the script path stays drift-sensitive.
+        const covered = jobEntries.some((entry) => (entry.ci ?? [entry.cmd]).some(
+          (x) => x === command || (entry.ci !== undefined && command.startsWith(x)),
+        ));
+        if (!covered) {
           failures.push(`${name}/${job}: workflow command missing from ci:local: ${command}`);
         }
       }

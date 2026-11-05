@@ -547,8 +547,10 @@ test('unknown flags exit with the usage code', async () => {
   assert.equal(io.calls.git.length, 0);
 });
 
-test('the e2e:android:local script points at the runner (runner wiring is guarded)', () => {
+test('the shared entry delegates the Linux path to this runner (runner wiring is guarded)', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-  assert.equal(pkg.scripts['e2e:android:local'], 'node tools/e2e-android/run-local.mjs');
+  assert.equal(pkg.scripts['e2e:android:local'], 'node tools/ci/android-e2e-local.mjs', 'the shared #124/#132 entry');
+  const entry = fs.readFileSync(path.join(root, 'tools', 'ci', 'android-e2e-local.mjs'), 'utf8');
+  assert.match(entry, /tools['", ]+.*e2e-android.*run-local\.mjs/, 'the entry must delegate the Linux path to this runner');
   assert.match(pkg.scripts.test, /"tools\/e2e-android\/\*\.test\.mjs"/, 'this suite must stay wired into npm test');
 });

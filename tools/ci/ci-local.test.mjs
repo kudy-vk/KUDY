@@ -80,7 +80,7 @@ test('significantCommands keeps the check commands and drops the plumbing', () =
 
 test('the local jscpd command uses the version pinned in jscpd.yml, not its own pin', () => {
   const version = jscpdVersion();
-  const entry = buildSteps().find((step) => step.job === 'jscpd');
+  const entry = buildSteps().find((step) => step.id === 'jscpd');
   assert.equal(entry.cmd, `npx --yes jscpd@${version} --config .jscpd.json --no-tips .`);
   assert.deepEqual(entry.ci, [`npx --yes jscpd@${version} --config "$CONFIG" --no-tips`]);
 });
@@ -103,5 +103,7 @@ test('revert: a dedupe entry before its install must fail loudly, never pass sil
 test('the npm scripts point at the runners (runner wiring is guarded)', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
   assert.equal(pkg.scripts['ci:local'], 'node tools/ci/ci-local.mjs');
-  assert.equal(pkg.scripts['e2e:android:local'], 'node tools/e2e-android/run-local.mjs');
+  // The shared entry routes by platform: #124's Windows path in-place, the
+  // #132 Linux runner by delegation (judge finding #156).
+  assert.equal(pkg.scripts['e2e:android:local'], 'node tools/ci/android-e2e-local.mjs');
 });
