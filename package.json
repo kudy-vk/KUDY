@@ -19,6 +19,7 @@
     "e2e:origin": "node tools/e2e-origin/serve-e2e-origin.mjs",
     "e2e:web": "node web/e2e/run-e2e.mjs",
     "e2e:android": "node tools/e2e-android/run-e2e.mjs",
+    "e2e:android:local": "node tools/ci/android-e2e-local.mjs",
     "visual:check": "node tools/e2e-android/visual-check.mjs",
     "engine:parity": "node tools/engine-regressions/parity-count.mjs",
     "engine:regressions": "node tools/engine-regressions/check-regressions.mjs",
