@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { FAST_WORKFLOWS, WINDOWS_ONLY_SKIP, buildSteps, coverageFailures, jscpdVersion, parseWorkflowJobs, significantCommands } from './ci-local.mjs';
+import { FAST_WORKFLOWS, WINDOWS_ONLY_SKIP, buildSteps, coverageFailures, dedupeStepResult, jscpdVersion, parseWorkflowJobs, significantCommands } from './ci-local.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const readWorkflow = (name) => fs.readFileSync(path.join(root, '.github', 'workflows', name), 'utf8');
@@ -83,6 +83,17 @@ test('the local jscpd command uses the version pinned in jscpd.yml, not its own 
   const entry = buildSteps().find((step) => step.job === 'jscpd');
   assert.equal(entry.cmd, `npx --yes jscpd@${version} --config .jscpd.json --no-tips .`);
   assert.deepEqual(entry.ci, [`npx --yes jscpd@${version} --config "$CONFIG" --no-tips`]);
+});
+
+test('revert: a dedupe entry before its install must fail loudly, never pass silently (voka missing-dedupe-revert-guard)', () => {
+  const installed = new Set();
+  assert.deepEqual(dedupeStepResult(installed, 'root').code, 1, 'reached before its install — the order is broken');
+  assert.match(dedupeStepResult(installed, 'root').message, /order is broken/);
+  installed.add('root');
+  assert.deepEqual(dedupeStepResult(installed, 'root').code, 0, 'after its install the dedupe is a printed note');
+  // Reverting the caller to a silent `return 0` (or dropping the guard test)
+  // turns this assertion red: the broken order must not read as a pass.
+  assert.notDeepEqual(dedupeStepResult(new Set(), 'root'), { code: 0 });
 });
 
 test('the npm scripts point at the runners (runner wiring is guarded)', () => {

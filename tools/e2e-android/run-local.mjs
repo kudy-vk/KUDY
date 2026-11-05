@@ -145,9 +145,14 @@ export function ownSerial({ child, avd, fresh, listenPorts, procDir }) {
   const pid = ownEmulatorPid({ pid: child.pid, avd, ...(procDir ? { procDir } : {}) });
   if (pid === null) return null;
   const ports = listenPorts(pid);
+  // `ss` unavailable — ownership cannot be proven from ports; the first
+  // fresh serial is the documented fallback.
+  if (ports === null) return fresh[0];
   const owned = ports.filter((port) => port >= 5554 && fresh.includes(`emulator-${port}`));
   if (owned.length > 0) return `emulator-${owned[0]}`;
-  if (ports.length === 0) return fresh[0];
+  // Our qemu runs but has not bound its console port yet: the fresh serial
+  // provably belongs to someone else — keep polling, never adopt
+  // (voka finding foreign-serial-fallback-race).
   return null;
 }
 
@@ -199,10 +204,12 @@ export function findJdk17(searchDirs, { isDir = (p) => fs.existsSync(p) && fs.st
 
 // ---------- default io (the real process world) ----------
 
-// Listening TCP ports of one pid, parsed from `ss -ltnp` (Linux).
+// Listening TCP ports of one pid, parsed from `ss -ltnp` (Linux). Returns
+// null when `ss` is unavailable — distinct from an empty list, which means
+// our qemu has not bound its console port yet.
 function listeningPorts(pid) {
   const result = spawnSync('ss', ['-ltnp'], { encoding: 'utf8' });
-  if (result.status !== 0) return [];
+  if (result.status !== 0 || typeof result.stdout !== 'string') return null;
   const marker = `pid=${pid},`;
   const ports = [];
   for (const line of result.stdout.split('\n')) {
@@ -478,7 +485,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
       return notVerified(`missing system image ${SYSTEM_IMAGE_DIR} — install it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'sdkmanager')} 'system-images;android-36;google_apis;x86_64'"`);
     }
     if (!io.listAvds(emulatorBinary).includes(avdName)) {
-      return notVerified(`no AVD ${avdName} — create it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'avdmanager')} create avd --name ${avdName} --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'"`);
+      return notVerified(`no AVD ${avdName} — create it with avdmanager create avd --name ${avdName} (the CI guest: --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'; an override guest with its own --package, e.g. android-35 google_apis)`);
     }
     if (!io.kvmWritable()) {
       return notVerified('/dev/kvm is not writable for this user — the Linux host runs the emulator with KVM (add the user to the kvm group); no software fallback');

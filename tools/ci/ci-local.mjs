@@ -36,6 +36,16 @@ export const FAST_WORKFLOWS = ['required-checks.yml', 'web-e2e.yml', 'jscpd.yml'
 
 export const WINDOWS_ONLY_SKIP = 'Windows-only job (runs-on: windows-latest) — skipped on the Linux host';
 
+// A dedupe entry reached before its install step means the step list order
+// broke — silently treating it as a pass would skip an npm ci (voka finding
+// deduped-silent-skip). Pure so the revert guard can pin it: reverting the
+// caller to a silent `return 0` must turn the guard test red
+// (implementation-rules 1).
+export function dedupeStepResult(installed, area) {
+  if (installed.has(area)) return { code: 0 };
+  return { code: 1, message: 'dedupe entry reached before its install step — the step list order is broken' };
+}
+
 // Read the pinned jscpd version from the CI workflow itself, so the local
 // gate cannot drift from the CI gate (tools/ci/check-required-checks.mjs
 // already forces the same version onto AGENTS.md).
@@ -198,14 +208,12 @@ function runStep(step, { installed, chromiumProbe }) {
     return 0;
   }
   if (step.deduped !== undefined) {
-    if (installed.has(step.deduped)) {
+    const dedupe = dedupeStepResult(installed, step.deduped);
+    if (dedupe.code === 0) {
       console.log(`DEDUPED [${step.id}] npm ci for ${step.deduped} already ran above`);
       return 0;
     }
-    // A dedupe entry before its install ran means the step order broke —
-    // silently treating it as a pass would skip an npm ci (voka finding
-    // deduped-silent-skip).
-    console.error(`FAIL [${step.id}] dedupe entry reached before its install step — the step list order is broken`);
+    console.error(`FAIL [${step.id}] ${dedupe.message}`);
     return 1;
   }
   if (step.install !== undefined) {

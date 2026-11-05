@@ -325,8 +325,14 @@ test('ownership falls back to the first fresh serial only when the port scan is 
   const proc = makeFakeProc();
   try {
     assert.equal(
-      ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => [] }),
+      ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => null }),
       'emulator-5554',
+      'ss unavailable — the documented fresh[0] fallback',
+    );
+    assert.equal(
+      ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => [] }),
+      null,
+      'ss works but our guest has no console port yet — the fresh serial belongs to someone else, keep polling (voka foreign-serial-fallback-race)',
     );
     assert.equal(
       ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => [5558] }),
