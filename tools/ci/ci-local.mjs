@@ -202,7 +202,12 @@ function chromiumEnv() {
   return { KUDY_CHROMIUM: executable };
 }
 
-function runStep(step, { installed, chromiumProbe }) {
+// One step of the local run: prints its outcome and returns the exit code
+// the runner should propagate (0 = green/deduped/skipped). Exported for the
+// revert guard: the dedupe-before-install branch must fail through THIS
+// production path, not only through the pure helper (voka finding
+// dedupe-guard-not-wired).
+export function runStep(step, { installed, chromiumProbe }) {
   if (step.skip) {
     console.log(`SKIP [${step.workflow}/${step.job}] ${step.skip}`);
     return 0;
