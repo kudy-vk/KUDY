@@ -198,8 +198,15 @@ function runStep(step, { installed, chromiumProbe }) {
     return 0;
   }
   if (step.deduped !== undefined) {
-    if (installed.has(step.deduped)) console.log(`DEDUPED [${step.id}] npm ci for ${step.deduped} already ran above`);
-    return 0;
+    if (installed.has(step.deduped)) {
+      console.log(`DEDUPED [${step.id}] npm ci for ${step.deduped} already ran above`);
+      return 0;
+    }
+    // A dedupe entry before its install ran means the step order broke —
+    // silently treating it as a pass would skip an npm ci (voka finding
+    // deduped-silent-skip).
+    console.error(`FAIL [${step.id}] dedupe entry reached before its install step — the step list order is broken`);
+    return 1;
   }
   if (step.install !== undefined) {
     installed.add(step.install);

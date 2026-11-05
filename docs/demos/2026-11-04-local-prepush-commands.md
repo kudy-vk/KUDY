@@ -23,4 +23,12 @@ node tools/e2e-android/run-local.mjs --no-such-flag >/dev/null 2>&1; printf 'unk
 unknown flag exit code: 2
 ```
 
-Порт-політыка і NOT-VERIFIED: на занятым порце 8083 ранер адмаўляе прагон і ніколі не забівае чужы працэс; правіла праверана юніт-тэстамі праз stub-io ў main. Адзін рэзюмэ-радок выніку мае тры формы з issue — passed, failed, NOT-VERIFIED — і ніводзін SKIP не лічыцца праходам. Поўны прагон абедзвюх каманд зафіксаваны ў PR (крытэрый 5).
+Гвард дрыфту ci:local і правілы e2e:android:local — адзіны зялёны прагон:
+
+```bash
+node --test --experimental-strip-types --experimental-test-module-mocks tools/ci/ci-local.test.mjs tools/e2e-android/run-local.test.mjs >/dev/null 2>&1 && printf 'drift guard + runner rules: PASS\n'
+```
+
+```output
+drift guard + runner rules: PASS
+```

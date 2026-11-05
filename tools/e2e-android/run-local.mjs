@@ -107,11 +107,54 @@ export function lockRefusalMessage(holder, stale, file) {
     + 'Wait for that run to finish.';
 }
 
+// Ownership check: only the emulator this run spawned lives in the child's
+// own process group (the runner spawns it detached — it becomes a group
+// leader; a concurrently booting foreign emulator never does). The pgid scan
+// reads /proc/<pid>/stat field pgrp; the cmdline must carry `-avd <name>`.
+export function ownEmulatorPid({ pid, avd, procDir = '/proc', readDir = fs.readdirSync, readFile = fs.readFileSync } = {}) {
+  try {
+    for (const entry of readDir(procDir)) {
+      if (!/^[0-9]+$/.test(entry)) continue;
+      try {
+        const stat = readFile(path.join(procDir, entry, 'stat'), 'utf8');
+        const fields = stat.slice(stat.lastIndexOf(')') + 2).split(' ');
+        if (Number(fields[2]) !== pid) continue;
+        const tokens = readFile(path.join(procDir, entry, 'cmdline'), 'utf8')
+          .replaceAll('\0', ' ')
+          .trim()
+          .split(/\s+/);
+        const avdIndex = tokens.indexOf('-avd');
+        if (avdIndex !== -1 && tokens[avdIndex + 1] === avd) return Number(entry);
+      } catch {
+        // the process raced its own exit — not ours, then
+      }
+    }
+  } catch {
+    // /proc is unavailable — ownership cannot be proven
+  }
+  return null;
+}
+
+// The serial of the emulator this run spawned: the console port our own qemu
+// listens on (even ports from 5554), matched against the serials that are new
+// since the pre-boot list. Never adopted by device-list diffing alone — a
+// concurrently booting foreign emulator can win that race. When the port scan
+// is unavailable, the first fresh serial is the documented fallback.
+export function ownSerial({ child, avd, fresh, listenPorts, procDir }) {
+  if (fresh.length === 0) return null;
+  const pid = ownEmulatorPid({ pid: child.pid, avd, ...(procDir ? { procDir } : {}) });
+  if (pid === null) return null;
+  const ports = listenPorts(pid);
+  const owned = ports.filter((port) => port >= 5554 && fresh.includes(`emulator-${port}`));
+  if (owned.length > 0) return `emulator-${owned[0]}`;
+  if (ports.length === 0) return fresh[0];
+  return null;
+}
+
 // The runner boots its own emulator and never reuses, never kills one it did
 // not start: a coexisting foreign emulator is left alone (a shared dev host
-// runs several sessions — this runner picks its own fresh serial and pins
-// every suite to it). Real conflicts still refuse the run: the host lock and
-// the 8083/8792 ports.
+// runs several sessions). Serials already up before the boot are reported in
+// the log and excluded from the adoption candidates.
 export function preExistingSerials(bootedSerials) {
   return bootedSerials.filter((name) => /^emulator-\d+$/.test(name));
 }
@@ -156,6 +199,20 @@ export function findJdk17(searchDirs, { isDir = (p) => fs.existsSync(p) && fs.st
 
 // ---------- default io (the real process world) ----------
 
+// Listening TCP ports of one pid, parsed from `ss -ltnp` (Linux).
+function listeningPorts(pid) {
+  const result = spawnSync('ss', ['-ltnp'], { encoding: 'utf8' });
+  if (result.status !== 0) return [];
+  const marker = `pid=${pid},`;
+  const ports = [];
+  for (const line of result.stdout.split('\n')) {
+    if (!line.includes(marker)) continue;
+    const local = line.match(/:(\d+)\s/);
+    if (local) ports.push(Number(local[1]));
+  }
+  return ports;
+}
+
 function realIo() {
   const require = createRequire(import.meta.url);
   const expoCli = require.resolve('expo/bin/cli');
@@ -193,11 +250,12 @@ function realIo() {
       }
       return false;
     },
-    // Spawn the CI AVD with the flags above (RAM per the evidence note) and
+    // Spawn the AVD with the flags above (RAM per the evidence note) and
     // poll until sys.boot_completed prints 1. Never throws: any failure comes
     // back as { booted: false } so the caller can stop the child it owns.
-    // The first serial that is NEW since the pre-boot list is sticky — a
-    // coexisting foreign emulator must never be adopted.
+    // The serial is derived from the runner's own process group and console
+    // port — never adopted by device-list diffing, which a concurrently
+    // booting foreign emulator can win.
     async bootEmulator({ emulatorBinary, adbPath, logPath, avd, knownSerials = [] }) {
       const log = fs.openSync(logPath, 'a');
       const child = spawn(emulatorBinary, ['-avd', avd, ...EMULATOR_FLAGS], {
@@ -211,7 +269,9 @@ function realIo() {
           const fresh = (await listBootedDevices(adbPath))
             .filter((name) => /^emulator-\d+$/.test(name))
             .filter((name) => !knownSerials.includes(name));
-          if (serial === null && fresh.length > 0) serial = fresh[0];
+          if (serial === null) {
+            serial = ownSerial({ child, avd, fresh, listenPorts: listeningPorts });
+          }
           if (serial !== null) {
             const prop = spawnSync(adbPath, ['-s', serial, 'shell', 'getprop', 'sys.boot_completed'], { encoding: 'utf8' });
             if (prop.status === 0 && prop.stdout.trim() === '1') return { serial, child, booted: true };
@@ -372,9 +432,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
   if (/^[0-9a-f]{40}$/.test(base ?? '')) scopeOutput = io.runScopeTool(base, head);
   if (!scopeNeeded(scopeOutput)) {
     console.log(scopeOutput.trim());
-    const summary = `Android E2E: not needed (scope run=false on ${head})`;
-    console.log(summary);
-    return { code: EXIT.passed, summary };
+    return { code: EXIT.passed, summary: `Android E2E: not needed (scope run=false on ${head})` };
   }
   console.log(scopeOutput.trim());
 
@@ -413,7 +471,10 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     }
     const emulatorBinary = path.join(sdk, 'emulator', 'emulator');
     if (!fs.existsSync(emulatorBinary)) return notVerified(`no emulator binary at ${emulatorBinary}`);
-    if (!fs.existsSync(path.join(sdk, SYSTEM_IMAGE_DIR))) {
+    // The CI AVD wraps the android-36 image; a `--avd` override selects a
+    // guest the host owner manages, so the hardcoded image check applies to
+    // the default only (voka finding avd-image-preflight).
+    if (avdName === AVD_NAME && !fs.existsSync(path.join(sdk, SYSTEM_IMAGE_DIR))) {
       return notVerified(`missing system image ${SYSTEM_IMAGE_DIR} — install it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'sdkmanager')} 'system-images;android-36;google_apis;x86_64'"`);
     }
     if (!io.listAvds(emulatorBinary).includes(avdName)) {

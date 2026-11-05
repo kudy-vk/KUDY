@@ -21,6 +21,8 @@ import {
   isJdk17,
   lockRefusalMessage,
   main,
+  ownEmulatorPid,
+  ownSerial,
   portBusyReason,
   preExistingSerials,
   readJdkRelease,
@@ -284,6 +286,78 @@ test('a busy Metro or origin port refuses the run with the named port', async ()
     }
   });
   assert.match(portBusyReason(8792), /the runner never kills it/);
+});
+
+// Fake /proc tree: two qemu processes run `-avd kudy-ci` — ours (pgid 4242)
+// and a foreign copy booting concurrently (pgid 9999).
+function makeFakeProc() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kudy-proc-'));
+  const write = (pid, pgid) => {
+    fs.mkdirSync(path.join(dir, pid), { recursive: true });
+    fs.writeFileSync(path.join(dir, pid, 'stat'), `${pid} (qemu-system-x86) S 1 ${pgid} 1 0 -1 4194560\n`);
+    fs.writeFileSync(path.join(dir, pid, 'cmdline'), `/emulator/qemu-system-x86_64\0-avd\0kudy-ci\0-no-window\0`);
+  };
+  write('111', '4242');
+  write('222', '9999');
+  return { dir, restore: () => fs.rmSync(dir, { recursive: true, force: true }) };
+}
+
+test('the runner adopts only the emulator in its own process group (voka foreign-serial-adoption-race)', () => {
+  const proc = makeFakeProc();
+  try {
+    // The port map gives ours 5556 and the foreign one 5554 — the first fresh
+    // serial would adopt the foreign guest.
+    assert.equal(ownEmulatorPid({ pid: 4242, avd: 'kudy-ci', procDir: proc.dir }), 111);
+    assert.equal(ownEmulatorPid({ pid: 9999, avd: 'kudy-ci', procDir: proc.dir }), 222);
+    assert.equal(ownEmulatorPid({ pid: 7777, avd: 'kudy-ci', procDir: proc.dir }), null, 'no process in that group');
+    const serial = ownSerial({
+      child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir,
+      fresh: ['emulator-5554', 'emulator-5556'],
+      listenPorts: (pid) => (pid === 111 ? [5556, 5555] : [5554, 5555]),
+    });
+    assert.equal(serial, 'emulator-5556', 'the runner must pin its own console port, not the first fresh serial');
+  } finally {
+    proc.restore();
+  }
+});
+
+test('ownership falls back to the first fresh serial only when the port scan is unavailable', () => {
+  const proc = makeFakeProc();
+  try {
+    assert.equal(
+      ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => [] }),
+      'emulator-5554',
+    );
+    assert.equal(
+      ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => [5558] }),
+      null,
+      'our guest owns a different port than any fresh serial — no adoption',
+    );
+    assert.equal(
+      ownSerial({ child: { pid: 4242 }, avd: 'kudy-ci', procDir: proc.dir, fresh: ['emulator-5554'], listenPorts: () => [5555] }),
+      null,
+      'the adb port (odd) is not a console port — no adoption',
+    );
+  } finally {
+    proc.restore();
+  }
+});
+
+test('the --avd override skips the android-36 image preflight (voka avd-image-preflight)', async () => {
+  await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      // Strip the android-36 system image from the fake SDK: the override
+      // guest does not need it, so the run must still reach the emulator.
+      fs.rmSync(path.join(args[1], 'system-images'), { recursive: true, force: true });
+      const io = stubIo({ listAvds: () => ['kudy-ci', 'kudy-apr05-api35'] });
+      const { code } = await main([...args, '--avd', 'kudy-apr05-api35'], io);
+      assert.equal(code, EXIT.passed, 'the run must reach the emulator without the android-36 image');
+      assert.equal(io.calls.bootEmulator.length, 1);
+    } finally {
+      restore();
+    }
+  });
 });
 
 test('--avd selects a non-default guest; the default stays the CI AVD', async () => {

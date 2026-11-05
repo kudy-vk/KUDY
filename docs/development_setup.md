@@ -201,7 +201,8 @@ swiftshader: smoke 11/11, walk 5/5, discovery 4/4. Пераключэнне CI-�
 | JDK 17 | `~/KUDY-Android/java/jdk-17*` (напрыклад, Temurin 17.0.21). JDK 17, бо `tools/android-build` адхіляе любы іншы JDK (React Native 0.81 збіраецца на 17) і CI збірае з Temurin 17; сістэмныя JDK 21/25 для гэтай зборкі не выкарыстоўваюцца |
 | Android SDK | ужо ёсць: `~/Android/Sdk` (`ANDROID_HOME` у `~/.zshenv`) |
 | System image | `~/Android/Sdk/system-images/android-36/google_apis/x86_64`; калі няма — `~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager 'system-images;android-36;google_apis;x86_64'` |
-| AVD `kudy-ci` | `~/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name kudy-ci --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'` || KVM | `/dev/kvm` даступны на запіс (група `kvm`); праграмнае паскарэнне не выкарыстоўваецца — без KVM ранер адмаўляе прагон |
+| AVD `kudy-ci` | `~/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name kudy-ci --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'` |
+| KVM | `/dev/kvm` даступны на запіс (група `kvm`); праграмнае паскарэнне не выкарыстоўваецца — без KVM ранер адмаўляе прагон |
 | Deno | устаноўлены і адпавядае `supabase/functions/.deno-version` (патрэбны для `ci:local`) |
 | Chromium | `npx playwright install chromium` з root checkout-а (на Debian-падобных `--with-deps`, як у CI), альбо сістэмны Chromium |
 
