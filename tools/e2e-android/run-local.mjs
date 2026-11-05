@@ -189,9 +189,9 @@ function realIo() {
     // back as { booted: false } so the caller can stop the child it owns.
     // The first serial that is NEW since the pre-boot list is sticky — a
     // coexisting foreign emulator must never be adopted.
-    async bootEmulator({ emulatorBinary, adbPath, logPath, knownSerials = [] }) {
+    async bootEmulator({ emulatorBinary, adbPath, logPath, avd, knownSerials = [] }) {
       const log = fs.openSync(logPath, 'a');
-      const child = spawn(emulatorBinary, ['-avd', AVD_NAME, ...EMULATOR_FLAGS], {
+      const child = spawn(emulatorBinary, ['-avd', avd, ...EMULATOR_FLAGS], {
         cwd: REPO_ROOT, detached: true, windowsHide: true, stdio: ['ignore', log, log],
       });
       fs.closeSync(log);
@@ -340,7 +340,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
   try {
     args = parseArgs({
       args: argv,
-      options: { jdk: { type: 'string' }, sdk: { type: 'string' }, 'build-root': { type: 'string' } },
+      options: { jdk: { type: 'string' }, sdk: { type: 'string' }, 'build-root': { type: 'string' }, avd: { type: 'string' } },
       strict: true,
     }).values;
   } catch (error) {
@@ -375,6 +375,11 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
 
   // 2. One run per host (criterion 3): a host-wide lock with the
   // checkout-lock policy — a stale lock is reported, never taken over.
+  // The CI AVD is the default; --avd / KUDY_E2E_AVD selects another one — on
+  // this host the android-36 image the CI AVD wraps ANRs SystemUI under app
+  // load (issue #132 debugging log), and an android-35 guest passes all
+  // three suites; switching the default is an operator decision (PR note).
+  const avdName = args.avd ?? process.env.KUDY_E2E_AVD ?? AVD_NAME;
   const kudyRoot = process.env.KUDY_ANDROID_ROOT ?? path.join(os.homedir(), 'KUDY-Android');
   fs.mkdirSync(kudyRoot, { recursive: true });
   const lockFile = path.join(kudyRoot, 'e2e-android-local.lock');
@@ -402,8 +407,8 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     if (!fs.existsSync(path.join(sdk, SYSTEM_IMAGE_DIR))) {
       return notVerified(`missing system image ${SYSTEM_IMAGE_DIR} — install it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'sdkmanager')} 'system-images;android-36;google_apis;x86_64'"`);
     }
-    if (!io.listAvds(emulatorBinary).includes(AVD_NAME)) {
-      return notVerified(`no AVD ${AVD_NAME} — create it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'avdmanager')} create avd --name ${AVD_NAME} --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'"`);
+    if (!io.listAvds(emulatorBinary).includes(avdName)) {
+      return notVerified(`no AVD ${avdName} — create it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'avdmanager')} create avd --name ${avdName} --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'"`);
     }
     if (!io.kvmWritable()) {
       return notVerified('/dev/kvm is not writable for this user — the Linux host runs the emulator with KVM (add the user to the kvm group); no software fallback');
@@ -450,8 +455,8 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     console.log(`-- APK: ${apkPath} (sha256 ${sha256(apkPath)})`);
 
     // 5. Emulator (criterion 2.3): the CI AVD with the CI flags, KVM.
-    console.log(`-- booting the CI AVD ${AVD_NAME} with KVM (flags: ${EMULATOR_FLAGS.join(' ')})`);
-    const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log'), knownSerials: preBoot });
+    console.log(`-- booting the AVD ${avdName} with KVM (flags: ${EMULATOR_FLAGS.join(' ')})`);
+    const boot = await io.bootEmulator({ emulatorBinary, adbPath: adb, logPath: path.join(runDir, 'emulator.log'), avd: avdName, knownSerials: preBoot });
     if (!boot.booted) {
       await io.stopEmulator({ child: boot.child, adbPath: adb, serial: boot.serial });
       return notVerified(`emulator did not boot within ${Math.round((BOOT_ATTEMPTS * BOOT_POLL_MS) / 1000)} s (log: ${path.join(runDir, 'emulator.log')})`);

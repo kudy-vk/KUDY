@@ -285,8 +285,26 @@ test('a busy Metro or origin port refuses the run with the named port', async ()
   assert.match(portBusyReason(8792), /the runner never kills it/);
 });
 
-test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass', async () => {
+test('--avd selects a non-default guest; the default stays the CI AVD', async () => {
   await withTempRoot(async () => {
+    const { args, restore } = preflightArgs();
+    try {
+      const overrideIo = stubIo({ listAvds: () => ['kudy-ci', 'kudy-apr05-api35'] });
+      const override = await main([...args, '--avd', 'kudy-apr05-api35'], overrideIo);
+      assert.equal(override.code, EXIT.passed);
+      assert.deepEqual(overrideIo.calls.bootEmulator.map(([bootArgs]) => bootArgs.avd), ['kudy-apr05-api35']);
+
+      const defaultIo = stubIo();
+      const defaulted = await main([...args], defaultIo);
+      assert.equal(defaulted.code, EXIT.passed);
+      assert.deepEqual(defaultIo.calls.bootEmulator.map(([bootArgs]) => bootArgs.avd), ['kudy-ci']);
+    } finally {
+      restore();
+    }
+  });
+});
+
+test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass', async () => {  await withTempRoot(async () => {
     const noKvm = preflightArgs();
     try {
       const io = stubIo({ kvmWritable: () => false });
