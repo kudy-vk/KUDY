@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { FAST_WORKFLOWS, WINDOWS_ONLY_SKIP, buildSteps, coverageFailures, dedupeStepResult, jscpdVersion, parseWorkflowJobs, runStep, significantCommands } from './ci-local.mjs';
+import { FAST_WORKFLOWS, WINDOWS_ONLY_SKIP, buildSteps, chromiumEnv, coverageFailures, dedupeStepResult, jscpdVersion, parseWorkflowJobs, runStep, significantCommands } from './ci-local.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const readWorkflow = (name) => fs.readFileSync(path.join(root, '.github', 'workflows', name), 'utf8');
@@ -98,6 +98,16 @@ test('revert: a dedupe entry before its install must fail loudly, never pass sil
   // reverting runStep's dedupe branch to a silent `return 0` turns this red.
   const outOfOrder = runStep({ id: 'lint/install (root, deduped)', deduped: 'root' }, { installed: new Set(), chromiumProbe: () => ({}) });
   assert.equal(outOfOrder, 1, 'the production runStep must fail an out-of-order dedupe entry');
+});
+
+test('chromium resolution: managed download wins, the documented system fallback applies (voka system-chromium-doc-claim)', () => {
+  const noAccess = () => {};
+  const managed = chromiumEnv({ probe: () => '/ms-playwright/chrome', fileExists: (p) => p === '/ms-playwright/chrome', access: noAccess });
+  assert.equal(managed.KUDY_CHROMIUM, '/ms-playwright/chrome');
+  const system = chromiumEnv({ probe: () => null, fileExists: (p) => p === '/usr/bin/chromium', access: noAccess });
+  assert.equal(system.KUDY_CHROMIUM, '/usr/bin/chromium', 'the documented system-Chromium alternative must work');
+  assert.throws(() => chromiumEnv({ probe: () => null, fileExists: () => false, access: noAccess }), /no chromium for the web journeys/,
+    'neither source — a named failure, never a silent pass');
 });
 
 test('the npm scripts point at the runners (runner wiring is guarded)', () => {

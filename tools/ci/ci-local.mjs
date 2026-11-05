@@ -214,16 +214,43 @@ export function coverageFailures(workflows, steps) {
 // KUDY_CHROMIUM. Runs inside the journeys step: on a fresh host the
 // Chromium install step has already run, and a missing binary fails that
 // step with a named reason instead of crashing before the first step.
-function chromiumEnv() {
+// The playwright-managed chromium path, with the harness's own system
+// fallback (the same candidate list web/test-browser/cdp-browser.mjs
+// findChromiumBinary() uses) when the managed download is missing — the
+// setup doc offers a system Chromium as the alternative, so the journeys
+// step must accept it too (voka finding system-chromium-doc-claim).
+const SYSTEM_CHROMIUM_CANDIDATES = [
+  '/usr/bin/google-chrome',
+  '/usr/bin/google-chrome-stable',
+  '/usr/bin/chromium',
+  '/usr/sbin/chromium',
+  '/usr/bin/chromium-browser',
+  '/snap/bin/chromium',
+];
+
+export function chromiumEnv({ probe = defaultChromiumProbe, fileExists = (p) => fs.existsSync(p), access = (p) => fs.accessSync(p, fs.constants.X_OK) } = {}) {
+  const executable = probe();
+  if (executable && fileExists(executable)) {
+    access(executable);
+    return { KUDY_CHROMIUM: executable };
+  }
+  const system = SYSTEM_CHROMIUM_CANDIDATES.find((candidate) => fileExists(candidate));
+  if (system) {
+    access(system);
+    return { KUDY_CHROMIUM: system };
+  }
+  throw new Error('no chromium for the web journeys — neither the playwright-managed download nor a system chromium; run the Chromium install step');
+}
+
+function defaultChromiumProbe() {
   const probe = spawnSync(process.execPath, ['-e', `process.stdout.write(require('playwright').chromium.executablePath())`], {
     cwd: REPO_ROOT, encoding: 'utf8',
   });
   const executable = probe.status === 0 ? probe.stdout.trim() : '';
   if (!executable || !fs.existsSync(executable)) {
-    throw new Error(`playwright chromium executable not found (${probe.stderr.trim() || executable || 'no output'}) — run the Chromium install step`);
+    return null;
   }
-  fs.accessSync(executable, fs.constants.X_OK);
-  return { KUDY_CHROMIUM: executable };
+  return executable;
 }
 
 // One step of the local run: prints its outcome and returns the exit code
