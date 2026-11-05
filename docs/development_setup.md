@@ -161,7 +161,8 @@ engine-regressions → web-build → gitleaks → web-e2e → jscpd → guard-re
 `run=false` — «not needed» і выхад 0; `run=true` — зборка debug-APK дакладна
 гэтага HEAD (`tools/android-build/android-build.mjs`, task-owned build-root),
 загрузка AVD `kudy-ci` (pixel_5, API 36) з сцягамі CI
-(`-no-window -no-audio -no-snapshot -gpu swiftshader_indirect -memory 2048`)
+(`-no-window -no-audio -no-snapshot -gpu swiftshader_indirect`; RAM гасця —
+4096, не CI-авыя 2048 — гл. адхіл ніжэй)
 на KVM, сюіты `smoke`, `walk`, `discovery`, пасля іх — non-gating
 `visual:check`, і адзін радок выніку: `Android E2E: passed on <sha>`,
 `failed (<suite>) on <sha>` або `NOT-VERIFIED (<reason>)`. Радок

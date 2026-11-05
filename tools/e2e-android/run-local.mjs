@@ -489,7 +489,8 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     }
     if (!io.kvmWritable()) {
       return notVerified('/dev/kvm is not writable for this user — the Linux host runs the emulator with KVM (add the user to the kvm group); no software fallback');
-    }    const jdk = args.jdk ?? process.env.KUDY_JDK17 ?? findJdk17([path.join(kudyRoot, 'java'), '/usr/lib/jvm']);
+    }
+    const jdk = args.jdk ?? process.env.KUDY_JDK17 ?? findJdk17([path.join(kudyRoot, 'java'), '/usr/lib/jvm']);
     if (!jdk || !isJdk17(jdk)) {
       return notVerified('no JDK 17 (set --jdk or KUDY_JDK17) — the build uses JDK 17 like CI, because tools/android-build refuses any other JDK');
     }
