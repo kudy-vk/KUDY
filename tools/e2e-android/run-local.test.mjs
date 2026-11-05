@@ -385,7 +385,8 @@ test('--avd selects a non-default guest; the default stays the CI AVD', async ()
   });
 });
 
-test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass', async () => {  await withTempRoot(async () => {
+test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass', async () => {
+  await withTempRoot(async () => {
     const noKvm = preflightArgs();
     try {
       const io = stubIo({ kvmWritable: () => false });
@@ -405,6 +406,21 @@ test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass',
       assert.match(result.summary, /system-images;android-36;google_apis;x86_64/);
     } finally {
       noAvd.restore();
+    }
+
+    // voka finding missing-image-revert-test: the default AVD without its
+    // system image must refuse with the named reason — deleting the guard
+    // turns this case red.
+    const noImage = preflightArgs();
+    try {
+      fs.rmSync(path.join(noImage.args[1], 'system-images'), { recursive: true, force: true });
+      const io = stubIo();
+      const result = await main(noImage.args, io);
+      assert.equal(result.code, EXIT.notVerified);
+      assert.match(result.summary, /missing system image system-images\/android-36\/google_apis\/x86_64/);
+      assert.equal(io.calls.bootEmulator.length, 0, 'nothing boots without the image');
+    } finally {
+      noImage.restore();
     }
   });
 });

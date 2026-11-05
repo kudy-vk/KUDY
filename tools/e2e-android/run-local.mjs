@@ -421,7 +421,7 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     }).values;
   } catch (error) {
     console.error(`e2e:android:local: ${error.message}`);
-    console.error('usage: npm run e2e:android:local [-- --jdk <abs> --sdk <abs> --build-root <abs>]');
+    console.error('usage: npm run e2e:android:local [-- --jdk <abs> --sdk <abs> --build-root <abs> --avd <name>]');
     return { code: EXIT.usage, summary: null };
   }
 
