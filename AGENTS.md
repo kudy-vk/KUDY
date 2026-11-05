@@ -12,7 +12,7 @@ When you claim, execute, block or hand back a task tracked as a GitHub issue in 
 
 Search before adding helpers. On a jscpd fail, refactor or reuse; do not paste a second variant.
 
-Local pre-push: `npm run arch:check`, then `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`
+Local pre-push on the Linux host: `npm run ci:local` (the fast CI checks in workflow order, including `arch:check` and the jscpd gate `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`), then `npm run e2e:android:local` when `tools/ci/android-e2e-scope.mjs` says run=true (docs/agent-rules/android-e2e-local.md).
 
 Before every push to a pull-request branch, read and follow `docs/agent-rules/android-e2e-local.md`. CI runs only the fast checks; when the change touches project code, the Android E2E suites run on a local emulator, and documentation-only or design-mockup changes skip them.
 

@@ -44,6 +44,11 @@ import { runDiscoverySuite } from './discovery.mjs';
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ORIGIN_TOOL = path.join(REPO_ROOT, 'tools', 'e2e-origin', 'serve-e2e-origin.mjs');
 const ARTIFACTS_ROOT = path.join(REPO_ROOT, 'tools', 'e2e-android', 'artifacts');
+// The local pre-push runner (tools/e2e-android/run-local.mjs) checks these
+// same two ports before it boots anything, so they live here — the single
+// source — not restated there.
+export const DEFAULT_METRO_PORT = 8083;
+export const DEFAULT_ORIGIN_PORT = 8792;
 const DEFAULT_APK = path.join(REPO_ROOT, 'android', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
 const METRO_READY_TIMEOUT_MS = 120000;
 const METRO_START_RETRIES = 2;
@@ -455,8 +460,8 @@ async function main() {
     console.error(`--only requires --suite locales and one of ${onlyCases.join('/')} (got ${only})`);
     process.exit(2);
   }
-  const metroPort = Number(argValue('--metro-port') ?? 8083);
-  const originPort = Number(argValue('--origin-port') ?? 8792);
+  const metroPort = Number(argValue('--metro-port') ?? DEFAULT_METRO_PORT);
+  const originPort = Number(argValue('--origin-port') ?? DEFAULT_ORIGIN_PORT);
 
   const runId = new Date().toISOString().replaceAll(/[:.]/g, '-');
   const runDir = path.join(ARTIFACTS_ROOT, runId);

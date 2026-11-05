@@ -137,6 +137,82 @@ unavailable-станы гіда, прагулкі, месца, калекцыі 
 не рапартуе праход. На супольным хосце ранер не спаўняе і не забівае
 эмулятараў — пазначайце свой serial.
 
+## Лакальныя праверкі перад push на Linux: `ci:local` і `e2e:android:local` (#132)
+
+Дзве каманды — увесь pre-push правераны прагон на Linux-хосце распрацоўкі
+(CachyOS). Правіла іх прымянення — `docs/agent-rules/android-e2e-local.md`.
+
+```sh
+npm run ci:local           # хуткія праверкі CI ў парадку workflow-файлаў
+npm run e2e:android:local  # Android-сюіты на лакальным эмулятары, калі scope кажа run=true
+```
+
+`ci:local` ідзе ў парадку `.github/workflows/`: tests → lint → server-typecheck →
+engine-regressions → web-build → gitleaks → web-e2e → jscpd → guard-required-checks,
+з першым ненулявым кодам выхаду як спыненнем. Windows-адзіны job
+`windows-portable` пазначаны як SKIP; `npm ci` для root і web выконваецца
+аднойчы, астатнія ўваходы ідуць як DEDUPED-нататкі. Гвард
+`tools/ci/ci-local.test.mjs` парсіць workflow-файлы і падае, калі каманды
+кроку няма ў `ci:local`, — спіс не можа адстайваць ад CI. На Windows ранер
+адмаўляецца працаваць з патлумачэннем (#124).
+
+`e2e:android:local` сам выконвае scope-праверку
+(`tools/ci/android-e2e-scope.mjs` супраць `merge-base origin/main HEAD`):
+`run=false` — «not needed» і выхад 0; `run=true` — зборка debug-APK дакладна
+гэтага HEAD (`tools/android-build/android-build.mjs`, task-owned build-root),
+загрузка AVD `kudy-ci` (pixel_5, API 36) з сцягамі CI
+(`-no-window -no-audio -no-snapshot -gpu swiftshader_indirect`; RAM гасця —
+4096, не CI-авыя 2048 — гл. адхіл ніжэй)
+на KVM, сюіты `smoke`, `walk`, `discovery`, пасля іх — non-gating
+`visual:check`, і адзін радок выніку: `Android E2E: passed on <sha>`,
+`failed (<suite>) on <sha>` або `NOT-VERIFIED (<reason>)`. Радок
+`SKIP e2e:android` ніколі не лічыцца праходам. Коды выхаду: 0 — праход
+(ці not needed), 1 — памылка сюіту, 2 — usage, 3 — NOT-VERIFIED, 4 — хост
+залочаны іншым прагонам.
+
+Хост-політыка (адзін прагон на хост): lock у `$KUDY_ANDROID_ROOT`
+(дэфолт `~/KUDY-Android`), палітыка checkout-lock — старонні і стэйл-lock
+паведамляюцца і ніколі не забіраюцца самавольна. Ранер грузіць УЛАСНЫ
+эмулятар і ніколі не пераўжывае і не забівае чужы: суседні эмулятар іншай
+сэсіі застаецца недатыкальным, сюіты прыбіты да serial ранера. Сапраўдныя
+канфлікты адмаўляюць прагон з прычынай: занятыя порты 8083/8792, lock хоста.
+
+Адзін доказавы адхіл ад сцягаў CI: RAM гасця — 4096, не 2048 (эмулятар
+аўтаматычна паднімае 2048 да 2560). Пры 2048/2560 кожны госць android-36
+google_apis на гэтым хосце ANR-іць SystemUI цягам хвіліны пасля загрузкі
+(дыялог ANR — адзінае акно ў дампах, усе кейсы тайм-аўцяць; глядж
+дэбаг-лог у PR #140: тры загрузкі 2026-11-04; размешчаны CI-джоб на гэтых
+сцягах таксама ні разу не прайшоў эмулятар). Пры 4096 госць загрузаецца і
+трымаецца здаровым. RAM не мяняе пікселі — парытэт базлайнаў visual:check
+не парушаецца. Астатнія сцягі — дакладна CI-авыя: іншыя сцягі могуць даць
+ілжывыя дыфы visual:check.
+
+Каманда `e2e:android:local` — агульны ўваход `tools/ci/android-e2e-local.mjs`: на Windows ідзе шлях #124 (дыск D:, коды 0/1/64/75/86), на Linux ранер дэлегуе ў `tools/e2e-android/run-local.mjs` (коды ніжэй). Дэфолтны AVD ранера — `kudy-ci` (парыцец на CI). Сцягам `--avd` (ці
+зменнай `KUDY_E2E_AVD`) выбіраецца іншы госць: вобраз android-36
+google_apis ANR-іць SystemUI пад нагрузкай дадатку нават пры 4096 (гл.
+дэбаг-лог), а госць android-35 google_apis праходзіць усе тры сюіты —
+даказана 2026-11-05 на `kudy-apr05-api35` з тым жа эмулятарам і
+swiftshader: smoke 11/11, walk 5/5, discovery 4/4. Пераключэнне CI-вобраза
+і базлайнаў на android-35 — рашэнне ўладальніка (гл. PR #140).
+
+### Разавая падрыхтоўка Linux-хоста
+
+| Што | Дзе / каманда |
+|---|---|
+| JDK 17 | `~/KUDY-Android/java/jdk-17*` (напрыклад, Temurin 17.0.21). JDK 17, бо `tools/android-build` адхіляе любы іншы JDK (React Native 0.81 збіраецца на 17) і CI збірае з Temurin 17; сістэмныя JDK 21/25 для гэтай зборкі не выкарыстоўваюцца |
+| Android SDK | ужо ёсць: `~/Android/Sdk` (`ANDROID_HOME` у `~/.zshenv`) |
+| System image | `~/Android/Sdk/system-images/android-36/google_apis/x86_64`; калі няма — `~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager 'system-images;android-36;google_apis;x86_64'` |
+| AVD `kudy-ci` | `~/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name kudy-ci --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'` |
+| KVM | `/dev/kvm` даступны на запіс (група `kvm`); праграмнае паскарэнне не выкарыстоўваецца — без KVM ранер адмаўляе прагон |
+| Deno | устаноўлены і адпавядае `supabase/functions/.deno-version` (патрэбны для `ci:local`) |
+| Chromium | `npx playwright install chromium` з root checkout-а (на Debian-падобных `--with-deps`, як у CI), альбо сістэмны Chromium |
+
+`KUDY_JDK17` — зменная з шляхам да JDK 17 (ці `--jdk`); `KUDY_ANDROID_ROOT` —
+корань lock-файла, JDK і build-root (дэфолт `~/KUDY-Android`, build-root —
+`$KUDY_ANDROID_ROOT/build`). Усё, што піша зборка і прагон, жыве ў гэтых
+тэчках і ў git-ігнараваным `tools/e2e-android/artifacts/`; checkout застаецца
+чыстым (`android/` ігнаруецца).
+
 ## Натыўныя зборкі (development build)
 
 Прадумова: профіль `development` мае `developmentClient: true` — EAS патрабуе залежнасць `expo-dev-client` у `package.json` (у каркасе: `~6.0.21`).

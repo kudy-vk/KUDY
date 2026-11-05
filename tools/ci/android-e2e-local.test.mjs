@@ -201,3 +201,18 @@ describe('android-e2e-local runner wiring', () => {
     assert.ok(fs.existsSync(new URL('./android-e2e-local.mjs', import.meta.url)));
   });
 });
+
+// Issue #132 consolidation: on non-Windows hosts the entry delegates to the
+// #132 Linux runner (tools/e2e-android/run-local.mjs) with argv passthrough
+// and exit-code propagation. Reverting the delegation branch turns this red.
+describe('android-e2e-local platform dispatch', () => {
+  it('delegates the Linux path to the #132 runner and propagates its usage exit', async () => {
+    if (process.platform === 'win32') return; // the Windows path runs in-place on win32
+    const { spawnSync } = await import('node:child_process');
+    const { fileURLToPath } = await import('node:url');
+    const entry = fileURLToPath(new URL('./android-e2e-local.mjs', import.meta.url));
+    const result = spawnSync(process.execPath, [entry, '--no-such-flag'], { encoding: 'utf8', timeout: 60_000 });
+    assert.equal(result.status, 2, 'the Linux runner usage exit must propagate through the entry');
+    assert.match(result.stdout + result.stderr, /e2e:android:local .*--avd <name>/, 'the usage line must be the #132 runner\'s');
+  });
+});

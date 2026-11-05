@@ -24,35 +24,26 @@ The allowlist in `tools/ci/android-e2e-scope.mjs` is the only definition of "not
 
 A previous local pass still holds when `node tools/ci/android-e2e-scope.mjs <passed-sha> <HEAD>` prints `run=false`: since that pass, only allowlisted files changed. Name both SHAs in the report.
 
-## 2. Run the suites
+## 2. Run the pre-push checks
 
-Use `npm run e2e:android:local` once it exists (issue #124: SDK, emulator and builds on drive D:).
-
-Until then, on a host with a JDK 17, an Android SDK and the AVD `kudy-ci`:
-
-1. Build the debug APK with the documented procedure in `docs/development_setup.md` («Лакальная debug-зборка Android на Windows»; on Linux, `npx expo prebuild --platform android --no-install` and `./gradlew assembleDebug` in `android/`).
-2. Boot the emulator with the same flags as `.github/workflows/android-e2e.yml` and the visual baselines in `docs/design-qa/baselines/`. Other flags can produce false `visual:check` diffs. Wait until `adb shell getprop sys.boot_completed` prints `1`.
+On the Linux dev host the two commands are the whole pre-push run:
 
 ```sh
-emulator -avd kudy-ci -no-window -no-audio -no-snapshot -gpu swiftshader_indirect -memory 2048
+npm run ci:local
+npm run e2e:android:local
 ```
 
-3. Run each suite and check that each one exits 0 and prints no `SKIP e2e:android` line:
-
-```sh
-npm run e2e:android -- --suite smoke
-npm run e2e:android -- --suite walk
-npm run e2e:android -- --suite discovery
-```
-
-4. For a change to the interface, also run `npm run visual:check -- --out <dir>`. It is a non-gating report for design-QA (`docs/agent-rules/design-qa.md`).
-
-Run only one Android E2E run at a time per host: other agent sessions share the machine, and every run uses the same Metro port (8083) and origin port (8792). If `adb devices` already lists an emulator you did not start, or either port is busy, wait for that run to finish. Do not start a second emulator. Never kill an emulator, Metro or origin server you did not start.
+- `npm run ci:local` runs the fast CI checks in the workflow order (tests, lint, server-typecheck, engine-regressions, web-build, gitleaks, web-e2e, jscpd, guard-required-checks) and stops at the first failure. The Windows-only `windows-portable` job is listed as skipped. The drift guard `tools/ci/ci-local.test.mjs` fails when a fast workflow step's command is missing, so the local list cannot drift from CI.
+- `npm run e2e:android:local` runs the scope check of section 1 itself. On `run=false` it prints that and exits 0. On `run=true` it builds the debug APK for the exact HEAD, boots the AVD `kudy-ci` (pixel_5, API 36) with CI's flags except guest RAM (see the Setup bullet in `docs/development_setup.md`) and KVM, runs the suites `smoke`, `walk` and `discovery`, then the non-gating `visual:check`, and prints one summary line: `Android E2E: passed on <sha>`, `Android E2E: failed (<suite>) on <sha>` or `Android E2E: NOT-VERIFIED (<reason>)`. A `SKIP e2e:android` line is never a pass — it becomes `NOT-VERIFIED`.
+- Exit codes: 0 — passed (or not needed); 1 — a failed suite; 2 — usage; 3 — NOT-VERIFIED; 4 — the host is locked by another run.
+- One run at a time per host (the runner enforces it): a host lock in `$KUDY_ANDROID_ROOT` (default `~/KUDY-Android`) with the checkout-lock policy — a stale lock is reported, never taken over. The runner boots its own emulator and never reuses or kills one it did not start: a coexisting foreign emulator (another session's) is left alone and the suites are pinned to the runner's own serial. Real conflicts still refuse the run: a busy Metro or origin port (8083/8792) is a named refusal, never a kill.
+- Setup (JDK 17, SDK system image, AVD, KVM, Chromium): the Linux section of `docs/development_setup.md`. The local boot deviates from CI's flags in one evidence-based way — guest RAM 4096 instead of 2048, because at the CI value every android-36 guest ANRs SystemUI within a minute of boot and every suite case times out (see the section in `docs/development_setup.md`). RAM does not change rendered pixels, so `visual:check` baseline parity is unaffected.
+- One command, two host runners: `e2e:android:local` is `tools/ci/android-e2e-local.mjs` — on Windows it runs #124's Windows path (drive D: layout, exit codes 0/1/64/75/86), on Linux it delegates to `tools/e2e-android/run-local.mjs` with the exit codes above.
 
 ## 3. Act on the result
 
 - Pass: push, and keep the line `Android E2E: passed on <sha> (smoke, walk, discovery)` in the PR body's Verification section.
-- Failure: run the failing suite again on `origin/main`, with an APK rebuilt from `origin/main` (step 1 of section 2, or `--apk <main build>`). The runner installs whatever APK is in the checkout, and that file survives `git checkout`. Record the APK SHA-256 that the runner prints for both runs.
+- Failure: run the failing suite again on `origin/main`, with an APK rebuilt from `origin/main`. The runner installs whatever APK is in the checkout, and that file survives `git checkout`. Record the APK SHA-256 that the runner prints for both runs.
   - If it passes on `main`, your change broke it. Fix it before you push.
   - If it fails on `main` too, the failure is not yours. Push, write `Android E2E: failed (<suite>) on <sha>; also fails on main <main-sha>` in the PR body, and link an issue for the failure (open one if none exists). Name the artifacts path (`tools/e2e-android/artifacts/`).
 - No SDK, no emulator, a `SKIP e2e:android` line, or an emulator that does not boot: this is not a pass. Push, and write `Android E2E: NOT-VERIFIED (<reason>)` in the PR body. Reviewers and Judge treat it as an open check, not a green one.
