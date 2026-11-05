@@ -5,6 +5,23 @@ import {nativeLayout} from '../native-layout.ts';
 import {joinGroups} from '../magnet.mjs';
 const puzzle=()=>new CityPuzzle(360,()=>.5);
 const anchor=(m,id)=>{const p=m.pieces.get(id),a=nativeLayout.pieces.find(p=>p.id===id);return {x:125+a.x+p.group.dx+a.width/2,y:320+a.y+p.group.dy+a.height/2};};
+
+test('a configured subset assembles without requiring the absent fifth piece',()=>{
+  const ids=nativeLayout.pieces.slice(0,4).map(p=>p.id);
+  const m=new CityPuzzle(320,()=>.5,ids),first=[...m.groups][0];
+  assert.equal(m.pieces.has('kudy'),false);
+  for(const group of [...m.groups].slice(1))joinGroups(first,group,m.pieces,m.groups);
+  m.completeNow();assert.equal(m.phase,'complete');
+});
+
+test('a tap-only host keeps its configured scatter during held movement',()=>{
+  const m=new CityPuzzle(320,()=>0,undefined,{height:2500,positions:{nearby:{x:110,y:600}},dragEnabled:false});
+  const before=m.position('nearby'),point=anchor(m,'nearby');
+  assert.deepEqual(before,{x:110,y:600});
+  m.begin(point,0);m.hold(301);m.move({x:point.x+100,y:point.y},350);
+  assert.deepEqual(m.position('nearby'),before);
+  assert.equal(m.release(400).kind,'none');assert.equal(m.groups.size,5);
+});
 test('idle time, holding and release never magnetize nearby pieces',()=>{
   const m=puzzle(),a=m.pieces.get('nearby'),b=m.pieces.get('guides');
   b.group.dx=a.group.dx+2;b.group.dy=a.group.dy+2;

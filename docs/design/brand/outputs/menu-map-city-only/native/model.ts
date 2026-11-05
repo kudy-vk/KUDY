@@ -5,6 +5,7 @@ import { amberMotion } from '../amber-light.mjs';
 export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
+export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean };
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
 type Group = { dx: number; dy: number; members: Set<PieceId> };
 type Shape = { id: string; x: number; y: number; width: number; height: number; rows: number[][] };
@@ -34,12 +35,15 @@ export class CityPuzzle {
   active: Gesture | null = null;
   private motion: { at: number; group: Group; from: Point } | null = null;
   private scale: number;
+  private readonly layout?: CityMenuLayout;
 
-  constructor(width: number, random: () => number = Math.random) {
+  constructor(width: number, random: () => number = Math.random, ids: readonly PieceId[] = nativeLayout.pieces.map(p=>p.id), layout?: CityMenuLayout) {
+    this.layout = layout;
     this.scale = this.validScale(width);
     const slots = [[170,190],[880,230],[1010,880],[130,850],[410,1400]];
     nativeLayout.pieces.forEach((item, index) => {
-      const [x,y] = slots[index];
+      if (!ids.includes(item.id)) return;
+      const [x,y] = layout?.positions[item.id] ? [layout.positions[item.id]!.x,layout.positions[item.id]!.y] : slots[index];
       const group = { dx: x + random()*22 - 125 - item.x, dy: y + random()*16 - 320 - item.y, members: new Set([item.id]) };
       this.groups.add(group);
       this.pieces.set(item.id, { ...item, rows: rows(item.hitRows), group });
@@ -77,6 +81,7 @@ export class CityPuzzle {
     return hit;
   }
   hold(now: number) {
+    if (this.layout?.dragEnabled === false) return;
     const active = this.active;
     if (active && !active.hit.passive && !active.cancelled && this.phase === 'scattered' && now-active.at >= nativeLayout.gesture.holdMs) active.held = true;
   }
@@ -93,13 +98,14 @@ export class CityPuzzle {
     if (dx === 0 && dy === 0) return none;
     const members = [...group.members].map(id => this.pieces.get(id)!);
     group.dx = Math.max(-Math.min(...members.map(p=>p.x))-55,Math.min(1390-Math.max(...members.map(p=>p.x+p.width)),group.dx+dx));
-    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min(1370-Math.max(...members.map(p=>p.y+p.height)),group.dy+dy));
+    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min((this.layout?.height??1800)-430-Math.max(...members.map(p=>p.y+p.height)),group.dy+dy));
     active.last = point;
-    const target = findMagnet(group,this.pieces,nativeLayout.joints,nativeLayout.gesture.snapDistanceDp/this.scale);
+    const joints = nativeLayout.joints.filter(joint=>this.pieces.has(joint.a)&&this.pieces.has(joint.b));
+    const target = findMagnet(group,this.pieces,joints,nativeLayout.gesture.snapDistanceDp/this.scale);
     if (!target) return none;
     joinGroups(group,target.other,this.pieces,this.groups);
     this.active = null;
-    const complete = group.members.size === 5;
+    const complete = group.members.size === this.pieces.size;
     if (complete) { this.motion = { at: now, group, from: {x:group.dx,y:group.dy} }; this.phase = 'assembling'; }
     return { kind:'snap', complete, point:{x:125+group.dx+target.joint.port[0],y:320+group.dy+target.joint.port[1]} };
   }
@@ -128,7 +134,7 @@ export class CityPuzzle {
   completeNow() {
     if (this.groups.size !== 1) return;
     const group = [...this.groups][0];
-    if (group.members.size !== 5) return;
+    if (group.members.size !== this.pieces.size) return;
     group.dx=0;group.dy=0;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
   }
 }

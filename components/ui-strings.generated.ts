@@ -13,6 +13,7 @@ import type { UiStrings } from "../contracts/ui-message-types.ts";
 
 export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   "be": {
+    "comingSoon": "Хутка",
     "access": {
       "free": "Бясплатна",
       "mixed": "Змешана",
@@ -102,6 +103,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Чым заняцца →",
   },
   "en": {
+    "comingSoon": "Coming soon",
     "access": {
       "free": "Free",
       "mixed": "Mixed",
@@ -191,6 +193,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "What to do →",
   },
   "uk": {
+    "comingSoon": "Скоро",
     "access": {
       "free": "Безкоштовно",
       "mixed": "Змішано",
@@ -280,6 +283,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Чим зайнятися →",
   },
   "de": {
+    "comingSoon": "Bald",
     "access": {
       "free": "Kostenlos",
       "mixed": "Gemischt",
@@ -369,6 +373,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Was unternehmen →",
   },
   "es": {
+    "comingSoon": "Pronto",
     "access": {
       "free": "Gratis",
       "mixed": "Mixto",
@@ -458,6 +463,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Qué hacer →",
   },
   "fr": {
+    "comingSoon": "Bientôt",
     "access": {
       "free": "Gratuit",
       "mixed": "Mixte",
@@ -547,6 +553,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Que faire →",
   },
   "cs": {
+    "comingSoon": "Brzy",
     "access": {
       "free": "Zdarma",
       "mixed": "Smíšené",
@@ -636,6 +643,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Co dělat →",
   },
   "sv": {
+    "comingSoon": "Kommer snart",
     "access": {
       "free": "Gratis",
       "mixed": "Blandat",
@@ -725,6 +733,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whatToDo": "Att göra →",
   },
   "zh": {
+    "comingSoon": "\u5373\u5C06\u63A8\u51FA",
     "access": {
       "free": "\u514D\u8D39",
       "mixed": "\u90E8\u5206\u514D\u8D39",

@@ -5,6 +5,7 @@ import { fireEvent, renderRouter, screen, within } from "expo-router/testing-lib
 
 import My from "./(tabs)/my";
 import Index from "./index";
+import Menu from "./menu";
 import Run from "./run/[id]";
 import RoutePreview from "./route/[id]";
 import Map from "./map";
@@ -227,10 +228,13 @@ describe("city surface on the published catalog (G06.01.a)", () => {
       {
         ...withCatalogRoutes(layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }))),
         index: Index,
+        menu: Menu,
       },
       { initialUrl: "/" },
     );
-    expect(await screen.findByTestId("guide-card-guide-route-a1", { timeout: 10_000 })).toBeTruthy();
+    expect(await screen.findByTestId("screen-Menu", { timeout: 10_000 })).toBeTruthy();
+    fireEvent.press(screen.getByTestId("city-menu-access-guides"));
+    expect(await screen.findByTestId("guide-card-guide-route-a1")).toBeTruthy();
   });
 
   test("the city renders the published guides: one card per guide, canon facts", async () => {

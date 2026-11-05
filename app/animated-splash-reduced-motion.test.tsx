@@ -1,11 +1,11 @@
 // The entry transition respects the system's reduced-motion setting:
 // app-entry-2026-10-19/README.md says the transition has no movement in
-// that mode, and the current intro must not hold Explore behind its timer.
+// that mode, and the current intro must not hold the map menu behind its timer.
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { renderRouter, screen } from "expo-router/testing-library";
 import { useReducedMotion } from "react-native-reanimated";
 
-import Explore from "./(tabs)/explore";
+import Menu from "./menu";
 import Index from "./index";
 import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
@@ -17,7 +17,7 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-test("reduced motion opens Explore immediately without playing the timed intro", () => {
+test("reduced motion opens the map menu immediately without playing the timed intro", () => {
   reducedMotion.mockReturnValue(true);
   jest.useFakeTimers();
 
@@ -25,11 +25,11 @@ test("reduced motion opens Explore immediately without playing the timed intro",
     {
       _layout: layoutWith(createServices({})),
       index: Index,
-      "(tabs)/explore": Explore,
+      menu: Menu,
     },
     { initialUrl: "/" },
   );
 
-  expect(screen.getByTestId("screen-Explore")).toBeTruthy();
+  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
   expect(screen.queryByTestId("splash-scene")).toBeNull();
 });

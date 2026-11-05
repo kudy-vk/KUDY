@@ -1,19 +1,25 @@
 import React, {useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
-import {AccessibilityInfo,AppState,PanResponder,StyleSheet,Text,View} from 'react-native';
+import {AccessibilityInfo,AppState,PanResponder,Pressable,StyleSheet,View} from 'react-native';
+import type {ReactNode} from 'react';
 import type {GestureResponderEvent,StyleProp,TextStyle,ViewStyle} from 'react-native';
 import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
 import {amberPalette,lightThreads} from '../amber-light.mjs';
 import {cityMenuAssets,citySceneAssets} from '../native-assets';
 import {nativeLayout} from '../native-layout';
 import {CityPuzzle} from './model';
-import type {PieceId,Point,PuzzleEvent,SceneId} from './model';
+import type {CityMenuLayout,PieceId,Point,PuzzleEvent,SceneId} from './model';
+import {tokens} from '../../../../../../components/design-tokens';
+import {ScaledText} from '../../../../../../components/scaled-text';
 
 export type {PieceId,SceneId} from './model';
+export type CityMenuItem = {id:PieceId;disabled?:boolean;icon?:ReactNode};
 export interface CityMapMenuProps {
   width: number;
   labels: Readonly<Record<PieceId,string>>;
-  hint: string;
-  sceneLabels: Readonly<Record<SceneId,string>>;
+  hint?: string;
+  sceneLabels?: Readonly<Record<SceneId,string>>;
+  items?: readonly CityMenuItem[];
+  layout?: CityMenuLayout;
   onSelect: (id:PieceId)=>void;
   reduceMotion?: boolean;
   labelStyle?: StyleProp<TextStyle>;
@@ -22,7 +28,14 @@ export interface CityMapMenuProps {
 
 export function CityMapMenu(props:CityMapMenuProps) {
   const {width,labels,hint,sceneLabels,labelStyle,style}=props;
-  const [model]=useState(()=>new CityPuzzle(width));
+  const items:readonly CityMenuItem[]=props.items??nativeLayout.pieces.map(p=>({id:p.id}));
+  const pieceKey=items.map(item=>item.id).join(',');
+  const layoutKey=JSON.stringify(props.layout);
+  // Labels and destination state may change without moving the geometry.
+  const model=useMemo(()=>new CityPuzzle(width,Math.random,pieceKey.split(',') as PieceId[],props.layout),[pieceKey,layoutKey]);
+  const sceneHeight=props.layout?.height??1800;
+  const pieces=items.map(item=>nativeLayout.pieces.find(piece=>piece.id===item.id)!);
+  const [focused,setFocused]=useState<PieceId|null>(null);
   const [,setRevision]=useState(0);
   const [systemReduced,setSystemReduced]=useState(true);
   const reduced=props.reduceMotion??systemReduced;
@@ -53,7 +66,10 @@ export function CityMapMenu(props:CityMapMenuProps) {
     startFrame();refresh();
   },[startFrame,refresh]);
   const handle=useCallback((event:PuzzleEvent)=>{
-    if(event.kind==='select')latest.current.onSelect(event.id);
+    if(event.kind==='select'){
+      const item=latest.current.items?.find(item=>item.id===event.id);
+      if(!latest.current.items||item&&!item.disabled)latest.current.onSelect(event.id);
+    }
     else if(event.kind==='passive'||event.kind==='snap'){
       pulse(event.point);
       if(event.kind==='snap'&&event.complete){if(reducedRef.current)model.completeNow();else startFrame();}
@@ -104,14 +120,14 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const scale=width/1600,complete=model.phase!=='scattered';
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
   const passivePress=(id:SceneId)=>{const part=model.scenery.find(p=>p.id===id)!;pulse({x:125+part.x+part.width/2,y:320+part.y+part.height/2});};
-  return <View style={[styles.host,style,{width,height:width*1.125}]}>
+  return <View style={[styles.host,style,{width,height:width*sceneHeight/1600}]}>
     <View testID="city-menu-canvas" collapsable={false} style={StyleSheet.absoluteFill} {...responder.panHandlers}>
       <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={StyleSheet.absoluteFill}>
-        <Svg width={width} height={width*1.125} viewBox="0 0 1600 1800">
+        <Svg width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
           <Defs>
             <RadialGradient id="city-menu-light"><Stop offset={0} stopColor={amberPalette.core}/><Stop offset={0.4} stopColor={amberPalette.glow} stopOpacity={0.95}/><Stop offset={1} stopColor={amberPalette.edge} stopOpacity={0}/></RadialGradient>
             <ClipPath id="city-menu-reveal"><Circle cx="675" cy="582" r={model.radius}/></ClipPath>
-            {nativeLayout.pieces.map(item=><Mask key={item.id} id={`city-menu-veil-${item.id}`} maskUnits="userSpaceOnUse" x={0} y={0} width={item.width} height={item.height}><SvgImage href={cityMenuAssets[item.id].light} width={item.width} height={item.height}/></Mask>)}
+            {pieces.map(item=><Mask key={item.id} id={`city-menu-veil-${item.id}`} maskUnits="userSpaceOnUse" x={0} y={0} width={item.width} height={item.height}><SvgImage href={cityMenuAssets[item.id].light} width={item.width} height={item.height}/></Mask>)}
           </Defs>
           <Ellipse cx="800" cy="902" rx={350+model.light*530} ry={320+model.light*470} fill="url(#city-menu-light)" opacity={model.light}/>
           <G opacity={model.light*.25} fill="none" stroke={amberPalette.glow}><Ellipse cx="800" cy="902" rx="690" ry="560" strokeWidth={5}/><Ellipse cx="800" cy="902" rx="740" ry="610" strokeWidth={2}/></G>
@@ -122,7 +138,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
               <Path d={thread.d} fill="none" stroke={thread.core} strokeWidth={thread.width} strokeOpacity={0.95} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
             </G>)}
           </G>
-          {nativeLayout.pieces.map(item=>{
+          {pieces.map(item=>{
             const at=model.position(item.id),piece=model.pieces.get(item.id)!,assets=cityMenuAssets[item.id];
             const pressed=model.active?.hit.id===item.id;
             return <G key={item.id} testID={`city-menu-piece-${item.id}`} transform={`translate(${at.x} ${at.y})`} opacity={pressed&&!model.active?.held?0.86:1}>
@@ -137,21 +153,25 @@ export function CityMapMenu(props:CityMapMenuProps) {
           </G>
           {feedback.current&&<Circle cx={feedback.current.point.x} cy={feedback.current.point.y} r={reduced?55:40+(1-pulseProgress)*140} stroke="#bd852c" strokeWidth={6} fill="#f4d68a" fillOpacity={.2} opacity={pulseProgress}/>}
         </Svg>
-        {!complete&&nativeLayout.pieces.map(item=>{
-          const at=model.position(item.id),labelWidth=Math.max(350,Math.min(650,item.width+80))*scale;
-          return <Text key={item.id} numberOfLines={2} ellipsizeMode="tail" style={[styles.label,labelStyle,{left:(at.x+item.width/2)*scale-labelWidth/2,top:at.y*scale-48,width:labelWidth}]}>{labels[item.id]}</Text>;
-        })}
       </View>
-      {nativeLayout.pieces.map(item=>{
-        const at=model.position(item.id),activate=()=>latest.current.onSelect(item.id);
-        return <View key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={hint} accessibilityActions={[{name:'activate'}]} onAccessibilityTap={activate} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')activate();}} style={{position:'absolute',left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}}/>;
+      {pieces.map(item=>{
+        const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
+        const disabled=entry.disabled===true;
+        const showLabel=!complete||focused===item.id;
+        const activate=()=>{if(!disabled)latest.current.onSelect(item.id);};
+        const labelWidth=Math.max(110,Math.min(650,item.width+150)*scale);
+        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} disabled={disabled} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} accessibilityActions={disabled?[]:[{name:'activate'}]} onAccessibilityTap={activate} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')activate();}} style={({pressed})=>[styles.label,{left:Math.max(0,Math.min(width-labelWidth,(at.x+item.width/2)*scale-labelWidth/2)),top:Math.max(0,at.y*scale-76),width:labelWidth,borderColor:!showLabel?'transparent':disabled?tokens.colorDisabledLine:focused===item.id?tokens.colorAccent:'transparent',backgroundColor:!showLabel?'transparent':pressed?tokens.colorBadgeFree:tokens.colorPaper},complete&&{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
+          <View testID={`city-menu-label-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.labelContent,{opacity:showLabel?1:0}]}>{entry.icon}<ScaledText style={[styles.labelText,labelStyle,{color:disabled?tokens.colorDisabledInk:tokens.colorAccent}]}>{labels[item.id]}</ScaledText></View>
+        </Pressable>;
       })}
-      {model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(125+item.x)*scale,top:(320+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
+      {sceneLabels&&model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(125+item.x)*scale,top:(320+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
     </View>
   </View>;
 }
 
 const styles=StyleSheet.create({
-  host:{backgroundColor:'#faf7f2',overflow:'hidden'},
-  label:{position:'absolute',height:48,fontSize:14,lineHeight:20,color:'#1d6b4f',textAlign:'center',textAlignVertical:'bottom',paddingTop:6},
+  host:{backgroundColor:tokens.colorPaper,overflow:'hidden'},
+  label:{position:'absolute',minHeight:48,padding:4,borderWidth:1,borderRadius:tokens.radiusBase,justifyContent:'center'},
+  labelContent:{alignItems:'center'},
+  labelText:{fontSize:14,lineHeight:20,textAlign:'center'},
 });

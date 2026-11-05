@@ -1,0 +1,249 @@
+{
+  "runtime": "React Native Web 0.21.2; Chrome; component preview, not a native device",
+  "reducedMotion": true,
+  "deviceScaleFactor": 1,
+  "captures": [
+    {
+      "theme": "light",
+      "width": 390,
+      "locale": "be",
+      "file": "light-390-be.png",
+      "buttons": [
+        {
+          "label": "Побач",
+          "disabled": null,
+          "box": {
+            "x": 28.34375,
+            "y": 145.5,
+            "width": 122.828125,
+            "height": 48
+          }
+        },
+        {
+          "label": "Гіды",
+          "disabled": null,
+          "box": {
+            "x": 220.765625,
+            "y": 86,
+            "width": 123.0625,
+            "height": 48
+          }
+        },
+        {
+          "label": "Чым заняцца",
+          "disabled": null,
+          "box": {
+            "x": 217.859375,
+            "y": 270.578125,
+            "width": 127.75,
+            "height": 48
+          }
+        },
+        {
+          "label": "Хутка",
+          "disabled": "true",
+          "box": {
+            "x": 21.234375,
+            "y": 301.8125,
+            "width": 120.8125,
+            "height": 48
+          }
+        },
+        {
+          "label": "KUDY · Хутка",
+          "disabled": "true",
+          "box": {
+            "x": 118.890625,
+            "y": 492.828125,
+            "width": 133.796875,
+            "height": 48
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "locale": "be",
+      "file": "dark-390-be.png",
+      "buttons": [
+        {
+          "label": "Побач",
+          "disabled": null,
+          "box": {
+            "x": 23.9375,
+            "y": 145.765625,
+            "width": 122.828125,
+            "height": 48
+          }
+        },
+        {
+          "label": "Гіды",
+          "disabled": null,
+          "box": {
+            "x": 222.171875,
+            "y": 86,
+            "width": 123.0625,
+            "height": 48
+          }
+        },
+        {
+          "label": "Чым заняцца",
+          "disabled": null,
+          "box": {
+            "x": 217.828125,
+            "y": 268.0625,
+            "width": 127.75,
+            "height": 48
+          }
+        },
+        {
+          "label": "Хутка",
+          "disabled": "true",
+          "box": {
+            "x": 23.21875,
+            "y": 303.21875,
+            "width": 120.8125,
+            "height": 48
+          }
+        },
+        {
+          "label": "KUDY · Хутка",
+          "disabled": "true",
+          "box": {
+            "x": 121.890625,
+            "y": 493.03125,
+            "width": 133.796875,
+            "height": 48
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "theme": "light",
+      "width": 320,
+      "locale": "de",
+      "file": "light-320-de.png",
+      "buttons": [
+        {
+          "label": "In der Nähe",
+          "disabled": null,
+          "box": {
+            "x": 19.015625,
+            "y": 120.703125,
+            "width": 110,
+            "height": 48
+          }
+        },
+        {
+          "label": "Guides",
+          "disabled": null,
+          "box": {
+            "x": 176.15625,
+            "y": 86,
+            "width": 110,
+            "height": 48
+          }
+        },
+        {
+          "label": "Was unternehmen",
+          "disabled": null,
+          "box": {
+            "x": 174.328125,
+            "y": 218.765625,
+            "width": 110,
+            "height": 66
+          }
+        },
+        {
+          "label": "Bald",
+          "disabled": "true",
+          "box": {
+            "x": 16,
+            "y": 246.0625,
+            "width": 110,
+            "height": 48
+          }
+        },
+        {
+          "label": "KUDY · Bald",
+          "disabled": "true",
+          "box": {
+            "x": 97.65625,
+            "y": 397.625,
+            "width": 110,
+            "height": 48
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "theme": "dark",
+      "width": 430,
+      "locale": "zh",
+      "file": "dark-430-zh.png",
+      "buttons": [
+        {
+          "label": "\u9644\u8FD1",
+          "disabled": null,
+          "box": {
+            "x": 28.8125,
+            "y": 160.828125,
+            "width": 136.5625,
+            "height": 48
+          }
+        },
+        {
+          "label": "\u5BFC\u89C8",
+          "disabled": null,
+          "box": {
+            "x": 244.828125,
+            "y": 95.640625,
+            "width": 136.8125,
+            "height": 48
+          }
+        },
+        {
+          "label": "\u73A9\u4EC0\u4E48",
+          "disabled": null,
+          "box": {
+            "x": 241.75,
+            "y": 299.21875,
+            "width": 142.03125,
+            "height": 48
+          }
+        },
+        {
+          "label": "\u5373\u5C06\u63A8\u51FA",
+          "disabled": "true",
+          "box": {
+            "x": 25.15625,
+            "y": 334.984375,
+            "width": 134.3125,
+            "height": 48
+          }
+        },
+        {
+          "label": "KUDY · \u5373\u5C06\u63A8\u51FA",
+          "disabled": "true",
+          "box": {
+            "x": 134.125,
+            "y": 546.40625,
+            "width": 148.75,
+            "height": 48
+          }
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "source": {
+    "baseCommit": "6dfc81b6d6cb261a7524b602a9feee59df55f178",
+    "uiCommit": "2a7980f6f170023e338790e3fc77c8b4a9e6a88f",
+    "bundleSha256": "53869579258ef36f26b0fbc4268efe6e8cba79bfe189e17129ec72397b26cec1",
+    "note": "Captured from the worktree before the assembled-preview-only Voka fix. Production scatter is unchanged. This is not an approved native baseline."
+  }
+}
