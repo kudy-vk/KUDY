@@ -68,3 +68,6 @@ docs/specifications/design-qa/index.html
 /.rnstorybook/storybook.requires.ts
 
 .voka
+
+# Python bytecode from asset build scripts (MAP-02-VECTOR loads build-vector.py as a module).
+__pycache__/

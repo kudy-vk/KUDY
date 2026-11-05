@@ -7,7 +7,25 @@ on:
 permissions:
   contents: read
 jobs:
+  # Issue #134: the copy-paste gate scans code formats only, so a docs-only
+  # change set (shared deny-by-default scope script) skips it. An unknown
+  # path, an unknown change set or a git failure runs the scan.
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.docs-only.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: docs-only scope
+        id: docs-only
+        run: node tools/ci/docs-only-scope.mjs "${{ github.event.pull_request.base.sha || github.event.before }}" "${{ github.event.pull_request.head.sha || github.sha }}"
   jscpd:
+    needs: [scope]
+    # Issue #134: skipped on docs-only change sets (see the scope job).
+    if: needs.scope.outputs.docs_only != 'true'
     # Self-contained jscpd gate. A cross-repo reusable workflow is not used:
     # GitHub rejects reusable-workflow calls between private user-account
     # repositories at startup with zero jobs, so the gate would silently never

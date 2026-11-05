@@ -14,6 +14,8 @@ Search before adding helpers. On a jscpd fail, refactor or reuse; do not paste a
 
 Local pre-push: `npm run arch:check`, then `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`
 
+Before every push to a pull-request branch, read and follow `docs/agent-rules/android-e2e-local.md`. CI runs only the fast checks; when the change touches project code, the Android E2E suites run on a local emulator, and documentation-only or design-mockup changes skip them.
+
 ## Publish task breakdowns to GitHub Issues
 
 After splitting an approved specification into tasks, create or update the corresponding GitHub Issues in this repository as part of the same work. Local task files alone do not complete the task breakdown. This rule authorizes issue creation and synchronization without another confirmation.
@@ -28,4 +30,6 @@ After splitting an approved specification into tasks, create or update the corre
 
 ## Record human follow-up actions after a task
 
-When a task ends with something a human must do themselves (merge or close a PR, a GitHub UI step, a settings change, a command on their machine, a paid service, and so on), do not leave it only in the chat summary. Add a short entry to the top of `docs/human-actions.md`: what to do, one to three sentences in the imperative; the PR link (or the issue/commit link when there is no PR); the date. One entry per task, newest first. Entries are human-facing documentation, so write them in Belarusian per `docs/agent-rules/documentation-language.md`. When the human confirms an action is done, remove its entry.
+When a task ends with something a human must do themselves (merge or close a PR, a GitHub UI step, a settings change, a command on their machine, a paid service, and so on), do not leave it only in the chat summary. Add a one-line entry to the top of `docs/human-actions.md`: it starts with `Табе зрабіць:` and states what to do in the imperative, with the PR link (or the issue/commit link when there is no PR). No heading, no bold titles; one entry per task, newest first. Entries are human-facing documentation, so write them in Belarusian per `docs/agent-rules/documentation-language.md`. When the human confirms an action is done, remove its entry.
+
+Every session's final report ends by answering one explicit question: are there human follow-up actions, yes or no — say "none" when there are none. Judgment work counts the same as mechanical steps: reviewing a design or rendered output, approving or rejecting an approach, taking a product or scope decision, owner-only choices. Anything only the owner can judge or decide is named in that report and, when it must not be lost, recorded in `docs/human-actions.md` as above.
