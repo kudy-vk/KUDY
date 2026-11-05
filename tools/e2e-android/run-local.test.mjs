@@ -89,6 +89,7 @@ function stubIo(overrides = {}) {
     kvmWritable: () => true,
     netBusy: () => false,
     listBootedDevices: () => [],
+    waitForDevice: () => true,
     bootEmulator: () => ({ serial: 'emulator-5554', child: { exitCode: null }, booted: true }),
     stopEmulator: () => {},
     runPrebuild: () => ({ status: 0 }),
@@ -339,6 +340,10 @@ test('the suites run in the CI order, then the non-gating visual:check; the emul
       assert.deepEqual(io.calls.runSuite.map(([runArgs]) => runArgs.suite), [...SUITES], 'smoke, walk, discovery');
       assert.equal(io.calls.runVisualCheck.length, 1, 'visual:check runs after the suites');
       assert.deepEqual(io.calls.stopEmulator.map(([stopArgs]) => stopArgs.serial), ['emulator-5554']);
+      // The runner settles the fresh guest to adb state 'device' before the
+      // suites (a cold adb server refused `adb reverse` right after boot).
+      assert.ok(callIndex(io, 'waitForDevice') < callIndex(io, 'runSuite'),
+        'the device-settle wait must precede the suites');
       // CI order: the APK is built before the emulator boots — a guest that
       // sits through a full Gradle build starves (lmkd thrashing, SystemUI
       // ANR — the first local run's failure, issue #132 debugging log).

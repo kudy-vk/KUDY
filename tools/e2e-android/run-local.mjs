@@ -184,6 +184,15 @@ function realIo() {
     async listBootedDevices(adbPath) {
       return listBootedDevices(adbPath);
     },
+    // Poll `adb get-state` until the serial answers `device` (30 s).
+    async waitForDevice(adbPath, serial) {
+      for (let attempt = 0; attempt < 15; attempt += 1) {
+        const result = spawnSync(adbPath, ['-s', serial, 'get-state'], { encoding: 'utf8', timeout: 10_000 });
+        if (result.status === 0 && result.stdout.trim() === 'device') return true;
+        await sleep(2000);
+      }
+      return false;
+    },
     // Spawn the CI AVD with the flags above (RAM per the evidence note) and
     // poll until sys.boot_completed prints 1. Never throws: any failure comes
     // back as { booted: false } so the caller can stop the child it owns.
@@ -462,6 +471,14 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
       return notVerified(`emulator did not boot within ${Math.round((BOOT_ATTEMPTS * BOOT_POLL_MS) / 1000)} s (log: ${path.join(runDir, 'emulator.log')})`);
     }
     emulator = boot;
+
+    // The guest reports boot_completed while its adbd can still refuse
+    // `adb reverse` (seen right after a host reboot: the first suite died on
+    // `adb -s … reverse tcp:8083`). Wait until adb answers `device` for our
+    // serial before the suites.
+    if (!(await io.waitForDevice(adb, emulator.serial))) {
+      return notVerified(`emulator ${emulator.serial} did not settle to adb state 'device'`);
+    }
 
     // 6. The suites (criterion 2.4): smoke, walk, discovery — a SKIP line is
     // never a pass.
