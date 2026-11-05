@@ -21,7 +21,7 @@ node --test tools/ci/android-e2e-local.test.mjs 2>&1 | grep '^ℹ' | grep -v dur
 ℹ todo 0
 ```
 
-NOT-VERIFIED на карані не на D:: каманда ніколі не рэпартуе праход, выходзіць з асобным кодам 86 і называе ўсе прычыны разам.
+NOT-VERIFIED на карані не на D:: каманда ніколі не рэпартуе праход, выходзіць з асобным кодам 86 і называе ўсе прычыны разам. Справаджэнне scope першае — гэта крок 1 кантракту issue #124, таму docs-only змены выходзяць са «skipped» яшчэ да праверкі макета.
 
 ```bash
 KUDY_ANDROID_ROOT='Q:\no-such-root' npm run e2e:android:local; echo "exit=$?"
@@ -32,6 +32,7 @@ KUDY_ANDROID_ROOT='Q:\no-such-root' npm run e2e:android:local; echo "exit=$?"
 > kudy@0.1.0 e2e:android:local
 > node tools/ci/android-e2e-local.mjs
 
+android-e2e scope: run=true (6 changed file(s))
 Android E2E: NOT-VERIFIED (root Q:\no-such-root must be an absolute path on drive D:)
 Android E2E: NOT-VERIFIED (java path Q:\no-such-root\java is not on drive D:)
 Android E2E: NOT-VERIFIED (sdk path Q:\no-such-root\sdk is not on drive D:)

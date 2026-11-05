@@ -10,7 +10,7 @@ import { after, describe, it } from 'node:test';
 
 import { acquireLock } from '../android-build/checkout-lock.mjs';
 import {
-  EXIT, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine, notVerifiedReasons,
+  EXIT, buildLayout, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine, notVerifiedReasons,
   probePort, resolveLayout, scopeOutcome, summaryLine,
 } from './android-e2e-local.mjs';
 
@@ -52,9 +52,10 @@ describe('android-e2e-local D:-only layout', () => {
     const root = 'D:\\KUDY-Android';
     const { layout, errors } = resolveLayout(root);
     assert.equal(errors, undefined);
-    assert.equal(layout.sdk, 'D:\\KUDY-Android\\sdk');
-    assert.equal(layout.checkout, 'D:\\KUDY-Android\\checkout');
-    assert.equal(layout.lockFile, 'D:\\KUDY-Android\\runner.lock');
+    // Joined with path.join so the assertion holds on POSIX test hosts too.
+    assert.equal(layout.sdk, path.join(root, 'sdk'));
+    assert.equal(layout.checkout, path.join(root, 'checkout'));
+    assert.equal(layout.lockFile, path.join(root, 'runner.lock'));
     assert.equal(driveOf(layout.buildRoot), 'D:\\');
   });
 });
@@ -74,26 +75,42 @@ describe('android-e2e-local NOT-VERIFIED reasons', () => {
   const buildFullLayout = (root) => {
     const write = (file) => fs.writeFileSync(file, '');
     for (const dir of [
-      ['sdk', 'platform-tools'], ['sdk', 'emulator'], ['sdk', 'platforms', 'android-36'],
+      ['sdk', 'platform-tools'], ['sdk', 'cmdline-tools', 'latest', 'bin'], ['sdk', 'build-tools', '36.0.0'],
+      ['sdk', 'emulator'], ['sdk', 'platforms', 'android-36'],
       ['sdk', 'system-images', 'android-36', 'google_apis', 'x86_64'],
       ['java', 'jdk-17.0.20.1+1', 'bin'], ['avd'], ['build'], ['checkout', '.git'],
     ]) {
       const dirPath = path.join(root, ...dir);
       fs.mkdirSync(dirPath, { recursive: true });
-      if (dir.at(-1) === 'platform-tools') write(path.join(dirPath, 'adb.exe'));
-      if (dir.at(-1) === 'emulator') write(path.join(dirPath, 'emulator.exe'));
-      if (dir.at(-1) === 'bin') write(path.join(dirPath, 'java.exe'));
+      if (dir.at(-1) === 'platform-tools') {
+        // Both launcher names: the host checks adb.exe, CI checks adb.
+        write(path.join(dirPath, 'adb.exe'));
+        write(path.join(dirPath, 'adb'));
+      }
+      if (dir.at(-1) === 'bin') {
+        write(path.join(dirPath, 'sdkmanager.bat'));
+        write(path.join(dirPath, 'sdkmanager'));
+        if (dir.at(-2) === 'jdk-17.0.20.1+1') {
+          write(path.join(dirPath, 'java.exe'));
+          write(path.join(dirPath, 'java'));
+        }
+      }
+      if (dir.at(-1) === 'emulator') {
+        write(path.join(dirPath, 'emulator.exe'));
+        write(path.join(dirPath, 'emulator'));
+      }
     }
     write(path.join(root, 'avd', 'kudy-ci.ini'));
-    return resolveLayout(root).layout;
+    return buildLayout(root);
   };
 
   it('names every missing package in one pass (revert: drop a check → its reason vanishes)', () => {
     const root = makeTmpRoot();
-    const layout = resolveLayout(root).layout;
+    const layout = buildLayout(root);
     const reasons = notVerifiedReasons(layout);
-    for (const fragment of ['platform-tools/adb', 'SDK emulator', 'platforms;android-36',
-      'system-images;android-36;google_apis;x86_64', 'JDK 17', 'AVD kudy-ci', 'build checkout', 'missing build root']) {
+    for (const fragment of ['platform-tools/adb', 'cmdline-tools;latest', 'build-tools;36.0.0', 'SDK emulator',
+      'platforms;android-36', 'system-images;android-36;google_apis;x86_64', 'JDK 17', 'AVD kudy-ci',
+      'build checkout', 'missing build root']) {
       assert.ok(reasons.some((reason) => reason.includes(fragment)), `no reason for ${fragment}: ${reasons.join('; ')}`);
     }
   });

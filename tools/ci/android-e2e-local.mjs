@@ -59,11 +59,12 @@ export function driveOf(p) {
   return parsed.root.toUpperCase().replace(/\/$/, '\\');
 }
 
-export function resolveLayout(root) {
-  const errors = [];
-  if (driveOf(root) !== 'D:\\') errors.push(`root ${root} must be an absolute path on drive D:`);
-  const jdk = findJdk17(path.join(root, 'java'));
-  const layout = {
+// Pure path construction with no host rules: resolveLayout validates the
+// D:-only rule on top of it, and the unit tests build POSIX-rooted layouts
+// directly so the package checks stay testable on every platform (CI runs
+// them on Ubuntu).
+export function buildLayout(root) {
+  return {
     root: String(root),
     java: path.join(root, 'java'),
     sdk: path.join(root, 'sdk'),
@@ -76,8 +77,14 @@ export function resolveLayout(root) {
     visual: path.join(root, 'visual'),
     npmCache: path.join(root, 'npm-cache'),
     lockFile: path.join(root, 'runner.lock'),
-    jdk,
+    jdk: findJdk17(path.join(root, 'java')),
   };
+}
+
+export function resolveLayout(root) {
+  const errors = [];
+  if (driveOf(root) !== 'D:\\') errors.push(`root ${root} must be an absolute path on drive D:`);
+  const layout = buildLayout(root);
   for (const [name, dir] of Object.entries(layout)) {
     if (name === 'jdk' || name === 'root') continue; // root is checked above
     if (driveOf(dir) !== 'D:\\') errors.push(`${name} path ${dir} is not on drive D:`);
@@ -103,6 +110,9 @@ export function notVerifiedReasons(layout, { exists = fs.existsSync } = {}) {
     if (!exists(dir)) reasons.push(`missing ${label}: ${dir}`);
   };
   need(path.join(layout.sdk, 'platform-tools', exe('adb')), 'SDK platform-tools/adb');
+  need(path.join(layout.sdk, 'cmdline-tools', 'latest', 'bin', `sdkmanager${isWindows ? '.bat' : ''}`),
+    'SDK package cmdline-tools;latest');
+  need(path.join(layout.sdk, 'build-tools', '36.0.0'), 'SDK package build-tools;36.0.0');
   need(path.join(layout.sdk, 'emulator', exe('emulator')), 'SDK emulator');
   need(path.join(layout.sdk, 'platforms', 'android-36'), 'SDK package platforms;android-36');
   need(path.join(layout.sdk, 'system-images', 'android-36', 'google_apis', 'x86_64'),
@@ -323,6 +333,24 @@ async function main() {
     console.error('usage: npm run e2e:android:local (no arguments; the host root is KUDY_ANDROID_ROOT or D:\\KUDY-Android)');
     return EXIT.usage;
   }
+  // 1. Scope short-cut first (issue #124 step 1): a docs-only change set
+  // exits 0 before anything is resolved or written, so an unconfigured host
+  // still skips honestly. Nothing below runs before this decision.
+  const head = git(CALLING_CHECKOUT, ['rev-parse', 'HEAD']);
+  const sha = head.code === 0 ? head.out : null;
+  const mergeBase = git(CALLING_CHECKOUT, ['merge-base', 'origin/main', 'HEAD']);
+  const scope = await runCommand(process.execPath, [path.join(CALLING_CHECKOUT, 'tools', 'ci', 'android-e2e-scope.mjs'),
+    ...(mergeBase.code === 0 && sha ? [mergeBase.out, sha] : [])],
+  { cwd: CALLING_CHECKOUT, env: { ...process.env, EXPO_NO_TELEMETRY: '1' } });
+  const outcome = scopeOutcome(scope.output);
+  if (!outcome.run && sha) {
+    console.log(`Android E2E: skipped (scope run=false) on ${sha}`);
+    return EXIT.ok;
+  }
+  const scopeEntry = { step: 'scope', run: outcome.run, parsed: outcome.parsed, mergeBase: mergeBase.code === 0 ? mergeBase.out : null };
+
+  // 2. layout and NOT-VERIFIED diagnostics, only for change sets that need
+  // the suites.
   let layout;
   {
     const root = process.env.KUDY_ANDROID_ROOT ?? DEFAULT_ROOT;
@@ -344,6 +372,12 @@ async function main() {
     }
   };
   const env = childEnv(layout, process.env);
+  log(scopeEntry);
+  if (!sha) {
+    console.log(notVerifiedLine(`calling checkout HEAD unreadable: ${head.err.split(/\r?\n/)[0]}`));
+    log({ step: 'not-verified', reason: 'calling checkout HEAD unreadable' });
+    return EXIT.notVerified;
+  }
 
   const reasons = notVerifiedReasons(layout);
   if (reasons.length > 0) {
@@ -352,25 +386,7 @@ async function main() {
     return EXIT.notVerified;
   }
 
-  // 1. scope short-cut against the calling checkout's merge-base.
-  const head = git(CALLING_CHECKOUT, ['rev-parse', 'HEAD']);
-  if (head.code !== 0) {
-    console.log(notVerifiedLine(`calling checkout HEAD unreadable: ${head.err.split(/\r?\n/)[0]}`));
-    return EXIT.notVerified;
-  }
-  const sha = head.out;
-  const mergeBase = git(CALLING_CHECKOUT, ['merge-base', 'origin/main', 'HEAD']);
-  const scope = await runCommand(process.execPath, [path.join(CALLING_CHECKOUT, 'tools', 'ci', 'android-e2e-scope.mjs'),
-    ...(mergeBase.code === 0 ? [mergeBase.out, sha] : [])],
-  { cwd: CALLING_CHECKOUT, env: { ...process.env, EXPO_NO_TELEMETRY: '1' } });
-  const outcome = scopeOutcome(scope.output);
-  log({ step: 'scope', run: outcome.run, parsed: outcome.parsed, mergeBase: mergeBase.code === 0 ? mergeBase.out : null });
-  if (!outcome.run) {
-    console.log(`Android E2E: skipped (scope run=false) on ${sha}`);
-    return EXIT.ok;
-  }
-
-  // 2. one run at a time; wait visibly on a live holder, refuse a stale one.
+  // 3. one run at a time; wait visibly on a live holder, refuse a stale one.
   let lock = acquireLock(layout.lockFile, 'e2e:android:local');
   let verdict = lockVerdict(lock);
   while (verdict.action === 'wait') {
@@ -394,7 +410,7 @@ async function main() {
   process.once('exit', () => lock.release?.());
   log({ step: 'lock', verdict: 'acquired' });
 
-  // 3. sync the exact calling checkout HEAD into the D: build checkout.
+  // 4. sync the exact calling checkout HEAD into the D: build checkout.
   const sync = await syncBuildCheckout(layout, sha, log);
   if (!sync.ok) {
     console.error(`-- sync failed: ${sync.message}`);
@@ -403,7 +419,7 @@ async function main() {
   }
   log({ step: 'sync', decision: `fetched ${sync.via}`, sha });
 
-  // 4. dependencies, prebuild, APK build — all inside the D: checkout.
+  // 5. dependencies, prebuild, APK build — all inside the D: checkout.
   const deps = await ensureDependencies(layout, sha, env, log);
   if (!deps.ok) {
     console.error(`-- ${deps.message}`);
@@ -429,7 +445,7 @@ async function main() {
   }
   log({ step: 'build', exitCode: build.code, apk: true, apkPath });
 
-  // 5. emulator: adopt a booted kudy-ci, otherwise boot one; never kill.
+  // 6. emulator: adopt a booted kudy-ci, otherwise boot one; never kill.
   const existing = await bootedEmulators(layout, env);
   let serial = null;
   if (existing.length === 1) {
@@ -474,7 +490,7 @@ async function main() {
   }
   console.log(`-- emulator ${serial} (${AVD_NAME}) in use; it is left running for the next incremental run`);
 
-  // 6. ports must be free before the suites start; a foreign listener fails
+  // 7. ports must be free before the suites start; a foreign listener fails
   // the run loudly instead of being killed.
   for (const [label, port] of [['metro', METRO_PORT], ['origin', ORIGIN_PORT]]) {
     if (await probePort(port)) {
@@ -485,7 +501,7 @@ async function main() {
     }
   }
 
-  // 7. suites; the first failure stops the rest, a SKIP line fails the run.
+  // 8. suites; the first failure stops the rest, a SKIP line fails the run.
   const suiteEnv = { ...env, KUDY_E2E_APK: apkPath };
   for (const suite of SUITES) {
     const suiteLog = path.join(layout.logs, `${suite}-${runStamp}.log`);
@@ -501,7 +517,7 @@ async function main() {
     console.log(`-- suite ${suite} passed (log: ${suiteLog})`);
   }
 
-  // 8. non-gating visual:check, CI parity: the report is recorded, the exit
+  // 9. non-gating visual:check, CI parity: the report is recorded, the exit
   // code never gates the run.
   const visualOut = path.join(layout.visual, runStamp);
   const visual = await runCommand(npmCommand(), npmArgs(['run', 'visual:check', '--', '--out', visualOut]),
