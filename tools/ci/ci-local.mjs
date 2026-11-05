@@ -176,6 +176,10 @@ export function coverageFailures(workflows, steps) {
   return failures;
 }
 
+// Resolve the playwright chromium path the CI journey step exports as
+// KUDY_CHROMIUM. Runs inside the journeys step: on a fresh host the
+// Chromium install step has already run, and a missing binary fails that
+// step with a named reason instead of crashing before the first step.
 function chromiumEnv() {
   const probe = spawnSync(process.execPath, ['-e', `process.stdout.write(require('playwright').chromium.executablePath())`], {
     cwd: REPO_ROOT, encoding: 'utf8',
@@ -188,7 +192,7 @@ function chromiumEnv() {
   return { KUDY_CHROMIUM: executable };
 }
 
-function runStep(step, { installed, chromium }) {
+function runStep(step, { installed, chromiumProbe }) {
   if (step.skip) {
     console.log(`SKIP [${step.workflow}/${step.job}] ${step.skip}`);
     return 0;
@@ -200,7 +204,15 @@ function runStep(step, { installed, chromium }) {
   if (step.install !== undefined) {
     installed.add(step.install);
   }
-  const env = step.needsChromium === true ? { ...process.env, ...chromium } : process.env;
+  let env = process.env;
+  if (step.needsChromium === true) {
+    try {
+      env = { ...process.env, ...chromiumProbe() };
+    } catch (error) {
+      console.error(`FAIL [${step.id}] ${error.message}`);
+      return 1;
+    }
+  }
   let command = step.cmd;
   if (step.distroDeps === true && !fs.existsSync('/etc/debian_version')) {
     command = step.cmd.replace(' --with-deps', '');
@@ -225,11 +237,17 @@ async function main() {
     console.error('ci:local: NOT-VERIFIED (win32) — the Windows host path is issue #124; refusing to run a half-list that would read as a pass');
     return 3;
   }
-  const chromium = chromiumEnv();
+  const chromiumProbe = (() => {
+    let resolved = null;
+    return () => {
+      if (resolved === null) resolved = chromiumEnv();
+      return resolved;
+    };
+  })();
   const steps = buildSteps();
   const installed = new Set();
   for (const step of steps) {
-    const status = runStep(step, { installed, chromium });
+    const status = runStep(step, { installed, chromiumProbe });
     if (status !== 0) return status;
   }
   const skipped = steps.filter((step) => step.skip).map((step) => step.id);
