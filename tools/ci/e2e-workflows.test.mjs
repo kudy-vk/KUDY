@@ -94,6 +94,23 @@ test('scope CLI writes run=false only for a real docs-only diff', () => {
   }
 });
 
+test('Android E2E frees runner disk space before installing the SDK', () => {
+  const { source, workflow } = read('android-e2e.yml');
+  const steps = workflow.jobs['smoke-and-walk'].steps;
+  const freeIndex = steps.findIndex((step) => step.run?.includes('/usr/share/dotnet'));
+  const sdkIndex = steps.findIndex((step) => step.run?.includes('sdkmanager'));
+  assert.ok(freeIndex !== -1, 'disk-free step missing');
+  assert.ok(sdkIndex !== -1, 'SDK install step missing');
+  assert.ok(freeIndex < sdkIndex, 'the disk-free step must run before the SDK install');
+  assert.match(source, /df -h/, 'the disk-free step must log disk usage for evidence');
+});
+
+test('Android E2E waits up to 20 minutes for a fully booted emulator', () => {
+  const { source } = read('android-e2e.yml');
+  assert.match(source, /seq 1 240/, 'the boot wait must allow 20 minutes on slow cold boots');
+  assert.match(source, /pm path android/, 'the boot wait must confirm the package manager answers, not only sys.boot_completed');
+});
+
 test('visual:check runs after the suites and always uploads its report as a non-gating artifact', () => {
   const { source, workflow } = read('android-e2e.yml');
   const steps = workflow.jobs['smoke-and-walk'].steps;
