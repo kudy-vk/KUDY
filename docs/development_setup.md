@@ -160,7 +160,8 @@ engine-regressions → web-build → gitleaks → web-e2e → jscpd → guard-re
 (`tools/ci/android-e2e-scope.mjs` супраць `merge-base origin/main HEAD`):
 `run=false` — «not needed» і выхад 0; `run=true` — зборка debug-APK дакладна
 гэтага HEAD (`tools/android-build/android-build.mjs`, task-owned build-root),
-загрузка AVD `kudy-ci` (pixel_5, API 36) з сцягамі CI
+загрузка AVD `kudy-ci` (pixel_5, вобраз эмулятара API 35; зборка —
+platforms/build-tools 36) з сцягамі CI
 (`-no-window -no-audio -no-snapshot -gpu swiftshader_indirect`; RAM гасця —
 4096, не CI-авыя 2048 — гл. адхіл ніжэй)
 на KVM, сюіты `smoke`, `walk`, `discovery`, пасля іх — non-gating
@@ -178,22 +179,21 @@ engine-regressions → web-build → gitleaks → web-e2e → jscpd → guard-re
 канфлікты адмаўляюць прагон з прычынай: занятыя порты 8083/8792, lock хоста.
 
 Адзін доказавы адхіл ад сцягаў CI: RAM гасця — 4096, не 2048 (эмулятар
-аўтаматычна паднімае 2048 да 2560). Пры 2048/2560 кожны госць android-36
-google_apis на гэтым хосце ANR-іць SystemUI цягам хвіліны пасля загрузкі
-(дыялог ANR — адзінае акно ў дампах, усе кейсы тайм-аўцяць; глядж
-дэбаг-лог у PR #140: тры загрузкі 2026-11-04; размешчаны CI-джоб на гэтых
-сцягах таксама ні разу не прайшоў эмулятар). Пры 4096 госць загрузаецца і
-трымаецца здаровым. RAM не мяняе пікселі — парытэт базлайнаў visual:check
-не парушаецца. Астатнія сцягі — дакладна CI-авыя: іншыя сцягі могуць даць
-ілжывыя дыфы visual:check.
+аўтаматычна паднімае 2048 да 2560) — значэнне, пры якім ішлі ўсе доказавыя
+прагоны android-35. Папярэдні вобраз android-36 адкінуты ўвогуле: ён
+ANR-іць SystemUI пад нагрузкай дадатку пры любой RAM (2048/2560/4096;
+глядж дэбаг-лог у PR #140), а размешчаны CI-джоб таксама ні разу не прайшоў
+эмулятар на гэтых сцягах. Дзейны вобраз — android-35 google_apis (рашэнне
+ўладальніка 2026-11-06, issue #164). RAM не мяняе пікселі — парытэт
+базлайнаў visual:check не парушаецца. Астатнія сцягі — дакладна CI-авыя:
+іншыя сцягі могуць даць ілжывыя дыфы visual:check.
 
 Каманда `e2e:android:local` — агульны ўваход `tools/ci/android-e2e-local.mjs`: на Windows ідзе шлях #124 (дыск D:, коды 0/1/64/75/86), на Linux ранер дэлегуе ў `tools/e2e-android/run-local.mjs` (коды ніжэй). Дэфолтны AVD ранера — `kudy-ci` (парыцец на CI). Сцягам `--avd` (ці
-зменнай `KUDY_E2E_AVD`) выбіраецца іншы госць: вобраз android-36
-google_apis ANR-іць SystemUI пад нагрузкай дадатку нават пры 4096 (гл.
-дэбаг-лог), а госць android-35 google_apis праходзіць усе тры сюіты —
-даказана 2026-11-05 на `kudy-apr05-api35` з тым жа эмулятарам і
-swiftshader: smoke 11/11, walk 5/5, discovery 4/4. Пераключэнне CI-вобраза
-і базлайнаў на android-35 — рашэнне ўладальніка (гл. PR #140).
+зменнай `KUDY_E2E_AVD`) выбіраецца іншы госць. Дзейны вобраз — android-35
+google_apis з #164 (рашэнне ўладальніка 2026-11-06); доказ 2026-11-05 на
+`kudy-apr05-api35` з тым жа эмулятарам і swiftshader: smoke 11/11, walk
+5/5, discovery 4/4, тады як вобраз android-36 ANR-іць SystemUI пад
+нагрузкай дадатку нават пры 4096 (гл. дэбаг-лог PR #140).
 
 ### Разавая падрыхтоўка Linux-хоста
 
@@ -202,7 +202,7 @@ swiftshader: smoke 11/11, walk 5/5, discovery 4/4. Пераключэнне CI-�
 | JDK 17 | `~/KUDY-Android/java/jdk-17*` (напрыклад, Temurin 17.0.21). JDK 17, бо `tools/android-build` адхіляе любы іншы JDK (React Native 0.81 збіраецца на 17) і CI збірае з Temurin 17; сістэмныя JDK 21/25 для гэтай зборкі не выкарыстоўваюцца |
 | Android SDK | ужо ёсць: `~/Android/Sdk` (`ANDROID_HOME` у `~/.zshenv`) |
 | System image | `~/Android/Sdk/system-images/android-36/google_apis/x86_64`; калі няма — `~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager 'system-images;android-36;google_apis;x86_64'` |
-| AVD `kudy-ci` | `~/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name kudy-ci --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'` |
+| AVD `kudy-ci` | `~/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name kudy-ci --device pixel_5 --package 'system-images;android-35;google_apis;x86_64'` |
 | KVM | `/dev/kvm` даступны на запіс (група `kvm`); праграмнае паскарэнне не выкарыстоўваецца — без KVM ранер адмаўляе прагон |
 | Deno | устаноўлены і адпавядае `supabase/functions/.deno-version` (патрэбны для `ci:local`) |
 | Chromium | `npx playwright install chromium` з root checkout-а (на Debian-падобных `--with-deps`, як у CI), альбо сістэмны Chromium |
@@ -363,9 +363,9 @@ checkout-а ў build-checkout, зборка debug APK праз
 1. JDK 17: zip-архіў Temurin 17.0.20.1+1 (SHA-256 правераны), распакаваны ў `java\`.
 2. cmdline-tools у `sdk\cmdline-tools\latest`; ліцэнзіі прынятыя; пакеты тыя самыя,
    што ў CI: `platform-tools`, `platforms;android-36`, `build-tools;36.0.0`,
-   `emulator`, `system-images;android-36;google_apis;x86_64`.
+   `emulator`, `system-images;android-35;google_apis;x86_64`.
 3. AVD: `avdmanager create avd --name kudy-ci --device pixel_5
-   --package "system-images;android-36;google_apis;x86_64"` пры
+   --package "system-images;android-35;google_apis;x86_64"` пры
    `ANDROID_AVD_HOME=D:\KUDY-Android\avd`.
 4. Клон: `gh repo clone kudy-vk/KUDY D:\KUDY-Android\checkout`.
 

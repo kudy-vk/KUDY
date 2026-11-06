@@ -123,8 +123,8 @@ export function notVerifiedReasons(layout, { exists = fs.existsSync } = {}) {
   need(path.join(layout.sdk, 'build-tools', '36.0.0'), 'SDK package build-tools;36.0.0');
   need(path.join(layout.sdk, 'emulator', exe('emulator')), 'SDK emulator');
   need(path.join(layout.sdk, 'platforms', 'android-36'), 'SDK package platforms;android-36');
-  need(path.join(layout.sdk, 'system-images', 'android-36', 'google_apis', 'x86_64'),
-    'SDK package system-images;android-36;google_apis;x86_64');
+  need(path.join(layout.sdk, 'system-images', 'android-35', 'google_apis', 'x86_64'),
+    'SDK package system-images;android-35;google_apis;x86_64');
   if (!layout.jdk) reasons.push(`missing JDK 17 under ${layout.java} (name a directory jdk-17*)`);
   else if (!exists(path.join(layout.jdk, 'bin', exe('java')))) reasons.push(`JDK at ${layout.jdk} has no bin/${exe('java')}`);
   need(path.join(layout.avdHome, `${AVD_NAME}.ini`), `AVD ${AVD_NAME}`);
