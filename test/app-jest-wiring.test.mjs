@@ -38,6 +38,19 @@ test('guard: map-menu behavioral suites remain in the root runners', () => {
   );
 });
 
+// #132: jest's 5000 ms default per-test timeout fails the heavy render suites
+// under full-run CPU contention on the dev host (hint-card, discovery, place
+// timed out in the first ci:local run; the same tests take 8.6 s idle). The
+// node --test half of npm test pins 60000 ms for the same reason; dropping
+// this pin must turn this guard red (implementation-rules 1).
+test('guard: jest runs on the 60 s per-test timeout contract, not the 5 s default', () => {
+  assert.match(
+    jestConfig,
+    /testTimeout:\s*60000/,
+    'jest config must pin testTimeout: 60000 — the 5 s default fails heavy render suites under full-run CPU contention'
+  );
+});
+
 // G06.10.f (issue #406): the reanimated base must stay jest-mocked through
 // the official mock plus the controllable useReducedMotion stub — dropping
 // the mapping loads the real base and its worklet runtime, which jest

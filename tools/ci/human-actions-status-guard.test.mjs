@@ -29,6 +29,20 @@ function mergeEntriesWithoutLabelCleanup(markdown) {
       && /`agent:running`/u.test(entry);
     if (!hasCleanup) missing.push(header);
   }
+
+  // One-line entries (the `- Табе зрабіць:` convention): a merge handoff that
+  // CLOSES a linked issue must name the agent:running removal — closing the
+  // issue does not clear the status label. Handoffs that merely route a task
+  // elsewhere (no close) leave the issue's label alone.
+  const lines = markdown.split("\n").filter((line) => line.startsWith("- Табе зрабіць:"));
+  for (const line of lines) {
+    if (!/зліце|змержы|мерж/iu.test(line)) continue;
+    if (!/pull\/\d+/u.test(line) || !/issues\/\d+/u.test(line)) continue;
+    if (!/закрывае|closing|closes/iu.test(line)) continue;
+    const hasCleanup = /(?:знімі|зняць|прыбяры)/iu.test(line)
+      && /`agent:running`/u.test(line);
+    if (!hasCleanup) missing.push(line.slice(0, 120));
+  }
   return missing;
 }
 
@@ -48,6 +62,15 @@ test("the guard fails when the removal instruction is reverted", () => {
     mergeEntriesWithoutLabelCleanup(withoutRemoval),
     ["2026-10-23 — змержы PR"],
   );
+});
+
+test("one-line entries: a closing merge handoff names the cleanup, a hand-off does not", () => {
+  const closing = "- Табе зрабіць: зліце [PR #140](https://github.com/kudy-vk/KUDY/pull/140), закрывае [issue #132](https://github.com/kudy-vk/KUDY/issues/132), пасля мержу знімі `agent:running` з issue #132.";
+  const closingWithoutCleanup = "- Табе зрабіць: зліце [PR #140](https://github.com/kudy-vk/KUDY/pull/140), закрывае [issue #132](https://github.com/kudy-vk/KUDY/issues/132).";
+  const handOff = "- Табе зрабіць: зліце [PR #125](https://github.com/kudy-vk/KUDY/pull/125): аддайце задачу [#124](https://github.com/kudy-vk/KUDY/issues/124) асобнай сесіі.";
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(closing), []);
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(closingWithoutCleanup), [closingWithoutCleanup.slice(0, 120)]);
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(handOff), [], "a hand-off without a close leaves the label alone");
 });
 
 test("the guard accepts explicit cleanup and ignores historical completed entries", () => {
