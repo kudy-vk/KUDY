@@ -230,7 +230,14 @@ export async function startMetro({ port, env, logPath }) {
       [EXPO_CLI, 'start', '--dev-client', '--port', String(port), '--max-workers', '2'],
       {
         cwd: REPO_ROOT,
-        env: { ...process.env, CI: '1', EXPO_NO_TELEMETRY: '1', ...env },
+        // Expo CLI loads the project .env for every EXPO_PUBLIC_ key missing
+        // from process.env, so a host .env (gitignored) would leak into the
+        // served bundle — issue #135: the phase A «no catalog origin» contract
+        // broke on hosts with EXPO_PUBLIC_CATALOG_ORIGIN set. The runner
+        // decides the bundle env; the empty-string default keeps an
+        // origin-free spawn truly origin-free (the app's catalogOriginFrom
+        // reads '' as unconfigured), and the caller env still wins.
+        env: { ...process.env, CI: '1', EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_CATALOG_ORIGIN: '', ...env },
         logPath,
       },
     );

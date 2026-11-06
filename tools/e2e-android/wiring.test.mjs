@@ -30,6 +30,15 @@ test('the e2e:android script points at the runner', () => {
   assert.equal(packageJson.scripts['e2e:android'], 'node tools/e2e-android/run-e2e.mjs');
 });
 
+test('the Metro spawn pins the catalog origin against a host .env', () => {
+  const source = fs.readFileSync(path.join(repoRoot, 'tools/e2e-android/run-e2e.mjs'), 'utf8');
+  assert.match(
+    source,
+    /EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_CATALOG_ORIGIN: '', \.\.\.env\b/,
+    'startMetro must default-pin EXPO_PUBLIC_CATALOG_ORIGIN to the empty string before the caller env: Expo CLI loads the project .env for every EXPO_PUBLIC_ key missing from process.env, so without the pin a host .env leaks into the served bundle and breaks the phase A no-origin contract (issue #135)',
+  );
+});
+
 test('the walk command reaches device checks instead of rejecting the suite', () => {
   const runner = path.join(repoRoot, 'tools/e2e-android/run-e2e.mjs');
   const source = fs.readFileSync(runner, 'utf8');
