@@ -33,6 +33,11 @@ test('Android E2E workflow runs smoke, walk and discovery when started manually'
   assert.ok(steps.some((step) => step.run?.includes('test -f "$ANDROID_AVD_HOME/kudy-ci.ini"')));
   assert.ok(steps.some((step) => step.run?.includes('npm run e2e:android -- --suite "$suite"')));
   assert.match(source, /--device pixel_5/);
+  // The emulator image is the owner decision #164: android-36 ANR'd SystemUI
+  // at any RAM and was never validated in the hosted job (PR #140, log #5).
+  assert.match(source, /system-images;android-35;google_apis;x86_64/);
+  assert.ok(!source.includes('system-images;android-36;google_apis;x86_64'),
+    'the dropped android-36 image must not return into android-e2e.yml');
   assert.match(source, /for suite in smoke walk discovery; do/);
   assert.match(source, /SKIP e2e:android/);
   assert.ok(steps.some((step) => step.uses?.startsWith('actions/upload-artifact@') && step.if === 'failure()'));

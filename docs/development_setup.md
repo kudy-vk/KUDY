@@ -201,7 +201,7 @@ google_apis з #164 (рашэнне ўладальніка 2026-11-06); дока
 |---|---|
 | JDK 17 | `~/KUDY-Android/java/jdk-17*` (напрыклад, Temurin 17.0.21). JDK 17, бо `tools/android-build` адхіляе любы іншы JDK (React Native 0.81 збіраецца на 17) і CI збірае з Temurin 17; сістэмныя JDK 21/25 для гэтай зборкі не выкарыстоўваюцца |
 | Android SDK | ужо ёсць: `~/Android/Sdk` (`ANDROID_HOME` у `~/.zshenv`) |
-| System image | `~/Android/Sdk/system-images/android-36/google_apis/x86_64`; калі няма — `~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager 'system-images;android-36;google_apis;x86_64'` |
+| System image | `~/Android/Sdk/system-images/android-35/google_apis/x86_64`; калі няма — `~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager 'system-images;android-35;google_apis;x86_64'` |
 | AVD `kudy-ci` | `~/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name kudy-ci --device pixel_5 --package 'system-images;android-35;google_apis;x86_64'` |
 | KVM | `/dev/kvm` даступны на запіс (група `kvm`); праграмнае паскарэнне не выкарыстоўваецца — без KVM ранер адмаўляе прагон |
 | Deno | устаноўлены і адпавядае `supabase/functions/.deno-version` (патрэбны для `ci:local`) |
