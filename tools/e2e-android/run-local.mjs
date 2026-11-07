@@ -13,7 +13,7 @@
 //   npm run e2e:android:local -- --jdk <abs> --sdk <abs> --build-root <abs>
 //
 // Order (issue #132, criterion 2): scope short-cut → build the debug APK for
-// the exact HEAD → boot the AVD kudy-ci (pixel_5, API 36) with the CI flags
+// the exact HEAD → boot the AVD kudy-ci (pixel_5, android-35 image) with the CI flags
 // and KVM → smoke, walk, discovery → the non-gating visual:check → one
 // summary line. A `SKIP e2e:android` line is never a pass.
 //
