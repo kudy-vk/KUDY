@@ -77,7 +77,7 @@ describe('android-e2e-local NOT-VERIFIED reasons', () => {
     for (const dir of [
       ['sdk', 'platform-tools'], ['sdk', 'cmdline-tools', 'latest', 'bin'], ['sdk', 'build-tools', '36.0.0'],
       ['sdk', 'emulator'], ['sdk', 'platforms', 'android-36'],
-      ['sdk', 'system-images', 'android-36', 'google_apis', 'x86_64'],
+      ['sdk', 'system-images', 'android-35', 'google_apis', 'x86_64'],
       ['java', 'jdk-17.0.20.1+1', 'bin'], ['avd'], ['build'], ['checkout', '.git'],
     ]) {
       const dirPath = path.join(root, ...dir);
@@ -109,7 +109,7 @@ describe('android-e2e-local NOT-VERIFIED reasons', () => {
     const layout = buildLayout(root);
     const reasons = notVerifiedReasons(layout);
     for (const fragment of ['platform-tools/adb', 'cmdline-tools;latest', 'build-tools;36.0.0', 'SDK emulator',
-      'platforms;android-36', 'system-images;android-36;google_apis;x86_64', 'JDK 17', 'AVD kudy-ci',
+      'platforms;android-36', 'system-images;android-35;google_apis;x86_64', 'JDK 17', 'AVD kudy-ci',
       'build checkout', 'missing build root']) {
       assert.ok(reasons.some((reason) => reason.includes(fragment)), `no reason for ${fragment}: ${reasons.join('; ')}`);
     }

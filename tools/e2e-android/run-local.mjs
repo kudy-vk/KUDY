@@ -13,7 +13,7 @@
 //   npm run e2e:android:local -- --jdk <abs> --sdk <abs> --build-root <abs>
 //
 // Order (issue #132, criterion 2): scope short-cut → build the debug APK for
-// the exact HEAD → boot the AVD kudy-ci (pixel_5, API 36) with the CI flags
+// the exact HEAD → boot the AVD kudy-ci (pixel_5, android-35 image) with the CI flags
 // and KVM → smoke, walk, discovery → the non-gating visual:check → one
 // summary line. A `SKIP e2e:android` line is never a pass.
 //
@@ -48,15 +48,15 @@ const VISUAL_CHECK_TOOL = path.join(REPO_ROOT, 'tools', 'e2e-android', 'visual-c
 const ARTIFACTS_ROOT = path.join(REPO_ROOT, 'tools', 'e2e-android', 'artifacts');
 const SCOPE_TOOL = path.join(REPO_ROOT, 'tools', 'ci', 'android-e2e-scope.mjs');
 const AVD_NAME = 'kudy-ci';
-const SYSTEM_IMAGE_DIR = path.join('system-images', 'android-36', 'google_apis', 'x86_64');
+const SYSTEM_IMAGE_DIR = path.join('system-images', 'android-35', 'google_apis', 'x86_64');
 // CI parity (.github/workflows/android-e2e.yml) with one evidence-based
-// deviation: the guest RAM. At the CI value (2048, auto-raised to 2560 by the
-// emulator) every android-36 google_apis guest on this host ANRs SystemUI
-// within a minute of boot — the ANR dialog is the only dumpable window, so
-// every suite case times out (issue #132 debugging log: three boots on
-// 2026-11-04, and the hosted CI job has never passed an emulator run on these
-// flags either). At 4096 MB the guest boots and stays healthy. RAM does not
-// change rendered pixels, so visual:check baseline parity is unaffected.
+// deviation: the guest RAM 4096 — the value every android-35 evidence run
+// used. The dropped android-36 image ANR'd SystemUI under app load at any
+// guest RAM (the ANR dialog was the only dumpable window, so every suite
+// case timed out; issue #132 debugging log + the #140 decisive experiment),
+// and the hosted CI job never passed an emulator run on these flags either.
+// RAM does not change rendered pixels, so visual:check baseline parity is
+// unaffected.
 // The other flags stay exactly CI's — other flags can produce false
 // visual:check diffs (android-e2e-local.md §2).
 const EMULATOR_FLAGS = ['-no-window', '-no-audio', '-no-snapshot', '-gpu', 'swiftshader_indirect', '-memory', '4096'];
@@ -451,10 +451,10 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
 
   // 2. One run per host (criterion 3): a host-wide lock with the
   // checkout-lock policy — a stale lock is reported, never taken over.
-  // The CI AVD is the default; --avd / KUDY_E2E_AVD selects another one — on
-  // this host the android-36 image the CI AVD wraps ANRs SystemUI under app
-  // load (issue #132 debugging log), and an android-35 guest passes all
-  // three suites; switching the default is an operator decision (PR note).
+  // The CI AVD is the default; --avd / KUDY_E2E_AVD selects another one —
+  // the default wraps the android-35 image since #164 (owner decision
+  // 2026-11-06): the android-36 image it replaced ANR'd SystemUI under app
+  // load at any guest RAM (issue #132 debugging log + PR #140 experiment).
   const avdName = args.avd ?? process.env.KUDY_E2E_AVD ?? AVD_NAME;
   const kudyRoot = process.env.KUDY_ANDROID_ROOT ?? path.join(os.homedir(), 'KUDY-Android');
   fs.mkdirSync(kudyRoot, { recursive: true });
@@ -480,14 +480,14 @@ export async function main(argv = process.argv.slice(2), io = realIo()) {
     }
     const emulatorBinary = path.join(sdk, 'emulator', 'emulator');
     if (!fs.existsSync(emulatorBinary)) return notVerified(`no emulator binary at ${emulatorBinary}`);
-    // The CI AVD wraps the android-36 image; a `--avd` override selects a
+    // The CI AVD wraps the android-35 image; a `--avd` override selects a
     // guest the host owner manages, so the hardcoded image check applies to
     // the default only (voka finding avd-image-preflight).
     if (avdName === AVD_NAME && !fs.existsSync(path.join(sdk, SYSTEM_IMAGE_DIR))) {
-      return notVerified(`missing system image ${SYSTEM_IMAGE_DIR} — install it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'sdkmanager')} 'system-images;android-36;google_apis;x86_64'"`);
+      return notVerified(`missing system image ${SYSTEM_IMAGE_DIR} — install it with "${path.join(sdk, 'cmdline-tools', 'latest', 'bin', 'sdkmanager')} 'system-images;android-35;google_apis;x86_64'"`);
     }
     if (!io.listAvds(emulatorBinary).includes(avdName)) {
-      return notVerified(`no AVD ${avdName} — create it with avdmanager create avd --name ${avdName} (the CI guest: --device pixel_5 --package 'system-images;android-36;google_apis;x86_64'; an override guest with its own --package, e.g. android-35 google_apis)`);
+      return notVerified(`no AVD ${avdName} — create it with avdmanager create avd --name ${avdName} (the CI guest: --device pixel_5 --package 'system-images;android-35;google_apis;x86_64'; an override guest with its own --package)`);
     }
     if (!io.kvmWritable()) {
       return notVerified('/dev/kvm is not writable for this user — the Linux host runs the emulator with KVM (add the user to the kvm group); no software fallback');
