@@ -37,7 +37,12 @@ function mergeEntriesWithoutLabelCleanup(markdown) {
   const lines = markdown.split("\n").filter((line) => line.startsWith("- Табе зрабіць:"));
   for (const line of lines) {
     if (!/зліце|змержы|мерж/iu.test(line)) continue;
-    if (!/pull\/\d+/u.test(line) || !/issues\/\d+/u.test(line)) continue;
+    // Short refs guard the same way as full URLs: «зліце PR #140, закрывае
+    // #132» (#154). A bare `#N` counts as the issue ref only when it is not
+    // the PR's own ref.
+    const hasPrRef = /(?:pull\/\d+|\bPR #\d+)/u.test(line);
+    const hasIssueRef = /(?:issues\/\d+|(?<!PR )#\d+)/u.test(line);
+    if (!hasPrRef || !hasIssueRef) continue;
     if (!/закрывае|closing|closes/iu.test(line)) continue;
     const hasCleanup = /(?:знімі|зняць|прыбяры)/iu.test(line)
       && /`agent:running`/u.test(line);
@@ -71,6 +76,22 @@ test("one-line entries: a closing merge handoff names the cleanup, a hand-off do
   assert.deepEqual(mergeEntriesWithoutLabelCleanup(closing), []);
   assert.deepEqual(mergeEntriesWithoutLabelCleanup(closingWithoutCleanup), [closingWithoutCleanup.slice(0, 120)]);
   assert.deepEqual(mergeEntriesWithoutLabelCleanup(handOff), [], "a hand-off without a close leaves the label alone");
+});
+
+test("one-line entries: short-ref closing handoffs are guarded like full URLs", () => {
+  const closingShortRefs = "- Табе зрабіць: зліце PR #140, закрывае #132, пасля мержу знімі `agent:running` з issue #132.";
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(closingShortRefs), []);
+  const closingShortRefsWithoutCleanup = "- Табе зрабіць: зліце PR #140, закрывае #132.";
+  assert.deepEqual(
+    mergeEntriesWithoutLabelCleanup(closingShortRefsWithoutCleanup),
+    [closingShortRefsWithoutCleanup.slice(0, 120)],
+  );
+  const prOnlyClose = "- Табе зрабіць: зліце PR #140, ён закрывае задачу аўтаматычна.";
+  assert.deepEqual(
+    mergeEntriesWithoutLabelCleanup(prOnlyClose),
+    [],
+    "a bare `#N` ref must name the issue, not the PR's own number",
+  );
 });
 
 test("the guard accepts explicit cleanup and ignores historical completed entries", () => {

@@ -48,7 +48,7 @@ function makeFakeSdk() {
     fs.mkdirSync(path.dirname(file), { recursive: true });
     fs.writeFileSync(file, '#!/bin/sh\n');
   }
-  fs.mkdirSync(path.join(dir, 'system-images', 'android-36', 'google_apis', 'x86_64'), { recursive: true });
+  fs.mkdirSync(path.join(dir, 'system-images', 'android-35', 'google_apis', 'x86_64'), { recursive: true });
   return dir;
 }
 
@@ -120,7 +120,7 @@ function callIndex(io, name) {
 }
 
 // --sdk/--jdk make the preflight deterministic on any host (CI has no
-// /usr/lib/jvm JDK 17 or android-36 image guarantee).
+// /usr/lib/jvm JDK 17 or android-36 build-side package guarantee).
 function preflightArgs() {
   const sdk = makeFakeSdk();
   const jdk = makeFakeJdk();
@@ -349,16 +349,16 @@ test('ownership falls back to the first fresh serial only when the port scan is 
   }
 });
 
-test('the --avd override skips the android-36 image preflight (voka avd-image-preflight)', async () => {
+test('the --avd override skips the android-35 image preflight (voka avd-image-preflight)', async () => {
   await withTempRoot(async () => {
     const { args, restore } = preflightArgs();
     try {
-      // Strip the android-36 system image from the fake SDK: the override
+      // Strip the android-35 system image from the fake SDK: the override
       // guest does not need it, so the run must still reach the emulator.
       fs.rmSync(path.join(args[1], 'system-images'), { recursive: true, force: true });
       const io = stubIo({ listAvds: () => ['kudy-ci', 'kudy-apr05-api35'] });
       const { code } = await main([...args, '--avd', 'kudy-apr05-api35'], io);
-      assert.equal(code, EXIT.passed, 'the run must reach the emulator without the android-36 image');
+      assert.equal(code, EXIT.passed, 'the run must reach the emulator without the android-35 image');
       assert.equal(io.calls.bootEmulator.length, 1);
     } finally {
       restore();
@@ -403,7 +403,7 @@ test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass',
       const result = await main(noAvd.args, io);
       assert.equal(result.code, EXIT.notVerified);
       assert.match(result.summary, /no AVD kudy-ci/);
-      assert.match(result.summary, /system-images;android-36;google_apis;x86_64/);
+      assert.match(result.summary, /system-images;android-35;google_apis;x86_64/);
     } finally {
       noAvd.restore();
     }
@@ -417,7 +417,7 @@ test('missing KVM or the CI system image is a named NOT-VERIFIED, never a pass',
       const io = stubIo();
       const result = await main(noImage.args, io);
       assert.equal(result.code, EXIT.notVerified);
-      assert.match(result.summary, /missing system image system-images\/android-36\/google_apis\/x86_64/);
+      assert.match(result.summary, /missing system image system-images\/android-35\/google_apis\/x86_64/);
       assert.equal(io.calls.bootEmulator.length, 0, 'nothing boots without the image');
     } finally {
       noImage.restore();
