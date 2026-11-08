@@ -136,11 +136,15 @@ export function buildSteps({ jscpd: version = jscpdVersion() } = {}) {
 
 // Significant commands of one workflow `run:` script: the npm/npx/node
 // invocations, with the jscpd workflow's `cmd=(npx …)` array construction
-// normalized to the npx line it executes (`exec "${cmd[@]}"` is its only
-// other line and runs the same array). Plumbing — set/export/test/echo/
-// printf/mkdir/sudo/grep/read and shell assignments — never runs a check and
-// is ignored.
-const PLUMBING_PREFIXES = ['set ', 'export ', 'test ', 'echo ', 'printf ', 'mkdir ', 'sudo ', 'grep ', 'read ', 'exec ', '[ '];
+// normalized to the npx line it executes. A leading `exec ` (the shell
+// builtin replaces itself with the command it prefixes) is stripped, so
+// `exec npm run x` reaches the coverage check like its bare form (voka
+// finding exec-drift-blindspot); the array expansion `exec "${cmd[@]}"`
+// then no longer names npm/npx/node and drops out on its own — the array
+// is already covered by the normalized cmd=(…) line. Plumbing — set/export/
+// test/echo/printf/mkdir/sudo/grep/read and shell assignments — never runs
+// a check and is ignored.
+const PLUMBING_PREFIXES = ['set ', 'export ', 'test ', 'echo ', 'printf ', 'mkdir ', 'sudo ', 'grep ', 'read ', '[ '];
 
 export function significantCommands(runScript) {
   return runScript
@@ -148,6 +152,7 @@ export function significantCommands(runScript) {
     .map((line) => line.trim())
     .filter((line) => line !== '' && !line.startsWith('#'))
     .filter((line) => !PLUMBING_PREFIXES.some((prefix) => line.startsWith(prefix)))
+    .map((line) => line.replace(/^exec\s+/, ''))
     .filter((line) => /^npm\s|^npx\s|^node\s|npx --yes jscpd@/.test(line))
     .map((line) => (line.startsWith('cmd=(') ? line.replace(/^cmd=\(/, '').replace(/\)$/, '') : line));
 }

@@ -78,6 +78,37 @@ test('significantCommands keeps the check commands and drops the plumbing', () =
   assert.deepEqual(significantCommands('# run: npm test\nnpm test\n'), ['npm test'], 'a commented-out command is not a command');
 });
 
+test('an exec-prefixed step command reaches the guard like its bare form (voka exec-drift-blindspot)', () => {
+  // The `exec` builtin replaces the shell with the command it prefixes, so
+  // `exec npm run x` runs the same check as `npm run x` and must be covered;
+  // only the jscpd array expansion drops out (the normalized cmd=(...) line
+  // already covers it).
+  assert.deepEqual(significantCommands('exec npm run new-gate\n'), ['npm run new-gate']);
+  assert.deepEqual(significantCommands('exec node tools/ci/check-required-checks.mjs\n'), ['node tools/ci/check-required-checks.mjs']);
+  assert.deepEqual(significantCommands('exec npx --yes jscpd@5.1.2 --config "$CONFIG" --no-tips\n'), ['npx --yes jscpd@5.1.2 --config "$CONFIG" --no-tips']);
+  assert.deepEqual(significantCommands('exec "${cmd[@]}"\n'), [], 'the array expansion is covered by the cmd=(...) line, not twice');
+  assert.deepEqual(significantCommands('exec chmod +x bin/kudy\n'), [], 'exec of a non-npm/npx/node command is not a significant command');
+});
+
+test('revert: an exec-prefixed workflow command parses through the production path and fails coverage when uncovered (voka exec-drift-blindspot)', () => {
+  const source = [
+    'jobs:',
+    '  guard:',
+    '    runs-on: ubuntu-latest',
+    '    steps:',
+    '      - run: |',
+    '          set -euo pipefail',
+    '          exec npm run new-gate',
+  ].join('\n');
+  const jobs = parseWorkflowJobs(source);
+  assert.deepEqual(jobs[0].commands, ['npm run new-gate'], 'exec npm must parse as the npm command it runs');
+  const failures = coverageFailures([['guard-required-checks.yml', jobs]], buildSteps());
+  assert.ok(
+    failures.some((failure) => failure.includes('guard-required-checks.yml/guard') && failure.includes('npm run new-gate')),
+    failures.join('\n'),
+  );
+});
+
 test('the local jscpd command uses the version pinned in jscpd.yml, not its own pin', () => {
   const version = jscpdVersion();
   const entry = buildSteps().find((step) => step.id === 'jscpd');
