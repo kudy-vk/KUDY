@@ -31,7 +31,7 @@ test('the e2e:android script points at the runner', () => {
 });
 
 test('the Metro spawn pins every runner-controlled EXPO_PUBLIC_ key against a host .env', () => {
-  const source = fs.readFileSync(path.join(repoRoot, 'tools/e2e-android/run-e2e.mjs'), 'utf8');
+  const source = fs.readFileSync(path.join(repoRoot, 'tools/e2e-android/run-e2e.mjs'), 'utf8').replace(/\r\n/g, '\n');
   assert.match(
     source,
     /EXPO_PUBLIC_CATALOG_ORIGIN: '',\n\s*EXPO_PUBLIC_DEMO_MODE: '',\n\s*EXPO_PUBLIC_E2E_FEEDBACK: '',\n\s*EXPO_PUBLIC_FEEDBACK_FUNCTIONS_URL: '',\n\s*\.\.\.env,/,
