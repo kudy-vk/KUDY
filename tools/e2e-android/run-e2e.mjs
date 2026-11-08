@@ -233,11 +233,23 @@ export async function startMetro({ port, env, logPath }) {
         // Expo CLI loads the project .env for every EXPO_PUBLIC_ key missing
         // from process.env, so a host .env (gitignored) would leak into the
         // served bundle — issue #135: the phase A «no catalog origin» contract
-        // broke on hosts with EXPO_PUBLIC_CATALOG_ORIGIN set. The runner
-        // decides the bundle env; the empty-string default keeps an
-        // origin-free spawn truly origin-free (the app's catalogOriginFrom
-        // reads '' as unconfigured), and the caller env still wins.
-        env: { ...process.env, CI: '1', EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_CATALOG_ORIGIN: '', ...env },
+        // broke on hosts with EXPO_PUBLIC_CATALOG_ORIGIN set. Issue #162:
+        // the same mechanism leaks the other runner-controlled bundle-env
+        // keys, so startMetro pins these four to '' before the caller env —
+        // the app reads '' as unconfigured (no origin, demo mode off, the
+        // feedback UI off, no feedback base URL) and the caller env still
+        // wins. EXPO_PUBLIC keys outside this list (EXPO_PUBLIC_STORYBOOK,
+        // EXPO_PUBLIC_OPEN_UI_LOCALES) are not pinned here.
+        env: {
+          ...process.env,
+          CI: '1',
+          EXPO_NO_TELEMETRY: '1',
+          EXPO_PUBLIC_CATALOG_ORIGIN: '',
+          EXPO_PUBLIC_DEMO_MODE: '',
+          EXPO_PUBLIC_E2E_FEEDBACK: '',
+          EXPO_PUBLIC_FEEDBACK_FUNCTIONS_URL: '',
+          ...env,
+        },
         logPath,
       },
     );
