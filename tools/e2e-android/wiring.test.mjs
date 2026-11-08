@@ -30,12 +30,12 @@ test('the e2e:android script points at the runner', () => {
   assert.equal(packageJson.scripts['e2e:android'], 'node tools/e2e-android/run-e2e.mjs');
 });
 
-test('the Metro spawn pins the catalog origin against a host .env', () => {
+test('the Metro spawn pins every runner-controlled EXPO_PUBLIC_ key against a host .env', () => {
   const source = fs.readFileSync(path.join(repoRoot, 'tools/e2e-android/run-e2e.mjs'), 'utf8');
   assert.match(
     source,
-    /EXPO_NO_TELEMETRY: '1', EXPO_PUBLIC_CATALOG_ORIGIN: '', \.\.\.env\b/,
-    'startMetro must default-pin EXPO_PUBLIC_CATALOG_ORIGIN to the empty string before the caller env: Expo CLI loads the project .env for every EXPO_PUBLIC_ key missing from process.env, so without the pin a host .env leaks into the served bundle and breaks the phase A no-origin contract (issue #135)',
+    /EXPO_PUBLIC_CATALOG_ORIGIN: '',\n\s*EXPO_PUBLIC_DEMO_MODE: '',\n\s*EXPO_PUBLIC_E2E_FEEDBACK: '',\n\s*EXPO_PUBLIC_FEEDBACK_FUNCTIONS_URL: '',\n\s*\.\.\.env,/,
+    'startMetro must default-pin every runner-controlled EXPO_PUBLIC_ key (catalog origin, demo mode, E2E feedback, feedback base URL) to the empty string before the caller env: Expo CLI loads the project .env for every EXPO_PUBLIC_ key missing from process.env, so without a pin a host .env leaks into the served bundle — the catalog pin alone guarded the phase A no-origin contract (issue #135), the other three keys would inject demo content or feedback wiring into the suites (issue #162)',
   );
 });
 
