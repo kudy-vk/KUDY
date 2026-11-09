@@ -19,4 +19,4 @@
 - `uvx --offline showboat==0.6.1 verify docs/demos/2026-11-09-map-03-geometry.md` — два аднолькавыя прагоны. На Windows `MAP03_PYTHON` паказваў на Python з OpenCV і NumPy.
 - `npm run arch:check` — 725 модуляў, 0 парушэнняў. `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .` — 0 дубляў.
 - `node --max-old-space-size=700 node_modules/typescript/bin/tsc --noEmit` — паспяхова.
-- NOT-VERIFIED — чытэльнасць подпісаў і доступнасць на прыладзе. Вынік вымярае геаметрыю зыходнай карты. Вытворчае выкарыстанне графікі чакае [пацвярджэння правоў](MAP-02-RIGHTS.md).
+- NOT-VERIFIED — чытэльнасць подпісаў і доступнасць на прыладзе. Вынік вымярае геаметрыю зыходнай карты. [Вынік праверкі публікацыі ілюстрацыі](MAP-02-RIGHTS.md).

@@ -131,7 +131,7 @@ KUDY самім заснавальнікам — майстры згенерав
 ад 2026-10-26; паходжанне і кантрольныя сумы — у пакеце
 `app-icon-copper-framed-v1` (README, `verification.json`, `SHA256SUMS`).
 
-У рэпазітары асет жыве ў `assets/kudy-icon/` (`icon.png`,
+У рэпазітары асет жыве ў `assets/kudy-icon/` (`assets/kudy-icon/icon.png`,
 `android-adaptive-foreground.png`, `android-adaptive-background.png`) і
 падключаецца палямі `icon`, `android.adaptiveIcon` і `splash` у
 `app.json`. Splash выкарыстоўвае той самы прыняты экспарт (`icon.png`)
