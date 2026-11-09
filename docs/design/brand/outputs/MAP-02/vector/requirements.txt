@@ -4,3 +4,5 @@ opencv-python==4.14.0.94
 numpy==2.5.3
 scipy==1.18.1
 scikit-image==0.26.0
+# Parsed with an explicit DTD-entity guard, not the stdlib default (#184).
+defusedxml==0.7.1

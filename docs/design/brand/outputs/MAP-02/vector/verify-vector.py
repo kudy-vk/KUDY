@@ -10,7 +10,7 @@ import json
 import re
 import tempfile
 from pathlib import Path
-from xml.etree import ElementTree as ET
+import defusedxml.ElementTree as ET
 
 import cv2
 import numpy as np
