@@ -3,7 +3,7 @@
 import base64
 import argparse
 from pathlib import Path
-from xml.etree import ElementTree as ET
+import defusedxml.ElementTree as ET
 
 import cv2
 

@@ -1,8 +1,7 @@
-import {spawnSync} from 'node:child_process';
-import {fileURLToPath} from 'node:url';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {findMagnet, joinGroups} from './magnet.mjs';
+import {runPythonTest} from './python-bridge.mjs';
 
 const setup=()=>{
   const left={id:'left',dx:30,dy:20,members:new Set(['one'])};
@@ -30,19 +29,9 @@ test('joining retains the exact source offset and all member identities',()=>{
 });
 
 test('MAP-03 rejects malformed menu geometry', t => {
-  const script = fileURLToPath(new URL('../MAP-03/test_geometry.py', import.meta.url));
-  const result = spawnSync('python', [script], {
-    encoding: 'utf8',
-    env: { ...process.env, OPENBLAS_NUM_THREADS: '1', PYTHONUTF8: '1' },
-  });
-  if (result.error?.code === 'ENOENT' || result.stderr?.startsWith('Python was not found;')) {
-    t.skip('Python is unavailable');
-    return;
-  }
-  if (result.status === 1 && /ModuleNotFoundError: No module named '(cv2|numpy)'/.test(result.stderr)) {
-    t.skip('Python OpenCV or NumPy is unavailable');
-    return;
-  }
-  if (result.error) throw result.error;
-  assert.equal(result.status, 0, result.stderr);
+  runPythonTest(t, new URL('../MAP-03/test_geometry.py', import.meta.url), ['cv2', 'numpy']);
+});
+
+test('MAP-02 parse path rejects DTD entity expansion', t => {
+  runPythonTest(t, new URL('../MAP-02/test_parse_guard.py', import.meta.url), ['defusedxml']);
 });
