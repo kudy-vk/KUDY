@@ -3,7 +3,8 @@
     python docs/design/brand/outputs/MAP-02/vector/verify-vector.py
 
 Exits non-zero on any failed check and prints every measured value. The
-negative cases prove the structure check rejects a flat raster SVG.
+negative cases prove the structure check rejects a flat raster SVG and
+refuses DTD entity expansion.
 """
 import importlib.util
 import json
