@@ -7,6 +7,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 
+from map_geometry import contour_path, map_joints
+
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE / 'source.png'
 EXPECTED = '72c208a8a14a687f215137511a2b722cc75e2f619bbc0805d4fc3e7c746f80f0'
@@ -140,14 +142,8 @@ for index in range(7):
         silhouette[:, :, 3] = cropped[:, :, 3]
         assert cv2.imwrite(str(HERE / f'pieces/{name}--light.png'), silhouette)
     mask = selected[y:bottom, x:right].astype(np.uint8)
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    paths = []
-    for contour in contours:
-        points = cv2.approxPolyDP(contour, .5, True).reshape(-1, 2)
-        if len(points) >= 3:
-            paths.append('M' + ' L'.join(f'{px},{py}' for px, py in points) + ' Z')
     item = {'id': name, 'x': x, 'y': y, 'width': right-x, 'height': bottom-y,
-            'png': file, 'path': ' '.join(paths), 'pixelCount': len(xs)}
+            'png': file, 'path': contour_path(mask), 'pixelCount': len(xs)}
     if index < 5:
         _, title, key, route, seeds, anchor = definitions[index]
         item.update(ownerNumber=index+1, label=title, labelKey=key, route=route, anchor=anchor, padding=72, light=f'pieces/{name}--light.png',
@@ -178,20 +174,7 @@ assert cv2.imwrite(str(HERE / 'assembled.png'), restored)
 city_only = np.zeros_like(source)
 city_only[owner < 5] = source[owner < 5]
 assert cv2.imwrite(str(HERE / 'city-only.png'), city_only)
-manifest['joints'] = []
-boundaries = []
-for mask in city_masks:
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    points = np.concatenate([cv2.approxPolyDP(c, 4, True).reshape(-1, 2) for c in contours])
-    boundaries.append(points.astype(float))
-for a in range(5):
-    for b in range(a+1, 5):
-        distances = ((boundaries[a][:, None, :] - boundaries[b][None, :, :])**2).sum(axis=-1)
-        ai, bi = np.unravel_index(distances.argmin(), distances.shape)
-        gap = float(np.sqrt(distances[ai, bi]))
-        if gap <= 125:
-            port = ((boundaries[a][ai]+boundaries[b][bi])/2).round(1).tolist()
-            manifest['joints'].append({'a': definitions[a][0], 'b': definitions[b][0], 'port': port, 'gap': round(gap, 1)})
+manifest['joints'] = map_joints({definition[0]: mask for definition, mask in zip(definitions, city_masks)})
 for item in manifest['pieces']:
     item['neighbors'] = [j['b'] if j['a'] == item['id'] else j['a'] for j in manifest['joints'] if item['id'] in (j['a'], j['b'])]
 repo = HERE.parents[4]
