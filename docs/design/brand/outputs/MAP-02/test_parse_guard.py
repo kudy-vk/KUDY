@@ -4,8 +4,11 @@
 
 The MAP-02 tooling parses only files this repository generates, but the parse
 path must reject DTD entities explicitly (issue #184) instead of relying on
-the stdlib refusing undefined entities as a side effect.
+the stdlib refusing undefined entities as a side effect. The third test drives
+the entity bomb through the production check_structure in vector/verify-vector.py
+(issue #189).
 """
+import importlib.util
 import unittest
 from pathlib import Path
 
@@ -32,6 +35,19 @@ class ParseGuardTests(unittest.TestCase):
             text = (HERE / name).read_text(encoding='utf-8')
             self.assertIn('import defusedxml.ElementTree as ET', text, name)
             self.assertNotIn('from xml.etree import', text, name)
+
+    def test_production_check_structure_refuses_dtd_entities(self):
+        for name in ('cv2', 'numpy', 'scipy', 'skimage'):
+            try:
+                __import__(name)
+            except ModuleNotFoundError:
+                self.skipTest(f'{name} is unavailable; verify-vector cannot load')
+        spec = importlib.util.spec_from_file_location(
+            'verify_vector', HERE / 'vector' / 'verify-vector.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with self.assertRaises(EntitiesForbidden):
+            module.check_structure(ENTITY_BOMB)
 
 
 if __name__ == '__main__':

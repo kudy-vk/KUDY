@@ -11,6 +11,7 @@ import re
 import tempfile
 from pathlib import Path
 import defusedxml.ElementTree as ET
+from defusedxml.common import EntitiesForbidden
 
 import cv2
 import numpy as np
@@ -84,7 +85,7 @@ def check_structure(text):
 
 
 def negative_cases(text):
-    """Every flat-raster or stripped variant must fail the structure check."""
+    """Every flat-raster, stripped or DTD-entity variant must fail the structure check."""
     raster = (HERE.parent / 'map-cutout-v2.svg').read_text(encoding='utf-8')
     flat_layer = re.sub(r'<g id="streets"[\s\S]*?\n  </g>',
                         '<g id="streets" inkscape:groupmode="layer" inkscape:label="x">'
@@ -103,6 +104,14 @@ def negative_cases(text):
             print(f'  rejected as expected: {name} ({error})')
         else:
             raise AssertionError(f'structure check accepted {name}')
+    entity_bomb = ('<?xml version="1.0"?><!DOCTYPE r [<!ENTITY a "aaa">'
+                   '<!ENTITY b "&a;&a;&a;&a;&a;&a;&a;&a;&a;&a;">]><r>&b;</r>')
+    try:
+        check_structure(entity_bomb)
+    except EntitiesForbidden as error:
+        print(f'  rejected as expected: DTD entity bomb ({error})')
+    else:
+        raise AssertionError('structure check accepted a DTD entity bomb')
 
 
 def read_png(path, alpha=True):
