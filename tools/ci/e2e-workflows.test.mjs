@@ -55,7 +55,7 @@ test('Android E2E starts only manually; the local pre-push rule owns the PR chec
   assert.match(rule, /node tools\/ci\/android-e2e-scope\.mjs/, 'the rule decides with the shared scope script');
   assert.match(rule, /npm run e2e:android:local/, 'the rule names the one-command local runner');
   assert.match(rule, /npm run ci:local/, 'the rule names the local fast-check command');
-  for (const suite of ['smoke', 'walk', 'discovery']) assert.match(rule, new RegExp(`\\b${suite}\\b`), `the rule must run the ${suite} suite`);
+  assert.match(rule, /runs the suites `smoke`, `walk` and `discovery`/, 'the rule must enumerate the suites smoke, walk and discovery as the one-command runner contract');
   assert.match(rule, /NOT-VERIFIED/, 'a host without an emulator must report, not pass');
   for (const entry of ['AGENTS.md', 'CLAUDE.md', path.join('.cursor', 'rules', 'android-e2e-local.mdc')]) {
     assert.match(fs.readFileSync(path.join(root, entry), 'utf8'), /docs\/agent-rules\/android-e2e-local\.md/, `${entry} must route to the rule`);
