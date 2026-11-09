@@ -41,6 +41,13 @@ def export_geometry(manifest):
 
 
 def build_geometry(manifest):
+    version = manifest['version']
+    if type(version) is not int or version < 1:
+        raise ValueError('map version must be a positive integer')
+    snap_distance = manifest['gesture']['snapDistanceDp']
+    if type(snap_distance) not in (int, float) or not 0 < snap_distance < float('inf'):
+        raise ValueError('snap distance must be positive and finite')
+
     source = manifest['source']
     width, height = source['width'], source['height']
     artwork = cv2.imread(str(ROOT / 'source.png'), cv2.IMREAD_UNCHANGED)
@@ -55,8 +62,11 @@ def build_geometry(manifest):
         piece_id = piece['id']
         if not re.fullmatch(r'[a-z][a-z0-9-]*', piece_id) or piece_id in pieces:
             raise ValueError(f'invalid or duplicate fragment ID: {piece_id!r}')
+        png = f'pieces/{piece_id}.png'
+        if entry['png'] != png:
+            raise ValueError(f'fragment PNG path differs from ID: {piece_id}')
         rect = mask_rect(piece, width, height)
-        image = cv2.imread(str(ROOT / 'pieces' / f'{piece_id}.png'), cv2.IMREAD_UNCHANGED)
+        image = cv2.imread(str(ROOT / png), cv2.IMREAD_UNCHANGED)
         if image is None or image.shape != (piece['height'], piece['width'], 4):
             raise ValueError(f'fragment PNG dimensions differ from manifest: {piece_id}')
 
@@ -108,9 +118,9 @@ def build_geometry(manifest):
             raise ValueError(f'reserved zone is not on unused scene artwork: {zone["id"]}')
 
     return {
-        'mapVersion': manifest['version'],
+        'mapVersion': version,
         'source': source,
-        'snapDistanceDp': manifest['gesture']['snapDistanceDp'],
+        'snapDistanceDp': snap_distance,
         'pieces': list(pieces.values()),
         'joints': joints,
         'reservedZones': RESERVED_ZONES,

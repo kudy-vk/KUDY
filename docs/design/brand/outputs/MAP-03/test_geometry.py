@@ -87,6 +87,30 @@ class GeometryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'joint port or gap differs from masks'):
             export_geometry(manifest)
 
+    def test_rejects_a_png_path_that_does_not_belong_to_the_piece(self):
+        for path in ('pieces/guides.png', '../source.png'):
+            with self.subTest(path=path):
+                manifest = deepcopy(self.manifest)
+                manifest['pieces'][0]['png'] = path
+                with self.assertRaisesRegex(ValueError, 'fragment PNG path differs from ID'):
+                    export_geometry(manifest)
+
+    def test_rejects_invalid_map_versions(self):
+        for version in (None, False, 0, 2.5):
+            with self.subTest(version=version):
+                manifest = deepcopy(self.manifest)
+                manifest['version'] = version
+                with self.assertRaisesRegex(ValueError, 'map version must be a positive integer'):
+                    export_geometry(manifest)
+
+    def test_rejects_invalid_snap_distances(self):
+        for distance in ('invalid', True, 0, float('inf'), float('nan')):
+            with self.subTest(distance=distance):
+                manifest = deepcopy(self.manifest)
+                manifest['gesture']['snapDistanceDp'] = distance
+                with self.assertRaisesRegex(ValueError, 'snap distance must be positive and finite'):
+                    export_geometry(manifest)
+
     def test_rejects_invalid_piece_entries(self):
         manifest = deepcopy(self.manifest)
         manifest['pieces'][0] = None

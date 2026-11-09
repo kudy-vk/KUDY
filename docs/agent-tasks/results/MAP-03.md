@@ -13,7 +13,7 @@
 ## Праверкі на Windows
 
 - `python docs/design/brand/outputs/menu-map-city-only/verify.py` — піксельная зборка пацверджаная.
-- `python docs/design/brand/outputs/MAP-03/test_geometry.py` — 11 тэстаў прайшлі.
+- `python docs/design/brand/outputs/MAP-03/test_geometry.py` — 14 тэстаў прайшлі.
 - `node --test --test-concurrency=1 docs/design/brand/outputs/menu-map-city-only/magnet.test.mjs docs/design/brand/outputs/menu-map-city-only/native/model.test.mjs` — 10 тэстаў прайшлі.
 - `build.py` да і пасля вынясення агульных функцый стварыў 26 байт-ідэнтычных файлаў у асобных часовых каталогах на адным наборы ўваходных файлаў.
 - `uvx --offline showboat==0.6.1 verify docs/demos/2026-11-09-map-03-geometry.md` — два аднолькавыя прагоны. На Windows `MAP03_PYTHON` паказваў на Python з OpenCV і NumPy.
