@@ -39,3 +39,10 @@ test('package.json license fields point readers at LICENSE', () => {
     assert.equal(parsed.license, 'SEE LICENSE IN LICENSE', file);
   }
 });
+
+test('lockfile mirrors carry the same license token as package.json', () => {
+  for (const lock of ['package-lock.json', path.join('web', 'package-lock.json')]) {
+    const parsed = JSON.parse(read(lock));
+    assert.equal(parsed.packages?.['']?.license, 'SEE LICENSE IN LICENSE', lock);
+  }
+});
