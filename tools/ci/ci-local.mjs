@@ -136,15 +136,19 @@ export function buildSteps({ jscpd: version = jscpdVersion() } = {}) {
 
 // Significant commands of one workflow `run:` script: the npm/npx/node
 // invocations, with the jscpd workflow's `cmd=(npx …)` array construction
-// normalized to the npx line it executes. A leading `exec ` (the shell
-// builtin replaces itself with the command it prefixes) is stripped, so
-// `exec npm run x` reaches the coverage check like its bare form (voka
-// finding exec-drift-blindspot); the array expansion `exec "${cmd[@]}"`
-// then no longer names npm/npx/node and drops out on its own — the array
-// is already covered by the normalized cmd=(…) line. Plumbing — set/export/
-// test/echo/printf/mkdir/sudo/grep/read and shell assignments — never runs
-// a check and is ignored.
-const PLUMBING_PREFIXES = ['set ', 'export ', 'test ', 'echo ', 'printf ', 'mkdir ', 'sudo ', 'grep ', 'read ', '[ '];
+// normalized to the npx line it executes. A leading `exec ` or `sudo ` —
+// both run the command they prefix — is stripped, so `exec npm run x` and
+// `sudo npm ci` reach the coverage check like their bare forms (voka
+// findings exec-drift-blindspot, drift-guard-compound-blind-spot); the array
+// expansion `exec "${cmd[@]}"` then no longer names npm/npx/node and drops
+// out on its own — the array is already covered by the normalized cmd=(…)
+// line. The npm/npx/node match sits anywhere in the line, not only at its
+// start, so a compound (`cd web && npm test`) or env-prefixed (`ENV=val npm
+// ci`) step becomes significant whole and must be covered verbatim by a
+// ci:local entry (voka finding drift-guard-compound-blind-spot). Plumbing —
+// set/export/test/echo/printf/mkdir/grep/read and pure shell assignments —
+// never runs a check and is ignored.
+const PLUMBING_PREFIXES = ['set ', 'export ', 'test ', 'echo ', 'printf ', 'mkdir ', 'grep ', 'read ', '[ '];
 
 export function significantCommands(runScript) {
   return runScript
@@ -152,8 +156,8 @@ export function significantCommands(runScript) {
     .map((line) => line.trim())
     .filter((line) => line !== '' && !line.startsWith('#'))
     .filter((line) => !PLUMBING_PREFIXES.some((prefix) => line.startsWith(prefix)))
-    .map((line) => line.replace(/^exec\s+/, ''))
-    .filter((line) => /^npm\s|^npx\s|^node\s|npx --yes jscpd@/.test(line))
+    .map((line) => line.replace(/^(?:exec|sudo)\s+/, ''))
+    .filter((line) => /\b(?:npm|npx|node)\b/.test(line))
     .map((line) => (line.startsWith('cmd=(') ? line.replace(/^cmd=\(/, '').replace(/\)$/, '') : line));
 }
 

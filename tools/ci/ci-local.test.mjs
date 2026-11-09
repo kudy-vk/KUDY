@@ -109,6 +109,33 @@ test('revert: an exec-prefixed workflow command parses through the production pa
   );
 });
 
+test('significantCommands sees compound and env-prefixed commands, not only npm-prefixed lines (voka drift-guard-compound-blind-spot)', () => {
+  assert.deepEqual(significantCommands('cd web && npm test\n'), ['cd web && npm test']);
+  assert.deepEqual(significantCommands('ENV=val npm ci\n'), ['ENV=val npm ci']);
+  assert.deepEqual(significantCommands('sudo npm ci\n'), ['npm ci'], 'sudo runs the command it prefixes, like exec');
+  assert.deepEqual(significantCommands('sudo apt-get install libnss3\n'), [], 'sudo of a non-npm command is not a significant command');
+  assert.deepEqual(significantCommands('export KUDY_CHROMIUM="$(node -e x)"\n'), [], 'plumbing stays plumbing: an export assignment never runs a check');
+});
+
+test('revert: a compound workflow command parses through the production path and fails coverage when uncovered (voka drift-guard-compound-blind-spot)', () => {
+  const source = [
+    'jobs:',
+    '  tests:',
+    '    runs-on: ubuntu-latest',
+    '    steps:',
+    '      - run: |',
+    '          set -euo pipefail',
+    '          cd web && npm test',
+  ].join('\n');
+  const jobs = parseWorkflowJobs(source);
+  assert.deepEqual(jobs[0].commands, ['cd web && npm test'], 'a compound line is significant whole; its npm tail must not drop out');
+  const failures = coverageFailures([['required-checks.yml', jobs]], buildSteps());
+  assert.ok(
+    failures.some((failure) => failure.includes('required-checks.yml/tests') && failure.includes('cd web && npm test')),
+    failures.join('\n'),
+  );
+});
+
 test('the local jscpd command uses the version pinned in jscpd.yml, not its own pin', () => {
   const version = jscpdVersion();
   const entry = buildSteps().find((step) => step.id === 'jscpd');
