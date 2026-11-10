@@ -22,7 +22,9 @@
 ## Праверкі
 
 - `npx jest --config jest.config.js --runInBand --silent --runTestsByPath components/point-status-sign.test.tsx components/run-native-map.test.tsx app/run.test.tsx`: 59 passed, 3 suites passed.
+- `npx jest --config jest.config.js --runInBand --silent`: 337 passed, 43 suites passed, 94.782 s.
 - `node --test test/run-map-contrast.test.mjs`: 5 passed.
+- `node --test --experimental-strip-types test/design-tokens.test.mjs test/design-runtime-theme.test.mjs test/run-map-contrast.test.mjs`: 27 passed пасля выпраўлення двух састарэлых згадванняў літары ў каноне.
 - `npm run typecheck`: exit 0.
 - `npm run arch:check`: 734 modules, 0 violations.
 - `npm run tools:check`: 97 production tool files clean.
@@ -38,6 +40,10 @@ Node-частка поўнага набору з `package.json` выканана
 
 ## Самаправерка аўтара
 
-Па чэк-лісце Voka і правілах KUDY правераныя тыпы, агульны кампанент, межы пластоў, подпісы, недатыкальнасць станаў і націсканняў. Вялікі файл Run застаецца зборкай экрана; новы знак вынесены ў асобны кампанент без другога ўласніка стану. Незалежныя Voka і Judge яшчэ не выкананыя.
+Па чэк-лісце Voka і правілах KUDY правераныя тыпы, агульны кампанент, межы пластоў, подпісы, недатыкальнасць станаў і націсканняў. Вялікі файл Run застаецца зборкай экрана; новы знак вынесены ў асобны кампанент без другога ўласніка стану.
+
+## Незалежная Voka
+
+Агент Voka (Codex, чысты кантэкст) праверыў дыф `9165d22…41287a5` і наступнае выпраўленне канона: `APPROVED — critical: 0, high: 0, medium: 0, low: 0`. Ён асобна паўтарыў 59 Jest-тэстаў, 5 тэстаў кантрасту і праверку тыпаў. Адзіная заўвага — дзве састарэлыя згадкі літары маркера — выпраўленая і паўторна правераная. Judge і прыёмка на прыладзе застаюцца адкрытымі; вердыкт кода не азначае гатоўнасць да мержу.
 
 Паўторная праверка: адкрыць Run, прагледзець пяць станаў на карце, у спісе і картцы; знакі павінны супадаць, тэкст стану заставацца бачным, націсканне маркера не павінна запускаць аўдыё. Паўтарыць у светлай і цёмнай тэмах.
