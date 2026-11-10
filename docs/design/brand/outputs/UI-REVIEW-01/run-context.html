@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Run — кантэкст для іконак прайгравання</title>
+<style>
+@font-face{font-family:Golos;src:url(../G25.06/fonts/GolosText_400Regular.ttf)}
+@font-face{font-family:Golos;src:url(../G25.06/fonts/GolosText_600SemiBold.ttf);font-weight:600}
+:root{--paper:#faf7f2;--ink:#22262b;--muted:#6b7280;--accent:#1d6b4f;--accent-ink:#fff;--card:#fff;--line:#d8d2c6;--map:#eef3ee}
+*{box-sizing:border-box}body{margin:0;padding:24px;background:var(--paper);color:var(--ink);font:16px/1.45 Golos,system-ui,sans-serif}
+h1{font-size:26px;margin:0 0 5px}p{margin:4px 0 12px}.intro{max-width:1080px}.caveat{border-left:4px solid var(--accent);padding:6px 12px;background:var(--card);max-width:1080px}
+.controls{display:flex;gap:12px;margin:18px 0;align-items:center}.controls label{display:grid;gap:3px;font-size:13px}.controls select{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px}
+.grid{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}.case{width:var(--w,360px);max-width:100%}.case h2{font-size:18px;margin:0 0 7px}.case p{font-size:13px;color:var(--muted);margin-top:7px}
+.phone{position:relative;width:100%;height:calc(var(--w,360px)*2.2222);overflow:hidden;border:2px solid #56605b;border-radius:24px;background:var(--map);box-shadow:0 7px 20px #22262b25}
+.map-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}.header{position:absolute;top:0;left:0;right:0;height:125px;background:var(--paper);padding:66px 14px 8px;color:var(--accent);font-size:18px}.header:before{content:'9:41  ▣';position:absolute;top:13px;left:20px;color:var(--ink);font:13px system-ui}.header .back{font:26px system-ui;margin-right:9px}
+.session{position:absolute;top:125px;left:0;right:0;padding:8px 12px;min-height:75px;background:var(--paper);display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}.session span{font-size:12px;color:var(--accent);border:1px solid var(--accent);border-radius:9px;padding:7px 6px;white-space:nowrap}
+.dock{position:absolute;bottom:0;left:0;right:0;min-height:107px;background:var(--card);border-top:1px solid var(--line);padding:10px 12px 18px;z-index:3}.dock-row{display:flex;gap:10px;align-items:center}.now{font-weight:600;flex:1;min-width:0;font-size:15px;line-height:1.2}.icon-button{width:48px;height:48px;min-width:48px;border:1px solid var(--accent);background:var(--card);color:var(--accent);border-radius:10px;display:inline-grid;place-items:center;padding:0}.icon-button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.icon-button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}.progress{height:6px;background:var(--line);border-radius:9px;margin:8px 0 5px;overflow:hidden}.progress span{display:block;width:42%;height:100%;background:var(--accent)}.source{font-size:10px;color:var(--muted)}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:53%;background:var(--card);border-top:1px solid var(--line);border-radius:10px 10px 0 0;padding:10px 12px 119px;overflow:auto}.handle{width:38px;height:4px;background:var(--muted);border-radius:9px;margin:0 auto 9px}.story-photo{width:100%;height:100px;object-fit:cover;object-position:center 0;border-radius:9px;border:1px solid var(--line);display:block}.photo-caption{font-size:10px;color:var(--muted);margin:3px 0 7px}.story-row{display:flex;gap:9px;align-items:center}.story-row h3{font-size:18px;margin:0;flex:1}.summary{font-size:13px;margin:4px 0 6px}.read{font:600 14px Golos,system-ui;background:var(--card);color:var(--accent);border:1px solid var(--accent);border-radius:9px;padding:7px 10px}
+.full{position:absolute;top:34px;bottom:0;left:0;right:0;background:var(--card);padding:10px 12px 119px;overflow:auto}.full .headerline{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.full h3{font-size:21px;margin:7px 0}.full .story-photo{height:150px}.full .bodycopy{font-size:14px;line-height:1.45}.full .bodycopy p{font-size:14px;color:var(--ink)}.proposal{font-size:11px;color:var(--muted)}
+.fact-table{border-collapse:collapse;max-width:1100px;margin-top:24px;background:var(--card)}.fact-table th,.fact-table td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;font-size:14px}.fact-table th{width:150px}
+body[data-theme=dark]{--paper:#171d1c;--ink:#f2f1e9;--muted:#c4d0ca;--accent:#80d4ad;--accent-ink:#0d2a1e;--card:#232c29;--line:#45534c}body[data-theme=dark] .phone{border-color:#91a69b}
+</style>
+</head>
+<body data-theme="light">
+<h1>Run: як іконкі працуюць у кантэксце</h1>
+<p class="intro">Гэта <b>даследчы макет, не канчатковы дызайн экрана</b>. Ён паказвае Peek, Half і Full як адну панэль над картай. Кнопкі прайгравання ў ніжняй панэлі і ў картцы — толькі іконкі; сэнс дзеяння застаецца ў даступнай лакалізаванай назве. Верхнія дзеянні кіруюць усёй прагулкай, таму іх нельга блытаць з паўзай гуку.</p>
+<p class="caveat">Падкладка карты — сапраўдны здымак Run 2026-10-11 без актыўнага гуку. Фота ў картцы — існая згенераваная ілюстрацыя KUDY, <b>часовы запаўняльнік</b>, не апублікаванае фота гісторыі. Тэкст гісторыі і яе назва — дэманстрацыйныя. Макет не сцвярджае, што фота ці пастаянная дарожка ў Half/Full ужо працуюць у кодзе.</p>
+<div class="controls"><label>Шырыня (dp)<select id="width"><option>320</option><option selected>360</option><option>390</option></select></label><label>Тэма<select id="theme"><option value="light">Светлая</option><option value="dark">Цёмная</option></select></label></div>
+<div class="grid">
+ <section class="case"><h2>Peek · карта і плэер</h2><div class="phone" id="peek"></div><p>Бягучыя кропкі кіравання: цяпер у кодзе Play/Pause тэкставыя; іконка — прапанова.</p></section>
+ <section class="case"><h2>Half · фота і кароткае апісанне</h2><div class="phone" id="half"></div><p>Фота і кароткі тэкст патрабуюцца кантрактам Run, але фота пакуль не паказваецца ў бягучым кодзе.</p></section>
+ <section class="case"><h2>Full · поўны тэкст</h2><div class="phone" id="full"></div><p>У кодзе транскрыпт ёсць. Ніжні плэер з дарожкай пры раскрытай панэлі — прапанова гэтага макета.</p></section>
+</div>
+<table class="fact-table"><tr><th>Ужо ёсць</th><td>Тры становішчы панэлі, ручны Play у картцы, Play/Pause у Peek для гуку гіда, тэкст транскрыпту ў Full, паласа прагрэсу ў Peek.</td></tr><tr><th>Патрабуе дызайну</th><td>Фота і кароткае апісанне ў Half паводле кантракту; спосаб паказу ніжняга плэера ў Half/Full, не хаваючы тэкст і safe area.</td></tr><tr><th>Магчыма не хапае</th><td>Бачны час і перамотка; паўтор/пераход да суседняй гісторыі; ясны стан, калі гук недаступны. Кожную функцыю трэба асобна праверыць з карыстальнікам і кантрактамі, перш чым дадаваць.</td></tr></table>
+<script>
+const map='../../../../../testing/evidence/2026-10-11-g727/run-active.png';
+const art='../mobile-welcome-2026-10-19/art/08-night-harbor.jpg';
+const pause='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+const play='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 4 13 8-13 8V4Z"/></svg>';
+const base=`<img class="map-shot" src="${map}" alt=""><div class="header"><span class="back" aria-hidden="true">←</span>Назад</div><div class="session"><span>Прыпыніць прагулку</span><span>Завяршыць прагулку</span></div>`;
+const dock=`<div class="dock"><div class="dock-row"><div class="now">Зараз грае: Кропка 1</div><button type="button" class="icon-button" aria-label="Паўза" title="Паўза">${pause}</button></div><div class="progress" aria-label="Прайграна 42%"><span></span></div><div class="source">Дадзеныя © удзельнікі OpenStreetMap, ODbL</div></div>`;
+const photo=`<img class="story-photo" src="${art}" alt="Ілюстрацыя-запаўняльнік: горад ля вады"><div class="photo-caption">Месца для фота гісторыі · прапанова</div>`;
+document.querySelector('#peek').innerHTML=base+dock;
+document.querySelector('#half').innerHTML=base+`<div class="sheet"><div class="handle"></div>${photo}<div class="story-row"><h3>Кропка 1</h3><button class="icon-button" type="button" aria-label="Граць" title="Граць">${play}</button></div><div class="summary">Кароткае апісанне з апублікаванага гіда.</div><button class="read" type="button">Чытаць</button></div>`+dock;
+document.querySelector('#full').innerHTML=`<div class="full"><div class="headerline"><span>← Назад да карткі</span><span>✕</span></div>${photo}<h3>Кропка 1</h3><div class="story-row"><span>Асноўная гісторыя</span><button class="icon-button" type="button" aria-label="Граць" title="Граць">${play}</button></div><div class="bodycopy"><p>Тут паказваецца апублікаваны тэкст гісторыі. У сапраўдным Run гэта транскрыпт абранай кропкі, незалежны ад гісторыі, што гучыць у плэеры.</p><p>Дадатковы абзац паказвае, як тэкст пракручваецца над ніжняй дарожкай і не хаваецца за кнопкамі.</p><p class="proposal">Прыклад структуры, не аўтарскі кантэнт гіда.</p></div></div>`+dock;
+for(const s of document.querySelectorAll('select'))s.addEventListener('change',()=>{document.body.dataset.theme=document.querySelector('#theme').value;document.body.style.setProperty('--w',document.querySelector('#width').value+'px')});
+</script>
+</body></html>
