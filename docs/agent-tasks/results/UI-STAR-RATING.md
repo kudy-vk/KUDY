@@ -1,6 +1,6 @@
 # UI-STAR-01 — пяць зорак для ацэнкі гіда — вынік
 
-Задача: [kudy-vk/KUDY#102](https://github.com/kudy-vk/KUDY/issues/102) · выканаўца: ZCode GLM-5.3 · галіна `zcode/102` · кодавы HEAD `f5565e4` · 2026-11-10
+Задача: [kudy-vk/KUDY#102](https://github.com/kudy-vk/KUDY/issues/102) · выканаўца: ZCode GLM-5.3 · галіна `zcode/102` · кодавы HEAD `619d3e1` · 2026-11-10
 
 ## Што зроблена
 
@@ -17,21 +17,21 @@
 2. **Значэнне 1–5 без змены схемы, паўторны выбар** — шлях `setScore`/`send` ідэнтычны папярэдняму; існы ахоўны тэст «choosing a star enables the Send; the acked round renders «адпраўлена»» праходзіць без змен; новы тэст фіксуе рэсэлект (4 → 2).
 3. **A11y і таргеты** — назва кожнай зоркі = лакалізаваны `native.feedback.starLabel` («N з 5», усе 9 лакаляў у generated каталозе), стан `selected` агучваецца праз `accessibilityState`; таргет 48×48 dp; фокус/кантраст — праз кананічныя токены і `PressableSurface`.
 4. **Станы і тэмы** — pressed (dim ≥10% + ripple), selected/unselected (fill+токены), disabled (busy — `accessibilityState.disabled` + прыглушэнне wrapper'ам), light/dark — `useThemeStyles(lightStyles, darkStyles)`; буйны шрыфт — `ScaledText` захаваны для астатніх тэкстаў, зорка — гліф. Прыладны доказ светлай тэмы: [light-theme-stars-device.png](../../design-qa/evidence/UI-STAR-RATING/light-theme-stars-device.png) (копія кадру з E2E-артефактаў `tools/e2e-android/artifacts/2026-11-10T19-48-44-729Z/discovery-feedback/failure.png`) — эмульятар API 35, be-лакаль: 4 зоркі запоўненыя акцэнтам, 5-я аўтлайн, бачных лічбаў няма (кадр з моманту флейку #173, калі E2E-кейс паспяхова тыкнуў star-4). Цёмная тэма на прыладзе — NOT-VERIFIED (гл. Design-QA).
-5. **Тэсты і proof** — `app/feedback.test.tsx`: без бачных лічбаў, a11y-назва кожнага значэння, fill дыяпазону, рэсэлект; пакрокавыя аховы ў `canon-icon.test.tsx` (17/17). Дэма: [docs/demos/2026-11-10-ui-star-rating.md](../../demos/2026-11-10-ui-star-rating.md) — `uvx showboat==0.6.1 verify` exit 0.
+5. **Тэсты і proof** — `app/feedback.test.tsx`: без бачных лічбаў, a11y-назва кожнага значэння, fill дыяпазону, рэсэлект; пакрокавыя аховы ў `canon-icon.test.tsx` (18/18, у тым ліку ахова дэфолту аўтлайна для выклікаў без `fill`). Дэма: [docs/demos/2026-11-10-ui-star-rating.md](../../demos/2026-11-10-ui-star-rating.md) — `uvx showboat==0.6.1 verify` exit 0.
 6. **PR** — адзін PR у `main` па `docs/agent-rules/issue-workflow.md`; паралельныя сесіі ўлічаны (клейм-трансфер зафіксаваны ў issue, галіна з клону).
 
-## Гейты (кодавы HEAD `f5565e4`)
+## Гейты (кодавы HEAD `619d3e1`)
 
-- `npx jest --config jest.config.js app/feedback.test.tsx components/canon-icon.test.tsx --maxWorkers=2` — **17/17 pass** ✅ (revert-аховы: зняццё `fill`-пастака ў `CanonIcon` чырваніць тэст дыяпазону; вяртанне лічбавых кнопак чырваніць тэст адсутнасці лічбаў).
-- `npm run ci:local` — **23 крокі зялёныя** (skipped on Linux: windows-portable), `jscpd` — «Found 0 clones.», `guard-required-checks: OK` ✅; прагон на працоўным дрэве, байт-ідэнтычным `f5565e4`.
-- `npm test` (поўны, на `f5565e4`): node --test — **3017 тэстаў: 2989 pass, 0 fail, 0 cancelled, 28 skipped**; jest — **42 сюіты / 329 тэстаў pass**, exit 0 ✅.
-- Android E2E: `Android E2E: failed (discovery) on f5565e4` — smoke і walk 100% зялёныя (15/15), discovery **2 passed, 2 failed**; гэта тыя ж самыя два кейсы (`nearby-card-offer-place-e2e-1`, `btn-feedback-send`) з тымі ж сэлектарамі і 30-сэкунднымі чыканямі, што і задакументаваны флейк-клас [#173](https://github.com/kudy-vk/KUDY/issues/173). Кантрольны прагон па працэдуры §3 на чыстым `origin/main` (`06e1024`) у той жа дзень на тым жа хасце падае ідэнтычна: `Android E2E: failed (discovery) on 06e1024`, discovery 2/4, smoke+walk зялёныя — падзенне не гэтага дыфа (артэфакты: `tools/e2e-android/artifacts/2026-11-10T19-48-44-729Z` дыф і `2026-11-10T20-08-05-671Z` кантроль; поздні удалы dump у маю гэтую хвіліну паказвае `screen-Feedback`, усе 5 зорак і адсутнасць `btn-feedback-send` з бачнага дрэва — ніжэй згорткі). Сённяшнія дзве кропкі дададзеныя ў #173.
+- `npx jest --config jest.config.js app/feedback.test.tsx components/canon-icon.test.tsx --maxWorkers=2` — **18/18 pass** ✅ (revert-аховы: зняццё `fill ?? "none"` у `CanonIcon` чырваніць ахову дэфолту аўтлайна; вяртанне лічбавых кнопак чырваніць тэст адсутнасці лічбаў; злом дыяпазону запаўнення — тэст дыяпазону).
+- `npm run ci:local` — **23 крокі зялёныя** (skipped on Linux: windows-portable), `jscpd` — «Found 0 clones.», `guard-required-checks: OK` ✅; прагон на чыстым дрэве `619d3e1`.
+- `npm test` (поўны, у складзе ci:local на `619d3e1`): node --test — **3017 тэстаў: 2989 pass, 0 fail, 0 cancelled, 28 skipped**; jest — **42 сюіты / 330 тэстаў pass**, exit 0 ✅.
+- Android E2E: `Android E2E: failed (discovery) on f5565e4` (прагон быў да каміта-фікса `619d3e1`; адзіная кодавая розніца паміж імі — вяртанне дэфолту аўтлайна для выклікаў без `fill`, г.зн. рух да паводзін main, што праверана прабамі рэвью цыкла-2) — smoke і walk 100% зялёныя (15/15), discovery **2 passed, 2 failed**; гэта тыя ж самыя два кейсы (`nearby-card-offer-place-e2e-1`, `btn-feedback-send`) з тымі ж сэлектарамі і 30-сэкунднымі чыканямі, што і задакументаваны флейк-клас [#173](https://github.com/kudy-vk/KUDY/issues/173). Кантрольны прагон па працэдуры §3 на чыстым `origin/main` (`06e1024`) у той жа дзень на тым жа хасце падае ідэнтычна: `Android E2E: failed (discovery) on 06e1024`, discovery 2/4, smoke+walk зялёныя — падзенне не гэтага дыфа (артэфакты: `tools/e2e-android/artifacts/2026-11-10T19-48-44-729Z` дыф і `2026-11-10T20-08-05-671Z` кантроль; позні удалы dump у хвілю таймаўту паказвае `screen-Feedback`, усе 5 зорак і адсутнасць `btn-feedback-send` з бачнага дрэва — ніжэй згорткі). Сённяшнія дзве кропкі дададзеныя ў #173.
 - Mimosa deep audit (паўтор пасля каміт-гукавога ENOBUFS): скан `scan-2026-11-10T20-17-56.135Z-3a1eeefe93c4` (seal `sha256:6330…`), 14 findings — усе ў файлах па-за гэтым дыфам (вядомы трыйяж-клас: postgres.js `unsafe` як назва API, dev-only SSRF guard; параўн. sealed-скан 2026-11-09 на `ecad44d`); у трох змененых файлах — 0 findings; gitleaks (у складзе ci:local) — зялёны ✅.
 
 ## Design-QA рэпарт (DQ-05)
 
 **Verdict: NO_VERIFIED_RULE** · RULE 0 · DIFF 0 · OPINION 1 · NOT-VERIFIED 3 · прыладны кадр светлай тэмы: [light-theme-stars-device.png](../../design-qa/evidence/UI-STAR-RATING/light-theme-stars-device.png) (эмульятар API 35, be; запаўненне 1…4 акцэнтам, 5-я аўтлайн — візуальнае пацверджанне формы і дыяпазону; кадр з моманту флейку #173)
-**Scope:** PR гэтай задачы, base `06e1024` / head `f5565e4`; змененыя паверхні: feedback-форма (блок ацэнкі), іконкавы пласт (пастак `fill`).
+**Scope:** PR гэтай задачы, base `06e1024` / head `619d3e1`; змененыя паверхні: feedback-форма (блок ацэнкі), іконкавы пласт (пастак `fill`).
 **Sources:** `docs/design/visual-language.md` (машынны блок токенаў + табліца кантрасту); `docs/design-qa/exceptions.md` (каміт `c9fdf54`); issue #102 — уладарскае рашэнне B (2026-11-02) як прыняты крытэр гэтай змены.
 **Environment:** праверкі на ўзроўні токенаў і зыходнікаў + render-тэсты jest; прыладныя вымярэнні — гл. NOT-VERIFIED.
 
