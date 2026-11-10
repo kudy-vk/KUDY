@@ -1,0 +1,130 @@
+/* Shared base of the production mockups: canon tokens, the phone frame and the
+   review board around it. Token values are copied from the machine block of
+   docs/design/visual-language.md (light and darkTheme); change them there first. */
+
+@font-face {
+  font-family: "Golos Text";
+  font-weight: 400 600;
+  src: url("../brand/outputs/menu-map-city-only/fonts/GolosText.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Alegreya";
+  src: url("../brand/outputs/menu-map-city-only/fonts/Alegreya.ttf") format("truetype");
+}
+
+:root,
+[data-theme="light"] {
+  --paper: #faf7f2;
+  --card: #ffffff;
+  --ink: #22262b;
+  --muted: #6b7280;
+  --line: #d8d2c6;
+  --accent: #1d6b4f;
+  --accent-ink: #ffffff;
+  --disabled-ink: #6b7280;
+  --disabled-line: #6b7280;
+}
+[data-theme="dark"] {
+  --paper: #171d1c;
+  --card: #232c29;
+  --ink: #f2f1e9;
+  --muted: #c4d0ca;
+  --line: #45534c;
+  --accent: #80d4ad;
+  --accent-ink: #0d2a1e;
+  --disabled-ink: #9aa8a1;
+  --disabled-line: #6d7c72;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #faf7f2;
+  color: #22262b;
+  font: 400 16px/1.45 "Golos Text", system-ui, sans-serif;
+}
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid #1d6b4f; outline-offset: 1px; }
+::selection { background: #e9d9b0; color: #22262b; }
+
+/* ---------- review board (outside the phone; never part of the screen) ---------- */
+
+.board { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+.board h1 { margin: 0 0 4px; font-size: 22px; font-weight: 600; }
+.board .lead { margin: 0 0 16px; color: #6b7280; max-width: 70ch; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; padding: 12px 0; border-block: 1px solid #d8d2c6; }
+.controls label { display: grid; gap: 4px; font-size: 13px; color: #6b7280; }
+.controls select,
+.controls button {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid #d8d2c6;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #22262b;
+  font-size: 14px;
+}
+.controls button { cursor: pointer; }
+.event { min-height: 24px; margin: 12px 0 0; font-size: 14px; color: #6b7280; }
+.phones { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-top: 16px; }
+.phones figure { margin: 0; }
+.phones figcaption { margin-bottom: 8px; font-size: 13px; color: #6b7280; }
+
+/* ---------- phone frame ---------- */
+
+.phone {
+  --fs: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--w);
+  height: var(--h);
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px #c9c1b1, 0 12px 32px rgb(70 50 25 / 12%);
+}
+.phone :focus-visible { outline-color: var(--accent); }
+.status {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--status);
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.status i { width: 18px; height: 9px; border-radius: 3px; background: var(--ink); opacity: .8; }
+.sysnav { flex: none; display: flex; align-items: center; justify-content: center; gap: 56px; height: var(--nav); }
+.sysnav.gesture::before { content: ""; width: 120px; height: 4px; border-radius: 4px; background: var(--ink); opacity: .55; }
+.sysnav.buttons i { width: 14px; height: 14px; border: 2px solid var(--muted); border-radius: 3px; }
+.sysnav.buttons i:nth-child(2) { border-radius: 50%; }
+.sysnav.buttons i:nth-child(1) { border-width: 0 0 2px 2px; rotate: 45deg; border-radius: 0; }
+
+.icon { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* The reserved place of the integrated ad. The ad SDK draws the creative; the
+   mockup shows only the zone and its label. */
+.ad-zone { flex: none; padding: 12px 16px 0; }
+.ad-zone[hidden] { display: none; }
+.ad-slot {
+  position: relative;
+  height: 90px;
+  border: 1px solid var(--line);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--line) 45%, transparent) 10px 11px),
+    var(--card);
+}
+.ad-slot span {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: calc(12px * var(--fs));
+}

@@ -8,6 +8,8 @@
 python -m http.server 4400 --bind 127.0.0.1
 ```
 
+Фінальныя макеты, якія ідуць ва ўкараненне, ляжаць у папцы [production](production/README.md).
+
 Каталог нічога не ўхваляе. Рашэнні запісаныя ў [рэестры рашэнняў](brand/decisions.md) і ў вердыктах уладальніка ў issues; правілы выгляду — у [візуальным каноне](visual-language.md). Калі каталог разыходзіцца з імі, слушныя яны, а каталог трэба паправіць.
 
 Статусы:
@@ -35,7 +37,7 @@ python -m http.server 4400 --bind 127.0.0.1
 | Экран | У дадатку | Апошні макет | Статус макета | Адкрыта |
 |---|---|---|---|---|
 | Застаўка з анімацыяй | [app/index.tsx](../../app/index.tsx), [animated-splash.tsx](../../components/animated-splash.tsx) | [Канон §3](visual-language.md) | Прынята 2026-10-28 | Шрыфт надпісу — працоўны |
-| Галоўнае меню | [app/menu.tsx](../../app/menu.tsx), [city-map-menu.tsx](../../components/city-map-menu.tsx) | [Пяць частак карты](brand/outputs/menu-map-city-only/index.html), [свячэнне](brand/outputs/menu-glow-options/index.html), [подпісы і станы](brand/outputs/MAP-05/specimen.html) | Часткова: пяць частак, бурштынавае свячэнне, тры актыўныя і дзве неактыўныя часткі ([#42](https://github.com/kudy-vk/KUDY/issues/42)); раскладка — M1 | Іконкі замест подпісаў; перацягванне і зборка ў дадатку ([#84](https://github.com/kudy-vk/KUDY/issues/84)); футэр ([#97](https://github.com/kudy-vk/KUDY/issues/97)) |
+| Галоўнае меню | [app/menu.tsx](../../app/menu.tsx), [city-map-menu.tsx](../../components/city-map-menu.tsx) | [Фінальны макет](production/menu.html), [пяць частак карты](brand/outputs/menu-map-city-only/index.html), [свячэнне](brand/outputs/menu-glow-options/index.html), [подпісы і станы](brand/outputs/MAP-05/specimen.html) | Часткова: пяць частак, бурштынавае свячэнне, тры актыўныя і дзве неактыўныя часткі ([#42](https://github.com/kudy-vk/KUDY/issues/42)); раскладка і тэксты — M1, M2 | Вердыкт па фінальным макеце; перацягванне і зборка ў дадатку ([#84](https://github.com/kudy-vk/KUDY/issues/84)); футэр ([#97](https://github.com/kudy-vk/KUDY/issues/97)) |
 | Гіды | [app/city/[id]/guides.tsx](../../app/city/%5Bid%5D/guides.tsx) | [Каталог гідаў](brand/outputs/GUIDES-catalog/prototype.html) | Прапанова | Фільтры, банер, зверка з карткамі Run |
 | Прэв'ю гіда | [app/route/[id].tsx](../../app/route/%5Bid%5D.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры C, D, M, N, O | Прапанова | Кнопка загрузкі і старту ([#100](https://github.com/kudy-vk/KUDY/issues/100)) |
 | Run | [app/run/[id].tsx](../../app/run/%5Bid%5D.tsx) | [Карткі паміж кропкамі](brand/outputs/RUN-card-states/prototype.html); [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры F, G, H | Прапанова | Play і Pause ([#98](https://github.com/kudy-vk/KUDY/issues/98)); банер у Run |
