@@ -4,9 +4,10 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { parseCatalog, statusKind } from './catalog-data.mjs';
+import { parseCatalog, statusKind } from '../docs/design/catalog-data.mjs';
 
-const here = path.dirname(fileURLToPath(import.meta.url));
+// The catalogue and the gallery parser live in docs/design; links in the catalogue resolve from there.
+const here = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'design');
 
 const FIXTURE = `# Title
 
