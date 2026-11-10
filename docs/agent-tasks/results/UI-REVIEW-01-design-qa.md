@@ -2,9 +2,9 @@
 
 - Verdict: **INSUFFICIENT_EVIDENCE**
 - Counts: **RULE 0 · DIFF 0 · OPINION 0 · NOT-VERIFIED 3**
-- Scope: issue [#98](https://github.com/kudy-vk/KUDY/issues/98), PR пакуль няма; база `ecad44d1eaa48ec5f136c16e02d2b0bf0f9f8c29`, каміт макетаў `e2efa37167b9ea80289779f4e407f1cb6deee31c`. Зменены толькі дакумент і макеты Play/Pause для Run, production UI не змяняўся.
+- Scope: issue [#98](https://github.com/kudy-vk/KUDY/issues/98), PR пакуль няма; база `ecad44d1eaa48ec5f136c16e02d2b0bf0f9f8c29`, апошні каміт макетаў `bf73bc56e91da3d693a97abdd2cd914d72ce9d6e`. Зменены толькі дакумент і макеты Play/Pause для Run, production UI не змяняўся.
 - Sources: на базе `ecad44d1` прачытаныя [візуальны канон](../../design/visual-language.md) §2, §4–5, §9, [пераходы Run](../../design/screens-and-transitions.md) §Run, [рэестр прынятых рашэнняў](../../design/brand/decisions.md) DT-2/DT-4 і [выключэнні](../../design-qa/exceptions.md). Прапанаваныя макеты не лічацца канонам.
-- Environment: Chromium/Playwright на Linux, макет 320/360/390 CSS px, светлая і цёмная тэмы, візуальная мадэль высокага кантрасту, тэкст 1×/1,25×. Прылада, API, TalkBack/VoiceOver, рэальны forced-colors і production fixture — **NOT-VERIFIED**.
+- Environment: Chromium/Playwright на Linux, макет 320/360/390 CSS px, светлая і цёмная тэмы, візуальная мадэль высокага кантрасту, тэкст 1×/1,25×; у Full на 320 px доўгі тэкст пракручаны да канца над ніжнім плэерам. Прылада, API, TalkBack/VoiceOver, рэальны forced-colors і production fixture — **NOT-VERIFIED**.
 
 ## DIFF
 
