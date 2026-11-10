@@ -38,17 +38,17 @@ python -m http.server 4400 --bind 127.0.0.1
 |---|---|---|---|---|
 | Застаўка з анімацыяй | [app/index.tsx](../../app/index.tsx), [animated-splash.tsx](../../components/animated-splash.tsx) | [Канон §3](visual-language.md) | Прынята 2026-10-28 | Шрыфт надпісу — працоўны |
 | Галоўнае меню | [app/menu.tsx](../../app/menu.tsx), [city-map-menu.tsx](../../components/city-map-menu.tsx) | [Фінальны макет](production/menu.html), [пяць частак карты](brand/outputs/menu-map-city-only/index.html), [свячэнне](brand/outputs/menu-glow-options/index.html), [подпісы і станы](brand/outputs/MAP-05/specimen.html) | Часткова: пяць частак, бурштынавае свячэнне, тры актыўныя і дзве неактыўныя часткі ([#42](https://github.com/kudy-vk/KUDY/issues/42)); раскладка і тэксты — M1, M2 | Вердыкт па фінальным макеце; перацягванне і зборка ў дадатку ([#84](https://github.com/kudy-vk/KUDY/issues/84)); футэр ([#97](https://github.com/kudy-vk/KUDY/issues/97)) |
-| Гіды | [app/city/[id]/guides.tsx](../../app/city/%5Bid%5D/guides.tsx) | [Каталог гідаў](brand/outputs/GUIDES-catalog/prototype.html) | Прапанова | Фільтры, банер, зверка з карткамі Run |
-| Прэв'ю гіда | [app/route/[id].tsx](../../app/route/%5Bid%5D.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры C, D, M, N, O | Прапанова | Кнопка загрузкі і старту ([#100](https://github.com/kudy-vk/KUDY/issues/100)) |
-| Run | [app/run/[id].tsx](../../app/run/%5Bid%5D.tsx) | [Карткі паміж кропкамі](brand/outputs/RUN-card-states/prototype.html); [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры F, G, H | Прапанова | Play і Pause ([#98](https://github.com/kudy-vk/KUDY/issues/98)); банер у Run |
-| Завяршэнне прагулкі | Асобнага маршруту няма | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр J | Прапанова | — |
-| Ацэнка | [app/feedback.tsx](../../app/feedback.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр K | Часткова: пяць зорачак замест лічбаў ([#39](https://github.com/kudy-vk/KUDY/issues/39), рэалізацыя — [#102](https://github.com/kudy-vk/KUDY/issues/102)) | Астатні выгляд формы |
-| KUDY (гісторыя прагулак) | [app/(tabs)/my.tsx](../../app/%28tabs%29/my.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры L, Q | Прапанова | Уваход з меню: частка `kudy` неактыўная |
-| Налады | Маршруту няма ([#51](https://github.com/kudy-vk/KUDY/issues/51)) | [Макет налад](settings/settings-sheet.html) | Часткова: іерархія блокаў (S1) | Тэксты радкоў, выгляд |
-| Побач | [app/map.tsx](../../app/map.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр P | Прапанова | — |
-| Чым заняцца | [app/discovery.tsx](../../app/discovery.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр B | Прапанова | — |
-| Месца | [app/place/[id].tsx](../../app/place/%5Bid%5D.tsx) | Няма макета | — | — |
-| Падборка | [app/collection/[id].tsx](../../app/collection/%5Bid%5D.tsx) | Няма макета | — | — |
+| Гіды | [app/city/[id]/guides.tsx](../../app/city/%5Bid%5D/guides.tsx) | [Фінальны макет](production/guides.html), [Каталог гідаў](brand/outputs/GUIDES-catalog/prototype.html) | Прапанова | Фільтры, банер, зверка з карткамі Run |
+| Прэв'ю гіда | [app/route/[id].tsx](../../app/route/%5Bid%5D.tsx) | [Фінальны макет](production/preview.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры C, D, M, N, O | Прапанова | Кнопка загрузкі і старту ([#100](https://github.com/kudy-vk/KUDY/issues/100)) |
+| Run | [app/run/[id].tsx](../../app/run/%5Bid%5D.tsx) | [Фінальны макет](production/run.html), [Карткі паміж кропкамі](brand/outputs/RUN-card-states/prototype.html); [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры F, G, H | Прапанова | Play і Pause ([#98](https://github.com/kudy-vk/KUDY/issues/98)); банер у Run |
+| Завяршэнне прагулкі | Асобнага маршруту няма | [Фінальны макет](production/end.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр J | Прапанова | — |
+| Ацэнка | [app/feedback.tsx](../../app/feedback.tsx) | [Фінальны макет](production/feedback.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр K | Часткова: пяць зорачак замест лічбаў ([#39](https://github.com/kudy-vk/KUDY/issues/39), рэалізацыя — [#102](https://github.com/kudy-vk/KUDY/issues/102)) | Астатні выгляд формы |
+| KUDY (гісторыя прагулак) | [app/(tabs)/my.tsx](../../app/%28tabs%29/my.tsx) | [Фінальны макет](production/my.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры L, Q | Прапанова | Уваход з меню: частка `kudy` неактыўная |
+| Налады | Маршруту няма ([#51](https://github.com/kudy-vk/KUDY/issues/51)) | [Фінальны макет](production/settings.html), [Макет налад](settings/settings-sheet.html) | Часткова: іерархія блокаў (S1) | Тэксты радкоў, выгляд |
+| Побач | [app/map.tsx](../../app/map.tsx) | [Фінальны макет](production/nearby.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр P | Прапанова | — |
+| Чым заняцца | [app/discovery.tsx](../../app/discovery.tsx) | [Фінальны макет](production/discovery.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр B | Прапанова | — |
+| Месца | [app/place/[id].tsx](../../app/place/%5Bid%5D.tsx) | [Фінальны макет](production/place.html) | Прапанова | — |
+| Падборка | [app/collection/[id].tsx](../../app/collection/%5Bid%5D.tsx) | [Фінальны макет](production/collection.html) | Прапанова | — |
 | Explore | [app/(tabs)/explore.tsx](../../app/%28tabs%29/explore.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр A | Гісторыя як уваход: заменены меню ([#42](https://github.com/kudy-vk/KUDY/issues/42), п. 1) | Роля экрана пасля меню |
 | Вэб-версія | `web/` | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры W–Z | Адкладзена ўладальнікам ([#96](https://github.com/kudy-vk/KUDY/issues/96)) | Увесь выгляд |
 
@@ -117,5 +117,5 @@ python -m http.server 4400 --bind 127.0.0.1
 4. **Радок B05 у рэестры адстаў.** Ён называе форму іконкі і месца кампаса адкрытымі; іконка дадатку прынятая, кампаса ў першым рэлізе няма.
 5. **Знак кампаса ў меню.** Часткі «Чым заняцца» і `kudy` у кодзе маюць аднолькавы знак `compass`. Трэба вырашыць, ці не супярэчыць гэта вердыкту «кампаса няма» і ці могуць дзве часткі мець адзін знак.
 6. **Раскладка банера змянілася.** 2026-11-02 была выбраная раскладка «банер і футэр ад ніза экрана»; M1 ставіць банер адразу пад часткамі карты. Дошка ADS-01, [#106](https://github.com/kudy-vk/KUDY/issues/106) і [#97](https://github.com/kudy-vk/KUDY/issues/97) апісваюць ранейшую раскладку.
-7. **Макеты «Гіды» і Run зробленыя асобна.** Макет Run бярэ іконкі Lucide з сеткі, макет «Гіды» нясе ўсё ў сабе. Шапка, картка, фота і зона банера паміж імі не звераныя.
+7. **Макеты «Гіды» і Run зробленыя асобна.** Макет Run бярэ іконкі Lucide з сеткі, макет «Гіды» нясе ўсё ў сабе. Шапка, картка, фота і зона банера паміж імі не звераныя. Вырашана ў макетах: [фінальныя макеты](production/README.md) абодвух экранаў збіраюцца з адной асновы.
 8. **Шэсць набораў іконак супраць аднаго ў кодзе.** Чарнавыя наборы 17.10 не выбраныя; дадатак малюе Lucide.

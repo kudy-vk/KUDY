@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — картка месца</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* A long title in a wide language takes a second line instead of being cut. */
+  .topbar .title { white-space: normal; line-height: 1.2; overflow-wrap: anywhere; }
+
+  .page { display: grid; align-content: start; gap: 12px; padding: 4px 16px 24px; }
+  .page > * { min-width: 0; }
+  .page > p { margin: 0; }
+  .notice.row { display: flex; gap: 8px; margin: 0; font-size: calc(14px * var(--fs)); }
+  .notice.row .icon { margin-top: 2px; }
+
+  /* The place for the photo: a neutral tile until the place has a picture. */
+  .hero {
+    display: grid; place-items: center; width: 100%; aspect-ratio: 16 / 9; max-height: calc(var(--h) * .22);
+    border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--muted);
+  }
+  .name { margin: 0; font-size: calc(24px * var(--fs)); font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  .meta .tag { margin-left: auto; }
+  .facts { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; color: var(--muted); font-size: calc(13px * var(--fs)); }
+  .fact { display: inline-flex; align-items: center; gap: 4px; }
+  .summary { margin: 0; }
+  .why { margin: 0; color: var(--muted); font-size: calc(14px * var(--fs)); }
+  .remark { display: flex; gap: 6px; margin: 0; color: var(--muted); font-size: calc(13px * var(--fs)); }
+  .remark .icon { margin-top: 1px; }
+
+  /* Moment teaser: the warm card with an explicit Play. The same block is in nearby.html. */
+  .moment-card { display: flex; align-items: flex-start; gap: 12px; }
+  .playbtn { flex: none; width: 48px; min-height: 0; height: 48px; padding: 0; border-radius: 50%; }
+  .moment-body { flex: 1; min-width: 0; }
+  .moment-label { margin: 0; font-size: calc(12px * var(--fs)); color: var(--muted); }
+  .moment-text { margin: 4px 0 0; font-size: calc(14px * var(--fs)); }
+  .moment-live { margin: 6px 0 0; font-size: calc(13px * var(--fs)); font-weight: 600; color: var(--accent); }
+  .textlink {
+    display: inline-flex; align-items: center; gap: 4px; min-height: 48px; margin-bottom: -12px; padding: 0;
+    border: 0; background: none; color: var(--accent); font-size: calc(14px * var(--fs)); font-weight: 600; text-align: left; cursor: pointer;
+  }
+  .rate { margin-top: 4px; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Картка месца</h1>
+  <p class="lead">Фінальны макет. Публічныя звесткі пра месца, тэйзер з яўным Play і ўласная ацэнка — толькі па яўным націску. Перамыкачы над тэлефонам да экрана не належаць.</p>
+</main>
+<script type="module" src="place.mjs"></script>
+</body>
+</html>

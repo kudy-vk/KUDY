@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — прагулка (Run)</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  /* One surface: the map behind, one panel over it in three heights, the ad at
+     the very bottom. Shades are mixed from kit tokens, never hard-coded. */
+  .run-root {
+    --shade: color-mix(in srgb, var(--ink) 20%, transparent);
+    --scrim: color-mix(in srgb, var(--ink) 35%, transparent);
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  [data-theme="dark"] .run-root {
+    --shade: color-mix(in srgb, var(--shelf-line) 55%, transparent);
+    --scrim: color-mix(in srgb, var(--shelf-line) 65%, transparent);
+  }
+  /* A guide title is never cut: it wraps instead of ending in an ellipsis. */
+  .run-root .topbar .title { padding-block: 6px; overflow: visible; white-space: normal; font-size: calc(17px * var(--fs)); font-weight: 500; line-height: 1.2; }
+  .run-root .ad-zone { padding-bottom: 8px; }
+
+  /* ---------- map: light in both themes (DT-4), a schematic, not cartography ---------- */
+  .run-map {
+    --shade: color-mix(in srgb, var(--ink) 28%, transparent);
+    position: relative;
+    flex: 1 1 0;
+    min-height: 96px;
+    overflow: hidden;
+    background: #eef3ee;
+    color: var(--ink);
+  }
+  .run-world { position: absolute; left: 0; top: 0; }
+  .run-world svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .run-street { fill: none; stroke: #dfe7df; stroke-linecap: round; }
+  .run-route { fill: none; stroke: var(--muted); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1 9; }
+  .run-marker {
+    position: absolute;
+    translate: -50% -17px;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 3px;
+    width: 124px;
+    min-height: 48px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .run-marker span {
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--card) 86%, transparent);
+    font-size: calc(12px * var(--fs));
+    line-height: 1.25;
+    text-align: center;
+  }
+  .run-marker b { display: block; font-weight: 600; }
+  /* The marker circle: state fill, white first letter of the state, white ring, shadow. */
+  .run-dot {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--card);
+    border-radius: 50%;
+    box-shadow: 0 1px 3px var(--shade);
+    color: var(--card);
+    font-style: normal;
+    font-weight: 600;
+    font-size: calc(14px * var(--fs));
+    line-height: 1;
+  }
+  .run-marker[aria-current="true"] .run-dot { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .run-dot.small { width: 24px; height: 24px; font-size: calc(11px * var(--fs)); box-shadow: none; }
+  .run-me {
+    position: absolute;
+    translate: -50% -50%;
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--card);
+    border-radius: 50%;
+    background: #1f5aa8;
+    box-shadow: 0 1px 3px var(--shade);
+  }
+  /* Notice at the top, attribution and "my position" at the bottom. The panel
+     overlaps the map by its rounded top, so the column ends 14px higher. */
+  .run-map-ui { position: absolute; inset: 8px 8px 22px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; pointer-events: none; }
+  .run-map-ui > *, .run-map-foot > * { pointer-events: auto; }
+  .run-map-foot { flex: none; display: flex; align-items: flex-end; gap: 8px; pointer-events: none; }
+  .run-attr {
+    padding: 3px 8px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--ink);
+    font-size: calc(12px * var(--fs));
+    line-height: 1.25;
+    text-align: left;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .run-fab {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--accent);
+    box-shadow: 0 2px 6px var(--shade);
+    cursor: pointer;
+  }
+  .run-banner { flex: 0 1 auto; min-height: 44px; margin-bottom: auto; overflow: auto; display: flex; gap: 8px; font-size: calc(13px * var(--fs)); line-height: 1.3; }
+  .run-banner .icon { margin-top: 1px; color: var(--warn); }
+
+  /* ---------- the panel: Peek / Half / Full ---------- */
+  .run-sheet {
+    position: relative;
+    z-index: 2;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    margin-top: -14px;
+    border-top: 1px solid var(--line);
+    border-radius: 16px 16px 0 0;
+    background: var(--paper);
+    box-shadow: 0 -4px 14px var(--shade);
+  }
+  /* Half is about 45% of the screen; on a short screen it yields so the map keeps a visible strip. */
+  .run-root[data-panel="half"] .run-sheet { flex: 0 1 calc(var(--h) * .45); }
+  .run-root[data-panel="half"] .run-map { min-height: 124px; }
+  .run-root[data-panel="full"] .run-sheet { flex: 1; margin-top: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+  .run-root[data-panel="full"] > .topbar,
+  .run-root[data-panel="full"] > .run-map { display: none; }
+  .run-grip { flex: none; align-self: center; width: 36px; height: 4px; margin: 8px 0 0; border-radius: 4px; background: var(--line); }
+  .run-card { flex: none; display: flex; align-items: center; padding: 2px 4px 0; touch-action: none; }
+  .run-card .iconbtn { width: 44px; }
+  .run-title {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    justify-items: start;
+    gap: 4px;
+    padding: 6px 2px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .run-title .t-display { font-size: calc(21px * var(--fs)); overflow-wrap: anywhere; }
+  .run-title .tag { gap: 6px; padding: 2px 10px 2px 2px; white-space: normal; }
+  .run-body { padding: 8px 16px 12px; font-size: calc(15px * var(--fs)); }
+  .run-body > * + * { margin-top: 12px; }
+  .run-body p { margin-bottom: 0; }
+  .run-body > p:first-child { margin-top: 0; }
+  .run-photos { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .run-photo {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 88px;
+    height: 64px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .run-read { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .run-read h3 { margin: 0; font-size: calc(16px * var(--fs)); font-weight: 600; }
+  .run-text p { margin: 0 0 12px; font-size: calc(16px * var(--fs)); line-height: 1.55; }
+  .run-text.large p { font-size: calc(20px * var(--fs)); }
+  .run-points { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .run-points .btn { flex-wrap: wrap; justify-content: flex-start; text-align: left; }
+  .run-points .t-display { flex: 1; min-width: 0; font-size: calc(18px * var(--fs)); overflow-wrap: anywhere; }
+  .run-notice { display: flex; gap: 8px; }
+  .run-notice .icon { margin-top: 2px; }
+
+  .run-sheet .progress { flex: none; margin: 4px 16px 0; }
+  .run-dock { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 8px; padding: 6px 4px 8px 16px; }
+  .run-now {
+    flex: 1 1 96px;
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font-size: calc(14px * var(--fs));
+    line-height: 1.3;
+    text-align: left;
+  }
+  button.run-now { cursor: pointer; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+  .run-now .t-small { text-decoration: none; }
+  .run-play {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: 0 2px 0 var(--shelf-accent);
+    cursor: pointer;
+  }
+  .run-play .icon { fill: currentColor; }
+  .run-play:active { translate: 0 2px; box-shadow: none; }
+  .run-play[aria-disabled="true"] { border-color: var(--disabled-line); background: transparent; color: var(--disabled-ink); box-shadow: none; cursor: default; translate: none; }
+
+  /* ---------- layers over the screen: session menu, confirmation, photo ---------- */
+  .run-over { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; justify-content: flex-end; background: var(--scrim); }
+  .run-over.center { justify-content: center; padding: 16px; }
+  .run-menu { display: grid; gap: 8px; padding: 4px 16px 16px; border-top: 1px solid var(--line); border-radius: 16px 16px 0 0; background: var(--paper); }
+  .run-menu .btn { justify-content: flex-start; text-align: left; }
+  .run-menu-head { display: flex; align-items: center; justify-content: space-between; margin-right: -12px; font-weight: 600; }
+  .run-dialog { display: grid; gap: 16px; max-width: 400px; margin: 0 auto; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .run-dialog p { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 600; }
+  .run-dialog div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+  .run-viewer { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; background: var(--paper-fill); }
+  .run-viewer-top { display: flex; align-items: center; justify-content: space-between; padding: 4px 4px 4px 16px; font-size: calc(14px * var(--fs)); color: var(--muted); }
+  .run-stage { flex: 1; min-height: 0; display: flex; align-items: center; touch-action: none; }
+  .run-large { flex: 1; min-width: 0; display: grid; place-items: center; aspect-ratio: 4 / 3; max-height: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--muted); }
+  .run-pager { display: flex; justify-content: center; gap: 8px; padding: 16px; }
+  .run-pager i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .run-pager i.on { background: var(--accent); }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Прагулка (Run)</h1>
+  <p class="lead">Фінальны макет. Карта — фон, панэль мае тры становішчы: згорнутая, з апісаннем, з поўным тэкстам. Абодва тэлефоны паказваюць адзін стан: націск у адным паўтараецца ў другім. Карта — умоўная схема, назвы кропак і тэксты — ілюстрацыйныя.</p>
+</main>
+<script type="module" src="run.mjs"></script>
+</body>
+</html>

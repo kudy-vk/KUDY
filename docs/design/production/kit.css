@@ -1,6 +1,10 @@
-/* Shared base of the production mockups: canon tokens, the phone frame and the
-   review board around it. Token values are copied from the machine block of
-   docs/design/visual-language.md (light and darkTheme); change them there first. */
+/* Shared base of the production mockups: tokens, the phone frame, the common
+   components and the review board around the phone.
+
+   Light values are the machine block of docs/design/visual-language.md.
+   Dark values are the brick-and-chocolate proposal recorded as decision M3 in
+   docs/design/brand/decisions.md; they replace the green-grey dark set of the
+   canon only after the owner's verdict and a canon sync. */
 
 @font-face {
   font-family: "Golos Text";
@@ -15,25 +19,60 @@
 :root,
 [data-theme="light"] {
   --paper: #faf7f2;
+  --paper-fill: #faf7f2;
   --card: #ffffff;
   --ink: #22262b;
   --muted: #6b7280;
   --line: #d8d2c6;
   --accent: #1d6b4f;
   --accent-ink: #ffffff;
+  --shelf-accent: #154f3a;
+  --shelf-line: #c9c1b1;
   --disabled-ink: #6b7280;
   --disabled-line: #6b7280;
+  --warn: #b3331f;
+  --notice-bg: #fdf1d7;
+  --notice-border: #e6c98c;
+  --error-bg: #fdeaea;
+  --error-border: #e0a2a2;
+  --hint-bg: #f6faff;
+  --hint-border: #bcd2f0;
+  --moment-bg: #fff7ec;
+  --moment-border: #ecd9b0;
+  --badge-paid: #fdf1d7;
+  --badge-free: #e7f2ec;
+  --badge-mixed: #ece7f8;
+  --badge-lock: #eceff1;
+  --engrave: #7a6248;
 }
 [data-theme="dark"] {
-  --paper: #171d1c;
-  --card: #232c29;
-  --ink: #f2f1e9;
-  --muted: #c4d0ca;
-  --line: #45534c;
-  --accent: #80d4ad;
-  --accent-ink: #0d2a1e;
-  --disabled-ink: #9aa8a1;
-  --disabled-line: #6d7c72;
+  --paper: #2a1510;
+  /* Warm light from above falling into deep brown: an oil-painting ground. */
+  --paper-fill: radial-gradient(130% 70% at 50% 0%, #4a2519 0%, #2a1510 58%, #1a0d0a 100%);
+  --card: #3a231b;
+  --ink: #f4eadb;
+  --muted: #d6c5b0;
+  --line: #6b4a3d;
+  --accent: #8ad4b0;
+  --accent-ink: #10281d;
+  --shelf-accent: #63b48e;
+  --shelf-line: #1a0d0a;
+  --disabled-ink: #b9a794;
+  --disabled-line: #927a6c;
+  --warn: #f09a80;
+  --notice-bg: #4a3618;
+  --notice-border: #8a733a;
+  --error-bg: #4a211b;
+  --error-border: #9a5046;
+  --hint-bg: #2e2c38;
+  --hint-border: #5a5878;
+  --moment-bg: #45301a;
+  --moment-border: #7a6238;
+  --badge-paid: #57421f;
+  --badge-free: #2f4234;
+  --badge-mixed: #40334e;
+  --badge-lock: #3d3530;
+  --engrave: #c9b59b;
 }
 
 * { box-sizing: border-box; }
@@ -43,7 +82,7 @@ body {
   color: #22262b;
   font: 400 16px/1.45 "Golos Text", system-ui, sans-serif;
 }
-button, select { font: inherit; color: inherit; }
+button, select, input { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid #1d6b4f; outline-offset: 1px; }
 ::selection { background: #e9d9b0; color: #22262b; }
 
@@ -81,12 +120,13 @@ button, select { font: inherit; color: inherit; }
   height: var(--h);
   overflow: hidden;
   border-radius: 28px;
-  background: var(--paper);
+  background: var(--paper-fill);
   color: var(--ink);
+  font-size: calc(16px * var(--fs));
   box-shadow: 0 0 0 1px #c9c1b1, 0 12px 32px rgb(70 50 25 / 12%);
 }
 .phone :focus-visible { outline-color: var(--accent); }
-.status {
+.phone .status {
   flex: none;
   display: flex;
   align-items: center;
@@ -95,20 +135,121 @@ button, select { font: inherit; color: inherit; }
   padding: 0 20px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--ink);
 }
-.status i { width: 18px; height: 9px; border-radius: 3px; background: var(--ink); opacity: .8; }
+.phone .status i { width: 18px; height: 9px; border-radius: 3px; background: var(--ink); opacity: .8; }
+.phone .body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .sysnav { flex: none; display: flex; align-items: center; justify-content: center; gap: 56px; height: var(--nav); }
 .sysnav.gesture::before { content: ""; width: 120px; height: 4px; border-radius: 4px; background: var(--ink); opacity: .55; }
 .sysnav.buttons i { width: 14px; height: 14px; border: 2px solid var(--muted); border-radius: 3px; }
 .sysnav.buttons i:nth-child(2) { border-radius: 50%; }
 .sysnav.buttons i:nth-child(1) { border-width: 0 0 2px 2px; rotate: 45deg; border-radius: 0; }
 
-.icon { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon { display: block; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- type ---------- */
+
+.t-display { font-family: Alegreya, serif; line-height: 1.15; text-wrap: balance; }
+.t-strong { font-weight: 600; }
+.t-secondary { font-size: calc(13px * var(--fs)); color: var(--muted); }
+.t-small { font-size: calc(12px * var(--fs)); color: var(--muted); }
+
+/* ---------- top bar: back, title, return to the walk ---------- */
+
+.topbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 0 4px;
+}
+.topbar .title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0 8px;
+  font-size: calc(18px * var(--fs));
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar .title:first-child { padding-left: 12px; }
+.iconbtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+}
+.iconbtn:active { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.walkbtn { flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer; }
+.walkbtn span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
+
+/* ---------- buttons, chips, cards, notices ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: calc(16px * var(--fs));
+  box-shadow: 0 2px 0 var(--shelf-line);
+  cursor: pointer;
+}
+.btn.primary { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 600; box-shadow: 0 2px 0 var(--shelf-accent); }
+.btn:active { translate: 0 2px; box-shadow: none; }
+.btn[aria-disabled="true"] { border-color: var(--disabled-line); background: transparent; color: var(--disabled-ink); box-shadow: none; cursor: default; translate: none; }
+.btn.block { display: flex; width: 100%; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: calc(14px * var(--fs));
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+
+.card { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.card.hint { border-color: var(--hint-border); background: var(--hint-bg); }
+.card.moment { border-color: var(--moment-border); background: var(--moment-bg); }
+.notice { padding: 12px; border: 1px solid var(--notice-border); border-radius: 10px; background: var(--notice-bg); }
+.notice.error { border-color: var(--error-border); background: var(--error-bg); }
+
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 99px; background: var(--badge-lock); color: var(--ink); font-size: calc(12px * var(--fs)); white-space: nowrap; }
+.tag.free { background: var(--badge-free); }
+.tag.paid { background: var(--badge-paid); }
+.tag.mixed { background: var(--badge-mixed); }
+
+.progress { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); }
+
+.scroll { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+
+/* ---------- ad zone and the engraved panorama ---------- */
 
 /* The reserved place of the integrated ad. The ad SDK draws the creative; the
    mockup shows only the zone and its label. */
-.ad-zone { flex: none; padding: 12px 16px 0; }
+.ad-zone { flex: none; position: relative; z-index: 1; padding: 12px 16px 0; }
 .ad-zone[hidden] { display: none; }
 .ad-slot {
   position: relative;
@@ -124,7 +265,14 @@ button, select { font: inherit; color: inherit; }
   left: 6px;
   padding: 1px 6px;
   border-radius: 4px;
-  background: var(--paper);
+  background: var(--card);
   color: var(--muted);
   font-size: calc(12px * var(--fs));
 }
+
+.panorama { display: block; width: 100%; height: auto; color: var(--engrave); }
+.panorama * { vector-effect: non-scaling-stroke; }
+.panorama .ink { fill: none; stroke: currentColor; stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; }
+.panorama .mass { fill: var(--panorama-ground, var(--paper)); stroke: currentColor; stroke-width: .9; stroke-linejoin: round; }
+.panorama .fine { fill: none; stroke: currentColor; stroke-width: .6; stroke-linecap: round; opacity: .55; }
+[data-theme="dark"] .panorama { --panorama-ground: #1e100c; }

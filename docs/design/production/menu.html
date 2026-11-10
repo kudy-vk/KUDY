@@ -22,21 +22,14 @@
     min-height: 48px;
     padding: 0 16px;
   }
+  .menu-head .walkbtn { margin-right: -4px; }
   .brand { font-size: calc(22px * var(--fs)); font-weight: 600; letter-spacing: -0.02em; color: var(--accent); }
   .city { margin-left: auto; font-size: calc(13px * var(--fs)); color: var(--muted); }
-  .walk { flex: none; display: grid; place-items: center; width: 48px; height: 48px; margin-right: -4px; padding: 0; border: 0; background: none; cursor: pointer; }
-  .walk span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
-  .menu-title {
-    position: relative;
-    z-index: 1;
-    margin: 8px 16px 0;
-    font: calc(32px * var(--fs)) / 1.1 Alegreya, serif;
-    text-wrap: balance;
-  }
+  .menu-title { position: relative; z-index: 1; margin: 8px 16px 0; font-size: calc(32px * var(--fs)); font-weight: 400; }
   .menu-canvas { position: relative; flex: 1; min-height: 0; }
   .menu-canvas svg { display: block; width: 100%; height: 100%; overflow: visible; touch-action: none; user-select: none; -webkit-user-select: none; }
-  .ad-zone { position: relative; z-index: 1; }
-  .menu-rest { flex: 1; }
+  /* Free space under the ad; the engraved panorama rests on its bottom edge. */
+  .menu-rest { flex: 1; min-height: 0; display: flex; align-items: flex-end; overflow: hidden; }
 
   .piece { outline: none; cursor: pointer; }
   .piece .art { transition: opacity 120ms ease-out, transform 160ms cubic-bezier(.2, .8, .2, 1); }
@@ -53,14 +46,26 @@
   .piece.near .ring { stroke: #bd852c; }
   .settling .piece { transition: transform 380ms cubic-bezier(.2, .8, .2, 1); }
 
-  /* Badges sit on the light map art, so they keep the light tokens in both themes (DT-4). */
-  .badge { filter: drop-shadow(0 2px 3px rgb(34 38 43 / 22%)); }
-  .badge rect { fill: #ffffff; stroke: #d8d2c6; }
-  .badge .glyph { fill: none; stroke: #1d6b4f; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .badge text { fill: #1d6b4f; font-family: "Golos Text", system-ui, sans-serif; dominant-baseline: central; }
-  .badge.off rect { stroke: #6b7280; }
-  .badge.off .glyph { stroke: #6b7280; }
-  .badge.off text { fill: #6b7280; }
+  /* A piece whose section is not open yet: paler art. A press gives it its colour
+     back for a moment and does nothing else; it can still be moved. */
+  .piece.off .tone { filter: saturate(.28) brightness(1.05); transition: filter 220ms ease-out; }
+  .piece.off[data-touch="pressed"] .tone,
+  .piece.off[data-touch="held"] .tone,
+  .piece.off[data-touch="dragging"] .tone,
+  .piece.off.lit .tone,
+  .complete .piece.off .tone { filter: none; }
+  .piece.off[data-touch="pressed"] .art { opacity: 1; }
+
+  /* Medallions are drawn in the map's own language: cream paper, a sand-gold
+     ring and brown ink, with a slightly uneven hand-drawn line. They sit on the
+     light map art, so they look the same in both themes (DT-4). */
+  .medal { filter: drop-shadow(0 1.5px 1.5px rgb(74 52 30 / 38%)); }
+  .medal .disc { fill: #fff6e0; stroke: #bd852c; stroke-width: 1.3; }
+  .medal .inner { fill: none; stroke: #bd852c; stroke-width: .7; opacity: .45; }
+  .medal .glyph { fill: none; stroke: #4a3b2a; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .medal.off .disc { fill: #f3ead6; stroke: #a8957c; }
+  .medal.off .inner { stroke: #a8957c; }
+  .medal.off .glyph { stroke: #7d6c58; }
 
   .radiance, .energy-ring { opacity: 0; transform-box: fill-box; transform-origin: center; }
   .energy-ring { fill: none; stroke: #f8d580; stroke-width: 10; }
@@ -71,7 +76,7 @@
   @keyframes ripple { from { opacity: .9; transform: scale(.6); } to { opacity: 0; transform: scale(2.3); } }
 
   @media (prefers-reduced-motion: reduce) {
-    .piece, .piece .art, .piece .ui-art { transition: none; }
+    .piece, .piece .art, .piece .ui-art, .piece.off .tone { transition: none; }
     .spark, .ripple { animation: none; opacity: 0; }
   }
 </style>
@@ -80,17 +85,6 @@
 <main class="board">
   <h1>Галоўны экран</h1>
   <p class="lead">Фінальны макет. Усё ў рамцы тэлефона — сам экран; перамыкачы над ім да экрана не належаць. Націск адкрывае раздзел, утрыманне дазваляе рухаць частку.</p>
-  <div class="controls">
-    <label>Экран<select id="device"></select></label>
-    <label>Мова<select id="locale"></select></label>
-    <label>Тэкст<select id="scale"><option value="1">Звычайны</option><option value="1.5">Буйны ×1,5</option></select></label>
-    <label>Подпісы<select id="labels"><option value="icons">Іконкі</option><option value="text">Іконкі з тэкстам</option></select></label>
-    <label>Банер<select id="ad"><option value="loaded">Загрузіўся</option><option value="none">Не загрузіўся</option></select></label>
-    <label>Прагулка<select id="walk"><option value="no">Не ідзе</option><option value="yes">Ідзе</option></select></label>
-    <button type="button" id="again">Адкрыць экран нанова</button>
-  </div>
-  <p class="event" id="event" role="status"></p>
-  <div class="phones" id="phones"></div>
 </main>
 <script type="module" src="menu.mjs"></script>
 </body>

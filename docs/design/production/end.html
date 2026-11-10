@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — завяршэнне прагулкі</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  /* One calm column: the result, what can still be opened, the optional rating
+     invitation. Free space below rests on the engraved panorama. */
+  /* The screen name is never cut: it wraps instead of ending in an ellipsis. */
+  .phone .topbar .title { padding-block: 6px; overflow: visible; white-space: normal; line-height: 1.2; }
+  .end-scroll { display: flex; flex-direction: column; padding: 4px 16px 0; }
+  .end-hero { flex: none; display: grid; justify-items: start; gap: 10px; padding: 8px 0 24px; }
+  .end-badge { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--badge-free); color: var(--accent); }
+  .end-hero h3 { margin: 0; font-size: calc(30px * var(--fs)); font-weight: 400; }
+  .end-hero .tag { gap: 6px; padding: 4px 12px; font-size: calc(13px * var(--fs)); white-space: normal; }
+  .end-hero p { margin: 0; }
+  .end-section { flex: none; margin: 0 0 8px; font-size: calc(16px * var(--fs)); font-weight: 600; }
+  .end-list { flex: none; display: grid; gap: 8px; margin: 0 0 24px; padding: 0; list-style: none; }
+  .end-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 8px 8px 8px 12px;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .end-row > span { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .end-row .t-display { font-size: calc(19px * var(--fs)); }
+  .end-row > .icon { color: var(--accent); }
+  .end-row > .icon:last-child { color: var(--muted); }
+  .end-invite { flex: none; display: grid; gap: 12px; margin-bottom: 24px; }
+  .end-invite p { margin: 0; }
+  .end-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .end-pending { flex: none; display: flex; gap: 8px; margin-bottom: 24px; font-size: calc(15px * var(--fs)); }
+  .end-pending > .icon { margin-top: 2px; }
+  .end-pending > div { display: grid; gap: 4px; }
+  .end-stars { display: flex; gap: 2px; color: var(--muted); }
+  .end-stars .on { fill: currentColor; color: var(--accent); }
+  .end-rest { flex: 1; min-height: 40px; display: flex; align-items: flex-end; margin: 0 -16px; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Завяршэнне прагулкі</h1>
+  <p class="lead">Фінальны макет. Экран паказвае завершаную прагулку: што праслухана, якія гісторыі яшчэ можна адкрыць, і неабавязковае запрашэнне ацаніць гід. Назва гіда і кропак — ілюстрацыйныя.</p>
+</main>
+<script type="module" src="end.mjs"></script>
+</body>
+</html>

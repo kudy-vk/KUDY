@@ -1,26 +1,28 @@
 // Main menu screen: five map pieces the visitor can tap or drag, the ad zone
-// under them, and free space below. Geometry, art, the magnet rule and the
-// amber light come from the accepted package brand/outputs/menu-map-city-only;
-// gesture timings are read from its manifest.
+// under them, and free space with an engraved panorama below. Geometry, art,
+// the magnet rule and the amber light come from the accepted package
+// brand/outputs/menu-map-city-only; gesture timings are read from its manifest.
 import { findMagnet, joinGroups } from '../brand/outputs/menu-map-city-only/magnet.mjs';
 import { amberMotion, amberPalette, lightThreads } from '../brand/outputs/menu-map-city-only/amber-light.mjs';
-import { DEVICES, LOCALES, appStrings, el, icon, iconShapes, phone, svg } from './kit.mjs';
+import { adZone, el, iconShapes, mountBoard, panorama, plainLabel, svg, walkButton } from './kit.mjs';
 
-const PKG = '../brand/outputs/menu-map-city-only/';
+const PKG = new URL('../brand/outputs/menu-map-city-only/', import.meta.url);
 // The whole scene (pieces plus water and fortifications), in source pixels.
 const SCENE = { width: 1351, height: 1164, cx: 675, cy: 582 };
 // Smallest drawing area, in source pixels, that holds five scattered pieces.
 const MIN_VIEW = { width: 1500, height: 1250 };
 // Where each piece starts, as a share of the drawing area (piece centre).
 const SLOTS = { nearby: [0.22, 0.17], guides: [0.74, 0.2], discovery: [0.76, 0.66], 'reserve-1': [0.2, 0.55], kudy: [0.42, 0.88] };
+const MEDAL = 38; // medallion diameter on screen, px
+const GLYPH = 20;
 
 // Routes mirror components/city-map-menu.tsx: three sections open, two wait.
 const ENTRIES = {
   nearby: { icon: 'map-pin', labelId: 'native.chrome.nearby', route: '/map' },
   guides: { icon: 'route', labelId: 'native.chrome.guidesLink', route: '/city/gdansk/guides' },
   discovery: { icon: 'lightbulb', labelId: 'native.chrome.whatToDo', route: '/discovery' },
-  'reserve-1': { icon: 'clock', labelId: 'native.chrome.comingSoon', route: null },
-  kudy: { icon: 'clock', labelId: 'native.chrome.kudyLink', route: null },
+  'reserve-1': { icon: 'hourglass', labelId: 'native.chrome.comingSoon', route: null },
+  kudy: { icon: 'hourglass', labelId: 'native.chrome.kudyLink', route: null },
 };
 const SOON = 'native.chrome.comingSoon';
 const WALK = 'native.chrome.walk';
@@ -37,13 +39,11 @@ const CITY = {
   fr: 'Gdańsk', cs: 'Gdaňsk', sv: 'Gdańsk',
 };
 
-const eventLine = document.getElementById('event');
-const say = (text) => { eventLine.textContent = text; };
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 async function alphaPixels(item) {
   const bitmap = new Image();
-  bitmap.src = PKG + item.png;
+  bitmap.src = new URL(item.png, PKG);
   await bitmap.decode();
   const surface = el('canvas', { width: item.width, height: item.height });
   const context = surface.getContext('2d', { willReadFrequently: true });
@@ -51,16 +51,19 @@ async function alphaPixels(item) {
   return context.getImageData(0, 0, item.width, item.height).data;
 }
 
-let manifest;
+const response = await fetch(new URL('manifest.json', PKG));
+if (!response.ok) throw new Error(`manifest.json: ${response.status}`);
+const manifest = await response.json();
 const alpha = new Map();
-const measure = el('canvas').getContext('2d');
+for (const item of [...manifest.pieces, ...manifest.layers]) alpha.set(item.id, await alphaPixels(item));
 let serial = 0;
 
-class MenuScreen {
-  constructor(host, theme, state, strings) {
+class MenuMap {
+  constructor(stage, { strings, say }) {
     this.uid = `menu${(serial += 1)}`;
-    this.state = state;
+    this.stage = stage;
     this.strings = strings;
+    this.say = say;
     this.turn = 0;
     this.groups = new Set();
     this.actors = new Map();
@@ -69,32 +72,6 @@ class MenuScreen {
     this.keyboard = null;
     this.complete = false;
     this.revealed = false;
-
-    const { frame, status, sysnav } = phone(state.device, theme);
-    frame.lang = state.locale;
-    frame.style.setProperty('--fs', state.scale);
-
-    const head = el('div', { className: 'menu-head' },
-      el('span', { className: 'brand', textContent: 'KUDY' }),
-      el('span', { className: 'city', textContent: CITY[state.locale] }));
-    if (state.walk === 'yes') {
-      const walk = el('button', { className: 'walk', type: 'button' }, el('span', {}, icon('footprints', 20)));
-      walk.setAttribute('aria-label', strings[WALK]);
-      walk.addEventListener('click', () => say(`Вяртанне да бягучай прагулкі («${strings[WALK]}»).`));
-      head.append(walk);
-    }
-    const title = el('h2', { className: 'menu-title', textContent: HEADING[state.locale] });
-
-    this.stage = svg('svg', { role: 'group', 'aria-label': HEADING[state.locale] });
-    const canvas = el('div', { className: 'menu-canvas' }, this.stage);
-    const top = el('div', { className: 'menu-top' }, head, title, canvas);
-
-    const ad = el('div', { className: 'ad-zone' }, el('div', { className: 'ad-slot' }, el('span', { textContent: 'Рэклама' })));
-    ad.hidden = state.ad !== 'loaded';
-
-    frame.append(status, top, ad, el('div', { className: 'menu-rest' }), sysnav);
-    host.append(el('figure', {}, el('figcaption', { textContent: theme === 'dark' ? 'Цёмная тэма' : 'Светлая тэма' }), frame));
-
     this.build();
     this.scatter();
     this.bind();
@@ -105,7 +82,7 @@ class MenuScreen {
   destroy() { this.turn += 1; this.active = null; }
 
   disabled(actor) { return ENTRIES[actor.id].route === null; }
-  title(actor) { return this.strings[ENTRIES[actor.id].labelId].replace(/\s*→$/, ''); }
+  title(actor) { return plainLabel(this.strings[ENTRIES[actor.id].labelId]); }
   // What a screen reader hears: the section name, and for a waiting piece the word «Хутка».
   spoken(actor) {
     const name = this.title(actor), soon = this.strings[SOON];
@@ -126,8 +103,12 @@ class MenuScreen {
       svg('stop', { offset: 0, 'stop-color': amberPalette.core }),
       svg('stop', { offset: 0.4, 'stop-color': amberPalette.glow, 'stop-opacity': 0.9 }),
       svg('stop', { offset: 1, 'stop-color': amberPalette.edge, 'stop-opacity': 0 }));
+    // A slow, shallow displacement: the medallion line wavers like a pen stroke.
+    const handDrawn = svg('filter', { id: `${uid}-hand`, x: '-20%', y: '-20%', width: '140%', height: '140%' },
+      svg('feTurbulence', { type: 'fractalNoise', baseFrequency: 0.07, numOctaves: 2, seed: 7, result: 'noise' }),
+      svg('feDisplacementMap', { in: 'SourceGraphic', in2: 'noise', scale: 2.4, xChannelSelector: 'R', yChannelSelector: 'G' }));
     this.sceneRadius = svg('circle', { cx: SCENE.cx, cy: SCENE.cy, r: 0 });
-    this.defs = svg('defs', {}, gradient, svg('clipPath', { id: `${uid}-clip` }, this.sceneRadius));
+    this.defs = svg('defs', {}, gradient, handDrawn, svg('clipPath', { id: `${uid}-clip` }, this.sceneRadius));
 
     this.radiance = svg('ellipse', { class: 'radiance', cx: SCENE.cx, cy: SCENE.cy, rx: 880, ry: 790, fill: `url(#${uid}-light)` });
     this.ring = svg('ellipse', { class: 'energy-ring', cx: SCENE.cx, cy: SCENE.cy, rx: 630, ry: 530 });
@@ -142,84 +123,48 @@ class MenuScreen {
     this.pieces = svg('g');
     this.scene = svg('g', { 'clip-path': `url(#${uid}-clip)`, 'aria-hidden': 'true' });
     this.sparks = svg('g', { 'pointer-events': 'none' });
-    // The scene sits under the pieces so a badge that overhangs its piece stays readable.
+    // The scene sits under the pieces so a medallion that overhangs its piece stays whole.
     stage.append(this.defs, this.evolution, this.scene, this.pieces, this.sparks);
 
     for (const item of manifest.pieces) {
-      const node = svg('g', { class: 'piece', 'data-piece': item.id, tabindex: 0, role: 'button' });
+      const off = ENTRIES[item.id].route === null;
+      const node = svg('g', { class: `piece${off ? ' off' : ''}`, 'data-piece': item.id, tabindex: 0, role: 'button' });
       const pad = item.padding;
-      const mask = svg('mask', { id: `${uid}-veil-${item.id}`, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: item.width, height: item.height },
-        svg('image', { href: PKG + item.light, width: item.width, height: item.height }));
-      this.defs.append(mask);
+      this.defs.append(svg('mask', { id: `${uid}-veil-${item.id}`, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: item.width, height: item.height },
+        svg('image', { href: new URL(item.light, PKG), width: item.width, height: item.height })));
       const veil = svg('rect', { x: 0, y: 0, width: item.width, height: item.height, fill: amberPalette.veil, mask: `url(#${uid}-veil-${item.id})`, opacity: 0 });
       const art = svg('g', { class: 'art', 'pointer-events': 'none' },
-        svg('image', { href: PKG + item.png, width: item.width, height: item.height }),
-        svg('image', { class: 'ui-art', href: PKG + item.ui, x: -pad, y: -pad, width: item.width + pad * 2, height: item.height + pad * 2 }),
+        svg('image', { class: 'tone', href: new URL(item.png, PKG), width: item.width, height: item.height }),
+        svg('image', { class: 'tone ui-art', href: new URL(item.ui, PKG), x: -pad, y: -pad, width: item.width + pad * 2, height: item.height + pad * 2 }),
         veil,
         svg('path', { class: 'ring', d: item.path, 'stroke-width': 3 / this.scale }));
-      const caption = svg('g', { class: 'caption' });
+
+      // Medallion with the section icon, kept at a constant size on screen.
+      const [ax, ay] = [item.anchor[0] - item.x, item.anchor[1] - item.y];
+      const medal = svg('g', { class: `medal${off ? ' off' : ''}`, transform: `translate(${ax} ${ay}) scale(${1 / this.scale})` },
+        svg('g', { filter: `url(#${uid}-hand)` },
+          svg('circle', { class: 'disc', r: MEDAL / 2 }),
+          svg('circle', { class: 'inner', r: MEDAL / 2 - 3.5 }),
+          svg('g', { class: 'glyph', transform: `translate(${-GLYPH / 2} ${-GLYPH / 2}) scale(${GLYPH / 24})` }, ...iconShapes(ENTRIES[item.id].icon))));
+      const caption = svg('g', { class: 'caption' }, medal);
       node.append(art, caption);
       this.pieces.append(node);
-      const actor = { ...item, node, caption, veil, alpha: alpha.get(item.id), ext: { l: 0, t: 0, r: item.width, b: item.height } };
-      if (this.disabled(actor)) node.setAttribute('aria-disabled', 'true');
+
+      const half = MEDAL / 2 / this.scale;
+      const actor = {
+        ...item, node, veil, off, alpha: alpha.get(item.id),
+        // Bounds of the piece together with its medallion, in source pixels.
+        ext: { l: Math.min(0, ax - half), r: Math.max(item.width, ax + half), t: Math.min(0, ay - half), b: Math.max(item.height, ay + half) },
+      };
+      if (off) node.setAttribute('aria-disabled', 'true');
       node.setAttribute('aria-label', this.spoken(actor));
       node.addEventListener('keydown', (event) => this.key(event, actor));
       this.actors.set(item.id, actor);
     }
     for (const layer of manifest.layers) {
-      const node = svg('g', { class: 'scene-part' }, svg('image', { href: PKG + layer.png, x: layer.x, y: layer.y, width: layer.width, height: layer.height }));
+      const node = svg('g', { class: 'scene-part' }, svg('image', { href: new URL(layer.png, PKG), x: layer.x, y: layer.y, width: layer.width, height: layer.height }));
       this.scene.append(node);
       this.scenery.push({ ...layer, node, alpha: alpha.get(layer.id), passive: true });
-    }
-    this.captions();
-  }
-
-  // The badge on each piece: an icon, plus text when the piece waits («Хутка»
-  // must stay readable) or when the board asks for icons with text.
-  captions() {
-    const fontPx = 13 * this.state.scale, iconPx = 20, padX = 10, gap = 6;
-    measure.font = `${fontPx}px "Golos Text"`;
-    const maxText = Math.min(150 * this.state.scale, this.stage.clientWidth * 0.42);
-    for (const actor of this.actors.values()) {
-      const off = this.disabled(actor);
-      const withName = this.state.labels === 'text' && !this.complete;
-      let text = off ? (withName ? this.spoken(actor) : this.strings[SOON]) : (withName ? this.title(actor) : '');
-      while (text && measure.measureText(text).width > maxText) text = `${Array.from(text.replace(/…$/, '')).slice(0, -1).join('').trimEnd()}…`;
-      const height = Math.max(36, fontPx + 18);
-      const width = text ? padX * 2 + iconPx + gap + measure.measureText(text).width : height;
-      const [ax, ay] = [actor.anchor[0] - actor.x, actor.anchor[1] - actor.y];
-      const badge = svg('g', { class: `badge${off ? ' off' : ''}`, transform: `translate(${ax} ${ay}) scale(${1 / this.scale})` },
-        svg('rect', { x: -width / 2, y: -height / 2, width, height, rx: height / 2 }),
-        svg('g', { class: 'glyph', transform: `translate(${text ? -width / 2 + padX : -iconPx / 2} ${-iconPx / 2}) scale(${iconPx / 24})` }, ...iconShapes(ENTRIES[actor.id].icon)));
-      if (text) {
-        const label = svg('text', { x: -width / 2 + padX + iconPx + gap, y: 0, 'font-size': fontPx });
-        label.textContent = text;
-        badge.append(label);
-      }
-      actor.caption.replaceChildren(badge);
-      const halfW = width / 2 / this.scale, halfH = height / 2 / this.scale;
-      actor.ext = { l: Math.min(0, ax - halfW), r: Math.max(actor.width, ax + halfW), t: Math.min(0, ay - halfH), b: Math.max(actor.height, ay + halfH) };
-      actor.badge = { node: badge, cx: actor.x + ax, cy: actor.y + ay, halfW, halfH, ax, ay };
-    }
-    if (this.complete) this.separateBadges();
-  }
-
-  // On the assembled map two neighbouring badges can meet; move such a pair apart vertically.
-  separateBadges() {
-    const badges = [...this.actors.values()].map((actor) => actor.badge);
-    for (let i = 0; i < badges.length; i += 1) {
-      for (let j = i + 1; j < badges.length; j += 1) {
-        const [upper, lower] = badges[i].cy <= badges[j].cy ? [badges[i], badges[j]] : [badges[j], badges[i]];
-        const overlapX = upper.halfW + lower.halfW - Math.abs(upper.cx - lower.cx);
-        const overlapY = upper.halfH + lower.halfH - (lower.cy - upper.cy);
-        if (overlapX <= 0 || overlapY <= 0) continue;
-        const move = overlapY / 2 + 2 / this.scale;
-        upper.cy -= move;
-        upper.ay -= move;
-        lower.cy += move;
-        lower.ay += move;
-        for (const badge of [upper, lower]) badge.node.setAttribute('transform', `translate(${badge.ax} ${badge.ay}) scale(${1 / this.scale})`);
-      }
     }
   }
 
@@ -252,13 +197,16 @@ class MenuScreen {
 
   open(actor) {
     const entry = ENTRIES[actor.id];
-    if (entry.route) say(`Адкрываецца раздзел «${this.title(actor)}» → ${entry.route}`);
-    else say(`«${this.spoken(actor)}» — частка рухаецца, але раздзел не адкрывае.`);
+    if (entry.route) { this.say(`Адкрываецца раздзел «${this.title(actor)}» → ${entry.route}`); return; }
+    // A waiting piece answers a tap with its colour only.
+    actor.node.classList.add('lit');
+    this.defer(() => actor.node.classList.remove('lit'), 700);
+    this.say(`«${this.spoken(actor)}»: частка на момант вяртае колер, раздзел не адкрываецца.`);
   }
 
   feedback(event) {
-    const local = new DOMPoint(event.clientX, event.clientY).matrixTransform(this.stage.getScreenCTM().inverse());
     if (this.reduced) return;
+    const local = new DOMPoint(event.clientX, event.clientY).matrixTransform(this.stage.getScreenCTM().inverse());
     const ripple = svg('circle', { class: 'ripple', cx: local.x, cy: local.y, r: 36 });
     this.sparks.append(ripple);
     setTimeout(() => ripple.remove(), 500);
@@ -310,12 +258,12 @@ class MenuScreen {
       moving.forEach((actor, index) => actor.node.animate([{ transform: before[index] }, { transform: actor.node.style.transform }], { duration: 220, easing: 'cubic-bezier(.2,1.25,.4,1)' }));
     }
     this.glow(joint, group);
-    say(`Злучана ${group.members.size} з ${this.actors.size}. Часткі рухаюцца разам.`);
+    this.say(`Злучана ${group.members.size} з ${this.actors.size}. Часткі рухаюцца разам.`);
     if (group.members.size === this.actors.size) this.finish(group);
     return true;
   }
 
-  // Pieces, with their badges, never leave the drawing area: nothing slides under the ad.
+  // Pieces, with their medallions, never leave the drawing area: nothing slides under the ad.
   shift(group, dx, dy) {
     const members = [...group.members].map((id) => this.actors.get(id));
     const minX = this.complete ? 0 : Math.min(...members.map((actor) => actor.x + actor.ext.l));
@@ -376,7 +324,6 @@ class MenuScreen {
     if (!this.reduced) this.stage.classList.add('settling');
     group.dx = 0;
     group.dy = 0;
-    this.captions();
     this.render();
     this.defer(() => {
       this.stage.classList.remove('settling');
@@ -419,7 +366,7 @@ class MenuScreen {
     this.sceneRadius.setAttribute('r', 1000);
     this.stage.classList.remove('settling');
     this.scene.setAttribute('aria-hidden', 'false');
-    say('Карта сабраная. Раздзелы па-ранейшаму адкрываюцца націскам.');
+    this.say('Карта сабраная. Раздзелы па-ранейшаму адкрываюцца націскам.');
   }
 
   bind() {
@@ -475,42 +422,24 @@ class MenuScreen {
   }
 }
 
-// ---------- review board ----------
-
-const state = { device: '390x844', locale: 'be', scale: 1, labels: 'icons', ad: 'loaded', walk: 'no' };
-const phones = document.getElementById('phones');
-let screens = [];
-
-async function draw() {
-  const strings = await appStrings(state.locale, STRING_IDS);
-  for (const screen of screens) screen.destroy();
-  phones.replaceChildren();
-  screens = ['light', 'dark'].map((theme) => new MenuScreen(phones, theme, state, strings));
-  say('');
-}
-
-function fill(select, options, value) {
-  select.replaceChildren(...options.map(([key, label]) => el('option', { value: key, textContent: label })));
-  select.value = value;
-}
-
-try {
-  const response = await fetch(`${PKG}manifest.json`);
-  if (!response.ok) throw new Error(`manifest.json: ${response.status}`);
-  manifest = await response.json();
-  for (const item of [...manifest.pieces, ...manifest.layers]) alpha.set(item.id, await alphaPixels(item));
-  await Promise.all([document.fonts.load('13px "Golos Text"'), document.fonts.load('32px Alegreya')]);
-
-  fill(document.getElementById('device'), Object.keys(DEVICES).map((key) => [key, key.replace('x', ' × ')]), state.device);
-  fill(document.getElementById('locale'), Object.entries(LOCALES), state.locale);
-  for (const name of ['device', 'locale', 'scale', 'labels', 'ad', 'walk']) {
-    document.getElementById(name).addEventListener('change', (event) => {
-      state[name] = name === 'scale' ? Number(event.target.value) : event.target.value;
-      draw();
-    });
-  }
-  document.getElementById('again').addEventListener('click', draw);
-  await draw();
-} catch (error) {
-  say(`Не ўдалося загрузіць экран: ${error.message}. Старонка працуе праз лакальны сервер, запушчаны з кораня рэпазіторыя.`);
-}
+await mountBoard({
+  controls: [
+    { id: 'ad', label: 'Банер', options: [['loaded', 'Загрузіўся'], ['none', 'Не загрузіўся']] },
+    { id: 'walk', label: 'Прагулка', options: [['no', 'Не ідзе'], ['yes', 'Ідзе']] },
+  ],
+  stringIds: STRING_IDS,
+  build({ body, state, strings, say }) {
+    const head = el('div', { className: 'menu-head' },
+      el('span', { className: 'brand', textContent: 'KUDY' }),
+      el('span', { className: 'city', textContent: CITY[state.locale] }),
+      state.walk === 'yes' && walkButton(strings[WALK], () => say(`Вяртанне да бягучай прагулкі («${strings[WALK]}»).`)));
+    const title = el('h2', { className: 'menu-title t-display', textContent: HEADING[state.locale] });
+    const stage = svg('svg', { role: 'group', 'aria-label': HEADING[state.locale] });
+    body.append(
+      el('div', { className: 'menu-top' }, head, title, el('div', { className: 'menu-canvas' }, stage)),
+      adZone(state.ad === 'loaded'),
+      el('div', { className: 'menu-rest' }, panorama()));
+    const map = new MenuMap(stage, { strings, say });
+    return () => map.destroy();
+  },
+});
