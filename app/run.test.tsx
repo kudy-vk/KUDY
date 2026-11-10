@@ -27,6 +27,7 @@ import { CATALOG_FIXTURES, flatStyle, layoutWith, makeRunSession, serve, sha256 
 import type { GuideHintValues } from "../services/config";
 import hintValuesJson from "../contracts/hints/guide-hints.values.v1.json";
 import { tokens } from "../components/design-tokens";
+import { PointStatusSign } from "../components/point-status-sign";
 import * as Reanimated from "react-native-reanimated";
 
 // G06.10.f (issue #406): the reduce-motion seam — the controllable stub of
@@ -305,6 +306,7 @@ describe("run map surface", () => {
     expect(screen.getByTestId("run-marker-stop-1")).toBeTruthy();
     expect(textOf("run-status-stop-1")).toBe("Мытня — чакае");
     expect(textOf("run-status-stop-3")).toBe("Вежа — зачынена");
+    expect(screen.UNSAFE_getAllByType(PointStatusSign).find((sign) => sign.props.testID === "run-marker-sign-stop-1")?.props.status).toBe("pending");
     // The POI point is its own kind, not a stop marker. UX 05 (issue
     // #351): the label goes through the run strings' kind dictionary —
     // «sight» renders its Belarusian word, a kind without an entry renders
@@ -454,6 +456,7 @@ describe("run map surface", () => {
     fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(screen.getByTestId("run-preview")).toBeTruthy();
+    expect(screen.UNSAFE_getAllByType(PointStatusSign).find((sign) => sign.props.testID === "run-preview-sign")?.props.status).toBe("pending");
     expect(screen.getByTestId("run-preview").children.length).toBeGreaterThan(0);
     expect(screen.getByText("Мытня")).toBeTruthy();
     expect(audioPort.commands).toEqual([]);

@@ -37,21 +37,10 @@ import {
 import { ScaledText } from "../../components/scaled-text";
 import { WalkProgress } from "../../components/walk-progress";
 import { RunNativeMap } from "../../components/run-native-map";
+import { PointStatusSign } from "../../components/point-status-sign";
 import { useServices, useUiLocale } from "../_layout";
 
 const OSM_ATTRIBUTION_URL = "https://www.openstreetmap.org/copyright";
-
-// UX 04 (issue #350): the marker fills are the canon's own marker tokens
-// (color.marker.*), each ≥3:1 against the canon map background (WCAG
-// 1.4.11) — a status is a word first, the color is the second channel
-// (G06.06); test/run-map-contrast.test.mjs guards the configuration.
-const STATUS_COLOR: Record<string, string> = {
-  playing: tokens.colorMarkerPlaying,
-  played: tokens.colorMarkerPlayed,
-  available: tokens.colorMarkerAvailable,
-  pending: tokens.colorMarkerPending,
-  locked: tokens.colorMarkerLocked,
-};
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: {
@@ -110,22 +99,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     position: "absolute",
     width: 120,
   },
-  dot: {
-    // UX 04 (issue #350): the canon marker — size.marker diameter, state
-    // fill, white 2px outline, a soft shadow; the fill carries the ≥3:1
-    // figure contrast, the outline is separation only (visual-language.md
-    // «Маркеры мапы»).
-    borderColor: tokens.colorAccentInk,
-    borderRadius: 999,
-    borderWidth: 2,
-    elevation: 2,
-    height: palette.markerSize,
-    shadowColor: tokens.colorInk,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
-    width: palette.markerSize,
-  },
+  statusRow: { flexDirection: "row", alignItems: "center", gap: palette.spaceS },
   poi: {
     backgroundColor: tokens.colorBadgeMixed,
     borderColor: tokens.colorMuted,
@@ -786,7 +760,6 @@ export default function Run() {
           retryLabel={uiStrings(locale).retry}
           markerHint={strings.markerHint}
           statusWords={strings.status}
-          statusColors={STATUS_COLOR}
           poiWords={strings.poiKind}
           fallback={<View style={styles.map} testID="run-map-schematic">
           {process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? (
@@ -828,7 +801,7 @@ export default function Run() {
               ]}
               testID={`run-marker-${marker.stopId}`}
             >
-              <View style={[styles.dot, { backgroundColor: STATUS_COLOR[marker.status] }]} />
+              <PointStatusSign status={marker.status} label={strings.status[marker.status]} testID={`run-marker-sign-${marker.stopId}`} />
               <ScaledText style={styles.markerLabel} testID={`run-status-${marker.stopId}`}>
                 {`${marker.name} — ${strings.status[marker.status]}`}
               </ScaledText>
@@ -917,7 +890,10 @@ export default function Run() {
             {inspectedMarker ? (
               <View style={styles.preview} testID="run-preview">
                 <ScaledText style={styles.previewName}>{inspectedMarker.name}</ScaledText>
-                <ScaledText style={styles.previewStatus}>{strings.status[inspectedMarker.status]}</ScaledText>
+                <View style={styles.statusRow} accessible accessibilityLabel={`${inspectedMarker.name}, ${strings.status[inspectedMarker.status]}`}>
+                  <PointStatusSign status={inspectedMarker.status} label={strings.status[inspectedMarker.status]} small testID="run-preview-sign" />
+                  <ScaledText style={styles.previewStatus}>{strings.status[inspectedMarker.status]}</ScaledText>
+                </View>
                 {inspectedMarker.status === "locked" ? (
                   // G08.05 (AC5, 11 §16.4): the honest locked state —
                   // available after purchase, never a content reveal

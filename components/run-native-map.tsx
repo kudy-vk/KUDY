@@ -9,6 +9,7 @@ import type { RunStop } from '../controllers/run/runOrchestrator.ts';
 import type { RunPlaceFact } from '../services/contentRepo/runMapFacts.ts';
 import { tokens } from './design-tokens.ts';
 import { ScaledText } from './scaled-text.tsx';
+import { PointStatusSign } from './point-status-sign.tsx';
 import { mapProvider } from '../contracts/map-provider.ts';
 
 const FOLLOW_ZOOM = 16;
@@ -26,13 +27,6 @@ const styles = StyleSheet.create({
   map: { ...StyleSheet.absoluteFillObject },
   fallback: { ...StyleSheet.absoluteFillObject },
   marker: { alignItems: 'center', minHeight: 48, width: 120 },
-  dot: {
-    borderColor: tokens.colorAccentInk,
-    borderRadius: 999,
-    borderWidth: 2,
-    height: tokens.markerSize,
-    width: tokens.markerSize,
-  },
   poi: {
     backgroundColor: tokens.colorBadgeMixed,
     borderColor: tokens.colorMuted,
@@ -73,7 +67,8 @@ const styles = StyleSheet.create({
     borderRadius: tokens.radiusBase, borderWidth: 1, left: tokens.spaceM,
     maxHeight: 240, position: 'absolute', right: tokens.spaceM, top: 64,
   },
-  pointsRow: { minHeight: 48, justifyContent: 'center', paddingHorizontal: tokens.spaceM },
+  pointsRow: { minHeight: 48, alignItems: 'center', flexDirection: 'row', gap: tokens.spaceS, paddingHorizontal: tokens.spaceM },
+  pointLabel: { flex: 1 },
   retry: { alignSelf: 'center', backgroundColor: tokens.colorPaper, borderRadius: tokens.radiusBase, bottom: tokens.spaceM, minHeight: 48, justifyContent: 'center', paddingHorizontal: tokens.spaceM, position: 'absolute' },
 });
 
@@ -91,7 +86,6 @@ export function RunNativeMap({
   retryLabel,
   markerHint,
   statusWords,
-  statusColors,
   poiWords,
 }: {
   view: RunMapView;
@@ -107,7 +101,6 @@ export function RunNativeMap({
   retryLabel: string;
   markerHint: string;
   statusWords: Record<string, string>;
-  statusColors: Record<string, string>;
   poiWords: Record<string, string>;
 }) {
   const camera = useRef<CameraRef>(null);
@@ -217,7 +210,7 @@ export function RunNativeMap({
                   accessibilityHint={markerHint}
                   testID={`run-marker-${marker.stopId}`}
                 >
-                  <View style={[styles.dot, { backgroundColor: statusColors[marker.status] }]} />
+                  <PointStatusSign status={marker.status} label={statusWords[marker.status]} testID={`run-marker-sign-${marker.stopId}`} />
                   <ScaledText style={styles.label} testID={`run-status-${marker.stopId}`}>
                     {`${marker.name} — ${statusWords[marker.status]}`}
                   </ScaledText>
@@ -272,7 +265,8 @@ export function RunNativeMap({
               accessibilityHint={markerHint}
               testID={`run-point-${marker.stopId}`}
             >
-              <ScaledText testID={`run-point-status-${marker.stopId}`}>
+              <PointStatusSign status={marker.status} label={statusWords[marker.status]} small testID={`run-point-sign-${marker.stopId}`} />
+              <ScaledText style={styles.pointLabel} testID={`run-point-status-${marker.stopId}`}>
                 {`${marker.name} — ${statusWords[marker.status]}`}
               </ScaledText>
             </Pressable>
