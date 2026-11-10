@@ -46,7 +46,7 @@ export function CanonIcon({
   }
   return (
     <View accessible={true} accessibilityLabel={label} pointerEvents="none" style={style} testID={testID}>
-      <Glyph color={color ?? palette.colorInk} size={size} fill={fill} />
+      <Glyph color={color ?? palette.colorInk} size={size} fill={fill ?? "none"} />
     </View>
   );
 }

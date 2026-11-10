@@ -15,8 +15,8 @@
 
 1. **Толькі 5 бачных зорак, без лічбаў** — `app/feedback.tsx` (блок зорак); тэст: `queryByText(starLabel)` пуста для ўсіх 1–5, у дрэве 5 зорак-кнопак.
 2. **Значэнне 1–5 без змены схемы, паўторны выбар** — шлях `setScore`/`send` ідэнтычны папярэдняму; існы ахоўны тэст «choosing a star enables the Send; the acked round renders «адпраўлена»» праходзіць без змен; новы тэст фіксуе рэсэлект (4 → 2).
-3. **A11y і таргеты** — назва кожнай зоркі = лакалізаваны `native.feedback.starLabel` («N з 5», усе 8 лакаляў у generated каталозе), стан `selected` агучваецца праз `accessibilityState`; таргет 48×48 dp; фокус/кантраст — праз кананічныя токены і `PressableSurface`.
-4. **Станы і тэмы** — pressed (dim ≥10% + ripple), selected/unselected (fill+токены), disabled (busy — `accessibilityState.disabled` + прыглушэнне wrapper'ам), light/dark — `useThemeStyles(lightStyles, darkStyles)`; буйны шрыфт — `ScaledText` захаваны для астатніх тэкстаў, зорка — гліф. Прыладны доказ светлай тэмы: [failure.png](../../e2e-android/artifacts/2026-11-10T19-48-44-729Z/discovery-feedback/failure.png) — эмульятар API 35, be-лакаль: 4 зоркі запоўненыя акцэнтам, 5-я аўтлайн, бачных лічбаў няма (кадр з моманту флейку #173, калі E2E-кейс паспяхова тыкнуў star-4). Цёмная тэма на прыладзе — NOT-VERIFIED (гл. Design-QA).
+3. **A11y і таргеты** — назва кожнай зоркі = лакалізаваны `native.feedback.starLabel` («N з 5», усе 9 лакаляў у generated каталозе), стан `selected` агучваецца праз `accessibilityState`; таргет 48×48 dp; фокус/кантраст — праз кананічныя токены і `PressableSurface`.
+4. **Станы і тэмы** — pressed (dim ≥10% + ripple), selected/unselected (fill+токены), disabled (busy — `accessibilityState.disabled` + прыглушэнне wrapper'ам), light/dark — `useThemeStyles(lightStyles, darkStyles)`; буйны шрыфт — `ScaledText` захаваны для астатніх тэкстаў, зорка — гліф. Прыладны доказ светлай тэмы: [light-theme-stars-device.png](../../design-qa/evidence/UI-STAR-RATING/light-theme-stars-device.png) (копія кадру з E2E-артефактаў `tools/e2e-android/artifacts/2026-11-10T19-48-44-729Z/discovery-feedback/failure.png`) — эмульятар API 35, be-лакаль: 4 зоркі запоўненыя акцэнтам, 5-я аўтлайн, бачных лічбаў няма (кадр з моманту флейку #173, калі E2E-кейс паспяхова тыкнуў star-4). Цёмная тэма на прыладзе — NOT-VERIFIED (гл. Design-QA).
 5. **Тэсты і proof** — `app/feedback.test.tsx`: без бачных лічбаў, a11y-назва кожнага значэння, fill дыяпазону, рэсэлект; пакрокавыя аховы ў `canon-icon.test.tsx` (17/17). Дэма: [docs/demos/2026-11-10-ui-star-rating.md](../../demos/2026-11-10-ui-star-rating.md) — `uvx showboat==0.6.1 verify` exit 0.
 6. **PR** — адзін PR у `main` па `docs/agent-rules/issue-workflow.md`; паралельныя сесіі ўлічаны (клейм-трансфер зафіксаваны ў issue, галіна з клону).
 
@@ -30,7 +30,7 @@
 
 ## Design-QA рэпарт (DQ-05)
 
-**Verdict: NO_VERIFIED_RULE** · RULE 0 · DIFF 0 · OPINION 1 · NOT-VERIFIED 3 · прыладны кадр светлай тэмы: `tools/e2e-android/artifacts/2026-11-10T19-48-44-729Z/discovery-feedback/failure.png` (эмульятар API 35, be; запаўненне 1…4 акцэнтам, 5-я аўтлайн — візуальнае пацверджанне формы і дыяпазону; кадр з моманту флейку #173)
+**Verdict: NO_VERIFIED_RULE** · RULE 0 · DIFF 0 · OPINION 1 · NOT-VERIFIED 3 · прыладны кадр светлай тэмы: [light-theme-stars-device.png](../../design-qa/evidence/UI-STAR-RATING/light-theme-stars-device.png) (эмульятар API 35, be; запаўненне 1…4 акцэнтам, 5-я аўтлайн — візуальнае пацверджанне формы і дыяпазону; кадр з моманту флейку #173)
 **Scope:** PR гэтай задачы, base `06e1024` / head `f5565e4`; змененыя паверхні: feedback-форма (блок ацэнкі), іконкавы пласт (пастак `fill`).
 **Sources:** `docs/design/visual-language.md` (машынны блок токенаў + табліца кантрасту); `docs/design-qa/exceptions.md` (каміт `c9fdf54`); issue #102 — уладарскае рашэнне B (2026-11-02) як прыняты крытэр гэтай змены.
 **Environment:** праверкі на ўзроўні токенаў і зыходнікаў + render-тэсты jest; прыладныя вымярэнні — гл. NOT-VERIFIED.

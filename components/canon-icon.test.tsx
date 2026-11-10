@@ -54,6 +54,16 @@ describe("CanonIcon (G06.10.c)", () => {
     expect(svgOf(tree).props.width).toBe(24);
   });
 
+  test("a caller that omits fill keeps the lucide outline default on the Svg root", () => {
+    // The fill passthrough must not leak `undefined` into the lucide props:
+    // an explicit undefined key drops the fill:"none" child default and
+    // react-native-svg paints unset fills black on device (voka finding
+    // undefined-fill-black-fill, PR #203) — the ?? "none" at the Glyph call
+    // is the contract; reverting it turns this check red.
+    const tree = render(<CanonIcon glyph={MapPin} label="Кропкі" />);
+    expect(svgOf(tree).props.fill).toBe("none");
+  });
+
   test("the label is visible to accessibility tooling; an empty label is a contract breach", () => {
     const tree = render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-labelled" />);
     expect(tree.getByTestId("icon-labelled").props.accessible).toBe(true);
