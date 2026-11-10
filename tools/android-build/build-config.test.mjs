@@ -4,7 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { buildEnv, classifyProcesses, gradleArgs, gradleUserProperties, resolveOptions } from './build-config.mjs';
+import { buildEnv, classifyProcesses, gradleArgs, gradleSpawnPlan, gradleStartedInLog, gradleUserProperties, resolveOptions } from './build-config.mjs';
 
 const checkoutRoot = path.resolve('/w/KUDY');
 const buildRoot = path.resolve('/w/KUDY-build');
@@ -130,4 +130,40 @@ test('classifyProcesses: Windows paths match case-insensitively and with either 
   ];
   const { owned } = classifyProcesses(procs, { buildRoot: root, checkoutRoot: 'D:\\KUDY-592', selfPid: 0, caseInsensitive: true });
   assert.deepEqual(owned.map((p) => p.pid), [1, 2]);
+});
+
+test('gradleSpawnPlan: Windows names the wrapper with a path so cmd never resolves a bare name (revert: bare gradlew.bat → test fails, #211)', () => {
+  const { options } = optionsFor(valid);
+  const plan = gradleSpawnPlan(options, { platform: 'win32' });
+  assert.ok(plan.command.startsWith('.\\gradlew.bat '), plan.command);
+  assert.equal(plan.shell, true);
+  assert.deepEqual(plan.args, []);
+  assert.equal(plan.file, plan.command);
+});
+
+test('gradleSpawnPlan: Linux keeps ./gradlew with the args array and no shell', () => {
+  const { options } = optionsFor(valid);
+  const plan = gradleSpawnPlan(options, { platform: 'linux' });
+  assert.equal(plan.shell, false);
+  assert.equal(plan.file, './gradlew');
+  assert.deepEqual(plan.args, gradleArgs(options));
+  assert.equal(plan.command, `./gradlew ${gradleArgs(options).join(' ')}`);
+});
+
+test('gradleStartedInLog: the signatures of a real Gradle run are recognized on any host locale', () => {
+  for (const line of [
+    '> Task :app:preBuild UP-TO-DATE',
+    'BUILD SUCCESSFUL in 3m 21s',
+    'FAILURE: Build failed with an exception.',
+    'Welcome to Gradle 8.12!',
+    'Starting a Gradle Daemon (subsequent builds will be faster)',
+  ]) {
+    assert.equal(gradleStartedInLog(line), true, line);
+  }
+});
+
+test('gradleStartedInLog: a log without Gradle output means the wrapper never started (#211)', () => {
+  assert.equal(gradleStartedInLog(''), false);
+  assert.equal(gradleStartedInLog("'gradlew.bat' is not recognized as an internal or external command"), false);
+  assert.equal(gradleStartedInLog('ERROR: JAVA_HOME is set to an invalid directory'), false);
 });

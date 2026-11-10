@@ -125,6 +125,32 @@ export function gradleArgs(options) {
   return args;
 }
 
+// cmd quotes only what whitespace would split; the wrapper's args never
+// contain a double quote (resolveOptions rejects cmd metacharacters).
+export const quoteForCmd = (arg) => (/[\s]/.test(arg) ? `"${arg}"` : arg);
+
+// The wrapper command as spawn() must receive it. On Windows the name carries
+// a path (.\gradlew.bat): a bare `gradlew.bat` leaves resolution to cmd's
+// search order, which a host may run with the current directory excluded, so
+// the build dies with "'gradlew.bat' is not recognized" before Gradle starts
+// [#211]. The separator is written literally so the plan does not depend on
+// the host that builds the string.
+export function gradleSpawnPlan(options, { platform = process.platform } = {}) {
+  const args = gradleArgs(options);
+  const command = `${platform === 'win32' ? '.\\gradlew.bat' : './gradlew'} ${args.map(quoteForCmd).join(' ')}`;
+  return platform === 'win32'
+    ? { file: command, args: [], shell: true, command }
+    : { file: './gradlew', args, shell: false, command };
+}
+
+// Gradle's own output is never localized, so its presence in the build log —
+// not the exit text — proves the wrapper actually started. A log without any
+// of these lines (cmd could not execute the wrapper, the JVM never came up)
+// marks a host problem, not a build failure [#211].
+export function gradleStartedInLog(logText) {
+  return /(BUILD (SUCCESSFUL|FAILED)|FAILURE:|^> Task |Welcome to Gradle|Starting a Gradle Daemon)/m.test(logText);
+}
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // A root matches only as a whole path: D:\b must not match D:\b2\x.

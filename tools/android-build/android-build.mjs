@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { applyCleanup, findCandidates, gitOwnership, planCleanup, resolveRoots } from './scoped-clean.mjs';
 import { acquireLock, lockPath } from './checkout-lock.mjs';
 import { OwnPathError, checkOwnFile, openNewFile, prepareOwnDirs, replaceOwnFile } from './own-paths.mjs';
-import { buildEnv, classifyProcesses, gradleArgs, gradleUserProperties, resolveOptions, taskPaths } from './build-config.mjs';
+import { buildEnv, classifyProcesses, gradleSpawnPlan, gradleStartedInLog, gradleUserProperties, resolveOptions, taskPaths } from './build-config.mjs';
 
 const checkoutRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const isWindows = process.platform === 'win32';
@@ -130,7 +130,9 @@ function preflight(options) {
 
 // Exit codes: 0 ok, 1 failure, 2 cleanup target refused, 3 active build
 // process, 64 usage, 73 a build output path is a link or not the build root's
-// own entry, 75 checkout locked by another build/clean or by a stale lock.
+// own entry, 75 checkout locked by another build/clean or by a stale lock,
+// 87 the build command could not run on this host (no Gradle output in the
+// log; the callers report NOT-VERIFIED for it, never a build failure).
 function clean(options, apply) {
   if (apply) {
     // Deleting outputs under a running build loses its results or breaks it,
@@ -182,8 +184,6 @@ function stopOwned(options) {
   return after.owned.length === 0 ? 0 : 1;
 }
 
-const quoteForCmd = (arg) => (/[\s]/.test(arg) ? `"${arg}"` : arg);
-
 function sha256(file) {
   return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').toUpperCase();
 }
@@ -203,15 +203,13 @@ async function build(options) {
 
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');
   const logFile = path.join(paths.logs, `assembleDebug-${stamp}.log`);
-  const args = gradleArgs(options);
-  const wrapper = isWindows ? 'gradlew.bat' : './gradlew';
-  const command = `${wrapper} ${args.map(quoteForCmd).join(' ')}`;
-  console.log(`build: cwd=${path.join(checkoutRoot, 'android')} command=${command} log=${logFile}`);
+  const plan = gradleSpawnPlan(options);
+  console.log(`build: cwd=${path.join(checkoutRoot, 'android')} command=${plan.command} log=${logFile}`);
 
   const log = fs.createWriteStream(null, { fd: openNewFile(logFile) });
   const started = Date.now();
-  const child = spawn(isWindows ? command : wrapper, isWindows ? [] : args, {
-    cwd: path.join(checkoutRoot, 'android'), env: buildEnv(options, process.env), shell: isWindows,
+  const child = spawn(plan.file, plan.args, {
+    cwd: path.join(checkoutRoot, 'android'), env: buildEnv(options, process.env), shell: plan.shell,
   });
   child.stdout.on('data', (chunk) => { log.write(chunk); process.stdout.write(chunk); });
   child.stderr.on('data', (chunk) => { log.write(chunk); process.stderr.write(chunk); });
@@ -222,7 +220,13 @@ async function build(options) {
     if (isWindows) spawnSync('taskkill.exe', ['/T', '/F', '/PID', String(child.pid)], { stdio: 'inherit' });
     else child.kill('SIGTERM');
   }, options.timeoutMinutes * 60_000);
-  const exitCode = await new Promise((resolve) => child.on('close', (code) => resolve(code ?? 1)));
+  // A spawn failure emits 'error' and never 'close': without a listener the
+  // event throws uncaught and the run dies unclassified instead of answering.
+  let spawnError = null;
+  const exitCode = await new Promise((resolve) => {
+    child.on('close', (code) => resolve(code ?? 1));
+    child.on('error', (error) => { spawnError = error; resolve(null); });
+  });
   clearTimeout(timer);
   await new Promise((resolve) => log.end(resolve));
 
@@ -232,7 +236,7 @@ async function build(options) {
     : null;
   const leftovers = processReport(options).owned.map(short);
   const record = {
-    command, cwd: path.join(checkoutRoot, 'android'), log: logFile,
+    command: plan.command, cwd: path.join(checkoutRoot, 'android'), log: logFile,
     startedAt: new Date(started).toISOString(), durationSeconds: Math.round((Date.now() - started) / 1000),
     exitCode, timedOut, gitHead: git(['rev-parse', 'HEAD']), gitStatus: git(['status', '--short']),
     gradleUserProperties: gradleUserProperties(options), roDepCache: options.roDepCache ?? null,
@@ -244,9 +248,18 @@ async function build(options) {
   console.log(`build: exit=${exitCode} duration=${record.durationSeconds}s record=${recordFile}`);
   if (apk) console.log(`build: apk ${apk.bytes} bytes sha256 ${apk.sha256}`);
   for (const line of leftovers) console.error(`build: task-owned process still running: ${line}`);
+  if (spawnError) {
+    console.error(`build: the build command could not be started on this host: ${spawnError.message}`);
+    return 87;
+  }
   if (exitCode === 0 && !apk) {
     console.error(`build: Gradle exited 0 but ${apkPath} is missing`);
     return 1;
+  }
+  if (exitCode !== 0 && !gradleStartedInLog(fs.readFileSync(logFile, 'utf8'))) {
+    console.error('build: the Gradle wrapper did not start (no Gradle output in the log); '
+      + 'this is a host problem, reported as NOT-VERIFIED, not a build failure');
+    return 87;
   }
   return exitCode;
 }
