@@ -3,7 +3,8 @@
 // alternatives under their own heading, each with its difference (NAV4, D04).
 // Every card names why it is in the list and carries its access mark (D06).
 // States follow docs/design/screens-and-transitions.md «Discovery result».
-import { el, icon, mountBoard, registerIcons, topbar, walkButton } from './kit.mjs';
+import { el, icon, mountBoard, registerIcons } from './kit.mjs';
+import { discoveryContent, offerCard, openPage, pick, readOffers } from './offers.mjs';
 
 // Lucide shapes this screen alone needs (lucide-react-native, ISC).
 registerIcons({
@@ -42,17 +43,10 @@ const SEASON_GROUP = {
   be: 'Сезон', en: 'Season', uk: 'Сезон', de: 'Jahreszeit', es: 'Temporada', fr: 'Saison', cs: 'Roční období', sv: 'Årstid',
 };
 
-const TYPE_ICON = { guide: 'route', place: 'map-pin', collection: 'layers' };
 const TIME_LIMITS = [60, 120, 240]; // the first-release buttons of 20 §2
 
 // Real titles, annotations and themes come from the published discovery sources.
-const CONTENT = new URL('../../../content/discovery/', import.meta.url);
-async function json(file) {
-  const response = await fetch(new URL(file, CONTENT));
-  if (!response.ok) throw new Error(`${file}: ${response.status}`);
-  return response.json();
-}
-const content = Promise.all([json('discovery.json'), json('route.json')]);
+const content = discoveryContent();
 
 // Mockup fixtures, not content. Recorded audio languages are a fact of the
 // published index, not of the source files.
@@ -83,57 +77,9 @@ const VIEWS = {
 };
 VIEWS.offline = VIEWS.selector;
 
-const pick = (map, locale) => map?.[locale] ?? map?.be ?? '';
-const langOf = (map, locale) => (map?.[locale] ? locale : 'be');
-const codes = (list) => (list.length ? list.join(', ') : '—');
-const sr = (text) => el('span', { className: 'sr', textContent: text });
-
-// The published index carries `access`; the source files do not, so the mockup
-// applies the rule of 21 §3.2: a guide takes its route's access, a place is
-// free, a collection is mixed when any member is paid.
-function readOffers(index, route) {
-  const guidePaid = (ref) => ref.kind === 'guide' && ref.route_id === route.route_id && route.access !== 'free';
-  return index.offers.map((offer) => {
-    const kind = offer.ref.kind;
-    const members = kind === 'collection' ? index.collections.find((entry) => entry.collection_id === offer.ref.collection_id).members : [];
-    return {
-      id: offer.offer_id,
-      kind,
-      text: offer.localized,
-      duration: offer.estimated_duration ?? null,
-      textLocales: Object.keys(offer.localized.title),
-      audioLocales: AUDIO[offer.offer_id] ?? [],
-      access: kind === 'guide' ? route.access : members.some(guidePaid) ? 'mixed' : 'free',
-    };
-  });
-}
 
 function note(kind, iconName, words) {
   return el('span', { className: `offer-note ${kind}` }, icon(iconName, 16), el('span', { textContent: words.join(' · ') }));
-}
-
-function offerCard(offer, { t, locale, reasons = [], differences = [], onOpen }) {
-  const title = el('span', { className: `offer-title${offer.kind === 'guide' ? ' t-display' : ''}` }, sr(`${t(offer.kind)}: `), pick(offer.text.title, locale));
-  title.lang = langOf(offer.text.title, locale);
-  const summary = el('span', { className: 'offer-summary', textContent: pick(offer.text.summary, locale) });
-  summary.lang = langOf(offer.text.summary, locale);
-  const facts = el('span', { className: 'facts' },
-    el('span', { className: 'fact' }, icon(TYPE_ICON[offer.kind], 16)),
-    offer.duration && el('span', { className: 'fact' }, icon('clock', 16), sr(`${t('duration')}: `), `${offer.duration.min_minutes}–${offer.duration.max_minutes} ${t('unit')}`));
-  // A collection has no audio of its own, so it shows no audio languages.
-  const langs = el('span', { className: 'facts' },
-    el('span', { className: 'fact' }, icon('book-open', 16), sr(`${t('text')}: `), codes(offer.textLocales)),
-    offer.kind !== 'collection' && el('span', { className: 'fact' }, icon('headphones', 16), sr(`${t('audio')}: `), codes(offer.audioLocales)));
-  const photo = el('span', { className: 'photo' }, icon('image', 20));
-  photo.setAttribute('aria-hidden', 'true');
-  const card = el('button', { className: 'card offer', type: 'button' },
-    el('span', { className: 'offer-head' }, photo, el('span', { className: 'offer-heading' }, title, facts)),
-    summary,
-    reasons.length > 0 && note('reason', 'check', reasons),
-    differences.length > 0 && note('difference', 'circle-alert', differences),
-    el('span', { className: 'offer-meta' }, langs, el('span', { className: `tag ${offer.access}`, textContent: t(offer.access) })));
-  card.addEventListener('click', () => onOpen(offer));
-  return card;
 }
 
 function chipGroup(iconName, label, chips) {
@@ -158,7 +104,7 @@ await mountBoard({
     const words = { ...Object.fromEntries(Object.entries(S).map(([key, id]) => [key, strings[id]])), collection: COLLECTION[locale] };
     const t = (key) => words[key];
     const view = VIEWS[state.view];
-    const offers = new Map(readOffers(index, route).map((offer) => [offer.id, offer]));
+    const offers = new Map(readOffers(index, route, AUDIO).map((offer) => [offer.id, offer]));
     const titleOf = (offer) => pick(offer.text.title, locale);
     const open = (offer) => say({
       guide: `Адкрываецца прэв'ю гіда «${titleOf(offer)}». Націск не купляе, не пачынае прагулку і не раскрывае платны змест.`,
@@ -167,23 +113,21 @@ await mountBoard({
     }[offer.kind]);
     const card = ([id, reasons = [], differences = []]) => offerCard(offers.get(id), {
       t, locale, onOpen: open,
-      reasons: reasons.map((reason) => strings[REASON + reason]),
-      differences: differences.map((difference) => strings[DIFFERENCE + difference]),
+      // Why the card is in the list, and how an alternative differs from the request.
+      notes: [
+        reasons.length > 0 && note('reason', 'check', reasons.map((reason) => strings[REASON + reason])),
+        differences.length > 0 && note('difference', 'circle-alert', differences.map((difference) => strings[DIFFERENCE + difference])),
+      ].filter(Boolean),
     });
 
-    body.append(topbar({
+    const page = openPage(body, {
       title: t('title'),
       backLabel: t('back'),
-      onBack: () => say('Назад: вяртанне на экран горада. Прагулка і гук не мяняюцца.'),
-      right: state.walk === 'yes' ? [walkButton(t('walk'), () => say(`Вяртанне да бягучай прагулкі («${t('walk')}») у ранейшым становішчы панэлі.`))] : [],
-    }));
-
-    const page = el('div', { className: 'page scroll' });
-    if (state.view === 'offline') {
-      const banner = el('p', { className: 'notice row' }, icon('wifi-off', 18), el('span', { textContent: t('cache') }));
-      banner.setAttribute('role', 'status');
-      page.append(banner);
-    }
+      backText: 'Назад: вяртанне на экран горада. Прагулка і гук не мяняюцца.',
+      walkLabel: state.walk === 'yes' ? t('walk') : null,
+      cacheText: state.view === 'offline' ? t('cache') : null,
+      say,
+    });
 
     // The selector. Chips show the choice of the current board state.
     const chip = (label, pressed) => {

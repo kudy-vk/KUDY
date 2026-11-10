@@ -5,6 +5,7 @@
 // mark and opens nothing of the paid content. States follow
 // docs/design/screens-and-transitions.md «Collection card (падборка)».
 import { el, icon, mountBoard, topbar, walkButton } from './kit.mjs';
+import { codes, discoveryContent, langOf, offerCard, pick, prose, readOffers, remark, sr } from './offers.mjs';
 
 const S = {
   back: 'native.chrome.back', walk: 'native.chrome.walk',
@@ -25,16 +26,9 @@ const CONDITIONS = {
   fr: 'Conditions', cs: 'Podmínky', sv: 'Villkor',
 };
 
-const TYPE_ICON = { guide: 'route', place: 'map-pin' };
 
 // The real collection, its members and their texts come from the published discovery sources.
-const CONTENT = new URL('../../../content/discovery/', import.meta.url);
-async function json(file) {
-  const response = await fetch(new URL(file, CONTENT));
-  if (!response.ok) throw new Error(`${file}: ${response.status}`);
-  return response.json();
-}
-const content = Promise.all([json('discovery.json'), json('route.json')]);
+const content = discoveryContent();
 
 const COLLECTION_ID = 'collection-gdansk-halfday';
 // Mockup fixtures, not content. Recorded audio languages are a fact of the
@@ -53,25 +47,6 @@ const FREE_ONLY = {
   members: ['offer-place-gdansk-highgate', 'offer-place-gdansk-franciscan'],
 };
 
-const pick = (map, locale) => map?.[locale] ?? map?.be ?? '';
-const langOf = (map, locale) => (map?.[locale] ? locale : 'be');
-const codes = (list) => (list.length ? list.join(', ') : '—');
-const sr = (text) => el('span', { className: 'sr', textContent: text });
-
-// The published index carries `access`; the source files do not, so the mockup
-// applies the rule of 21 §3.2: a guide takes its route's access, a place is free.
-function readOffers(index, route) {
-  return index.offers.map((offer) => ({
-    id: offer.offer_id,
-    kind: offer.ref.kind,
-    ref: offer.ref,
-    text: offer.localized,
-    duration: offer.estimated_duration ?? null,
-    textLocales: Object.keys(offer.localized.title),
-    audioLocales: AUDIO[offer.offer_id] ?? [],
-    access: offer.ref.kind === 'guide' && offer.ref.route_id === route.route_id ? route.access : 'free',
-  }));
-}
 
 // What the screen shows in each board state.
 function collectionView(view, index, offers) {
@@ -93,40 +68,6 @@ function collectionView(view, index, offers) {
   };
 }
 
-function prose(className, map, locale) {
-  const node = el('p', { className, textContent: pick(map, locale) });
-  node.lang = langOf(map, locale);
-  return node;
-}
-
-// A remark line: a sign, an optional visible label and the content text.
-function remark(iconName, label, map, locale, kind = '') {
-  const text = el('span', { textContent: pick(map, locale) });
-  text.lang = langOf(map, locale);
-  return el('p', { className: `remark${kind}` }, icon(iconName, 16), el('span', {}, label && el('strong', { textContent: `${label}: ` }), text));
-}
-
-function offerCard(offer, { t, locale, onOpen }) {
-  const title = el('span', { className: `offer-title${offer.kind === 'guide' ? ' t-display' : ''}` }, sr(`${t(offer.kind)}: `), pick(offer.text.title, locale));
-  title.lang = langOf(offer.text.title, locale);
-  const summary = el('span', { className: 'offer-summary', textContent: pick(offer.text.summary, locale) });
-  summary.lang = langOf(offer.text.summary, locale);
-  const facts = el('span', { className: 'facts' },
-    el('span', { className: 'fact' }, icon(TYPE_ICON[offer.kind], 16)),
-    offer.duration && el('span', { className: 'fact' }, icon('clock', 16), sr(`${t('duration')}: `), `${offer.duration.min_minutes}–${offer.duration.max_minutes} ${t('unit')}`));
-  const langs = el('span', { className: 'facts' },
-    el('span', { className: 'fact' }, icon('book-open', 16), sr(`${t('text')}: `), codes(offer.textLocales)),
-    el('span', { className: 'fact' }, icon('headphones', 16), sr(`${t('audio')}: `), codes(offer.audioLocales)));
-  const photo = el('span', { className: 'photo' }, icon('image', 20));
-  photo.setAttribute('aria-hidden', 'true');
-  const card = el('button', { className: 'card offer', type: 'button' },
-    el('span', { className: 'offer-head' }, photo, el('span', { className: 'offer-heading' }, title, facts)),
-    summary,
-    el('span', { className: 'offer-meta' }, langs, el('span', { className: `tag ${offer.access}`, textContent: t(offer.access) })));
-  card.addEventListener('click', () => onOpen(offer));
-  return card;
-}
-
 await mountBoard({
   controls: [
     { id: 'view', label: 'Склад', options: [
@@ -139,7 +80,7 @@ await mountBoard({
     const [index, route] = await content;
     const t = (key) => strings[S[key]];
     const locale = state.locale;
-    const view = collectionView(state.view, index, readOffers(index, route));
+    const view = collectionView(state.view, index, readOffers(index, route, AUDIO));
     // The rule of 21 §3.2: mixed with any paid member, free otherwise.
     const access = view.members.some((member) => member.access !== 'free') ? 'mixed' : 'free';
     const titleOf = (offer) => pick(offer.text.title, locale);

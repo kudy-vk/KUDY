@@ -4,6 +4,7 @@
 // the location notes of app/map.tsx. Nothing here starts audio by itself: a
 // teaser sounds only after its own Play.
 import { el, icon, mountBoard, svg, topbar, walkButton } from './kit.mjs';
+import { discoveryContent, offerCard, pick, readOffers, TYPE_ICON } from './offers.mjs';
 
 const S = {
   title: 'native.nearby.title', back: 'native.chrome.back', walk: 'native.chrome.walk',
@@ -25,16 +26,9 @@ const POSITION = {
   fr: 'Votre position', cs: 'Vaše poloha', sv: 'Din position',
 };
 
-const TYPE_ICON = { guide: 'route', place: 'map-pin' };
 
 // Real titles and annotations come from the published discovery sources.
-const CONTENT = new URL('../../../content/discovery/', import.meta.url);
-async function json(file) {
-  const response = await fetch(new URL(file, CONTENT));
-  if (!response.ok) throw new Error(`${file}: ${response.status}`);
-  return response.json();
-}
-const content = Promise.all([json('discovery.json'), json('route.json')]);
+const content = discoveryContent();
 
 // Mockup fixtures, not content. Recorded audio languages are a fact of the
 // published index, not of the source files.
@@ -64,45 +58,6 @@ const STREETS = [
   ['M68 100L68 70L65 24L64 0', 10], ['M88 100L86 46L84 0', 6], ['M56 71L54 49', 5],
 ];
 
-const pick = (map, locale) => map?.[locale] ?? map?.be ?? '';
-const langOf = (map, locale) => (map?.[locale] ? locale : 'be');
-const codes = (list) => (list.length ? list.join(', ') : '—');
-const sr = (text) => el('span', { className: 'sr', textContent: text });
-
-// The published index carries `access`; the source files do not, so the mockup
-// applies the rule of 21 §3.2: a guide takes its route's access, a place is free.
-function readOffers(index, route) {
-  return index.offers.filter((offer) => offer.ref.kind !== 'collection').map((offer) => ({
-    id: offer.offer_id,
-    kind: offer.ref.kind,
-    text: offer.localized,
-    duration: offer.estimated_duration ?? null,
-    textLocales: Object.keys(offer.localized.title),
-    audioLocales: AUDIO[offer.offer_id] ?? [],
-    access: offer.ref.kind === 'guide' && offer.ref.route_id === route.route_id ? route.access : 'free',
-  }));
-}
-
-function offerCard(offer, { t, locale, onOpen }) {
-  const title = el('span', { className: `offer-title${offer.kind === 'guide' ? ' t-display' : ''}` }, sr(`${t(offer.kind)}: `), pick(offer.text.title, locale));
-  title.lang = langOf(offer.text.title, locale);
-  const summary = el('span', { className: 'offer-summary', textContent: pick(offer.text.summary, locale) });
-  summary.lang = langOf(offer.text.summary, locale);
-  const facts = el('span', { className: 'facts' },
-    el('span', { className: 'fact' }, icon(TYPE_ICON[offer.kind], 16)),
-    offer.duration && el('span', { className: 'fact' }, icon('clock', 16), sr(`${t('duration')}: `), `${offer.duration.min_minutes}–${offer.duration.max_minutes} ${t('unit')}`));
-  const langs = el('span', { className: 'facts' },
-    el('span', { className: 'fact' }, icon('book-open', 16), sr(`${t('text')}: `), codes(offer.textLocales)),
-    el('span', { className: 'fact' }, icon('headphones', 16), sr(`${t('audio')}: `), codes(offer.audioLocales)));
-  const photo = el('span', { className: 'photo' }, icon('image', 20));
-  photo.setAttribute('aria-hidden', 'true');
-  const card = el('button', { className: 'card offer', type: 'button' },
-    el('span', { className: 'offer-head' }, photo, el('span', { className: 'offer-heading' }, title, facts)),
-    summary,
-    el('span', { className: 'offer-meta' }, langs, el('span', { className: `tag ${offer.access}`, textContent: t(offer.access) })));
-  card.addEventListener('click', () => onOpen(offer));
-  return card;
-}
 
 // One teaser. `player` is the single player of the screen: starting one teaser
 // stops the other, and nothing starts without a press on Play.
@@ -186,7 +141,7 @@ await mountBoard({
     const view = state.view;
     // With GPS denied, and while a walk holds the position, the places are browsed by hand.
     const located = view !== 'denied' && view !== 'walk';
-    const offers = view === 'empty' ? [] : readOffers(index, route);
+    const offers = view === 'empty' ? [] : readOffers(index, route, AUDIO).filter((offer) => offer.kind !== 'collection');
     const titleOf = (offer) => pick(offer.text.title, locale);
     const open = (offer) => say(offer.kind === 'guide'
       ? `Адкрываецца прэв'ю гіда «${titleOf(offer)}». Націск не купляе, не пачынае прагулку і не запускае гук.`

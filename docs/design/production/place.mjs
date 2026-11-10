@@ -3,7 +3,8 @@
 // place rating as an explicit action. States follow
 // docs/design/screens-and-transitions.md «Place card»: the card exists only
 // for a published place, uses no GPS and reads the same facts from the cache.
-import { button, el, icon, mountBoard, topbar, walkButton } from './kit.mjs';
+import { button, el, icon, mountBoard } from './kit.mjs';
+import { codes, discoveryContent, langOf, openPage, pick, prose, remark, sr } from './offers.mjs';
 
 const S = {
   place: 'native.nearby.placeLabel', back: 'native.chrome.back', walk: 'native.chrome.walk',
@@ -22,13 +23,8 @@ const CONDITIONS = {
   fr: 'Conditions', cs: 'Podmínky', sv: 'Villkor',
 };
 
-// The real title and texts come from the published discovery sources.
-const CONTENT = new URL('../../../content/discovery/', import.meta.url);
 const OFFER_ID = 'offer-place-gdansk-highgate';
-const content = fetch(new URL('discovery.json', CONTENT)).then((response) => {
-  if (!response.ok) throw new Error(`discovery.json: ${response.status}`);
-  return response.json();
-});
+const content = discoveryContent().then(([index]) => index);
 
 // Mockup fixtures, not content. Recorded audio languages are a fact of the
 // published index; the content has no Moment teasers yet, so this one restates
@@ -36,24 +32,6 @@ const content = fetch(new URL('discovery.json', CONTENT)).then((response) => {
 const AUDIO = ['be'];
 const MOMENT = 'Ад гэтай брамы галоўная вуліца вядзе да Доўгага рынку. Кароткая гісторыя перад першымі крокамі.';
 
-const pick = (map, locale) => map?.[locale] ?? map?.be ?? '';
-const langOf = (map, locale) => (map?.[locale] ? locale : 'be');
-const codes = (list) => (list.length ? list.join(', ') : '—');
-const sr = (text) => el('span', { className: 'sr', textContent: text });
-
-// A paragraph of content text, marked with the language it is written in.
-function prose(className, map, locale) {
-  const node = el('p', { className, textContent: pick(map, locale) });
-  node.lang = langOf(map, locale);
-  return node;
-}
-
-// A remark line: a sign, an optional visible label and the content text.
-function remark(iconName, label, map, locale) {
-  const text = el('span', { textContent: pick(map, locale) });
-  text.lang = langOf(map, locale);
-  return el('p', { className: 'remark' }, icon(iconName, 16), el('span', {}, label && el('strong', { textContent: `${label}: ` }), text));
-}
 
 // The teaser of this place. Nothing sounds until Play is pressed.
 function momentCard({ t, title, say }) {
@@ -96,19 +74,14 @@ await mountBoard({
     const locale = state.locale;
     const title = pick(offer.localized.title, locale);
 
-    body.append(topbar({
+    const page = openPage(body, {
       title: t('place'),
       backLabel: t('back'),
-      onBack: () => say('Назад: вяртанне на экран, з якога адкрылі картку. Прагулка і гук не мяняюцца.'),
-      right: state.walk === 'yes' ? [walkButton(t('walk'), () => say(`Вяртанне да бягучай прагулкі («${t('walk')}») у ранейшым становішчы панэлі.`))] : [],
-    }));
-
-    const page = el('div', { className: 'page scroll' });
-    if (state.view === 'offline') {
-      const banner = el('p', { className: 'notice row' }, icon('wifi-off', 18), el('span', { textContent: t('cache') }));
-      banner.setAttribute('role', 'status');
-      page.append(banner);
-    }
+      backText: 'Назад: вяртанне на экран, з якога адкрылі картку. Прагулка і гук не мяняюцца.',
+      walkLabel: state.walk === 'yes' ? t('walk') : null,
+      cacheText: state.view === 'offline' ? t('cache') : null,
+      say,
+    });
 
     const hero = el('div', { className: 'hero' }, icon('image', 28));
     hero.setAttribute('aria-hidden', 'true');

@@ -244,12 +244,13 @@ export function adZone(loaded = true) {
 // spire, the harbour crane, bastions and a moat in front. It is drawn by this
 // code, is not a copy of any print, and does not claim historical accuracy.
 function seeded(seed) {
-  let a = seed;
+  // xorshift32: a fixed seed gives the same drawing on every load.
+  let state = seed >>> 0 || 1;
   return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    state = (state ^ (state << 13)) >>> 0;
+    state = (state ^ (state >>> 17)) >>> 0;
+    state = (state ^ (state << 5)) >>> 0;
+    return state / 4294967296;
   };
 }
 
