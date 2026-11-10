@@ -1,0 +1,345 @@
+/* Shared base of the production mockups: tokens, the phone frame, the common
+   components and the review board around the phone.
+
+   Light values are the machine block of docs/design/visual-language.md.
+   Dark values are the brick-and-chocolate proposal recorded as decision M3 in
+   docs/design/brand/decisions.md; they replace the green-grey dark set of the
+   canon only after the owner's verdict and a canon sync. */
+
+@font-face {
+  font-family: "Golos Text";
+  font-weight: 400 600;
+  src: url("../brand/outputs/menu-map-city-only/fonts/GolosText.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Alegreya";
+  src: url("../brand/outputs/menu-map-city-only/fonts/Alegreya.ttf") format("truetype");
+}
+
+:root,
+[data-theme="light"] {
+  --paper: #faf7f2;
+  --paper-fill: #faf7f2;
+  --card: #ffffff;
+  --ink: #22262b;
+  --muted: #6b7280;
+  --line: #d8d2c6;
+  --accent: #1d6b4f;
+  --accent-ink: #ffffff;
+  --shelf-accent: #154f3a;
+  --shelf-line: #c9c1b1;
+  --disabled-ink: #6b7280;
+  --disabled-line: #6b7280;
+  --warn: #b3331f;
+  --notice-bg: #fdf1d7;
+  --notice-border: #e6c98c;
+  --error-bg: #fdeaea;
+  --error-border: #e0a2a2;
+  --hint-bg: #f6faff;
+  --hint-border: #bcd2f0;
+  --moment-bg: #fff7ec;
+  --moment-border: #ecd9b0;
+  --badge-paid: #fdf1d7;
+  --badge-free: #e7f2ec;
+  --badge-mixed: #ece7f8;
+  --badge-lock: #eceff1;
+  --engrave: #7a6248;
+}
+[data-theme="dark"] {
+  --paper: #2a1510;
+  /* Warm light from above falling into deep brown: an oil-painting ground. */
+  --paper-fill: radial-gradient(130% 70% at 50% 0%, #4a2519 0%, #2a1510 58%, #1a0d0a 100%);
+  --card: #3a231b;
+  --ink: #f4eadb;
+  --muted: #d6c5b0;
+  --line: #6b4a3d;
+  --accent: #8ad4b0;
+  --accent-ink: #10281d;
+  --shelf-accent: #63b48e;
+  --shelf-line: #1a0d0a;
+  --disabled-ink: #b9a794;
+  --disabled-line: #927a6c;
+  --warn: #f09a80;
+  --notice-bg: #4a3618;
+  --notice-border: #8a733a;
+  --error-bg: #4a211b;
+  --error-border: #9a5046;
+  --hint-bg: #2e2c38;
+  --hint-border: #5a5878;
+  --moment-bg: #45301a;
+  --moment-border: #7a6238;
+  --badge-paid: #57421f;
+  --badge-free: #2f4234;
+  --badge-mixed: #40334e;
+  --badge-lock: #3d3530;
+  --engrave: #c9b59b;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #faf7f2;
+  color: #22262b;
+  font: 400 16px/1.45 "Golos Text", system-ui, sans-serif;
+}
+button, select, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid #1d6b4f; outline-offset: 1px; }
+::selection { background: #e9d9b0; color: #22262b; }
+
+/* ---------- review board (outside the phone; never part of the screen) ---------- */
+
+.board { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+.board h1 { margin: 0 0 4px; font-size: 22px; font-weight: 600; }
+.board .lead { margin: 0 0 16px; color: #6b7280; max-width: 70ch; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; padding: 12px 0; border-block: 1px solid #d8d2c6; }
+.controls label { display: grid; gap: 4px; font-size: 13px; color: #6b7280; }
+.controls select,
+.controls button {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid #d8d2c6;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #22262b;
+  font-size: 14px;
+}
+.controls button { cursor: pointer; }
+.event { min-height: 24px; margin: 12px 0 0; font-size: 14px; color: #6b7280; }
+.phones { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-top: 16px; }
+.phones figure { margin: 0; }
+.phones figcaption { margin-bottom: 8px; font-size: 13px; color: #6b7280; }
+
+/* ---------- phone frame ---------- */
+
+.phone {
+  --fs: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--w);
+  height: var(--h);
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--paper-fill);
+  color: var(--ink);
+  font-size: calc(16px * var(--fs));
+  box-shadow: 0 0 0 1px #c9c1b1, 0 12px 32px rgb(70 50 25 / 12%);
+}
+.phone :focus-visible { outline-color: var(--accent); }
+.phone .status {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--status);
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.phone .status i { width: 18px; height: 9px; border-radius: 3px; background: var(--ink); opacity: .8; }
+.phone .body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.sysnav { flex: none; display: flex; align-items: center; justify-content: center; gap: 56px; height: var(--nav); }
+.sysnav.gesture::before { content: ""; width: 120px; height: 4px; border-radius: 4px; background: var(--ink); opacity: .55; }
+.sysnav.buttons i { width: 14px; height: 14px; border: 2px solid var(--muted); border-radius: 3px; }
+.sysnav.buttons i:nth-child(2) { border-radius: 50%; }
+.sysnav.buttons i:nth-child(1) { border-width: 0 0 2px 2px; rotate: 45deg; border-radius: 0; }
+
+.icon { display: block; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- type ---------- */
+
+.t-display { font-family: Alegreya, serif; line-height: 1.15; text-wrap: balance; }
+.t-strong { font-weight: 600; }
+.t-secondary { font-size: calc(13px * var(--fs)); color: var(--muted); }
+.t-small { font-size: calc(12px * var(--fs)); color: var(--muted); }
+
+/* ---------- top bar: back, title, return to the walk ---------- */
+
+.topbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 0 4px;
+}
+.topbar .title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0 8px;
+  font-size: calc(18px * var(--fs));
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar .title:first-child { padding-left: 12px; }
+.iconbtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+}
+.iconbtn:active,
+.iconbtn[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.iconbtn[aria-disabled="true"] { background: none; color: var(--disabled-ink); cursor: default; }
+.walkbtn { flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer; }
+.walkbtn span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
+
+/* ---------- buttons, chips, cards, notices ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: calc(16px * var(--fs));
+  box-shadow: 0 2px 0 var(--shelf-line);
+  cursor: pointer;
+}
+.btn.primary { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 600; box-shadow: 0 2px 0 var(--shelf-accent); }
+.btn:active { translate: 0 2px; box-shadow: none; }
+.btn[aria-disabled="true"] { border-color: var(--disabled-line); background: transparent; color: var(--disabled-ink); box-shadow: none; cursor: default; translate: none; }
+.btn.block { display: flex; width: 100%; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: calc(14px * var(--fs));
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+
+.card { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.card.hint { border-color: var(--hint-border); background: var(--hint-bg); }
+.card.moment { border-color: var(--moment-border); background: var(--moment-bg); }
+.notice { padding: 12px; border: 1px solid var(--notice-border); border-radius: 10px; background: var(--notice-bg); }
+.notice.error { border-color: var(--error-border); background: var(--error-bg); }
+
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 99px; background: var(--badge-lock); color: var(--ink); font-size: calc(12px * var(--fs)); white-space: nowrap; }
+.tag.free { background: var(--badge-free); }
+.tag.paid { background: var(--badge-paid); }
+.tag.mixed { background: var(--badge-mixed); }
+
+.progress { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); }
+
+.scroll { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+
+/* ---------- ad zone and the engraved panorama ---------- */
+
+/* The reserved place of the integrated ad. The ad SDK draws the creative; the
+   mockup shows only the zone and its label. */
+/* Always the last block of the screen, right above the system navigation (decision M6). */
+.ad-zone { flex: none; position: relative; z-index: 1; padding: 8px 16px; }
+.ad-zone[hidden] { display: none; }
+.ad-slot {
+  position: relative;
+  height: 90px;
+  border: 1px solid var(--line);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--line) 45%, transparent) 10px 11px),
+    var(--card);
+}
+.ad-slot span {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--card);
+  color: var(--muted);
+  font-size: calc(12px * var(--fs));
+}
+
+.panorama { display: block; width: 100%; height: auto; color: var(--engrave); }
+.panorama * { vector-effect: non-scaling-stroke; }
+.panorama .ink { fill: none; stroke: currentColor; stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; }
+.panorama .mass { fill: var(--panorama-ground, var(--paper)); stroke: currentColor; stroke-width: .9; stroke-linejoin: round; }
+.panorama .fine { fill: none; stroke: currentColor; stroke-width: .6; stroke-linecap: round; opacity: .55; }
+[data-theme="dark"] .panorama { --panorama-ground: #1e100c; }
+
+/* ---------- shared across screens: section heading, round action, markers ---------- */
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sec { margin: 16px 0 8px; font-size: calc(13px * var(--fs)); font-weight: 400; color: var(--muted); }
+
+/* The one round action of a screen: download, start a walk, play, pause. */
+.fab {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 2px 0 var(--shelf-accent);
+  cursor: pointer;
+}
+.fab:active { translate: 0 2px; box-shadow: none; }
+.fab[aria-disabled="true"] { background: transparent; color: var(--disabled-ink); box-shadow: inset 0 0 0 1px var(--disabled-line); cursor: default; translate: none; }
+
+/* Route point marker. The state is shown by a sign that needs no language
+   (decision M7): a tick, a speaker, an hourglass, a lock; an open point is a
+   plain dot. Fills are the canon marker colours and stay the same in both
+   themes because the map is always light (DT-4). */
+.marker {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #8a610e;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgb(34 38 43 / 35%);
+}
+.marker.small { width: 24px; height: 24px; }
+.marker.played { background: #1d6b4f; }
+.marker.playing { background: #b3331f; }
+.marker.pending { background: #646c77; }
+.marker.locked { background: #67707a; }
+.marker.available::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ffffff; }
+.marker.small.available::after { width: 6px; height: 6px; }
+
+/* ---------- offer card (offers.mjs) ---------- */
+
+/* Offer card: the list anatomy of the reviewed «Гіды» proposal — a 64×64 photo
+   place, the title, a short annotation, languages and the access tag. */
+.offer { display: block; width: 100%; color: var(--ink); font-size: calc(16px * var(--fs)); text-align: left; cursor: pointer; }
+.offer:active { border-color: var(--accent); }
+.offer-head { display: flex; align-items: center; gap: 12px; }
+.photo { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--muted); }
+.offer-heading { flex: 1; min-width: 0; }
+.offer-title { display: block; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.offer-title.t-display { font-size: calc(20px * var(--fs)); font-weight: 400; line-height: 1.15; }
+.facts { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; color: var(--muted); font-size: calc(13px * var(--fs)); }
+.offer-heading .facts { margin-top: 4px; }
+.fact { display: inline-flex; align-items: center; gap: 4px; }
+.offer-summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; margin-top: 8px; color: var(--muted); overflow-wrap: anywhere; }
+.offer-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 8px; }
+.offer-meta .tag { margin-left: auto; }

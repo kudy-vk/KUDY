@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Побач</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  /* The map stays light in both themes (DT-4): the box carries data-theme="light",
+     so the markers on it take the light tokens. Ground, streets and the position
+     dot are the three fixed map values. */
+  .map { flex: none; position: relative; height: calc(var(--h) * .3); overflow: hidden; }
+  .map .ground { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+  .map path { fill: none; stroke: #dfe7df; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .pin { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; translate: -50% -50%; cursor: pointer; }
+  .pin span {
+    display: grid; place-items: center; width: 34px; height: 34px;
+    border: 2px solid var(--card); border-radius: 50%;
+    background: var(--accent); color: var(--accent-ink);
+    box-shadow: 0 2px 5px color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+  .me {
+    position: absolute; width: 18px; height: 18px; translate: -50% -50%; border-radius: 50%; background: #1f5aa8;
+    box-shadow: 0 0 0 3px var(--card), 0 0 0 15px color-mix(in srgb, #1f5aa8 16%, transparent);
+  }
+
+  /* The list lies over the lower edge of the map as a sheet. */
+  .sheet {
+    position: relative; display: grid; align-content: start; gap: 12px;
+    margin-top: -14px; padding: 16px 16px 24px;
+    border-top: 1px solid var(--line); border-radius: 16px 16px 0 0; background: var(--paper-fill);
+  }
+  .sheet > * { min-width: 0; }
+  .mode { margin: 0; font-size: calc(13px * var(--fs)); font-weight: 600; color: var(--muted); }
+  .notice.row { display: flex; gap: 8px; margin: 0; font-size: calc(14px * var(--fs)); }
+  .notice.row .icon { margin-top: 2px; }
+
+  /* Moment teaser: the warm card with an explicit Play. The same block is in place.html. */
+  .moment-card { display: flex; align-items: flex-start; gap: 12px; }
+  .playbtn { flex: none; width: 48px; min-height: 0; height: 48px; padding: 0; border-radius: 50%; }
+  .moment-body { flex: 1; min-width: 0; }
+  .moment-label { margin: 0; font-size: calc(12px * var(--fs)); color: var(--muted); }
+  .moment-title { margin: 0; font-size: calc(16px * var(--fs)); font-weight: 600; overflow-wrap: anywhere; }
+  .moment-text { margin: 4px 0 0; font-size: calc(14px * var(--fs)); }
+  .moment-live { margin: 6px 0 0; font-size: calc(13px * var(--fs)); font-weight: 600; color: var(--accent); }
+  .textlink {
+    display: inline-flex; align-items: center; gap: 4px; min-height: 48px; margin-bottom: -12px; padding: 0;
+    border: 0; background: none; color: var(--accent); font-size: calc(14px * var(--fs)); font-weight: 600; text-align: left; cursor: pointer;
+  }
+
+  .map-host { flex: none; }
+  /* Layer switches sit on the map: one icon chip per kind of point. */
+  .layers { position: absolute; top: 8px; left: 8px; display: flex; gap: 8px; }
+  .chip.layer { justify-content: center; width: 44px; min-height: 44px; padding: 0; box-shadow: 0 1px 3px rgb(34 38 43 / 25%); }
+  .pin-lock { position: absolute; top: 5px; right: 5px; display: grid; place-items: center; width: 17px; height: 17px; border: 1.5px solid #ffffff; border-radius: 50%; background: #67707a; color: #ffffff; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Побач</h1>
+  <p class="lead">Фінальны макет. Схематычная карта з прапановамі паблізу і спіс пад ёй: тэйзеры з яўным Play, гіды і месцы. Нішто не гучыць само; перамыкачы над тэлефонам да экрана не належаць.</p>
+</main>
+<script type="module" src="nearby.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — гісторыя, загрузкі, ацэнкі</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  /* Content column inside the scrolling area. */
+  .pad { display: flex; flex-direction: column; padding: 0 16px 24px; }
+  .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+  /* Section heading with an optional fact on the right (total size). */
+  .sec {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2px 12px;
+    margin: 20px 0 8px;
+    font-size: calc(13px * var(--fs));
+    color: var(--muted);
+  }
+  .sec h3 { margin: 0; font-size: inherit; font-weight: 600; }
+  .rows { display: grid; gap: 8px; }
+  .empty { margin: 0; font-size: calc(14px * var(--fs)); color: var(--muted); }
+
+  /* The one row that opens Settings. */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    margin-top: 4px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .nav-row > .icon { color: var(--muted); }
+  .nav-row > .icon:last-child { color: var(--accent); }
+  .nav-row span { display: block; }
+
+  /* A session, a download or a rating: a title and a line of small facts. */
+  .row-title { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 400; }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-top: 6px;
+    font-size: calc(13px * var(--fs));
+    color: var(--muted);
+  }
+  .fact { display: inline-flex; align-items: center; gap: 4px; }
+  .split { display: flex; align-items: flex-start; gap: 4px; }
+  .split > .iconbtn { margin: -8px -8px -8px 0; }
+  .iconbtn[aria-disabled="true"] { color: var(--disabled-ink); cursor: default; }
+  .iconbtn[aria-disabled="true"]:active { background: none; }
+  .reason { margin: 6px 0 0; font-size: calc(13px * var(--fs)); color: var(--disabled-ink); }
+
+  /* Stars repeat the visible «N з 5» text, so they are decoration. */
+  .stars { display: inline-flex; gap: 1px; color: var(--muted); }
+  .stars .on { color: var(--accent); fill: currentColor; }
+
+  /* Delivery state of a rating: always a visible sentence, never colour alone. */
+  .delivery { display: flex; align-items: flex-start; gap: 8px; margin: 8px 0 0; font-size: calc(13px * var(--fs)); }
+  /* Centres a 16px icon on the first text line at any text scale. */
+  .delivery .icon { margin-top: calc(9.4px * var(--fs) - 8px); }
+  .delivery.plain { color: var(--muted); }
+  .delivery.notice { padding: 8px 10px; }
+  .delivery.notice .icon { color: var(--warn); }
+
+  .unavailable { display: grid; gap: 12px; justify-items: start; margin-top: 16px; }
+  .unavailable p { margin: 0; display: flex; align-items: flex-start; gap: 8px; }
+  .unavailable p .icon { margin-top: calc(11.6px * var(--fs) - 9px); color: var(--warn); }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>KUDY — гісторыя, загрузкі, ацэнкі</h1>
+  <p class="lead">Фінальны макет паверхні гісторыі. Усё ў рамцы тэлефона — сам экран; перамыкачы над ім да экрана не належаць. Радок пад перамыкачамі кажа, што зрабіў бы націск.</p>
+</main>
+<script type="module" src="my.mjs"></script>
+</body>
+</html>
