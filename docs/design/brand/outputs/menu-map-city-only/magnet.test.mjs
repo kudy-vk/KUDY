@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {findMagnet, joinGroups} from './magnet.mjs';
+import {runPythonTest} from './python-bridge.mjs';
 
 const setup=()=>{
   const left={id:'left',dx:30,dy:20,members:new Set(['one'])};
@@ -25,4 +26,12 @@ test('joining retains the exact source offset and all member identities',()=>{
   assert.deepEqual([...left.members],['one','two']);
   assert.equal(groups.size,1);
   assert.equal(findMagnet(left,actors,[{a:'one',b:'two'}],10),undefined);
+});
+
+test('MAP-03 rejects malformed menu geometry', t => {
+  runPythonTest(t, new URL('../MAP-03/test_geometry.py', import.meta.url), ['cv2', 'numpy']);
+});
+
+test('MAP-02 parse path rejects DTD entity expansion', t => {
+  runPythonTest(t, new URL('../MAP-02/test_parse_guard.py', import.meta.url), ['defusedxml']);
 });
