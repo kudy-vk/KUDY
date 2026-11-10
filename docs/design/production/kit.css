@@ -188,7 +188,9 @@ button, select, input { font: inherit; color: inherit; }
   color: var(--accent);
   cursor: pointer;
 }
-.iconbtn:active { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.iconbtn:active,
+.iconbtn[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.iconbtn[aria-disabled="true"] { background: none; color: var(--disabled-ink); cursor: default; }
 .walkbtn { flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer; }
 .walkbtn span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
 
@@ -249,7 +251,8 @@ button, select, input { font: inherit; color: inherit; }
 
 /* The reserved place of the integrated ad. The ad SDK draws the creative; the
    mockup shows only the zone and its label. */
-.ad-zone { flex: none; position: relative; z-index: 1; padding: 12px 16px 0; }
+/* Always the last block of the screen, right above the system navigation (decision M6). */
+.ad-zone { flex: none; position: relative; z-index: 1; padding: 8px 16px; }
 .ad-zone[hidden] { display: none; }
 .ad-slot {
   position: relative;
@@ -276,3 +279,49 @@ button, select, input { font: inherit; color: inherit; }
 .panorama .mass { fill: var(--panorama-ground, var(--paper)); stroke: currentColor; stroke-width: .9; stroke-linejoin: round; }
 .panorama .fine { fill: none; stroke: currentColor; stroke-width: .6; stroke-linecap: round; opacity: .55; }
 [data-theme="dark"] .panorama { --panorama-ground: #1e100c; }
+
+/* ---------- shared across screens: section heading, round action, markers ---------- */
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sec { margin: 16px 0 8px; font-size: calc(13px * var(--fs)); font-weight: 400; color: var(--muted); }
+
+/* The one round action of a screen: download, start a walk, play, pause. */
+.fab {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 2px 0 var(--shelf-accent);
+  cursor: pointer;
+}
+.fab:active { translate: 0 2px; box-shadow: none; }
+.fab[aria-disabled="true"] { background: transparent; color: var(--disabled-ink); box-shadow: inset 0 0 0 1px var(--disabled-line); cursor: default; translate: none; }
+
+/* Route point marker. The state is shown by a sign that needs no language
+   (decision M7): a tick, a speaker, an hourglass, a lock; an open point is a
+   plain dot. Fills are the canon marker colours and stay the same in both
+   themes because the map is always light (DT-4). */
+.marker {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #8a610e;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgb(34 38 43 / 35%);
+}
+.marker.small { width: 24px; height: 24px; }
+.marker.played { background: #1d6b4f; }
+.marker.playing { background: #b3331f; }
+.marker.pending { background: #646c77; }
+.marker.locked { background: #67707a; }
+.marker.available::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ffffff; }
+.marker.small.available::after { width: 6px; height: 6px; }

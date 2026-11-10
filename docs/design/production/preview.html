@@ -8,53 +8,59 @@
 <style>
   .pv-scroll { padding: 0 16px 16px; }
   .pv-title { margin: 4px 0 8px; font-size: calc(28px * var(--fs)); font-weight: 400; overflow-wrap: anywhere; }
-  .pv-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 12px; }
   .pv-summary { margin: 0 0 12px; }
-
-  /* Facts and languages: an icon beside each line; the line itself stays text. */
+  .pv-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
+  .pv-row > .icon { color: var(--muted); }
   .pv-facts { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 12px; padding: 0; list-style: none; }
-  .pv-facts li, .pv-lang { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .pv-lang { flex-wrap: wrap; margin: 0 0 8px; }
-  .pv-facts .icon, .pv-lang .icon, .pv-stops .icon { color: var(--muted); }
+  .pv-facts li { display: flex; align-items: center; gap: 8px; }
+  .pv-facts .icon { color: var(--muted); }
+  .pv-more { min-height: 28px; padding: 2px 10px; border: 1px solid var(--line); border-radius: 99px; background: none; color: var(--accent); font-size: calc(12px * var(--fs)); cursor: pointer; }
 
-  .pv-h { margin: 16px 0 8px; font-size: calc(16px * var(--fs)); font-weight: 600; }
+  /* Route map: a light schematic in both themes (DT-4); it opens to full size. */
+  .pv-map { position: relative; height: 150px; margin: 0 0 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: #eef3ee; }
+  .pv-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pv-map .street { fill: none; stroke: #dfe7df; stroke-width: 7; stroke-linecap: round; }
+  .pv-map .route { fill: none; stroke: #67707a; stroke-width: 2; stroke-dasharray: 1 5; stroke-linecap: round; }
+  .pv-map .street, .pv-map .route { vector-effect: non-scaling-stroke; }
+  .pv-map .marker { position: absolute; translate: -50% -50%; }
+  .pv-map .pv-zoom { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; background: #ffffff; color: #1d6b4f; box-shadow: 0 1px 3px rgb(34 38 43 / 30%); }
+  .pv-full { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; background: var(--paper-fill); }
+  .pv-full .pv-map { flex: 1; height: auto; margin: 0; border: 0; border-radius: 0; }
+
+  .pv-list { padding: 0; }
   .pv-stops { margin: 0; padding: 0 12px; list-style: none; }
-  .pv-stops li { display: flex; gap: 12px; padding: 12px 0; }
+  .pv-stops li { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
   .pv-stops li + li { border-top: 1px solid var(--line); }
-  .pv-stops li > .icon { margin-top: 2px; }
   .pv-stops p { margin: 0; overflow-wrap: anywhere; }
-  .pv-stops p.pv-announce { margin-top: 4px; }
-  .pv-stops .tag { margin-top: 8px; }
+  .pv-all { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; border: 0; border-top: 1px solid var(--line); background: none; color: var(--accent); cursor: pointer; }
 
   .pv-notice { margin: 4px 0 12px; }
   .pv-notice p { margin: 0; }
   .pv-notice p + p { margin-top: 4px; }
   .pv-notice .t-strong { display: flex; align-items: flex-start; gap: 8px; }
-  .pv-notice .t-strong .icon { margin-top: .2em; }
   .pv-notice .btn { margin-top: 12px; }
 
   /* The purchase offer is a separate, quiet card: buying is its own action. */
-  .pv-offer { margin-top: 16px; }
+  .pv-offer { margin: 4px 0 12px; }
   .pv-offer h3 { margin: 0; font-size: inherit; }
   .pv-offer p { margin: 8px 0 12px; color: var(--muted); }
   .pv-quiet { display: block; width: 100%; min-height: 48px; margin-top: 4px; border: 0; background: none; color: var(--muted); cursor: pointer; }
 
-  /* The one main button stays in reach under the scrolling description;
-     the reason for an unavailable button is written right under it. */
-  .pv-foot { flex: none; padding: 12px 16px; border-top: 1px solid var(--line); }
-  .pv-foot p { margin: 8px 0 0; }
+  /* The one main action stays in reach under the scrolling description; what
+     it is waiting for, or why it is unavailable, is written beside it. */
+  .pv-foot { flex: none; display: flex; align-items: center; gap: 12px; min-height: 80px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  .pv-foot .pv-why { flex: 1; min-width: 0; }
+  .pv-foot p { margin: 0; }
   .pv-progress { margin-top: 8px; }
   .pv-progress i { width: 40%; border-radius: 99px; animation: pv-run 1.2s ease-in-out infinite alternate; }
   @keyframes pv-run { from { translate: 0; } to { translate: 150%; } }
   @media (prefers-reduced-motion: reduce) { .pv-progress i { animation: none; } }
-
-  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>
 </head>
 <body>
 <main class="board">
   <h1>Прэв'ю гіда</h1>
-  <p class="lead">Апісанне гіда з адной галоўнай кнопкай: спачатку «Загрузіць», пасля загрузкі і праверкі — «Пачаць». Усё ў рамцы тэлефона — сам экран; перамыкачы над ім да экрана не належаць.</p>
+  <p class="lead">Апісанне гіда з картай маршруту, выбарам мовы тэксту і аўдыё і адной галоўнай кнопкай-іконкай: спачатку загрузка, пасля загрузкі і праверкі — пачатак прагулкі. Усё ў рамцы тэлефона — сам экран; перамыкачы над ім да экрана не належаць.</p>
 </main>
 <script type="module" src="preview.mjs"></script>
 </body>

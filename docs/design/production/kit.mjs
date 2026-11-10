@@ -211,6 +211,25 @@ export function button(label, { kind = 'plain', iconName, disabled = false, bloc
   return node;
 }
 
+// The one round action of a screen. Icon only; `label` is its accessible name.
+export function fab(iconName, label, { disabled = false, onPress } = {}) {
+  const node = el('button', { className: 'fab', type: 'button' }, icon(iconName, 26));
+  node.setAttribute('aria-label', label);
+  if (disabled) node.setAttribute('aria-disabled', 'true');
+  if (onPress) node.addEventListener('click', () => { if (!disabled) onPress(); });
+  return node;
+}
+
+// The sign of a route point state, the same wherever a state is shown: on the
+// map, in a card, in a list. An open point has no sign, only the plain dot.
+export const STATE_ICON = { played: 'check', playing: 'volume-2', pending: 'hourglass', locked: 'lock', available: null };
+
+export function marker(state, { small = false } = {}) {
+  const node = el('span', { className: `marker ${state}${small ? ' small' : ''}` });
+  if (STATE_ICON[state]) node.append(icon(STATE_ICON[state], small ? 13 : 17));
+  return node;
+}
+
 // The reserved ad place. `loaded: false` removes the zone, as the app does when no ad arrives.
 export function adZone(loaded = true) {
   const zone = el('div', { className: 'ad-zone' }, el('div', { className: 'ad-slot' }, el('span', { textContent: 'Рэклама' })));

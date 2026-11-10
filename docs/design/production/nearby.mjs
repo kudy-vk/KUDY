@@ -154,7 +154,8 @@ function cityMap({ label, pins, position }) {
     map.append(me);
   }
   for (const pin of pins) {
-    const button = el('button', { className: 'pin', type: 'button' }, el('span', {}, icon(pin.icon, 18)));
+    const button = el('button', { className: 'pin', type: 'button' }, el('span', {}, icon(pin.icon, 18)),
+      pin.locked ? el('i', { className: 'pin-lock' }, icon('lock', 10)) : null);
     button.setAttribute('aria-label', pin.label);
     button.style.left = `${pin.at[0]}%`;
     button.style.top = `${pin.at[1]}%`;
@@ -198,32 +199,60 @@ await mountBoard({
       right: view === 'walk' ? [walkButton(t('walk'), () => say(`Вяртанне да бягучай прагулкі («${t('walk')}») у ранейшым становішчы панэлі.`))] : [],
     }));
 
-    body.append(cityMap({
-      label: t('title'),
-      position: located ? POSITION[locale] : null,
-      pins: offers.map((offer) => ({
-        icon: TYPE_ICON[offer.kind],
-        label: `${t(offer.kind)}: ${titleOf(offer)}`,
-        at: SPOT[offer.id],
-        onPress: () => open(offer),
-      })),
-    }));
-
+    // One map for everything that has a place in the city. Layers are switched
+    // by icon chips on the map: where my guides start, and places. A new kind
+    // of point (cafes, viewpoints) becomes one more chip here, not a new screen.
+    const layers = { guide: true, place: true };
+    const mapHost = el('div', { className: 'map-host' });
     const sheet = el('div', { className: 'sheet scroll' });
-    if (view === 'offline') sheet.append(notice('wifi-off', t('cache')));
-    if (view === 'denied') sheet.append(notice('locate-fixed', t('denied')));
-    if (view === 'walk') sheet.append(notice('footprints', t('held')));
-    sheet.append(el('h3', { className: 'mode', textContent: t(located ? 'near' : 'review') }));
-    if (offers.length === 0) {
-      sheet.append(notice('info', t('empty')));
-    } else {
-      const player = { current: null, cards: [] };
-      for (const moment of MOMENTS) {
+    const player = { current: null, cards: [] };
+    const draw = () => {
+      const shown = offers.filter((offer) => layers[offer.kind]);
+      const map = cityMap({
+        label: t('title'),
+        position: located ? POSITION[locale] : null,
+        pins: shown.map((offer) => ({
+          icon: TYPE_ICON[offer.kind],
+          // A guide pin stands where the route starts and says whether the guide is paid.
+          locked: offer.kind === 'guide' && offer.access === 'paid',
+          label: [`${t(offer.kind)}: ${titleOf(offer)}`, S[offer.access] ? t(offer.access) : ''].filter(Boolean).join(', '),
+          at: SPOT[offer.id],
+          onPress: () => open(offer),
+        })),
+      });
+      const chips = el('div', { className: 'layers' }, ...Object.keys(layers).map((kind) => {
+        const chip = el('button', { className: 'chip layer', type: 'button' }, icon(TYPE_ICON[kind], 18));
+        chip.setAttribute('aria-label', t(kind));
+        chip.setAttribute('aria-pressed', String(layers[kind]));
+        chip.addEventListener('click', () => {
+          layers[kind] = !layers[kind];
+          draw();
+          say(`Слой «${t(kind)}» ${layers[kind] ? 'паказаны' : 'схаваны'} на карце і ў спісе.`);
+        });
+        return chip;
+      }));
+      chips.setAttribute('role', 'group');
+      map.append(chips);
+      mapHost.replaceChildren(map);
+
+      sheet.replaceChildren();
+      if (view === 'offline') sheet.append(notice('wifi-off', t('cache')));
+      if (view === 'denied') sheet.append(notice('locate-fixed', t('denied')));
+      if (view === 'walk') sheet.append(notice('footprints', t('held')));
+      sheet.append(el('h3', { className: 'sec', textContent: t(located ? 'near' : 'review') }));
+      if (shown.length === 0) {
+        sheet.append(notice('info', t('empty')));
+        return;
+      }
+      player.cards.length = 0;
+      // Teasers belong to places, so they follow the places layer.
+      for (const moment of layers.place ? MOMENTS : []) {
         const offer = offers.find((entry) => entry.id === moment.offer);
         sheet.append(momentCard(moment, { t, title: offer ? titleOf(offer) : moment.place, say, player }));
       }
-      for (const offer of offers) sheet.append(offerCard(offer, { t, locale, onOpen: open }));
-    }
-    body.append(sheet);
+      for (const offer of shown) sheet.append(offerCard(offer, { t, locale, onOpen: open }));
+    };
+    draw();
+    body.append(mapHost, sheet);
   },
 });

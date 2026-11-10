@@ -21,7 +21,8 @@ const IDS = {
 // Illustrative content: a made-up guide and made-up stories, the same as on the
 // Run mockup. It is not real route content and stays Belarusian in every language.
 const GUIDE = 'Шпацыр па старым горадзе';
-const HEARD = ['Ратуша', 'Плошча', 'Набярэжная'];
+// How many stories were heard; the screen shows the count, never the list of names.
+const HEARD = 3;
 // The unit of the list is a story, not a stop: an extra story of a heard stop
 // is its own row; locked stories never appear here (11 §3.1).
 const OPEN = [{ name: 'Брама', layer: 'base' }, { name: 'Плошча', layer: 'extended' }];
@@ -30,7 +31,7 @@ const RATED = 4;
 
 await mountBoard({
   controls: [
-    { id: 'more', label: 'Яшчэ можна адкрыць', options: [['yes', 'Ёсць гісторыі'], ['no', 'Усё праслухана']] },
+    { id: 'more', label: 'Яшчэ можна адкрыць', options: [['yes', 'Ёсць гісторыі'], ['many', 'Шмат гісторый (20)'], ['no', 'Усё праслухана']] },
     { id: 'rating', label: 'Ацэнка', options: [['invite', 'Запрашэнне ацаніць'], ['none', 'Без запрашэння'], ['pending', 'Ацэнка чакае сеткі']] },
   ],
   stringIds: Object.values(IDS),
@@ -42,17 +43,24 @@ await mountBoard({
       onBack: () => say('Back вяртае туды, адкуль адкрылі прагулку. Прагулка ўжо завершана і не аднаўляецца.'),
     });
 
+    const open = state.more === 'no' ? [] : state.more === 'many'
+      ? Array.from({ length: 20 }, (_, index) => ({ name: `Тэставая гісторыя ${index + 1}`, layer: index % 3 ? 'base' : 'extended' }))
+      : OPEN;
+    const share = el('div', { className: 'progress end-share' }, el('i'));
+    share.firstChild.style.width = `${Math.round((HEARD / (HEARD + open.length)) * 100)}%`;
+    share.setAttribute('aria-hidden', 'true');
     const badge = el('span', { className: 'end-badge' }, icon('check', 24));
     badge.setAttribute('aria-hidden', 'true');
     const hero = el('div', { className: 'end-hero' }, badge,
       el('h3', { className: 't-display', textContent: GUIDE }),
-      el('span', { className: 'tag free' }, icon('headphones', 16), t('heard').replace('${count}', HEARD.length)),
-      el('p', { className: 't-secondary', textContent: HEARD.join(' · ') }));
+      el('span', { className: 'tag free' }, icon('headphones', 16), t('heard').replace('${count}', HEARD)),
+      // A bar instead of a list of names: it reads the same for three stories and for thirty.
+      share);
     const scroll = el('div', { className: 'end-scroll scroll' }, hero);
 
-    if (state.more === 'yes') {
+    if (open.length) {
       const list = el('ul', { className: 'end-list' });
-      for (const story of OPEN) {
+      for (const story of open) {
         const layer = t(story.layer);
         const row = el('button', { className: 'card end-row', type: 'button' }, icon('book-open', 20),
           el('span', {}, el('span', { className: 't-display', textContent: story.name }), el('span', { className: 't-small', textContent: layer })),
@@ -61,7 +69,7 @@ await mountBoard({
         row.addEventListener('click', () => say(`Адкрываецца картка гісторыі «${story.name}» з поўным тэкстам. Прагулка застаецца завершанай.`));
         list.append(el('li', {}, row));
       }
-      scroll.append(el('h3', { className: 'end-section', textContent: t('more') }), list);
+      scroll.append(el('h3', { className: 'sec', textContent: `${t('more')} · ${open.length}` }), list);
     }
 
     if (state.rating === 'invite') {

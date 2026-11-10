@@ -30,8 +30,6 @@ const T = {
   system: ['Як у прылады', 'Same as device', 'Як у пристрої', 'Wie am Gerät', 'Como el dispositivo', 'Comme l’appareil', 'Podle zařízení', 'Som enheten'],
   light: ['Светлая', 'Light', 'Світла', 'Hell', 'Clara', 'Clair', 'Světlý', 'Ljust'],
   dark: ['Цёмная', 'Dark', 'Темна', 'Dunkel', 'Oscura', 'Sombre', 'Tmavý', 'Mörkt'],
-  nowLight: ['Зараз: светлая', 'Now: light', 'Зараз: світла', 'Jetzt: hell', 'Ahora: clara', 'Actuellement : clair', 'Nyní: světlý', 'Nu: ljust'],
-  nowDark: ['Зараз: цёмная', 'Now: dark', 'Зараз: темна', 'Jetzt: dunkel', 'Ahora: oscura', 'Actuellement : sombre', 'Nyní: tmavý', 'Nu: mörkt'],
   guidesForMe: ['Гіды для мяне', 'Guides for me', 'Гіди для мене', 'Guides für mich', 'Guías para mí', 'Guides pour moi', 'Průvodci pro mě', 'Guider för mig'],
   showAll: ['Паказваць усё', 'Show everything', 'Показувати все', 'Alles anzeigen', 'Mostrar todo', 'Tout afficher', 'Zobrazovat vše', 'Visa allt'],
   hiddenCount: ['Схавана груп: ${n}', 'Hidden groups: ${n}', 'Приховано груп: ${n}', 'Ausgeblendete Gruppen: ${n}', 'Grupos ocultos: ${n}', 'Groupes masqués : ${n}', 'Skryté skupiny: ${n}', 'Dolda grupper: ${n}'],
@@ -174,8 +172,8 @@ await mountBoard({
           onPress: () => say('Адкрываецца тлумачэнне: мова гісторый выбіраецца для гіда асобна. Бягучую прагулку гэта не пераключае.'),
         })),
         heading(t('look')),
-        el('div', { className: 'card theme' }, segments,
-          prefs.theme === 'system' && el('p', { className: 't-small', textContent: t(theme === 'dark' ? 'nowDark' : 'nowLight') })),
+        // The control alone: the screen itself shows which theme is on, and nothing shifts when the choice changes.
+        el('div', { className: 'card theme' }, segments),
         // 3. «Гіды для мяне»: the summary; the exclusions live on their own screen.
         el('div', { className: 'card group gap' }, row('sliders-horizontal', t('guidesForMe'), {
           note: guidesStatus, trailing: icon('chevron-right', 20), key: 'guides',

@@ -437,8 +437,9 @@ await mountBoard({
     const stage = svg('svg', { role: 'group', 'aria-label': HEADING[state.locale] });
     body.append(
       el('div', { className: 'menu-top' }, head, title, el('div', { className: 'menu-canvas' }, stage)),
-      adZone(state.ad === 'loaded'),
-      el('div', { className: 'menu-rest' }, panorama()));
+      // Free space with the panorama; the ad is the last thing on every screen that has one.
+      el('div', { className: 'menu-rest' }, panorama()),
+      adZone(state.ad === 'loaded'));
     const map = new MenuMap(stage, { strings, say });
     return () => map.destroy();
   },

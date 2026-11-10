@@ -4,7 +4,7 @@
 // swipes change only the open card, one button in the bottom row controls the
 // sound, the ad sits under the control row. Both phones on the board share one
 // state, so a tap in one theme is mirrored in the other.
-import { adZone, button, el, icon, iconButton, mountBoard, registerIcons, svg, topbar } from './kit.mjs';
+import { adZone, button, el, icon, iconButton, marker as stateMark, mountBoard, registerIcons, svg, topbar } from './kit.mjs';
 
 // Lucide shapes this screen alone needs (lucide-react-native 1.49.0, ISC).
 registerIcons({
@@ -16,13 +16,13 @@ registerIcons({
 });
 
 // Marker fills are the canon's own values, the same in both themes.
-const FILL = { played: '#1d6b4f', playing: '#b3331f', available: '#8a610e', pending: '#646c77', locked: '#67707a' };
+const STATUSES = ['played', 'playing', 'available', 'pending', 'locked'];
 const RUN = (key) => `native.run.${key}`;
 const STRING_IDS = [
   ...['attribution', 'autoplaySuspendedTitle', 'close', 'deniedGps', 'endConfirmAccept', 'endConfirmCancel', 'endConfirmTitle',
     'endWalk', 'lockedHint', 'manualPlayHint', 'markerHint', 'nothingPlaying', 'nowPlayingLabel', 'pauseAudio', 'pauseWalk',
     'pausedTitle', 'playAudio', 'points', 'recenter', 'resume', 'transcript'].map(RUN),
-  ...Object.keys(FILL).map((status) => RUN(`status.${status}`)),
+  ...STATUSES.map((status) => RUN(`status.${status}`)),
   'native.chrome.back', 'native.place.paused', 'web.ui.prevStop', 'web.ui.nextStop',
 ];
 
@@ -93,11 +93,10 @@ function swipe(node, { left, right, up, down }) {
   node.addEventListener('click', (event) => { if (swiped) { swiped = false; event.stopPropagation(); } }, true);
 }
 
-// The marker circle: state fill and the white first letter of the state word.
+// The marker circle: the state fill and the state sign shared by every screen
+// (a tick, a speaker, an hourglass, a lock; an open point is a plain dot).
 function dot(c, status, small = false) {
-  const node = el('i', { className: `run-dot${small ? ' small' : ''}`, textContent: c.w(`status.${status}`).charAt(0).toLocaleUpperCase(c.locale) });
-  node.dataset.theme = 'light';
-  node.style.background = FILL[status];
+  const node = stateMark(status, { small });
   node.setAttribute('aria-hidden', 'true');
   return node;
 }
@@ -204,8 +203,8 @@ function cardBody(c, stop) {
       tile.addEventListener('click', () => c.set({ over: 'photo', photo: index }));
       photos.append(tile);
     }
-    body.append(el('p', { textContent: stop.short }),
-      keyed(button(c.w('transcript'), { iconName: 'file-text', onPress: () => c.set({ panel: 'full' }) }), 'read'), photos);
+    // The way to the full text is the transcript button of the card row above.
+    body.append(el('p', { textContent: stop.short }), photos);
   } else {
     // The transcript belongs to the open card, not to the story that plays (11 §3.2).
     const size = keyed(iconButton(s.large ? 'a-arrow-down' : 'a-arrow-up', c.n(s.large ? 'smaller' : 'bigger'), () => c.set({ large: !s.large })), 'size');
@@ -271,14 +270,21 @@ function sheet(c, stop) {
   title.setAttribute('aria-label', `${stop.name}, ${word}`);
   title.setAttribute('aria-expanded', String(s.panel !== 'peek'));
   title.addEventListener('click', up);
-  // Peek: a way straight to the full text. Half and Full: one position down.
-  const corner = s.panel !== 'peek' ? iconButton('chevron-down', c.w('close'), c.lower)
-    : stop.locked || s.uncached === stop.id ? null : iconButton('file-text', c.w('transcript'), () => c.set({ panel: 'full', list: false }));
+  // The same four controls sit in the same places on every card and in every
+  // panel position: previous, title, next, transcript. The transcript button
+  // opens the full text and, from the full text, returns to the description.
+  // On a card that has no text to read it stays in place, switched off.
+  const noText = stop.locked || s.uncached === stop.id;
+  const read = iconButton('file-text', c.w('transcript'), () => { if (!noText) c.set({ panel: s.panel === 'full' ? 'half' : 'full', list: false }); });
+  read.setAttribute('aria-pressed', String(s.panel === 'full'));
+  if (noText) read.setAttribute('aria-disabled', 'true');
   const card = el('div', { className: 'run-card' }, keyed(iconButton('chevron-left', c.strings['web.ui.prevStop'], () => move(-1)), 'prev'),
-    title, keyed(iconButton('chevron-right', c.strings['web.ui.nextStop'], () => move(1)), 'next'), corner && keyed(corner, 'corner'));
+    title, keyed(iconButton('chevron-right', c.strings['web.ui.nextStop'], () => move(1)), 'next'), keyed(read, 'corner'));
   swipe(card, { left: () => move(1), right: () => move(-1), up, down: c.lower });
-  const grip = el('div', { className: 'run-grip' });
-  grip.setAttribute('aria-hidden', 'true');
+  // The handle lowers the panel one position; in Peek it raises it (the title does the same for a screen reader).
+  const grip = el('button', { className: 'run-grip', type: 'button' });
+  if (s.panel === 'peek') { grip.setAttribute('aria-hidden', 'true'); grip.tabIndex = -1; } else grip.setAttribute('aria-label', c.w('close'));
+  grip.addEventListener('click', () => (s.panel === 'peek' ? up() : c.lower()));
   const node = el('div', { className: 'run-sheet' }, grip, card, s.panel !== 'peek' && cardBody(c, stop));
   if (s.playing && !s.walkPaused) {
     // The line belongs to the story that plays, whatever card is open.

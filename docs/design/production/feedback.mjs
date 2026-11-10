@@ -3,7 +3,17 @@
 // of reasons per target kind (at most three), the disclosure next to Send, and
 // an honest delivery state. Rules: docs/design/screens-and-transitions.md
 // «Feedback form (temporary surface)», docs/design/visual-language.md §8.
-import { button, el, icon, iconButton, mountBoard } from './kit.mjs';
+import { button, el, fab, icon, iconButton, mountBoard, registerIcons } from './kit.mjs';
+
+// Lucide «send» (lucide-react-native 1.49.0, ISC): the one action of this form.
+registerIcons({
+  send: [
+    ['path', { d: 'M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z' }],
+    ['path', { d: 'm21.854 2.147-10.94 10.939' }],
+  ],
+});
+// A written review is short on purpose: less text, less chance of personal data.
+const REVIEW_MAX = 500;
 
 const FB = (key) => `native.feedback.${key}`;
 // The closed reason lists of controllers/useFeedbackController.ts.
@@ -21,9 +31,11 @@ const STRING_IDS = [
 
 // New strings of this screen. The app has no records for them yet; these are
 // proposals that need a native-speaker review before they enter the contract.
-// «Прапусціць» is the word docs/11_run_interaction.md §16.7 already uses.
+// The written review itself is new too: today the form sends only stars and
+// closed reasons, so the field needs a contract and privacy decision first.
 const NEW = {
-  skip: { be: 'Прапусціць', en: 'Skip', uk: 'Пропустити', de: 'Überspringen', es: 'Omitir', fr: 'Passer', cs: 'Přeskočit', sv: 'Hoppa över' },
+  review: { be: 'Водгук (неабавязкова)', en: 'Review (optional)', uk: 'Відгук (необов’язково)', de: 'Rückmeldung (optional)', es: 'Opinión (opcional)', fr: 'Avis (facultatif)', cs: 'Recenze (nepovinné)', sv: 'Omdöme (valfritt)' },
+  noPersonal: { be: 'Не пішы асабістых даных', en: 'Do not write personal data', uk: 'Не пиши особистих даних', de: 'Bitte keine persönlichen Daten', es: 'No escribas datos personales', fr: 'N’écris pas de données personnelles', cs: 'Nepiš osobní údaje', sv: 'Skriv inga personuppgifter' },
   choose: { be: 'Каб адправіць, выберы ацэнку', en: 'Choose a rating to send', uk: 'Щоб надіслати, вибери оцінку', de: 'Wähle zum Senden eine Bewertung', es: 'Para enviar, elige una valoración', fr: 'Pour envoyer, choisis une note', cs: 'Pro odeslání vyber hodnocení', sv: 'Välj ett betyg för att skicka' },
 };
 
@@ -47,10 +59,22 @@ await mountBoard({
     const busy = state.status === 'sending', conflict = state.status === 'conflict';
     const leave = 'Форма закрываецца і вяртае на экран, з якога яе адкрылі. Нічога не запісана і нічога не заблакавана.';
 
-    const top = el('div', { className: 'topbar' }, iconButton('arrow-left', strings['native.chrome.back'], () => say(leave)));
+    // Who sees a rating is a hint behind the «i» in the corner, not a block in the form.
+    const hint = el('div', { className: 'card fb-hint', hidden: true },
+      el('p', { className: 't-strong', textContent: t('disclosureTitle') }),
+      el('p', { className: 't-secondary', textContent: t('disclosureBody') }),
+      el('p', { className: 't-secondary', textContent: t('disclosureAnalytics') }));
+    const info = iconButton('info', t('disclosureTitle'), () => {
+      hint.hidden = !hint.hidden;
+      info.setAttribute('aria-expanded', String(!hint.hidden));
+    });
+    info.setAttribute('aria-expanded', 'false');
+    // Back leaves the form without saving, so it is also the way to skip it.
+    const top = el('div', { className: 'topbar' }, iconButton('arrow-left', strings['native.chrome.back'], () => say(leave)), el('div', { className: 'title' }), info);
+    let review = '';
     const scroll = el('div', { className: 'fb-scroll scroll' });
     const foot = el('div', { className: 'fb-foot' });
-    body.append(top, scroll, foot);
+    body.append(top, hint, scroll, foot);
 
     function render() {
       const held = body.contains(document.activeElement) ? document.activeElement.dataset.k : null;
@@ -99,8 +123,14 @@ await mountBoard({
         chips.append(chip);
       }
 
-      const note = el('div', { className: 'card fb-note' }, el('p', { className: 't-strong', textContent: t('disclosureTitle') }),
-        el('p', { className: 't-secondary', textContent: t('disclosureBody') }), el('p', { className: 't-secondary', textContent: t('disclosureAnalytics') }));
+      // A short free-text review with a reminder not to put personal data in it.
+      const field = keyed(el('textarea', { className: 'fb-review', rows: 3, maxLength: REVIEW_MAX, value: review, disabled: busy }), 'review');
+      field.setAttribute('aria-label', NEW.review[state.locale]);
+      field.placeholder = NEW.review[state.locale];
+      const counter = el('span', { textContent: `${review.length} / ${REVIEW_MAX}` });
+      field.addEventListener('input', () => { review = field.value; counter.textContent = `${review.length} / ${REVIEW_MAX}`; });
+      const note = el('div', { className: 'fb-write' }, field,
+        el('p', { className: 't-small fb-write-note' }, el('span', { textContent: NEW.noPersonal[state.locale] }), counter));
 
       scroll.replaceChildren(...[header, notice, el('div', {}, stars, ends),
         el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips), note,
@@ -111,9 +141,11 @@ await mountBoard({
       // the reason is always written next to it.
       const reason = form.score === null ? NEW.choose[state.locale] : conflict ? t('errorText.feedback-resolution-required') : null;
       const off = busy || reason !== null;
-      const send = keyed(button(busy ? strings['native.chrome.loading'] : t('send'), { kind: 'primary', disabled: off, onPress: () => say('Ацэнка захоўваецца на прыладзе і адпраўляецца. Форма закрываецца і вяртае на экран, з якога яе адкрылі.') }), 'send');
-      foot.replaceChildren(...[reason && el('p', { className: 'fb-reason' }, icon('info', 16), el('span', { textContent: reason })),
-        el('div', { className: 'fb-actions' }, keyed(button(NEW.skip[state.locale], { onPress: () => say(leave) }), 'skip'), send)].filter(Boolean));
+      const send = keyed(fab('send', t('send'), { disabled: off, onPress: () => say('Ацэнка захоўваецца на прыладзе і адпраўляецца. Форма закрываецца і вяртае на экран, з якога яе адкрылі.') }), 'send');
+      // The footer is the same on every screen with one action: what the action
+      // waits for on the left, the round action on the right.
+      const why = el('p', { className: 'fb-reason', textContent: busy ? strings['native.chrome.loading'] : reason ?? '' });
+      foot.replaceChildren(why, send);
 
       if (held) body.querySelector(`[data-k="${held}"]`)?.focus();
     }

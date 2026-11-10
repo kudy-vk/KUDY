@@ -32,6 +32,17 @@ python -m http.server 4400 --bind 127.0.0.1
 | [Сінтэз патрабаванняў 17.10](brand/2026-10-17-requirements-synthesis.md) | Зводка патрабаванняў да дызайну | Часткова: D1–D4 |
 | [Канцэпцыя налад](settings/2026-10-17-settings-concept.md) | Блокі экрана налад | Часткова: S1–S3 |
 
+## Раздзелы галоўнага меню
+
+Якую задачу вырашае кожны раздзел. Канчатковая раскладка меню і месца для «Пра горад» яшчэ адкрытыя.
+
+- **Гіды** — выбар аўдыяпрагулкі: маршрут, працягласць, кропка старту і запуск.
+- **Побач** — што цікавага вакол мяне зараз: мапа бліжэйшых знаходак, кароткія гісторыі і падказкі, на што паглядзець на месцы.
+- **Чым заняцца** — асобны раздзел, які напаўняецца кантэнтам. На першым экране прапануюцца гатовыя аўтарскія планы пад сітуацыю, а час, тэма і сезон дапамагаюць удакладніць выбар. Першы прыклад ужо ёсць — «Гданьск за паўдня»: аўдыяпрагулка і прыпынак у манастыры, 65–100 хвілін з пераходам. «Гадзіна да цягніка» і «Што рабіць у дождж» — ідэі для напаўнення. «Падборка» адкрывае падрабязнасці канкрэтнага плана ўнутры гэтага раздзела.
+- **Пра горад** — практычны даведнік у асобным раздзеле з каруселлю: «Аэрапорт», «Транспарт і білеты», «Дзе што ў горадзе», «Побач з горадам». У апісанне ўваходзяць Мальбарк, аплата і карысныя праграмы, бясплатныя дні музеяў і пацверджаныя перавагі турыстычнай карты. Асноўная даведка задумана даступнай без сеткі, а актуальныя расклады і квіткі адкрываюцца ў афіцыйных сэрвісах. Збор і праверка матэрыялаў — [#200](https://github.com/kudy-vk/KUDY/issues/200), дызайн і напаўненне экрана — [#202](https://github.com/kudy-vk/KUDY/issues/202).
+
+Прапанова агента, якая чакае вердыкту: усё, што мае месца ў горадзе, паказваецца на адной мапе ў «Побач» са слаямі, а не на асобных мапах у кожным раздзеле. Слаі пераключаюцца значкамі на мапе: пачаткі маіх маршрутаў з пазнакай платнага, месцы; новы від кропак (кавярні, аглядныя пляцоўкі) дадаецца яшчэ адным значком. Іншыя раздзелы адкрываюць гэтую ж мапу з патрэбным слоем.
+
 ## 2. Экраны
 
 | Экран | У дадатку | Апошні макет | Статус макета | Адкрыта |
@@ -46,9 +57,10 @@ python -m http.server 4400 --bind 127.0.0.1
 | KUDY (гісторыя прагулак) | [app/(tabs)/my.tsx](../../app/%28tabs%29/my.tsx) | [Фінальны макет](production/my.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры L, Q | Прапанова | Уваход з меню: частка `kudy` неактыўная |
 | Налады | Маршруту няма ([#51](https://github.com/kudy-vk/KUDY/issues/51)) | [Фінальны макет](production/settings.html), [Макет налад](settings/settings-sheet.html) | Часткова: іерархія блокаў (S1) | Тэксты радкоў, выгляд |
 | Побач | [app/map.tsx](../../app/map.tsx) | [Фінальны макет](production/nearby.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр P | Прапанова | — |
-| Чым заняцца | [app/discovery.tsx](../../app/discovery.tsx) | [Фінальны макет](production/discovery.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр B | Прапанова | — |
+| Чым заняцца | [app/discovery.tsx](../../app/discovery.tsx) | [Фінальны макет](production/discovery.html), [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр B | Прапанова | Гатовыя аўтарскія планы на першым экране — кірунак напаўнення |
 | Месца | [app/place/[id].tsx](../../app/place/%5Bid%5D.tsx) | [Фінальны макет](production/place.html) | Прапанова | — |
-| Падборка | [app/collection/[id].tsx](../../app/collection/%5Bid%5D.tsx) | [Фінальны макет](production/collection.html) | Прапанова | — |
+| Падборка | [app/collection/[id].tsx](../../app/collection/%5Bid%5D.tsx) | [Фінальны макет](production/collection.html) | Прапанова | Гэта падрабязнасці канкрэтнага плана ўнутры «Чым заняцца», не асобны раздзел |
+| Пра горад | Экрана няма | Няма макета | Запланаваны: дызайн і ўкараненне пачнуцца пасля мержу каталога ў main ([#201](https://github.com/kudy-vk/KUDY/issues/201)) і гатоўнасці матэрыялаў | Матэрыялы [#200](https://github.com/kudy-vk/KUDY/issues/200), дызайн [#202](https://github.com/kudy-vk/KUDY/issues/202) |
 | Explore | [app/(tabs)/explore.tsx](../../app/%28tabs%29/explore.tsx) | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадр A | Гісторыя як уваход: заменены меню ([#42](https://github.com/kudy-vk/KUDY/issues/42), п. 1) | Роля экрана пасля меню |
 | Вэб-версія | `web/` | [G25.07](brand/outputs/G25.07/contact-sheet.html), кадры W–Z | Адкладзена ўладальнікам ([#96](https://github.com/kudy-vk/KUDY/issues/96)) | Увесь выгляд |
 
@@ -59,12 +71,12 @@ python -m http.server 4400 --bind 127.0.0.1
 | Іконкі інтэрфейсу | У кодзе адзін набор Lucide праз [canon-icon.tsx](../../components/canon-icon.tsx); [інвентар G25.04](../agent-tasks/results/G25.04.md) | Часткова: «пераважна іконкі без бачных подпісаў», стыль выбіраецца па кожным элеменце ([#39](https://github.com/kudy-vk/KUDY/issues/39)) | [#98](https://github.com/kudy-vk/KUDY/issues/98), [#99](https://github.com/kudy-vk/KUDY/issues/99), [#100](https://github.com/kudy-vk/KUDY/issues/100) |
 | Шапка: «Назад» і вяртанне да прагулкі | [back-button.tsx](../../components/back-button.tsx), [walk-button.tsx](../../components/walk-button.tsx) | Часткова: прынцып прыняты ([#42](https://github.com/kudy-vk/KUDY/issues/42), п. 6–7) | Выгляд і месца ([#99](https://github.com/kudy-vk/KUDY/issues/99)) |
 | Карткі, кнопкі, чыпы | Канон §5; [узоры G25.06](brand/outputs/G25.06/contact-sheet.html) | Часткова: K1–K3 | Паіменны прагляд ([#41](https://github.com/kudy-vk/KUDY/issues/41)) |
-| Маркеры мапы | Канон §5; [markers.svg](brand/outputs/G25.06/markers.svg) | Прынята: каляровыя кружкі з тэкставымі станамі ([#39](https://github.com/kudy-vk/KUDY/issues/39), п. 4) | — |
+| Маркеры мапы | Канон §5; [markers.svg](brand/outputs/G25.06/markers.svg); знакі станаў у [фінальным макеце Run](production/run.html) | Прынята: каляровыя кружкі з тэкставымі станамі ([#39](https://github.com/kudy-vk/KUDY/issues/39), п. 4); знак стану замест літары — M7 | Сінхранізацыя канона §5 з M7 |
 | Кампас | [Макет G25.04](brand/outputs/G25.04/kudy-compass-mock.svg) | Прынята: кампаса няма ў першым рэлізе ([#39](https://github.com/kudy-vk/KUDY/issues/39), п. 1) | — |
-| Рэкламны банер | [Даследаванне ADS-01](../agent-tasks/results/ADS-01.md), [дошка](brand/outputs/ADS-01/specimen.html) | Часткова: месца ў меню — M1; рэклама ў дадатку не ўключаная | Інтэграцыя ([#101](https://github.com/kudy-vk/KUDY/issues/101)); банер у Run і ў «Гідах» |
+| Рэкламны банер | [Даследаванне ADS-01](../agent-tasks/results/ADS-01.md), [дошка](brand/outputs/ADS-01/specimen.html) | Часткова: банер заўсёды ўнізе экрана — M6; рэклама ў дадатку не ўключаная | Інтэграцыя ([#101](https://github.com/kudy-vk/KUDY/issues/101)); на якіх экранах, акрамя галоўнага, «Гідаў» і Run, ёсць банер |
 | Колеры гліны і бурштыну | [Дошка G25.01](brand/outputs/G25.01/board.html) | Прапанова (B04.1–B04.3) | [#36](https://github.com/kudy-vk/KUDY/issues/36) |
 | Назвы раздзелаў | [Наборы назваў](brand/outputs/G25.02/naming-sets.html), [гласарый](brand/outputs/G25.02/glossary.md) | Часткова: «Мае знаходкі» (B06.1) | [#37](https://github.com/kudy-vk/KUDY/issues/37) |
-| Дракон | [Позы G25.03](brand/outputs/G25.03/contact-sheet.html) | Часткова: роля (B02.1, D4) | Позы і падабенства да фігуркі ([#38](https://github.com/kudy-vk/KUDY/issues/38), [#47](https://github.com/kudy-vk/KUDY/issues/47)) |
+| Дракон | Прыняты дракон — іконка «медны дракон з абрамленнем» (`assets/kudy-icon/`) і вектарны цмок застаўкі, разабраны на лапы, галаву, вочы і рот (`assets/kudy-splash/dragon-paths.json`); [позы G25.03](brand/outputs/G25.03/contact-sheet.html) — толькі прапановы | Часткова: іконка (2026-10-26), застаўка (2026-10-28), роля (B02.1, D4) | Ці застаецца дракон у дадатку ([#204](https://github.com/kudy-vk/KUDY/issues/204)); калі так — дракон па экранах ([#205](https://github.com/kudy-vk/KUDY/issues/205)), калі не — новы лагатып і застаўка ([#206](https://github.com/kudy-vk/KUDY/issues/206)) |
 | Памятныя прадметы | [Узоры G25.05](brand/outputs/G25.05/contact-sheet.html) | Прапанова | [#40](https://github.com/kudy-vk/KUDY/issues/40) |
 | Іконка дадатку | `assets/kudy-icon/`; канон §3 | Прынята (2026-10-26, I1) | — |
 | Узоры для праверкі выгляду | [baselines](../design-qa/baselines/README.md): картка гіда і Explore | Знятыя, уладальнікам не ўхваленыя | [#87](https://github.com/kudy-vk/KUDY/issues/87) |
