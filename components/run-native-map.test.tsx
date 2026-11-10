@@ -3,6 +3,7 @@ import { expect, jest, test } from '@jest/globals';
 import { Text } from 'react-native';
 
 import { RunNativeMap } from './run-native-map';
+import { PointStatusSign } from './point-status-sign';
 
 const { cameraCalls } = require('../test/maplibre-react-native-mock') as {
   cameraCalls: Array<{ center: [number, number]; zoom: number; duration: number }>;
@@ -23,7 +24,6 @@ const props = {
   retryLabel: 'Паўтарыць',
   markerHint: 'Прагляд кропкі. Аўдыё не запускаецца.',
   statusWords: { available: 'даступна' },
-  statusColors: { available: '#123456' },
   poiWords: {},
 };
 
@@ -99,4 +99,21 @@ test('missing geometry keeps every session marker on the schematic', () => {
   />);
   expect(screen.queryByTestId('run-native-map')).toBeNull();
   expect(screen.getByTestId('map-fallback')).toBeTruthy();
+});
+
+test.each(['available', 'played', 'playing', 'pending', 'locked'] as const)('native marker and point list share the %s sign and keep status labels', (status) => {
+  const statusWords = { [status]: `state: ${status}` };
+  render(<RunNativeMap {...props} statusWords={statusWords}
+    view={{ ...props.view, markers: [{ ...props.view.markers[0], status }] }} onMapPosition={() => () => {}} />);
+  act(() => fireEvent(screen.getByTestId('run-native-map'), 'onDidFinishLoadingMap'));
+  fireEvent.press(screen.getByTestId('run-map-points'));
+  for (const id of ['run-marker-sign-stop-1', 'run-point-sign-stop-1']) {
+    const sign = screen.UNSAFE_getAllByType(PointStatusSign).find((node) => node.props.testID === id);
+    expect(sign?.props.status).toBe(status);
+    expect(sign?.props.label).toBe(statusWords[status]);
+  }
+  for (const id of ['run-marker-stop-1', 'run-point-stop-1']) {
+    expect(screen.getByTestId(id).props.accessibilityLabel).toBe(`Мытня, state: ${status}`);
+  }
+  expect(screen.getByTestId('run-status-stop-1').props.children).toBe(`Мытня — state: ${status}`);
 });
