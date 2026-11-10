@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Каталог дызайну KUDY</title>
+<style>
+  @font-face {
+    font-family: "Golos Text";
+    font-weight: 400;
+    src: url("brand/outputs/G25.01/fonts/GolosText_400Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Golos Text";
+    font-weight: 600;
+    src: url("brand/outputs/G25.01/fonts/GolosText_600SemiBold.ttf") format("truetype");
+  }
+  :root {
+    /* Light values of the canon tokens (visual-language.md, machine block). */
+    --paper: #faf7f2;
+    --card: #ffffff;
+    --ink: #22262b;
+    --muted: #6b7280;
+    --accent: #1d6b4f;
+    --accent-ink: #ffffff;
+    --line: #c9c1b1;
+    --partial: #8a5a00;
+    --proposal: #2f5d8a;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 16px/1.45 "Golos Text", system-ui, sans-serif;
+  }
+  button, a { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--card);
+  }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    background: var(--card);
+    cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  main { display: grid; grid-template-columns: 320px 1fr; min-height: 0; }
+  nav { overflow: auto; padding: 8px 8px 24px; border-right: 1px solid var(--line); }
+  nav h2 { margin: 16px 8px 4px; font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .item {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    gap: 2px 8px;
+    align-items: baseline;
+    width: 100%;
+    padding: 8px;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+  }
+  .item:hover { background: #f0ebe1; }
+  .item[aria-current="true"] { background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+  .item .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+  .item .sub { grid-column: 2; font-size: 13px; color: var(--muted); }
+  .item.empty .name { color: var(--muted); }
+  .accepted .dot, .badge.accepted { background: var(--accent); }
+  .partial .dot, .badge.partial { background: var(--partial); }
+  .proposal .dot, .badge.proposal { background: var(--proposal); }
+
+  section.detail { display: grid; grid-template-rows: auto 1fr; min-width: 0; min-height: 0; }
+  .meta { padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--card); }
+  .meta h2 { display: inline; margin: 0 8px 0 0; font-size: 20px; font-weight: 600; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 99px; background: var(--muted); color: #fff; font-size: 13px; vertical-align: 3px; }
+  .meta p { margin: 6px 0 0; }
+  .meta .note { font-size: 14px; color: var(--muted); }
+  .meta .note b { font-weight: 600; color: var(--ink); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tab {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--card);
+    cursor: pointer;
+  }
+  .tab[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .row a { padding: 6px 4px; color: var(--accent); }
+  .stage { min-height: 0; overflow: auto; background: var(--paper); }
+  .stage iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+  .stage img { display: block; max-width: 100%; margin: 16px auto; cursor: zoom-in; }
+  .stage img.actual { max-width: none; cursor: zoom-out; }
+  .stage .blank { padding: 48px 16px; text-align: center; color: var(--muted); }
+  .stage code { padding: 2px 6px; border-radius: 6px; background: #f0ebe1; }
+
+  @media (max-width: 820px) {
+    main { grid-template-columns: 1fr; grid-template-rows: 38vh 1fr; }
+    nav { border-right: 0; border-bottom: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Каталог дызайну KUDY</h1>
+  <div class="filters" id="filters" role="group" aria-label="Паказваць па статусе"></div>
+</header>
+<main>
+  <nav id="list" aria-label="Экраны і матэрыялы"></nav>
+  <section class="detail" aria-live="polite">
+    <div class="meta" id="meta"></div>
+    <div class="stage" id="stage">
+      <div class="blank" id="boot">Чытаю каталог…</div>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { parseCatalog } from './catalog-data.mjs';
+
+const FILTERS = [
+  ['all', 'Усе'],
+  ['accepted', 'Прынята'],
+  ['partial', 'Часткова'],
+  ['proposal', 'Прапанова'],
+  ['other', 'Астатняе'],
+];
+const KIND_LABEL = { accepted: 'Прынята', partial: 'Часткова', proposal: 'Прапанова', other: '' };
+const IMAGE = /\.(png|jpe?g|gif|webp|svg)$/i;
+
+const list = document.getElementById('list');
+const meta = document.getElementById('meta');
+const stage = document.getElementById('stage');
+const filters = document.getElementById('filters');
+
+const el = (tag, props = {}, ...children) => {
+  const node = Object.assign(document.createElement(tag), props);
+  node.append(...children);
+  return node;
+};
+
+let sections = [];
+let filter = 'all';
+let current = null;
+let viewIndex = 0;
+
+const keyOf = (section, item) => `${section.title}/${item.title}`;
+const all = () => sections.flatMap((section) => section.items.map((item) => ({ section, item })));
+
+function renderFilters() {
+  filters.replaceChildren(
+    ...FILTERS.map(([kind, label]) => {
+      const count = kind === 'all' ? all().length : all().filter(({ item }) => item.kind === kind).length;
+      const chip = el('button', { className: 'chip', type: 'button', textContent: `${label} · ${count}` });
+      chip.setAttribute('aria-pressed', String(filter === kind));
+      chip.addEventListener('click', () => { filter = kind; renderFilters(); renderList(); });
+      return chip;
+    }),
+  );
+}
+
+function renderList() {
+  list.replaceChildren();
+  for (const section of sections) {
+    const items = section.items.filter((item) => filter === 'all' || item.kind === filter);
+    if (items.length === 0) continue;
+    list.append(el('h2', { textContent: section.title }));
+    for (const item of items) {
+      const hasView = item.views.length > 0;
+      const button = el(
+        'button',
+        { className: `item ${item.kind}${hasView ? '' : ' empty'}`, type: 'button' },
+        el('span', { className: 'dot' }),
+        el('span', { className: 'name', textContent: item.title }),
+        el('span', {
+          className: 'sub',
+          textContent: hasView ? item.status || '—' : [item.status, 'няма макета для прагляду'].filter((part) => part && part !== '—').join(' · '),
+        }),
+      );
+      if (current && keyOf(current.section, current.item) === keyOf(section, item)) button.setAttribute('aria-current', 'true');
+      button.addEventListener('click', () => select(section, item));
+      list.append(button);
+    }
+  }
+}
+
+function showView() {
+  const view = current.item.views[viewIndex];
+  if (!view) {
+    stage.replaceChildren(el('div', { className: 'blank', textContent: 'Для гэтага радка няма макета, які можна адкрыць.' }));
+    return;
+  }
+  if (IMAGE.test(view.href.split('#')[0])) {
+    const image = el('img', { src: view.href, alt: `${current.item.title}: ${view.label}` });
+    image.addEventListener('click', () => image.classList.toggle('actual'));
+    stage.replaceChildren(image);
+  } else {
+    stage.replaceChildren(el('iframe', { src: view.href, title: `${current.item.title}: ${view.label}` }));
+  }
+}
+
+function renderMeta() {
+  const { item } = current;
+  const head = el('div', {}, el('h2', { textContent: item.title }));
+  if (KIND_LABEL[item.kind]) head.append(el('span', { className: `badge ${item.kind}`, textContent: KIND_LABEL[item.kind] }));
+  meta.replaceChildren(head);
+  if (item.status) meta.append(el('p', { textContent: item.status }));
+  for (const note of item.notes) {
+    meta.append(el('p', { className: 'note' }, el('b', { textContent: `${note.name}: ` }), note.text));
+  }
+  const row = el('div', { className: 'row' });
+  item.views.forEach((view, index) => {
+    const tab = el('button', { className: 'tab', type: 'button', textContent: view.label });
+    tab.setAttribute('aria-pressed', String(index === viewIndex));
+    tab.addEventListener('click', () => { viewIndex = index; renderMeta(); showView(); });
+    row.append(tab);
+  });
+  const view = item.views[viewIndex];
+  if (view) row.append(el('a', { href: view.href, target: '_blank', rel: 'noopener', textContent: 'Адкрыць асобна ↗' }));
+  for (const link of item.links) {
+    row.append(el('a', { href: link.href, target: '_blank', rel: 'noopener noreferrer', textContent: link.label }));
+  }
+  if (row.children.length > 0) meta.append(row);
+}
+
+function select(section, item) {
+  current = { section, item };
+  viewIndex = 0;
+  history.replaceState(null, '', `#${encodeURIComponent(keyOf(section, item))}`);
+  renderList();
+  renderMeta();
+  showView();
+}
+
+try {
+  const response = await fetch('catalog.md');
+  if (!response.ok) throw new Error(`catalog.md: ${response.status}`);
+  sections = parseCatalog(await response.text());
+  const wanted = decodeURIComponent(location.hash.slice(1));
+  const start = all().find(({ section, item }) => keyOf(section, item) === wanted)
+    ?? all().find(({ item }) => item.views.length > 0);
+  renderFilters();
+  if (start) select(start.section, start.item);
+  else stage.replaceChildren(el('div', { className: 'blank', textContent: 'У каталогу няма макетаў для прагляду.' }));
+} catch (error) {
+  stage.replaceChildren(
+    el(
+      'div',
+      { className: 'blank' },
+      'Не ўдалося прачытаць catalog.md. Запусці з кораня рэпазіторыя ',
+      el('code', { textContent: 'python -m http.server 4400 --bind 127.0.0.1' }),
+      ' і адкрый ',
+      el('code', { textContent: 'http://127.0.0.1:4400/docs/design/catalog.html' }),
+      `. (${error.message})`,
+    ),
+  );
+}
+</script>
+</body>
+</html>
