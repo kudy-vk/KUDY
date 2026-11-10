@@ -16,14 +16,17 @@ import { tokens } from "./design-tokens";
 import { useThemeTokens } from "./theme";
 
 // The structural shape of a Lucide glyph; typed locally so the barrel never
-// appears in an import of this file.
-export type CanonGlyph = ComponentType<{ color?: string; size?: number }>;
+// appears in an import of this file. `fill` passes through for the glyphs a
+// caller renders filled (the feedback stars) — every existing usage that
+// leaves it out keeps the lucide outline default.
+export type CanonGlyph = ComponentType<{ color?: string; size?: number; fill?: string }>;
 
 export function CanonIcon({
   glyph: Glyph,
   label,
   color,
   size = tokens.fontBaseSize,
+  fill,
   style,
   testID,
 }: {
@@ -33,6 +36,7 @@ export function CanonIcon({
   label: string;
   color?: string;
   size?: number;
+  fill?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }) {
@@ -42,7 +46,7 @@ export function CanonIcon({
   }
   return (
     <View accessible={true} accessibilityLabel={label} pointerEvents="none" style={style} testID={testID}>
-      <Glyph color={color ?? palette.colorInk} size={size} />
+      <Glyph color={color ?? palette.colorInk} size={size} fill={fill ?? "none"} />
     </View>
   );
 }

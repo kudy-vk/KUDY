@@ -9,17 +9,22 @@
 // re-renders the words and keeps the bound target facts, and a stale
 // persisted locale renders the be fallback words. The exit guard (issue
 // #599): the real Back press pops the route and the unmount cleanup leaves
-// the form closed in the controller's singleton store.
+// the form closed in the controller's singleton store. The issue #102
+// guards: the rating is five star controls only — no visible digit buttons,
+// the localized «N з 5» accessible name per star, and the 1…N filled range
+// that moves on reselection.
 import { afterEach, describe, expect, jest, test } from "@jest/globals";
 import { fireEvent, renderRouter, screen, testRouter } from "expo-router/testing-library";
-import { act } from "@testing-library/react-native";
+import { act, within } from "@testing-library/react-native";
 import { View } from "react-native";
+import { Svg } from "react-native-svg";
 
 import FeedbackForm from "./feedback";
 import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import { feedbackStrings } from "../controllers/useFeedbackController";
 import type { UiLocalePersistence, UiLocaleSwitchCode } from "../controllers/uiLocaleStore";
+import { tokens } from "../components/design-tokens";
 import { createFeedbackSync } from "../services/feedbackSync";
 import { okPut, openIdentifiedStore, scriptedTransport, secretBox } from "../tests/feedback/queue-fixture";
 
@@ -64,10 +69,15 @@ describe("G16.03: the rating form route (issue #74)", () => {
     expect(screen.getByText(strings.formTitleGuide)).toBeTruthy();
     // The facts line names the bound target, not a catalog fact.
     expect(screen.getByTestId("feedback-target-line").props.children).toBe(strings.targetLine("be", "1"));
-    // No star is preselected: every chip renders its unselected state and
-    // the Send stays disabled until one is chosen.
+    // No star is preselected: every control renders its unselected outline
+    // state with the localized «N з 5» accessible name, and the old visible
+    // digit buttons are gone — the rating is the five stars only (issue #102).
     for (const value of [1, 2, 3, 4, 5]) {
-      expect(screen.getByTestId(`feedback-star-${value}`).props.accessibilityState.selected).toBe(false);
+      const star = screen.getByTestId(`feedback-star-${value}`);
+      expect(star.props.accessibilityState.selected).toBe(false);
+      expect(star.props.accessibilityLabel).toBe(strings.starLabel(value));
+      expect(within(star).UNSAFE_getByType(Svg).props.fill).toBe("none");
+      expect(screen.queryByText(strings.starLabel(value))).toBeNull();
     }
     expect(screen.getByTestId("btn-feedback-send").props.accessibilityState.disabled).toBe(true);
     // The versioned purpose disclosure rides the form.
@@ -86,6 +96,35 @@ describe("G16.03: the rating form route (issue #74)", () => {
     fireEvent.press(screen.getByTestId("btn-feedback-send"));
     expect(await screen.findByTestId("feedback-delivery")).toBeTruthy();
     expect(screen.getByTestId("feedback-delivery").props.children).toBe(strings.stateSent);
+  });
+
+  test("selecting a value fills stars 1…N; the choice stays re-selectable (issue #102)", async () => {
+    const { services } = feedbackServices();
+    renderRouter(withRoutes(services), {
+      initialUrl: "/feedback?kind=guide&id=guide-route-a1&version=1&locale=be",
+    });
+    await screen.findByTestId("feedback-title");
+    fireEvent.press(screen.getByTestId("feedback-star-4"));
+    // Each star is its own «N з 5» button: the chosen one is announced
+    // selected while the filled accent range marks 1…4 as a shape, not a
+    // color-only signal.
+    expect(screen.getByTestId("feedback-star-4").props.accessibilityState.selected).toBe(true);
+    for (const value of [1, 2, 3]) {
+      expect(screen.getByTestId(`feedback-star-${value}`).props.accessibilityState.selected).toBe(false);
+    }
+    for (const value of [1, 2, 3, 4]) {
+      expect(within(screen.getByTestId(`feedback-star-${value}`)).UNSAFE_getByType(Svg).props.fill).toBe(tokens.colorAccent);
+    }
+    expect(within(screen.getByTestId("feedback-star-5")).UNSAFE_getByType(Svg).props.fill).toBe("none");
+    // The reselection moves the range: picking 2 leaves 1–2 filled and the
+    // 4-star state gone.
+    fireEvent.press(screen.getByTestId("feedback-star-2"));
+    expect(screen.getByTestId("feedback-star-2").props.accessibilityState.selected).toBe(true);
+    expect(screen.getByTestId("feedback-star-4").props.accessibilityState.selected).toBe(false);
+    for (const value of [3, 4, 5]) {
+      expect(within(screen.getByTestId(`feedback-star-${value}`)).UNSAFE_getByType(Svg).props.fill).toBe("none");
+    }
+    expect(within(screen.getByTestId("feedback-star-1")).UNSAFE_getByType(Svg).props.fill).toBe(tokens.colorAccent);
   });
 
   test("the offline round keeps the honest pending word (saved on the device is not sent)", async () => {
