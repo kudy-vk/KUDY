@@ -186,7 +186,14 @@ export default function AboutCity() {
   const scrollRef = useRef<ScrollView>(null);
   const [sectionY, setSectionY] = useState<Partial<Record<AboutCitySectionId, number>>>({});
   const sectionLayout = (id: AboutCitySectionId): ((event: LayoutChangeEvent) => void) =>
-    (event) => setSectionY((prev) => ({ ...prev, [id]: event.nativeEvent.layout.y }));
+    (event) => {
+      // The y is read synchronously: the Fabric event object is freed after
+      // dispatch, and a state updater that touches it later crashes with
+      // "Cannot read property 'layout' of null" on device (render error
+      // caught by the first Android capture; jest events never pooled).
+      const y = event.nativeEvent.layout.y;
+      setSectionY((prev) => ({ ...prev, [id]: y }));
+    };
   const openEntry = (id: AboutCitySectionId) => {
     const y = sectionY[id];
     if (y !== undefined) scrollRef.current?.scrollTo({ animated: true, y });
