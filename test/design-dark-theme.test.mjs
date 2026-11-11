@@ -170,6 +170,18 @@ test('tier-2 dark cartography candidates hold the thresholds', () => {
   }
 });
 
+test('the recorded Tier-2 marker-letter range matches its unchanged candidate palette', () => {
+  const section = specText.split('### 5.4 ')[1]?.split('### 5.5 ')[0];
+  const range = section?.match(/([0-9.]+)–([0-9.]+):1; маркеры/);
+  assert.ok(range, 'the Tier-2 letter contrast range must be recorded');
+  const tier2 = zone.tier2Proposal;
+  const ratios = canon.contrastPairs
+    .filter(({ fg, bg }) => fg === canon.darkTheme.lightMarkerLetterToken && bg.startsWith('color.marker.'))
+    .map(({ bg }) => contrast(tier2.markerLetter, tier2[bg]));
+  assert.equal(range[1], Math.min(...ratios).toFixed(2));
+  assert.equal(range[2], Math.max(...ratios).toFixed(2));
+});
+
 test('behavior fixes the three choices and records the confirmed system default', () => {
   const behavior = spec.themeBehavior;
   assert.deepEqual(behavior.choices, ['system', 'light', 'dark']);

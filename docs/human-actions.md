@@ -1,3 +1,5 @@
+Табе зрабіць: для [PR #245](https://github.com/kudy-vk/KUDY/pull/245) правер і аднаві AVD `D:\KUDY-Android\avd\kudy-ci.avd` пасля kernel_panic ext4 з захаваннем патрэбных даных; затым паўтары Android E2E і атрымай натыўныя здымкі цёмнай тэмы да і пасля. PR пакінь чарнавіком да прыёмкі.
+
 - Табе зрабіць: пасля зліцця [PR #229](https://github.com/kudy-vk/KUDY/pull/229) перазапусці `npm run e2e:android:local` на Windows-хосце (D:\KUDY-Android) на змержаным main і пераканайся, што зборка даходзіць да выводу Gradle, а пры хост-праблеме ранер дае `Android E2E: NOT-VERIFIED`, а не `failed (build)`. [#211](https://github.com/kudy-vk/KUDY/issues/211).
 Табе зрабіць: дай вердыкт уладальніка на запісы ў каноне і базавыя здымкі для новых станаў зорніка з [PR #235](https://github.com/kudy-vk/KUDY/pull/235) (станы Fab, AdContainer, SectionHeader і фота-карткі гіда) у патоку DQ-03/DQ-04; [рэпарт design-QA](https://github.com/kudy-vk/KUDY/blob/main/docs/design-qa/reports/2026-11-11-kit-components.md) пакідае іх NOT-VERIFIED.
 
