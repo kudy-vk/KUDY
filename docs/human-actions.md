@@ -1,3 +1,5 @@
+Табе зрабіць: дай вердыкт уладальніка на запісы ў каноне і базавыя здымкі для новых станаў зорніка з [PR #235](https://github.com/kudy-vk/KUDY/pull/235) (станы Fab, AdContainer, SectionHeader і фота-карткі гіда) у патоку DQ-03/DQ-04; [рэпарт design-QA](https://github.com/kudy-vk/KUDY/blob/main/docs/design-qa/reports/2026-11-11-kit-components.md) пакідае іх NOT-VERIFIED.
+
 Табе зрабіць: для [PR #228](https://github.com/kudy-vk/KUDY/pull/228) правер, што лакальны Android E2E не працуе, выдалі састарэлы файл `D:\KUDY-Android\runner.lock` і запусці `npm run e2e:android:local`; да закрыцця [#213](https://github.com/kudy-vk/KUDY/issues/213) патрэбныя здымкі карты ў светлай і цёмнай тэмах.
 
 - Табе зрабіць: прайдзіся па фінальных макетах экранаў у галерэі `docs/design/catalog.html` і дай вердыкт па кожным; вырашы ў [#204](https://github.com/kudy-vk/KUDY/issues/204), ці застаецца дракон; пастаў пазнакі на заданні інтэграцыі макетаў. [PR #210](https://github.com/kudy-vk/KUDY/pull/210).
