@@ -1,7 +1,7 @@
 // #236 — dangling issue citations out of the tracked sources. Kit components,
 // the design canon, the architecture map, results docs, the design-QA spec and
 // the G25 contact sheets cited issues 430 and 339, which do not exist in
-// kudy-vk/KUDY (404; the original cards live in the archived vokhandcrafts/KUDY
+// kudy-vk/KUDY (404; the original cards live in the superseded vokhandcrafts/KUDY
 // repo — both closed — and the decisions they recorded stay reachable in-repo
 // through the canon §5 text (2026-10-03) and the components-zone note of
 // 19_class_and_module_map.md (2026-09-27)). Every citation was replaced with an
@@ -23,8 +23,8 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
 
-// Issue numbers confirmed dangling (404 in kudy-vk/KUDY, absent from the
-// migration map). The token is the hash sign glued to a dead number with a
+// Issue numbers confirmed dangling (404 in kudy-vk/KUDY; the original cards
+// live in the superseded vokhandcrafts/KUDY repo). The token is the hash sign glued to a dead number with a
 // word boundary on the right: "3399ff" or "4300" must not match, a citation
 // "(issue " + hash + number + ")" must.
 const DEAD_NUMBERS = [430, 339];
