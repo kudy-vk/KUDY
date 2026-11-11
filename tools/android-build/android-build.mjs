@@ -256,7 +256,10 @@ async function build(options) {
     console.error(`build: Gradle exited 0 but ${apkPath} is missing`);
     return 1;
   }
-  if (exitCode !== 0 && !gradleStartedInLog(fs.readFileSync(logFile, 'utf8'))) {
+  // A timed-out build was alive until the timer fired, so it started: it
+  // stays a build failure even when the log has no Gradle signature yet
+  // [#234], and the timeout trail lives in the log and the record.
+  if (exitCode !== 0 && !timedOut && !gradleStartedInLog(fs.readFileSync(logFile, 'utf8'))) {
     console.error('build: the Gradle wrapper did not start (no Gradle output in the log); '
       + 'this is a host problem, reported as NOT-VERIFIED, not a build failure');
     return 87;

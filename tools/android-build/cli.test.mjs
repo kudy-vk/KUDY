@@ -234,6 +234,33 @@ test('cli: a wrapper that exits without any Gradle output is a host failure, exi
   assert.match(result.stderr, /the Gradle wrapper did not start/);
 });
 
+// [key: missing-spawn-error-revert-guard]: the spawn-error branch itself. A
+// wrapper that exists but cannot be executed (exec bit missing on POSIX)
+// makes spawn emit 'error' and never 'close'; the run must answer 87 with a
+// named reason instead of dying as an uncaught exception. Windows has no exec
+// bits to remove; its never-started class is covered by the log-scan branch
+// and the runner verdict tests above.
+test('cli: a wrapper that exists but cannot be spawned is a host failure, exit 87', (t) => {
+  if (isWindows) return t.skip('no exec bits on Windows; the win32 never-started class is covered by the log-scan test');
+  const f = fixture(t);
+  fs.chmodSync(path.join(f.checkout, 'android', 'gradlew'), 0o644);
+  const result = run(f.args('build'));
+  assert.equal(result.status, 87, result.stderr);
+  assert.match(result.stderr, /could not be started/);
+});
+
+// [key: timeout-classified-as-not-started]: a build that the timer killed was
+// running, so it is a build failure with its timeout trail, never
+// NOT-VERIFIED "wrapper did not start".
+test('cli: a build stopped by the timeout timer is a build failure, not NOT-VERIFIED', (t) => {
+  const f = fixture(t, { posix: '#!/bin/sh\nsleep 90\n', win32: '@ping -n 90 127.0.0.1 >nul\r\n' });
+  const args = f.args('build', '--timeout-minutes', '1');
+  const result = spawnSync(process.execPath, args, { encoding: 'utf8', timeout: 150_000 });
+  assert.equal(result.status, 1, result.stderr);
+  assert.match(result.stderr, /timeout after 1 min/);
+  assert.doesNotMatch(result.stderr, /did not start/);
+});
+
 test('cli: a wrapper that ran Gradle and failed afterwards is a build failure, exit 1', (t) => {
   const f = fixture(t, { posix: "#!/bin/sh\necho '> Task :app:preBuild'\nexit 1\n", win32: '@echo BUILD FAILED\r\n@exit /b 1\r\n' });
   const result = run(f.args('build'));
