@@ -93,7 +93,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   },
   entryLabel: {
     color: palette.colorAccent,
-    flexShrink: 1,
     fontFamily: tokens.fontFamilyUiStrong,
     fontSize: tokens.fontBaseSize,
   },
@@ -149,7 +148,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   },
   linkLabel: {
     color: palette.colorAccent,
-    flexShrink: 1,
   },
 });
 const lightStyles = createStyles(tokens);
