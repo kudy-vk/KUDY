@@ -1,14 +1,15 @@
 // #236 — dangling issue citations out of the tracked sources. Kit components,
 // the design canon, the architecture map, results docs, the design-QA spec and
 // the G25 contact sheets cited issues 430 and 339, which do not exist in
-// kudy-vk/KUDY (404; the migration map covers only old 644–1009 → 3–109,
-// so no renumbering target exists either). The decisions they pointed at stay
-// reachable through the canon §5 text (2026-10-03) and the components-zone
-// note of 19_class_and_module_map.md, so every citation was replaced with an
-// anchor to those records. The repo walk below is what makes npm test fail
-// when a dead citation is re-added (implementation-rules 1). If one of these
-// numbers ever becomes a real issue, remove it from the list with a dated
-// revalidation note in the PR that adds the citation back.
+// kudy-vk/KUDY (404; the original cards live in the archived vokhandcrafts/KUDY
+// repo — both closed — and the decisions they recorded stay reachable in-repo
+// through the canon §5 text (2026-10-03) and the components-zone note of
+// 19_class_and_module_map.md (2026-09-27)). Every citation was replaced with an
+// anchor to those records — the option the issue itself names. The repo walk
+// below is what makes npm test fail when a dead citation is re-added
+// (implementation-rules 1). If one of these numbers ever becomes a real issue,
+// remove it from the list with a dated revalidation note in the PR that adds
+// the citation back.
 // The guard file itself stays scannable: it never spells the dead tokens
 // literally — fixtures build them by concatenation, and the regex is assembled
 // from the number list — otherwise a working scan would fail on this very file.
