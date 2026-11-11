@@ -25,14 +25,14 @@ function write(file, text = 'x', mode) {
 // Checkout with the tool, an ignored android/ project whose Gradle wrapper
 // only sleeps, generated output to clean, a fake SDK (adb) and JDK 17 release
 // file, and a build root next to the checkout.
-function fixture(t) {
+function fixture(t, stub) {
   const base = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), 'g2136-cli-')));
   t.after(() => fs.rmSync(base, { recursive: true, force: true }));
   const checkout = path.join(base, 'checkout');
   for (const name of MODULES) write(path.join(checkout, 'tools', 'android-build', name), fs.readFileSync(path.join(here, name)));
   write(path.join(checkout, '.gitignore'), 'node_modules/\n/android/\n');
-  if (isWindows) write(path.join(checkout, 'android', 'gradlew.bat'), '@ping -n 9 127.0.0.1 >nul\r\n@exit /b 0\r\n');
-  else write(path.join(checkout, 'android', 'gradlew'), '#!/bin/sh\nsleep 8\n', 0o755);
+  if (isWindows) write(path.join(checkout, 'android', 'gradlew.bat'), stub?.win32 ?? '@ping -n 9 127.0.0.1 >nul\r\n@exit /b 0\r\n');
+  else write(path.join(checkout, 'android', 'gradlew'), stub?.posix ?? '#!/bin/sh\nsleep 8\n', 0o755);
   write(path.join(checkout, 'android', 'app', 'build', 'out.apk'), 'generated');
   execFileSync('git', ['init', '-q'], { cwd: checkout });
   execFileSync('git', ['add', '.gitignore', 'tools'], { cwd: checkout });
@@ -221,6 +221,24 @@ test('cli: two concurrent claimants after a dead owner both refuse the stale loc
   fs.rmSync(f.lock);
   const after = run(f.args('clean', '--apply'));
   assert.equal(after.status, 0, after.stderr);
+});
+
+// [key: missing-build-87-test]: the two host-failure returns of build(). A
+// wrapper that dies with no Gradle output in the log is exit 87 (NOT-VERIFIED
+// upstream, never "failed (build)"); a wrapper whose log shows a real Gradle
+// run before dying stays a plain build failure.
+test('cli: a wrapper that exits without any Gradle output is a host failure, exit 87', (t) => {
+  const f = fixture(t, { posix: '#!/bin/sh\nexit 1\n', win32: '@exit /b 1\r\n' });
+  const result = run(f.args('build'));
+  assert.equal(result.status, 87, result.stderr);
+  assert.match(result.stderr, /the Gradle wrapper did not start/);
+});
+
+test('cli: a wrapper that ran Gradle and failed afterwards is a build failure, exit 1', (t) => {
+  const f = fixture(t, { posix: "#!/bin/sh\necho '> Task :app:preBuild'\nexit 1\n", win32: '@echo BUILD FAILED\r\n@exit /b 1\r\n' });
+  const result = run(f.args('build'));
+  assert.equal(result.status, 1, result.stderr);
+  assert.doesNotMatch(result.stderr, /did not start/);
 });
 
 test('acquireLock: a live holder blocks; a dead holder of this host is reported as stale and kept', async (t) => {
