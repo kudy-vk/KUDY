@@ -91,9 +91,13 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     columnGap: tokens.spaceS,
     flexDirection: "row",
   },
+  // The row labels ride Golos 400 (the BackButton idiom): the 600 SemiBold
+  // face inside an icon row dropped the last word at paint time on the
+  // Fabric dev build (the a11y tree held the full text; the same words
+  // rendered whole outside the row) — 400 rows paint whole.
   entryLabel: {
     color: palette.colorAccent,
-    fontFamily: tokens.fontFamilyUiStrong,
+    fontFamily: tokens.fontFamilyUi,
     fontSize: tokens.fontBaseSize,
   },
   section: {
