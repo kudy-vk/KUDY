@@ -75,10 +75,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     marginBottom: tokens.spaceS,
   },
   entries: {
-    columnGap: tokens.spaceS,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: tokens.spaceM,
     rowGap: tokens.spaceS,
   },
   entry: {
