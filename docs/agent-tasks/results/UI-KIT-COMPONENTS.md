@@ -83,4 +83,12 @@
 
 ## Android E2E
 
-Запоўніцца перад пушам (`npm run e2e:android:local`, scope run=true).
+Scope: run=true (кампаненты — не docs-only). На галінцы `1cff6dd`
+(APK sha256 `d62aa517…8ae2`): smoke 12/12, walk 5/5, discovery 2 passed /
+2 failed — «published teaser is silent until explicit Play» (таймаўт
+чакання testID) і «feedback queues offline…» (uiautomator dump failed
+within ~300 ms) — клас флейка [#173](https://github.com/kudy-vk/KUDY/issues/173).
+Кантроль на чыстым `origin/main` `ddff623` (асобны прогон, свой Metro з
+чэкаўту main): discovery падае таксама 2/4, тыя ж два кейсы, тыя ж
+dump-таймаўты (`Android E2E: failed (discovery) on ddff623…`). Правал не
+ад гэтай змены; smoke і walk зялёныя на абодвух HEAD.
