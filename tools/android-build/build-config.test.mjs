@@ -4,7 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { buildEnv, classifyProcesses, gradleArgs, gradleSpawnPlan, gradleStartedInLog, gradleUserProperties, resolveOptions } from './build-config.mjs';
+import { buildEnv, buildExitCode, classifyProcesses, gradleArgs, gradleSpawnPlan, gradleStartedInLog, gradleUserProperties, resolveOptions } from './build-config.mjs';
 
 const checkoutRoot = path.resolve('/w/KUDY');
 const buildRoot = path.resolve('/w/KUDY-build');
@@ -166,4 +166,17 @@ test('gradleStartedInLog: a log without Gradle output means the wrapper never st
   assert.equal(gradleStartedInLog(''), false);
   assert.equal(gradleStartedInLog("'gradlew.bat' is not recognized as an internal or external command"), false);
   assert.equal(gradleStartedInLog('ERROR: JAVA_HOME is set to an invalid directory'), false);
+});
+
+test('buildExitCode: a timed-out build keeps its build-failure class even with a silent log (#234, revert: drop the timedOut guard → test fails)', () => {
+  assert.equal(buildExitCode({ exitCode: 1, apkExists: false, timedOut: true, spawnError: null, gradleStarted: false }), 1);
+  assert.equal(buildExitCode({ exitCode: 1, apkExists: false, timedOut: true, spawnError: null, gradleStarted: true }), 1);
+});
+
+test('buildExitCode: every never-started shape is 87; real failures keep their exit code', () => {
+  assert.equal(buildExitCode({ exitCode: null, apkExists: false, timedOut: false, spawnError: new Error('spawn ENOENT'), gradleStarted: false }), 87);
+  assert.equal(buildExitCode({ exitCode: 1, apkExists: false, timedOut: false, spawnError: null, gradleStarted: false }), 87);
+  assert.equal(buildExitCode({ exitCode: 1, apkExists: false, timedOut: false, spawnError: null, gradleStarted: true }), 1, 'Gradle ran and failed');
+  assert.equal(buildExitCode({ exitCode: 0, apkExists: false, timedOut: false, spawnError: null, gradleStarted: true }), 1, 'exit 0 without the APK');
+  assert.equal(buildExitCode({ exitCode: 0, apkExists: true, timedOut: false, spawnError: null, gradleStarted: true }), 0);
 });

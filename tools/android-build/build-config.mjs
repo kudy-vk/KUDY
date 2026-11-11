@@ -151,6 +151,20 @@ export function gradleStartedInLog(logText) {
   return /(BUILD (SUCCESSFUL|FAILED)|FAILURE:|^> Task |Welcome to Gradle|Starting a Gradle Daemon)/m.test(logText);
 }
 
+// The build step's exit code from its raw outcomes [#211, #234]. Pure so the
+// whole decision is unit-testable inside npm test's 60 s test budget: the
+// only real-CLI way to reach the timeout branch is a 60 s round-trip
+// (--timeout-minutes is whole minutes), which the CI tests job cannot afford.
+export function buildExitCode({ exitCode, apkExists, timedOut, spawnError, gradleStarted }) {
+  if (spawnError) return 87;
+  if (exitCode === 0 && !apkExists) return 1;
+  // A timed-out build was alive until the timer fired, so it started: it
+  // stays a build failure even when the log has no Gradle signature yet, and
+  // the timeout trail lives in the log and the record.
+  if (exitCode !== 0 && !timedOut && !gradleStarted) return 87;
+  return exitCode;
+}
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // A root matches only as a whole path: D:\b must not match D:\b2\x.

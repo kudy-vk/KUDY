@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { applyCleanup, findCandidates, gitOwnership, planCleanup, resolveRoots } from './scoped-clean.mjs';
 import { acquireLock, lockPath } from './checkout-lock.mjs';
 import { OwnPathError, checkOwnFile, openNewFile, prepareOwnDirs, replaceOwnFile } from './own-paths.mjs';
-import { buildEnv, classifyProcesses, gradleSpawnPlan, gradleStartedInLog, gradleUserProperties, resolveOptions, taskPaths } from './build-config.mjs';
+import { buildEnv, buildExitCode, classifyProcesses, gradleSpawnPlan, gradleStartedInLog, gradleUserProperties, resolveOptions, taskPaths } from './build-config.mjs';
 
 const checkoutRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const isWindows = process.platform === 'win32';
@@ -248,23 +248,19 @@ async function build(options) {
   console.log(`build: exit=${exitCode} duration=${record.durationSeconds}s record=${recordFile}`);
   if (apk) console.log(`build: apk ${apk.bytes} bytes sha256 ${apk.sha256}`);
   for (const line of leftovers) console.error(`build: task-owned process still running: ${line}`);
+  const code = buildExitCode({
+    exitCode, apkExists: apk !== null, timedOut, spawnError,
+    gradleStarted: gradleStartedInLog(fs.readFileSync(logFile, 'utf8')),
+  });
   if (spawnError) {
     console.error(`build: the build command could not be started on this host: ${spawnError.message}`);
-    return 87;
-  }
-  if (exitCode === 0 && !apk) {
+  } else if (exitCode === 0 && !apk) {
     console.error(`build: Gradle exited 0 but ${apkPath} is missing`);
-    return 1;
-  }
-  // A timed-out build was alive until the timer fired, so it started: it
-  // stays a build failure even when the log has no Gradle signature yet
-  // [#234], and the timeout trail lives in the log and the record.
-  if (exitCode !== 0 && !timedOut && !gradleStartedInLog(fs.readFileSync(logFile, 'utf8'))) {
+  } else if (code === 87) {
     console.error('build: the Gradle wrapper did not start (no Gradle output in the log); '
       + 'this is a host problem, reported as NOT-VERIFIED, not a build failure');
-    return 87;
   }
-  return exitCode;
+  return code;
 }
 
 async function refuseForeignPaths(operation) {
