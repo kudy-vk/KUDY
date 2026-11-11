@@ -1,7 +1,7 @@
 // #236 — dangling issue citations out of the tracked sources. Kit components,
 // the design canon, the architecture map, results docs, the design-QA spec and
 // the G25 contact sheets cited issues 430 and 339, which do not exist in
-// kudy-vk/KUDY (404; the migration map covers only old #644–#1009 → #3–#109,
+// kudy-vk/KUDY (404; the migration map covers only old 644–1009 → 3–109,
 // so no renumbering target exists either). The decisions they pointed at stay
 // reachable through the canon §5 text (2026-10-03) and the components-zone
 // note of 19_class_and_module_map.md, so every citation was replaced with an
