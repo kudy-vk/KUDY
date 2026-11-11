@@ -50,7 +50,7 @@ export const ABOUT_CITY_SECTION_LINKS = {
 // the caption says proportions are approximate; the official map link in the
 // same section is the geographically exact source. `dx` shifts each label
 // left from its anchor so the anchor names the place itself.
-export const ABOUT_CITY_MAP_BOX_RATIO = 1.15;
+export const ABOUT_CITY_MAP_BOX_RATIO = 0.9;
 export const ABOUT_CITY_MAP_ITEMS = [
   { id: "mapStation", x: 34, y: 60, dx: -28 },
   { id: "mapStare", x: 47, y: 51, dx: -28 },

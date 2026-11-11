@@ -129,8 +129,10 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     position: "absolute",
   },
   mapLabelStrong: {
+    // Accent color only: the SemiBold face dropped its last word at paint
+    // time on the Fabric dev build (the same row/600 defect as the entry
+    // titles) — the accent color alone marks the main landmark.
     color: tokens.colorAccent,
-    fontFamily: tokens.fontFamilyUiStrong,
   },
   mapCaption: {
     color: palette.colorMuted,
