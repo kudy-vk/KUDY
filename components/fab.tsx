@@ -5,11 +5,11 @@
 // of the button (the production preview's pv-foot arrangement: the text
 // takes the remaining width, the round action sits at the end), and the
 // disabled state of canon §5 — the ghost pair after the owner's variant А
-// (issue #430: transparent fill, color.disabled-ink glyph, color.disabled-line
+// (owner decision 2026-10-03: transparent fill, color.disabled-ink glyph, color.disabled-line
 // frame, no shelf) — never an opacity dim. The reason is info the screen
 // supplies (why the action waits, or what it costs), shown whenever passed,
 // not only when disabled. Lives in components/, not app/: expo-router
-// treats every app/ file as a route (issue #339).
+// treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { StyleSheet, View } from "react-native";
 
 import type { CanonGlyph } from "./canon-icon";

@@ -6,7 +6,7 @@
 // same controller (NAV7). Navigation only: it never stops the audio and
 // never changes the session. Without a live walk there is no target — the
 // button renders nowhere (no fake destination). Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339); the
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone); the
 // screen passes its services walk member in as a prop — components takes
 // no runtime imports from the other zones.
 import { useCallback, useState } from "react";

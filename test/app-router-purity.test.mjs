@@ -1,4 +1,4 @@
-// Guard for the app/ router purity (issue #339 criterion 3): expo-router's
+// Guard for the app/ router purity, criterion 3: expo-router's
 // require.context treats every app/**/*.ts(x) file as a route — a nonscreen
 // module there warns on every start and (before #338) leaked into the device
 // bundle. app/ may hold only: router special files (`+*`, `_layout`), routes

@@ -9,7 +9,7 @@
 // class) — and the touch target is ≥48×48dp, hitSlop adds forgiveness.
 // Navigation only (screens-and-transitions: Back — навігацыя, не каманда).
 // Lives in components/, not app/: expo-router treats every app/ file as a
-// route (issue #339) — the WalkButton precedent.
+// route (docs/architecture/19_class_and_module_map.md — the components zone) — the WalkButton precedent.
 import { Pressable, StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 

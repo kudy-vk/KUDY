@@ -8,7 +8,7 @@
 // подпісы на кожнай icon-only кнопцы) on the wrapper View — the SVG inside
 // is decoration — and pointerEvents="none" lets the icon sit inside a
 // Pressable without stealing the press. Lives in components/, not app/:
-// expo-router treats every app/ file as a route (issue #339).
+// expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import type { ComponentType } from "react";
 import { View, type StyleProp, type ViewStyle } from "react-native";
 

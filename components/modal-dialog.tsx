@@ -4,7 +4,7 @@
 // system Back runs onRequestClose, no navigation of its own. The shell owns
 // the overlay, the card (visual-language §4: radius 10, max width 400) and
 // the two actions; the surfaces own the words. Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339).
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import type { ReactNode } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 

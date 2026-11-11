@@ -4,7 +4,7 @@
 // canon). Only the values these surfaces render live here; the guard in
 // test/design-tokens.test.mjs pins this file to the canon — changing a value
 // here without the canon turns the suite red. Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339).
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 export const tokens = {
   colorPaper: '#faf7f2', // color.paper — фон экрана
   colorInk: '#22262b', // color.ink — асноўны тэкст
@@ -17,7 +17,7 @@ export const tokens = {
   // існуючых колераў (канон §2), не новыя брэнд-колеры.
   colorShelfAccent: '#154f3a', // color.shelf.accent — полка вылепленай primary-кнопкі
   colorShelfLine: '#c9c1b1', // color.shelf.line — полка вылепленай звычайнай кнопкі
-  // Issue #430 (рашэнне ўладара 2026-10-03) — чытэльны выключаны стан: значэнне
+  // Рашэнне ўладара 2026-10-03 (канон §5) — чытэльны выключаны стан: значэнне
   // супадае з color.muted, але ролі і пары ў каноне свае (тэкст ≥4.5:1, межа
   // ≥3:1 на паперы, §5).
   colorDisabledInk: '#6b7280', // color.disabled-ink — тэкст выключанай кнопкі
