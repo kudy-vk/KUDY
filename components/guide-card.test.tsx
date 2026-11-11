@@ -78,3 +78,39 @@ describe("empty_locale_catalogue", () => {
     expect(screen.getByTestId("city-message").props.children).toBe("ej publicerad");
   });
 });
+
+// #215 — the one photo place (the kit offer anatomy): with a photo the card
+// frames a 64×64 slot left of the title; without one the card keeps today's
+// stacked look — the live screens pass no photo until their migration tasks
+// (#216–#227). GuideCard opens the preview through expo-router's Link, so
+// the render rides the router testing library.
+import { View } from "react-native";
+import { renderRouter } from "expo-router/testing-library";
+import { within } from "@testing-library/react-native";
+
+import { tokens } from "./design-tokens";
+import { GuideCard } from "./guide-card";
+
+describe("guide card photo place (#215)", () => {
+  test("with a photo — the framed 64×64 place renders beside the title", () => {
+    renderRouter(
+      {
+        index: () => (
+          <GuideCard
+            card={card("g-photo", ["be"])}
+            photo={<View testID="synthetic-photo" style={{ backgroundColor: "#d8d2c6", flex: 1 }} />}
+          />
+        ),
+      },
+      { initialUrl: "/" },
+    );
+    const place = screen.getByTestId("guide-card-photo");
+    expect(place.props.style).toMatchObject({ width: 64, height: 64, borderColor: tokens.colorLine });
+    expect(within(place).getByTestId("synthetic-photo")).toBeTruthy();
+  });
+
+  test("without a photo — no place renders, the card keeps its stacked look", () => {
+    renderRouter({ index: () => <GuideCard card={card("g-plain", ["be"])} /> }, { initialUrl: "/" });
+    expect(screen.queryByTestId("guide-card-photo")).toBeNull();
+  });
+});

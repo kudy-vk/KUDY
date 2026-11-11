@@ -48,6 +48,9 @@ export function isWide(width: number): boolean {
   return width >= 821;
 }
 
+// kit.css `.photo`: the 64×64 photo place of the offer-card anatomy.
+const PHOTO_PLACE_SIZE = 64;
+
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   card: {
     backgroundColor: palette.colorCard,
@@ -66,6 +69,26 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontSize: palette.fontBaseSize,
     fontWeight: palette.fontWeightStrong,
     marginBottom: palette.spaceS,
+  },
+  // #215 — the kit offer-head anatomy (kit.css `.offer-head`/`.photo`): the
+  // 64×64 photo place left, the title in the remaining width. The place
+  // renders only with a photo — the live screens pass none and keep their
+  // look until their migration tasks (#216–#227).
+  offerHead: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: palette.spaceM,
+  },
+  photo: {
+    alignItems: "center",
+    backgroundColor: palette.colorPaper,
+    borderColor: palette.colorLine,
+    borderRadius: 8, // kit.css `.photo`
+    borderWidth: 1,
+    height: PHOTO_PLACE_SIZE,
+    justifyContent: "center",
+    overflow: "hidden",
+    width: PHOTO_PLACE_SIZE,
   },
   locales: {
     color: palette.colorMuted,
@@ -290,10 +313,15 @@ export function GuideCard({
   card,
   from,
   locale = "be",
+  photo,
 }: {
   card: CatalogGuideCard;
   from?: "city" | "rubric" | "discovery" | "collection";
   locale?: string;
+  // #215 — the card's one photo place (the kit offer anatomy): the caller's
+  // photo node inside the framed 64×64 slot; absent → no place, the card
+  // keeps today's stacked look.
+  photo?: ReactNode;
 }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const strings = uiStrings(locale);
@@ -305,7 +333,10 @@ export function GuideCard({
         style={styles.card}
         testID={`guide-card-${card.routeId}`}
       >
-        <ScaledText style={styles.cardTitle}>{card.title}</ScaledText>
+        <View style={photo ? styles.offerHead : undefined}>
+          {photo ? <View style={styles.photo} testID="guide-card-photo">{photo}</View> : null}
+          <ScaledText style={styles.cardTitle}>{card.title}</ScaledText>
+        </View>
         {card.summary ? <ScaledText style={styles.cardSummary}>{card.summary}</ScaledText> : null}
         <AccessBadge access={card.access} locale={locale} />
         <GuideCardLocales card={card} locale={locale} />
