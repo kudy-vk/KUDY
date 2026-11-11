@@ -1,3 +1,5 @@
+Табе зрабіць: у [#79](https://github.com/kudy-vk/KUDY/issues/79) правер светлы і цёмны ўзоры экспарту MAP-04 на 320 px і пацвердзі візуальную прыёмку перад зліццём PR; натыўны рэндэр яшчэ не пацверджаны.
+
 Табе зрабіць: для [PR #228](https://github.com/kudy-vk/KUDY/pull/228) правер, што лакальны Android E2E не працуе, выдалі састарэлы файл `D:\KUDY-Android\runner.lock` і запусці `npm run e2e:android:local`; да закрыцця [#213](https://github.com/kudy-vk/KUDY/issues/213) патрэбныя здымкі карты ў светлай і цёмнай тэмах.
 
 - Табе зрабіць: прайдзіся па фінальных макетах экранаў у галерэі `docs/design/catalog.html` і дай вердыкт па кожным; вырашы ў [#204](https://github.com/kudy-vk/KUDY/issues/204), ці застаецца дракон; пастаў пазнакі на заданні інтэграцыі макетаў. [PR #210](https://github.com/kudy-vk/KUDY/pull/210).

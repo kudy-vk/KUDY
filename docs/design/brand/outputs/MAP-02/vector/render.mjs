@@ -1,5 +1,5 @@
 // Render SVG jobs to PNG in headless Chrome: `node render.mjs <jobs.json>`.
-// Each job: { svg, out, width, height, dpr?, background?, css?, pieces?, viewBox? }.
+// Each job: { svg, out, width, height, dpr?, background?, css?, pieces?, viewBox?, softwareRaster? }.
 // `pieces` renders only the five manifest fragments, clipped from the master,
 // inside `viewBox` (default: the whole map).
 import { readFile, writeFile } from 'node:fs/promises';
@@ -19,7 +19,9 @@ function piecesMarkup(svg, width, height, viewBox = '0 0 1351 1164') {
     + `<defs>${clips.join('')}</defs>${images.join('')}</svg>`;
 }
 
-const browser = await chromium.launch({ headless: true, channel: 'chrome' });
+// MAP-04 needs stable hashes across fresh sessions; preserve the older export's renderer.
+const args = jobs.some(job => job.softwareRaster === true) ? ['--disable-gpu'] : [];
+const browser = await chromium.launch({ headless: true, channel: 'chrome', args });
 try {
   for (const job of jobs) {
     const svg = await readFile(job.svg, 'utf8');
