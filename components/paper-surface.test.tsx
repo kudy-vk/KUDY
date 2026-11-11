@@ -16,8 +16,13 @@ import { PaperSurface } from "./paper-surface";
 // consumes the mirror paints the overridden opacity.
 jest.mock("./design-tokens", () => {
   const actual = jest.requireActual("./design-tokens") as { tokens: Record<string, unknown> };
-  return { tokens: { ...actual.tokens, texturePaperGrainOpacity: 0.5 } };
+  return { ...actual, tokens: { ...actual.tokens, texturePaperGrainOpacity: 0.5 } };
 });
+
+let mockScheme = "light";
+jest.mock("react-native/Libraries/Utilities/useColorScheme", () => ({
+  __esModule: true, default: () => mockScheme,
+}));
 
 // Issue #431: the tiling window is synthetic and differs from the jest
 // default on purpose — the size assertions read this value, so only a
@@ -51,6 +56,17 @@ function grainLayer() {
 }
 
 describe("PaperSurface (G06.10.e)", () => {
+  test("M3 grain uses four percent muted tint above the gradient", () => {
+    mockScheme = "dark";
+    try {
+      renderSurface();
+      expect(mergedStyle(grainLayer())).toMatchObject({ opacity: 0.04, tintColor: "#d6c5b0" });
+      expect(screen.getByTestId("screen-gradient", { includeHiddenElements: true })).toBeTruthy();
+    } finally {
+      mockScheme = "light";
+    }
+  });
+
   test("the grain layer renders under the content at the mirror opacity", () => {
     renderSurface();
     const grain = grainLayer();

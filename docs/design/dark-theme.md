@@ -5,11 +5,19 @@
 прыёмкі налад #787.
 Падрыхтаваная ў #860.
 
-Статус: **прынятая спецыфікацыя MVP**. Уладальнік 2026-10-24 ухваліў цёмную
+Статус: **прынятая спецыфікацыя MVP**.
+
+Абнаўленне 2026-11-11: уладальнік пацвердзіў палітру M3 і яе перанос у
+дадатак у [#212](https://github.com/kudy-vk/KUDY/issues/212). Актуальныя
+значэнні — §4, кантраст — §5, геаметрыя градыенту — у машынным люстры.
+`color.note` захоўвае ранейшае значэнне: у прынятым макеце для яго няма замены.
+Гістарычны аналіз пачатковай спецыфікацыі ніжэй апісвае стан на 2026-10-27.
+
+Уладальнік 2026-10-24 ухваліў цёмную
 тэму, а [27.10.2026 прыняў палітру і светлую заставу](#860).
 [Візуальны канон](visual-language.md) — адзіная машынная крыніца значэнняў;
-табліца §4 і блок ніжэй — правяранае люстра для #436. Runtime-рэалізацыя і
-прыладавая прыёмка яшчэ не выкананыя.
+табліца §4 і блок ніжэй — правяранае люстра. Runtime-токены і агульны
+градыент сінхранізуюцца ў #212; прыладавая прыёмка запісваецца асобна ў выніку задачы.
 
 ## 1. Крыніцы і правераны стан
 
@@ -46,6 +54,9 @@ Production-люстра супадае з канонам: кожнае знач�
 | Радыус картак | `radius.base` 10px | 14px на `.card` | Production трымае 10px; макет — ілюстрацыйны. Не мяняецца. |
 | Націснуты чып | фон `color.accent` (§5 канона) | фон `--accentWash` + межа акцэнту | Розныя мадэлі. Прынята рашэнне DT-5: фон акцэнту ў абедзвюх тэмах (§9). |
 | `accentWash` | токена няма; тое ж значэнне мае `color.badge.free` #e7f2ec | самастойная пераменная | У MVP новы токен не ўводзіцца; сегмент-кантрол тэмы (§6) выкарыстоўвае існыя токены. |
+
+У гістарычным макеце налад `--badge` адпавядае `color.badge.paid`.
+Актуальнае цёмнае значэнне гэтага токена цяпер задае палітра M3 (§4).
 
 ### 2.2 Цёмная тэма: што ёсць і чаго няма
 
@@ -89,9 +100,9 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 Прычына: [канон §2](visual-language.md#2-колеры) задае `color.accent-ink`
 для літар маркераў і светлае значэнне гэтага токена ў зоне картаграфіі
 цёмнай тэмы. Калі тэматызаваць маркеры паасобку, цёмны `accent-ink` на
-светлай заліўцы маркера дае 2.39:1 — ніжэй за 4.5:1. Зона картаграфіі
+светлай заліўцы маркера дае 2.43:1 — ніжэй за 4.5:1. Зона картаграфіі
 выключае канфлікт: яна цалкам светлая, тады як
-`accent-ink` на акцэнтнай кнопцы панэлі Run цямнее разам з акцэнтам (8.73:1).
+`accent-ink` на акцэнтнай кнопцы панэлі Run цямнее разам з акцэнтам (9.03:1).
 Цёмная картаграфія — Tier-2: значэнні-кандыдаты і іх вымярэнні запісаныя ў §5.4
 для будучага асобнага рашэння; да яго іх не прымяняюць.
 
@@ -124,31 +135,31 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 
 | Токен | Роля | Светлая (канон) | Цёмная (канон) | Паходжанне цёмнай |
 |---|---|---|---|---|
-| `color.paper` | фон экрана | #faf7f2 | #171d1c | макет налад |
-| `color.card` | фон картак, кнопак, панэлі Run | #ffffff | #232c29 | макет налад |
-| `color.ink` | асноўны тэкст | #22262b | #f2f1e9 | макет налад |
-| `color.muted` | другарадны тэкст | #6b7280 | #c4d0ca | макет налад |
-| `color.line` | межы, падзяляльнікі, трэк прагрэсу | #d8d2c6 | #45534c | макет налад |
-| `color.accent` | галоўныя дзеянні, чып, фокус, прагрэс | #1d6b4f | #80d4ad | макет налад |
-| `color.accent-ink` | тэкст на акцэнце | #ffffff | #0d2a1e | вытворнае: тэкст на светлай заліўцы |
-| `color.shelf.accent` | полка primary-кнопкі | #154f3a | #65cb9c | правіла канона §2: светлата акцэнту −7 п.п. |
-| `color.shelf.line` | полка звычайнай кнопкі | #c9c1b1 | #35403a | правіла канона §2: светлата лініі −7 п.п. |
-| `color.disabled-ink` | тэкст выключанай кнопкі | #6b7280 | #9aa8a1 | вытворнае, пары §5 |
-| `color.disabled-line` | межа выключанай кнопкі | #6b7280 | #6d7c72 | вытворнае, пары §5 |
-| `color.notice.bg` | фон notice-блока | #fdf1d7 | #3a3119 | вытворнае з палітры макета |
-| `color.notice.border` | межа notice-блока | #e6c98c | #7d6b3a | вытворнае |
-| `color.error.bg` | фон error-блока | #fdeaea | #3a201b | вытворнае |
-| `color.error.border` | межа error-блока | #e0a2a2 | #8a4a42 | вытворнае |
-| `color.hint.bg` | фон карткі-падказкі R07 | #f6faff | #1c2833 | вытворнае |
-| `color.hint.border` | межа падказкі | #bcd2f0 | #3e5871 | вытворнае |
-| `color.moment.bg` | фон карткі Moment | #fff7ec | #342a19 | вытворнае |
-| `color.moment.border` | межа Moment | #ecd9b0 | #6e5c36 | вытворнае |
-| `color.badge.paid` | фон пазнакі paid | #fdf1d7 | #493b23 | макет налад (`--badge`) |
-| `color.badge.free` | фон пазнакі free | #e7f2ec | #263b31 | макет налад (`--accentWash`) |
-| `color.badge.mixed` | фон пазнакі mixed | #ece7f8 | #332c47 | вытворнае |
-| `color.badge.lock` | фон пазнакі замка | #eceff1 | #2b343b | вытворнае |
-| `color.warn` | памылковы тэкст і акцэнты збою | #b3331f | #ef8a72 | вытворнае |
-| `color.note` | фон дэма-стужкі пратотыпа | #fffbe8 | #33301d | вытворнае |
+| `color.paper` | фон экрана | #faf7f2 | #2a1510 | M3, 2026-11-11 |
+| `color.card` | фон картак, кнопак, панэлі Run | #ffffff | #3a231b | M3, 2026-11-11 |
+| `color.ink` | асноўны тэкст | #22262b | #f4eadb | M3, 2026-11-11 |
+| `color.muted` | другарадны тэкст | #6b7280 | #d6c5b0 | M3, 2026-11-11 |
+| `color.line` | межы, падзяляльнікі, трэк прагрэсу | #d8d2c6 | #6b4a3d | M3, 2026-11-11 |
+| `color.accent` | галоўныя дзеянні, чып, фокус, прагрэс | #1d6b4f | #8ad4b0 | M3, 2026-11-11 |
+| `color.accent-ink` | тэкст на акцэнце | #ffffff | #10281d | M3, 2026-11-11 |
+| `color.shelf.accent` | полка primary-кнопкі | #154f3a | #63b48e | M3, 2026-11-11 |
+| `color.shelf.line` | полка звычайнай кнопкі | #c9c1b1 | #1a0d0a | M3, 2026-11-11 |
+| `color.disabled-ink` | тэкст выключанай кнопкі | #6b7280 | #b9a794 | M3, 2026-11-11 |
+| `color.disabled-line` | межа выключанай кнопкі | #6b7280 | #927a6c | M3, 2026-11-11 |
+| `color.notice.bg` | фон notice-блока | #fdf1d7 | #4a3618 | M3, 2026-11-11 |
+| `color.notice.border` | межа notice-блока | #e6c98c | #8a733a | M3, 2026-11-11 |
+| `color.error.bg` | фон error-блока | #fdeaea | #4a211b | M3, 2026-11-11 |
+| `color.error.border` | межа error-блока | #e0a2a2 | #9a5046 | M3, 2026-11-11 |
+| `color.hint.bg` | фон карткі-падказкі R07 | #f6faff | #2e2c38 | M3, 2026-11-11 |
+| `color.hint.border` | межа падказкі | #bcd2f0 | #5a5878 | M3, 2026-11-11 |
+| `color.moment.bg` | фон карткі Moment | #fff7ec | #45301a | M3, 2026-11-11 |
+| `color.moment.border` | межа Moment | #ecd9b0 | #7a6238 | M3, 2026-11-11 |
+| `color.badge.paid` | фон пазнакі paid | #fdf1d7 | #57421f | M3, 2026-11-11 |
+| `color.badge.free` | фон пазнакі free | #e7f2ec | #2f4234 | M3, 2026-11-11 |
+| `color.badge.mixed` | фон пазнакі mixed | #ece7f8 | #40334e | M3, 2026-11-11 |
+| `color.badge.lock` | фон пазнакі замка | #eceff1 | #3d3530 | M3, 2026-11-11 |
+| `color.warn` | памылковы тэкст і акцэнты збою | #b3331f | #f09a80 | M3, 2026-11-11 |
+| `color.note` | фон дэма-стужкі пратотыпа | #fffbe8 | #33301d | ранейшае значэнне DT-2; M3 яго не змяняе |
 
 Токены, якія **не залежаць** ад тэмы:
 
@@ -159,11 +170,11 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 - Усе не-колеравыя токены: шрыфты (сем'і, вагі, памеры, множнік 1.25),
   інтэрвалы, радыусы, памеры элементаў, `panel.body-max-height`,
   `dialog.max-width`, `texture.paper-grain` (непразрыстасць 4–5%, тыя ж
-  дазволеныя і забароненыя месцы; у цёмнай тэме тайл зерня светлы на цёмнай
-  паперы — фактура не змяняе правілы).
+  дазволеныя і забароненыя месцы; у цёмнай тэме M3 — 4%, тон `color.muted`).
 
-Зерне і паліцы: зярно — згенераваны тайл паверх паперы; у цёмнай тэме асет
-генеруецца тым жа правілам са светлым зернем. Полкі кнопак — дэкаратыўны пласт,
+Зерне і паліцы: зярно — згенераваны тайл паверх паперы; у цёмнай тэме M3
+тон `color.muted` пры 4% захоўвае кантраст рамкі на яркім версе градыенту.
+Полкі кнопак у M3 маюць прынятыя значэнні замест формулы HSL; гэта дэкаратыўны пласт,
 канон не задае для іх кантрастных пар (§2 канона).
 
 ## 5. Кантрастныя пары і спосаб паўторнай праверкі (крытэрый 3)
@@ -177,31 +188,31 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 
 | Пара | Плашка | Светлая | Цёмная |
 |---|---|---|---|
-| `ink` / `paper` | 4.5 | 14.24 | 15.08 |
-| `ink` / `card` | 4.5 | 15.22 | 12.66 |
-| `muted` / `paper` | 4.5 | 4.52 | 10.76 |
-| `muted` / `card` | 4.5 | 4.83 | 9.03 |
-| `accent-ink` / `accent` | 4.5 | 6.43 | 8.73 |
-| `muted` / `note` | 4.5 | 4.65 | 8.36 |
-| `ink` / `notice.bg` | 4.5 | 13.58 | 11.35 |
-| `ink` / `error.bg` | 4.5 | 13.14 | 13.22 |
-| `ink` / `hint.bg` | 4.5 | 14.52 | 13.23 |
-| `ink` / `moment.bg` | 4.5 | 14.32 | 12.43 |
-| `muted` / `hint.bg` | 4.5 | 4.61 | 9.44 |
-| `muted` / `moment.bg` | 4.5 | 4.55 | 8.87 |
-| `accent` / `paper` (фокус, прагрэс) | 3 | 6.01 | 9.71 |
-| `accent` / `card` | 3 | 6.43 | 8.16 |
-| `accent` / `line` | 3 | 4.27 | 4.60 |
-| `disabled-ink` / `paper` | 4.5 | 4.52 | 6.91 |
-| `disabled-ink` / `card` | 4.5 | 4.83 | 5.80 |
-| `disabled-line` / `paper` | 3 | 4.52 | 3.89 |
-| `disabled-line` / `card` | 3 | 4.83 | 3.26 |
-| `ink` / `badge.paid` — дабаўка | 4.5 | 13.58 | 9.59 |
-| `ink` / `badge.free` — дабаўка | 4.5 | 13.27 | 10.58 |
-| `ink` / `badge.mixed` — дабаўка | 4.5 | 12.57 | 11.64 |
-| `ink` / `badge.lock` — дабаўка | 4.5 | 13.17 | 11.18 |
-| `warn` / `paper` — дабаўка | 4.5 | 5.76 | 6.96 |
-| `warn` / `card` — дабаўка | 4.5 | 6.16 | 5.84 |
+| `ink` / `paper` | 4.5 | 14.24 | 14.54 |
+| `ink` / `card` | 4.5 | 15.22 | 12.28 |
+| `muted` / `paper` | 4.5 | 4.52 | 10.28 |
+| `muted` / `card` | 4.5 | 4.83 | 8.68 |
+| `accent-ink` / `accent` | 4.5 | 6.43 | 9.03 |
+| `muted` / `note` | 4.5 | 4.65 | 7.89 |
+| `ink` / `notice.bg` | 4.5 | 13.58 | 9.63 |
+| `ink` / `error.bg` | 4.5 | 13.14 | 11.57 |
+| `ink` / `hint.bg` | 4.5 | 14.52 | 11.50 |
+| `ink` / `moment.bg` | 4.5 | 14.32 | 10.43 |
+| `muted` / `hint.bg` | 4.5 | 4.61 | 8.13 |
+| `muted` / `moment.bg` | 4.5 | 4.55 | 7.38 |
+| `accent` / `paper` (фокус, прагрэс) | 3 | 6.01 | 9.99 |
+| `accent` / `card` | 3 | 6.43 | 8.44 |
+| `accent` / `line` | 3 | 4.27 | 4.54 |
+| `disabled-ink` / `paper` | 4.5 | 4.52 | 7.43 |
+| `disabled-ink` / `card` | 4.5 | 4.83 | 6.28 |
+| `disabled-line` / `paper` | 3 | 4.52 | 4.30 |
+| `disabled-line` / `card` | 3 | 4.83 | 3.64 |
+| `ink` / `badge.paid` — дабаўка | 4.5 | 13.58 | 8.00 |
+| `ink` / `badge.free` — дабаўка | 4.5 | 13.27 | 9.05 |
+| `ink` / `badge.mixed` — дабаўка | 4.5 | 12.57 | 9.79 |
+| `ink` / `badge.lock` — дабаўка | 4.5 | 13.17 | 10.08 |
+| `warn` / `paper` — дабаўка | 4.5 | 5.76 | 7.95 |
+| `warn` / `card` — дабаўка | 4.5 | 6.16 | 6.71 |
 
 Чатыры badge-пары, пара `person`/`street` (§5.2) і дзве пары `warn` раней
 адсутнічалі ў канонавым спісе, хоць інтэрфейс выкарыстоўваў гэтыя камбінацыі.
@@ -217,8 +228,8 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 
 ### 5.3 Канфлікт, які выключае паасобную тэматызацыю маркераў
 
-`accent-ink` цёмнай тэмы (#0d2a1e) на светлай заліўцы `marker.played`
-(#1d6b4f) дае **2.39:1** — ніжэй за 4.5:1. Правіла зоны картаграфіі (§3)
+`accent-ink` цёмнай тэмы (#10281d) на светлай заліўцы `marker.played`
+(#1d6b4f) дае **2.43:1** — ніжэй за 4.5:1. Правіла зоны картаграфіі (§3)
 гэта выключае; гард §5.5 фіксуе лічбу як доказ прычыны.
 
 ### 5.4 Tier-2: кандыдаты цёмнай картаграфіі (не прымяняюцца ў MVP)
@@ -227,7 +238,7 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 #1b2420, `street` #2b3630, `person` #6ba3e8, маркеры: played #80d4ad,
 playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літара
 маркера — цёмны `accent-ink` #0d2a1e. Вымярэнні кандыдатаў: літары на маркерах
-5.07–8.73:1; маркеры на `map` 5.25–9.05:1, на `street` 4.14–7.14:1;
+5.07–9.03:1; маркеры на `map` 5.25–9.05:1, на `street` 4.14–7.14:1;
 `person` 6.08:1 на `map`, 4.80:1 на `street` — усе праходзяць плашкі. Кандыдаты
 не трапляюць у production да асобнага рашэння ўладальніка.
 
@@ -358,44 +369,63 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
 {
   "status": "accepted",
   "issue": "#860",
-  "ownerDecision": "#860",
+  "ownerDecision": "#212",
+  "backgroundGradient": {
+    "cx": "50%",
+    "cy": "0%",
+    "rx": "130%",
+    "ry": "70%",
+    "stops": [
+      {
+        "offset": "0%",
+        "color": "#4a2519"
+      },
+      {
+        "offset": "58%",
+        "color": "#2a1510"
+      },
+      {
+        "offset": "100%",
+        "color": "#1a0d0a"
+      }
+    ]
+  },
   "verifiedSha": "7bd243888c1b99d3d94a6d77ed876fb1ec859b67",
   "darkTokens": {
-    "color.paper": "#171d1c",
-    "color.card": "#232c29",
-    "color.ink": "#f2f1e9",
-    "color.muted": "#c4d0ca",
-    "color.line": "#45534c",
-    "color.accent": "#80d4ad",
-    "color.accent-ink": "#0d2a1e",
-    "color.shelf.accent": "#65cb9c",
-    "color.shelf.line": "#35403a",
-    "color.disabled-ink": "#9aa8a1",
-    "color.disabled-line": "#6d7c72",
-    "color.notice.bg": "#3a3119",
-    "color.notice.border": "#7d6b3a",
-    "color.error.bg": "#3a201b",
-    "color.error.border": "#8a4a42",
-    "color.hint.bg": "#1c2833",
-    "color.hint.border": "#3e5871",
-    "color.moment.bg": "#342a19",
-    "color.moment.border": "#6e5c36",
-    "color.badge.paid": "#493b23",
-    "color.badge.free": "#263b31",
-    "color.badge.mixed": "#332c47",
-    "color.badge.lock": "#2b343b",
-    "color.warn": "#ef8a72",
+    "color.paper": "#2a1510",
+    "color.card": "#3a231b",
+    "color.ink": "#f4eadb",
+    "color.muted": "#d6c5b0",
+    "color.line": "#6b4a3d",
+    "color.accent": "#8ad4b0",
+    "color.accent-ink": "#10281d",
+    "color.shelf.accent": "#63b48e",
+    "color.shelf.line": "#1a0d0a",
+    "color.disabled-ink": "#b9a794",
+    "color.disabled-line": "#927a6c",
+    "color.notice.bg": "#4a3618",
+    "color.notice.border": "#8a733a",
+    "color.error.bg": "#4a211b",
+    "color.error.border": "#9a5046",
+    "color.hint.bg": "#2e2c38",
+    "color.hint.border": "#5a5878",
+    "color.moment.bg": "#45301a",
+    "color.moment.border": "#7a6238",
+    "color.badge.paid": "#57421f",
+    "color.badge.free": "#2f4234",
+    "color.badge.mixed": "#40334e",
+    "color.badge.lock": "#3d3530",
+    "color.warn": "#f09a80",
     "color.note": "#33301d"
   },
   "tokenOrigins": {
-    "макет налад .phone.dark": ["color.paper", "color.card", "color.ink", "color.muted", "color.line", "color.accent", "color.badge.paid", "color.badge.free"],
-    "вытворнае з палітры макета": ["color.accent-ink", "color.disabled-ink", "color.disabled-line", "color.notice.bg", "color.notice.border", "color.error.bg", "color.error.border", "color.hint.bg", "color.hint.border", "color.moment.bg", "color.moment.border", "color.badge.mixed", "color.badge.lock", "color.warn", "color.note"],
-    "правіла канона §2 (светлата −7 п.п.)": ["color.shelf.accent", "color.shelf.line"]
+    "M3, пацверджана ў #212 2026-11-11": ["color.paper","color.card","color.ink","color.muted","color.line","color.accent","color.accent-ink","color.shelf.accent","color.shelf.line","color.disabled-ink","color.disabled-line","color.notice.bg","color.notice.border","color.error.bg","color.error.border","color.hint.bg","color.hint.border","color.moment.bg","color.moment.border","color.badge.paid","color.badge.free","color.badge.mixed","color.badge.lock","color.warn"],
+    "ранейшае значэнне DT-2": ["color.note"]
   },
   "cartographyZone": {
     "rule": "У MVP картаграфія і маркеры застаюцца са светлай тэмай у абедзвюх тэмах: стыль правайдара (contracts/map-provider.ts, interim ADR G00.02) не тэматызуецца, літара маркера — светлай-тэмавы color.accent-ink у абедзвюх тэмах.",
     "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked"],
-    "reason": "Цёмны accent-ink на светлай заліўцы marker.played дае 2.39:1 — ніжэй за 4.5:1; паасобная тэматызацыя маркераў ламае правіла канона §5.",
+    "reason": "Цёмны accent-ink на светлай заліўцы marker.played дае 2.43:1 — ніжэй за 4.5:1; паасобная тэматызацыя маркераў ламае правіла канона §5.",
     "tier2Proposal": {
       "color.map": "#1b2420",
       "color.street": "#2b3630",

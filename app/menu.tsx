@@ -10,6 +10,7 @@ import { ScaledText } from "../components/scaled-text";
 import { useThemeTokens } from "../components/theme";
 import { WalkButton } from "../components/walk-button";
 import { uiStrings } from "../components/ui-strings";
+import { ScreenSurface } from "../components/screen-surface";
 
 export default function Menu() {
   const { width } = useWindowDimensions();
@@ -22,7 +23,7 @@ export default function Menu() {
   useFocusEffect(useCallback(() => { setVisit(value => value + 1); }, []));
   const mapWidth = Math.max(1, Math.min(430, width - insets.left - insets.right - tokens.spaceL * 2));
   return (
-    <View testID="screen-Menu" style={[styles.screen, { backgroundColor: palette.colorPaper, paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }]}>
+    <ScreenSurface testID="screen-Menu" style={[styles.screen, { backgroundColor: palette.colorPaper, paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }]}>
       <View style={styles.header}>
         <ScaledText accessibilityRole="header" style={[styles.brand, { color: palette.colorAccent }]}>{uiStrings(locale).myKudy}</ScaledText>
         <WalkButton walk={services.walk} locale={locale} iconOnly />
@@ -33,7 +34,7 @@ export default function Menu() {
           if (entry?.destination) router.push(entry.destination);
         }} />
       </ScrollView>
-    </View>
+    </ScreenSurface>
   );
 }
 

@@ -32,6 +32,7 @@ import { ScaledText } from "../components/scaled-text";
 import { uiStrings } from "../components/ui-strings";
 import { darkTokens, tokens, type ThemeTokens } from "../components/design-tokens";
 import { useThemeStyles } from "../components/theme";
+import { ScreenSurface } from "../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: { backgroundColor: palette.colorPaper },
@@ -288,7 +289,7 @@ export default function Map() {
   // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   return (
-    <View
+    <ScreenSurface
       style={[styles.screen, {
         flex: 1,
         padding: tokens.spaceL,
@@ -352,6 +353,6 @@ export default function Map() {
           </>
         )}
       </ScrollView>
-    </View>
+    </ScreenSurface>
   );
 }

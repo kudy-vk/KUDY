@@ -38,6 +38,7 @@ import { useScreenStyles } from "../../components/screen-styles";
 import { darkTokens, tokens, type ThemeTokens } from "../../components/design-tokens";
 import { useThemeStyles } from "../../components/theme";
 import { useVisibleMomentPlayback, type VisibleMoment } from "../../components/use-visible-moment-playback";
+import { ScreenSurface } from "../../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   // G06.10.b: the interface text renders the UI family (canon §3, Golos
@@ -267,7 +268,7 @@ export default function PlaceDetail() {
     facts.content_version !== null &&
     facts.content_locale !== null;
   return (
-    <View style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Place detail">
+    <ScreenSurface style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Place detail">
       {/* UX 02 (issue #348): the back sits in the frame above the scroll —
           reachable while the moment cards are scrolled (AC2). */}
       <BackButton label={back} testID="btn-place-back" />
@@ -369,6 +370,6 @@ export default function PlaceDetail() {
           </>
         )}
       </ScrollView>
-    </View>
+    </ScreenSurface>
   );
 }

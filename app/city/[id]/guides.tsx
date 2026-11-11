@@ -5,7 +5,7 @@
 // The [id] route of 19 §2.5 is display-shaped only in the MVP single-city
 // catalog: the surface renders the active city and does not echo an
 // unvalidated param (21 §3.2 — у MVP толькі актыўны Гданьск).
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useCatalogController } from "../../../controllers/catalog/useCatalogController";
@@ -15,6 +15,7 @@ import { darkTokens, tokens, type ThemeTokens } from "../../../components/design
 import { useThemeStyles } from "../../../components/theme";
 import { CityCatalogBody } from "../../../components/guide-card";
 import { uiStrings } from "../../../components/ui-strings";
+import { ScreenSurface } from "../../../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: {
@@ -39,7 +40,7 @@ export default function Guides() {
   // the failed load's named retry.
   const strings = uiStrings(locale);
   return (
-    <View
+    <ScreenSurface
       style={[styles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom }]}
       testID="screen-Guides"
     >
@@ -51,6 +52,6 @@ export default function Guides() {
         locale={locale}
         leading={<BackButton label={strings.backToCity} testID="btn-guides-back" />}
       />
-    </View>
+    </ScreenSurface>
   );
 }
