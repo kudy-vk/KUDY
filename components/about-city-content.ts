@@ -4,7 +4,7 @@
 // check date and conditions, and nothing here fetches — the screen opens the
 // rows through Linking and renders the whole document offline. Lives in
 // components/, not app/: expo-router treats every app/ file as a route
-// (issue #339 — the WalkButton precedent).
+// (docs/architecture/19_class_and_module_map.md — the components zone — the WalkButton precedent).
 import type { AboutCityStrings } from "../contracts/ui-message-types";
 
 export type AboutCityLinkKey = keyof AboutCityStrings["links"];
