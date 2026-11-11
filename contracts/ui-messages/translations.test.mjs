@@ -58,12 +58,18 @@ test('shipped translation sets pass their own contract', () => {
   }
 });
 
-test('the uk set covers every source record except the documented guideHint fallback', () => {
+// The documented-fallback domains of the output plan (tools/i18n/
+// generate-messages.mjs DOMAINS): guideHint omits uk (uk-release-scope
+// §6.4), aboutCity renders be only until its words are authored (issue
+// #200). A domain joins this list together with its plan entry.
+const FALLBACK_DOMAIN_PREFIXES = ['native.guideHint.', 'native.aboutCity.'];
+
+test('the uk set covers every source record except the documented fallback domains', () => {
   const set = loadUiMessageTranslations(shippedPath('uk'), sourceDoc, ['en', 'uk']);
   const covered = new Set(set.records.map((record) => record.id));
   const missing = sourceDoc.records.filter((record) => !covered.has(record.id)).map((record) => record.id);
   assert.deepEqual(missing, sourceDoc.records
-    .filter((record) => record.id.startsWith('native.guideHint.'))
+    .filter((record) => FALLBACK_DOMAIN_PREFIXES.some((prefix) => record.id.startsWith(prefix)))
     .map((record) => record.id));
 });
 

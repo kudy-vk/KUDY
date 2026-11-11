@@ -12,6 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import { defaultEngineConfig } from "../core/engine/reducer";
 import { ServicesContext } from "../app/_layout";
 import Explore from "../app/(tabs)/explore";
+import AboutCity from "../app/city/[id]/about";
 import Collection from "../app/collection/[id]";
 import Discovery from "../app/discovery";
 import Feedback from "../app/feedback";
@@ -98,6 +99,7 @@ export function frameRoutes() {
     "_layout": layoutWith(createServices({})),
     "(tabs)/explore": Explore,
     "(tabs)/my": My,
+    "city/[id]/about": AboutCity,
     "city/[id]/guides": Guides,
     "collection/[id]": Collection,
     "discovery": Discovery,

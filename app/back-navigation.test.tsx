@@ -30,6 +30,7 @@ test("«Побач» has its one back and it returns to the city (AC2)", async (
 
 test.each([
   ["guides", "/city/gdansk/guides", "btn-guides-back", "Горад", "screen-Guides"],
+  ["about", "/city/gdansk/about", "btn-about-back", "Назад", "screen-AboutCity"],
   ["preview", "/route/r1", "btn-preview-back", "Назад", "screen-Route preview"],
   ["place", "/place/p1", "btn-place-back", "Назад", "screen-Place detail"],
   ["run", "/run/r1", "btn-run-back", "Назад", "screen-Run"],
