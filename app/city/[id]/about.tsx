@@ -81,15 +81,8 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     borderColor: palette.colorLine,
     borderRadius: tokens.radiusBase,
     borderWidth: StyleSheet.hairlineWidth,
-    flexGrow: 1,
-    flexShrink: 1,
     paddingHorizontal: tokens.spaceM,
     paddingVertical: tokens.spaceM,
-  },
-  entryRow: {
-    alignItems: "center",
-    columnGap: tokens.spaceS,
-    flexDirection: "row",
   },
   // The row labels ride Golos 400 (the BackButton idiom): the 600 SemiBold
   // face inside an icon row dropped the last word at paint time on the
@@ -222,10 +215,12 @@ export default function AboutCity() {
               style={styles.entry}
               testID={`entry-about-${entry.id}`}
             >
-              <View style={styles.entryRow}>
-                <CanonIcon glyph={entry.icon} label={strings[entry.id].title} color={palette.colorAccent} />
-                <ScaledText style={styles.entryLabel}>{strings[entry.id].title}</ScaledText>
-              </View>
+              {/* The title rides its own line under the icon: a title inside
+                  the icon row dropped its last word at paint time on the
+                  Fabric dev build (the a11y tree carried the full text and
+                  the same words rendered whole outside the row). */}
+              <CanonIcon glyph={entry.icon} label={strings[entry.id].title} color={palette.colorAccent} />
+              <ScaledText style={styles.entryLabel}>{strings[entry.id].title}</ScaledText>
             </PressableSurface>
           ))}
         </View>
