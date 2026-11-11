@@ -1,4 +1,4 @@
-Табе зрабіць: у [#79](https://github.com/kudy-vk/KUDY/issues/79) правер узоры MAP-04 на 320 px, пацвердзі візуальную прыёмку і запусці Voka ды Judge ў новых звычайных Chat-сесіях; перад зліццём патрэбная праверка Android пасля бяспечнага зняцця састарэлага `D:\KUDY-Android\runner.lock`.
+Табе зрабіць: у [PR #232](https://github.com/kudy-vk/KUDY/pull/232) правер узоры MAP-04 на 320 px, пацвердзі візуальную прыёмку і запусці Voka ды Judge ў новых звычайных Chat-сесіях; перад зліццём патрэбная праверка Android пасля бяспечнага зняцця састарэлага `D:\KUDY-Android\runner.lock`.
 
 Табе зрабіць: для [PR #228](https://github.com/kudy-vk/KUDY/pull/228) правер, што лакальны Android E2E не працуе, выдалі састарэлы файл `D:\KUDY-Android\runner.lock` і запусці `npm run e2e:android:local`; да закрыцця [#213](https://github.com/kudy-vk/KUDY/issues/213) патрэбныя здымкі карты ў светлай і цёмнай тэмах.
 
