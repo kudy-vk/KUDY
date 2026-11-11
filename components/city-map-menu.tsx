@@ -1,7 +1,7 @@
 import MapPinIcon from "lucide-react-native/icons/map-pin";
 import RouteIcon from "lucide-react-native/icons/route";
 import CompassIcon from "lucide-react-native/icons/compass";
-import ClockIcon from "lucide-react-native/icons/clock";
+import LandmarkIcon from "lucide-react-native/icons/landmark";
 
 import { CityMapMenu, type PieceId } from "../docs/design/brand/outputs/menu-map-city-only/native";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
@@ -11,15 +11,17 @@ import { uiStrings, type UiStrings } from "./ui-strings";
 
 type MenuEntry = {
   id: PieceId;
-  labelKey: "nearby" | "guidesLink" | "whatToDo" | "comingSoon" | "kudyLink";
+  labelKey: "nearby" | "guidesLink" | "whatToDo" | "comingSoon" | "aboutCity" | "kudyLink";
   icon: CanonGlyph;
-  destination: "/map" | "/city/gdansk/guides" | "/discovery" | null;
+  destination: "/map" | "/city/gdansk/guides" | "/city/gdansk/about" | "/discovery" | null;
 };
 
 // Geometry and image paths stay in the existing export; routing belongs to the host.
 export const cityMenuConfig = {
   mapVersion: manifest.version,
   // The renderer is tap-only for MAP-06; drag/snap integration belongs to MAP-07/08.
+  // Issue #200: the reserve-1 fragment stops being the Soon slot — it opens the
+  // static «Пра горад» guide; only kudy stays reserved without a destination.
   layout: {
     height: 2500,
     dragEnabled: false,
@@ -35,7 +37,7 @@ export const cityMenuConfig = {
     { id: "nearby", labelKey: "nearby", icon: MapPinIcon, destination: "/map" },
     { id: "guides", labelKey: "guidesLink", icon: RouteIcon, destination: "/city/gdansk/guides" },
     { id: "discovery", labelKey: "whatToDo", icon: CompassIcon, destination: "/discovery" },
-    { id: "reserve-1", labelKey: "comingSoon", icon: ClockIcon, destination: null },
+    { id: "reserve-1", labelKey: "aboutCity", icon: LandmarkIcon, destination: "/city/gdansk/about" },
     { id: "kudy", labelKey: "kudyLink", icon: CompassIcon, destination: null },
   ] satisfies readonly MenuEntry[],
 };
@@ -50,7 +52,11 @@ export function HomeMapMenu({ width, locale, onSelect }: {
   const items = cityMenuConfig.items.map(entry => {
     const word = strings[entry.labelKey].replace(/\s*→$/, "");
     const disabled = entry.destination === null;
-    const label = disabled && entry.labelKey !== "comingSoon" ? `${word} · ${strings.comingSoon}` : word;
+    // A disabled entry appends the honest «· Хутка» note; the enabled
+    // guide entry (issue #200) renders its own word only. The old
+    // labelKey-is-comingSoon guard died with the reserve-1 rename — no
+    // disabled entry uses that labelKey any more.
+    const label = disabled ? `${word} · ${strings.comingSoon}` : word;
     labels[entry.id] = label;
     return {
       id: entry.id,

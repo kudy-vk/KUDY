@@ -90,6 +90,24 @@ export const DOMAINS = [
     ],
   },
   {
+    // Issue #200 — the «Пра горад» static Gdańsk guide: a curated document,
+    // authored in Belarusian (the app's first preference). Every display
+    // locale renders the be text until its words are authored — the same
+    // documented-fallback idiom as the guideHint's uk row; the document
+    // joins the translation gate when a locale set lands.
+    domain: 'native.aboutCity',
+    note: 'the «Пра горад» static Gdańsk guide (issue #200); the document is authored in Belarusian — every other display locale falls back to be (the guideHint documented-fallback idiom) until its words are authored',
+    outputs: [
+      {
+        file: 'components/about-city-strings.generated.ts',
+        exportName: 'ABOUT_CITY_STRINGS',
+        locales: ['be'],
+        annotation: 'AboutCityStrings',
+        imports: ['import type { AboutCityStrings } from "../contracts/ui-message-types.ts";'],
+      },
+    ],
+  },
+  {
     domain: 'native.preview',
     note: 'the guide preview\'s words (G06.05 #280, AC4/AC5; G08.05 #292)',
     outputs: [
