@@ -125,6 +125,46 @@ export function gradleArgs(options) {
   return args;
 }
 
+// cmd quotes only what whitespace would split; the wrapper's args never
+// contain a double quote (resolveOptions rejects cmd metacharacters).
+export const quoteForCmd = (arg) => (/[\s]/.test(arg) ? `"${arg}"` : arg);
+
+// The wrapper command as spawn() must receive it. On Windows the name carries
+// a path (.\gradlew.bat): a bare `gradlew.bat` leaves resolution to cmd's
+// search order, which a host may run with the current directory excluded, so
+// the build dies with "'gradlew.bat' is not recognized" before Gradle starts
+// [#211]. The separator is written literally so the plan does not depend on
+// the host that builds the string.
+export function gradleSpawnPlan(options, { platform = process.platform } = {}) {
+  const args = gradleArgs(options);
+  const command = `${platform === 'win32' ? '.\\gradlew.bat' : './gradlew'} ${args.map(quoteForCmd).join(' ')}`;
+  return platform === 'win32'
+    ? { file: command, args: [], shell: true, command }
+    : { file: './gradlew', args, shell: false, command };
+}
+
+// Gradle's own output is never localized, so its presence in the build log —
+// not the exit text — proves the wrapper actually started. A log without any
+// of these lines (cmd could not execute the wrapper, the JVM never came up)
+// marks a host problem, not a build failure [#211].
+export function gradleStartedInLog(logText) {
+  return /(BUILD (SUCCESSFUL|FAILED)|FAILURE:|^> Task |Welcome to Gradle|Starting a Gradle Daemon)/m.test(logText);
+}
+
+// The build step's exit code from its raw outcomes [#211, #234]. Pure so the
+// whole decision is unit-testable inside npm test's 60 s test budget: the
+// only real-CLI way to reach the timeout branch is a 60 s round-trip
+// (--timeout-minutes is whole minutes), which the CI tests job cannot afford.
+export function buildExitCode({ exitCode, apkExists, timedOut, spawnError, gradleStarted }) {
+  if (spawnError) return 87;
+  if (exitCode === 0 && !apkExists) return 1;
+  // A timed-out build was alive until the timer fired, so it started: it
+  // stays a build failure even when the log has no Gradle signature yet, and
+  // the timeout trail lives in the log and the record.
+  if (exitCode !== 0 && !timedOut && !gradleStarted) return 87;
+  return exitCode;
+}
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // A root matches only as a whole path: D:\b must not match D:\b2\x.

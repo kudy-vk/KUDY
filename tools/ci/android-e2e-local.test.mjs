@@ -10,8 +10,8 @@ import { after, describe, it } from 'node:test';
 
 import { acquireLock } from '../android-build/checkout-lock.mjs';
 import {
-  EXIT, buildLayout, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine, notVerifiedReasons,
-  probePort, resolveLayout, scopeOutcome, summaryLine,
+  EXIT, buildLayout, buildStepVerdict, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine,
+  notVerifiedReasons, probePort, resolveLayout, scopeOutcome, summaryLine,
 } from './android-e2e-local.mjs';
 
 const tmpRoots = [];
@@ -188,6 +188,23 @@ describe('android-e2e-local summary contract', () => {
     assert.notEqual(EXIT.notVerified, EXIT.ok);
     assert.notEqual(EXIT.lockStale, EXIT.ok);
     assert.notEqual(EXIT.notVerified, EXIT.fail);
+  });
+});
+
+describe('android-e2e-local build step verdict', () => {
+  it('exit 87 from android-build is NOT-VERIFIED with a reason, never failed (build) (revert: 87 → failed → test fails, #211)', () => {
+    const verdict = buildStepVerdict(87, false);
+    assert.equal(verdict.kind, 'not-verified');
+    assert.match(verdict.reason, /wrapper did not start/);
+  });
+
+  it('a real build failure and a missing APK still fail the run', () => {
+    assert.equal(buildStepVerdict(1, false).kind, 'failed');
+    assert.equal(buildStepVerdict(0, false).kind, 'failed', 'exit 0 without the APK is a failure, not a pass');
+  });
+
+  it('exit 0 with the APK present passes', () => {
+    assert.equal(buildStepVerdict(0, true).kind, 'ok');
   });
 });
 
