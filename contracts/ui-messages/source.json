@@ -20,7 +20,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/city-map-menu.tsx#comingSoon"
+        "components/ui-strings.ts#aboutCity"
       ],
       "sourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca"
     },
@@ -3476,7 +3476,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#title"
+        "components/about-city-strings.generated.ts#title"
       ],
       "sourceHash": "c97032b4d08f98ed3af66cce699ff0e6889b996bd17594eb97c3d1befa34e62d"
     },
@@ -3487,7 +3487,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#intro"
+        "components/about-city-strings.generated.ts#intro"
       ],
       "sourceHash": "090593db3d59daaf0cbc9058b21d7088776b2194ea7c4418a64fd59823c5a6aa"
     },
@@ -3503,7 +3503,7 @@
         }
       ],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#verifiedLine"
+        "components/about-city-strings.generated.ts#verifiedLine"
       ],
       "sourceHash": "6b9d5ad3be3b2367e16d5bb1a6adcd0a61fd6defc3eb7dc94badf7e3fdea2222"
     },
@@ -3514,7 +3514,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#entriesHeading"
+        "components/about-city-strings.generated.ts#entriesHeading"
       ],
       "sourceHash": "9a9522ded766116d9fc1d14190c7b93c1dc7261c9fafe09b25d5565e302d5d32"
     },
@@ -3525,7 +3525,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#food.title"
+        "components/about-city-strings.generated.ts#food.title"
       ],
       "sourceHash": "b6fe227c2b6cd68c8348af50174d3336ba7e3844b64b7b4511233071674bee57"
     },
@@ -3536,7 +3536,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#food.delivery"
+        "components/about-city-strings.generated.ts#food.delivery"
       ],
       "sourceHash": "9c44854faf8b84cd69f6ed9f9d162b467aa40859229dd047f56927d2dd9fe1f7"
     },
@@ -3547,7 +3547,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#food.cards"
+        "components/about-city-strings.generated.ts#food.cards"
       ],
       "sourceHash": "d38d557124cc4e3bee94ca074cd9d8b7add8aca69f9dc9459734830e49760cbe"
     },
@@ -3558,7 +3558,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#food.blik"
+        "components/about-city-strings.generated.ts#food.blik"
       ],
       "sourceHash": "92b3e4267e2e34766937596e4d324656dd58a70bdaedcd4567993ff714a9e7fd"
     },
@@ -3569,7 +3569,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#karta.title"
+        "components/about-city-strings.generated.ts#karta.title"
       ],
       "sourceHash": "0ea2f67229fc4e5a65ed4851bd49886f3fa1618b548dac8db7bc863603cae825"
     },
@@ -3580,7 +3580,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#karta.packages"
+        "components/about-city-strings.generated.ts#karta.packages"
       ],
       "sourceHash": "b8b765722a08132f1a8fe639abfe21e09c0d6cb0d9562fb846b80284ba08bc0c"
     },
@@ -3591,7 +3591,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#karta.transportAddOn"
+        "components/about-city-strings.generated.ts#karta.transportAddOn"
       ],
       "sourceHash": "be38f7d77e54c8849669417d8e8100ae71e134ba373e26f9fba7b17de56bac88"
     },
@@ -3602,7 +3602,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#karta.freeMuseums"
+        "components/about-city-strings.generated.ts#karta.freeMuseums"
       ],
       "sourceHash": "8b2a06b04aa1d5c3bc52b6b1484d9b58fa61e544e945853f333cf9bf39aa16dc"
     },
@@ -3613,7 +3613,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#karta.exceptionsNote"
+        "components/about-city-strings.generated.ts#karta.exceptionsNote"
       ],
       "sourceHash": "54b276ddab78fd02616560125756a5ca2584be2d4978f38e813e437927eb2db5"
     },
@@ -3624,7 +3624,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.airportBuses"
+        "components/about-city-strings.generated.ts#links.airportBuses"
       ],
       "sourceHash": "76b0679d627edb6cc931a3d34360f92f58a060d2b645c2e3327650bbaf24d64e"
     },
@@ -3635,7 +3635,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.airportTrains"
+        "components/about-city-strings.generated.ts#links.airportTrains"
       ],
       "sourceHash": "43d598052646b9c99df8c7f124be41f69b27e08c481bb07b55c98f2e1b0b6a3f"
     },
@@ -3646,7 +3646,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.ztmSchedule"
+        "components/about-city-strings.generated.ts#links.ztmSchedule"
       ],
       "sourceHash": "d2b5d2bbe3bbba73cb1d5ffa4e0340122ebfb0f508e7d5ab09dd4bd7fb1aade6"
     },
@@ -3657,7 +3657,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.ztmTickets"
+        "components/about-city-strings.generated.ts#links.ztmTickets"
       ],
       "sourceHash": "8b247a98e7216c1bd428a4c8fd3708940b94f28484604e6ace2ea9ab95d7f0ab"
     },
@@ -3668,7 +3668,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.skmSearch"
+        "components/about-city-strings.generated.ts#links.skmSearch"
       ],
       "sourceHash": "b8ad3b62a24691ad6f3222ce838587762a7b7f195a6957c24b2fcab606f1a6c4"
     },
@@ -3679,7 +3679,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.jakdojade"
+        "components/about-city-strings.generated.ts#links.jakdojade"
       ],
       "sourceHash": "272dbdc55384fdad165b2ad6ab8860b8315bd1fcbd3855404e34b620d0e64946"
     },
@@ -3690,7 +3690,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.mzkzg"
+        "components/about-city-strings.generated.ts#links.mzkzg"
       ],
       "sourceHash": "1396459f5e6dd63c3b715839f813c3c5ecf9c868cc91867212c876e7719dad3d"
     },
@@ -3701,7 +3701,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.visitGdanskMap"
+        "components/about-city-strings.generated.ts#links.visitGdanskMap"
       ],
       "sourceHash": "e23f59a039cb47da15f47f07486d88216c16f59befeb2647326d8156d5a2ba09"
     },
@@ -3712,7 +3712,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.kartaTurysty"
+        "components/about-city-strings.generated.ts#links.kartaTurysty"
       ],
       "sourceHash": "05e311458d24b3df7019cede9a29047147797d6eee5f04facd3e39ded5e53c02"
     },
@@ -3723,7 +3723,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.muzeumGdanska"
+        "components/about-city-strings.generated.ts#links.muzeumGdanska"
       ],
       "sourceHash": "b5aa0296032f141776ba027451259c02ba9f937abca36b11f134852e5b2d550e"
     },
@@ -3734,7 +3734,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.muzeum1939"
+        "components/about-city-strings.generated.ts#links.muzeum1939"
       ],
       "sourceHash": "75d77d12f01fd7eae9284e64e1040708bb5f24cb125fd77dbfb03802a25c1cfe"
     },
@@ -3745,7 +3745,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.pysznePayment"
+        "components/about-city-strings.generated.ts#links.pysznePayment"
       ],
       "sourceHash": "75cbcf90e32d1b5c322110547cc100eabe73f7d3dd213adabe56a6cbc63035ca"
     },
@@ -3756,7 +3756,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.blikHow"
+        "components/about-city-strings.generated.ts#links.blikHow"
       ],
       "sourceHash": "08bdd0ec8ab72c4a7735c58c9805ece5a374fb10e97cfcc87ade78586d49c6c5"
     },
@@ -3767,7 +3767,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.malborkVisit"
+        "components/about-city-strings.generated.ts#links.malborkVisit"
       ],
       "sourceHash": "0dc3ad96a1b0dc22232c95f99d0ad18b552306ae74f4239e00ad0163e049c1ba"
     },
@@ -3778,7 +3778,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.trainSchedule"
+        "components/about-city-strings.generated.ts#links.trainSchedule"
       ],
       "sourceHash": "03f434b8c78781464fad7ca9b9a2d1aee57a84209b2a2fb053cdbaa0cf7e276c"
     },
@@ -3789,7 +3789,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#links.unesco"
+        "components/about-city-strings.generated.ts#links.unesco"
       ],
       "sourceHash": "1c1ee781aa11e11877d858725ee92e23f619add473c8f2ab1f27a4b6f06a9354"
     },
@@ -3800,7 +3800,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.title"
+        "components/about-city-strings.generated.ts#transport.title"
       ],
       "sourceHash": "7892c1708152b7ea11fef6826a4df56d09599ad0e4ab36f1aafa54cb9d19a819"
     },
@@ -3811,7 +3811,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.ztmWhen"
+        "components/about-city-strings.generated.ts#transport.ztmWhen"
       ],
       "sourceHash": "cd3f7e564a93ebc58d541bc1f585aee49435e4359ab60e4f44f4cebfc3088450"
     },
@@ -3822,7 +3822,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.skmWhen"
+        "components/about-city-strings.generated.ts#transport.skmWhen"
       ],
       "sourceHash": "fdf1f5a1be0f592996439466a1bd330f7fbeaef6021e3d50117ebf0d5f01acc5"
     },
@@ -3833,7 +3833,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.otherRail"
+        "components/about-city-strings.generated.ts#transport.otherRail"
       ],
       "sourceHash": "341d5f10e342a1ba883ec3f4be5ac86b36f7a1e4b045070f51cedab39aee2fd6"
     },
@@ -3844,7 +3844,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.tickets"
+        "components/about-city-strings.generated.ts#transport.tickets"
       ],
       "sourceHash": "e8842d0fc1d1a44e2e58c3bf91464b0aa64ce8ac289c4087cf08dfcd35327eb8"
     },
@@ -3855,7 +3855,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.activation"
+        "components/about-city-strings.generated.ts#transport.activation"
       ],
       "sourceHash": "631e6b5c847e02ecee665ca3feab71f13c0097076e56fe91212cf9f5597b33a8"
     },
@@ -3866,7 +3866,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#transport.machinesApps"
+        "components/about-city-strings.generated.ts#transport.machinesApps"
       ],
       "sourceHash": "8dbbad1ad96b9a8d7001eddf528bb8ab7e34c3e05eb6bb3be007e448d5a23f4a"
     },
@@ -3877,7 +3877,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.title"
+        "components/about-city-strings.generated.ts#airport.title"
       ],
       "sourceHash": "dfa8fcbba3c5eac62aaadc50ca03d5c8b44a2918218ab076872cbacf9b2872f4"
     },
@@ -3888,7 +3888,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.intro"
+        "components/about-city-strings.generated.ts#airport.intro"
       ],
       "sourceHash": "5cf74b68128cb4154b7132bd0db55ddc4d2332c014e17b6ed9f39b4de04f5c38"
     },
@@ -3899,7 +3899,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.busDay"
+        "components/about-city-strings.generated.ts#airport.busDay"
       ],
       "sourceHash": "a55412479befad23da9ff240ce29fc5a7f5ff9ba8e507f39a7fd721a40767d3d"
     },
@@ -3910,7 +3910,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.busSecond"
+        "components/about-city-strings.generated.ts#airport.busSecond"
       ],
       "sourceHash": "5dc5448a5a0c7d5ad0a8fa2b3079f8fd55eade34bb1be83f9cfc649ae7399954"
     },
@@ -3921,7 +3921,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.nightBus"
+        "components/about-city-strings.generated.ts#airport.nightBus"
       ],
       "sourceHash": "f8ee4c615653ca4f25c6dffeba37d0c20fe5d0996cedd939751c7af15ec116a9"
     },
@@ -3932,7 +3932,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.train"
+        "components/about-city-strings.generated.ts#airport.train"
       ],
       "sourceHash": "473105c9dd4ce44c71c6b7154f3b902109dead8b0b34d55c851d6032be3690af"
     },
@@ -3943,7 +3943,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.ticketNote"
+        "components/about-city-strings.generated.ts#airport.ticketNote"
       ],
       "sourceHash": "73c5434557ef297640273eb1c25de1c069ea9cac81b0af2b94ebc83c07ac301b"
     },
@@ -3954,7 +3954,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#airport.scheduleNote"
+        "components/about-city-strings.generated.ts#airport.scheduleNote"
       ],
       "sourceHash": "0f0f097e4ad5d56d348255661d59b2084a152de8d3202ff181c6b5e3c2b7a9d8"
     },
@@ -3965,7 +3965,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.title"
+        "components/about-city-strings.generated.ts#city.title"
       ],
       "sourceHash": "e3faf352c946a5279b2554b48bce5c7a59fb62eb6aab1f2569769d168f139208"
     },
@@ -3976,7 +3976,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.glowneVsStare"
+        "components/about-city-strings.generated.ts#city.glowneVsStare"
       ],
       "sourceHash": "f94f553bf8350befaedaecba4729137e42f32409594fcb912ec35033ef24a7e5"
     },
@@ -3987,7 +3987,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.station"
+        "components/about-city-strings.generated.ts#city.station"
       ],
       "sourceHash": "5283d372ec0f73e5661ab31b2e033e78f38abf063fcf27fe6157e91fc4ff7604"
     },
@@ -3998,7 +3998,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.wrzeszcz"
+        "components/about-city-strings.generated.ts#city.wrzeszcz"
       ],
       "sourceHash": "dd5571935eaa5279475a67a21cc660e0205219d8af954f471e3d3185b7e08430"
     },
@@ -4009,7 +4009,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.oliwa"
+        "components/about-city-strings.generated.ts#city.oliwa"
       ],
       "sourceHash": "d7cd4b9a3f587208edcb55423998a432c654d776e2d9f80d41fe7dcfa3d2b248"
     },
@@ -4020,7 +4020,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.beaches"
+        "components/about-city-strings.generated.ts#city.beaches"
       ],
       "sourceHash": "42ff19bbb86aad221f5124a5091fb4a0cc1e72093b95d5dfd1814fcc8385da2d"
     },
@@ -4031,7 +4031,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapCaption"
+        "components/about-city-strings.generated.ts#city.mapCaption"
       ],
       "sourceHash": "0972f56a2cc638aa25686793ee7724f0c25c6533f0adec45af9d03f95ca9a616"
     },
@@ -4042,7 +4042,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapSea"
+        "components/about-city-strings.generated.ts#city.mapSea"
       ],
       "sourceHash": "0da10651a707d7996b316819e12598bbf824c47ecf8a0849d152072b52a5148b"
     },
@@ -4053,7 +4053,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapStation"
+        "components/about-city-strings.generated.ts#city.mapStation"
       ],
       "sourceHash": "f6a41232e88c564945fec2c31f75702654c38ae365cb9079945c136886b038fc"
     },
@@ -4064,7 +4064,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapGlowne"
+        "components/about-city-strings.generated.ts#city.mapGlowne"
       ],
       "sourceHash": "7a429d8c532f4371495c370095cee803dc939a3806591f18f1a2aa02eb9659ee"
     },
@@ -4075,7 +4075,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapStare"
+        "components/about-city-strings.generated.ts#city.mapStare"
       ],
       "sourceHash": "813eb25324f174211264035edf3b1d159b2a7251866aaf915ccaaf86995a1cb8"
     },
@@ -4086,7 +4086,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapMotlawa"
+        "components/about-city-strings.generated.ts#city.mapMotlawa"
       ],
       "sourceHash": "81da11a502d0e49fb0781925cd8a1a14f0ef168397ac5e9a916c2423ff9f6535"
     },
@@ -4097,7 +4097,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapWrzeszcz"
+        "components/about-city-strings.generated.ts#city.mapWrzeszcz"
       ],
       "sourceHash": "0bafde0d8ac1fe557859ec266ecbf61855a229a8eb274ba86c7c9a2ce0b373e3"
     },
@@ -4108,7 +4108,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapOliwa"
+        "components/about-city-strings.generated.ts#city.mapOliwa"
       ],
       "sourceHash": "27c77902ecdd95c67486c691d0dd18fa96891303c4621c521c06c89f80fd45f1"
     },
@@ -4119,7 +4119,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapBrzezno"
+        "components/about-city-strings.generated.ts#city.mapBrzezno"
       ],
       "sourceHash": "bb8e001c3ef63320c9bd9b58fa3cfe955d9d6e6ed56e8df4096bd79eefc46be0"
     },
@@ -4130,7 +4130,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapJelitkowo"
+        "components/about-city-strings.generated.ts#city.mapJelitkowo"
       ],
       "sourceHash": "0ab649bf9a706542ed5c4d32980a073b93f67eee0733da143edd74cdefd860a1"
     },
@@ -4141,7 +4141,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapStogi"
+        "components/about-city-strings.generated.ts#city.mapStogi"
       ],
       "sourceHash": "2593a22351a426f137154e0eeac7c16c464c7b1915a24d5d3cc9adacac234176"
     },
@@ -4152,7 +4152,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#city.mapSobieszewo"
+        "components/about-city-strings.generated.ts#city.mapSobieszewo"
       ],
       "sourceHash": "41811c6a79544601e21d60f348deaea3391cc657abd49a63c096c661c5c304d0"
     },
@@ -4163,7 +4163,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#malbork.title"
+        "components/about-city-strings.generated.ts#malbork.title"
       ],
       "sourceHash": "ce402642bb2e94df0f5e8c6008d207d40a9900e02a9b7d2c56be4285ba21a2c6"
     },
@@ -4174,7 +4174,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#malbork.intro"
+        "components/about-city-strings.generated.ts#malbork.intro"
       ],
       "sourceHash": "263203713edca1370185368e30b44ccbe89de003113c5b377aedb9f925f91fb0"
     },
@@ -4185,7 +4185,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#malbork.train"
+        "components/about-city-strings.generated.ts#malbork.train"
       ],
       "sourceHash": "d8321890461b33100ac0521d462a95e6417afd7d6eff35ec95c6ee794b275d7b"
     },
@@ -4196,7 +4196,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#malbork.walk"
+        "components/about-city-strings.generated.ts#malbork.walk"
       ],
       "sourceHash": "893433bf0f8d738984832b6aef4f6e6564cd3b39bba77977243b85e018731f36"
     },
@@ -4207,7 +4207,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "app/city/[id]/about.tsx#malbork.visitNote"
+        "components/about-city-strings.generated.ts#malbork.visitNote"
       ],
       "sourceHash": "b9294b80d6222afc5c7d2baec9bc9eb76970b165aa6693f371e6a393661bd975"
     }

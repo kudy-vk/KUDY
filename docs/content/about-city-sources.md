@@ -26,7 +26,7 @@
 
 | Факт | Значэнне ў даведніку | Крыніца | Дата праверкі | Умовы |
 |---|---|---|---|---|
-| Арганізатары тарыфу | ZTM Гданьск — горад; агламерацыя (14 гмін) — звяз MZKZG; ZKM Гдыня, MZK Wejherowo — свае сеткі | [ztm.gda.pl/bilety](https://ztm.gda.pl/bilety), [mzkzg.org](https://mzkzg.org/) | 2026-11-10 | старыя назвы «стrefa metropolitalna 1/2», «aglomeracyjny» больш не ўжываюцца |
+| Арганізатары тарыфу | ZTM Гданьск — горад; агламерацыя (14 гмін) — звяз MZKZG; ZKM Гдыня, MZK Wejherowo — свае сеткі | [ztm.gda.pl/bilety](https://ztm.gda.pl/bilety), [mzkzg.org](https://mzkzg.org/) | 2026-11-10 | старыя назвы «strefa metropolitalna 1/2», «aglomeracyjny» больш не ўжываюцца |
 | Білеты ZTM Гданьска | 75 хв — 4,80/2,40; адна паездка — 6,00/3,00; дзень — 22/11 | [ztm.gda.pl — bilety-jednorazowe](https://ztm.gda.pl/bilety/bilety-jednorazowe,a,3019) | 2026-11-10 | цэннік ад 03.04.2023; дзейнічаюць толькі ў сетцы ZTM |
 | Метрапалітальныя білеты MZKZG | адна паездка 4,80 (тэлефон)/5,20 (папера); 75 хв — 6,00/3,00; дзень — 24/12; 72 гад — 48/24 | [mzkzg.org — jednorazowe i czasowe](https://mzkzg.org/bilety-metropolitalne/bilety-jednorazowe-czasowe/) | 2026-11-10 | старонка абноўленая 14.10.2026; weekend-білета няма |
 | Білеты ў цягнік (kolejowo-komunalne) | дзень «двух арганізатараў» 30/15; «усіх» 34/17; 72 гад — 68/34 | [mzkzg.org — miesięczne kolejowo-komunalne](https://mzkzg.org/bilety-metropolitalne/miesieczne-kolejowo-komunalne/) | 2026-11-10 | адзіныя білеты ZTM/MZKZG у цягніках не дзейнічаюць; ад 01.07.2026 месячныя — толькі праз FALA |
