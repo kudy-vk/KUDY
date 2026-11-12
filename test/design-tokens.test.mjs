@@ -324,6 +324,8 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
     'screenStyles.title must render the UI family');
   assert.match(roleSource, /\bdisplayTitle:\s*{[^}]*fontFamily:\s*tokens\.fontFamilyDisplay/,
     'screenStyles.displayTitle must render the display family');
+  assert.match(roleSource, /\bmenuDisplayTitle:\s*{[^}]*fontFamily:\s*tokens\.fontFamilyDisplayRegular/,
+    'screenStyles.menuDisplayTitle must render the regular display face (M11)');
   const displayConsumers = [];
   const scan = (dir) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -334,7 +336,7 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
         if (dir === join(root, 'app') && /fontFamilyDisplay/.test(source)) {
           displayConsumers.push(`${repoRel(filePath)}: hard-coded display token`);
         }
-        if (/screenStyles\.displayTitle/.test(source)) {
+        if (/screenStyles\.(displayTitle|menuDisplayTitle)/.test(source)) {
           displayConsumers.push(repoRel(filePath));
         }
       }
@@ -342,7 +344,7 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
   };
   scan(join(root, 'app'));
   scan(join(root, 'components'));
-  assert.deepEqual(displayConsumers.sort(), ['app/route/[id].tsx'],
+  assert.deepEqual(displayConsumers.sort(), ['app/route/[id].tsx', 'components/screen-styles.ts'],
     'the display roles are allowed on the route preview title and the screen-styles definitions only');
 });
 
