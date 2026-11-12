@@ -309,14 +309,14 @@ test('surface font-family mirror stays anchored to the licensed canon families (
   );
 });
 
-test('the display family renders only guide and history names (canon §3, issue #435)', () => {
-  // Canon §3: Alegreya is the display face of the guide and story names
-  // only. The role lives in one place — screenStyles.displayTitle; every
-  // other screen title (rubrics, place names, collections) consumes
-  // screenStyles.title on the UI family. The walk is the reverted-line
-  // check (implementation-rules 1): re-pointing a rubric or place title
-  // at the display role, or a screen consuming the display token
-  // directly, turns this red.
+test('the display family renders its two sanctioned roles (canon §3 as amended by M11)', () => {
+  // Canon §3 (issue #435) gave Alegreya the guide and story names; M11
+  // (issue #216) sanctions the second role — the main screen's «Куды
+  // сёння?» heading through screenStyles.menuDisplayTitle. Every other
+  // screen title (rubrics, place names, collections) stays on the UI
+  // family. The walk is the reverted-line check (implementation-rules 1):
+  // re-pointing a rubric or place title at a display role, or a screen
+  // consuming a display token directly, turns this red.
   const roleSource = readFileSync(join(root, 'components/screen-styles.ts'), 'utf8');
   // \b anchors the key start: a future `subtitle:` must not satisfy the
   // `title:` assertion by substring (pr-review 2026-10-01).
@@ -343,7 +343,7 @@ test('the display family renders only guide and history names (canon §3, issue 
   scan(join(root, 'app'));
   scan(join(root, 'components'));
   assert.deepEqual(displayConsumers.sort(), ['app/route/[id].tsx'],
-    'the display role is allowed on the route preview title (the history name) only');
+    'the display roles are allowed on the route preview title and the screen-styles definitions only');
 });
 
 test('surface styles consume the canon title token — no hardcoded title size (UX 08)', () => {

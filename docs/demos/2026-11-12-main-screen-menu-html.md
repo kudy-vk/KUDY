@@ -33,6 +33,8 @@ npm run messages:check 2>&1 | grep 'check-messages:'
 
 ```output
 ✔ the approved spec mirrors the canon and cites the owner decision
+✔ M3 uses the owner-approved production palette and radial background (#212)
+✔ readable dark text and controls retain contrast across the M3 gradient and grain
 ✔ the readable token table agrees with both canon themes
 ✔ the measured contrast table agrees with the approved values
 ✔ dark tokens plus the cartography zone cover every canon color token exactly once
@@ -41,6 +43,7 @@ npm run messages:check 2>&1 | grep 'check-messages:'
 ✔ cartography pairs keep the light values in both themes (MVP zone rule)
 ✔ the zone rule exists because partial theming breaks the marker letter
 ✔ tier-2 dark cartography candidates hold the thresholds
+✔ the recorded Tier-2 marker-letter range matches its unchanged candidate palette
 ✔ behavior fixes the three choices and records the confirmed system default
 ✔ guard is wired into npm test (implementation-rules 1 and 7)
 ✔ the panorama drawing is deterministic and shared by the mockups and the app
