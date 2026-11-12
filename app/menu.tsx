@@ -13,6 +13,7 @@ import { useScreenStyles } from "../components/screen-styles";
 import { useThemeTokens } from "../components/theme";
 import { WalkButton } from "../components/walk-button";
 import { uiStrings } from "../components/ui-strings";
+import { ScreenSurface } from "../components/screen-surface";
 
 // Issue #216 (M11) — the main screen per the approved mocket menu.html:
 // the header (brand, city name on the right, the walk button), the «Куды
@@ -49,7 +50,7 @@ export default function Menu() {
     Math.max(120, topBlockHeight - headExtent - titleExtent));
   const mapWidth = Math.max(1, Math.floor(Math.min(canvasWidth, canvasHeight)));
   return (
-    <View testID="screen-Menu" style={[styles.screen, { backgroundColor: palette.colorPaper, paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }]}>
+    <ScreenSurface testID="screen-Menu" style={[styles.screen, { backgroundColor: palette.colorPaper, paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }]}>
       <View style={[styles.top, { height: topBlockHeight }]}>
         <View style={styles.header}>
           <ScaledText accessibilityRole="header" style={[styles.brand, { color: palette.colorAccent }]}>{uiStrings(locale).myKudy}</ScaledText>
@@ -77,7 +78,7 @@ export default function Menu() {
         <CityPanorama testID="menu-panorama" />
       </View>
       <AdContainer loaded={false} testID="menu-ad" />
-    </View>
+    </ScreenSurface>
   );
 }
 

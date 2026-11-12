@@ -27,7 +27,7 @@ const darkValue = (token) => canon.darkTheme.tokens[token] ?? canon.tokens[token
 test('the approved spec mirrors the canon and cites the owner decision', () => {
   assert.equal(spec.status, 'accepted');
   assert.equal(spec.issue, '#860');
-  assert.equal(spec.ownerDecision, '#860');
+  assert.equal(spec.ownerDecision, '#212');
   assert.match(spec.verifiedSha, /^[0-9a-f]{40}$/, 'the compared main SHA must be recorded in full');
   assert.deepEqual(spec.darkTokens, canon.darkTheme.tokens);
   assert.deepEqual(zone.tokens, canon.darkTheme.lightCartographyTokens);
@@ -37,6 +37,56 @@ test('the approved spec mirrors the canon and cites the owner decision', () => {
     assert.ok(canon.contrastPairs.some((entry) =>
       entry.fg === pair.fg && entry.bg === pair.bg && entry.min === pair.min),
       `${pair.fg}/${pair.bg} must be in the canon contrast pairs`);
+  }
+});
+
+test('M3 uses the owner-approved production palette and radial background (#212)', () => {
+  assert.equal(canon.darkTheme.ownerDecision, '#212');
+  const css = readFileSync(join(root, 'docs/design/production/kit.css'), 'utf8');
+  const dark = css.match(/\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(dark, 'production dark palette must exist');
+  const variables = Object.fromEntries([...dark.matchAll(/--([\w-]+):\s*(#[\da-f]{6})/gi)]
+    .map(([, name, value]) => [name, value.toLowerCase()]));
+  for (const [token, value] of Object.entries(canon.darkTheme.tokens)) {
+    const cssName = token.replace(/^color\./, '').replaceAll('.', '-');
+    if (token === 'color.note') continue; // M3 leaves the existing prototype-only note unchanged.
+    assert.equal(value, variables[cssName], `${token} must match the approved M3 palette`);
+  }
+  assert.equal(canon.darkTheme.tokens['color.note'], '#33301d');
+  const gradient = canon.darkTheme.backgroundGradient;
+  assert.deepEqual(gradient, {
+    cx: '50%', cy: '0%', rx: '130%', ry: '70%',
+    stops: [
+      { offset: '0%', color: '#4a2519' },
+      { offset: '58%', color: '#2a1510' },
+      { offset: '100%', color: '#1a0d0a' },
+    ],
+  });
+  assert.deepEqual(spec.backgroundGradient, gradient);
+  const fill = `radial-gradient(${gradient.rx} ${gradient.ry} at ${gradient.cx} ${gradient.cy}, ` +
+    gradient.stops.map(({ color, offset }) => `${color} ${offset}`).join(', ') + ')';
+  assert.ok(dark.includes(`--paper-fill: ${fill};`), 'mockup and native gradient geometry must agree');
+});
+
+test('readable dark text and controls retain contrast across the M3 gradient and grain', () => {
+  assert.equal(canon.paperGrain.darkOpacity, 0.04);
+  assert.equal(canon.paperGrain.darkTintToken, 'color.muted');
+  const roles = [
+    ['color.ink', 4.5], ['color.muted', 4.5], ['color.disabled-ink', 4.5],
+    ['color.disabled-line', 3], ['color.accent', 3], ['color.warn', 4.5],
+  ];
+  const blend = (background, foreground, alpha) => '#' + [0, 1, 2].map(channel => {
+    const part = (hex) => Number.parseInt(hex.slice(1 + channel * 2, 3 + channel * 2), 16);
+    return Math.round(part(background) * (1 - alpha) + part(foreground) * alpha)
+      .toString(16).padStart(2, '0');
+  }).join('');
+  for (const stop of canon.darkTheme.backgroundGradient.stops) {
+    for (const bg of [stop.color, blend(stop.color, darkValue(canon.paperGrain.darkTintToken), canon.paperGrain.darkOpacity)]) {
+      for (const [role, min] of roles) {
+        const ratio = contrast(darkValue(role), bg);
+        assert.ok(ratio >= min, `${role} on ${bg}: ${ratio.toFixed(2)} < ${min}`);
+      }
+    }
   }
 });
 
@@ -118,6 +168,18 @@ test('tier-2 dark cartography candidates hold the thresholds', () => {
     const ratio = contrast(fgValue, tier2[bg]);
     assert.ok(ratio >= min, `tier-2 ${fg} on ${bg} ${ratio.toFixed(2)}:1 < ${min}`);
   }
+});
+
+test('the recorded Tier-2 marker-letter range matches its unchanged candidate palette', () => {
+  const section = specText.split('### 5.4 ')[1]?.split('### 5.5 ')[0];
+  const range = section?.match(/([0-9.]+)–([0-9.]+):1; маркеры/);
+  assert.ok(range, 'the Tier-2 letter contrast range must be recorded');
+  const tier2 = zone.tier2Proposal;
+  const ratios = canon.contrastPairs
+    .filter(({ fg, bg }) => fg === canon.darkTheme.lightMarkerLetterToken && bg.startsWith('color.marker.'))
+    .map(({ bg }) => contrast(tier2.markerLetter, tier2[bg]));
+  assert.equal(range[1], Math.min(...ratios).toFixed(2));
+  assert.equal(range[2], Math.max(...ratios).toFixed(2));
 });
 
 test('behavior fixes the three choices and records the confirmed system default', () => {

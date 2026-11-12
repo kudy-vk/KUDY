@@ -87,38 +87,48 @@ export const tokens = {
 } as const;
 
 
-// #436 — approved DT-2 dark-chrome values from the darkTheme machine block in
+// #212 — owner-approved M3 dark-chrome values from the darkTheme machine block in
 // docs/design/visual-language.md. The light map, marker colors and typography
 // deliberately stay unchanged (DT-4); test/design-runtime-theme.test.mjs pins
 // every override to the accepted canon. Never invert content imagery.
 export const darkTokens = {
   ...tokens,
-  colorPaper: '#171d1c',
-  colorInk: '#f2f1e9',
-  colorMuted: '#c4d0ca',
-  colorAccent: '#80d4ad',
-  colorAccentInk: '#0d2a1e',
-  colorCard: '#232c29',
-  colorLine: '#45534c',
-  colorShelfAccent: '#65cb9c',
-  colorShelfLine: '#35403a',
-  colorDisabledInk: '#9aa8a1',
-  colorDisabledLine: '#6d7c72',
-  colorBadgePaid: '#493b23',
-  colorBadgeFree: '#263b31',
-  colorBadgeMixed: '#332c47',
-  colorNoticeBg: '#3a3119',
-  colorNoticeBorder: '#7d6b3a',
-  colorErrorBg: '#3a201b',
-  colorErrorBorder: '#8a4a42',
-  colorHintBg: '#1c2833',
-  colorHintBorder: '#3e5871',
+  texturePaperGrainOpacity: 0.04,
+  colorPaper: '#2a1510',
+  colorInk: '#f4eadb',
+  colorMuted: '#d6c5b0',
+  colorAccent: '#8ad4b0',
+  colorAccentInk: '#10281d',
+  colorCard: '#3a231b',
+  colorLine: '#6b4a3d',
+  colorShelfAccent: '#63b48e',
+  colorShelfLine: '#1a0d0a',
+  colorDisabledInk: '#b9a794',
+  colorDisabledLine: '#927a6c',
+  colorBadgePaid: '#57421f',
+  colorBadgeFree: '#2f4234',
+  colorBadgeMixed: '#40334e',
+  colorNoticeBg: '#4a3618',
+  colorNoticeBorder: '#8a733a',
+  colorErrorBg: '#4a211b',
+  colorErrorBorder: '#9a5046',
+  colorHintBg: '#2e2c38',
+  colorHintBorder: '#5a5878',
   /* Issue #216 (M5/M11) — панарама ў цёмнай тэме: светлы штрых на цёмным
      глейзе (kit.css [data-theme="dark"] --engrave / --panorama-ground).
      Without inline anchors: the dark overrides are pinned by the runtime
      theme test, not by the light-token guard. */
   colorEngrave: '#c9b59b',
   colorPanoramaGround: '#1e100c',
+} as const;
+
+export const darkBackground = {
+  cx: '50%', cy: '0%', rx: '130%', ry: '70%',
+  stops: [
+    { offset: '0%', color: '#4a2519' },
+    { offset: '58%', color: '#2a1510' },
+    { offset: '100%', color: '#1a0d0a' },
+  ],
 } as const;
 
 export type ThemeTokens = typeof tokens | typeof darkTokens;

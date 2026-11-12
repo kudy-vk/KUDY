@@ -39,6 +39,7 @@ import { WalkProgress } from "../../components/walk-progress";
 import { RunNativeMap } from "../../components/run-native-map";
 import { PointStatusSign } from "../../components/point-status-sign";
 import { useServices, useUiLocale } from "../_layout";
+import { ScreenSurface } from "../../components/screen-surface";
 
 const OSM_ATTRIBUTION_URL = "https://www.openstreetmap.org/copyright";
 
@@ -459,7 +460,7 @@ export default function Run() {
 
   if (surface === null || surface.status === "unavailable") {
     return (
-      <View style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
+      <ScreenSurface style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
         <BackButton label={back} testID="btn-run-back" />
         <ScaledText style={styles.centered} testID="run-unavailable">
           {strings.unavailableTitle}
@@ -469,17 +470,17 @@ export default function Run() {
             {runMapReason(surface.reason, strings)}
           </ScaledText>
         ) : null}
-      </View>
+      </ScreenSurface>
     );
   }
   if (surface.status === "loading" || run === null) {
     return (
-      <View style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
+      <ScreenSurface style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
         {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the loading state keeps the frame — with the
             native header off there is no other way back (AC2). */}
         <BackButton label={back} testID="btn-run-back" />
         <LoadingIndicator style={styles.centered} text={strings.loading} />
-      </View>
+      </ScreenSurface>
     );
   }
   const view = runMapView(run.run, surface.stops, surface.facts, surface.places, [surface.locale, "be", "en"]);
@@ -570,7 +571,7 @@ export default function Run() {
     </PressableSurface>
   );
   return (
-    <View style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
+    <ScreenSurface style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
       {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the one back element; from Peek it is the
           navigation out of Run, from an open card it dismisses the card —
           the controller's backOrDismiss (AC2). */}
@@ -1020,6 +1021,6 @@ export default function Run() {
           />
         </ModalDialog>
       ) : null}
-    </View>
+    </ScreenSurface>
   );
 }

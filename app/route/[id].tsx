@@ -43,6 +43,7 @@ import { uiStrings } from "../../components/ui-strings";
 import { UpgradeOffer } from "../../components/upgrade-offer";
 import { WalkButton } from "../../components/walk-button";
 import { useServices, useUiLocale } from "../_layout";
+import { ScreenSurface } from "../../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   // G06.10.b: the interface text renders the UI family (canon §3, Golos
@@ -281,7 +282,7 @@ export default function RoutePreview() {
 
   if (!controller) {
     return (
-      <View
+      <ScreenSurface
         style={frameStyle}
         testID="screen-Route preview"
       >
@@ -291,7 +292,7 @@ export default function RoutePreview() {
         <ScaledText style={styles.unavailable} testID="route-unavailable">
           {strings.catalogUnavailable}
         </ScaledText>
-      </View>
+      </ScreenSurface>
     );
   }
   // Start hands over to the Run surface (the run controller's G06.02 home):
@@ -317,7 +318,7 @@ export default function RoutePreview() {
   // busy); the ghost pair and the dropped shelf read it, nothing else.
   const mainDisabled = !state.button.enabled || state.busy;
   return (
-    <View style={frameStyle} testID="screen-Route preview">
+    <ScreenSurface style={frameStyle} testID="screen-Route preview">
       {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back sits in the frame above the scroll —
           reachable while the stops list is scrolled (AC2). */}
       <BackButton label={strings.back} testID="btn-preview-back" />
@@ -638,6 +639,6 @@ export default function RoutePreview() {
           />
         </ModalDialog>
       ) : null}
-    </View>
+    </ScreenSurface>
   );
 }
