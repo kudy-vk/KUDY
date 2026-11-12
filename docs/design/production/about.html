@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Пра горад</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  /* A long title in a wide language takes a second line instead of being cut. */
+  .topbar .title { white-space: normal; line-height: 1.2; overflow-wrap: anywhere; }
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 80ch; }
+  .board .based a { color: #1d6b4f; }
+
+  /* ---------- the wheel of sections ---------- */
+
+  /* Items stand on a ring and are moved by about-wheel.mjs. Every item has the
+     same box, so nothing jumps when another one is chosen; the one in the
+     middle is only drawn larger. */
+  .wheel {
+    /* The labels grow with the text size up to the app's limit of 1.25
+       (font.big-text-factor): three items always fit the narrowest screen. */
+    --label: calc(12px * min(var(--fs), 1.25));
+    flex: none; position: relative; height: calc(92px + 2.4 * var(--label) + 14px);
+    overflow: hidden; border-bottom: 1px solid var(--line);
+    touch-action: pan-y; user-select: none; cursor: grab;
+  }
+  /* The ring goes on beyond the screen: its very edges fade out. */
+  .wheel { mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); }
+  .wheel.dragging { cursor: grabbing; }
+  /* The dotted way the medallions sit on, like the route line of a guide. */
+  .wheel::before { content: ""; position: absolute; top: 46px; left: 0; right: 0; border-top: 2px dotted var(--line); }
+  /* The mark under the middle item: this section is open below. */
+  .wheel::after {
+    content: ""; position: absolute; bottom: -6px; left: calc(50% - 6px); width: 11px; height: 11px;
+    border: 1px solid var(--line); border-width: 1px 0 0 1px; background: var(--paper); rotate: 45deg;
+  }
+  .slot {
+    --near: 0;
+    position: absolute; top: 6px; left: calc(50% - var(--slot) / 2); width: var(--slot);
+    display: grid; justify-items: center; gap: 4px; padding: 0; border: 0; background: none;
+    color: color-mix(in srgb, var(--ink) calc(var(--near) * 100%), var(--muted));
+    font-size: var(--label); line-height: 1.2; text-align: center; cursor: inherit; will-change: transform;
+  }
+  .slot .label { display: block; width: 100%; height: 2.4em; padding: 0 2px; overflow-wrap: anywhere; }
+  /* The round sign of an item: the medallion of the home screen pieces (owner's
+     choice, decision M9) with its hand-drawn sand-gold rim. --near runs from 0
+     (a side item) to 1 (the item in the middle): the accent ring and the amber
+     light grow in as the wheel turns. In the dark theme the disc takes the card
+     fill and the sign the theme's ink, so the wheel is not a light island. */
+  .medal { width: 80px; height: 80px; scale: calc(.72 + .28 * var(--near)); filter: drop-shadow(0 1.5px 1.5px rgb(74 52 30 / 38%)); }
+  .medal circle { fill: none; }
+  .medal .disc { fill: var(--medal-paper); stroke: var(--medal-rim); stroke-width: 2; }
+  .medal .inner { stroke: var(--medal-rim); stroke-width: .7; opacity: .45; }
+  .medal .glyph * { fill: none; stroke: var(--medal-ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .medal .glow { stroke: var(--medal-glow); stroke-width: 6; opacity: var(--near); }
+  .medal .pick { stroke: var(--accent); stroke-width: 3; opacity: var(--near); }
+  [data-theme="dark"] .medal .disc { fill: var(--card); }
+  [data-theme="dark"] .medal .glyph * { stroke: var(--ink); }
+  .slot { border-radius: 10px; }
+
+  /* ---------- the open section ---------- */
+
+  .page { display: grid; grid-auto-rows: max-content; align-content: start; gap: 12px; padding: 16px 16px 24px; }
+  .page > * { min-width: 0; margin: 0; }
+  .page p { margin: 0; overflow-wrap: anywhere; }
+  @keyframes from-right { from { opacity: 0; translate: 18px 0; } }
+  @keyframes from-left { from { opacity: 0; translate: -18px 0; } }
+  .page.from-right > * { animation: from-right 220ms ease-out; }
+  .page.from-left > * { animation: from-left 220ms ease-out; }
+  @media (prefers-reduced-motion: reduce) { .page > * { animation: none !important; } .fold-body, .fold-head > .icon { transition: none !important; } }
+
+  /* Golos, not Alegreya: the canon (§3) keeps the display face for the names of guides and stories. */
+  .g-head { margin: 0; font-size: calc(22px * var(--fs)); font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+  .g-checked { display: flex; align-items: center; gap: 4px; margin-top: -8px !important; color: var(--muted); font-size: calc(12px * var(--fs)); }
+  .g-checked .icon { color: var(--accent); }
+  .g-sub { margin: 12px 0 0; font-size: calc(13px * var(--fs)); font-weight: 400; color: var(--muted); }
+  .stack { display: grid; gap: 6px; }
+  .g-end { margin: 12px -16px -24px !important; opacity: .8; }
+
+  /* A switch between a few values: the theme switch of the settings. */
+  .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .seg button {
+    /* All in one line, or — when the row is too narrow for the text size — all stacked. */
+    flex: 1 1 calc((240px * var(--fs) - 100%) * 999);
+    min-width: 0; min-height: 44px; padding: 6px 8px; border: 0; border-radius: 7px; background: none; color: var(--ink);
+    font-size: calc(14px * var(--fs)); line-height: 1.2; text-align: center; cursor: pointer;
+  }
+  .seg button[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); }
+
+  /* Numbered steps joined by a line. */
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  /* The number grows with the text size up to the app's limit of 1.25. */
+  .steps { --n: calc(32px * min(var(--fs), 1.25)); }
+  .step { position: relative; display: grid; grid-template-columns: var(--n) minmax(0, 1fr); column-gap: 12px; padding-bottom: 20px; }
+  .step:last-child { padding-bottom: 0; }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    display: grid; place-items: center; width: var(--n); height: var(--n); border: 2px solid var(--accent); border-radius: 50%;
+    color: var(--accent); font-size: calc(15px * min(var(--fs), 1.25)); font-weight: 600;
+  }
+  .step::after { content: ""; position: absolute; top: calc(var(--n) + 4px); bottom: 4px; left: calc(var(--n) / 2 - 1px); width: 2px; background: var(--line); }
+  .step:last-child::after { display: none; }
+  .step-body { display: grid; gap: 10px; min-width: 0; }
+  .step-title { margin: 4px 0 0; font-size: calc(17px * var(--fs)); font-weight: 600; line-height: 1.3; }
+
+  /* A fold: the head is always visible, the body opens under it. */
+  .folds { display: grid; gap: 8px; }
+  .fold { border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .fold-head {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 10px 12px;
+    border: 0; border-radius: 10px; background: none; color: var(--ink); font-size: calc(16px * var(--fs)); text-align: left; cursor: pointer;
+  }
+  .fold-head > .icon:first-child { color: var(--accent); }
+  .fold-head > .icon:last-child { color: var(--accent); transition: rotate 200ms; }
+  .fold.open .fold-head > .icon:last-child { rotate: 180deg; }
+  .fold-title { flex: 1; min-width: 0; display: grid; gap: 4px; }
+  .fold-name { font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+  .fold-meta { color: var(--muted); font-size: calc(13px * var(--fs)); }
+  .fold-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 240ms ease; }
+  .fold.open .fold-body { grid-template-rows: 1fr; }
+  .fold-inner { min-height: 0; overflow: hidden; }
+  .fold-pad { display: grid; gap: 10px; padding: 2px 12px 14px; }
+
+  /* The number of a line as a plate. */
+  .line {
+    flex: none; display: inline-grid; place-items: center; min-width: 52px; min-height: 36px; padding: 2px 8px;
+    border-radius: 10px; font-size: calc(15px * var(--fs)); font-weight: 600;
+  }
+  .line.bus { background: var(--accent); color: var(--accent-ink); }
+  .line.night { background: var(--ink); color: var(--paper); }
+  .line.train { border: 2px solid var(--accent); color: var(--accent); font-size: calc(12px * var(--fs)); }
+
+  /* Short facts with a sign each. */
+  .gfacts { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); font-size: calc(13px * var(--fs)); font-weight: 400; }
+  .gfact { display: inline-flex; align-items: flex-start; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+  .gfact .icon { margin-top: 1px; }
+
+  .rows { display: grid; gap: 10px; margin: 0; }
+  .rows > div { display: grid; gap: 2px; }
+  .rows dt { color: var(--muted); font-size: calc(12px * var(--fs)); }
+  .rows dd { margin: 0; overflow-wrap: anywhere; }
+
+  .prices { display: grid; margin: 0; }
+  .prices > div { display: flex; align-items: baseline; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .prices > div:first-child { border-top: 0; padding-top: 0; }
+  .prices > div:last-child { padding-bottom: 0; }
+  .prices dt { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .prices dd { margin: 0; font-weight: 600; text-align: right; white-space: nowrap; }
+  .prices small { display: block; color: var(--muted); font-size: calc(12px * var(--fs)); font-weight: 400; }
+
+  /* A remark is the kit's notice (a warning, an error) or the kit's card (a
+     tip), laid out as a row with its sign — the row of place.html. */
+  .page .row { display: flex; gap: 8px; font-size: calc(14px * var(--fs)); }
+  .page .row .icon { flex: none; margin-top: 2px; }
+  .page .card.row .icon { color: var(--accent); }
+
+  .ticket { display: grid; gap: 10px; }
+  .ticket h5 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: calc(16px * var(--fs)); font-weight: 600; }
+  .ticket h5 .icon { color: var(--accent); }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(calc(130px * var(--fs)), 1fr)); gap: 8px; }
+  .tile { display: grid; align-content: start; gap: 4px; font-size: calc(13px * var(--fs)); color: var(--muted); }
+  .tile .icon { color: var(--accent); }
+  .tile strong { color: var(--ink); font-size: calc(14px * var(--fs)); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+
+  /* ---------- «Дзе што ў горадзе»: the orientation schematic ---------- */
+
+  /* Light in both themes (DT-4). Its layout is fixed, so its names grow only
+     to the app's limit of 1.25 (font.big-text-factor) and the box grows with them. */
+  .orientation { display: grid; gap: 6px; }
+  .schematic {
+    --ms: min(var(--fs), 1.25);
+    position: relative; width: 100%; aspect-ratio: 1 / calc(.8 * var(--ms)); overflow: hidden;
+    border: 1px solid #d8d2c6; border-radius: 10px; background: #eef3ee; color: #22262b; font-size: calc(12.8px * var(--ms)); line-height: 1.2;
+  }
+  /* The coast and the river carry meaning: the muted tone gives 4.3:1 on the
+     map ground, above the 3:1 asked of graphic objects (canon §9). */
+  .schematic .coast { position: absolute; top: 13%; left: 0; right: 0; height: 1px; background: #6b7280; }
+  .schematic .river { position: absolute; top: 13%; bottom: 0; left: 62%; width: 2px; background: #6b7280; }
+  .schematic .water { position: absolute; white-space: nowrap; }
+  .schematic .sea { top: 3%; left: 4%; }
+  .schematic .motlawa { top: 68%; left: 65.5%; }
+  /* A place is one button: its dot stands on the point (--x, --y) and its
+     name beside it — to the right, to the left, or under it. The button is
+     low (--py) so that the buttons of neighbouring places never share a strip. */
+  .spot {
+    --px: 6px; --py: 2px; --dot: 8px;
+    position: absolute; top: var(--y); display: flex; align-items: center; gap: 5px; padding: var(--py) var(--px);
+    border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; cursor: pointer;
+  }
+  .spot.right { left: var(--x); translate: calc(-1 * (var(--px) + var(--dot) / 2)) -50%; }
+  .spot.left { right: calc(100% - var(--x)); flex-direction: row-reverse; translate: calc(var(--px) + var(--dot) / 2) -50%; }
+  .spot.below {
+    right: calc(100% - var(--x)); flex-direction: column; align-items: flex-end; gap: 2px;
+    translate: calc(var(--px) + var(--dot) / 2 + 12px) calc(-1 * (var(--py) + var(--dot) / 2));
+  }
+  .spot.below .dot { margin-right: 12px; }
+  .spot .dot { flex: none; width: var(--dot); height: var(--dot); border-radius: 50%; background: #22262b; }
+  .spot .name { padding: 1px 4px; border-radius: 4px; white-space: nowrap; }
+  .spot.main { --dot: 10px; }
+  .spot.main .dot { background: #1d6b4f; }
+  .spot.main .name { color: #1d6b4f; }
+  .spot[aria-pressed="true"] .dot { box-shadow: 0 0 0 3px #eef3ee, 0 0 0 6px var(--medal-glow); }
+  .spot[aria-pressed="true"] .name { background: #1d6b4f; color: #ffffff; }
+  /* The canon's focus ring, 3 px; drawn inwards because the box clips. */
+  .spot:focus-visible { outline: 3px solid #1d6b4f; outline-offset: -3px; }
+  .place { display: grid; gap: 10px; }
+  .place-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .place-head h4, .pack h4 { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+
+  /* ---------- delivery, the tourist card ---------- */
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .service { display: grid; gap: 6px; }
+  .service.off strong { color: var(--muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pack { display: grid; gap: 8px; }
+  .pack-head { display: flex; align-items: flex-start; gap: 12px; }
+  .pack-head > :first-child { flex: 1; min-width: 0; }
+  .pack-price { flex: none; color: var(--accent); font-size: calc(20px * var(--fs)); font-weight: 600; line-height: 1.2; text-align: right; white-space: nowrap; }
+  .pack-price small { display: block; color: var(--muted); font-size: calc(12px * var(--fs)); font-weight: 400; }
+  .pack .tag { justify-self: start; }
+  /* The week: seven equal days; a dot marks a day with free entry. */
+  .week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .week button {
+    position: relative; min-width: 0; min-height: 48px; padding: 4px 0 10px; border: 0; border-radius: 7px; background: none;
+    color: var(--ink); font-size: calc(13px * min(var(--fs), 1.25)); cursor: pointer;
+  }
+  .week button i { position: absolute; bottom: 6px; left: calc(50% - 3px); width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .week button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+  .week button[aria-pressed="true"] i { background: var(--accent-ink); }
+  .day { display: grid; gap: 12px; }
+  .day-line { display: grid; gap: 4px; }
+  .day-line + .day-line { padding-top: 12px; border-top: 1px solid var(--line); }
+  .day-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .day-head strong { font-weight: 600; overflow-wrap: anywhere; }
+
+  /* Official pages: one bordered card, rows divided by a line (the settings rows). */
+  .group { padding: 0; }
+  .srow {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 10px 12px;
+    border: 0; background: none; color: var(--ink); font-size: calc(16px * var(--fs)); text-align: left; cursor: pointer;
+  }
+  .srow + .srow { border-top: 1px solid var(--line); }
+  .srow:active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .srow .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .srow > .icon { color: var(--accent); }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Пра горад</h1>
+  <p class="lead">Фінальны макет. Практычны даведнік па Гданьску. Уверсе круціцца кола раздзелаў: пацягні яго і адпусці — яно пакоціцца далей з той сілай, з якой яго штурхнулі, і спыніцца роўна на раздзеле. Пад колам адкрыты раздзел, што стаіць пасярэдзіне. Раздзел складзены з крокаў, рэйсаў з лічбамі, цэн, пераключальнікаў і згортванняў, а не з абзацаў. Даведнік паказваецца мовай інтэрфейсу, калі для яе ёсць тэкст, інакш па-англійску (рашэнне L1); цяпер тэкст ёсць па-англійску і па-беларуску. Перамыкачы над тэлефонам да экрана не належаць.</p>
+  <ul class="based">
+    <li>Шапка са стрэлкай «Назад» і кнопкай вяртання да прагулкі — як у <a href="place.html">«Месцы»</a> і <a href="discovery.html">«Чым заняцца»</a>.</li>
+    <li>Кружочкі кола — медальёны частак карты з <a href="menu.html">галоўнага экрана</a> з няроўным, нібы намаляваным рукой кантам; абраны мае акцэнтнае кольца і бурштынавае свячэнне. У цёмнай тэме дыск цёмны (рашэнне M9).</li>
+    <li>Загаловак раздзела набраны Golos, а не Alegreya: канон пакідае Alegreya назвам гідаў і гісторый.</li>
+    <li>Пераключальнікі — пераключальнік тэмы з <a href="settings.html">«Налад»</a>; чыпы спосабу аплаты — чыпы выбару з <a href="discovery.html">«Чым заняцца»</a>.</li>
+    <li>Згортванні — прыём доўгіх спісаў з <a href="preview.html">«Прэв'ю гіда»</a>; спіс афіцыйных старонак — радкі <a href="settings.html">«Налад»</a>.</li>
+    <li>Схема арыенціраў светлая ў абедзвюх тэмах, як мапа ў <a href="nearby.html">«Побач»</a> (рашэнне DT-4). Цёмная тэма — шакаладна-цагляная палітра M3.</li>
+  </ul>
+</main>
+<script type="module" src="about.mjs"></script>
+</body>
+</html>
