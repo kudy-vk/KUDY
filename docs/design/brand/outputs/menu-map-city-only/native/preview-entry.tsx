@@ -14,7 +14,7 @@ function Preview(){
   return <SafeAreaProvider><SafeAreaView style={styles.page}><ScrollView contentContainerStyle={styles.content}>
     <Text style={[styles.brand,fontsLoaded&&{fontFamily:'Golos'}]}>KUDY</Text>
     <Text style={[styles.title,fontsLoaded&&{fontFamily:'Alegreya'}]}>Куды сёння?</Text>
-    <CityMapMenu width={Math.min(430,width-32)} labels={manifest.labels.be} sceneLabels={{water:'Вада і масты. Без пераходу.',fortifications:'Астатняя карта. Без пераходу.'}} hint="Націсні, каб адкрыць. Утрымлівай і перацягвай, каб злучыць." labelStyle={fontsLoaded?{fontFamily:'Golos'}:undefined} onSelect={setSelected}/>
+    <CityMapMenu width={Math.min(430,width-32)} labels={manifest.labels.be} sceneLabels={{water:'Вада і масты. Без пераходу.',fortifications:'Астатняя карта. Без пераходу.'}} hint="Націсні, каб адкрыць. Утрымлівай і перацягвай, каб злучыць." onSelect={setSelected}/>
     <Text accessibilityLiveRegion="polite" style={styles.status}>{selected?`Выбраны раздзел: ${manifest.labels.be[selected]}`:'Націсні — адкрыць. Утрымлівай і перацягвай — злучыць.'}</Text>
   </ScrollView></SafeAreaView></SafeAreaProvider>;
 }

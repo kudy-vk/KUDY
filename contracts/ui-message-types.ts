@@ -50,6 +50,10 @@ export interface UiStrings {
   // The KUDY surface's Explore entry (issue #426): the owner's 2026-10-01
   // decision — the history surface is named «KUDY», not «My KUDY».
   readonly kudyLink: string;
+  // The main screen header words (issue #216, decisions M2/M11): the city
+  // name on the right and the heading above the map pieces.
+  readonly cityName: string;
+  readonly whereToToday: string;
   readonly demoVersion: string;
   readonly demoNoticeDetail: string;
   readonly demoNearbyMapAccessibility: string;

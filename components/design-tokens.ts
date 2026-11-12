@@ -37,6 +37,15 @@ export const tokens = {
   colorMarkerAvailable: '#8a610e', // color.marker.available
   colorMarkerPending: '#646c77', // color.marker.pending
   colorMarkerLocked: '#67707a', // color.marker.locked
+  // Issue #216 (M4/M11) — медальён часткі карты: крэмавая папера, пясочна-залаты
+  // кант, карычневае чарніла. Медальён сядзіць на светлай картаграфіі DT-4, таму
+  // значэнні аднолькавыя ў абедзвюх тэмах (выключэнні з цёмнай палітры не ўносяцца).
+  colorMedalPaper: '#fff6e0', // color.medal.paper
+  colorMedalRim: '#bd852c', // color.medal.rim
+  colorMedalInk: '#4a3b2a', // color.medal.ink
+  // Issue #216 (M5/M11) — гравюрная панарама Гданьска пад блокам частак карты.
+  colorEngrave: '#7a6248', // color.engrave
+  colorPanoramaGround: '#faf7f2', // color.panorama.ground
   radiusBase: 10, // radius.base
   markerSize: 34, // size.marker — дыяметр маркера кропкі
   radiusPill: 99, // radius.pill
@@ -52,7 +61,10 @@ export const tokens = {
   contentMaxWidth: 640, // content.max-width — максімальная шырыня кантэнту
   fontBaseSize: 16, // font.base-size
   fontTitleSize: 18, // font.size-title — памер загалоўка экрана
+  // Issue #216 (M11) — загаловак «Куды сёння?» галоўнага экрана (макет menu.html).
+  fontMenuTitleSize: 32, // font.size.menu-title
   fontWeightStrong: '600', // font.weight-strong
+  fontWeightRegular: '400', // font.weight-regular
   fontBigTextFactor: 1.25, // font.big-text-factor
   // G06.10.b (docs/agent-tasks/app/G06.10.md — G06.10.b) — the font-family mirror: the named per-weight
   // faces the @expo-google-fonts packages export, one family per weight
@@ -63,6 +75,10 @@ export const tokens = {
   fontFamilyUi: 'GolosText_400Regular', // font.family-ui
   fontFamilyUiStrong: 'GolosText_600SemiBold', // font.family-ui
   fontFamilyDisplay: 'Alegreya_600SemiBold', // font.family-display
+  // Issue #216 (M11): другі выраз сямейства display — рэгулярнае начарканне
+  // загалоўка галоўнага экрана (у макеце Alegreya 400). Токен анкераваны да
+  // таго ж ліцэнзійнага запіса font.family-display.
+  fontFamilyDisplayRegular: 'Alegreya_400Regular', // font.family-display
   fontFamilyDragon: 'Caveat_400Regular', // font.family-dragon
   // G06.10.e (issue #405) — the grain layer opacity over the paper: the
   // canon keeps the approved range in the paperGrain rule, so the guard
@@ -98,6 +114,12 @@ export const darkTokens = {
   colorErrorBorder: '#9a5046',
   colorHintBg: '#2e2c38',
   colorHintBorder: '#5a5878',
+  /* Issue #216 (M5/M11) — панарама ў цёмнай тэме: светлы штрых на цёмным
+     глейзе (kit.css [data-theme="dark"] --engrave / --panorama-ground).
+     Without inline anchors: the dark overrides are pinned by the runtime
+     theme test, not by the light-token guard. */
+  colorEngrave: '#c9b59b',
+  colorPanoramaGround: '#1e100c',
 } as const;
 
 export const darkBackground = {

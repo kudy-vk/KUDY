@@ -1,18 +1,21 @@
-import React, {useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
+import React,{useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {AccessibilityInfo,AppState,PanResponder,Pressable,StyleSheet,View} from 'react-native';
-import type {ReactNode} from 'react';
-import type {GestureResponderEvent,StyleProp,TextStyle,ViewStyle} from 'react-native';
+import type {GestureResponderEvent,StyleProp,ViewStyle} from 'react-native';
 import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
 import {amberPalette,lightThreads} from '../amber-light.mjs';
+import manifest from '../manifest.json';
 import {cityMenuAssets,citySceneAssets} from '../native-assets';
 import {nativeLayout} from '../native-layout';
 import {CityPuzzle} from './model';
 import type {CityMenuLayout,PieceId,Point,PuzzleEvent,SceneId} from './model';
+import {CanonIcon,type CanonGlyph} from '../../../../../../components/canon-icon';
 import {tokens} from '../../../../../../components/design-tokens';
-import {ScaledText} from '../../../../../../components/scaled-text';
 
 export type {PieceId,SceneId} from './model';
-export type CityMenuItem = {id:PieceId;disabled?:boolean;icon?:ReactNode};
+// Issue #216 (M11): the medallion glyph arrives as the component (CanonGlyph),
+// the renderer places it on the medallion disc itself — the pieces carry no
+// visible text captions any more, the label stays the screen-reader name.
+export type CityMenuItem = {id:PieceId;disabled?:boolean;icon?:CanonGlyph};
 export interface CityMapMenuProps {
   width: number;
   labels: Readonly<Record<PieceId,string>>;
@@ -22,12 +25,25 @@ export interface CityMapMenuProps {
   layout?: CityMenuLayout;
   onSelect: (id:PieceId)=>void;
   reduceMotion?: boolean;
-  labelStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
 }
 
+// The medallion of the map pieces (mockup menu.mjs MEDAL/GLYPH): a constant
+// 38dp cream disc with the sand-gold rim and the section glyph in brown ink.
+// The off (disabled) tones are the mockup's literal `.medal.off` values; the
+// disc sits on the light map art (DT-4), so the tones are theme-independent.
+const MEDAL = 38;
+const OFF_PAPER = '#f3ead6';
+const OFF_RIM = '#a8957c';
+const OFF_INK = '#7d6c58';
+// The mockup's `.piece.off` tone: a pale, desaturated art. React Native has
+// no SVG filters, so the dim is a paper veil through the piece's own light
+// mask; a press lights the piece back for the mockup's 700 ms.
+const DIM_OPACITY = 0.55;
+const LIT_MS = 700;
+
 export function CityMapMenu(props:CityMapMenuProps) {
-  const {width,labels,hint,sceneLabels,labelStyle,style}=props;
+  const {width,labels,hint,sceneLabels,style}=props;
   const items:readonly CityMenuItem[]=props.items??nativeLayout.pieces.map(p=>({id:p.id}));
   const pieceKey=items.map(item=>item.id).join(',');
   const layoutKey=JSON.stringify(props.layout);
@@ -36,6 +52,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const sceneHeight=props.layout?.height??1800;
   const pieces=items.map(item=>nativeLayout.pieces.find(piece=>piece.id===item.id)!);
   const [focused,setFocused]=useState<PieceId|null>(null);
+  const [litId,setLitId]=useState<PieceId|null>(null);
   const [,setRevision]=useState(0);
   const [systemReduced,setSystemReduced]=useState(true);
   const reduced=props.reduceMotion??systemReduced;
@@ -43,10 +60,12 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const reducedRef=useRef(reduced);reducedRef.current=reduced;
   const frame=useRef<number|null>(null);
   const hold=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const lit=useRef<ReturnType<typeof setTimeout>|null>(null);
   const feedback=useRef<{point:Point;until:number}|null>(null);
   const clock=useRef(Date.now());
   const refresh=useCallback(()=>setRevision(value=>value+1),[]);
   const clearHold=useCallback(()=>{if(hold.current!==null)clearTimeout(hold.current);hold.current=null;},[]);
+  const clearLit=useCallback(()=>{if(lit.current!==null)clearTimeout(lit.current);lit.current=null;},[]);
   const stopFrame=useCallback(()=>{if(frame.current!==null)cancelAnimationFrame(frame.current);frame.current=null;},[]);
   const cancel=useCallback(()=>{clearHold();model.cancel();refresh();},[clearHold,model,refresh]);
   const startFrame=useCallback(()=>{
@@ -75,6 +94,18 @@ export function CityMapMenu(props:CityMapMenuProps) {
       if(event.kind==='snap'&&event.complete){if(reducedRef.current)model.completeNow();else startFrame();}
     }
   },[model,pulse,startFrame]);
+  const activatePiece=useCallback((id:PieceId)=>{
+    const item=latest.current.items?.find(item=>item.id===id);
+    if(item?.disabled){
+      // M4: a waiting piece answers a tap with its colour only — the piece
+      // lights back for a moment and nothing opens.
+      setLitId(id);
+      clearLit();
+      lit.current=setTimeout(()=>setLitId(null),LIT_MS);
+      return;
+    }
+    if(!latest.current.items||item)latest.current.onSelect(id);
+  },[clearLit]);
 
   useLayoutEffect(()=>{stopFrame();clearHold();model.resize(width);if(model.phase!=='scattered'&&model.phase!=='complete')model.completeNow();feedback.current=null;refresh();},[width,model,refresh,clearHold,stopFrame]);
   useEffect(()=>{
@@ -91,8 +122,8 @@ export function CityMapMenu(props:CityMapMenuProps) {
     const subscription=AppState.addEventListener('change',state=>{
       if(state!=='active'){clearHold();stopFrame();model.cancel();model.completeNow();feedback.current=null;refresh();}
     });
-    return()=>{subscription.remove();clearHold();stopFrame();model.cancel();feedback.current=null;};
-  },[model,clearHold,stopFrame,refresh]);
+    return()=>{subscription.remove();clearHold();clearLit();stopFrame();model.cancel();feedback.current=null;};
+  },[model,clearHold,clearLit,stopFrame,refresh]);
 
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
@@ -120,6 +151,13 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const scale=width/1600,complete=model.phase!=='scattered';
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
   const passivePress=(id:SceneId)=>{const part=model.scenery.find(p=>p.id===id)!;pulse({x:125+part.x+part.width/2,y:320+part.y+part.height/2});};
+  // The piece-relative medallion anchor of each piece, from the accepted
+  // package manifest (menu.mjs: [anchor] − [x, y]).
+  const medalAt=(id:PieceId)=>{
+    const piece=manifest.pieces.find(piece=>piece.id===id);
+    if(!piece)return null;
+    return {x:(piece.anchor[0]-piece.x)*scale,y:(piece.anchor[1]-piece.y)*scale};
+  };
   return <View style={[styles.host,style,{width,height:width*sceneHeight/1600}]}>
     <View testID="city-menu-canvas" collapsable={false} style={StyleSheet.absoluteFill} {...responder.panHandlers}>
       <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={StyleSheet.absoluteFill}>
@@ -139,13 +177,12 @@ export function CityMapMenu(props:CityMapMenuProps) {
             </G>)}
           </G>
           {pieces.map(item=>{
-            const at=model.position(item.id),piece=model.pieces.get(item.id)!,assets=cityMenuAssets[item.id];
-            const pressed=model.active?.hit.id===item.id;
-            return <G key={item.id} testID={`city-menu-piece-${item.id}`} transform={`translate(${at.x} ${at.y})`} opacity={pressed&&!model.active?.held?0.86:1}>
-              <SvgImage href={assets.city} width={item.width} height={item.height}/>
-              {!complete&&piece.group.members.size===1&&<SvgImage href={assets.ui} x={-item.padding} y={-item.padding} width={item.width+item.padding*2} height={item.height+item.padding*2}/>}
+            const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!,disabled=entry.disabled===true;
+            return <G key={item.id} testID={`city-menu-piece-${item.id}`} transform={`translate(${at.x} ${at.y})`} opacity={model.active?.hit.id===item.id&&!model.active?.held?0.86:1}>
+              <SvgImage href={cityMenuAssets[item.id].city} width={item.width} height={item.height}/>
+              {!complete&&<SvgImage href={cityMenuAssets[item.id].ui} x={-item.padding} y={-item.padding} width={item.width+item.padding*2} height={item.height+item.padding*2}/>}
               <Rect testID={`city-menu-veil-${item.id}`} x={0} y={0} width={item.width} height={item.height} fill={amberPalette.veil} mask={`url(#city-menu-veil-${item.id})`} opacity={model.silhouette}/>
-              {!complete&&<><Path d={`M${item.width/2},-45 Q${item.width/2+25},-10 ${item.width/2},10`} stroke={model.active?.held&&pressed?'#bd852c':'#957e60'} strokeWidth={5} fill="none"/><Circle cx={item.width/2} cy={10} r={7} fill="#957e60"/></>}
+              {disabled&&<Rect testID={`city-menu-dim-${item.id}`} x={0} y={0} width={item.width} height={item.height} fill={tokens.colorPaper} mask={`url(#city-menu-veil-${item.id})`} opacity={litId===item.id?0:DIM_OPACITY}/>}
             </G>;
           })}
           <G transform="translate(125 320)" clipPath="url(#city-menu-reveal)">
@@ -157,11 +194,13 @@ export function CityMapMenu(props:CityMapMenuProps) {
       {pieces.map(item=>{
         const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
         const disabled=entry.disabled===true;
-        const showLabel=!complete||focused===item.id;
-        const activate=()=>{if(!disabled)latest.current.onSelect(item.id);};
-        const labelWidth=Math.max(110,Math.min(650,item.width+150)*scale);
-        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} disabled={disabled} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} accessibilityActions={disabled?[]:[{name:'activate'}]} onAccessibilityTap={activate} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')activate();}} style={({pressed})=>[styles.label,{left:Math.max(0,Math.min(width-labelWidth,(at.x+item.width/2)*scale-labelWidth/2)),top:Math.max(0,at.y*scale-76),width:labelWidth,borderColor:!showLabel?'transparent':disabled?tokens.colorDisabledLine:focused===item.id?tokens.colorAccent:'transparent',backgroundColor:!showLabel?'transparent':pressed?tokens.colorBadgeFree:tokens.colorPaper},complete&&{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
-          <View testID={`city-menu-label-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.labelContent,{opacity:showLabel?1:0}]}>{entry.icon}<ScaledText style={[styles.labelText,labelStyle,{color:disabled?tokens.colorDisabledInk:tokens.colorAccent}]}>{labels[item.id]}</ScaledText></View>
+        const medal=medalAt(item.id);
+        const activate=()=>activatePiece(item.id);
+        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} accessibilityActions={disabled?[]:[{name:'activate'}]} onAccessibilityTap={activate} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')activate();}} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
+          {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:disabled?OFF_RIM:focused===item.id?tokens.colorAccent:tokens.colorMedalRim,backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
+            <View pointerEvents="none" style={[styles.medalInner,{borderColor:disabled?OFF_RIM:tokens.colorMedalRim}]}/>
+            <CanonIcon glyph={entry.icon} label={labels[item.id]} color={disabled?OFF_INK:tokens.colorMedalInk} size={20}/>
+          </View>}
         </Pressable>;
       })}
       {sceneLabels&&model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(125+item.x)*scale,top:(320+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
@@ -171,7 +210,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
 
 const styles=StyleSheet.create({
   host:{backgroundColor:tokens.colorPaper,overflow:'hidden'},
-  label:{position:'absolute',minHeight:48,padding:4,borderWidth:1,borderRadius:tokens.radiusBase,justifyContent:'center'},
-  labelContent:{alignItems:'center'},
-  labelText:{fontSize:14,lineHeight:20,textAlign:'center'},
+  piece:{position:'absolute'},
+  medal:{position:'absolute',width:38,height:38,borderRadius:19,borderWidth:1.3,alignItems:'center',justifyContent:'center',shadowColor:'#4a341e',shadowOpacity:0.38,shadowRadius:1.5,shadowOffset:{width:0,height:1.5}},
+  medalInner:{position:'absolute',width:31,height:31,borderRadius:15.5,borderWidth:0.7,opacity:0.45},
 });

@@ -102,6 +102,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Папярэдні валідны кэш",
     "walk": "Прагулка",
     "whatToDo": "Чым заняцца →",
+    "cityName": "Гданьск",
+    "whereToToday": "Куды сёння?",
   },
   "en": {
     "comingSoon": "Coming soon",
@@ -193,6 +195,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Previous valid cache",
     "walk": "Walk",
     "whatToDo": "What to do →",
+    "cityName": "Gdańsk",
+    "whereToToday": "Where to today?",
   },
   "uk": {
     "comingSoon": "Скоро",
@@ -284,6 +288,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Попередній валідний кеш",
     "walk": "Прогулянка",
     "whatToDo": "Чим зайнятися →",
+    "cityName": "Гданськ",
+    "whereToToday": "Куди сьогодні?",
   },
   "de": {
     "comingSoon": "Bald",
@@ -375,6 +381,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Vorheriger gültiger Cache",
     "walk": "Rundgang",
     "whatToDo": "Was unternehmen →",
+    "cityName": "Danzig",
+    "whereToToday": "Wohin heute?",
   },
   "es": {
     "comingSoon": "Pronto",
@@ -466,6 +474,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Caché válida anterior",
     "walk": "Recorrido",
     "whatToDo": "Qué hacer →",
+    "cityName": "Gdansk",
+    "whereToToday": "¿Adónde hoy?",
   },
   "fr": {
     "comingSoon": "Bientôt",
@@ -557,6 +567,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Cache valide précédent",
     "walk": "Visite",
     "whatToDo": "Que faire →",
+    "cityName": "Gdańsk",
+    "whereToToday": "Où aller aujourd’hui ?",
   },
   "cs": {
     "comingSoon": "Brzy",
@@ -648,6 +660,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Předchozí platná mezipaměť",
     "walk": "Procházka",
     "whatToDo": "Co dělat →",
+    "cityName": "Gdaňsk",
+    "whereToToday": "Kam dnes?",
   },
   "sv": {
     "comingSoon": "Kommer snart",
@@ -739,6 +753,8 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Tidigare giltig cache",
     "walk": "Promenad",
     "whatToDo": "Att göra →",
+    "cityName": "Gdańsk",
+    "whereToToday": "Vart i dag?",
   },
   "zh": {
     "comingSoon": "\u5373\u5C06\u63A8\u51FA",
@@ -830,5 +846,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "\u4E0A\u6B21\u6709\u6548\u7F13\u5B58",
     "walk": "\u6563\u6B65",
     "whatToDo": "\u73A9\u4EC0\u4E48 →",
+    "cityName": "\u683C\u4F46\u65AF\u514B",
+    "whereToToday": "\u4ECA\u5929\u53BB\u54EA\u513F\uFF1F",
   },
 };

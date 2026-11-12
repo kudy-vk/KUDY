@@ -72,6 +72,8 @@
   --badge-mixed: #40334e;
   --badge-lock: #3d3530;
   --engrave: #c9b59b;
+  /* Issue #216 (M5/M11): the panorama's own ground panel in the dark theme. */
+  --panorama-ground: #1e100c;
 }
 
 * { box-sizing: border-box; }
@@ -276,8 +278,8 @@ button, select, input { font: inherit; color: inherit; }
 .panorama * { vector-effect: non-scaling-stroke; }
 .panorama .ink { fill: none; stroke: currentColor; stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; }
 .panorama .mass { fill: var(--panorama-ground, var(--paper)); stroke: currentColor; stroke-width: .9; stroke-linejoin: round; }
+/* The ground token lives in the theme root above; the panorama just consumes it. */
 .panorama .fine { fill: none; stroke: currentColor; stroke-width: .6; stroke-linecap: round; opacity: .55; }
-[data-theme="dark"] .panorama { --panorama-ground: #1e100c; }
 
 /* ---------- medallion of the map pieces ---------- */
 

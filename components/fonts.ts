@@ -11,7 +11,7 @@
 // a single family, so each named weight loads under its own family name and
 // the strong styles point at the 600 face (tokens.fontFamilyUiStrong etc.).
 import { useFonts } from "expo-font";
-import { Alegreya_600SemiBold } from "@expo-google-fonts/alegreya";
+import { Alegreya_400Regular, Alegreya_600SemiBold } from "@expo-google-fonts/alegreya";
 import { Caveat_400Regular } from "@expo-google-fonts/caveat";
 import { GolosText_400Regular, GolosText_600SemiBold } from "@expo-google-fonts/golos-text";
 
@@ -22,6 +22,10 @@ export function useAppFonts(): void {
     [tokens.fontFamilyUi]: GolosText_400Regular,
     [tokens.fontFamilyUiStrong]: GolosText_600SemiBold,
     [tokens.fontFamilyDisplay]: Alegreya_600SemiBold,
+    // Issue #216 (M11): the main screen's «Куды сёння?» renders the mockup's
+    // weight-400 display face under its own family name (the one-family-per-
+    // weight Android workaround, G06.10.b).
+    [tokens.fontFamilyDisplayRegular]: Alegreya_400Regular,
     // The dragon voice (canon §3: only the dragon's lines and hints, never
     // interface text) loads now; its first surface is the dragon hint card
     // (G07.04) — not this task.

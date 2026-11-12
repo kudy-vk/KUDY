@@ -779,6 +779,24 @@
       }
     },
     {
+      "id": "native.chrome.cityName",
+      "value": "Danzig",
+      "reviewedSourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2",
+      "review": {
+        "outcome": "approved",
+        "note": "З масіва CITY макету menu.html; макет прыняты ўладальнікам цалкам 2026-11-12 (M11, issue #216)"
+      }
+    },
+    {
+      "id": "native.chrome.whereToToday",
+      "value": "Wohin heute?",
+      "reviewedSourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956",
+      "review": {
+        "outcome": "approved",
+        "note": "З масіва HEADING макету menu.html; макет прыняты ўладальнікам цалкам 2026-11-12 (M11, issue #216)"
+      }
+    },
+    {
       "id": "native.guideHint.dismiss",
       "value": "Ausblenden",
       "reviewedSourceHash": "ef41daab2552c03555650792656b97d33407771656bc80aea288af4b0527ad24",
