@@ -2,7 +2,7 @@
 // the three approved families (visual-language §3 «Ухвалены шрыфтавы пакет»)
 // load once at the root, keyed by the token mirror, so a style pointing at
 // tokens.fontFamilyUi resolves to the loaded face. Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339).
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 //
 // No loading gate: rendering never waits for the fonts. While they load (and
 // if loading fails) every surface draws its system-ui fallback and stays

@@ -7,7 +7,7 @@
 // апісання не дае доступу»). The visual language is the quiet-offer card's
 // (G08.05): radius 10, the line border, the token rhythm, one quiet decline.
 // Lives in components/, not app/: expo-router treats every app/ file as a
-// route (issue #339).
+// route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { useSyncExternalStore } from "react";
 import { StyleSheet, View } from "react-native";
 
