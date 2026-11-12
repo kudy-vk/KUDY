@@ -9,8 +9,17 @@
 // screen. The [id] route of 19 §2.5 is display-shaped only in the MVP
 // single-city catalog: the surface renders the active city and does not echo
 // an unvalidated param (21 §3.2 — у MVP толькі актыўны Гданьск).
-import { useCallback, useMemo, useRef, useState } from "react";
-import { Linking, ScrollView, StyleSheet, View, useWindowDimensions } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  AccessibilityInfo,
+  Animated,
+  Easing,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CheckIcon from "lucide-react-native/icons/check";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
@@ -139,13 +148,30 @@ export default function AboutCity() {
     [strings, t, ui, setUi, toggleFold],
   );
 
-  const onSelect = useCallback((index: number, _direction: number) => {
+  // The section slides in from the side the wheel turned to (the mockup's
+  // from-left/from-right, 220 ms); the system «reduce motion» setting jumps
+  // it into place.
+  const slide = useRef(new Animated.Value(0)).current;
+  const [calm, setCalm] = useState(false);
+  useEffect(() => {
+    AccessibilityInfo.isReduceMotionEnabled?.().then(setCalm).catch(() => undefined);
+    const subscription = AccessibilityInfo.addEventListener?.("reduceMotionChanged", setCalm);
+    return () => subscription?.remove();
+  }, []);
+
+  const onSelect = useCallback((index: number, direction: number) => {
     const next = ABOUT_CITY_SECTIONS[index];
     if (!next || next.id === sectionId) return;
     setSectionId(next.id);
     // A change of section resets the scroll.
     scrollRef.current?.scrollTo({ animated: false, y: 0 });
-  }, [sectionId]);
+    slide.setValue(direction > 0 ? 18 : -18);
+    if (calm) {
+      slide.setValue(0);
+      return;
+    }
+    Animated.timing(slide, { toValue: 0, duration: 220, easing: Easing.out(Easing.ease), useNativeDriver: true }).start();
+  }, [sectionId, calm, slide]);
 
   const openLink = useCallback((linkKey: AboutCityLinkKey) => {
     const url = ABOUT_CITY_LINK_URLS[linkKey];
@@ -183,7 +209,9 @@ export default function AboutCity() {
           <CanonIcon glyph={CheckIcon} label={t("verified")} size={14} color={tokens.colorAccent} />
           <ScaledText style={[styles.verified, { marginTop: 0 }]}>{t("verified")}</ScaledText>
         </View>
-        <AboutCitySection key={sectionId} id={sectionId} ctx={ctx} />
+        <Animated.View style={{ transform: [{ translateX: slide }] }}>
+          <AboutCitySection key={sectionId} id={sectionId} ctx={ctx} />
+        </Animated.View>
         <View style={styles.sources}>
           <SubHeading>{t("sources.title")}</SubHeading>
           <ScaledText style={styles.verified}>{t("sources.note")}</ScaledText>
