@@ -225,74 +225,347 @@ export interface GuideHintStrings {
 // set is authored. The verified fact lines embed their own check-date claims
 // — the sources table beside the guide (docs/content/about-city-sources.md)
 // records the official source and check date per changeable fact.
+// Issue #252 — the «Пра горад» wheel screen's words, the generated
+// catalogue's shape (components/about-city-strings.generated.ts, be + en
+// per decision L1): the ids of the owner-approved mockup word sets
+// (docs/design/production/about-words-*.mjs) with the id-only renames the
+// nesting rule forced (a key may not be a prefix of another key). The link
+// row labels — one label per official page the guide sends the reader to;
+// the URLs themselves live beside the screen (about-city-content).
 export interface AboutCityStrings {
-  readonly title: string;
-  readonly intro: string;
-  // The dated verification note under the title: the date names the last
-  // full check of the guide's changeable facts (no bare numbers elsewhere).
-  readonly verifiedLine: (date: string) => string;
-  readonly entriesHeading: string;
-  readonly airport: {
-    readonly title: string;
-    readonly intro: string;
-    readonly busDay: string;
-    readonly busSecond: string;
-    readonly nightBus: string;
-    readonly train: string;
-    readonly ticketNote: string;
-    readonly scheduleNote: string;
+  readonly wheel: {
+    readonly label: string;
   };
-  readonly transport: {
+  readonly tab: {
+    readonly airport: string;
+    readonly transport: string;
+    readonly city: string;
+    readonly food: string;
+    readonly card: string;
+  };
+  readonly head: {
+    readonly airport: string;
+    readonly transport: string;
+    readonly city: string;
+    readonly food: string;
+    readonly card: string;
+  };
+  readonly verified: string;
+  readonly sources: {
     readonly title: string;
-    readonly ztmWhen: string;
-    readonly skmWhen: string;
-    readonly otherRail: string;
-    readonly tickets: string;
-    readonly activation: string;
-    readonly machinesApps: string;
+    readonly note: string;
+  };
+  // The device could not open the page: its address stays on the screen.
+  readonly link: {
+    readonly failed: (url: string) => string;
+  };
+  readonly u: {
+    readonly aboutMin: (n: number) => string;
+    readonly everyWeekdays: (n: number) => string;
+    readonly hourly: string;
+    readonly aboutHourly: string;
+    readonly reduced: (price: string) => string;
+    readonly decimal: string;
+  };
+  readonly sr: {
+    readonly bus: string;
+    readonly night: string;
+    readonly train: string;
+  };
+  readonly air: {
+    readonly dirLabel: string;
+    readonly dirFrom: string;
+    readonly dirTo: string;
+    readonly from: {
+      readonly s1: {
+        readonly title: string;
+        readonly text: string;
+        readonly stop01: string;
+        readonly stop02: string;
+      };
+    };
+    readonly to: {
+      readonly s1: {
+        readonly title: string;
+        readonly text: string;
+      };
+    };
+    readonly s2: {
+      readonly title: string;
+    };
+    readonly s3: {
+      readonly title: string;
+    };
+    readonly ticket: {
+      readonly bus: {
+        readonly title: string;
+        readonly where: string;
+      };
+      readonly train: {
+        readonly title: string;
+        readonly where: string;
+      };
+    };
+    readonly notice: string;
+  };
+  readonly ride: {
+    readonly "110": {
+      readonly from: string;
+      readonly to: string;
+      readonly also: string;
+    };
+    readonly "210": {
+      readonly from: string;
+      readonly to: string;
+    };
+    readonly n3: {
+      readonly from: string;
+      readonly to: string;
+      readonly when: string;
+      readonly toCentre: string;
+      readonly toWrzeszcz: string;
+      readonly route: string;
+    };
+    readonly train: {
+      readonly from: string;
+      readonly to: string;
+      readonly change: string;
+      readonly line: string;
+      readonly operator: string;
+    };
+  };
+  readonly row: {
+    readonly stop: string;
+    readonly firstLast: string;
+    readonly sunday: string;
+    readonly centreStops: string;
+    readonly also: string;
+    readonly route: string;
+    readonly toCentre: string;
+    readonly toWrzeszcz: string;
+    readonly operator: string;
+  };
+  readonly tk: {
+    readonly "75": string;
+    readonly singleRide: string;
+    readonly single: {
+      readonly phone: string;
+      readonly paper: string;
+    };
+    readonly day24: string;
+    readonly "24h": {
+      readonly two: string;
+      readonly all: string;
+    };
+    readonly "72h": string;
+    readonly night: string;
+  };
+  readonly tr: {
+    readonly modes: string;
+    readonly ztm: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly skm: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+      readonly warn: string;
+    };
+    readonly rail: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly prices: string;
+    readonly zoneLabel: string;
+    readonly zone: {
+      readonly ztm: string;
+      readonly metro: string;
+      readonly rail: string;
+    };
+    readonly zoneNote: {
+      readonly ztm: string;
+      readonly metro: string;
+      readonly rail: string;
+    };
+    readonly activate: string;
+    readonly act: {
+      readonly paper: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly mobile: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly valid: {
+        readonly title: string;
+        readonly text: string;
+      };
+    };
+    readonly buyLabel: string;
+    readonly buy: {
+      readonly fala: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly apps: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly board: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly desk: {
+        readonly title: string;
+        readonly text: string;
+      };
+    };
+    readonly tip: {
+      readonly card: string;
+      readonly kompas: string;
+    };
   };
   readonly city: {
-    readonly title: string;
-    readonly glowneVsStare: string;
+    readonly pick: string;
+    readonly caption: string;
+    readonly sea: string;
+    readonly get: string;
+    readonly summer: string;
+  };
+  readonly kind: {
+    readonly centre: string;
+    readonly quarter: string;
+    readonly station: string;
+    readonly district: string;
+    readonly beach: string;
+    readonly island: string;
+  };
+  readonly place: {
+    readonly glowne: string;
+    readonly stare: string;
     readonly station: string;
     readonly wrzeszcz: string;
     readonly oliwa: string;
-    readonly beaches: string;
-    readonly mapCaption: string;
-    readonly mapSea: string;
-    readonly mapStation: string;
-    readonly mapGlowne: string;
-    readonly mapStare: string;
-    readonly mapMotlawa: string;
-    readonly mapWrzeszcz: string;
-    readonly mapOliwa: string;
-    readonly mapJelitkowo: string;
-    readonly mapBrzezno: string;
-    readonly mapStogi: string;
-    readonly mapSobieszewo: string;
+    readonly brzezno: string;
+    readonly jelitkowo: string;
+    readonly stogiBeach: string;
+    readonly stogi: {
+      readonly warn: string;
+    };
+    readonly sobieszewo: string;
+  };
+  readonly get: {
+    readonly glowne: string;
+    readonly station: {
+      readonly walk: string;
+      readonly skm: string;
+    };
+    readonly wrzeszcz: string;
+    readonly oliwa: {
+      readonly tram: string;
+      readonly skm: string;
+    };
+    readonly brzezno: string;
+    readonly jelitkowo: string;
+    readonly stogi: string;
+    readonly sobieszewo: string;
   };
   readonly food: {
-    readonly title: string;
-    readonly delivery: string;
-    readonly cards: string;
+    readonly deliveryLabel: string;
+    readonly delivery: {
+      readonly lead: string;
+    };
+    readonly pay: string;
+    readonly unconfirmed: string;
+    readonly bolt: {
+      readonly note: string;
+    };
+    readonly note: string;
+    readonly city: string;
+    readonly cards: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly blik: {
+      readonly title: string;
+      readonly meta: string;
+      readonly need: string;
+      readonly online: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly till: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly more: string;
+    };
+  };
+  readonly pay: {
+    readonly any: string;
+    readonly card: string;
     readonly blik: string;
+    readonly cash: string;
+    readonly apple: string;
+    readonly google: string;
+    readonly paypal: string;
   };
-  readonly karta: {
+  readonly card: {
     readonly title: string;
-    readonly packages: string;
-    readonly transportAddOn: string;
-    readonly freeMuseums: string;
-    readonly exceptionsNote: string;
+    readonly lead: string;
+    readonly duration: string;
+    readonly hours: (n: number) => string;
+    readonly odkrywca: {
+      readonly entries: string;
+      readonly list: string;
+    };
+    readonly premium: {
+      readonly entries: string;
+      readonly list: string;
+    };
+    readonly smaki: string;
+    readonly transport: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly freeHeading: string;
+    readonly day: string;
+    readonly free: {
+      readonly badge: string;
+    };
+    readonly closed: {
+      readonly badge: string;
+    };
+    readonly mon: {
+      readonly gdanska: string;
+      readonly ww2: string;
+    };
+    readonly tue: {
+      readonly ww2: string;
+      readonly gdanska: string;
+    };
+    readonly other: string;
+    readonly notice: string;
   };
-  readonly malbork: {
-    readonly title: string;
-    readonly intro: string;
-    readonly train: string;
-    readonly walk: string;
-    readonly visitNote: string;
+  readonly museum: {
+    readonly gdanska: string;
+    readonly ww2: string;
   };
-  // The link row labels — one label per official page the guide sends the
-  // reader to; the URLs themselves live beside the screen (about-city-content).
+  readonly day: {
+    readonly "1": string;
+    readonly "2": string;
+    readonly "3": string;
+    readonly "4": string;
+    readonly "5": string;
+    readonly "6": string;
+    readonly "7": string;
+  };
   readonly links: {
     readonly airportBuses: string;
     readonly airportTrains: string;
@@ -307,9 +580,6 @@ export interface AboutCityStrings {
     readonly muzeum1939: string;
     readonly pysznePayment: string;
     readonly blikHow: string;
-    readonly malborkVisit: string;
-    readonly trainSchedule: string;
-    readonly unesco: string;
   };
 }
 

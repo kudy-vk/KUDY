@@ -29,9 +29,9 @@ const CATALOGS = {
   'native.nearby': () => nearbyStrings('be'),
   'native.offer': () => offerStrings('be'),
   'native.feedback': () => feedbackStrings('be'),
-  // Issue #200: the aboutCity guide's words live in the generated be-only
-  // projection; every display locale falls back to it (the guideHint idiom).
-  'native.aboutCity': () => ABOUT_CITY_STRINGS,
+  // Issue #200/#252: the aboutCity guide's words live in the generated
+  // be+en projection; the be catalogue mirrors the canonical be records.
+  'native.aboutCity': () => ABOUT_CITY_STRINGS.be,
 };
 
 function leaf(obj, path) {

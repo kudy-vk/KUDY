@@ -31,9 +31,10 @@ const CATALOGS = {
   'native.offer': { value: offerStrings('be'), file: 'controllers/commerce/commerceController.ts' },
   'native.feedback': { value: feedbackStrings('be'), file: 'controllers/useFeedbackController.ts' },
   'web.ui': { value: webBe, file: 'web/lib/i18n/be.ts' },
-  // Issue #200: the aboutCity guide's words live in the generated be-only
-  // projection (importable pure TS); every display locale falls back to it.
-  'native.aboutCity': { value: ABOUT_CITY_STRINGS, file: 'components/about-city-strings.generated.ts' },
+  // Issue #200/#252: the aboutCity guide's words live in the generated
+  // be+en projection (importable pure TS); the be catalogue mirrors the
+  // canonical be records.
+  'native.aboutCity': { value: ABOUT_CITY_STRINGS.be, file: 'components/about-city-strings.generated.ts' },
 };
 
 // GuideHintCard.tsx cannot be imported under node strip-types (JSX); since

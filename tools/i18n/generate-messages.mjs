@@ -90,19 +90,18 @@ export const DOMAINS = [
     ],
   },
   {
-    // Issue #200 — the «Пра горад» static Gdańsk guide: a curated document,
-    // authored in Belarusian (the app's first preference). Every display
-    // locale renders the be text until its words are authored — the same
-    // documented-fallback idiom as the guideHint's uk row; the document
-    // joins the translation gate when a locale set lands.
+    // Issue #200/#252 — the «Пра горад» practical guide behind the section
+    // wheel. Decision L1 (2026-11-12): the dictionary's base language is
+    // English — a display locale without its own words shows the English
+    // text, not the be base (the be fallback the #200 screen used is gone).
     domain: 'native.aboutCity',
-    note: 'the «Пра горад» static Gdańsk guide (issue #200); the document is authored in Belarusian — every other display locale falls back to be (the guideHint documented-fallback idiom) until its words are authored',
+    note: 'the «Пра горад» guide (issue #200; the #252 wheel screen); base language English per decision L1 (docs/design/brand/decisions.md) — a locale without its own words shows the English text (the be-only fallback of #200 is retired)',
     outputs: [
       {
         file: 'components/about-city-strings.generated.ts',
         exportName: 'ABOUT_CITY_STRINGS',
-        locales: ['be'],
-        annotation: 'AboutCityStrings',
+        locales: ['be', 'en'],
+        annotation: 'Record<"be" | "en", AboutCityStrings>',
         imports: ['import type { AboutCityStrings } from "../contracts/ui-message-types.ts";'],
       },
     ],
