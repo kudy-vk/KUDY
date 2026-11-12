@@ -1,6 +1,6 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { act, fireEvent, renderRouter, screen } from "expo-router/testing-library";
-import Menu from "./menu";
+import Menu, { menuTopBlockHeight } from "./menu";
 import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
 import { cityMenuConfig } from "../components/city-map-menu";
@@ -119,5 +119,14 @@ test("the free space carries the panorama and the ad zone stays hidden without a
   openMenu();
   expect(screen.getByTestId("menu-panorama")).toBeTruthy();
   expect(screen.queryByTestId("menu-ad")).toBeNull();
+});
+
+// Issue #216 (AC3, M1): the parts block ends at 5/8 of the FULL screen
+// height minus the status-bar inset (the README verdict row). Reverting the
+// 5/8 formula or the status subtraction turns this red.
+test("the map block height is 5/8 of the screen height minus the status inset", () => {
+  expect(menuTopBlockHeight(844, 47)).toBeCloseTo(480.5);
+  expect(menuTopBlockHeight(640, 24)).toBeCloseTo(376);
+  expect(menuTopBlockHeight(932, 47)).toBeCloseTo(535.5);
 });
 

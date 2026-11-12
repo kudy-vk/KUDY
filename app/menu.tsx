@@ -23,6 +23,12 @@ import { uiStrings } from "../components/ui-strings";
 // its block — the square 1600×1600 drawing area is sized to the smaller of
 // the canvas sides, the letterbox stays transparent like the mockup's dark
 // phone. The screen never makes network requests and renders no dragon.
+// M1/README verdict, pinned by a test: the block height is 5/8 of the FULL
+// screen height minus the status-bar inset.
+export function menuTopBlockHeight(height: number, statusInset: number): number {
+  return height * 5 / 8 - statusInset;
+}
+
 export default function Menu() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -34,7 +40,7 @@ export default function Menu() {
   const [visit, setVisit] = useState(0);
   useFocusEffect(useCallback(() => { setVisit(value => value + 1); }, []));
   // The mockup measures 5/8 from the top edge: block height = 5/8·h − status.
-  const topBlockHeight = height * 5 / 8 - insets.top;
+  const topBlockHeight = menuTopBlockHeight(height, insets.top);
   const canvasWidth = Math.max(1, Math.min(430, width - insets.left - insets.right));
   // Initial canvas estimate (header + heading extents), corrected by onLayout.
   const headExtent = tokens.fontTitleSize * 1.45;

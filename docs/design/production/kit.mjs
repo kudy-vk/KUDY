@@ -2,6 +2,7 @@
 // common components, the icon set and access to the app's interface strings.
 // A screen module calls mountBoard() and fills the phone body it is given.
 import { ICONS } from './kit-icons.mjs';
+import { PANORAMA_VIEWBOX, panoramaPaths } from './panorama-paths.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -254,8 +255,6 @@ export function penStroke(id) {
 // The drawing itself lives in panorama-paths.mjs — the pure builder the app
 // consumes too (components/city-panorama.tsx, issue #216); this file only
 // paints it into the browser DOM.
-import { PANORAMA_VIEWBOX, panoramaPaths } from './panorama-paths.mjs';
-
 export function panorama() {
   // Decoration only: it carries no information a screen reader needs.
   const root = svg('svg', { class: 'panorama', viewBox: PANORAMA_VIEWBOX, 'aria-hidden': 'true' });
