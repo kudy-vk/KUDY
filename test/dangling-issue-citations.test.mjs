@@ -5,7 +5,16 @@
 // repo — both closed — and the decisions they recorded stay reachable in-repo
 // through the canon §5 text (2026-10-03) and the components-zone note of
 // 19_class_and_module_map.md (2026-09-27)). Every citation was replaced with an
-// anchor to those records — the option the issue itself names. The repo walk
+// anchor to those records — the option the issue itself names.
+// #241 (2026-11-12) — the same defect class on the remaining dead numbers
+// (284, 292, 313, 338, 344, 348, 349, 350, 352, 353, 402, 403, 404, 432; all
+// 404 in kudy-vk/KUDY on 2026-11-12, the original cards closed in
+// vokhandcrafts/KUDY): a second pass anchored every citation to the canonical
+// in-repo record of its decision — the design canon (§3 fonts, §5 buttons and
+// dialogs, §9 street readability), screens-and-transitions.md,
+// docs/agent-tasks/app/G06.10.md, results G25.04 (the icon layer),
+// 15_guide_decisions.md (R07), 16_delivery_backlog.md (G08.05) and the
+// development_setup.md device-run update (2026-09-27). The repo walk
 // below is what makes npm test fail when a dead citation is re-added
 // (implementation-rules 1). If one of these numbers ever becomes a real issue,
 // remove it from the list with a dated revalidation note in the PR that adds
@@ -23,11 +32,12 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
 
-// Issue numbers confirmed dangling (404 in kudy-vk/KUDY; the original cards
-// live in the superseded vokhandcrafts/KUDY repo). The token is the hash sign glued to a dead number with a
+// Issue numbers confirmed dangling (404 in kudy-vk/KUDY, re-verified 2026-11-12
+// for the full list; the original cards live in the superseded vokhandcrafts/KUDY
+// repo, all closed). The token is the hash sign glued to a dead number with a
 // word boundary on the right: "3399ff" or "4300" must not match, a citation
 // "(issue " + hash + number + ")" must.
-const DEAD_NUMBERS = [430, 339];
+const DEAD_NUMBERS = [284, 292, 313, 338, 339, 344, 348, 349, 350, 352, 353, 402, 403, 404, 430, 432];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
 
@@ -62,7 +72,7 @@ test('tracked sources carry no citations of the confirmed-dangling issue numbers
   assert.deepEqual(
     violations,
     [],
-    'citations of non-existent issues 430/339 — anchor the decision to its canonical record instead (design canon §5 / 19_class_and_module_map.md)',
+    'citations of non-existent issue numbers (430/339 and the 284–432 series) — anchor the decision to its canonical record instead (design canon / screens-and-transitions.md / docs/agent-tasks/results / 19_class_and_module_map.md / development_setup.md)',
   );
 });
 

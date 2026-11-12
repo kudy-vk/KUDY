@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — Showboat driver: the production catalog service
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — Showboat driver: the production catalog service
 // over the published fixtures (fixtures/discovery-contract — the pair whose
 // pointer pins the index by bytes and sha256), then the honest states of
 // 21 §3.3: index degradation, offline over the last valid cache and the

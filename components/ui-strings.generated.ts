@@ -6,7 +6,7 @@
 // G21.25 (issue #558): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 #432, #403; UX 05 #351; G15.03 #70)
+// the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 — results G25.04.md (іконкавы слой) + docs/agent-tasks/app/G06.10.md; UX 05 #351; G15.03 #70)
 
 import { completeUiLocaleSelfNames, type CompleteUiLocaleCode } from "../contracts/ui-locales.ts";
 import type { UiStrings } from "../contracts/ui-message-types.ts";

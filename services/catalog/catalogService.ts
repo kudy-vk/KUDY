@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the city catalog service: the published catalog
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the city catalog service: the published catalog
 // envelope plus its optional discovery index, projected into the guide-card
 // view state. Reader policy per 09 §4 and 21 §3.3: refresh at every load, a
 // failure is fatal only with no previous result (offline over the last valid

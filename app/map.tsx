@@ -284,7 +284,7 @@ export default function Map() {
     locationView,
   );
   const note = locationNote(locationView, strings);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
   // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   return (
@@ -297,9 +297,9 @@ export default function Map() {
       }]}
       testID="screen-Map"
     >
-      {/* UX 02 (issue #348): the Nearby surface gains its one back element —
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the Nearby surface gains its one back element —
           it never had one (AC2); the label is hosted by the shared
-          component's <Text> (the #344 class guard). */}
+          component's <Text> (the bare-string Pressable class guard). */}
       <BackButton label={uiStrings(uiLocale).back} testID="btn-map-back" />
       <GuideHintMount
         binding={services.hints}

@@ -162,7 +162,7 @@ describe("guide preview surface (G06.01.b)", () => {
     // duration_min when both are published (AC1).
     expect(screen.getByText("Час: ад 45 да 75 хв")).toBeTruthy();
     expect(screen.getByText("Кропкі: 2")).toBeTruthy();
-    // G06.10.c (issue #403): the metadata row carries the icon layer — the
+    // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): the metadata row carries the icon layer — the
     // clock beside the duration fact, the map-pin beside the stops count.
     // Each row is one accessibility element announcing the fact once.
     const durationRow = screen.getByTestId("preview-duration");
@@ -255,7 +255,7 @@ describe("guide preview surface (G06.01.b)", () => {
     expect(screen.getByTestId("stop-locked-stop-b1-2")).toBeTruthy();
     expect(screen.getByText("Млынавая вуліца")).toBeTruthy();
     expect(screen.getByText("Кароткі анонс пашыранай гісторыі пра млын.")).toBeTruthy();
-    // G06.10 (issue #432): the locked badge renders the Lucide lock through
+    // G06.10 (results G25.04.md — іконкавы слой): the locked badge renders the Lucide lock through
     // the icon layer — no emoji glyph anywhere in the rendered preview, the
     // badge's screen-reader word stays «Зачынена». The emoji query turns
     // red the moment the 🔒 markup returns.
@@ -351,7 +351,7 @@ describe("guide preview surface (G06.01.b)", () => {
     expect(screen.getByTestId("screen-Route preview")).toBeTruthy();
   });
 
-  // UX 06 (issue #352) AC1: the dialog is a real modal — a native Modal in
+  // UX 06 (канон §5 — Дыялог і стужкі) AC1: the dialog is a real modal — a native Modal in
   // the tree (an in-tree overlay leaves none and the guard fails —
   // implementation-rules 1), and the system Back closes it in place: the
   // dialog goes, the preview stays, no walk starts and nothing navigates.
@@ -365,7 +365,7 @@ describe("guide preview surface (G06.01.b)", () => {
     expect(screen.getByTestId("screen-Route preview")).toBeTruthy();
   });
 
-  // UX 06 (issue #352) AC2: «Скасаваць» is an active action with its own
+  // UX 06 (канон §5 — Дыялог і стужкі) AC2: «Скасаваць» is an active action with its own
   // outline style — no dimmed disabled opacity, the accent outline present.
   // Reverting the cancel to the disabled copy of the main button fails both
   // queries (implementation-rules 1).
@@ -463,7 +463,7 @@ describe("guide preview surface (G06.01.b)", () => {
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving catalog fetch holds the preview in
 // loading. Reverting the LoadingIndicator wiring in app/route/[id].tsx turns
 // this red (implementation-rules 1).
@@ -533,13 +533,13 @@ describe("G06.05 preview a11y and failure exits (issue #280)", () => {
   });
 });
 
-// G08.05 (issue #292) — the quiet commerce offer on the preview: the
+// G08.05 (16_delivery_backlog.md — G08.05) — the quiet commerce offer on the preview: the
 // impression follows the render fact, not the mount (AC3); the decline is
 // respected (AC4); repeated purchase errors keep both exits and the app
 // keeps working (AC2, `11` C28); the §8 words follow the finished store
 // leg; the absent port renders nothing (fail closed). The Run-surface
 // absence of the card is proven in app/run.test.tsx (C26).
-describe("G08.05 quiet commerce offer (issue #292)", () => {
+describe("G08.05 quiet commerce offer", () => {
   function commerceRig(outcome: PurchaseOutcome = { kind: "store-problem", code: "E_STORE" }) {
     const events: CommerceEventRecord[] = [];
     const purchases: string[] = [];
@@ -685,7 +685,7 @@ describe("guide preview font layer (G06.10.b)", () => {
     expect(flatStyle(title).fontFamily).toBe(tokens.fontFamilyDisplay);
     // The big-text multiplier applies to the new families (AC4).
     expect(title.props.maxFontSizeMultiplier).toBe(tokens.fontBigTextFactor);
-    // G06.10.c (issue #403): the fact's testID stays on the row (the one
+    // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): the fact's testID stays on the row (the one
     // accessibility element); the font contract reads the fact TEXT inside it.
     const durationText = screen.getByTestId("preview-duration-text");
     expect(flatStyle(durationText).fontFamily).toBe(tokens.fontFamilyUi);
@@ -709,7 +709,7 @@ describe("guide preview font layer (G06.10.b)", () => {
   });
 });
 
-// G06.10.d (issue #404) — the clay buttons: the one main action of the
+// G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d) — the clay buttons: the one main action of the
 // screen carries the accent shelf of the canon tokens (through the token
 // mirror — a hardcoded literal in the surfaces fails these assertions),
 // the secondary actions take the line shade, and the disabled contract

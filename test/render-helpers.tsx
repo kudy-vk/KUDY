@@ -63,7 +63,7 @@ export function serve(paths: Record<string, string>) {
 
 export function layoutWith(services: Services) {
   // The test layout mirrors app/_layout.tsx: the provider around the Stack
-  // navigator with the native header off (UX 02, issue #348 — expo-router
+  // navigator with the native header off (UX 02 — screens-and-transitions.md, Агульныя правілы пераходаў; expo-router
   // reads the routes from context, children are not rendered explicitly),
   // and the root status bar pinned to dark content (issue #428) — copied
   // verbatim from there, the guard for the real file is app/status-bar.test.tsx.
@@ -80,7 +80,7 @@ export function layoutWith(services: Services) {
 
 // The flattened style of a rendered element: the screens merge their frame
 // styles into arrays (inset + base spacing), the guards read the effective
-// value (UX 02, issue #348). Deep-flat: surfaces hand the shared pressable
+// value (UX 02 — screens-and-transitions.md, Агульныя правілы пераходаў). Deep-flat: surfaces hand the shared pressable
 // composed arrays and the wrapper appends its own layers (G06.10.d), so one
 // level is not always enough — React Native paints the fully merged picture.
 export function flatStyle(element: { props: { style?: unknown } }): Record<string, unknown> {
@@ -90,7 +90,7 @@ export function flatStyle(element: { props: { style?: unknown } }): Record<strin
   return Object.assign({}, ...style) as Record<string, unknown>;
 }
 
-// UX 02 (issue #348) — the full route tree for the navigation-frame guards
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the full route tree for the navigation-frame guards
 // (back navigation, safe-area): the real screen components under the
 // mirrored layout, the honest no-ports services. One copy for the frame
 // suites — sibling route maps are jscpd clones (implementation-rules 3).

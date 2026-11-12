@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the shared City/Guides chrome: the guide card, the
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the shared City/Guides chrome: the guide card, the
 // access badge and the honest-state banner, styled from the canon tokens in
 // components/design-tokens.ts (docs/design/visual-language.md, G06.07).
 // Screens render state — every decision about what exists lives in the catalog

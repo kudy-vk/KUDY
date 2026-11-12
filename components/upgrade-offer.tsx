@@ -1,4 +1,4 @@
-// G08.05 (issue #292) — the quiet upgrade offer card of the guide preview
+// G08.05 (16_delivery_backlog.md — G08.05) — the quiet upgrade offer card of the guide preview
 // (11 C26: «Спакойная прапанова ўнізе апісання»; the visual-language card:
 // radius 10, the line border, the token rhythm). The card itself buys
 // nothing — D06/NAV6: «Націск на платную прапанову… адкрывае прэв'ю; ён

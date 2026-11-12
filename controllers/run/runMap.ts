@@ -157,7 +157,7 @@ export interface RunMapStrings {
   // finish — both legal at any moment of a live walk.
   readonly pauseWalk: string;
   readonly endWalk: string;
-  // UX 06 (issue #352): the destructive finish asks first — the dialog's
+  // UX 06 (канон §5 — Дыялог і стужкі): the destructive finish asks first — the dialog's
   // title and the two actions sit with the other surface words.
   readonly endConfirmTitle: string;
   readonly endConfirmAccept: string;

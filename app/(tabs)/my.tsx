@@ -180,7 +180,7 @@ export default function My() {
       feedbackController?.getState().refreshItems();
     }, [historyStore, feedbackController]),
   );
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
   // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   // G06.05 (issue #280, AC1): the surface's words come from the shared
@@ -204,7 +204,7 @@ export default function My() {
       }]}
       testID="screen-KUDY"
     >
-      {/* UX 02 (issue #348): the surface's one back element (AC2), fixed
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the surface's one back element (AC2), fixed
           above the scrolling history so it stays reachable. */}
       <BackButton label={strings.back} testID="btn-my-back" />
       {/* UX 01 (issue #347) + G22.06 (issue #611): the history list scrolls

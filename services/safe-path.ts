@@ -2,7 +2,7 @@
 // the 09 §7 filesystem-input checks — reused by the inventory, the download
 // deletion/activation and the catalog service instead of a second variant.
 // Node-free by constraint: the value chain app → controllers/createServices
-// reaches this module in the device bundle (issue #338), so absoluteness is
+// reaches this module in the device bundle (docs/development_setup.md, 2026-09-27), so absoluteness is
 // expressed without path.isAbsolute. Every absolute form requires a
 // separator (POSIX a leading '/', Windows a leading '\\' or a drive letter
 // before one), so the separator checks subsume the POSIX case; the drive

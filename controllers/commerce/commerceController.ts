@@ -1,4 +1,4 @@
-// G08.05 (issue #292) — the quiet commerce controller behind the guide
+// G08.05 (16_delivery_backlog.md — G08.05) — the quiet commerce controller behind the guide
 // preview: the upgrade offer's visibility, the purchase attempt's error
 // exits and the local telemetry facts. One instance per opened route (the
 // preview controller idiom; the composition root hands the factory when the

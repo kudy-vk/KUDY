@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the «Гіды» rubric surface: the full list of the
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the «Гіды» rubric surface: the full list of the
 // published guides in the canonical order, each exactly once (11 §16.1), Back
 // to the city (NAV9). The rubric exists only with published content — the
 // empty city renders its honest NAV3 message instead of an empty rubric.
@@ -32,7 +32,7 @@ export default function Guides() {
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const controller = useCatalogController(services.catalog?.controller);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
   // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   // G06.05 (issue #280, AC1/AC4): the shared words in the display locale and

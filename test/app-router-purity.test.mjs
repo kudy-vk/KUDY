@@ -1,6 +1,6 @@
 // Guard for the app/ router purity: expo-router's
 // require.context treats every app/**/*.ts(x) file as a route — a nonscreen
-// module there warns on every start and (before #338) leaked into the device
+// module there warns on every start and (before the device-bundle fix — docs/development_setup.md, 2026-09-27) leaked into the device
 // bundle. app/ may hold only: router special files (`+*`, `_layout`), routes
 // (a default export) and colocated `*.test.*` suites (the metro blockList
 // keeps those out of the bundle). Dropping a nonscreen module back into

@@ -1,4 +1,4 @@
-// UX 02 (issue #348) — the shared screen-frame styles of the detail
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the shared screen-frame styles of the detail
 // surfaces (route preview, place detail): the paper container and the
 // section title. One copy — sibling StyleSheets are jscpd clones
 // (implementation-rules 3).

@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the catalog envelope reading for the device path.
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the catalog envelope reading for the device path.
 //
 // The single interpretation source for the envelope is contracts/reader.mjs
 // (09 §4: "Фармат — публічны кантракт"); it is Node-stdlib only (node:fs for

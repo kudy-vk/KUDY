@@ -1,4 +1,4 @@
-// Direct acceptance suite for the shared safe-unit idiom (issue #338): the
+// Direct acceptance suite for the shared safe-unit idiom (docs/development_setup.md, 2026-09-27): the
 // checks moved out of contentRepo/inventory.ts must keep every rejection, and
 // the node-free absoluteness rule must hold on every platform — a drive
 // absolute «C:/…» path is never a safe rel path. Each negative fixture
@@ -36,7 +36,7 @@ test('isSafeRel accepts multi-segment rel paths and rejects the documented viola
   assert.equal(isSafeRel('/abs/path'), false, 'posix absolute');
 });
 
-test('isSafeRel rejects drive-absolute paths on every platform (issue #338)', () => {
+test('isSafeRel rejects drive-absolute paths on every platform (docs/development_setup.md, 2026-09-27)', () => {
   assert.equal(isSafeRel('C:/victim.txt'), false, 'drive absolute');
   assert.equal(isSafeSegment('C:x'), true, 'drive-relative without a separator stays a safe segment');
 });

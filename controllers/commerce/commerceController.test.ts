@@ -1,4 +1,4 @@
-// G08.05 (issue #292) — the commerce controller's acceptance suite.
+// G08.05 (16_delivery_backlog.md — G08.05) — the commerce controller's acceptance suite.
 // Criteria:
 // 1. the offer renders only in its allowed place — the derivation never
 //    offers on a free route, without a product fact or without the port,
