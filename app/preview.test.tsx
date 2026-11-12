@@ -713,7 +713,7 @@ describe("guide preview font layer (G06.10.b)", () => {
 // screen carries the accent shelf of the canon tokens (through the token
 // mirror — a hardcoded literal in the surfaces fails these assertions),
 // the secondary actions take the line shade, and the disabled contract
-// (canon §5 after the owner's variant А, issue #430: the ghost pair, no
+// (canon §5 after the owner's variant А of 2026-10-03: the ghost pair, no
 // shelf, no dip, the reason next to the button) holds.
 describe("guide preview clay buttons (G06.10.d)", () => {
   test("the primary action renders the accent shelf from the token mirror; the text pair is unchanged", async () => {
@@ -726,7 +726,7 @@ describe("guide preview clay buttons (G06.10.d)", () => {
     expect(flatStyle(label).color).toBe(tokens.colorAccentInk);
   });
 
-  // Issue #430 (owner's variant А): the disabled primary reads — the canon
+  // Owner variant А (2026-10-03): the disabled primary reads — the canon
   // ghost pair through the mirror, no opacity substitute anywhere in the
   // layers, no shelf. Reverting to the dimmed accent copy fails the border,
   // the fill and the label-color queries (implementation-rules 1).

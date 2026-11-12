@@ -23,7 +23,7 @@ test('guard: the app/ component suite is wired into npm test (implementation-rul
   assert.match(
     jestConfig,
     /components\/\*\*\/\*\.test\.tsx/,
-    'jest config must match components/**/*.test.tsx (issue #339: the guide-card suite lives there — reverting the glob would silently drop it from npm test)'
+    'jest config must match components/**/*.test.tsx (the guide-card suite lives in the components zone — reverting the glob would silently drop it from npm test)'
   );
 });
 

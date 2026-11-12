@@ -1,4 +1,4 @@
-// Deterministic demo driver for issue #339: the app/ router purity verdict
+// Deterministic demo driver for the app/ router purity guard: the verdict
 // (the same shared classifier the guard suite runs —
 // test/app-router-classifier.mjs) and the index route wiring. No
 // emulator, no server — the output block of

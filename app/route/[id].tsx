@@ -172,7 +172,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     marginTop: palette.spaceM,
     padding: palette.spaceM,
   },
-  // Issue #430 (варыянт А): the disabled primary reads — transparent fill,
+  // Owner variant А (2026-10-03): the disabled primary reads — transparent fill,
   // the canon ghost pair through the mirror, no opacity substitute (§5).
   mainButtonDisabled: {
     backgroundColor: "transparent",
@@ -313,7 +313,7 @@ export default function RoutePreview() {
     }
   };
   const state = controller;
-  // Issue #430: the disabled condition is the button's own (enabled gate +
+  // Canon §5, owner decision 2026-10-03: the disabled condition is the button's own (enabled gate +
   // busy); the ghost pair and the dropped shelf read it, nothing else.
   const mainDisabled = !state.button.enabled || state.busy;
   return (
@@ -554,7 +554,7 @@ export default function RoutePreview() {
               // G06.10.d (issue #404): the one main action of the screen is
               // the clay primary — the accent shelf; the dip rides the
               // shared wrapper (a disabled press never dips).
-              // Issue #430: the disabled primary drops the shelf — the ghost
+              // Owner decision 2026-10-03: the disabled primary drops the shelf — the ghost
               // pair of canon §5 carries the unavailable state instead.
               shelf={mainDisabled ? undefined : "accent"}
               testID={state.button.action === "download" ? "btn-download" : "btn-start"}

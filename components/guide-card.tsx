@@ -3,7 +3,7 @@
 // components/design-tokens.ts (docs/design/visual-language.md, G06.07).
 // Screens render state — every decision about what exists lives in the catalog
 // controller, nothing is invented here. Lives in components/, not app/:
-// expo-router treats every app/ file as a route (issue #339); the controller
+// expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone); the controller
 // types come in as a type-only import (components takes no runtime imports
 // from the other zones).
 import { Link } from "expo-router";
