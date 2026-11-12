@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the city catalog service types. The service turns
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the city catalog service types. The service turns
 // the published catalog envelope (09 §4, 21 §3.3) plus its optional discovery
 // index into the guide-card view state the City and Guides surfaces render.
 // Ports only — no transport and no digest API live here (the loader port is

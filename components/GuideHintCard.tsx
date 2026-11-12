@@ -1,4 +1,4 @@
-// G07.05 (issue #284) — the quiet guide-hint card of the open app (R07 in
+// G07.05 (15_guide_decisions.md — R07) — the quiet guide-hint card of the open app (R07 in
 // docs/15: «Побач ёсць гід…» without a session, the small quiet card during
 // one; «Яна не запускае аўдыё, не пачынае сесію, не купляе кантэнт»). The
 // rows are the public preview facts the hint controller projected — a tap
@@ -7,7 +7,7 @@
 // апісання не дае доступу»). The visual language is the quiet-offer card's
 // (G08.05): radius 10, the line border, the token rhythm, one quiet decline.
 // Lives in components/, not app/: expo-router treats every app/ file as a
-// route (issue #339).
+// route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { useSyncExternalStore } from "react";
 import { StyleSheet, View } from "react-native";
 

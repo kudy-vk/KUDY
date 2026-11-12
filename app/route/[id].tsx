@@ -114,7 +114,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontSize: palette.fontBaseSize,
     marginTop: palette.spaceS,
   },
-  // G06.10.c (issue #403): the wrapped facts own the row's spacing — the
+  // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): the wrapped facts own the row's spacing — the
   // icon (canon tokens, deep import) sits beside the fact text, and the row
   // is the one accessibility element announcing the fact once.
   factRow: {
@@ -173,7 +173,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     marginTop: palette.spaceM,
     padding: palette.spaceM,
   },
-  // Issue #430 (варыянт А): the disabled primary reads — transparent fill,
+  // Owner variant А (2026-10-03): the disabled primary reads — transparent fill,
   // the canon ghost pair through the mirror, no opacity substitute (§5).
   mainButtonDisabled: {
     backgroundColor: "transparent",
@@ -235,7 +235,7 @@ export default function RoutePreview() {
   const locale = useUiLocale();
   const routeId = typeof id === "string" && id.length > 0 ? id : "";
   const controller = usePreviewController(routeId ? services.preview : undefined, routeId);
-  // G08.05 (issue #292): the commerce controller per opened route (the
+  // G08.05 (16_delivery_backlog.md — G08.05): the commerce controller per opened route (the
   // preview idiom). Absent without the commerce port — the preview renders
   // no offer, the fail-closed rule of every optional service member.
   const commerceStore = useMemo(
@@ -250,7 +250,7 @@ export default function RoutePreview() {
     controller?.recordSource(typeof from === "string" ? from : null);
   }, [controller, from]);
 
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
   // the native header off (AC4). APR-05 (#810): the bottom inset clears the
   // navigation bar. Keep the hook before the early returns.
   const insets = useSafeAreaInsets();
@@ -286,7 +286,7 @@ export default function RoutePreview() {
         style={frameStyle}
         testID="screen-Route preview"
       >
-        {/* UX 02 (issue #348): even the unavailable state keeps the frame —
+        {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): even the unavailable state keeps the frame —
             with the native header off there is no other way back (AC2). */}
         <BackButton label={strings.back} testID="btn-preview-back" />
         <ScaledText style={styles.unavailable} testID="route-unavailable">
@@ -314,12 +314,12 @@ export default function RoutePreview() {
     }
   };
   const state = controller;
-  // Issue #430: the disabled condition is the button's own (enabled gate +
+  // Canon §5, owner decision 2026-10-03: the disabled condition is the button's own (enabled gate +
   // busy); the ghost pair and the dropped shelf read it, nothing else.
   const mainDisabled = !state.button.enabled || state.busy;
   return (
     <ScreenSurface style={frameStyle} testID="screen-Route preview">
-      {/* UX 02 (issue #348): the back sits in the frame above the scroll —
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back sits in the frame above the scroll —
           reachable while the stops list is scrolled (AC2). */}
       <BackButton label={strings.back} testID="btn-preview-back" />
       {/* UX 01 (issue #347): the surface scrolls — every stop and the main
@@ -398,7 +398,7 @@ export default function RoutePreview() {
               </View>
             ) : null}
             {formatDuration(state.surface.preview.estimatedDuration, state.surface.preview.durationMin) ? (
-              // G06.10.c (issue #403): the first icon application — the
+              // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): the first icon application — the
               // metadata row. The row is one accessibility element carrying
               // the fact once; the icon's own required label satisfies the
               // §9 contract if it ever renders outside the row. The row's
@@ -526,7 +526,7 @@ export default function RoutePreview() {
                     {stop.placeName ? <ScaledText style={styles.stopPlace}>{stop.placeName}</ScaledText> : null}
                     {stop.announce ? <ScaledText style={styles.stopAnnounce}>{stop.announce}</ScaledText> : null}
                     {stop.locked ? (
-                      // G06.05 (AC1) + G06.10 (issue #432): the badge renders
+                      // G06.05 (AC1) + G06.10 (results G25.04.md — іконкавы слой): the badge renders
                       // the Lucide lock — the emoji glyph is gone from the
                       // markup; the screen reader still gets the word, never
                       // the glyph alone (the factRow idiom: the row is the
@@ -552,10 +552,10 @@ export default function RoutePreview() {
               onPress={() => void handleMainButton()}
               disabled={mainDisabled}
               style={[styles.mainButton, mainDisabled && styles.mainButtonDisabled]}
-              // G06.10.d (issue #404): the one main action of the screen is
+              // G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d): the one main action of the screen is
               // the clay primary — the accent shelf; the dip rides the
               // shared wrapper (a disabled press never dips).
-              // Issue #430: the disabled primary drops the shelf — the ghost
+              // Owner decision 2026-10-03: the disabled primary drops the shelf — the ghost
               // pair of canon §5 carries the unavailable state instead.
               shelf={mainDisabled ? undefined : "accent"}
               testID={state.button.action === "download" ? "btn-download" : "btn-start"}
@@ -581,7 +581,7 @@ export default function RoutePreview() {
         ) : null}
       </ScrollView>
       {state.confirm ? (
-        // UX 06 (issue #352) AC1: a real modal — TalkBack reads only the
+        // UX 06 (канон §5 — Дыялог і стужкі) AC1: a real modal — TalkBack reads only the
         // dialog, and the system Back closes it in place: the shell's
         // onRequestClose runs the controller's cancel, so no navigation
         // happens and no walk starts.
@@ -609,7 +609,7 @@ export default function RoutePreview() {
             }}
             testID="btn-confirm-start"
           />
-          {/* UX 06 (issue #352) AC2: «Скасаваць» is an active action with
+          {/* UX 06 (канон §5 — Дыялог і стужкі) AC2: «Скасаваць» is an active action with
               its own outline style — the disabled-looking dimmed copy of
               the main button is gone. */}
           <ModalDialogCancel

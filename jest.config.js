@@ -21,7 +21,7 @@ module.exports = {
       caller: { name: "metro", bundler: "metro", platform: "ios" },
     }],
   },
-  // G06.10.c (issue #403): jest reads the "react-native" export condition,
+  // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): jest reads the "react-native" export condition,
   // which hands lucide-react-native's deep icon imports their ESM .mjs build —
   // an extension babel-jest's transform pattern never matches. The CJS build
   // of the same glyph is a drop-in for the test run; Metro keeps the device

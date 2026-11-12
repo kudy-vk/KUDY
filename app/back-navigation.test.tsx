@@ -1,9 +1,9 @@
-// UX 02 (issue #348) — the navigation-frame guards: every non-start screen
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the navigation-frame guards: every non-start screen
 // hosts exactly one back element (getByTestId throws on a second) and its
 // label lives inside a <Text> — within().getByText() reaches only <Text>
-// hosts, so a reverted bare string in Pressable (the #344 class) turns these
+// hosts, so a reverted bare string in Pressable (the bare-string Pressable class) turns these
 // red. «Побач» gains its back and it walks back to the city (AC2, NAV9);
-// the start surface stays back-free. G06.10 (issue #432): the one back image
+// the start surface stays back-free. G06.10 (results G25.04.md — іконкавы слой): the one back image
 // is the Lucide arrow beside the word — no screen renders a text arrow
 // glyph, and the back word lives in the one chrome dictionary (the unity
 // guard turns a re-added per-screen copy red).
@@ -30,6 +30,7 @@ test("«Побач» has its one back and it returns to the city (AC2)", async (
 
 test.each([
   ["guides", "/city/gdansk/guides", "btn-guides-back", "Горад", "screen-Guides"],
+  ["about", "/city/gdansk/about", "btn-about-back", "Назад", "screen-AboutCity"],
   ["preview", "/route/r1", "btn-preview-back", "Назад", "screen-Route preview"],
   ["place", "/place/p1", "btn-place-back", "Назад", "screen-Place detail"],
   ["run", "/run/r1", "btn-run-back", "Назад", "screen-Run"],
@@ -50,7 +51,7 @@ test("the start surface stays back-free (AC2)", async () => {
   expect(screen.queryAllByText(/←/)).toHaveLength(0);
 });
 
-test("the back word lives in the one chrome dictionary, arrow-free (issue #432)", () => {
+test("the back word lives in the one chrome dictionary, arrow-free (results G25.04.md — іконкавы слой)", () => {
   // The chrome catalog is the single source of the back caption: the value
   // carries no text arrow (the arrow is the Lucide glyph BackButton
   // renders), and neither surface dictionary holds its own copy — a

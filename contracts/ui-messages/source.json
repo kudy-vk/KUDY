@@ -14,6 +14,17 @@
       "sourceHash": "ddd8d54d445057e907cd788a7e2a70b26423e2dbe88a1f3dbfd8f884ca624750"
     },
     {
+      "id": "native.chrome.aboutCity",
+      "source": "Пра горад",
+      "context": "Пункт галоўнага меню «Пра горад» (рэзервовы фрагмент reserve-1): адкрывае практычны даведнік па Гданьску (issue #200; папярэднім словам пункта была «Хутка»)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#aboutCity"
+      ],
+      "sourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca"
+    },
+    {
       "id": "native.chrome.access.free",
       "source": "Бясплатна",
       "context": "Пазнака доступу: бясплатна",
@@ -3457,6 +3468,748 @@
       "migratedFrom": [
         "web/lib/i18n/be.ts#usageRulesReuse"
       ]
+    },
+    {
+      "id": "native.aboutCity.title",
+      "source": "Пра горад: практычны даведнік",
+      "context": "Загаловак экрана даведніка «Пра горад» (issue #200): адкрываецца з рэзервовага фрагмента галоўнага меню",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#title"
+      ],
+      "sourceHash": "c97032b4d08f98ed3af66cce699ff0e6889b996bd17594eb97c3d1befa34e62d"
+    },
+    {
+      "id": "native.aboutCity.intro",
+      "source": "Кароткі даведнік для першых дзён у Гданьску: дарога з аэрапорта і назад, транспарт і білеты, арыенціры горада, ежа і аплата, картка турыста з бясплатнымі музеямі і паездка ў Мальбарк. Даведнік чытаецца без сеткі; спасылкі вядуць на афіцыйныя старонкі, дзе заўсёды актуальныя звесткі.",
+      "context": "Уводзіны даведніка: для каго, што ўнутры, працуе без сеткі (issue #200, крытэрыі 1 і 8)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#intro"
+      ],
+      "sourceHash": "090593db3d59daaf0cbc9058b21d7088776b2194ea7c4418a64fd59823c5a6aa"
+    },
+    {
+      "id": "native.aboutCity.verifiedLine",
+      "source": "Звесткі даведніка правераныя ${date} па крыніцах у раздзелах; перад паездкай правярайце дзейны расклад і цэны на афіцыйнай старонцы.",
+      "context": "Датаваная пазнака праверкі пад загалоўкам: дата — апошняя поўная праверка зменлівых фактаў (issue #200, крытэрый 1)",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "date",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#verifiedLine"
+      ],
+      "sourceHash": "6b9d5ad3be3b2367e16d5bb1a6adcd0a61fd6defc3eb7dc94badf7e3fdea2222"
+    },
+    {
+      "id": "native.aboutCity.entriesHeading",
+      "source": "Галоўныя ўваходы",
+      "context": "Загаловак блока чатырох кароткіх уваходаў уверсе экрана (issue #200, крытэрый 8)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#entriesHeading"
+      ],
+      "sourceHash": "9a9522ded766116d9fc1d14190c7b93c1dc7261c9fafe09b25d5565e302d5d32"
+    },
+    {
+      "id": "native.aboutCity.food.title",
+      "source": "Ежа, аплата і праграмы",
+      "context": "Загаловак раздзела пра ежу, дастаўку і аплату (issue #200, крытэрый 5)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.title"
+      ],
+      "sourceHash": "b6fe227c2b6cd68c8348af50174d3336ba7e3844b64b7b4511233071674bee57"
+    },
+    {
+      "id": "native.aboutCity.food.delivery",
+      "source": "Дастаўку ў Гданьску замоўляць праз Pyszne.pl, Glovo, Wolt, Uber Eats або Bolt Food — усе пяць сэрвісаў пакрываюць горад. Аплата адрозніваецца: Pyszne.pl бярэ карткі, BLIK (праз PayU), Apple Pay, Google Pay, PayPal і гатоўку; Glovo і Wolt прымаюць карткі, BLIK і гатоўку; Uber Eats — карткі, BLIK і Apple Pay; Bolt Food — карткі і гатоўку пры атрыманні.",
+      "context": "Дастаўка і метады аплаты па сэрвісах; правераныя афіцыйнымі старонкамі сэрвісаў 10.11.2026 (issue #200, крытэрый 5)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.delivery"
+      ],
+      "sourceHash": "9c44854faf8b84cd69f6ed9f9d162b467aa40859229dd047f56927d2dd9fe1f7"
+    },
+    {
+      "id": "native.aboutCity.food.cards",
+      "source": "Карткі Visa і Mastercard з кантактлесам — асноўны спосаб аплаты ў дастаўцы і ў крамах; гатоўку ў злотых сэрвісы прымаюць толькі там, дзе гэта яўна пазначана. Афіцыйнай статыстыкі «карткі/гатоўку прымаюць паўсюль» няма, таму даведнік агульнага абяцання не дае — дзейны метад пазначаюць у тэрмінале і ў кассе.",
+      "context": "Карткі і гатоўка: сумленная фармулёўка без непацверджанага «паўсюль» (issue #200, крытэрый 5)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.cards"
+      ],
+      "sourceHash": "d38d557124cc4e3bee94ca074cd9d8b7add8aca69f9dc9459734830e49760cbe"
+    },
+    {
+      "id": "native.aboutCity.food.blik",
+      "source": "BLIK — польскі мабільны плацёж. Трэба: рахунак у польскім банку-ўдзельніку і мабільная аплікацыя банка. Аплаты: у інтэрнэце — аднаразовы шасцілічбавы код з ап і пацвярджэнне; на касе — кантактлес ад ап або той самы код на тэрмінале; BLIK таксама перадае грошы па нумары тэлефона і здымае гатоўку ў банкамаце без карты.",
+      "context": "BLIK: што гэта, што патрэбна і як карыстацца; крыніца blik.com (issue #200, крытэрый 5)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik"
+      ],
+      "sourceHash": "92b3e4267e2e34766937596e4d324656dd58a70bdaedcd4567993ff714a9e7fd"
+    },
+    {
+      "id": "native.aboutCity.karta.title",
+      "source": "Картка турыста і бясплатныя музеі",
+      "context": "Загаловак блока пра Karta Turysty і бясплатныя дні музеяў (issue #200, крытэрый 6)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#karta.title"
+      ],
+      "sourceHash": "0ea2f67229fc4e5a65ed4851bd49886f3fa1618b548dac8db7bc863603cae825"
+    },
+    {
+      "id": "native.aboutCity.karta.packages",
+      "source": "Gdańska Karta Turysty (лістапад 2026): пакеты Odkrywca — 24/48/72 гадзіны за 75/85/95 zł (льготны 60/70/80) і Odkrywca Premium — 90/110/130 zł (льготны 70/85/100); асобны кулінарны пакет Smaki Gdańska Duet на дзвюх асоб — 216 zł на 30 дзён. Odkrywca робіць бясплатнымі 13 уваходаў (у тым ліку Ратуша Галоўнага горада, Музей бурштыну, Hevelianum, заапарк, музеі Нацыянальнага марскога); Premium — 23 уваходы: дадаюцца Артуса двор, Музей ІІ сусветнай вайны, Еўрапейскі цэнтр салідарнасці, Жураве і інш.",
+      "context": "Пакеты Karta Turysty і іх пацверджаныя перавагі; крыніца kartaturysty.visitgdansk.com, праверана 10.11.2026 (issue #200, крытэрый 6)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#karta.packages"
+      ],
+      "sourceHash": "b8b765722a08132f1a8fe639abfe21e09c0d6cb0d9562fb846b80284ba08bc0c"
+    },
+    {
+      "id": "native.aboutCity.karta.transportAddOn",
+      "source": "Транспарт да пакета дадаецца асобна за плату: Bilet Metropolitalny на 24 гадзіны — 34 zł (льготны 17), на 72 гадзіны — 68 zł (льготны 34); дзейнічае на аўтобусы, трамваі і цягнікі SKM і POLREGIO метраполіі. Пакет і транспартны білет можна актываваць у розныя дні.",
+      "context": "Транспартнае дапаўненне Karta Turysty; крыніцы FAQ Karta Turysty і MZKZG, праверана 10.11.2026 (issue #200, крытэрый 6)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#karta.transportAddOn"
+      ],
+      "sourceHash": "be38f7d77e54c8849669417d8e8100ae71e134ba373e26f9fba7b17de56bac88"
+    },
+    {
+      "id": "native.aboutCity.karta.freeMuseums",
+      "source": "Без карткі: Музей ІІ сусветнай вайны — бясплатны ўваход ва ўсе выставы па ўторак; білет за 0 zł выдаюць толькі ў касе ў дзень наведвання (не пазней за гадзіну да зачынення), онлайн-браніраванне бясплатных білетаў няма; панядзелкі музей звычайна закрыты. Muzeum Gdańska — бясплатны ўваход у панядзелак: Ратуша Галоўнага горада, Артуса двор і Дом Уфагена 10:00–16:00, Музей бурштыну 10:00–18:00; уторак асноўныя аддзелы закрытыя.",
+      "context": "Бясплатныя дні музеяў без карткі; крыніцы muzeum1939.pl і muzeumgdansk.pl, праверана 10.11.2026 (issue #200, крытэрый 6)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#karta.freeMuseums"
+      ],
+      "sourceHash": "8b2a06b04aa1d5c3bc52b6b1484d9b58fa61e544e945853f333cf9bf39aa16dc"
+    },
+    {
+      "id": "native.aboutCity.karta.exceptionsNote",
+      "source": "Выключэнні: на бясплатны дзень частка часовых выставак можа не працаваць; у дзяржаўныя і царкоўныя святы музеі мяняюць расклад. Дакладны спіс закрытых дзён і умовы дзеня бясплатнага ўваходу правярайце на афіцыйнай старонцы кожнага музея — спасылкі ніжэй.",
+      "context": "Сезонныя і святочныя выключэнні; дзе праверыць (issue #200, крытэрый 6)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#karta.exceptionsNote"
+      ],
+      "sourceHash": "54b276ddab78fd02616560125756a5ca2584be2d4978f38e813e437927eb2db5"
+    },
+    {
+      "id": "native.aboutCity.links.airportBuses",
+      "source": "Аўтобусы з і ў аэрапорт — airport.gdansk.pl",
+      "context": "Спасылка на афіцыйную старонку аўтобусаў аэрапорта (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.airportBuses"
+      ],
+      "sourceHash": "76b0679d627edb6cc931a3d34360f92f58a060d2b645c2e3327650bbaf24d64e"
+    },
+    {
+      "id": "native.aboutCity.links.airportTrains",
+      "source": "Цягнікі з і ў аэрапорт — airport.gdansk.pl",
+      "context": "Спасылка на афіцыйную старонку цягнікоў аэрапорта (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.airportTrains"
+      ],
+      "sourceHash": "43d598052646b9c99df8c7f124be41f69b27e08c481bb07b55c98f2e1b0b6a3f"
+    },
+    {
+      "id": "native.aboutCity.links.ztmSchedule",
+      "source": "Расклады ZTM Гданьска",
+      "context": "Спасылка на афіцыйныя расклады ZTM (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.ztmSchedule"
+      ],
+      "sourceHash": "d2b5d2bbe3bbba73cb1d5ffa4e0340122ebfb0f508e7d5ab09dd4bd7fb1aade6"
+    },
+    {
+      "id": "native.aboutCity.links.ztmTickets",
+      "source": "Білеты ZTM Гданьска",
+      "context": "Спасылка на афіцыйную старонку білетаў ZTM (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.ztmTickets"
+      ],
+      "sourceHash": "8b247a98e7216c1bd428a4c8fd3708940b94f28484604e6ace2ea9ab95d7f0ab"
+    },
+    {
+      "id": "native.aboutCity.links.skmSearch",
+      "source": "Пошук злучэнняў SKM",
+      "context": "Спасылка на пошук злучэнняў SKM (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.skmSearch"
+      ],
+      "sourceHash": "b8ad3b62a24691ad6f3222ce838587762a7b7f195a6957c24b2fcab606f1a6c4"
+    },
+    {
+      "id": "native.aboutCity.links.jakdojade",
+      "source": "Jakdojade — планы паездак і білеты",
+      "context": "Спасылка на планавальшчык і краму білетаў Jakdojade (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.jakdojade"
+      ],
+      "sourceHash": "272dbdc55384fdad165b2ad6ab8860b8315bd1fcbd3855404e34b620d0e64946"
+    },
+    {
+      "id": "native.aboutCity.links.mzkzg",
+      "source": "Метрапалітальныя білеты MZKZG",
+      "context": "Спасылка на білеты MZKZG, якія пакрываюць SKM і POLREGIO (праверана 10.11.2026)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.mzkzg"
+      ],
+      "sourceHash": "1396459f5e6dd63c3b715839f813c3c5ecf9c868cc91867212c876e7719dad3d"
+    },
+    {
+      "id": "native.aboutCity.links.visitGdanskMap",
+      "source": "Афіцыйная мапа цэнтра Гданьска (PDF)",
+      "context": "Спасылка на афіцыйны PDF мапы цэнтра ад visitgdansk.com (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.visitGdanskMap"
+      ],
+      "sourceHash": "e23f59a039cb47da15f47f07486d88216c16f59befeb2647326d8156d5a2ba09"
+    },
+    {
+      "id": "native.aboutCity.links.kartaTurysty",
+      "source": "Karta Turysty — пакеты і цэны",
+      "context": "Спасылка на цэны і пакеты Karta Turysty (праверана 10.11.2026)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.kartaTurysty"
+      ],
+      "sourceHash": "05e311458d24b3df7019cede9a29047147797d6eee5f04facd3e39ded5e53c02"
+    },
+    {
+      "id": "native.aboutCity.links.muzeumGdanska",
+      "source": "Muzeum Gdańska — бясплатны ўваход",
+      "context": "Спасылка на афіцыйную старонку бясплатнага ўваходу Muzeum Gdańska (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.muzeumGdanska"
+      ],
+      "sourceHash": "b5aa0296032f141776ba027451259c02ba9f937abca36b11f134852e5b2d550e"
+    },
+    {
+      "id": "native.aboutCity.links.muzeum1939",
+      "source": "Музей ІІ сусветнай вайны — правілы наведвання",
+      "context": "Спасылка на афіцыйныя правілы наведвання Музея ІІ сусветнай вайны (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.muzeum1939"
+      ],
+      "sourceHash": "75d77d12f01fd7eae9284e64e1040708bb5f24cb125fd77dbfb03802a25c1cfe"
+    },
+    {
+      "id": "native.aboutCity.links.pysznePayment",
+      "source": "Аплата ў Pyszne.pl",
+      "context": "Спасылка на афіцыйны спіс метадаў аплаты Pyszne.pl (праверана 10.11.2026)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.pysznePayment"
+      ],
+      "sourceHash": "75cbcf90e32d1b5c322110547cc100eabe73f7d3dd213adabe56a6cbc63035ca"
+    },
+    {
+      "id": "native.aboutCity.links.blikHow",
+      "source": "Як карыстацца BLIK — blik.com",
+      "context": "Спасылка на афіцыйную інструкцыю BLIK (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.blikHow"
+      ],
+      "sourceHash": "08bdd0ec8ab72c4a7735c58c9805ece5a374fb10e97cfcc87ade78586d49c6c5"
+    },
+    {
+      "id": "native.aboutCity.links.malborkVisit",
+      "source": "Замак у Мальборку — наведванне",
+      "context": "Спасылка на афіцыйную старонку наведвання замка ў Мальборку (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.malborkVisit"
+      ],
+      "sourceHash": "0dc3ad96a1b0dc22232c95f99d0ad18b552306ae74f4239e00ad0163e049c1ba"
+    },
+    {
+      "id": "native.aboutCity.links.trainSchedule",
+      "source": "Пошук цягнікоў Польшчы — Portal Pasażera",
+      "context": "Спасылка на афіцыйны пошук чыгунных злучэнняў Польшчы",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.trainSchedule"
+      ],
+      "sourceHash": "03f434b8c78781464fad7ca9b9a2d1aee57a84209b2a2fb053cdbaa0cf7e276c"
+    },
+    {
+      "id": "native.aboutCity.links.unesco",
+      "source": "ЮНЕСКА — замак тэўтонскага ордэна ў Мальборку",
+      "context": "Спасылка на старонку аб'екта Сусветнай спадчыны ЮНЕСКА (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.unesco"
+      ],
+      "sourceHash": "1c1ee781aa11e11877d858725ee92e23f619add473c8f2ab1f27a4b6f06a9354"
+    },
+    {
+      "id": "native.aboutCity.transport.title",
+      "source": "Транспарт і білеты",
+      "context": "Загаловак раздзела пра гарадскі транспарт і білеты (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.title"
+      ],
+      "sourceHash": "7892c1708152b7ea11fef6826a4df56d09599ad0e4ab36f1aafa54cb9d19a819"
+    },
+    {
+      "id": "native.aboutCity.transport.ztmWhen",
+      "source": "Аўтобусам і трамваем ZTM карыстаюцца ў Гданьску і суседніх гмінах — гэта галоўны транспарт горада. Сопат і Гдыня маюць уласныя сеткі ZKM, агульны тарыфт на ўсю агламерацыю вядзе звяз MZKZG: яго білеты дзейнічаюць і ў Гданьску, і ў суседзяў.",
+      "context": "Калі карыстацца аўтобусам і трамваем ZTM і дзе жыве агульны тарыфт; крыніцы ztm.gda.pl і mzkzg.org, праверана 10.11.2026 (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.ztmWhen"
+      ],
+      "sourceHash": "cd3f7e564a93ebc58d541bc1f585aee49435e4359ab60e4f44f4cebfc3088450"
+    },
+    {
+      "id": "native.aboutCity.transport.skmWhen",
+      "source": "Цягніком SKM едуць на Сопат і Гдыню: галоўная вось Гдыня–Сопат–Гданьск возіць у працоўныя дні прыблізна кожныя 10–15 хвілін (дакладныя змены — у раскладзе). Уважайце: адзіныя білеты ZTM у цягніках не дзейнічаюць — цягнік пакрываюць метрапалітальныя білеты «kolejowo-komunalne» MZKZG або ўласны білет SKM.",
+      "context": "Калі SKM і які білет дзейнічае ў цягніку; крыніцы mzkzg.org і skm.pkp.pl, праверана 10.11.2026; рэгулярнасць — з прэсы, афіцыйных лічбаў няма (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.skmWhen"
+      ],
+      "sourceHash": "fdf1f5a1be0f592996439466a1bd330f7fbeaef6021e3d50117ebf0d5f01acc5"
+    },
+    {
+      "id": "native.aboutCity.transport.otherRail",
+      "source": "Лінію PKM да аэрапорта (Gdańsk Wrzeszcz–Gdańsk Port Lotniczy–Osowa) абслугоўвае POLREGIO, не SKM. Рэгіянальныя цягнікі POLREGIO ідуць і на Мальбарк, Слупск, Картузы; расклад і білеты — polregio.pl.",
+      "context": "Ролі PKM і POLREGIO; крыніцы pkm-sa.pl і polregio.pl, праверана 10.11.2026 (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.otherRail"
+      ],
+      "sourceHash": "341d5f10e342a1ba883ec3f4be5ac86b36f7a1e4b045070f51cedab39aee2fd6"
+    },
+    {
+      "id": "native.aboutCity.transport.tickets",
+      "source": "Білеты ZTM Гданьска: 75 хвілін — 4,80 zł (льготны 2,40), адна паездка — 6,00 zł (3,00), цэлы дзень — 22 zł (11). Метрапалітальныя MZKZG (Гданьск, Сопат, Гдыня, Wejherowo): адна паездка 4,80 zł у тэлефоне ці 5,20 zł паперавы, 75 хвілін — 6,00 zł (3,00), дзень — 24 zł (12), 72 гадзіны — 48 zł (24). На цягнік: дзень «двух арганізатараў» — 30 zł (15), «усіх арганізатараў» — 34 zł (17), 72 гадзіны — 68 zł (34). Начныя рэйсы даплаты не маюць.",
+      "context": "Дзейныя цэны і тыпы білетаў; крыніцы ztm.gda.pl/bilety і mzkzg.org, праверана 10.11.2026 (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.tickets"
+      ],
+      "sourceHash": "e8842d0fc1d1a44e2e58c3bf91464b0aa64ce8ac289c4087cf08dfcd35327eb8"
+    },
+    {
+      "id": "native.aboutCity.transport.activation",
+      "source": "Білет дзейнічае ад актывацыі: паперавы з QR-кодам скануйце ў салоне ў прыладзе FALA (знізу прылады, 10–15 см, сігнал «Bilet aktywny») альбо прабіце яго ў прабіўніку ў салоне; мабільны білет у jakdojade актывуецца сам падчас куплі — купляйце адразу пасля ўваходу ў салон. Адна паездка дзейнічае да выхаду, 75 хвілін і дзень/72 гадзіны — ад актывацыі.",
+      "context": "Калі і як актываваць білет і што ён пакрывае; крыніцы systemfala.pl, company.jakdojade.pl і mzkzg.org, праверана 10.11.2026 (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.activation"
+      ],
+      "sourceHash": "631e6b5c847e02ecee665ca3feab71f13c0097076e56fe91212cf9f5597b33a8"
+    },
+    {
+      "id": "native.aboutCity.transport.machinesApps",
+      "source": "Дзе купіць: апікацыя FALA — найбольш, у тым ліку чыгуначныя білеты; jakdojade і яшчэ некалькі аплікацый (GoPay, moBilet, mPay, SkyCash, zBiletem) — метрапалітальныя; у салоне — прылады FALA безнаяльнай аплатай; дадаткова касы SKM і ZTM, кіёскі і пошта. FALA — агульная сістэма білетаў Гданьска і Памор'я (апікацыя, партал systemfala.pl, картка): з плацёжнай карткай можна ехаць і без загадзя купленага білета — сістэма сама падбірае тарыфт. Аплікацыя SKM KomPas трымае расклад цягнікоў афлайн.",
+      "context": "Ролі Jakdojade, аўтаматаў FALA і аплікацый; крыніцы mzkzg.org, ztm.gda.pl, systemfala.pl, skm.pkp.pl, праверана 10.11.2026 (issue #200, крытэрый 3)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#transport.machinesApps"
+      ],
+      "sourceHash": "8dbbad1ad96b9a8d7001eddf528bb8ab7e34c3e05eb6bb3be007e448d5a23f4a"
+    },
+    {
+      "id": "native.aboutCity.airport.title",
+      "source": "З аэрапорта і назад",
+      "context": "Загаловак раздзела пра дарогу з аэрапорта ў горад і назад (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.title"
+      ],
+      "sourceHash": "dfa8fcbba3c5eac62aaadc50ca03d5c8b44a2918218ab076872cbacf9b2872f4"
+    },
+    {
+      "id": "native.aboutCity.airport.intro",
+      "source": "Аэрапорт імя Леха Валенсы (GDN) далучаюць да горада два шляхі: гарадскія аўтобусы ZTM стаяць насупраць пасажырскага тэрмінала каля паркінгу P1 (прыпынкі Port Lotniczy 01 і 02), а побач уваход на станцыю Gdańsk Port Lotniczy — ад тэрмінала вядзе крытая хада.",
+      "context": "Дзе на аэрапорце сесці на аўтобус і цягнік; крыніцы airport.gdansk.pl і mapa.ztm.gda.pl, праверана 10.11.2026 (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.intro"
+      ],
+      "sourceHash": "5cf74b68128cb4154b7132bd0db55ddc4d2332c014e17b6ed9f39b4de04f5c38"
+    },
+    {
+      "id": "native.aboutCity.airport.busDay",
+      "source": "Дзённы аўтобус 210 — цэнтр ⇄ аэрапорт, каля 40 хвілін у дарозе. З аэрапорта: прыпынак Port Lotniczy 01, у будні прыкладна кожныя 30 хвілін (першы 04:50, апошні 23:05), у нядзелю штогадзіну. З цэнтра: прыпынак Dworzec Główny 10 на вул. Podwale Grodzkie (першы 04:30, апошні 22:27). У цэнтры карысныя прыпынкі: Hucisko, Urząd Miejski, Hevelianum, Płowce, Focha.",
+      "context": "Аўтобус 210: маршрут, адыходы і прыпынкі абодвух кірункаў; крыніцы airport.gdansk.pl і расклады ztm.gda.pl (важныя ад 02.11.2026), праверана 10.11.2026 (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.busDay"
+      ],
+      "sourceHash": "a55412479befad23da9ff240ce29fc5a7f5ff9ba8e507f39a7fd721a40767d3d"
+    },
+    {
+      "id": "native.aboutCity.airport.busSecond",
+      "source": "Аўтобус 110 — Gdańsk Wrzeszcz ⇄ аэрапорт: з прыпынку Port Lotniczy 02 у будні кожныя 20 хвілін (05:05–23:20; у бок Wrzeszcz першы 04:52, апошні 22:30). Таксама да аэрапорта ідзе аўтобус 120 ад Łostowice Świętokrzyska.",
+      "context": "Аўтобус 110 і дадатковы 120; крыніцы airport.gdansk.pl і ztm.gda.pl (важны ад 01.10.2026), праверана 10.11.2026 (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.busSecond"
+      ],
+      "sourceHash": "5dc5448a5a0c7d5ad0a8fa2b3079f8fd55eade34bb1be83f9cfc649ae7399954"
+    },
+    {
+      "id": "native.aboutCity.airport.nightBus",
+      "source": "Начны N3 ходзіць штоночы з 23:00 да 04:00, штогадзіну: Dworzec Główny ⇄ аэрапорт ⇄ Gdańsk Wrzeszcz; да Сопата і Гдыні ён не ідзе. З аэрапорта ў цэнтр — з Port Lotniczy 01 (23:15, 00:06, 01:15…), у Wrzeszcz — з Port Lotniczy 02; да цэнтра каля 50 хвілін, да Wrzeszcz каля 20.",
+      "context": "Начны аўтобус N3: гадзіны, кірункі, прыпынкі; крыніцы airport.gdansk.pl і ztm.gda.pl (важны ад 07.10.2026), праверана 10.11.2026 (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.nightBus"
+      ],
+      "sourceHash": "f8ee4c615653ca4f25c6dffeba37d0c20fe5d0996cedd939751c7af15ec116a9"
+    },
+    {
+      "id": "native.aboutCity.airport.train",
+      "source": "Цягнік POLREGIO: да Gdańsk Wrzeszcz каля 25 хвілін, рэйсы прыкладна штогадзіну; прамыя да Gdańsk Główny ёсць, але часцей патрэбная перасадка ў Gdańsk Wrzeszcz — з перону 3 на SKM у бок цэнтра. SKM да станцыі аэрапорта не ідзе.",
+      "context": "Цягнік: аператар POLREGIO, час, перасадка ў Gdańsk Wrzeszcz (перон 3); крыніцы airport.gdansk.pl, pkm-sa.pl, skm.pkp.pl, праверана 10.11.2026; бок платформы на Gdańsk Wrzeszcz афіцыйна не пазначаны — у тэкст не ўвайшоў (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.train"
+      ],
+      "sourceHash": "473105c9dd4ce44c71c6b7154f3b902109dead8b0b34d55c851d6032be3690af"
+    },
+    {
+      "id": "native.aboutCity.airport.ticketNote",
+      "source": "На аўтобусы (210, 110, 120, N3) — звычайны білет ZTM: адна паездка 4,80 zł (льготны 2,40), 75 хвілін 6,00 zł (3,00), дзень 22 zł (11); начны даплаты не мае. На цягнік гарадскі адзіны білет не дзейнічае — купляйце чыгуначны: аўтаматы на перонах, аплікацыі (Polregio, Jakdojade) або FALA.",
+      "context": "Білеты на аўтобусы і цягнік аэрапорта; крыніцы airport.gdansk.pl, ztm.gda.pl, mzkzg.org; пакрыццё адзінага білета на ўсю перасадку Polregio+SKM не пацверджана — у тэкст не ўвайшло (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.ticketNote"
+      ],
+      "sourceHash": "73c5434557ef297640273eb1c25de1c069ea9cac81b0af2b94ebc83c07ac301b"
+    },
+    {
+      "id": "native.aboutCity.airport.scheduleNote",
+      "source": "Увага: цягнікі да 12.12.2026 ідуць па часовым заменным раскладзе, сталы стартуе 13.12.2026; расклады аўтобусаў мяняюцца сезонна. Перад паездкай зырце жывыя табло і расклады — спасылкі ніжэй.",
+      "context": "Сезонная заўвага пра замены раскладаў; крыніцы pkm-sa.pl і ztm.gda.pl, праверана 10.11.2026 (issue #200, крытэрый 2)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#airport.scheduleNote"
+      ],
+      "sourceHash": "0f0f097e4ad5d56d348255661d59b2084a152de8d3202ff181c6b5e3c2b7a9d8"
+    },
+    {
+      "id": "native.aboutCity.city.title",
+      "source": "Дзе што ў горадзе",
+      "context": "Загаловак раздзела-арыенціра з маленькай схемай (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.title"
+      ],
+      "sourceHash": "e3faf352c946a5279b2554b48bce5c7a59fb62eb6aab1f2569769d168f139208"
+    },
+    {
+      "id": "native.aboutCity.city.glowneVsStare",
+      "source": "Турыстычнае сэрца — Główne Miasto («Галоўны горад») на беразе ракі Motławy: вуліцы Długa і Długi Targ, фантан Нептуна, Ратуша, касцёл Св. Марыі, Жураве. Не блытайце з Stare Miasto: гэта асобны гістарычны квартал на поўнач адтуль — з касцёлам Св. Кацярыны і Вялікім млынам; назва «старэйшы», а гуляць ідзе ў Галоўны горад.",
+      "context": "Рознасць Główne Miasto і Stare Miasto і іх арыенціры; крыніцы visitgdansk.com і даведнікі горада, праверана 10.11.2026 (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.glowneVsStare"
+      ],
+      "sourceHash": "f94f553bf8350befaedaecba4729137e42f32409594fcb912ec35033ef24a7e5"
+    },
+    {
+      "id": "native.aboutCity.city.station",
+      "source": "Вакзал Gdańsk Główny — каля 10 хвілін пешкі да Галоўнага горада, з тунэляў вядуць выхады да трамвайных прыпынкаў. Бліжэйшая да цэнтра станцыя чыгункі — Gdańsk Śródmieście на лініі SKM.",
+      "context": "Вакзал і сувязь з цэнтрам; крыніца даведнікі станцыі + падарожніцкія ацэнкі (афіцыйныя лічбы хвілін не даюць) — у тэксце «каля», праверана 10.11.2026 (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.station"
+      ],
+      "sourceHash": "5283d372ec0f73e5661ab31b2e033e78f38abf063fcf27fe6157e91fc4ff7604"
+    },
+    {
+      "id": "native.aboutCity.city.wrzeszcz",
+      "source": "Wrzeszcz — самы населены жылы раён: крамы і кавярні, вуліца Wajdeloty — яго сэрца, вілы канца XIX стагоддзя. Туды лёгка дабрацца SKM або цягніком да станцыі Gdańsk Wrzeszcz.",
+      "context": "Характар Wrzeszcza і як туды дабрацца; крыніцы visitgdansk.com (Wajdeloty) і даведнікі раёна; час язды SKM афіцыйна не пазначаны — у тэкст не ўвайшоў, праверана 10.11.2026 (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.wrzeszcz"
+      ],
+      "sourceHash": "dd5571935eaa5279475a67a21cc660e0205219d8af954f471e3d3185b7e08430"
+    },
+    {
+      "id": "native.aboutCity.city.oliwa",
+      "source": "Oliwa — катэдра цыстэрцыянцаў са знакамітым арганам (канцэрты; міжнародны фестываль арганнай музыкі ў ліпені–жніўні), парк Адама Міцкевіча і найбольшы ў Польшчы па плошчы заапарк. Туды ідзе трамвай 5 (таксама 6) або SKM да станцыі Gdańsk Oliwa.",
+      "context": "Oliwa: катэдра, арганныя канцэрты, парк, заапарк, транспарт; крыніцы visitgdansk.com, archikatedraoliwa.pl і даведнікі, праверана 10.11.2026 (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.oliwa"
+      ],
+      "sourceHash": "d7cd4b9a3f587208edcb55423998a432c654d776e2d9f80d41fe7dcfa3d2b248"
+    },
+    {
+      "id": "native.aboutCity.city.beaches",
+      "source": "Пляжы: Brzeźno — найпапулярнейшы гарадскі (трамвай 3 да Brzeźno Dom Zdrojowy); Jelitkowo — сямейны каля мяжы з Сопатам (трамваі 2 і 4); Stogi — шырокі і спакойны (зараз аўтобусам T8 або 158: мост Siennicki закрыты, трамваі скарочаныя да 2027); Wyspa Sobieszewska — «дзікі» зялёны канец горада з рэзерватамі птушак (аўтобус 512). Летам пляжныя рэйсы ездзяць часцей.",
+      "context": "Пляжныя раёны і рэйсы да іх; крыніцы visitgdansk.com (пляжы) і ztm.gda.pl/rozklady; летнія змены частоты — GAiT, праверана 10.11.2026 (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.beaches"
+      ],
+      "sourceHash": "42ff19bbb86aad221f5124a5091fb4a0cc1e72093b95d5dfd1814fcc8385da2d"
+    },
+    {
+      "id": "native.aboutCity.city.mapCaption",
+      "source": "Схема вышэй — арыенціры з прыблізнымі прапорцыямі, не геаграфічная мапа; дакладная мапа цэнтра — па спасылцы ніжэй.",
+      "context": "Падпіс пад схемай: сумлённе пра прыблізнасць + спасылка на афіцыйную мапу (issue #200, крытэрый 4)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapCaption"
+      ],
+      "sourceHash": "0972f56a2cc638aa25686793ee7724f0c25c6533f0adec45af9d03f95ca9a616"
+    },
+    {
+      "id": "native.aboutCity.city.mapSea",
+      "source": "Балтыйскае мора",
+      "context": "Пазнака мора на схеме арыенціраў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapSea"
+      ],
+      "sourceHash": "0da10651a707d7996b316819e12598bbf824c47ecf8a0849d152072b52a5148b"
+    },
+    {
+      "id": "native.aboutCity.city.mapStation",
+      "source": "Gdańsk Główny",
+      "context": "Пазнака вакзала на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapStation"
+      ],
+      "sourceHash": "f6a41232e88c564945fec2c31f75702654c38ae365cb9079945c136886b038fc"
+    },
+    {
+      "id": "native.aboutCity.city.mapGlowne",
+      "source": "Główne Miasto",
+      "context": "Пазнака Галоўнага горада на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapGlowne"
+      ],
+      "sourceHash": "7a429d8c532f4371495c370095cee803dc939a3806591f18f1a2aa02eb9659ee"
+    },
+    {
+      "id": "native.aboutCity.city.mapStare",
+      "source": "Stare Miasto",
+      "context": "Пазнака Стары горад на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapStare"
+      ],
+      "sourceHash": "813eb25324f174211264035edf3b1d159b2a7251866aaf915ccaaf86995a1cb8"
+    },
+    {
+      "id": "native.aboutCity.city.mapMotlawa",
+      "source": "Motława",
+      "context": "Пазнака ракі на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapMotlawa"
+      ],
+      "sourceHash": "81da11a502d0e49fb0781925cd8a1a14f0ef168397ac5e9a916c2423ff9f6535"
+    },
+    {
+      "id": "native.aboutCity.city.mapWrzeszcz",
+      "source": "Wrzeszcz",
+      "context": "Пазнака раёна на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapWrzeszcz"
+      ],
+      "sourceHash": "0bafde0d8ac1fe557859ec266ecbf61855a229a8eb274ba86c7c9a2ce0b373e3"
+    },
+    {
+      "id": "native.aboutCity.city.mapOliwa",
+      "source": "Oliwa",
+      "context": "Пазнака раёна на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapOliwa"
+      ],
+      "sourceHash": "27c77902ecdd95c67486c691d0dd18fa96891303c4621c521c06c89f80fd45f1"
+    },
+    {
+      "id": "native.aboutCity.city.mapBrzezno",
+      "source": "Brzeźno",
+      "context": "Пазнака пляжнага раёна на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapBrzezno"
+      ],
+      "sourceHash": "bb8e001c3ef63320c9bd9b58fa3cfe955d9d6e6ed56e8df4096bd79eefc46be0"
+    },
+    {
+      "id": "native.aboutCity.city.mapJelitkowo",
+      "source": "Jelitkowo",
+      "context": "Пазнака пляжнага раёна на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapJelitkowo"
+      ],
+      "sourceHash": "0ab649bf9a706542ed5c4d32980a073b93f67eee0733da143edd74cdefd860a1"
+    },
+    {
+      "id": "native.aboutCity.city.mapStogi",
+      "source": "Stogi",
+      "context": "Пазнака пляжнага раёна на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapStogi"
+      ],
+      "sourceHash": "2593a22351a426f137154e0eeac7c16c464c7b1915a24d5d3cc9adacac234176"
+    },
+    {
+      "id": "native.aboutCity.city.mapSobieszewo",
+      "source": "Sobieszewo",
+      "context": "Пазнака вострава і пляжа на схеме: польская назва з указальнікаў (issue #200)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.mapSobieszewo"
+      ],
+      "sourceHash": "41811c6a79544601e21d60f348deaea3391cc657abd49a63c096c661c5c304d0"
+    },
+    {
+      "id": "native.aboutCity.malbork.title",
+      "source": "Паездка ў Мальбарк",
+      "context": "Загаловак блока пра дзённую паездку ў Мальбарк (issue #200, крытэрый 7)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#malbork.title"
+      ],
+      "sourceHash": "ce402642bb2e94df0f5e8c6008d207d40a9900e02a9b7d2c56be4285ba21a2c6"
+    },
+    {
+      "id": "native.aboutCity.malbork.intro",
+      "source": "Ад Гданьска на цягніку — Замак тэўтонскага ордэна ў Мальборку: аб'ект Сусветнай спадчыны ЮНЕСКА з 1997 года, які афіцыйны сайт замка называе найбуйнейшым цагляным замкам свету. Гэта простая дзённая паездка: цягнік, замак, зварот.",
+      "context": "Статус ЮНЕСКА і тэзіс «найбуйнейшы цагляны замак» з адрозненнем крыніц: ЮНЕСКА (whc.unesco.org/en/list/847, 1997) называе яго выдатным прыкладам цаглянага замка; фраза «найбуйнейшы» — з афіцыйнага сайта замка; праверана 10.11.2026 (issue #200, крытэрый 7)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#malbork.intro"
+      ],
+      "sourceHash": "263203713edca1370185368e30b44ccbe89de003113c5b377aedb9f925f91fb0"
+    },
+    {
+      "id": "native.aboutCity.malbork.train",
+      "source": "Цягнікі POLREGIO ідуць з Gdańsk Główny прама да Malbork прыблізна штогадзіну, у дарозе 45–65 хвілін; зваротныя рэйсы да позняга вечара. Расклад — Portal Pasażera або polregio.pl; ад 13.12.2026 дзейны новы сезонны расклад.",
+      "context": "Цягнік да Мальбарка: аператар, частота, час; крыніцы polregio.pl (расклад GD5, важны 25.10–12.12.2026) і portalpasazera.pl, праверана 10.11.2026 (issue #200, крытэрый 7)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#malbork.train"
+      ],
+      "sourceHash": "d8321890461b33100ac0521d462a95e6417afd7d6eff35ec95c6ee794b275d7b"
+    },
+    {
+      "id": "native.aboutCity.malbork.walk",
+      "source": "Ад станцыі Malbork да замка — пешкі праз горад. Увага з 16.11.2026: пешаходная кладка праз Nogat закрытая на ремонт — пераходзьце па мосту імя ротмістра Пілцкага (DK55); актуальныя прапановы — на афіцыйнай старонцы наведвання.",
+      "context": "Хада ад станцыі да замка і змена маршруту праз закрыццё кладкі; крыніца zamek.malbork.pl (навіна ад 04.11.2026); неафіцыйная ацэнка ~15–20 хв у тэкст не ўвайшла, праверана 10.11.2026 (issue #200, крытэрый 7)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#malbork.walk"
+      ],
+      "sourceHash": "893433bf0f8d738984832b6aef4f6e6564cd3b39bba77977243b85e018731f36"
+    },
+    {
+      "id": "native.aboutCity.malbork.visitNote",
+      "source": "У лістападзе–красавіку: уторак–нядзеля Trasa historyczna 9:00–16:00 (апошні ўваход 12:45, інтэр'еры зачыняюцца а 15:00); панядзелак — толькі бясплатныя замкавыя падворкі (Trasa spacerowa), білет на месцы. Білеты: Trasa historyczna 80 zł (льготны 60), Trasa spacerowa 35 zł (25), аўдыёгід у цане; онлайн — bilety.zamek.malbork.pl, у святы свой расклад (11.11 адкрыта 9:00–16:00).",
+      "context": "Гадзіны і білеты замка ў нізкім сезоне; крыніцы zamek.malbork.pl (opening-hours, tickets) і bilety.zamek.malbork.pl; сезон 01.10.2026–25.04.2027, летнія гадзіны правярайце на старонцы, праверана 10.11.2026 (issue #200, крытэрый 7)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#malbork.visitNote"
+      ],
+      "sourceHash": "b9294b80d6222afc5c7d2baec9bc9eb76970b165aa6693f371e6a393661bd975"
     }
   ]
 }

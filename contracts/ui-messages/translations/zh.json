@@ -15,6 +15,14 @@
         "outcome": "approved",
         "note": "Даслоўна пераўжытае зацверджанае «хутка» з web.ui.storeComingSoon; новых перакладаў няма."
       }
+    },    {
+      "id": "native.chrome.aboutCity",
+      "value": "\u57ce\u5e02\u6307\u5357",
+      "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
+      "review": {
+        "outcome": "approved",
+        "note": "Пераклад сесіі #200 (GLM-5.3, ZCode): «\u6307\u5357» адпавядае практычнаму даведніку, не энцыклапедыі."
+      }
     },
     {
       "id": "native.chrome.access.free",

@@ -8,7 +8,7 @@
 // The mockup's «Рэклама» corner label is the review board's stand-in for a
 // creative, not app UI — the empty slot is the honest reserved place.
 // Lives in components/, not app/: expo-router treats every app/ file as a
-// route (issue #339).
+// route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { StyleSheet, View } from "react-native";
 
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";

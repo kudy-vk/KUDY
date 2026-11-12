@@ -242,13 +242,13 @@ export default function PlaceDetail() {
   const playback = useVisibleMomentPlayback(momentPlay, pathname, placeId);
   // G06.05 (issue #280, AC1): the display locale, not a hard-code.
   const strings = placeDetailStrings(locale);
-  // G06.10 (issue #432): the back word is the shared chrome catalog's — the
+  // G06.10 (results G25.04.md — іконкавы слой): the back word is the shared chrome catalog's — the
   // place dictionary holds no copy of it (one back image, one dictionary).
   const back = uiStrings(locale).back;
   // G16.03 (issue #74): the place rating words — the action, the visit
   // confirmation and its accept.
   const feedbackWords = feedbackStrings(locale);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
   // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   // G16.03 (issue #74): the self-reported visit confirmation — the dialog is
@@ -269,7 +269,7 @@ export default function PlaceDetail() {
     facts.content_locale !== null;
   return (
     <ScreenSurface style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Place detail">
-      {/* UX 02 (issue #348): the back sits in the frame above the scroll —
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back sits in the frame above the scroll —
           reachable while the moment cards are scrolled (AC2). */}
       <BackButton label={back} testID="btn-place-back" />
       {/* UX 01 (issue #347): the detail scrolls — the last moment card is

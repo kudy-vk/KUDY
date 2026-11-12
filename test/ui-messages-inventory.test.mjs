@@ -18,6 +18,7 @@ import { offerStrings } from '../controllers/commerce/commerceController.ts';
 import { feedbackStrings } from '../controllers/useFeedbackController.ts';
 import { be as webBe } from '../web/lib/i18n/be.ts';
 import { GUIDE_HINT_STRINGS } from '../components/guide-hint-strings.generated.ts';
+import { ABOUT_CITY_STRINGS } from '../components/about-city-strings.generated.ts';
 
 import { loadUiMessagesSource } from '../contracts/ui-messages/ui-messages.mjs';
 
@@ -30,6 +31,9 @@ const CATALOGS = {
   'native.offer': { value: offerStrings('be'), file: 'controllers/commerce/commerceController.ts' },
   'native.feedback': { value: feedbackStrings('be'), file: 'controllers/useFeedbackController.ts' },
   'web.ui': { value: webBe, file: 'web/lib/i18n/be.ts' },
+  // Issue #200: the aboutCity guide's words live in the generated be-only
+  // projection (importable pure TS); every display locale falls back to it.
+  'native.aboutCity': { value: ABOUT_CITY_STRINGS, file: 'components/about-city-strings.generated.ts' },
 };
 
 // GuideHintCard.tsx cannot be imported under node strip-types (JSX); since

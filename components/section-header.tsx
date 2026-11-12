@@ -3,7 +3,7 @@
 // component so the screens never restyle it. The text arrives from the
 // caller — the words ride the catalogs (G14.04.d), this component owns
 // only the look. Lives in components/, not app/: expo-router treats every
-// app/ file as a route (issue #339).
+// app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { StyleSheet } from "react-native";
 
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";

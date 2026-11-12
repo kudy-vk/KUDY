@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the catalog service tests. The committed
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the catalog service tests. The committed
 // discovery-contract fixtures are the published data (rule 15: the tests run
 // the production load path — loader port in, integrity pin, projection out).
 // The envelope parity block pins the device-side envelope reading to the

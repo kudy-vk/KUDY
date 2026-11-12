@@ -6,7 +6,7 @@
 // G21.25 (issue #558): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 #432, #403; UX 05 #351; G15.03 #70)
+// the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 — results G25.04.md (іконкавы слой) + docs/agent-tasks/app/G06.10.md; UX 05 #351; G15.03 #70)
 
 import { completeUiLocaleSelfNames, type CompleteUiLocaleCode } from "../contracts/ui-locales.ts";
 import type { UiStrings } from "../contracts/ui-message-types.ts";
@@ -14,6 +14,7 @@ import type { UiStrings } from "../contracts/ui-message-types.ts";
 export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   "be": {
     "comingSoon": "Хутка",
+    "aboutCity": "Пра горад",
     "access": {
       "free": "Бясплатна",
       "mixed": "Змешана",
@@ -104,6 +105,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "en": {
     "comingSoon": "Coming soon",
+    "aboutCity": "About the city",
     "access": {
       "free": "Free",
       "mixed": "Mixed",
@@ -194,6 +196,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "uk": {
     "comingSoon": "Скоро",
+    "aboutCity": "Про місто",
     "access": {
       "free": "Безкоштовно",
       "mixed": "Змішано",
@@ -284,6 +287,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "de": {
     "comingSoon": "Bald",
+    "aboutCity": "Über die Stadt",
     "access": {
       "free": "Kostenlos",
       "mixed": "Gemischt",
@@ -374,6 +378,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "es": {
     "comingSoon": "Pronto",
+    "aboutCity": "Sobre la ciudad",
     "access": {
       "free": "Gratis",
       "mixed": "Mixto",
@@ -464,6 +469,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "fr": {
     "comingSoon": "Bientôt",
+    "aboutCity": "À propos de la ville",
     "access": {
       "free": "Gratuit",
       "mixed": "Mixte",
@@ -554,6 +560,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "cs": {
     "comingSoon": "Brzy",
+    "aboutCity": "O městě",
     "access": {
       "free": "Zdarma",
       "mixed": "Smíšené",
@@ -644,6 +651,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "sv": {
     "comingSoon": "Kommer snart",
+    "aboutCity": "Om staden",
     "access": {
       "free": "Gratis",
       "mixed": "Blandat",
@@ -734,6 +742,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   },
   "zh": {
     "comingSoon": "\u5373\u5C06\u63A8\u51FA",
+    "aboutCity": "\u57CE\u5E02\u6307\u5357",
     "access": {
       "free": "\u514D\u8D39",
       "mixed": "\u90E8\u5206\u514D\u8D39",

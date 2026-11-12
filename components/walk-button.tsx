@@ -6,7 +6,7 @@
 // same controller (NAV7). Navigation only: it never stops the audio and
 // never changes the session. Without a live walk there is no target — the
 // button renders nowhere (no fake destination). Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339); the
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone); the
 // screen passes its services walk member in as a prop — components takes
 // no runtime imports from the other zones.
 import { useCallback, useState } from "react";
@@ -61,7 +61,7 @@ export function WalkButton({ walk, locale = "be", iconOnly = false }: { walk?: S
       accessibilityLabel={label}
       onPress={() => router.push(`/run/${live.routeId}`)}
       style={[styles.button, iconOnly && { minWidth: 48, minHeight: 48, alignItems: "center", justifyContent: "center", marginBottom: 0 }]}
-      // G06.10.d (issue #404): the walk entry is a primary action — the
+      // G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d): the walk entry is a primary action — the
       // accent shelf of the clay button.
       shelf="accent"
       testID="btn-walk-mode"

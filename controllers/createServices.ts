@@ -150,7 +150,7 @@ export interface ServicePorts {
   // G07.02 — the clock the FocusRegain threshold reads (§3.7); the root
   // defaults to the wall clock when absent.
   readonly now?: () => number;
-  // G08.05 (issue #292) — the commerce seam (G08.04 Рашэнне 1: the chain's
+  // G08.05 (16_delivery_backlog.md — G08.05) — the commerce seam (G08.04 Рашэнне 1: the chain's
   // consumer). The root resolves it from the store session (the G08.03
   // service) and the purchase-chain state when those adapters exist;
   // absent, the preview renders no offer — fail closed, the idiom of every
@@ -172,7 +172,7 @@ export interface ServicePorts {
   // Absent (the device db adapter is TR-10) the choice lives for the
   // session; the `settings` row joins with the adapter (the consent idiom).
   readonly uiLocalePersistence?: UiLocalePersistence;
-  // G07.05 (issue #284) — the R07 hint seams: the durable guide_hint_state/
+  // G07.05 (15_guide_decisions.md — R07) — the R07 hint seams: the durable guide_hint_state/
   // guide_hint_last store over services/db (zone B), the public points
   // projection and the accepted values document (ADR G07.04 §3). The app
   // foreground fact and the local hint-event recorder are optional sub-seams;
@@ -305,7 +305,7 @@ export interface Services {
         readonly controller: ControllerStore<DiscoveryControllerState>;
       }
     | undefined;
-  // G07.05 (issue #284) — the ONE R07 hint controller (19 §2.2): the quiet
+  // G07.05 (15_guide_decisions.md — R07) — the ONE R07 hint controller (19 §2.2): the quiet
   // guide-nearby card over the accepted ADR G07.04 contract, the owner of
   // the guide_hint_state/guide_hint_last records. Exists only when the
   // location, audio and catalog services AND the guideHints seams are all
@@ -477,7 +477,7 @@ export function createServices(ports: ServicePorts): Services {
     }
     return liveRunWrapper.source;
   };
-  // G07.05 (issue #284) — the ONE R07 hint controller (19 §2.2), over the
+  // G07.05 (15_guide_decisions.md — R07) — the ONE R07 hint controller (19 §2.2), over the
   // accepted ADR G07.04 contract. It reads the fixes through the location
   // service's read-only tap and the live run state through the resolver; the
   // durable limits, the public points and the values document arrive with

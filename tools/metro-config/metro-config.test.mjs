@@ -1,4 +1,4 @@
-// Guard for the device-bundle Metro wiring (issue #338, implementation-rules
+// Guard for the device-bundle Metro wiring (docs/development_setup.md, 2026-09-27; implementation-rules
 // 1 and 7 — config counts as code and the runner glob is wired in the same
 // change). Removing either element of the fix — the blockList or the
 // node:* → stub resolveRequest — turns a test here red; deleting the stub
@@ -59,10 +59,10 @@ test('guard: the stub loads silently and throws only when a builtin is called', 
   assert.throws(() => bound(), /KUDY: node builtin isAbsolute/, 'the call must fail loudly');
 });
 
-test('guard: the app value-chain sources stay node-free (the #338 criterion-1 revert)', () => {
+test('guard: the app value-chain sources stay node-free (criterion-1 revert — docs/development_setup.md, 2026-09-27)', () => {
   // The stub only fails at call time, so a returned `node:*` import in the
   // value chain would build silently and break on device — the sources the
-  // #338 proof names are asserted directly instead.
+  // development_setup.md (2026-09-27) proof names are asserted directly instead.
   for (const rel of [
     'controllers/createServices.ts',
     'services/contentRepo/inventory.ts',

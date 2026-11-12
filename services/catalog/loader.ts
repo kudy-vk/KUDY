@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the origin-binding adapter for the catalog loader
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the origin-binding adapter for the catalog loader
 // port: relative published paths resolve against the configured public origin
 // (21 §3.3 — the client fetches only that origin). fetch is global in the
 // app runtime and in Node ≥ 22, so one adapter serves the device build and a

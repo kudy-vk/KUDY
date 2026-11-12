@@ -1,10 +1,10 @@
-// UX 06 (issue #352) — the one shared modal shell for the app's dialogs: a
+// UX 06 (канон §5 — Дыялог і стужкі) — the one shared modal shell for the app's dialogs: a
 // transparent RN Modal makes the dialog truly modal — TalkBack reads only
 // the dialog (the surface behind sits in another native window) and the
 // system Back runs onRequestClose, no navigation of its own. The shell owns
 // the overlay, the card (visual-language §4: radius 10, max width 400) and
 // the two actions; the surfaces own the words. Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339).
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import type { ReactNode } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 
@@ -45,7 +45,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     color: palette.colorAccentInk,
     fontSize: palette.fontBaseSize,
   },
-  // UX 06 (issue #352) AC2: «Скасаваць» is an active action with its own
+  // UX 06 (канон §5 — Дыялог і стужкі) AC2: «Скасаваць» is an active action with its own
   // outline style — never the disabled-looking dimmed copy of the accept.
   cancel: {
     alignItems: "center",

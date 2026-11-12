@@ -237,6 +237,18 @@ export function adZone(loaded = true) {
   return zone;
 }
 
+// ---------- medallion of the map pieces ----------
+
+// The filter that makes a medallion's rim waver like a pen stroke: a slow,
+// shallow displacement. Put it into the <svg> that draws the medallion and
+// refer to it as `filter: url(#<id>)`; `id` must be unique in the page. The
+// medallion's colours are the --medal-* values of kit.css.
+export function penStroke(id) {
+  return svg('filter', { id, x: '-20%', y: '-20%', width: '140%', height: '140%' },
+    svg('feTurbulence', { type: 'fractalNoise', baseFrequency: 0.07, numOctaves: 2, seed: 7, result: 'noise' }),
+    svg('feDisplacementMap', { in: 'SourceGraphic', in2: 'noise', scale: 2.4, xChannelSelector: 'R', yChannelSelector: 'G' }));
+}
+
 // ---------- engraved panorama of Gdańsk ----------
 
 // An original line drawing in the manner of old city prospects: sea and masts

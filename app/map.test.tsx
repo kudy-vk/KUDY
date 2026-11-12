@@ -349,7 +349,7 @@ describe("Nearby surface (G07.01)", () => {
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving catalog fetch holds the surface in
 // loading. Reverting the LoadingIndicator wiring in app/map.tsx turns this
 // red (implementation-rules 1).

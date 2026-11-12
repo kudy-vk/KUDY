@@ -19,6 +19,7 @@ import { placeDetailStrings } from '../controllers/place/placeDetailController.t
 import { nearbyStrings } from '../controllers/nearby/nearbySurfaceController.ts';
 import { offerStrings } from '../controllers/commerce/commerceController.ts';
 import { feedbackStrings } from '../controllers/useFeedbackController.ts';
+import { ABOUT_CITY_STRINGS } from '../components/about-city-strings.generated.ts';
 
 const CATALOGS = {
   'native.chrome': () => uiStrings('be'),
@@ -28,6 +29,9 @@ const CATALOGS = {
   'native.nearby': () => nearbyStrings('be'),
   'native.offer': () => offerStrings('be'),
   'native.feedback': () => feedbackStrings('be'),
+  // Issue #200: the aboutCity guide's words live in the generated be-only
+  // projection; every display locale falls back to it (the guideHint idiom).
+  'native.aboutCity': () => ABOUT_CITY_STRINGS,
 };
 
 function leaf(obj, path) {

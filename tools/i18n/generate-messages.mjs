@@ -58,7 +58,7 @@ function parameterTsType(parameter) {
 export const DOMAINS = [
   {
     domain: 'native.chrome',
-    note: 'the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 #432, #403; UX 05 #351; G15.03 #70)',
+    note: 'the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 — results G25.04.md (іконкавы слой) + docs/agent-tasks/app/G06.10.md; UX 05 #351; G15.03 #70)',
     outputs: [
       {
         file: 'components/ui-strings.generated.ts',
@@ -78,7 +78,7 @@ export const DOMAINS = [
   },
   {
     domain: 'native.guideHint',
-    note: 'the nearby guide-hint card\'s words (G07.05 #284); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 #544), es too (G21.11 #545), fr too (G21.12 #546), cs too (G21.13 #547), sv too (G21.14 #548), zh too (G21.46 #670)',
+    note: 'the nearby guide-hint card\'s words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 #544), es too (G21.11 #545), fr too (G21.12 #546), cs too (G21.13 #547), sv too (G21.14 #548), zh too (G21.46 #670)',
     outputs: [
       {
         file: 'components/guide-hint-strings.generated.ts',
@@ -90,8 +90,26 @@ export const DOMAINS = [
     ],
   },
   {
+    // Issue #200 — the «Пра горад» static Gdańsk guide: a curated document,
+    // authored in Belarusian (the app's first preference). Every display
+    // locale renders the be text until its words are authored — the same
+    // documented-fallback idiom as the guideHint's uk row; the document
+    // joins the translation gate when a locale set lands.
+    domain: 'native.aboutCity',
+    note: 'the «Пра горад» static Gdańsk guide (issue #200); the document is authored in Belarusian — every other display locale falls back to be (the guideHint documented-fallback idiom) until its words are authored',
+    outputs: [
+      {
+        file: 'components/about-city-strings.generated.ts',
+        exportName: 'ABOUT_CITY_STRINGS',
+        locales: ['be'],
+        annotation: 'AboutCityStrings',
+        imports: ['import type { AboutCityStrings } from "../contracts/ui-message-types.ts";'],
+      },
+    ],
+  },
+  {
     domain: 'native.preview',
-    note: 'the guide preview\'s words (G06.05 #280, AC4/AC5; G08.05 #292)',
+    note: 'the guide preview\'s words (G06.05 #280, AC4/AC5; G08.05 — 16_delivery_backlog.md)',
     outputs: [
       {
         file: 'controllers/catalog/preview-strings.generated.ts',
@@ -145,7 +163,7 @@ export const DOMAINS = [
   },
   {
     domain: 'native.offer',
-    note: 'the commerce offer card\'s words (11 §8; G08.05 #292)',
+    note: 'the commerce offer card\'s words (11 §8; G08.05 — 16_delivery_backlog.md)',
     outputs: [
       {
         file: 'controllers/commerce/commerce-strings.generated.ts',

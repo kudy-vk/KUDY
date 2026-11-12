@@ -314,7 +314,7 @@ describe("Place detail surface (G07.02)", () => {
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving catalog fetch holds the detail in
 // loading. Reverting the LoadingIndicator wiring in app/place/[id].tsx turns
 // this red (implementation-rules 1).

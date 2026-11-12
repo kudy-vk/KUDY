@@ -1,4 +1,4 @@
-// G06.10.c (issue #403) — the one icon layer over Lucide (founder quiz
+// G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c) — the one icon layer over Lucide (founder quiz
 // 2026-09-29: one rounded outline set, ISC). The glyph arrives from the usage
 // site as a deep per-glyph import (Metro does not tree-shake the barrel —
 // G06.10); this file imports nothing from the icon package, not even a type.
@@ -8,7 +8,7 @@
 // подпісы на кожнай icon-only кнопцы) on the wrapper View — the SVG inside
 // is decoration — and pointerEvents="none" lets the icon sit inside a
 // Pressable without stealing the press. Lives in components/, not app/:
-// expo-router treats every app/ file as a route (issue #339).
+// expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import type { ComponentType } from "react";
 import { View, type StyleProp, type ViewStyle } from "react-native";
 

@@ -547,7 +547,7 @@ test('G05.02.c AC2: a foreground grant does not skip the background ask on the g
   h.assertClean();
 });
 
-// --- G07.05 (issue #284): the read-only raw-fix tap -------------------------
+// --- G07.05 (15_guide_decisions.md — R07): the read-only raw-fix tap -------------------------
 
 test('G07.05: onRawFix observers receive the same fixes the sink forwards; the unsubscribe releases them', () => {
   const h = makeService();

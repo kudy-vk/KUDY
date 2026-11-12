@@ -1,6 +1,7 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { fireEvent, renderRouter, screen } from "expo-router/testing-library";
 import Menu from "./menu";
+import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
 import { cityMenuConfig } from "../components/city-map-menu";
 import { uiStrings } from "../components/ui-strings";
@@ -20,6 +21,9 @@ test.each([
   ["nearby", "screen-Map", "btn-map-back"],
   ["guides", "screen-Guides", "btn-guides-back"],
   ["discovery", "screen-Discovery", "btn-discovery-back"],
+  // Issue #200: the reserve-1 fragment opens the «Пра горад» guide — the
+  // row fails when the transition (or its destination route) is removed.
+  ["reserve-1", "screen-AboutCity", "btn-about-back"],
 ])("%s opens its real destination and Back returns to the map menu", async (id, destination, back) => {
   openMenu();
   const before = screen.getByTestId("city-menu-canvas");
@@ -30,22 +34,22 @@ test.each([
   expect(screen.getByTestId("city-menu-canvas")).not.toBe(before);
 });
 
-test("two reserved pieces stay visible, named and disabled without navigating", () => {
+test("the kudy piece stays visible, named and disabled without navigating", () => {
   openMenu();
-  for (const id of ["reserve-1", "kudy"]) {
-    const piece = screen.getByTestId(`city-menu-access-${id}`);
-    expect(piece.props.accessibilityState.disabled).toBe(true);
-    expect(piece.props.accessibilityLabel).toContain(uiStrings("be").comingSoon);
-    fireEvent.press(piece);
-    fireEvent(piece, "accessibilityTap");
-    expect(screen.getByTestId("screen-Menu")).toBeTruthy();
-  }
+  const piece = screen.getByTestId("city-menu-access-kudy");
+  expect(piece.props.accessibilityState.disabled).toBe(true);
+  expect(piece.props.accessibilityLabel).toContain(uiStrings("be").comingSoon);
+  fireEvent.press(piece);
+  fireEvent(piece, "accessibilityTap");
+  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
 
 test("menu config names existing geometry and localizable labels for every open locale", () => {
   expect(cityMenuConfig.items).toHaveLength(5);
   expect(new Set(cityMenuConfig.items.map(item => item.id)).size).toBe(5);
-  expect(cityMenuConfig.items.filter(item => item.destination)).toHaveLength(3);
+  // Issue #200: reserve-1 carries the guide destination; only kudy stays null.
+  expect(cityMenuConfig.items.filter(item => item.destination)).toHaveLength(4);
+  expect(cityMenuConfig.items.find(item => item.id === "reserve-1")?.destination).toBe("/city/gdansk/about");
   for (const locale of OPEN_UI_LOCALES) {
     for (const item of cityMenuConfig.items) expect(uiStrings(locale)[item.labelKey].trim()).not.toBe("");
   }

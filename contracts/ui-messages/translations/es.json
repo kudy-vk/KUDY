@@ -17,6 +17,15 @@
       }
     },
     {
+      "id": "native.chrome.aboutCity",
+      "value": "Sobre la ciudad",
+      "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
+      "review": {
+        "outcome": "approved",
+        "note": "Пераклад сесіі #200 (GLM-5.3, ZCode): стандартная назва раздзела «пра горад»."
+      }
+    },
+    {
       "id": "native.chrome.access.free",
       "value": "Gratis",
       "reviewedSourceHash": "82e16c5b12218d14ab2c468f999861493c22fd508e1f225f286674ecffbac141",

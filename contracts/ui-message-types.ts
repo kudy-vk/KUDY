@@ -43,6 +43,10 @@ export interface UiStrings {
   readonly nearby: string;
   readonly guidesLink: string;
   readonly comingSoon: string;
+  // The map menu's «Пра горад» entry (issue #200): the reserve-1 fragment
+  // opens the static Gdańsk practical guide — it takes the slot that
+  // previously rendered the comingSoon word.
+  readonly aboutCity: string;
   // The KUDY surface's Explore entry (issue #426): the owner's 2026-10-01
   // decision — the history surface is named «KUDY», not «My KUDY».
   readonly kudyLink: string;
@@ -82,7 +86,7 @@ export interface UiStrings {
   readonly sizeMb: (mb: number) => string;
   readonly freeStopsCount: (count: number) => string;
   readonly stopNumber: (position: number) => string;
-  // The metadata-row icon words (G06.10.c, issue #403): the standalone
+  // The metadata-row icon words (G06.10.c — docs/agent-tasks/app/G06.10.md): the standalone
   // screen-reader label the icon contract requires — the fact line next to
   // the icon carries the value.
   readonly durationLabel: string;
@@ -208,6 +212,101 @@ export interface GuideHintStrings {
   readonly paid: string;
   readonly openHint: string;
   readonly dismiss: string;
+}
+
+// Issue #200 — the words of the «Пра горад» static Gdańsk guide (opened from
+// the map menu's reserve-1 fragment). The document is authored in Belarusian
+// — the generated catalogue renders only be, and every other display locale
+// falls back to it (the guideHint documented-fallback idiom) until a locale
+// set is authored. The verified fact lines embed their own check-date claims
+// — the sources table beside the guide (docs/content/about-city-sources.md)
+// records the official source and check date per changeable fact.
+export interface AboutCityStrings {
+  readonly title: string;
+  readonly intro: string;
+  // The dated verification note under the title: the date names the last
+  // full check of the guide's changeable facts (no bare numbers elsewhere).
+  readonly verifiedLine: (date: string) => string;
+  readonly entriesHeading: string;
+  readonly airport: {
+    readonly title: string;
+    readonly intro: string;
+    readonly busDay: string;
+    readonly busSecond: string;
+    readonly nightBus: string;
+    readonly train: string;
+    readonly ticketNote: string;
+    readonly scheduleNote: string;
+  };
+  readonly transport: {
+    readonly title: string;
+    readonly ztmWhen: string;
+    readonly skmWhen: string;
+    readonly otherRail: string;
+    readonly tickets: string;
+    readonly activation: string;
+    readonly machinesApps: string;
+  };
+  readonly city: {
+    readonly title: string;
+    readonly glowneVsStare: string;
+    readonly station: string;
+    readonly wrzeszcz: string;
+    readonly oliwa: string;
+    readonly beaches: string;
+    readonly mapCaption: string;
+    readonly mapSea: string;
+    readonly mapStation: string;
+    readonly mapGlowne: string;
+    readonly mapStare: string;
+    readonly mapMotlawa: string;
+    readonly mapWrzeszcz: string;
+    readonly mapOliwa: string;
+    readonly mapJelitkowo: string;
+    readonly mapBrzezno: string;
+    readonly mapStogi: string;
+    readonly mapSobieszewo: string;
+  };
+  readonly food: {
+    readonly title: string;
+    readonly delivery: string;
+    readonly cards: string;
+    readonly blik: string;
+  };
+  readonly karta: {
+    readonly title: string;
+    readonly packages: string;
+    readonly transportAddOn: string;
+    readonly freeMuseums: string;
+    readonly exceptionsNote: string;
+  };
+  readonly malbork: {
+    readonly title: string;
+    readonly intro: string;
+    readonly train: string;
+    readonly walk: string;
+    readonly visitNote: string;
+  };
+  // The link row labels — one label per official page the guide sends the
+  // reader to; the URLs themselves live beside the screen (about-city-content).
+  readonly links: {
+    readonly airportBuses: string;
+    readonly airportTrains: string;
+    readonly ztmSchedule: string;
+    readonly ztmTickets: string;
+    readonly skmSearch: string;
+    readonly jakdojade: string;
+    readonly mzkzg: string;
+    readonly visitGdanskMap: string;
+    readonly kartaTurysty: string;
+    readonly muzeumGdanska: string;
+    readonly muzeum1939: string;
+    readonly pysznePayment: string;
+    readonly blikHow: string;
+    readonly malborkVisit: string;
+    readonly trainSchedule: string;
+    readonly unesco: string;
+  };
 }
 
 // G16.03 (issue #74) — the voluntary private rating words (20 §7, 21 §5/§6):

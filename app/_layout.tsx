@@ -72,7 +72,7 @@ export default function RootLayout() {
       {/* #428/#436: one root status bar, dark glyphs on light chrome and
           light glyphs on dark chrome. The accepted light splash is separate. */}
       <StatusBar style={statusBarStyle(theme)} />
-      {/* UX 02 (issue #348): the native header is off — it printed raw route
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the native header is off — it printed raw route
           names as titles and duplicated the screens' own back; every screen
           owns its frame (one BackButton, safe-area padding). */}
       <Stack screenOptions={{ headerShown: false }} />

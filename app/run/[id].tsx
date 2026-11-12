@@ -60,7 +60,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     marginTop: palette.spaceS,
   },
   map: {
-    // UX 04 (issue #350): the canon map background (color.map) — the marker
+    // UX 04 (канон §9 — Чытэльнасць на вуліцы): the canon map background (color.map) — the marker
     // tokens' contrast pairs are declared against it, not against card white.
     backgroundColor: tokens.colorMap,
     borderColor: palette.colorLine,
@@ -111,14 +111,14 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   },
   markerLabel: {
     color: tokens.colorInk,
-    // UX 04 (issue #350, AC5): the readable 12dp floor for map labels.
+    // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC5): the readable 12dp floor for map labels.
     fontSize: 12,
     marginTop: 2,
     textAlign: "center",
   },
   poiLabel: {
     color: tokens.colorMuted,
-    // UX 04 (issue #350, AC5): the readable 12dp floor for map labels.
+    // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC5): the readable 12dp floor for map labels.
     fontSize: 12,
     marginTop: 2,
     textAlign: "center",
@@ -226,7 +226,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   },
   attributionText: {
     color: palette.colorMuted,
-    // UX 04 (issue #350, AC5): the readable 12dp floor applies to the
+    // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC5): the readable 12dp floor applies to the
     // attribution line as well.
     fontSize: 12,
   },
@@ -330,7 +330,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     color: palette.colorAccent,
     fontSize: palette.fontBaseSize,
   },
-  // The finish confirmation's words (UX 06, issue #352) — the shell carries
+  // The finish confirmation's words (UX 06 — канон §5, Дыялог і стужкі) — the shell carries
   // the card and the two action styles.
   confirmText: {
     color: palette.colorInk,
@@ -418,17 +418,17 @@ export default function Run() {
   // screen after choosing English or Українська. A ready session keeps its
   // pinned locale (a UI switch never substitutes the active walk's language).
   const strings = runMapStrings(ready?.locale ?? locale);
-  // G06.10 (issue #432): the back word is the shared chrome catalog's, in the
+  // G06.10 (results G25.04.md — іконкавы слой): the back word is the shared chrome catalog's, in the
   // run session's own display locale — the run map dictionary holds no copy
   // of it (one back image, one dictionary). The no-session fallback rides
   // the same UI-locale choice (issue #524).
   const back = uiStrings(ready?.locale ?? locale).back;
 
-  // UX 02 (issue #348): the frame's top inset — the content starts below the
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the frame's top inset — the content starts below the
   // status bar and the notch with the native header off (AC4). A hook —
   // before the early returns.
   const insets = useSafeAreaInsets();
-  // UX 06 (issue #352): the destructive finish asks first — the dialog is a
+  // UX 06 (канон §5 — Дыялог і стужкі): the destructive finish asks first — the dialog is a
   // surface-side gate (a hook, before the early returns); the controller's
   // end() stays the only session write and runs only on the confirmation.
   const [endConfirm, setEndConfirm] = useState(false);
@@ -476,7 +476,7 @@ export default function Run() {
   if (surface.status === "loading" || run === null) {
     return (
       <ScreenSurface style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
-        {/* UX 02 (issue #348): the loading state keeps the frame — with the
+        {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the loading state keeps the frame — with the
             native header off there is no other way back (AC2). */}
         <BackButton label={back} testID="btn-run-back" />
         <LoadingIndicator style={styles.centered} text={strings.loading} />
@@ -548,11 +548,11 @@ export default function Run() {
     if (run.panel !== "peek") run.dismissPanel();
     else router.back();
   };
-  // UX 04 (issue #350, AC3): while the peek bar is up, its absolute
+  // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC3): while the peek bar is up, its absolute
   // positioning covers the screen's bottom flow — the attribution lives
   // inside the bar then, never under it.
   const peekBarOpen = session !== null && session.phase !== "Ended" && run.panel === "peek";
-  // UX 04 (issue #350, AC4): the ODbL duty — a real Pressable link, one
+  // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC4): the ODbL duty — a real Pressable link, one
   // element rendered either in the flow or as the peek bar's last row.
   const attribution = (
     <PressableSurface
@@ -572,7 +572,7 @@ export default function Run() {
   );
   return (
     <ScreenSurface style={[styles.screen, { paddingTop: insets.top + tokens.spaceL }]} testID="screen-Run">
-      {/* UX 02 (issue #348): the one back element; from Peek it is the
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the one back element; from Peek it is the
           navigation out of Run, from an open card it dismisses the card —
           the controller's backOrDismiss (AC2). */}
       <BackButton label={back} onPress={backOrDismiss} testID="btn-run-back" />
@@ -733,7 +733,7 @@ export default function Run() {
               <ScaledText style={styles.sessionLabel}>{strings.pauseWalk}</ScaledText>
             </PressableSurface>
           ) : null}
-          {/* UX 06 (issue #352) AC3: the destructive finish asks first —
+          {/* UX 06 (канон §5 — Дыялог і стужкі) AC3: the destructive finish asks first —
               the press opens the confirmation, it no longer ends directly. */}
           <PressableSurface
             accessibilityRole="button"
@@ -796,7 +796,7 @@ export default function Run() {
               onPress={() => run.openCard(marker.stopId)}
               style={[
                 styles.marker,
-                // UX 04 (issue #350): the dot centers on the point whatever
+                // UX 04 (канон §9 — Чытэльнасць на вуліцы): the dot centers on the point whatever
                 // the canon markerSize — the label hangs below it.
                 { left: `${(process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? 0.2 + marker.nx * 0.6 : marker.nx) * 100}%`, top: `${(process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? 0.18 + marker.ny * 0.62 : marker.ny) * 100}%`, transform: [{ translateX: -60 }, { translateY: -(tokens.markerSize / 2) }] },
               ]}
@@ -812,11 +812,11 @@ export default function Run() {
         />
       ) : null}
       {nativeMapReadyRouteId !== routeId ? <ScaledText style={styles.note}>{strings.schematicNote}</ScaledText> : null}
-      {/* UX 04 (issue #350, AC3): the in-flow spot only when the peek bar is
+      {/* UX 04 (канон §9 — Чытэльнасць на вуліцы, AC3): the in-flow spot only when the peek bar is
           down — the bar's own copy replaces it while the bar covers the flow. */}
       {peekBarOpen ? null : attribution}
       {peekBarOpen ? (
-        // UX 02 (issue #348): the bar's bottom padding keeps its controls
+        // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the bar's bottom padding keeps its controls
         // above the home-indicator area (AC4).
         <View
           style={[styles.panelBar, { paddingBottom: tokens.spaceM + insets.bottom }]}
@@ -855,13 +855,13 @@ export default function Run() {
               testID="run-bar-progress"
             />
           ) : null}
-          {/* UX 04 (issue #350, AC3): the ODbL attribution rides the bar —
+          {/* UX 04 (канон §9 — Чытэльнасць на вуліцы, AC3): the ODbL attribution rides the bar —
               visible and tappable with the bar up, never covered by it. */}
           {attribution}
         </View>
       ) : null}
       {run.panel !== "peek" ? (
-        // UX 02 (issue #348): the sheet's bottom padding keeps its content
+        // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the sheet's bottom padding keeps its content
         // above the home-indicator area (AC4).
         <View
           style={[
@@ -1000,7 +1000,7 @@ export default function Run() {
         />
       ) : null}
       {endConfirm ? (
-        // UX 06 (issue #352) AC3: the confirmation is a real modal — the
+        // UX 06 (канон §5 — Дыялог і стужкі) AC3: the confirmation is a real modal — the
         // decline (and the system Back, the shell's onRequestClose) leaves
         // the session active and unchanged; the confirmation runs the same
         // end() the button used to call.

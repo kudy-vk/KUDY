@@ -1,4 +1,4 @@
-// UX 04 (issue #350) guard: the Run map's marker-status configuration is
+// UX 04 (канон §9 — Чытэльнасць на вуліцы) guard: the Run map's marker-status configuration is
 // contrast-safe — the five ADR G01.01 §4.5 states each carry a canon
 // color.marker.* fill with ≥3:1 against the canon map background (WCAG
 // 1.4.11 non-text), the map background itself is the canon color.map, and

@@ -1,10 +1,10 @@
-// G06.01.a (issue #313) — the visual values the City and Guides surfaces
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the visual values the City and Guides surfaces
 // consume, copied verbatim from the single design source
 // docs/design/visual-language.md («Дадатак», the machine JSON block, G06.07
 // canon). Only the values these surfaces render live here; the guard in
 // test/design-tokens.test.mjs pins this file to the canon — changing a value
 // here without the canon turns the suite red. Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339).
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 export const tokens = {
   colorPaper: '#faf7f2', // color.paper — фон экрана
   colorInk: '#22262b', // color.ink — асноўны тэкст
@@ -13,11 +13,11 @@ export const tokens = {
   colorAccentInk: '#ffffff', // color.accent-ink — тэкст на акцэнце
   colorCard: '#ffffff', // color.card — фон картак
   colorLine: '#d8d2c6', // color.line — межы картак
-  // G06.10.d (issue #404) — палкі вылепленых кнопак: цяменшае нацяжэнне
+  // G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d) — палкі вылепленых кнопак: цяменшае нацяжэнне
   // існуючых колераў (канон §2), не новыя брэнд-колеры.
   colorShelfAccent: '#154f3a', // color.shelf.accent — полка вылепленай primary-кнопкі
   colorShelfLine: '#c9c1b1', // color.shelf.line — полка вылепленай звычайнай кнопкі
-  // Issue #430 (рашэнне ўладара 2026-10-03) — чытэльны выключаны стан: значэнне
+  // Рашэнне ўладара 2026-10-03 (канон §5) — чытэльны выключаны стан: значэнне
   // супадае з color.muted, але ролі і пары ў каноне свае (тэкст ≥4.5:1, межа
   // ≥3:1 на паперы, §5).
   colorDisabledInk: '#6b7280', // color.disabled-ink — тэкст выключанай кнопкі
@@ -54,7 +54,7 @@ export const tokens = {
   fontTitleSize: 18, // font.size-title — памер загалоўка экрана
   fontWeightStrong: '600', // font.weight-strong
   fontBigTextFactor: 1.25, // font.big-text-factor
-  // G06.10.b (issue #402) — the font-family mirror: the named per-weight
+  // G06.10.b (docs/agent-tasks/app/G06.10.md — G06.10.b) — the font-family mirror: the named per-weight
   // faces the @expo-google-fonts packages export, one family per weight
   // (React Native cannot pick a weight inside a family — the Android
   // workaround). Values are not the canon CSS chains verbatim; the guard
