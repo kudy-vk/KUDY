@@ -385,13 +385,20 @@ async function phaseA(driver, metroPort) {
     coldStart(driver, url, { timeoutMs: FIRST_BUNDLE_TIMEOUT_MS, caseSlug: 'cold-start', homeOnly: true }),
   );
 
-  await runCase('map menu routes return home and reserved pieces stay disabled', 'map-menu', driver, async () => {
+  await runCase('map menu routes return home and the kudy piece stays disabled', 'map-menu', driver, async () => {
     await coldStart(driver, url, { timeoutMs: BUNDLE_TIMEOUT_MS, caseSlug: 'map-menu', homeOnly: true });
     const nodes = parseDump((await driver.dump('dump-map-menu.xml')).xml);
-    for (const id of ['reserve-1', 'kudy']) {
-      const node = findNode(nodes, { testID: `city-menu-access-${id}` });
-      if (!node || node.enabled) throw new DriverError(`reserved map menu piece ${id} must be visible and disabled`);
-    }
+    // Issue #200 (PR #242) made reserve-1 open the «Пра горад» guide — the
+    // old assertion (reserve-1 AND kudy both disabled, from #80) could not
+    // pass any main build since that merge. Only kudy stays reserved.
+    const kudy = findNode(nodes, { testID: 'city-menu-access-kudy' });
+    if (!kudy || kudy.enabled) throw new DriverError('reserved map menu piece kudy must be visible and disabled');
+    const about = findNode(nodes, { testID: 'city-menu-access-reserve-1' });
+    if (!about || !about.enabled) throw new DriverError('map menu piece reserve-1 must be visible and enabled (issue #200)');
+    await driver.tapSelector({ testID: 'city-menu-access-reserve-1' }, { timeoutMs: CASE_TIMEOUT_MS });
+    await driver.waitFor({ testID: 'screen-AboutCity' }, { timeoutMs: CASE_TIMEOUT_MS });
+    await driver.back();
+    await driver.waitFor({ testID: 'screen-Menu' }, { timeoutMs: CASE_TIMEOUT_MS });
     for (const [id,screen] of [['nearby','screen-Map'],['guides','screen-Guides'],['discovery','screen-Discovery']]) {
       await driver.tapSelector({ testID: `city-menu-access-${id}` }, { timeoutMs: CASE_TIMEOUT_MS });
       await driver.waitFor({ testID: screen }, { timeoutMs: CASE_TIMEOUT_MS });
