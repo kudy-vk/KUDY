@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCanon } from './design-canon.mjs';
-import { tokens, darkTokens } from '../components/design-tokens.ts';
+import { tokens, darkTokens, darkBackground } from '../components/design-tokens.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const canon = loadCanon();
@@ -39,8 +39,10 @@ test('runtime palettes reflect the accepted DT-2 canon exactly', () => {
     assert.equal(darkTokens[key], canon.darkTheme.tokens[canonKey], `dark ${key}`);
   }
   const overridden = Object.keys(tokens).filter((key) => tokens[key] !== darkTokens[key]);
-  assert.deepEqual(overridden.sort(), Object.keys(runtimeToCanon).sort(),
+  assert.deepEqual(overridden.sort(), [...Object.keys(runtimeToCanon), 'texturePaperGrainOpacity'].sort(),
     'every runtime override is accepted; no omitted or invented dark color');
+  assert.equal(darkTokens.texturePaperGrainOpacity, canon.paperGrain.darkOpacity);
+  assert.deepEqual(darkBackground, canon.darkTheme.backgroundGradient);
 });
 
 test('DT-4 keeps the actual map and markers light in both modes', () => {

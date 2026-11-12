@@ -2,9 +2,8 @@
    components and the review board around the phone.
 
    Light values are the machine block of docs/design/visual-language.md.
-   Dark values are the brick-and-chocolate proposal recorded as decision M3 in
-   docs/design/brand/decisions.md; they replace the green-grey dark set of the
-   canon only after the owner's verdict and a canon sync. */
+   Dark values are the owner-approved brick-and-chocolate palette M3 (#212) in
+   docs/design/brand/decisions.md, synchronized with the visual canon. */
 
 @font-face {
   font-family: "Golos Text";

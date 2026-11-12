@@ -42,7 +42,8 @@ production-экранаў G06.01+ і для прататыпа G06.08: асоб�
 цяменшае нацяжэнне існуючых колераў, не новыя брэнд-колеры:
 `color.shelf.accent` выводзіцца з `color.accent`, `color.shelf.line` — з
 `color.line` адным правілам: тон і насычанасць HSL трымаюцца, светлата
-менш на 7 працэнтных пунктаў. Полка — дэкаратыўны пласт пад кнопкай:
+менш на 7 працэнтных пунктаў у светлай тэме; цёмная M3 выкарыстоўвае
+дакладныя значэнні прынятай палітры. Полка — дэкаратыўны пласт пад кнопкай:
 тэкст на ёй не жыве, таму кантрастнай пары для паліў канон не задае
 (правіла §10 пра пары для новых колераў тут не ўжываецца дакладна з
 гэтай прычыны); тэкставая пара `accent-ink`/`accent` застаецца
@@ -50,23 +51,27 @@ production-экранаў G06.01+ і для прататыпа G06.08: асоб�
 
 Зярно паперы (`texture.paper-grain`) — згенераваны тайлавы асет
 непразрыстасцю 4–5% паверх `color.paper`; сам тайл не падмяняе токен
-паперы. У цёмнай тэме зярно светлае на цёмным фоне. Дазволенае месца — фон
+паперы. У цёмнай тэме M3 зярно мае тон `color.muted` і непразрыстасць 4%:
+гэта захоўвае кантраст неактыўнай рамкі на самым светлым участку градыенту. Дазволенае месца — фон
 спакойных экранаў Explore і My KUDY. Забароненыя месцы: панэль Run,
 мапа і ўсякае размяшчэнне пад шчыльным тэкстам (спісы, табліцы,
 доўгія апісанні). Поўны спіс дазволенага і забароненага — у машынным
 блоку (`paperGrain`).
 
-### Цёмная тэма MVP — рашэнне ўладальніка 2026-10-27
+### Цёмная тэма MVP — M3, пацверджана 2026-11-11
 
-Уладальнік [прыняў цёмную палітру і кантрастныя пары](#860)
-са [спецыфікацыі](dark-theme.md) §4–5. Светлыя значэнні застаюцца ў `tokens`,
+Уладальнік [пацвердзіў палітру M3](https://github.com/kudy-vk/KUDY/issues/212)
+2026-11-11 пасля параўнання ў чаце. Яна замяняе значэнні DT-2;
+[спецыфікацыя](dark-theme.md) §4–5 утрымлівае актуальныя пары.
+Фон цёмных экранаў — радыяльны градыент `darkTheme.backgroundGradient`.
+Светлыя значэнні застаюцца ў `tokens`,
 цёмныя — у `darkTheme.tokens` машыннага блока ніжэй. Уся зона картаграфіі
 (`darkTheme.lightCartographyTokens`) застаецца светлай у абедзвюх тэмах;
 гліф маркера выкарыстоўвае светлае `color.accent-ink`. Пары
 `contrastPairs` правяраюцца ў абедзвюх тэмах, з гэтым выключэннем для мапы.
 Змена тэмы не змяняе кантэнтныя выявы і не перазапускае Run, GPS або аўдыё.
 
-Уладальнік тым жа рашэннем пакінуў светлую брэндавую заставу ў MVP нават
+Рашэнне DT-6 ад 2026-10-27 пакідае светлую брэндавую заставу ў MVP нават
 пры цёмнай тэме (`darkTheme.splash = light`). Гэта свядомае абмежаванне,
 не падстава перафарбоўваць прыняты асет #429. Runtime-рэалізацыя і
 прыладавая прыёмка належаць #436; ручны выбар — #798.
@@ -358,32 +363,52 @@ mascot-only (a11y-плашка `screens.md`).
     "content.max-width":      { "value": "640px", "use": "максімальная шырыня кантэнту экрана на акнах ≥600dp (APR-10.b, зафіксавана 2026-11-02): трымае радок аднакалончнага цела ў межах мэты 45–75 сімвалаў (issue #959, core Line_Length); ніжэй за кап няма эфекту. Двухкалонная сетка гідаў (акно ≥821dp) — зафіксаванае выключэнне (#970): картка ≈295dp — 48.5% унутранай шырыні капа (640dp − 2×16dp), таму радок карткавай анатацыі ≈27–29 сімвалаў, карацей мэты; прыярытэт мае шчыльнасць дзвюх калонак. Вымярэнне 2026-11-02." }
   },
   "darkTheme": {
-    "ownerDecision": "#860",
+    "ownerDecision": "#212",
+    "backgroundGradient": {
+      "cx": "50%",
+      "cy": "0%",
+      "rx": "130%",
+      "ry": "70%",
+      "stops": [
+        {
+          "offset": "0%",
+          "color": "#4a2519"
+        },
+        {
+          "offset": "58%",
+          "color": "#2a1510"
+        },
+        {
+          "offset": "100%",
+          "color": "#1a0d0a"
+        }
+      ]
+    },
     "tokens": {
-      "color.paper": "#171d1c",
-      "color.card": "#232c29",
-      "color.ink": "#f2f1e9",
-      "color.muted": "#c4d0ca",
-      "color.line": "#45534c",
-      "color.accent": "#80d4ad",
-      "color.accent-ink": "#0d2a1e",
-      "color.shelf.accent": "#65cb9c",
-      "color.shelf.line": "#35403a",
-      "color.disabled-ink": "#9aa8a1",
-      "color.disabled-line": "#6d7c72",
-      "color.notice.bg": "#3a3119",
-      "color.notice.border": "#7d6b3a",
-      "color.error.bg": "#3a201b",
-      "color.error.border": "#8a4a42",
-      "color.hint.bg": "#1c2833",
-      "color.hint.border": "#3e5871",
-      "color.moment.bg": "#342a19",
-      "color.moment.border": "#6e5c36",
-      "color.badge.paid": "#493b23",
-      "color.badge.free": "#263b31",
-      "color.badge.mixed": "#332c47",
-      "color.badge.lock": "#2b343b",
-      "color.warn": "#ef8a72",
+      "color.paper": "#2a1510",
+      "color.card": "#3a231b",
+      "color.ink": "#f4eadb",
+      "color.muted": "#d6c5b0",
+      "color.line": "#6b4a3d",
+      "color.accent": "#8ad4b0",
+      "color.accent-ink": "#10281d",
+      "color.shelf.accent": "#63b48e",
+      "color.shelf.line": "#1a0d0a",
+      "color.disabled-ink": "#b9a794",
+      "color.disabled-line": "#927a6c",
+      "color.notice.bg": "#4a3618",
+      "color.notice.border": "#8a733a",
+      "color.error.bg": "#4a211b",
+      "color.error.border": "#9a5046",
+      "color.hint.bg": "#2e2c38",
+      "color.hint.border": "#5a5878",
+      "color.moment.bg": "#45301a",
+      "color.moment.border": "#7a6238",
+      "color.badge.paid": "#57421f",
+      "color.badge.free": "#2f4234",
+      "color.badge.mixed": "#40334e",
+      "color.badge.lock": "#3d3530",
+      "color.warn": "#f09a80",
       "color.note": "#33301d"
     },
     "lightCartographyTokens": [
@@ -533,6 +558,8 @@ mascot-only (a11y-плашка `screens.md`).
   "paperGrain": {
     "token": "texture.paper-grain",
     "opacity": "4–5%",
+    "darkOpacity": 0.04,
+    "darkTintToken": "color.muted",
     "allowed": [
       "фон экранаў Explore і My KUDY (паверх color.paper)"
     ],

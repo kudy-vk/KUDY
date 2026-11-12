@@ -8,6 +8,7 @@ import MapPinIcon from "lucide-react-native/icons/map-pin";
 
 import Collection from "./collection/[id]";
 import Discovery from "./discovery";
+import Menu from "./menu";
 import { CanonIcon } from "../components/canon-icon";
 import { darkTokens } from "../components/design-tokens";
 import { createServices } from "../controllers/createServices";
@@ -22,6 +23,20 @@ jest.mock("react-native/Libraries/Utilities/useColorScheme", () => ({
 
 afterEach(() => {
   jest.restoreAllMocks();
+});
+
+test.each([
+  ["/menu", "screen-Menu"],
+  ["/explore", "screen-Explore"], ["/my", "screen-KUDY"],
+  ["/city/gdansk/guides", "screen-Guides"], ["/route/r1", "screen-Route preview"],
+  ["/place/p1", "screen-Place detail"], ["/collection/c1", "screen-Collection"],
+  ["/discovery", "screen-Discovery"], ["/feedback", "screen-Feedback"],
+  ["/run/r1", "screen-Run"], ["/map", "screen-Map"],
+  ["/missing", "screen-Not found"],
+])("M3 gradient reaches the actual %s screen", async (url, testID) => {
+  renderRouter({ ...frameRoutes(), menu: Menu }, { initialUrl: url });
+  const root = await screen.findByTestId(testID);
+  expect(within(root).getByTestId("screen-gradient", { includeHiddenElements: true })).toBeTruthy();
 });
 
 function openDiscovery(url: string) {
