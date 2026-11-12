@@ -132,3 +132,26 @@ AVD `kudy-ci` адноўлены wipe-data-загрузкай пасля ext4 ke
 Умовы і маркеры бандла — [маніфест](../../design/brand/outputs/dark-theme-212/native/capture-manifest.json).
 Блакуючую заўвагу Voka/Judge пра натыўную прыёмку знята; фінальнае рэв'ю
 гэтых дакументаў — асобны крок канвеера.
+
+## Праверка змержанага дрэва 5f736b3
+
+Мерж origin/main (`2979327`: #242, #246, #249, #262) унёс новыя экраны і
+змену меню. Праверкі на каміце:
+
+- CI GitHub Actions: усе 15 чэкаў `5f736b3` зялёныя (required-checks
+  уключна з tests 22/24, web-e2e, jscpd, showboat, guard).
+- Smoke: 11 passed / 1 failed — кейс «map menu routes…» чакае `reserve-1`
+  адключаным, а main у #200 наўмысна зрабіў яго жывой спасылкай
+  «Пра горад». Дыферэнцыял §3 на нязмененым main `2979327` (той самы APK,
+  JS базы праз Metro): той самы адзін fail, 11/1. Гэта састарэлы сцэнарый
+  main, не гэтай змены — [issue #266](https://github.com/kudy-vk/KUDY/issues/266).
+- Walk: 3 passed / 2 failed — тыя ж два GPS-кейсы, што і ў першым прагоне
+  `e3aef49` (флейк-клас #173: на чыстым паўторы таго ж кода яны прайшлі
+  5/0). Discovery: 4 passed / 0 failed.
+- Дыферэнцыял main для walk раней: 0/5 з `uiautomator dump: adb timed out`
+  — падае горш без гэтай змены.
+- Тэмавыя гарды на змержаным дрэве: `design-dark-theme` +
+  `design-runtime-theme` + `map-05-specimen` 21/21; render-тэсты
+  `dark-theme-render` + `screen-surface` 20/20; `npm run typecheck` прайшоў.
+- Judge-знаходка low (пусты радок у human-actions) выпраўленая ў мерж-каміце:
+  [issue #265](https://github.com/kudy-vk/KUDY/issues/265) закрыты з доказам.
