@@ -32,7 +32,8 @@ const priceRows = (c, list) => {
 function airport(c) {
   const { t, ui } = c;
   const way = ui.direction;
-  const rides = folds(RIDES.map((ride) => ({
+  const rides = folds(ui.folds, RIDES.map((ride) => ({
+    id: `ride-${ride.id}`,
     lead: lineBadge(ride.kind, ride.line, t(`sr.${ride.kind}`)),
     title: t(`ride.${ride.id}.${way}`),
     meta: facts(ride[way].facts.map(([sign, key, values]) => [sign, t(key, values)])),
@@ -44,7 +45,7 @@ function airport(c) {
     list && text('t-secondary', t('tk.night')),
     text('', where));
   return [
-    seg(t('air.dir'), [['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, (value) => { ui.direction = value; c.redraw(); }),
+    seg('direction', t('air.dir'), [['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, (value) => { ui.direction = value; c.redraw(); }),
     steps([
       {
         title: t(`air.${way}.s1.title`),
@@ -72,20 +73,20 @@ function transport(c) {
   const zones = ['ztm', 'metro', 'rail'];
   return [
     heading(t('tr.modes')),
-    folds([
-      { lead: icon('tram-front', 22), title: t('tr.ztm.title'), meta: t('tr.ztm.meta'), body: [text('', t('tr.ztm.text'))], open: true },
-      { lead: icon('train-front', 22), title: t('tr.skm.title'), meta: t('tr.skm.meta'), body: [text('', t('tr.skm.text')), remark('warn', t('tr.skm.warn'))] },
-      { lead: icon('route', 22), title: t('tr.rail.title'), meta: t('tr.rail.meta'), body: [text('', t('tr.rail.text'))] },
+    folds(ui.folds, [
+      { id: 'mode-ztm', lead: icon('tram-front', 22), title: t('tr.ztm.title'), meta: t('tr.ztm.meta'), body: [text('', t('tr.ztm.text'))], open: true },
+      { id: 'mode-skm', lead: icon('train-front', 22), title: t('tr.skm.title'), meta: t('tr.skm.meta'), body: [text('', t('tr.skm.text')), remark('warn', t('tr.skm.warn'))] },
+      { id: 'mode-rail', lead: icon('route', 22), title: t('tr.rail.title'), meta: t('tr.rail.meta'), body: [text('', t('tr.rail.text'))] },
     ]),
     heading(t('tr.prices')),
-    seg(t('tr.zone'), zones.map((zone) => [zone, t(`tr.zone.${zone}`)]), ui.zone, (value) => { ui.zone = value; c.redraw(); }),
+    seg('zone', t('tr.zone'), zones.map((zone) => [zone, t(`tr.zone.${zone}`)]), ui.zone, (value) => { ui.zone = value; c.redraw(); }),
     card('ticket', text('t-secondary', t(`tr.zone.${ui.zone}.note`)), priceRows(c, PRICES[ui.zone]),
       ui.zone !== 'rail' && text('t-secondary', t('tk.night'))),
     heading(t('tr.activate')),
-    folds([
-      { lead: icon('scan-qr-code', 22), title: t('tr.act.paper.title'), body: [text('', t('tr.act.paper.text'))] },
-      { lead: icon('smartphone', 22), title: t('tr.act.mobile.title'), body: [text('', t('tr.act.mobile.text'))] },
-      { lead: icon('clock', 22), title: t('tr.act.valid.title'), body: [text('', t('tr.act.valid.text'))] },
+    folds(ui.folds, [
+      { id: 'act-paper', lead: icon('scan-qr-code', 22), title: t('tr.act.paper.title'), body: [text('', t('tr.act.paper.text'))] },
+      { id: 'act-mobile', lead: icon('smartphone', 22), title: t('tr.act.mobile.title'), body: [text('', t('tr.act.mobile.text'))] },
+      { id: 'act-valid', lead: icon('clock', 22), title: t('tr.act.valid.title'), body: [text('', t('tr.act.valid.text'))] },
     ]),
     heading(t('tr.buy')),
     el('div', { className: 'tiles' },
@@ -114,6 +115,7 @@ function city(c) {
       el('i', { className: 'dot' }), el('span', { className: 'name', lang: 'pl', textContent: place.name }));
     button.style.setProperty('--x', `${place.x}%`);
     button.style.setProperty('--y', `${place.y}%`);
+    button.dataset.key = `place:${place.id}`;
     button.setAttribute('aria-pressed', String(place.id === ui.place));
     button.addEventListener('click', () => { ui.place = place.id; c.redraw(); });
     box.append(button);
@@ -140,6 +142,7 @@ function food(c) {
   const { t, ui } = c;
   const chip = (key) => {
     const node = el('button', { className: 'chip', type: 'button', textContent: t(`pay.${key}`) });
+    node.dataset.key = `pay:${key}`;
     node.setAttribute('aria-pressed', String(ui.pay === key));
     node.addEventListener('click', () => { ui.pay = key; c.redraw(); });
     return node;
@@ -162,10 +165,10 @@ function food(c) {
     el('div', { className: 'folds' }, ...services),
     text('t-secondary', t('food.note')),
     heading(t('food.city')),
-    folds([
-      { lead: icon('credit-card', 22), title: t('food.cards.title'), meta: t('food.cards.meta'), body: [text('', t('food.cards.text'))] },
+    folds(ui.folds, [
+      { id: 'pay-cards', lead: icon('credit-card', 22), title: t('food.cards.title'), meta: t('food.cards.meta'), body: [text('', t('food.cards.text'))] },
       {
-        lead: icon('smartphone', 22), title: t('food.blik.title'), meta: t('food.blik.meta'),
+        id: 'pay-blik', lead: icon('smartphone', 22), title: t('food.blik.title'), meta: t('food.blik.meta'),
         body: [
           text('', t('food.blik.need')),
           rows([[t('food.blik.online.title'), t('food.blik.online.text')], [t('food.blik.till.title'), t('food.blik.till.text')]]),
@@ -190,6 +193,7 @@ function touristCard(c) {
     const free = (FREE_DAYS[day] ?? []).some(([state]) => state === 'free');
     const node = el('button', { type: 'button' }, el('span', { textContent: t(`day.${day}`) }),
       free ? el('i', {}, sr(t('card.free.badge'))) : null);
+    node.dataset.key = `day:${day}`;
     node.setAttribute('aria-pressed', String(day === ui.day));
     node.addEventListener('click', () => { ui.day = day; c.redraw(); });
     return node;
@@ -207,10 +211,10 @@ function touristCard(c) {
   return [
     heading(t('card.title')),
     text('', t('card.lead')),
-    seg(t('card.duration'), CARD_HOURS.map((hours) => [hours, t('card.hours', { n: hours })]), ui.hours, (value) => { ui.hours = value; c.redraw(); }),
+    seg('hours', t('card.duration'), CARD_HOURS.map((hours) => [hours, t('card.hours', { n: hours })]), ui.hours, (value) => { ui.hours = value; c.redraw(); }),
     ...CARD_PACKAGES.map(pack),
     card('pack', el('div', { className: 'pack-head' }, text('', t('card.smaki')), el('span', { className: 'pack-price', textContent: c.money(CARD_SMAKI_PRICE) }))),
-    fold({ lead: icon('tram-front', 22), title: t('card.transport.title'), meta: t('card.transport.meta'), body: [text('', t('card.transport.text')), priceRows(c, PRICES.cardTransport)] }),
+    fold({ id: 'card-transport', memory: ui.folds, lead: icon('tram-front', 22), title: t('card.transport.title'), meta: t('card.transport.meta'), body: [text('', t('card.transport.text')), priceRows(c, PRICES.cardTransport)] }),
     heading(t('card.free')),
     week,
     day,
@@ -231,7 +235,8 @@ const board = await mountBoard({
   async build({ body, state, strings, say, device, theme }) {
     const lang = guideLanguage(state.locale);
     const t = translator(state.locale);
-    const ui = { direction: 'from', zone: 'ztm', place: 'glowne', pay: 'any', hours: 24, day: 1 };
+    // What the visitor chose and opened inside the sections; it outlives a repaint.
+    const ui = { direction: 'from', zone: 'ztm', place: 'glowne', pay: 'any', hours: 24, day: 1, folds: new Map() };
     let current = SECTIONS.find((section) => section.id === state.section);
 
     body.append(topbar({
@@ -265,9 +270,12 @@ const board = await mountBoard({
       ];
     }
     // Paints the open section. A change of section resets the scroll and slides
-    // the content in from the side the wheel turned to.
+    // the content in from the side the wheel turned to. A repaint in place
+    // (after a choice inside the section) keeps the scroll, what was opened
+    // (ui.folds) and the focus: the pressed control is found again by its key.
     function paint(fresh, direction = 0) {
       const top = fresh ? 0 : page.scrollTop;
+      const focused = !fresh && page.contains(document.activeElement) ? document.activeElement.dataset.key : null;
       page.setAttribute('aria-label', t(`tab.${current.id}`));
       page.replaceChildren(
         el('h3', { className: 'g-head', textContent: t(`head.${current.id}`) }),
@@ -277,6 +285,7 @@ const board = await mountBoard({
         // The engraved view of Gdańsk from the home screen closes every section.
         el('div', { className: 'g-end' }, panorama()));
       page.scrollTop = top;
+      if (focused) page.querySelector(`[data-key="${CSS.escape(focused)}"]`)?.focus({ preventScroll: true });
       if (!fresh) return;
       page.classList.remove('from-left', 'from-right');
       void page.offsetWidth; // restarts the slide
@@ -290,6 +299,7 @@ const board = await mountBoard({
       // (up to the app's limit of 1.25), and three items always fit the screen.
       slot: Math.min(Math.round(100 * (0.75 + 0.25 * Math.min(state.scale, 1.25))), Math.floor(device.w / 3)),
       label: t('wheel.label'),
+      lang,
       controls: page.id,
       onSelect(index, direction) {
         current = SECTIONS[index];

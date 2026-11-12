@@ -10,51 +10,58 @@ let seq = 0;
 
 // A fold: a head that is always visible and a body that opens under it.
 // `lead` stands before the title (a sign or a line badge), `meta` under it.
+// `id` names the fold inside its screen and `memory` (a Map of id → open)
+// keeps what the visitor opened, so a repaint of the section does not close
+// it; without a record in `memory` the fold starts as `open` says.
 // Returns the node with `setOpen(value)`.
-export function fold({ lead, title, meta, body, open = false, onOpen }) {
-  const id = `fold-${(seq += 1)}`;
+export function fold({ id, memory, lead, title, meta, body, open = false, onOpen }) {
+  const region = `fold-${(seq += 1)}`;
   const head = el('button', { className: 'fold-head', type: 'button' },
     lead,
     el('span', { className: 'fold-title' },
       el('span', { className: 'fold-name', textContent: title }),
       typeof meta === 'string' ? el('span', { className: 'fold-meta', textContent: meta }) : meta),
     icon('chevron-down', 20));
-  head.setAttribute('aria-controls', id);
+  head.setAttribute('aria-controls', region);
+  head.dataset.key = `fold:${id}`;
   const inner = el('div', { className: 'fold-inner' }, el('div', { className: 'fold-pad' }, ...body));
-  const region = el('div', { className: 'fold-body', id }, inner);
-  const node = el('div', { className: 'fold' }, head, region);
+  const node = el('div', { className: 'fold' }, head, el('div', { className: 'fold-body', id: region }, inner));
   node.setOpen = (value) => {
     node.classList.toggle('open', value);
     head.setAttribute('aria-expanded', String(value));
     // A closed body is out of the tab order and hidden from the screen reader.
     inner.inert = !value;
+    memory.set(id, value);
   };
   head.addEventListener('click', () => {
     const next = !node.classList.contains('open');
     node.setOpen(next);
     if (next) onOpen?.(node);
   });
-  node.setOpen(open);
+  node.setOpen(memory.has(id) ? memory.get(id) : open);
   return node;
 }
 
 // Folds of one group: opening one closes the others, so the list never grows
-// into a wall of text.
-export function folds(items) {
+// into a wall of text. `memory` is shared with fold().
+export function folds(memory, items) {
   const nodes = items.map((item) => fold({
     ...item,
+    memory,
     onOpen: (opened) => { for (const node of nodes) if (node !== opened) node.setOpen(false); },
   }));
   return el('div', { className: 'folds' }, ...nodes);
 }
 
 // A switch between a few values, drawn like the theme switch of the settings.
-export function seg(label, options, value, onChange) {
+// `name` is the switch's own name inside the screen (for keeping the focus).
+export function seg(name, label, options, value, onChange) {
   const node = el('div', { className: 'seg' });
   node.setAttribute('role', 'radiogroup');
   node.setAttribute('aria-label', label);
   const buttons = options.map(([key, text]) => {
     const button = el('button', { type: 'button', textContent: text });
+    button.dataset.key = `${name}:${key}`;
     button.setAttribute('role', 'radio');
     button.setAttribute('aria-checked', String(key === value));
     button.addEventListener('click', () => {

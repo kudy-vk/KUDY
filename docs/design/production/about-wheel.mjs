@@ -7,13 +7,34 @@
 // side item brings that item to the middle. Arrow keys and a horizontal
 // scroll turn it by one item. With the system setting «reduce motion» the
 // wheel jumps to its place without animation.
-import { el, iconShapes, svg } from './kit.mjs';
+import { el, iconShapes, penStroke, svg } from './kit.mjs';
 
 const COAST_TIME = 300; // ms: the time constant of the coast after a push
 const STEP_TIME = 110; // ms: the time constant of a move by a press or a key
 const SPEED_WINDOW = 100; // ms: the end of the drag the speed is measured over
 const TAP_SLOP = 6; // px: a shorter move is a press, not a drag
 const MAX_TURN = 1.5; // rings: the longest coast after one push
+
+// The speed of the hand at the end of a drag, px per ms; positive when the
+// hand moved left, so the wheel turns forward. `samples` are [time, x] of the
+// pointer in order, the last one being the last move; `releasedAt` is the
+// time of the release. A hand that stood still before letting go gives 0.
+export function releaseSpeed(samples, releasedAt) {
+  const [lastTime, lastX] = samples[samples.length - 1];
+  if (releasedAt - lastTime >= SPEED_WINDOW) return 0;
+  const [firstTime, firstX] = samples.find(([time]) => lastTime - time <= SPEED_WINDOW);
+  return lastTime > firstTime ? (firstX - lastX) / (lastTime - firstTime) : 0;
+}
+
+// Where the wheel stops after a push, px along the ring: it travels on for
+// speed × COAST_TIME (at most MAX_TURN rings either way) and settles on the
+// nearest item. `position` is where the wheel was let go, `slot` the width of
+// an item, `count` the number of items. Speed 0 gives the nearest item.
+export function stopAfterPush({ position, speed, slot, count }) {
+  const limit = MAX_TURN * count * slot;
+  const reach = Math.max(-limit, Math.min(limit, speed * COAST_TIME));
+  return Math.round((position + reach) / slot) * slot;
+}
 
 let drawn = 0;
 
@@ -23,10 +44,7 @@ let drawn = 0;
 function medallion(iconName) {
   const hand = `wheel-hand-${(drawn += 1)}`;
   return svg('svg', { class: 'medal', viewBox: '-36 -36 72 72', 'aria-hidden': 'true' },
-    // A slow, shallow displacement: the rim wavers like a pen stroke (menu.mjs).
-    svg('filter', { id: hand, x: '-20%', y: '-20%', width: '140%', height: '140%' },
-      svg('feTurbulence', { type: 'fractalNoise', baseFrequency: 0.07, numOctaves: 2, seed: 7, result: 'noise' }),
-      svg('feDisplacementMap', { in: 'SourceGraphic', in2: 'noise', scale: 2.4, xChannelSelector: 'R', yChannelSelector: 'G' })),
+    penStroke(hand),
     svg('circle', { class: 'glow', r: 32 }),
     svg('circle', { class: 'pick', r: 31.5 }),
     svg('g', { filter: `url(#${hand})` },
@@ -36,14 +54,14 @@ function medallion(iconName) {
 }
 
 // items: [{ id, icon, label }]. `slot` is the width of one item in px,
-// `controls` the id of the panel the wheel opens.
-// onSelect(index, direction) fires as soon as the wheel knows where it stops.
-// Returns the node with `go(index)`.
-export function wheel({ items, index = 0, slot, label, controls, onSelect }) {
+// `controls` the id of the panel the wheel opens, `lang` the language of the
+// labels. onSelect(index, direction) fires as soon as the wheel knows where
+// it stops.
+export function wheel({ items, index = 0, slot, label, lang, controls, onSelect }) {
   const count = items.length;
   const ring = count * slot;
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const root = el('div', { className: 'wheel' });
+  const root = el('div', { className: 'wheel', lang });
   root.setAttribute('role', 'tablist');
   root.setAttribute('aria-label', label);
   root.style.setProperty('--slot', `${slot}px`);
@@ -121,30 +139,32 @@ export function wheel({ items, index = 0, slot, label, controls, onSelect }) {
     if (drag.samples.length > 24) drag.samples.shift();
     paint();
   });
-  const release = (event) => {
-    if (!drag) return;
-    const { moved, samples, target } = drag;
+  const endDrag = () => {
+    const ended = drag;
     drag = null;
     root.classList.remove('dragging');
+    return ended;
+  };
+  root.addEventListener('pointerup', (event) => {
+    if (!drag) return;
+    const { moved, samples, target } = endDrag();
     if (!moved) {
       // A press: the pressed item comes to the middle.
       const i = nodes.indexOf(target);
       coast(i < 0 ? Math.round(position / slot) * slot : position + offset(i), STEP_TIME);
       return;
     }
-    // The speed of the hand over the last moments of the drag, px per ms. The
-    // wheel goes on at that speed: the harder the push, the farther it turns.
-    // A hand that stopped before letting go gives no push.
-    const [t1, x1] = samples[samples.length - 1];
-    const recent = samples.filter(([time]) => t1 - time <= SPEED_WINDOW);
-    const [t0, x0] = recent[0];
-    const speed = event.timeStamp - t1 < SPEED_WINDOW && t1 > t0 ? (x0 - x1) / (t1 - t0) : 0;
-    const reach = Math.max(-MAX_TURN * ring, Math.min(MAX_TURN * ring, speed * COAST_TIME));
-    const stop = Math.round((position + reach) / slot) * slot;
+    // The wheel goes on at the speed of the hand: the harder the push, the farther it turns.
+    const stop = stopAfterPush({ position, speed: releaseSpeed(samples, event.timeStamp), slot, count });
     coast(stop, Math.abs(stop - position) > slot ? COAST_TIME : STEP_TIME);
-  };
-  root.addEventListener('pointerup', release);
-  root.addEventListener('pointercancel', release);
+  });
+  // The browser took the gesture away (a touch that became a page scroll): this
+  // is neither a press nor a push, so the wheel settles on the nearest item.
+  root.addEventListener('pointercancel', () => {
+    if (!drag) return;
+    endDrag();
+    coast(Math.round(position / slot) * slot, STEP_TIME);
+  });
   // A pointer press is handled on release above; this is the keyboard press
   // (Enter or Space on a focused item), which arrives as a click without a pointer.
   root.addEventListener('click', (event) => {
@@ -174,6 +194,5 @@ export function wheel({ items, index = 0, slot, label, controls, onSelect }) {
     node.tabIndex = i === chosen ? 0 : -1;
   });
   paint();
-  root.go = (next) => coast(position + offset(next), STEP_TIME);
   return root;
 }

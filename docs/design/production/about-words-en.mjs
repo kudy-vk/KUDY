@@ -21,7 +21,6 @@ export const en = {
   'u.hourly': 'hourly',
   'u.aboutHourly': 'about hourly',
   'u.reduced': 'reduced {price}',
-  'sr.line': 'Line',
   'sr.bus': 'Bus',
   'sr.night': 'Night bus',
   'sr.train': 'Train',

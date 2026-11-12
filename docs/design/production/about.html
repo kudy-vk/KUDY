@@ -49,10 +49,10 @@
      fill and the sign the theme's ink, so the wheel is not a light island. */
   .medal { width: 80px; height: 80px; scale: calc(.72 + .28 * var(--near)); filter: drop-shadow(0 1.5px 1.5px rgb(74 52 30 / 38%)); }
   .medal circle { fill: none; }
-  .medal .disc { fill: #fff6e0; stroke: #bd852c; stroke-width: 2; }
-  .medal .inner { stroke: #bd852c; stroke-width: .7; opacity: .45; }
-  .medal .glyph * { fill: none; stroke: #4a3b2a; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-  .medal .glow { stroke: #f8d580; stroke-width: 6; opacity: var(--near); }
+  .medal .disc { fill: var(--medal-paper); stroke: var(--medal-rim); stroke-width: 2; }
+  .medal .inner { stroke: var(--medal-rim); stroke-width: .7; opacity: .45; }
+  .medal .glyph * { fill: none; stroke: var(--medal-ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .medal .glow { stroke: var(--medal-glow); stroke-width: 6; opacity: var(--near); }
   .medal .pick { stroke: var(--accent); stroke-width: 3; opacity: var(--near); }
   [data-theme="dark"] .medal .disc { fill: var(--card); }
   [data-theme="dark"] .medal .glyph * { stroke: var(--ink); }
@@ -181,17 +181,18 @@
   .schematic .sea { top: 3%; left: 4%; }
   .schematic .motlawa { top: 68%; left: 65.5%; }
   /* A place is one button: its dot stands on the point (--x, --y) and its
-     name beside it — to the right, to the left, or under it. */
+     name beside it — to the right, to the left, or under it. The button is
+     low (--py) so that the buttons of neighbouring places never share a strip. */
   .spot {
-    --pad: 6px; --dot: 8px;
-    position: absolute; top: var(--y); display: flex; align-items: center; gap: 5px; padding: var(--pad);
+    --px: 6px; --py: 2px; --dot: 8px;
+    position: absolute; top: var(--y); display: flex; align-items: center; gap: 5px; padding: var(--py) var(--px);
     border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; cursor: pointer;
   }
-  .spot.right { left: var(--x); translate: calc(-1 * (var(--pad) + var(--dot) / 2)) -50%; }
-  .spot.left { right: calc(100% - var(--x)); flex-direction: row-reverse; translate: calc(var(--pad) + var(--dot) / 2) -50%; }
+  .spot.right { left: var(--x); translate: calc(-1 * (var(--px) + var(--dot) / 2)) -50%; }
+  .spot.left { right: calc(100% - var(--x)); flex-direction: row-reverse; translate: calc(var(--px) + var(--dot) / 2) -50%; }
   .spot.below {
     right: calc(100% - var(--x)); flex-direction: column; align-items: flex-end; gap: 2px;
-    translate: calc(var(--pad) + var(--dot) / 2 + 12px) calc(-1 * (var(--pad) + var(--dot) / 2));
+    translate: calc(var(--px) + var(--dot) / 2 + 12px) calc(-1 * (var(--py) + var(--dot) / 2));
   }
   .spot.below .dot { margin-right: 12px; }
   .spot .dot { flex: none; width: var(--dot); height: var(--dot); border-radius: 50%; background: #22262b; }
@@ -199,9 +200,10 @@
   .spot.main { --dot: 10px; }
   .spot.main .dot { background: #1d6b4f; }
   .spot.main .name { color: #1d6b4f; }
-  .spot[aria-pressed="true"] .dot { box-shadow: 0 0 0 3px #eef3ee, 0 0 0 6px #f8d580; }
+  .spot[aria-pressed="true"] .dot { box-shadow: 0 0 0 3px #eef3ee, 0 0 0 6px var(--medal-glow); }
   .spot[aria-pressed="true"] .name { background: #1d6b4f; color: #ffffff; }
-  .spot:focus-visible { outline: 2px solid #1d6b4f; outline-offset: -2px; }
+  /* The canon's focus ring, 3 px; drawn inwards because the box clips. */
+  .spot:focus-visible { outline: 3px solid #1d6b4f; outline-offset: -3px; }
   .place { display: grid; gap: 10px; }
   .place-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
   .place-head h4, .pack h4 { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }

@@ -280,6 +280,18 @@ button, select, input { font: inherit; color: inherit; }
 .panorama .fine { fill: none; stroke: currentColor; stroke-width: .6; stroke-linecap: round; opacity: .55; }
 [data-theme="dark"] .panorama { --panorama-ground: #1e100c; }
 
+/* ---------- medallion of the map pieces ---------- */
+
+/* The medallion speaks the map's own language: cream paper, a sand-gold rim,
+   brown ink, and the amber light of a joined map. One set of values for the
+   pieces of the home screen and for the wheel of «Пра горад» (decisions M4, M9). */
+:root {
+  --medal-paper: #fff6e0;
+  --medal-rim: #bd852c;
+  --medal-ink: #4a3b2a;
+  --medal-glow: #f8d580;
+}
+
 /* ---------- shared across screens: section heading, round action, markers ---------- */
 
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

@@ -102,9 +102,9 @@ export const PRICES = {
 // place it is and the signs of how to get there.
 export const PLACES = [
   { id: 'jelitkowo', name: 'Jelitkowo', x: 9, y: 19, side: 'right', kind: 'beach', get: [['tram-front', 'get.jelitkowo']] },
-  { id: 'brzezno', name: 'Brzeźno', x: 30, y: 28, side: 'right', kind: 'beach', get: [['tram-front', 'get.brzezno']] },
+  { id: 'brzezno', name: 'Brzeźno', x: 30, y: 30, side: 'right', kind: 'beach', get: [['tram-front', 'get.brzezno']] },
   { id: 'stogi', name: 'Stogi', x: 72, y: 19, side: 'right', kind: 'beach', get: [['bus', 'get.stogi']], warn: 'place.stogi.warn' },
-  { id: 'sobieszewo', name: 'Sobieszewo', title: 'Wyspa Sobieszewska', x: 93, y: 26, side: 'below', kind: 'island', get: [['bus', 'get.sobieszewo']] },
+  { id: 'sobieszewo', name: 'Sobieszewo', title: 'Wyspa Sobieszewska', x: 93, y: 28, side: 'below', kind: 'island', get: [['bus', 'get.sobieszewo']] },
   { id: 'oliwa', name: 'Oliwa', x: 9, y: 40, side: 'right', kind: 'district', get: [['tram-front', 'get.oliwa.tram'], ['train-front', 'get.oliwa.skm']] },
   { id: 'wrzeszcz', name: 'Wrzeszcz', x: 30, y: 50, side: 'right', kind: 'district', get: [['train-front', 'get.wrzeszcz']] },
   { id: 'stare', name: 'Stare Miasto', x: 58, y: 63, side: 'left', kind: 'quarter', get: [] },

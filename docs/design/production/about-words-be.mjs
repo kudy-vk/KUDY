@@ -21,7 +21,6 @@ export const be = {
   'u.hourly': 'штогадзіну',
   'u.aboutHourly': 'прыблізна штогадзіну',
   'u.reduced': 'льготны {price}',
-  'sr.line': 'Рэйс',
   'sr.bus': 'Аўтобус',
   'sr.night': 'Начны аўтобус',
   'sr.train': 'Цягнік',
