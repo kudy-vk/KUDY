@@ -44,12 +44,13 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   },
   header: {
     alignItems: "center",
+    columnGap: tokens.spaceM,
     flexDirection: "row",
-    justifyContent: "space-between",
     paddingHorizontal: tokens.spaceL,
   },
   title: {
     color: palette.colorInk,
+    flex: 1,
     flexShrink: 1,
     fontSize: tokens.fontTitleSize,
     fontWeight: tokens.fontWeightStrong,
