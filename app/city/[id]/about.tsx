@@ -48,6 +48,12 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: tokens.spaceL,
   },
+  title: {
+    color: palette.colorInk,
+    flexShrink: 1,
+    fontSize: tokens.fontTitleSize,
+    fontWeight: tokens.fontWeightStrong,
+  },
   scroll: {
     flex: 1,
   },
@@ -154,6 +160,9 @@ export default function AboutCity() {
     >
       <View style={styles.header}>
         <BackButton label={chrome.back} testID="btn-about-back" />
+        {/* The screen title rides the chrome word the menu piece carries —
+            the mockup's topbar title. */}
+        <ScaledText style={styles.title} accessibilityRole="header">{chrome.aboutCity}</ScaledText>
         {/* The walk return shows only with a live walk and renders nowhere
             otherwise — the WalkButton contract. */}
         <WalkButton walk={services.walk} locale={locale} iconOnly />
