@@ -250,7 +250,7 @@ function city(ctx: AboutCitySectionContext): ReactNode {
           <View style={[styles.schematicLine, styles.coast]} />
           <View style={[styles.schematicLine, styles.river]} />
           <ScaledText style={[styles.water, styles.sea]}>{t("city.sea")}</ScaledText>
-          <ScaledText style={[styles.water, styles.motlawa]}>Motława</ScaledText>
+          <ScaledText style={[styles.water, styles.motlawa]}>{t("city.motlawa")}</ScaledText>
           {ABOUT_CITY_PLACES.map((place) => (
             <PlaceSpot
               key={place.id}

@@ -5836,6 +5836,17 @@
         "components/about-city-strings.generated.ts#links.blikHow"
       ],
       "sourceHash": "22756a7fb58d4dafbeff6953f1f370fd31f304b69591d68ed5e416edfa255468"
+    },
+    {
+      "id": "native.aboutCity.city.motlawa",
+      "source": "Motława",
+      "context": "Назва ракі на схеме арыенціраў раздзела «Дзе што ў горадзе»: уласнае імя, аднолькавае ва ўсіх мовах інтэрфейсу",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.motlawa"
+      ],
+      "sourceHash": "96b9a1cc981cc071188bed7116bdc884d4a52af4395e9e0dccb2da93d238d2b2"
     }
   ]
 }

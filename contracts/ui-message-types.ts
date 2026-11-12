@@ -433,6 +433,9 @@ export interface AboutCityStrings {
     readonly pick: string;
     readonly caption: string;
     readonly sea: string;
+    // The river's proper noun, identical in every language; it rides the
+    // catalog like every word (the no-hardcoded-words guard).
+    readonly motlawa: string;
     readonly get: string;
     readonly summer: string;
   };

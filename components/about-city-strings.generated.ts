@@ -213,6 +213,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "sea": "Балтыйскае мора",
       "get": "Як дабрацца",
       "summer": "Улетку пляжныя рэйсы ходзяць часцей.",
+      "motlawa": "Motława",
     },
     "kind": {
       "centre": "Гістарычны цэнтр",
@@ -562,6 +563,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "sea": "Baltic Sea",
       "get": "How to get there",
       "summer": "In summer, beach services run more often.",
+      "motlawa": "Motława",
     },
     "kind": {
       "centre": "Historic centre",

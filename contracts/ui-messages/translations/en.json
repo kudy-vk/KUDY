@@ -4357,6 +4357,15 @@
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
       }
+    },
+    {
+      "id": "native.aboutCity.city.motlawa",
+      "value": "Motława",
+      "reviewedSourceHash": "96b9a1cc981cc071188bed7116bdc884d4a52af4395e9e0dccb2da93d238d2b2",
+      "review": {
+        "outcome": "approved",
+        "note": "Уласнае імя ракі: тэкст супадае ва ўсіх мовах; перанесены з літарала ў каталог паводле гарда no-hardcoded-words (#252, 2026-11-12)."
+      }
     }
   ]
 }
