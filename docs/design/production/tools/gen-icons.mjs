@@ -17,6 +17,9 @@ const NAMES = [
   'maximize-2', 'moon', 'navigation', 'pause', 'play', 'refresh-cw', 'rotate-ccw', 'route', 'search', 'settings',
   'skip-back', 'skip-forward', 'sliders-horizontal', 'square', 'star', 'sun', 'trash', 'type', 'user-round',
   'volume-2', 'wifi-off', 'x',
+  // «Пра горад» (about.mjs): section signs of the carousel and the guide's facts.
+  'bus', 'credit-card', 'landmark', 'plane', 'scan-qr-code', 'smartphone', 'store', 'ticket',
+  'train-front', 'tram-front', 'triangle-alert', 'utensils-crossed',
 ];
 
 const icons = {};
