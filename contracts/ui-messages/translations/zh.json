@@ -772,7 +772,25 @@
       "reviewedSourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179",
       "review": {
         "outcome": "approved",
-        "note": "ссылка на паверхню падбора ў ніжняй навігацыі; пара да загалоўка экрана"
+        "note": "ссылка на паверхню падбора; пара да загалоўка экрана"
+      }
+    },
+    {
+      "id": "native.chrome.cityName",
+      "value": "\u683c\u4f46\u65af\u514b",
+      "reviewedSourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2",
+      "review": {
+        "outcome": "approved",
+        "note": "Аўтарскі пераклад сесіі #216 (GLM-5.3, ZCode) па прэцэдэнце аўтарскага zh-Hans набору G21.46 (#670); назва горада — агульнапрынятая кітайская («Гданьск»); вердыкт носьбіта — NOT-VERIFIED (адзначана ў выніку #216)"
+      }
+    },
+    {
+      "id": "native.chrome.whereToToday",
+      "value": "\u4eca\u5929\u53bb\u54ea\u513f\uff1f",
+      "reviewedSourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956",
+      "review": {
+        "outcome": "approved",
+        "note": "Аўтарскі пераклад сесіі #216 (GLM-5.3, ZCode) па прэцэдэнце аўтарскага zh-Hans набору G21.46 (#670); пытальная інтанацыя зберагае сэнс «Куды сёння?»; вердыкт носьбіта — NOT-VERIFIED (адзначана ў выніку #216)"
       }
     },
     {

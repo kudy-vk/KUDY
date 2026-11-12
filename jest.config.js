@@ -20,6 +20,12 @@ module.exports = {
       presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
       caller: { name: "metro", bundler: "metro", platform: "ios" },
     }],
+    // Issue #216 (M11): the panorama builder is ESM the same way — the app
+    // component imports it, so jest needs the Expo transform for it too.
+    "panorama-paths\\.mjs$": ["babel-jest", {
+      presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
+      caller: { name: "metro", bundler: "metro", platform: "ios" },
+    }],
   },
   // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): jest reads the "react-native" export condition,
   // which hands lucide-react-native's deep icon imports their ESM .mjs build —

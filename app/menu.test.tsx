@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { fireEvent, renderRouter, screen } from "expo-router/testing-library";
+import { act, fireEvent, renderRouter, screen } from "expo-router/testing-library";
 import Menu from "./menu";
 import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
@@ -9,8 +9,10 @@ import { OPEN_UI_LOCALES } from "../contracts/ui-locales";
 import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
+import HourglassIcon from "lucide-react-native/icons/hourglass";
+import LightbulbIcon from "lucide-react-native/icons/lightbulb";
 
-afterEach(() => { jest.restoreAllMocks(); });
+afterEach(() => { jest.restoreAllMocks(); jest.useRealTimers(); });
 
 function openMenu() {
   jest.spyOn(Math, "random").mockReturnValue(0.5);
@@ -65,5 +67,57 @@ test("the active-walk icon returns to the same Run without writing session state
   fireEvent.press(button);
   expect(await screen.findByTestId("screen-Run")).toBeTruthy();
   expect(services.walk?.liveSession()?.routeId).toBe("route-map");
+});
+
+// Issue #216 (M11): the header carries the city name on the right and the
+// display heading above the map — both through the contract, for every open
+// interface language.
+test("the header renders the contract city name and the display heading", () => {
+  openMenu();
+  expect(screen.getAllByText(uiStrings("be").cityName).length).toBeGreaterThan(0);
+  expect(screen.getAllByText(uiStrings("be").whereToToday).length).toBeGreaterThan(0);
+  for (const locale of OPEN_UI_LOCALES) {
+    expect(uiStrings(locale).cityName.trim()).not.toBe("");
+    expect(uiStrings(locale).whereToToday.trim()).not.toBe("");
+  }
+});
+
+// Issue #216 (AC4/AC6): pieces carry medallions with unique glyphs, no
+// visible captions; the map-point, route and lamp signs replace the compass.
+test("pieces carry medallions with unique glyphs and no visible captions", () => {
+  openMenu();
+  for (const item of cityMenuConfig.items) {
+    expect(screen.getByTestId(`city-menu-medal-${item.id}`, { includeHiddenElements: true })).toBeTruthy();
+    // The caption stays the screen-reader label only; the disabled entry's
+    // honest «· Хутка» note rides the same label (HomeMapMenu).
+    const word = uiStrings("be")[item.labelKey].replace(/\s*→$/, "");
+    const caption = item.destination === null ? `${word} · ${uiStrings("be").comingSoon}` : word;
+    expect(screen.queryByText(caption, { includeHiddenElements: true })).toBeNull();
+  }
+  expect(new Set(cityMenuConfig.items.map(item => item.icon)).size).toBe(cityMenuConfig.items.length);
+  expect(cityMenuConfig.items.find(item => item.id === "discovery")?.icon).toBe(LightbulbIcon);
+  expect(cityMenuConfig.items.find(item => item.id === "kudy")?.icon).toBe(HourglassIcon);
+});
+
+// Issue #216 (AC5): pressing the waiting piece lights it back for a moment
+// and nothing opens — the honest no-section answer of the mockup.
+test("pressing the waiting piece lights it back for a moment without navigating", () => {
+  jest.useFakeTimers();
+  openMenu();
+  const dim = screen.getByTestId("city-menu-dim-kudy", { includeHiddenElements: true });
+  expect(dim.props.opacity).toBe(0.55);
+  fireEvent.press(screen.getByTestId("city-menu-access-kudy"));
+  expect(dim.props.opacity).toBe(0);
+  act(() => { jest.advanceTimersByTime(701); });
+  expect(dim.props.opacity).toBe(0.55);
+  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
+});
+
+// Issue #216 (AC7): the engraved panorama rests in the free space and the
+// ad zone vanishes while no banner is loaded (M6; the real creative is #101).
+test("the free space carries the panorama and the ad zone stays hidden without a banner", () => {
+  openMenu();
+  expect(screen.getByTestId("menu-panorama")).toBeTruthy();
+  expect(screen.queryByTestId("menu-ad")).toBeNull();
 });
 

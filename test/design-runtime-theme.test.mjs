@@ -31,6 +31,10 @@ const runtimeToCanon = {
   colorErrorBorder: 'color.error.border',
   colorHintBg: 'color.hint.bg',
   colorHintBorder: 'color.hint.border',
+  // Issue #216 (M5/M11): the panorama strokes and ground follow the theme;
+  // the medallion colors do not — they sit on the light map art (DT-4).
+  colorEngrave: 'color.engrave',
+  colorPanoramaGround: 'color.panorama.ground',
 };
 
 test('runtime palettes reflect the accepted DT-2 canon exactly', () => {

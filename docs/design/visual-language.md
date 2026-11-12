@@ -103,7 +103,9 @@ production-экранаў G06.01+ і для прататыпа G06.08: асоб�
   выпушчана Paratype; афіцыйная крыніца —
   https://github.com/googlefonts/golos-text, тэкст ліцэнзіі — OFL.txt
   у тым жа рэпазітары.
-- **Alegreya** — дыплей-серыф, толькі назвы гідаў і гісторый.
+- **Alegreya** — дыплей-серыф: назвы гідаў і гісторый (§3 да M11) і, паводле
+  рашэння M11 (2026-11-12), загаловак «Куды сёння?» галоўнага экрана
+  (рэгулярнае начарканне 400).
   Ліцэнзія OFL 1.1, убудоўванне дазволенае. Аўтар Juan Pablo del
   Peral (Huerta Tipográfica); афіцыйная крыніца —
   https://github.com/huertatipografica/Alegreya, тэкст ліцэнзіі —
@@ -328,15 +330,21 @@ mascot-only (a11y-плашка `screens.md`).
     "color.badge.mixed":      { "value": "#ece7f8", "use": "фон пазнакі mixed" },
     "color.badge.lock":       { "value": "#eceff1", "use": "фон пазнакі замка" },
     "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі прататыпа" },
+    "color.medal.paper":      { "value": "#fff6e0", "use": "дыск медальёна часткі карты (M4, M11; kit.css --medal-paper); светлая картаграфія DT-4 — аднолькавы ў абедзвюх тэмах" },
+    "color.medal.rim":        { "value": "#bd852c", "use": "кант і ўнутранае кальцо медальёна (M4, M11; kit.css --medal-rim)" },
+    "color.medal.ink":        { "value": "#4a3b2a", "use": "значок у медальёне (M4, M11; kit.css --medal-ink)" },
+    "color.engrave":          { "value": "#7a6248", "use": "штрых гравюрнай панарамы Гданьска на галоўным экране (M5, M11; kit.css --engrave)" },
+    "color.panorama.ground":  { "value": "#faf7f2", "use": "залиўка мас панарамы (M5, M11; у цёмнай тэме — darkTheme.tokens)" },
     "font.family":            { "value": "system-ui, sans-serif", "use": "усё тэкставае; правы — раздзел 3" },
     "font.family-ui":         { "value": "Golos Text, system-ui, sans-serif", "use": "інтэрфейсны тэкст; fallback system-ui да падключэння файлаў; правы — раздзел 3" },
-    "font.family-display":    { "value": "Alegreya, serif", "use": "толькі назвы гідаў і гісторый; правы — раздзел 3" },
+    "font.family-display":    { "value": "Alegreya, serif", "use": "назвы гідаў і гісторый і загаловак галоўнага экрана (M11); правы — раздзел 3" },
     "font.family-dragon":     { "value": "Caveat, cursive", "use": "толькі рэплікі і падказкі дракона, ніколі інтэрфейсны тэкст; правы — раздзел 3" },
     "font.base-size":         { "value": "16px", "use": "базавы памер тэксту" },
     "font.line-height":       { "value": "1.45", "use": "міжрадковая адлегласць" },
     "font.weight-regular":    { "value": "400", "use": "звычайнае начарканне" },
     "font.weight-strong":     { "value": "600", "use": "назвы і загалоўкі" },
     "font.size-title":        { "value": "18px", "use": "назва экрана ў верхняй стужцы" },
+    "font.size.menu-title":   { "value": "32px", "use": "загаловак «Куды сёння?» галоўнага экрана (M11, макет menu.html)" },
     "font.size-secondary":    { "value": "13px", "use": "другі радок peek-плэера" },
     "font.size-small":        { "value": "12px", "use": "пазнакі і дэма-стужка" },
     "font.size-table":        { "value": "14px", "use": "табліцы" },
@@ -384,7 +392,9 @@ mascot-only (a11y-плашка `screens.md`).
       "color.badge.mixed": "#332c47",
       "color.badge.lock": "#2b343b",
       "color.warn": "#ef8a72",
-      "color.note": "#33301d"
+      "color.note": "#33301d",
+      "color.engrave": "#c9b59b",
+      "color.panorama.ground": "#1e100c"
     },
     "lightCartographyTokens": [
       "color.map",
@@ -394,7 +404,10 @@ mascot-only (a11y-плашка `screens.md`).
       "color.marker.playing",
       "color.marker.available",
       "color.marker.pending",
-      "color.marker.locked"
+      "color.marker.locked",
+      "color.medal.paper",
+      "color.medal.rim",
+      "color.medal.ink"
     ],
     "lightMarkerLetterToken": "color.accent-ink",
     "splash": "light"
@@ -432,6 +445,7 @@ mascot-only (a11y-плашка `screens.md`).
     { "fg": "color.accent-ink", "bg": "color.marker.locked", "min": 4.5 },
     { "fg": "color.marker.playing", "bg": "color.map", "min": 3 },
     { "fg": "color.marker.played", "bg": "color.map", "min": 3 },
+    { "fg": "color.medal.ink", "bg": "color.medal.paper", "min": 3 },
     { "fg": "color.marker.available", "bg": "color.map", "min": 3 },
     { "fg": "color.marker.pending", "bg": "color.map", "min": 3 },
     { "fg": "color.marker.locked", "bg": "color.map", "min": 3 },

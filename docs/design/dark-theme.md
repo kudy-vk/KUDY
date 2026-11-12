@@ -149,6 +149,8 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 | `color.badge.lock` | фон пазнакі замка | #eceff1 | #2b343b | вытворнае |
 | `color.warn` | памылковы тэкст і акцэнты збою | #b3331f | #ef8a72 | вытворнае |
 | `color.note` | фон дэма-стужкі пратотыпа | #fffbe8 | #33301d | вытворнае |
+| `color.engrave` | штрых гравюрнай панарамы Гданьска (#216, M5/M11) | #7a6248 | #c9b59b | вытворнае |
+| `color.panorama.ground` | заливка мас панарамы (#216, M5/M11) | #faf7f2 | #1e100c | вытворнае |
 
 Токены, якія **не залежаць** ад тэмы:
 
@@ -156,6 +158,10 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
   `color.marker.*` — светлыя значэнні ў абедзвюх тэмах (§3). Літара маркера —
   светлай-тэмавы `color.accent-ink` (#ffffff) у абедзвюх тэмах, пакуль
   картаграфія светлая.
+- Медальёны частак карты (`color.medal.paper`, `color.medal.rim`,
+  `color.medal.ink`, #216/M11): дыск, кант і значок сядзяць на светлай
+  картаграфіі DT-4, таму іх значэнні аднолькавыя ў абедзвюх тэмах — тая ж
+  зона светлай-незмяняльнай графікі, што і маркеры.
 - Усе не-колеравыя токены: шрыфты (сем'і, вагі, памеры, множнік 1.25),
   інтэрвалы, радыусы, памеры элементаў, `panel.body-max-height`,
   `dialog.max-width`, `texture.paper-grain` (непразрыстасць 4–5%, тыя ж
@@ -214,6 +220,11 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 3.98–5.09:1 на `street`, 6.06:1 (`person`/`map`) і 5.39:1 (`person`/`street`).
 Значэнні тыя ж, што ў канонавым спісе светлай тэмы; у цёмнай тэме яны не
 мяняюцца (§3).
+
+Медальён часткі карты (#216, M11): значок на дыск — `color.medal.ink` /
+`color.medal.paper` — 10.00:1, аднолькавы ў абедзвюх тэмах (зона §3).
+Кандыдаты tier-2 для медальёнаў даюць 9.65:1 (`color.medal.ink` #d9c08d на
+`color.medal.paper` #241a10).
 
 ### 5.3 Канфлікт, які выключае паасобную тэматызацыю маркераў
 
@@ -385,16 +396,18 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
     "color.badge.mixed": "#332c47",
     "color.badge.lock": "#2b343b",
     "color.warn": "#ef8a72",
-    "color.note": "#33301d"
+    "color.note": "#33301d",
+    "color.engrave": "#c9b59b",
+    "color.panorama.ground": "#1e100c"
   },
   "tokenOrigins": {
     "макет налад .phone.dark": ["color.paper", "color.card", "color.ink", "color.muted", "color.line", "color.accent", "color.badge.paid", "color.badge.free"],
-    "вытворнае з палітры макета": ["color.accent-ink", "color.disabled-ink", "color.disabled-line", "color.notice.bg", "color.notice.border", "color.error.bg", "color.error.border", "color.hint.bg", "color.hint.border", "color.moment.bg", "color.moment.border", "color.badge.mixed", "color.badge.lock", "color.warn", "color.note"],
+    "вытворнае з палітры макета": ["color.accent-ink", "color.disabled-ink", "color.disabled-line", "color.notice.bg", "color.notice.border", "color.error.bg", "color.error.border", "color.hint.bg", "color.hint.border", "color.moment.bg", "color.moment.border", "color.badge.mixed", "color.badge.lock", "color.warn", "color.note", "color.engrave", "color.panorama.ground"],
     "правіла канона §2 (светлата −7 п.п.)": ["color.shelf.accent", "color.shelf.line"]
   },
   "cartographyZone": {
     "rule": "У MVP картаграфія і маркеры застаюцца са светлай тэмай у абедзвюх тэмах: стыль правайдара (contracts/map-provider.ts, interim ADR G00.02) не тэматызуецца, літара маркера — светлай-тэмавы color.accent-ink у абедзвюх тэмах.",
-    "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked"],
+    "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked", "color.medal.paper", "color.medal.rim", "color.medal.ink"],
     "reason": "Цёмны accent-ink на светлай заліўцы marker.played дае 2.39:1 — ніжэй за 4.5:1; паасобная тэматызацыя маркераў ламае правіла канона §5.",
     "tier2Proposal": {
       "color.map": "#1b2420",
@@ -405,6 +418,9 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
       "color.marker.available": "#dcaa4e",
       "color.marker.pending": "#9aa8b1",
       "color.marker.locked": "#8b99a2",
+      "color.medal.paper": "#241a10",
+      "color.medal.rim": "#9a7a35",
+      "color.medal.ink": "#d9c08d",
       "markerLetter": "#0d2a1e"
     }
   },

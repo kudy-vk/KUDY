@@ -1009,6 +1009,28 @@
       "sourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179"
     },
     {
+      "id": "native.chrome.cityName",
+      "source": "Гданьск",
+      "context": "Назва горада ў шапцы галоўнага экрана справа (рашэнні M2 і M11; issue #216)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#cityName"
+      ],
+      "sourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2"
+    },
+    {
+      "id": "native.chrome.whereToToday",
+      "source": "Куды сёння?",
+      "context": "Загаловак галоўнага экрана над часткамі карты (рашэнні M2 і M11; issue #216)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#whereToToday"
+      ],
+      "sourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956"
+    },
+    {
       "id": "native.guideHint.dismiss",
       "source": "Схаваць",
       "context": "Пазнака і подпіс кнопкі схавання карткі падказкі",
