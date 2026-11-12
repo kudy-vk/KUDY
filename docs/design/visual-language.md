@@ -334,7 +334,7 @@ mascot-only (a11y-плашка `screens.md`).
     "color.medal.rim":        { "value": "#bd852c", "use": "кант і ўнутранае кальцо медальёна (M4, M11; kit.css --medal-rim)" },
     "color.medal.ink":        { "value": "#4a3b2a", "use": "значок у медальёне (M4, M11; kit.css --medal-ink)" },
     "color.engrave":          { "value": "#7a6248", "use": "штрых гравюрнай панарамы Гданьска на галоўным экране (M5, M11; kit.css --engrave)" },
-    "color.panorama.ground":  { "value": "#faf7f2", "use": "залиўка мас панарамы (M5, M11; у цёмнай тэме — darkTheme.tokens)" },
+    "color.panorama.ground":  { "value": "#faf7f2", "use": "заліўка мас панарамы (M5, M11; у цёмнай тэме — darkTheme.tokens)" },
     "font.family":            { "value": "system-ui, sans-serif", "use": "усё тэкставае; правы — раздзел 3" },
     "font.family-ui":         { "value": "Golos Text, system-ui, sans-serif", "use": "інтэрфейсны тэкст; fallback system-ui да падключэння файлаў; правы — раздзел 3" },
     "font.family-display":    { "value": "Alegreya, serif", "use": "назвы гідаў і гісторый і загаловак галоўнага экрана (M11); правы — раздзел 3" },

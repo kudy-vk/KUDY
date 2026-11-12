@@ -22,7 +22,7 @@ npx jest --config jest.config.js --runInBand --silent --runTestsByPath app/menu.
 PASS app/menu.test.tsx
 PASS docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.test.tsx
 Test Suites: 2 passed, 2 total
-Tests:       17 passed, 17 total
+Tests:       18 passed, 18 total
 ```
 
 ```bash
