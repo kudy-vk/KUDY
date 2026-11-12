@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the responsive boundary of the scheme
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the responsive boundary of the scheme
 // (screens-and-transitions.md, Explore row): one column below 821 px, two
 // columns at 821 px and above. Colocated with the module it tests in
 // components/ (docs/architecture/19_class_and_module_map.md — moved out of app/ with guide-card.tsx).

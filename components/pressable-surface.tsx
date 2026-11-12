@@ -1,4 +1,4 @@
-// UX 03 (issue #349) — the one shared pressed wrapper for the interactive
+// UX 03 (канон §5 — Кнопкі і чыпы) — the one shared pressed wrapper for the interactive
 // elements of the main screens (the design dossier 2026-09-28 finding:
 // «Ніякага pressed-стану»). Every press gets a visible reaction: a ≥10%
 // dim through opacity on every path, plus the android_ripple on Android
@@ -6,7 +6,7 @@
 // color.ink, not new canon values — visual-language.md §10 keeps new
 // colors out of the surface layer. Lives in components/, not app/:
 // expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
-// G06.10.d (issue #404) — the clay body: a pressable can carry a bottom
+// G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d) — the clay body: a pressable can carry a bottom
 // shelf, the darker tension of its fill from the canon shelf tokens
 // (visual-language §2) through the token mirror, and on press it dips
 // into the shelf — translate plus a reduced shelf, the bottom edge holds.

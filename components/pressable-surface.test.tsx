@@ -1,10 +1,10 @@
-// UX 03 (issue #349) — the guard over the one shared pressed wrapper
+// UX 03 (канон §5 — Кнопкі і чыпы) — the guard over the one shared pressed wrapper
 // (criterion 4): the accessibilityRole must reach the pressable element and
 // the pressed dim must appear while pressed and leave on release — removing
 // either turns the suite red. The Android ripple is wiring the render tree
 // cannot show on the test platform, so its guard pins the wrapper source
 // (the test/design-tokens.test.mjs source-pin idiom).
-// G06.10.d (issue #404) — the clay shelf guards: the shelf color is read
+// G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d) — the clay shelf guards: the shelf color is read
 // from the canon shelf tokens through the token mirror, so the file-level
 // mock overrides the mirror's accent shade with a synthetic value — a
 // hardcoded canon literal in the wrapper fails every shelf assertion below
@@ -60,7 +60,7 @@ function mergedStyle(): MergedStyle {
   ) as MergedStyle;
 }
 
-describe("PressableSurface (UX 03, issue #349)", () => {
+describe("PressableSurface (UX 03 — канон §5, Кнопкі і чыпы)", () => {
   test("accessibilityRole reaches the pressable element", () => {
     render(
       <PressableSurface accessibilityRole="button" testID="surface">
@@ -120,7 +120,7 @@ describe("PressableSurface (UX 03, issue #349)", () => {
   });
 });
 
-describe("PressableSurface clay shelf (G06.10.d, issue #404)", () => {
+describe("PressableSurface clay shelf (G06.10.d — docs/agent-tasks/app/G06.10.md)", () => {
   test("the accent shelf renders the token mirror's shade — overriding the token changes the shelf", () => {
     renderShelf("accent");
     // tokens here is the mocked mirror: #00aa55, not the canon #154f3a. A

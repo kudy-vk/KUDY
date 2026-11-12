@@ -1,4 +1,4 @@
-// G07.05 (issue #284) — the hint card render suite over the real composition
+// G07.05 (15_guide_decisions.md — R07) — the hint card render suite over the real composition
 // root (rule 15): the published catalog fixtures, the ONE LocationService the
 // app owns, the accepted values document and the one hint controller. The
 // guards are the issue's proof: the card renders from a ready hint state only

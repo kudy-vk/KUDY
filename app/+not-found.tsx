@@ -42,7 +42,7 @@ export default function NotFound() {
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const router = useRouter();
-  // UX 02 (issue #348): the frame's top inset — the content starts below the
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the frame's top inset — the content starts below the
   // status bar and the notch with the native header off (AC4). A hook —
   // before any early returns.
   const insets = useSafeAreaInsets();

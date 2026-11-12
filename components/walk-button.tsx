@@ -61,7 +61,7 @@ export function WalkButton({ walk, locale = "be", iconOnly = false }: { walk?: S
       accessibilityLabel={label}
       onPress={() => router.push(`/run/${live.routeId}`)}
       style={[styles.button, iconOnly && { minWidth: 48, minHeight: 48, alignItems: "center", justifyContent: "center", marginBottom: 0 }]}
-      // G06.10.d (issue #404): the walk entry is a primary action — the
+      // G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d): the walk entry is a primary action — the
       // accent shelf of the clay button.
       shelf="accent"
       testID="btn-walk-mode"

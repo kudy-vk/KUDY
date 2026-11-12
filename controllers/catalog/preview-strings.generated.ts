@@ -6,7 +6,7 @@
 // G21.25 (issue #558): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the guide preview's words (G06.05 #280, AC4/AC5; G08.05 #292)
+// the guide preview's words (G06.05 #280, AC4/AC5; G08.05 — 16_delivery_backlog.md)
 
 
 export const PREVIEW_STRINGS_DATA = {

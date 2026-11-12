@@ -1,4 +1,4 @@
-// UX 07 (issue #353) — the one shared loading row: a small ActivityIndicator
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў) — the one shared loading row: a small ActivityIndicator
 // next to the state text, so a pending surface reads as alive, not frozen.
 // Every loading state renders this component instead of a bare Text (the
 // issue forbids five copies). Lives in components/, not app/: expo-router

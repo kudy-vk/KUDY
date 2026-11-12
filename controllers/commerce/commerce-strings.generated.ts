@@ -6,7 +6,7 @@
 // G21.25 (issue #558): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the commerce offer card's words (11 §8; G08.05 #292)
+// the commerce offer card's words (11 §8; G08.05 — 16_delivery_backlog.md)
 
 
 export const OFFER_STRINGS_DATA = {

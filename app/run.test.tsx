@@ -36,7 +36,7 @@ const reducedMotionStub = Reanimated.useReducedMotion as unknown as {
   mockReturnValue: (value: boolean) => void;
 };
 
-// UX 02 (issue #348): the frame's insets are pinned to the same fake the
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the frame's insets are pinned to the same fake the
 // safe-area guard uses — the panel's bottom padding assertions below read
 // spaceM + 34 against it.
 jest.mock("react-native-safe-area-context", () => ({
@@ -532,7 +532,7 @@ describe("run map surface", () => {
     expect(screen.queryByTestId("run-map")).toBeNull();
   });
 
-  // UX 02 (issue #348): the surface starts at status 'loading' and resolves
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the surface starts at status 'loading' and resolves
   // through the readiness port — a pending readiness holds the state, and
   // the frame's back must be there. Reverting the loading branch's
   // BackButton in app/run/[id].tsx turns this red (implementation-rules 1).
@@ -544,7 +544,7 @@ describe("run map surface", () => {
     // The loading branch itself, not the unavailable one: the honest
     // «Загрузка…» wording is on the screen while readiness stays pending.
     expect(await screen.findByText("Загрузка…")).toBeTruthy();
-    // UX 07 (issue #353): the loading row carries the shared spinner —
+    // UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading row carries the shared spinner —
     // reverting the LoadingIndicator wiring turns this red too.
     expect(await screen.findByTestId("loading-indicator")).toBeTruthy();
     expect(await screen.findByTestId("btn-run-back")).toBeTruthy();
@@ -556,11 +556,11 @@ describe("run map surface", () => {
 
     fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
-    // UX 02 (issue #348): the sheet's bottom padding keeps its content above
+    // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the sheet's bottom padding keeps its content above
     // the home-indicator area — the pinned bottom inset (34) on the base
     // spacing (AC4).
     expect(flatStyle(screen.getByTestId("run-panel-half")).paddingBottom).toBe(tokens.spaceM + 34);
-    // UX 02 (issue #348): the back's label lives in a <Text> — the #344 guard
+    // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back's label lives in a <Text> — the bare-string Pressable guard
     // (within().getByText() reaches only <Text> hosts, a reverted bare string
     // fails here).
     expect(within(screen.getByTestId("btn-run-back")).getByText("Назад")).toBeTruthy();
@@ -669,8 +669,7 @@ describe("run map surface", () => {
     await waitFor(() => expect(screen.queryByTestId("run-paused")).toBeNull());
 
     // One story heard (stop-2's automatic launch), then the finish — legal
-    // after one story, no route completion required (11 §4.3). UX 06 (issue
-    // #352): the destructive finish asks first, the confirmation ends it.
+    // after one story, no route completion required (11 §4.3). UX 06 (канон §5 — Дыялог і стужкі): the destructive finish asks first, the confirmation ends it.
     await soundStop2({ locationPort, advance });
     act(() => {
       audioPort.finish(1);
@@ -747,7 +746,7 @@ describe("run map surface", () => {
     expect(screen.getByTestId("run-unavailable-reason").props.children).toBe("Ужо ёсць жывая прагулка.");
   });
 
-  // UX 06 (issue #352) AC3: the destructive finish asks first; the decline
+  // UX 06 (канон §5 — Дыялог і стужкі) AC3: the destructive finish asks first; the decline
   // (and the system Back, the shell's onRequestClose) leaves the session
   // active and unchanged, the confirmation finishes as before. Reverting
   // btn-run-end to a direct run.end() fails the first half — the dialog
@@ -855,7 +854,7 @@ describe("run map surface", () => {
     expect(screen.getByTestId("run-map").props.style).toEqual(expect.objectContaining({ flex: 1 }));
   });
 
-  // UX 04 (issue #350): the ODbL attribution is a real link that rides the
+  // UX 04 (канон §9 — Чытэльнасць на вуліцы): the ODbL attribution is a real link that rides the
   // peek bar — the bar's absolute positioning can no longer cover the
   // screen's bottom flow (AC3), and it announces itself as a link (AC4).
   // Reverting the attribution to the in-flow Text under the bar fails the
@@ -883,7 +882,7 @@ describe("run map surface", () => {
     expect(flatStyle(screen.getByText("Славутасць")).fontSize).toBeGreaterThanOrEqual(12);
   });
 
-  // UX 04 (issue #350, AC2): the canon strip — 6px accent on line with the
+  // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC2): the canon strip — 6px accent on line with the
   // muted 1px edge that keeps the track identifiable on the card.
   test("UX 04: the progress strip keeps its canon height and a ≥3:1 edge on the card (AC2)", async () => {
     const { locationPort, advance } = await mountedRunBe();

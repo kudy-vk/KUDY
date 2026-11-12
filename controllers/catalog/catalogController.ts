@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the city catalog controller: a vanilla store (the
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the city catalog controller: a vanilla store (the
 // G06.09.b helper) whose refresh runs the catalog service the composition
 // root handed over and copies the outcome into the surface state. The
 // catalog refreshes at every start and a failure is fatal only with no

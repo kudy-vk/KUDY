@@ -1,4 +1,4 @@
-// G07.05 (issue #284) — the quiet guide-hint card of the open app (R07 in
+// G07.05 (15_guide_decisions.md — R07) — the quiet guide-hint card of the open app (R07 in
 // docs/15: «Побач ёсць гід…» without a session, the small quiet card during
 // one; «Яна не запускае аўдыё, не пачынае сесію, не купляе кантэнт»). The
 // rows are the public preview facts the hint controller projected — a tap

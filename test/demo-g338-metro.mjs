@@ -1,4 +1,4 @@
-// Deterministic demo driver for issue #338: prints the committed Metro
+// Deterministic demo driver for the Metro device-bundle wiring (docs/development_setup.md, 2026-09-27): prints the committed Metro
 // wiring verdicts (blockList exclusions, node:* → stub resolution) and the
 // stub's call-time-only failure. No server, no timings — the output block of
 // the Showboat demo was captured from this.

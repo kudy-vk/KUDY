@@ -1,4 +1,4 @@
-// G06.10.b (issue #402) — the font-loading module of the root composition:
+// G06.10.b (docs/agent-tasks/app/G06.10.md — G06.10.b) — the font-loading module of the root composition:
 // the three approved families (visual-language §3 «Ухвалены шрыфтавы пакет»)
 // load once at the root, keyed by the token mirror, so a style pointing at
 // tokens.fontFamilyUi resolves to the loaded face. Lives in components/, not

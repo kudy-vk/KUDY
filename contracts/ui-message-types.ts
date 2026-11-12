@@ -86,7 +86,7 @@ export interface UiStrings {
   readonly sizeMb: (mb: number) => string;
   readonly freeStopsCount: (count: number) => string;
   readonly stopNumber: (position: number) => string;
-  // The metadata-row icon words (G06.10.c, issue #403): the standalone
+  // The metadata-row icon words (G06.10.c — docs/agent-tasks/app/G06.10.md): the standalone
   // screen-reader label the icon contract requires — the fact line next to
   // the icon carries the value.
   readonly durationLabel: string;
