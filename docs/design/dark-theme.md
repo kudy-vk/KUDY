@@ -161,6 +161,8 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 | `color.note` | фон дэма-стужкі пратотыпа | #fffbe8 | #33301d | ранейшае значэнне DT-2; M3 яго не змяняе |
 | `color.engrave` | штрых гравюрнай панарамы Гданьска (#216, M5/M11) | #7a6248 | #c9b59b | вытворнае |
 | `color.panorama.ground` | заліўка мас панарамы (#216, M5/M11) | #faf7f2 | #1e100c | вытворнае |
+| `color.medal.paper` | дыск медальёна кола «Пра горад» (#252) | #fff6e0 | #3a231b | M9, 2026-11-12 |
+| `color.medal.ink` | знак на дыску медальёна (#252) | #4a3b2a | #f4eadb | M9, 2026-11-12 |
 
 Токены, якія **не залежаць** ад тэмы:
 
@@ -168,10 +170,13 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
   `color.marker.*` — светлыя значэнні ў абедзвюх тэмах (§3). Літара маркера —
   светлай-тэмавы `color.accent-ink` (#ffffff) у абедзвюх тэмах, пакуль
   картаграфія светлая.
-- Медальёны частак карты (`color.medal.paper`, `color.medal.rim`,
-  `color.medal.ink`, #216/M11): дыск, кант і значок сядзяць на светлай
-  картаграфіі DT-4, таму іх значэнні аднолькавыя ў абедзвюх тэмах — тая ж
-  зона светлай-незмяняльнай графікі, што і маркеры.
+- Медальён: кант і свячэнне (`color.medal.rim`, `color.medal.glow`, M9/M11) —
+  у зоне светлай-незмяняльнай графікі. Дыск і знак (`color.medal.paper`,
+  `color.medal.ink`) у цёмнай тэме мяняюцца: рашэнне M9 (#252, 2026-11-12) —
+  «у цёмнай тэме дыск цёмны» — дыск бярэ карткавае значэнне M3, знак — тэмавы
+  ink; часткі карты галоўнага экрана гэта не дакранаецца (яны растравыя,
+  M11). Гэта замяняе класіфікацыю #216, што клала ўсе тры медальённыя
+  токены ў зону.
 - Усе не-колеравыя токены: шрыфты (сем'і, вагі, памеры, множнік 1.25),
   інтэрвалы, радыусы, памеры элементаў, `panel.body-max-height`,
   `dialog.max-width`, `texture.paper-grain` (непразрыстасць 4–5%, тыя ж
@@ -218,10 +223,14 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 | `ink` / `badge.lock` — дабаўка | 4.5 | 13.17 | 10.08 |
 | `warn` / `paper` — дабаўка | 4.5 | 5.76 | 7.95 |
 | `warn` / `card` — дабаўка | 4.5 | 6.16 | 6.71 |
+| `medal.ink` / `medal.paper` — дабаўка (#252) | 4.5 | 10.00 | 12.28 |
 
 Чатыры badge-пары, пара `person`/`street` (§5.2) і дзве пары `warn` раней
 адсутнічалі ў канонавым спісе, хоць інтэрфейс выкарыстоўваў гэтыя камбінацыі.
-Гэты PR дадаў іх у `contrastPairs`; гард правярае абедзве тэмы.
+Гэты PR дадаў іх у `contrastPairs`; гард правярае абедзве тэмы. Пара
+`medal.ink`/`medal.paper` (#252) — знак на дыску медальёна кола «Пра горад»:
+у цёмнай тэме дыск бярэ карткавае значэнне M3, знак — тэмавы `ink`; контур і
+свячэнне застаюцца светлай зоны (M9).
 
 ### 5.2 Пары зоны картаграфіі — светлыя значэнні ў абедзвюх тэмах
 
@@ -232,9 +241,13 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
 мяняюцца (§3).
 
 Медальён часткі карты (#216, M11): значок на дыск — `color.medal.ink` /
-`color.medal.paper` — 10.00:1, аднолькавы ў абедзвюх тэмах (зона §3).
-Кандыдаты tier-2 для медальёнаў даюць 9.65:1 (`color.medal.ink` #d9c08d на
-`color.medal.paper` #241a10).
+`color.medal.paper` — 10.00:1 у абедзвюх тэмах (пачаткова — зона §3).
+Запіс абнаўлення (#252, 2026-11-12): рашэнне M9 выводзіць дыск і знак з зоны
+(у цёмнай тэме дыск цёмны — карткавае значэнне M3, знак — тэмавы ink); кант і
+свячэнне застаюцца ў зоне. Часткі карты галоўнага экрана — растравыя, гэта
+перастаноўка іх не мала. Кандыдаты tier-2 для дыска і знака з #216
+(`color.medal.ink` #d9c08d на `color.medal.paper` #241a10 — 9.65:1) больш не
+адпавядаюць мадэлі і замененыя кандыдатамі для рыму і свячэння (§5.4).
 
 ### 5.3 Канфлікт, які выключае паасобную тэматызацыю маркераў
 
@@ -251,6 +264,12 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
 5.07–8.73:1; маркеры на `map` 5.25–9.05:1, на `street` 4.14–7.14:1;
 `person` 6.08:1 на `map`, 4.80:1 на `street` — усе праходзяць плашкі. Кандыдаты
 не трапляюць у production да асобнага рашэння ўладальніка.
+
+Медальённыя кандыдаты (#252, 2026-11-12): `medal.rim` #9a7a35 і
+`medal.glow` #c9a04e — цямнейшыя варыянты для гіпатэтычнага цёмнага медальёна
+разам з цёмнай картаграфіяй; у MVP рым і свячэнне застаюцца са светлай зоны
+(M9), таму кандыдаты таксама не прымяняюцца. Кандыдаты дыска і знака з #216
+замененыя гэтай мадэллю — дыск і знак больш не ў зоне (гл. §5.2).
 
 ### 5.5 Спосаб паўторнай праверкі
 
@@ -428,29 +447,31 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
     "color.warn": "#f09a80",
     "color.note": "#33301d",
     "color.engrave": "#c9b59b",
-    "color.panorama.ground": "#1e100c"
+    "color.panorama.ground": "#1e100c",
+    "color.medal.paper": "#3a231b",
+    "color.medal.ink": "#f4eadb"
   },
   "tokenOrigins": {
     "M3, пацверджана ў #212 2026-11-11": ["color.paper","color.card","color.ink","color.muted","color.line","color.accent","color.accent-ink","color.shelf.accent","color.shelf.line","color.disabled-ink","color.disabled-line","color.notice.bg","color.notice.border","color.error.bg","color.error.border","color.hint.bg","color.hint.border","color.moment.bg","color.moment.border","color.badge.paid","color.badge.free","color.badge.mixed","color.badge.lock","color.warn"],
     "ранейшае значэнне DT-2": ["color.note"],
-    "вытворнае з панарамы #216 (M5/M11)": ["color.engrave", "color.panorama.ground"]
+    "вытворнае з панарамы #216 (M5/M11)": ["color.engrave", "color.panorama.ground"],
+    "M9, дыск і знак кола «Пра горад» (#252, 2026-11-12)": ["color.medal.paper","color.medal.ink"]
   },
   "cartographyZone": {
     "rule": "У MVP картаграфія і маркеры застаюцца са светлай тэмай у абедзвюх тэмах: стыль правайдара (contracts/map-provider.ts, interim ADR G00.02) не тэматызуецца, літара маркера — светлай-тэмавы color.accent-ink у абедзвюх тэмах.",
-    "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked", "color.medal.paper", "color.medal.rim", "color.medal.ink"],
+    "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked", "color.medal.rim", "color.medal.glow"],
     "reason": "Цёмны accent-ink на светлай заліўцы marker.played дае 2.43:1 — ніжэй за 4.5:1; паасобная тэматызацыя маркераў ламае правіла канона §5.",
     "tier2Proposal": {
       "color.map": "#1b2420",
       "color.street": "#2b3630",
       "color.person": "#6ba3e8",
+      "color.medal.rim": "#9a7a35",
+      "color.medal.glow": "#c9a04e",
       "color.marker.played": "#80d4ad",
       "color.marker.playing": "#e5735a",
       "color.marker.available": "#dcaa4e",
       "color.marker.pending": "#9aa8b1",
       "color.marker.locked": "#8b99a2",
-      "color.medal.paper": "#241a10",
-      "color.medal.rim": "#9a7a35",
-      "color.medal.ink": "#d9c08d",
       "markerLetter": "#0d2a1e"
     }
   },

@@ -71,6 +71,10 @@
   --badge-free: #2f4234;
   --badge-mixed: #40334e;
   --badge-lock: #3d3530;
+  /* M9 (#252): the wheel medallion's disc takes the card fill and the sign
+     the theme's ink; rim and glow keep the light-zone values. */
+  --medal-paper: #3a231b;
+  --medal-ink: #f4eadb;
   --engrave: #c9b59b;
   /* Issue #216 (M5/M11): the panorama's own ground panel in the dark theme. */
   --panorama-ground: #1e100c;

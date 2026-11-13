@@ -25,6 +25,13 @@ export const tokens = {
   colorBadgePaid: '#fdf1d7', // color.badge.paid
   colorBadgeFree: '#e7f2ec', // color.badge.free
   colorBadgeMixed: '#ece7f8', // color.badge.mixed
+  // Рашэнні M4/M9 (#252) — мова медальёна: дыск, ручны контур, знак і
+  // бурштынавае свячэнне; у цёмнай тэме дыск і знак мяняюцца, контур і
+  // свячэнне застаюцца (светлая зона канона).
+  colorMedalPaper: '#fff6e0', // color.medal.paper
+  colorMedalRim: '#bd852c', // color.medal.rim
+  colorMedalInk: '#4a3b2a', // color.medal.ink
+  colorMedalGlow: '#f8d580', // color.medal.glow
   colorNoticeBg: '#fdf1d7', // color.notice.bg
   colorNoticeBorder: '#e6c98c', // color.notice.border
   colorErrorBg: '#fdeaea', // color.error.bg
@@ -37,12 +44,6 @@ export const tokens = {
   colorMarkerAvailable: '#8a610e', // color.marker.available
   colorMarkerPending: '#646c77', // color.marker.pending
   colorMarkerLocked: '#67707a', // color.marker.locked
-  // Issue #216 (M4/M11) — медальён часткі карты: крэмавая папера, пясочна-залаты
-  // кант, карычневае чарніла. Медальён сядзіць на светлай картаграфіі DT-4, таму
-  // значэнні аднолькавыя ў абедзвюх тэмах (выключэнні з цёмнай палітры не ўносяцца).
-  colorMedalPaper: '#fff6e0', // color.medal.paper
-  colorMedalRim: '#bd852c', // color.medal.rim
-  colorMedalInk: '#4a3b2a', // color.medal.ink
   // Issue #216 (M5/M11) — гравюрная панарама Гданьска пад блокам частак карты.
   colorEngrave: '#7a6248', // color.engrave
   colorPanoramaGround: '#faf7f2', // color.panorama.ground
@@ -108,6 +109,8 @@ export const darkTokens = {
   colorBadgePaid: '#57421f',
   colorBadgeFree: '#2f4234',
   colorBadgeMixed: '#40334e',
+  colorMedalPaper: '#3a231b',
+  colorMedalInk: '#f4eadb',
   colorNoticeBg: '#4a3618',
   colorNoticeBorder: '#8a733a',
   colorErrorBg: '#4a211b',

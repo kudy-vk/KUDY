@@ -1,16 +1,17 @@
-// Issue #200 — the «Пра горад» guide's word selector (the runMapStrings
-// idiom): the generated projection carries the authored catalogue and this
-// adapter only picks it. The document is authored in Belarusian — the app's
-// first preference — so every display locale renders the be text until its
-// words are authored (the guideHint documented-fallback idiom); a locale set
-// joins the translation gate the same way the guideHint locales joined.
+// Issue #252 — the «Пра горад» wheel screen's word selector (the uiStrings
+// idiom): the generated projection carries be and en, and decision L1
+// (docs/design/brand/decisions.md) makes English the base language — a
+// display locale without its own words shows the English text, not the be
+// base the #200 document used. A locale set joins the translation gate the
+// same way the chrome locales joined.
 import type { AboutCityStrings } from "../contracts/ui-message-types";
 
 import { ABOUT_CITY_STRINGS } from "./about-city-strings.generated";
 
+function hasCatalogue(locale: string): locale is keyof typeof ABOUT_CITY_STRINGS {
+  return locale in ABOUT_CITY_STRINGS;
+}
+
 export function aboutCityStrings(locale: string): AboutCityStrings {
-  // The generated projection carries one authored catalogue (be), so the
-  // selector renders it for every display locale (the documented-fallback
-  // idiom); the argument keeps the shared strings-selector signature.
-  return ABOUT_CITY_STRINGS;
+  return hasCatalogue(locale) ? ABOUT_CITY_STRINGS[locale] : ABOUT_CITY_STRINGS.en;
 }

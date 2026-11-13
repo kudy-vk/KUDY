@@ -2458,6 +2458,1914 @@
         "outcome": "approved",
         "note": "Translation check against the Belarusian source."
       }
+    },
+    {
+      "id": "native.aboutCity.wheel.label",
+      "value": "Guide sections",
+      "reviewedSourceHash": "b8729156471cb81584cf6d295747cb306076e3483ba44ac2f2b49162bc83d8ec",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tab.airport",
+      "value": "Airport",
+      "reviewedSourceHash": "da949fde636618b259827445f8e5ba7cb4e4a824748cbb40abf8c9847b7ec7ec",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tab.transport",
+      "value": "Transport and tickets",
+      "reviewedSourceHash": "623d23746d422df0872c9031667062f4474f29e0290655ab47e9a403cc8e0378",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tab.city",
+      "value": "What’s where",
+      "reviewedSourceHash": "38dde98a5b0db874b8e1a8072115f29aa8e134fca7429a6b7f22837e30debe24",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tab.food",
+      "value": "Food and payment",
+      "reviewedSourceHash": "fe28625e62075bfbff1038013f622cb199462c1dd47bc308925364f3e9e9ff96",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tab.card",
+      "value": "Card and museums",
+      "reviewedSourceHash": "1068369a3eedad9845ed1affa359e73fe02d5631f362445ddf08ba844514f6f3",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.head.airport",
+      "value": "To and from the airport",
+      "reviewedSourceHash": "456ad27870b31e81ce7a84897a438370a4f0fd0b88bf1a0eb93310801fab6fbc",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.head.transport",
+      "value": "Getting around",
+      "reviewedSourceHash": "a7c978153ac687d4f2071c0c073c7f22d70a04d9ec08bb7f566d86a1f1d89207",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.head.city",
+      "value": "What’s where in the city",
+      "reviewedSourceHash": "c0a21a8ee9abde5173c0b4f4889f4ccca2100560ab39ca10ac2e4cad1803d6e1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.head.food",
+      "value": "Food and payment",
+      "reviewedSourceHash": "50ac656520b81dd37c5a908c4cd2a25ec8fbd99ca2afdba460839543dfc96516",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.head.card",
+      "value": "Tourist card and free museum days",
+      "reviewedSourceHash": "ead63d1f833542bd3076214630969744d3fa38be4e0258f2cff30941f91d2481",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.verified",
+      "value": "Checked on 10 November 2026",
+      "reviewedSourceHash": "4ef5f398765c20be598a9e0ecb1a915f38401a4651284ce7bfbd43d3f9c7a440",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.sources.title",
+      "value": "Official pages",
+      "reviewedSourceHash": "fa1df8b472311042eb3b01a78071ab1f1e0dc0e7cda3f8082952da18ae842363",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.sources.note",
+      "value": "Timetables, prices and opening hours change. Links open in the browser and need a connection; the guide itself works offline.",
+      "reviewedSourceHash": "de1add891b3bc0d1188a3cd53c568021a222d6b63d7052777a80800159f28e7f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.link.failed",
+      "value": "Could not open the page. Its address: ${url}",
+      "reviewedSourceHash": "3e371b48d0d46b195827ac17608f2b45620f545072799375b4a43d491c7f808c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.u.aboutMin",
+      "value": "about ${n} min",
+      "reviewedSourceHash": "3d9d6c3319bf2e7517ab520f26c70b71dc7520dc806110261702aa2820f13769",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.u.everyWeekdays",
+      "value": "every ${n} min on weekdays",
+      "reviewedSourceHash": "cea437b7d77a31c8cb2b21ebf8eb967846691df251f8809420ed9fbf28c8e8e4",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.u.hourly",
+      "value": "hourly",
+      "reviewedSourceHash": "8820418dd562c56e39cb75e1a68f22695b8b1925c787441c9d134843d7cb00eb",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.u.aboutHourly",
+      "value": "about hourly",
+      "reviewedSourceHash": "a7f0f61e870a2ce673608d279b4b4261430c69688e5a9f86746d990305c9b3dc",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.u.reduced",
+      "value": "reduced ${price}",
+      "reviewedSourceHash": "2b95c962ba4780b83c0c8f0f83768bde34a65eaf938143cb2e98af263407ca8d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.sr.bus",
+      "value": "Bus",
+      "reviewedSourceHash": "4070bbadf9c6bf2d9cca95aeafa3e616a0ff2f84a9970190e772a95b9fbb522c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.sr.night",
+      "value": "Night bus",
+      "reviewedSourceHash": "acde85b43f6ab72632cbe7afbde67ac53959f74a4f500fa45b66e2d32446dcbf",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.sr.train",
+      "value": "Train",
+      "reviewedSourceHash": "9d0dbce0fc4c3d799725dabaaff13b773acd56466b5ec5bf38f1d7a92259a5e3",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.dirLabel",
+      "value": "Direction",
+      "reviewedSourceHash": "ec26420ca91c9f417edbf95df52a6ce9c684f9c50ef771dfd8114aeb42354412",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.dirFrom",
+      "value": "From the airport",
+      "reviewedSourceHash": "ba4cfde4c4d6fb1b33dfe72e5f9926be402d0e54b111d371fa6006cdab23720b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.dirTo",
+      "value": "To the airport",
+      "reviewedSourceHash": "93f7c06ef23da314ed088aa0a97cdc0d69bd1fd5dd6e85e85b49408dedf411c9",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.title",
+      "value": "Leave the terminal",
+      "reviewedSourceHash": "3358cfc979f0becbafa6f0c56d55e37b9693f83633d969b95728eda4df7fca8e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.text",
+      "value": "Bus stops are across from the terminal, next to car park P1. A covered walkway leads to the train station Gdańsk Port Lotniczy.",
+      "reviewedSourceHash": "9ad9c58c3f62510d168a0993946d07479c2dc395b572ea8c7937b0a810600601",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.stop01",
+      "value": "Port Lotniczy 01 — to the centre",
+      "reviewedSourceHash": "061fdaa9ac4c9b9c951b0bcbcc5937b7d58e2d5122947439c8e2fcd26fcc0f19",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.stop02",
+      "value": "Port Lotniczy 02 — to Wrzeszcz",
+      "reviewedSourceHash": "d07b08234d5b16a8f2f9f644490d0df8952a273c5fe1f17140a1eae06ca3e3a8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.to.s1.title",
+      "value": "Get to your stop",
+      "reviewedSourceHash": "a628da3a26e0a9c5c617f891b710b4715696f11b543f55c56392e2a0aa1441f6",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.to.s1.text",
+      "value": "Bus 210 leaves the centre from the stop Dworzec Główny 10 on Podwale Grodzkie street; bus 110 leaves from Gdańsk Wrzeszcz.",
+      "reviewedSourceHash": "540ad81eff5d454ead761b5a9894c29ea64ad46c78decbda681d46be9b5b91f7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.s2.title",
+      "value": "Pick your ride",
+      "reviewedSourceHash": "3f3bf1a5c18d7a57e88a9566faaffaf136a0d58fa9c69ea6c36c7cda0dd14b2b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.s3.title",
+      "value": "Get a ticket",
+      "reviewedSourceHash": "d4c2c6eee48057f9d70434acf25c66c28580687f9922c0f7023503c1bf437345",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.210.from",
+      "value": "To the city centre",
+      "reviewedSourceHash": "37ed30c972ff7c8921c286e4b062db04991d3fc9aa5fb107b641d4f62d37294e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.210.to",
+      "value": "From the city centre",
+      "reviewedSourceHash": "57d31a42885b8ff124e54cdf67edf1edfa007e31a757f52ff46ecafe6bcc4e83",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.110.from",
+      "value": "To Gdańsk Wrzeszcz",
+      "reviewedSourceHash": "96928c3a75f740fb3ab48ddebe6168a5a2ad46fe8d0087de962c3ac3248af3a1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.110.to",
+      "value": "From Gdańsk Wrzeszcz",
+      "reviewedSourceHash": "2c0d5a757ca1722161ce4327c3fe0088021bda8ce1e358805752f5d899c2b6f8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.n3.from",
+      "value": "At night: centre and Wrzeszcz",
+      "reviewedSourceHash": "2e5949f976f502fe4a3cf4fc8ee3815a01f33e7eceeb31d6c194c36d30dc9416",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.n3.to",
+      "value": "At night: from the centre and Wrzeszcz",
+      "reviewedSourceHash": "dafc0c94583222c04a8dae4d046f3029247ccc0011333ad4e2df993bb7b2034c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.train.from",
+      "value": "Train to Gdańsk Wrzeszcz",
+      "reviewedSourceHash": "cc8861f1d3475f477b939643bcf275f0bca842f0b581d1336b86ca9ed44a128b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.train.to",
+      "value": "Train from Gdańsk Wrzeszcz",
+      "reviewedSourceHash": "9be672c474bb6d071fd2cc97d1815901d986ecd1d63cc7074afb73eb7b024754",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.stop",
+      "value": "Stop",
+      "reviewedSourceHash": "e80d2182705857059dc858ba656e3aa9e16e0d7604421123625ea5be85729702",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.firstLast",
+      "value": "First and last",
+      "reviewedSourceHash": "71230bf9cbd7cd450602590de6044286d36769fc3700b7c580b8e1709e318d5e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.sunday",
+      "value": "On Sundays",
+      "reviewedSourceHash": "2691cd195577a706dd261e92f6cc3dd7198e645a76a1e39300e5a24136dc60a1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.centreStops",
+      "value": "Stops in the centre",
+      "reviewedSourceHash": "6111fb9f076d97e76887df036bd37246dd81a5817ef9eb0ccbdc02816fa8ddb5",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.also",
+      "value": "Also",
+      "reviewedSourceHash": "1c8452ac490b11b4b37823cad64e02d00dbf413659bf8b5d858b54774313d285",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.route",
+      "value": "Route",
+      "reviewedSourceHash": "c8b462504d5197ac27ada96b9d8dfcd2970688347f05565c74f380d8443494fd",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.toCentre",
+      "value": "To the centre",
+      "reviewedSourceHash": "a0505955bf685d80ca38199d25f51119731cc8e0a4ba34f878bf9624b98e7847",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.toWrzeszcz",
+      "value": "To Wrzeszcz",
+      "reviewedSourceHash": "065cde5013867110774e7d5da0590a0b471edde9501d509d7e2bed33ebf09169",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.row.operator",
+      "value": "Operator",
+      "reviewedSourceHash": "397d7fbe5fc3ae96a471334fe0d13ca4fd95913e00a1868c637101049e0e9afc",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.110.also",
+      "value": "Bus 120 runs between the airport and Łostowice Świętokrzyska.",
+      "reviewedSourceHash": "f56e63f650b50de04f25fbb0e9f4688088c373cce9f2220187e8698e0a78b016",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.n3.when",
+      "value": "every night, 23:00 – 04:00",
+      "reviewedSourceHash": "e129fdf31bdc8783dfb364ddfe5b77ad41f2bf8e3146d4e12ad083fb18b73b63",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.n3.toCentre",
+      "value": "From Port Lotniczy 01 at 23:15, 00:06, 01:15 and on; about 50 min.",
+      "reviewedSourceHash": "4536b989ae24c22417ecc2bd8a40b37ee8edc9170646b68dd326f85bd69d30cb",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.n3.toWrzeszcz",
+      "value": "From Port Lotniczy 02; about 20 min.",
+      "reviewedSourceHash": "5d9209725227333840d73e74d74ddc961dc7291b22e56af2b1e34ee6a13dc04b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.n3.route",
+      "value": "Dworzec Główny ⇄ airport ⇄ Gdańsk Wrzeszcz. It does not go to Sopot or Gdynia.",
+      "reviewedSourceHash": "e7c2ba1173e00f60135a880f883c4f8158c70a604650001e48ec651806e6b689",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.train.change",
+      "value": "Direct trains to Gdańsk Główny exist, but more often you change at Gdańsk Wrzeszcz: from platform 3 take the SKM towards the centre.",
+      "reviewedSourceHash": "eb7d9c105c72087226866f393aecb271290cfc7410ab0bc79bf33b57005f9f40",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.train.line",
+      "value": "Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa. Direct trains between Gdańsk Główny and the airport exist, but more often you change at Gdańsk Wrzeszcz.",
+      "reviewedSourceHash": "8bee6c8f4ecd4ef2a24e57029f04bb3cae39ce59fc713d590536f3a48a066872",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.ride.train.operator",
+      "value": "POLREGIO. The SKM does not serve the airport station.",
+      "reviewedSourceHash": "bbcbdcca5ef40ea963d9c7d7c5977c394ef424587ffd961e1fa1a0f2874de4ef",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.ticket.bus.title",
+      "value": "Bus: a ZTM ticket",
+      "reviewedSourceHash": "a62aabfad851d46e9abdf42d276c2df6c1ba447fd9f10b4de563ed3f06ffe01f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.ticket.bus.where",
+      "value": "Buy it in the Jakdojade or FALA app, or pay by card at the FALA device on board.",
+      "reviewedSourceHash": "b8f3889572e4a68acf420164cfe8f37715b1da553aec121853d1f2284c653af2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.ticket.train.title",
+      "value": "Train: a separate rail ticket",
+      "reviewedSourceHash": "c6f82060dc27eb9672232795843df848b25baf2a94f96538c0237ac678414d49",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.ticket.train.where",
+      "value": "The city ZTM ticket is not valid on the train. Buy a rail ticket at the platform machine or in the Polregio, Jakdojade or FALA app.",
+      "reviewedSourceHash": "f2d485b4b07d00b0d2c4f1db94153c8a34f995ad1ea04b3aca7ddf1ca9d5c7ef",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.singleRide",
+      "value": "One ride",
+      "reviewedSourceHash": "dffae6c8d783d37f60db26708e31cd3b309a6b984fad36b6eab28de1d2b328ca",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.single.phone",
+      "value": "One ride, in the phone",
+      "reviewedSourceHash": "a878bd29f9097830408f3a2eb553fb6f00d962d3b0829190a6672213cdce7f58",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.single.paper",
+      "value": "One ride, paper",
+      "reviewedSourceHash": "cb8761659fd95c716ccef1b203a2f9d3c0b8d12c8621efe55d6997f787aabf72",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.75",
+      "value": "75 minutes",
+      "reviewedSourceHash": "c58f1ed3401207570471139888d3fd93ab5fcbcc57db1d3da2ac52acb8544434",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.day24",
+      "value": "24 hours",
+      "reviewedSourceHash": "16d30412ffb509046a58a78efa00ced1e071292b5f1654c3cff61faf8c2213a4",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.24h.two",
+      "value": "24 hours, two operators",
+      "reviewedSourceHash": "1d5782469ca37d612b483a5bcd08c332fe614280aaf2dca2726f658a8e3c18e8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.24h.all",
+      "value": "24 hours, all operators",
+      "reviewedSourceHash": "a5ee1611667e1751120759aec8bc7e0ed0139b49eea610bc1ddf4dd190928186",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.72h",
+      "value": "72 hours",
+      "reviewedSourceHash": "903a406079e9ae95802981022603e90fd8602930dcc42cfd8e51c924f8b98587",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tk.night",
+      "value": "Night buses cost the same.",
+      "reviewedSourceHash": "0930ea5cbad721d8e5cbdf70e89e2c74bf6e9dba7d3a97dc188e6b326b0e57ac",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.notice",
+      "value": "Until 12 December 2026 trains run on a temporary timetable; the regular one starts on 13 December 2026. Bus timetables change with the season — check the live timetable before you go.",
+      "reviewedSourceHash": "3ab63b74e96c93d1cf377b47b80ae3273a3849ceed5122a17bada3894847fe38",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.modes",
+      "value": "What to ride",
+      "reviewedSourceHash": "30578e894c6ac40ee071de765e5c35633f17c04feca126be6ad8a2cdfdf72fe4",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.ztm.title",
+      "value": "Buses and trams",
+      "reviewedSourceHash": "b850100a827c6f0bdf9f21b8983c1fa27a6a2828a0c6fe3d39769723288dfec4",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.ztm.meta",
+      "value": "ZTM · around Gdańsk",
+      "reviewedSourceHash": "fb484fddcbeb36cf29de322f8396422b440c807267e3e175965f2c50698ef6a2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.ztm.text",
+      "value": "The city’s main transport, also serving neighbouring communes. Sopot and Gdynia run their own ZKM networks. One shared fare for the whole area is kept by the MZKZG union: its tickets are valid in Gdańsk and in the neighbouring towns.",
+      "reviewedSourceHash": "5242908c75ca09a31fa3f772654b1e64fc2705161882dc4bb21dff10e34e6d68",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.skm.title",
+      "value": "SKM train",
+      "reviewedSourceHash": "60421a8c9e985c58b7cb36ec801cd701645b71545efdf36dfad540e4180a72b1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.skm.meta",
+      "value": "To Sopot and Gdynia",
+      "reviewedSourceHash": "b2a541c0c88bc07ae3502a072a15f9aa6847adf04968a3196930230893bd1031",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.skm.text",
+      "value": "The main line Gdynia – Sopot – Gdańsk. On weekdays trains run roughly every 10–15 minutes; exact times are in the timetable.",
+      "reviewedSourceHash": "6d6df35de1bcf5068fd9def3a2327d23c5d2d0ff3dab726ebe42f391f011ddd8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.skm.warn",
+      "value": "ZTM single tickets are not valid on trains. Take an MZKZG ticket “with trains” or an SKM ticket.",
+      "reviewedSourceHash": "f528883f7506e0d1214313bf366180b91d5bad7e2ed6a9b13281296f13d9f474",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.rail.title",
+      "value": "POLREGIO trains",
+      "reviewedSourceHash": "c78968073de1d3de1b7674ecd7d79879d674d667a8e00cf3236b3920a066968b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.rail.meta",
+      "value": "Airport, Malbork and beyond",
+      "reviewedSourceHash": "e0bada036a28a50f40072412a465d787e96f88219b407c5aa80640d4b61b5e6d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.rail.text",
+      "value": "POLREGIO runs the PKM line to the airport (Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa) and regional trains to Malbork, Słupsk and Kartuzy. Timetable and tickets: polregio.pl.",
+      "reviewedSourceHash": "39049551136d4801d1d1fe4f37cde0c4c7c3012d55a03d8afd0f5e6f74bd71b7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.prices",
+      "value": "Tickets and prices",
+      "reviewedSourceHash": "a5641908c50c33bc2265437fbc4436342a62915a46c199e90b451249ddaa6a20",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zoneLabel",
+      "value": "Where the ticket is valid",
+      "reviewedSourceHash": "c152cb93d56a8917636bdfa75ea7b61adb456cc98e69bb208cc5cb647720370a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zone.ztm",
+      "value": "Gdańsk",
+      "reviewedSourceHash": "e7b650663541daddb05d32fd3625b44146dda6b7ba2570d19ca88c3c9f1a38a9",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zone.metro",
+      "value": "Tricity",
+      "reviewedSourceHash": "0a2e45d8c7e53e8da25038737590d7cb1da4b3d4e1cab65b006205e93597431b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zone.rail",
+      "value": "With trains",
+      "reviewedSourceHash": "2cfa49af40cff1a968c7be5f9c50597ae075f03136bdf157b2854739df8956b3",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zoneNote.ztm",
+      "value": "ZTM Gdańsk tickets: buses and trams of the city network.",
+      "reviewedSourceHash": "48554970ec2c0f388aaab5d935db0902c1e0782512e5ec83d883f88a7465edc4",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zoneNote.metro",
+      "value": "MZKZG metropolitan tickets: city transport in Gdańsk, Sopot, Gdynia and Wejherowo.",
+      "reviewedSourceHash": "5351b70ae358e250d16c033b07cc48e3e9b1084a2b7b3e4dddde9dddca202dd0",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.zoneNote.rail",
+      "value": "MZKZG tickets that are also valid on trains.",
+      "reviewedSourceHash": "11d54e957a4403ce0a9e9b864684cd9e944c0dc4bcc327e71cb6d5a44db7511b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.activate",
+      "value": "How to activate a ticket",
+      "reviewedSourceHash": "4ad0845a6053c271038710e74874bb363e872fa66a91637dd6bcd36d3f7e5cc6",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.act.paper.title",
+      "value": "Paper ticket with a QR code",
+      "reviewedSourceHash": "df17f344fe2344e4bf67a5b7a1ebd77ee466854f2e5a0ed081d417150fd0c88b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.act.paper.text",
+      "value": "Scan it on board at the FALA device: hold the ticket under the device, 10–15 cm away, until the signal sounds and “Bilet aktywny” appears. Or stamp it in the validator.",
+      "reviewedSourceHash": "23d9f5126da845e39845d2bfd728961c7f2b74f335a77e9de5d00eea858d0778",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.act.mobile.title",
+      "value": "Mobile ticket in Jakdojade",
+      "reviewedSourceHash": "82c6d345d44466a8fa35df143660dfd5aa3abfe329018e97ee49c5ecc845db4d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.act.mobile.text",
+      "value": "It activates at the moment of purchase, so buy it right after you board.",
+      "reviewedSourceHash": "29ea0ab1359da95c899993ab8f1016e1f1f9904a1070895ddc4ec301c959376b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.act.valid.title",
+      "value": "How long it lasts",
+      "reviewedSourceHash": "851f415a0d56ec83e1d67050557436cee9c67d55b7ac7cae22096ff05746283b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.act.valid.text",
+      "value": "One ride — until you get off. 75 minutes, 24 and 72 hours — counted from activation.",
+      "reviewedSourceHash": "471731de2e197e9fb9ee6ef7618d56eef7b0d0b3472f984a5f641d85f678e08f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buyLabel",
+      "value": "Where to buy",
+      "reviewedSourceHash": "e873ccfa67461ab038a72a14d55316f64c7bcacbf2cabc3e7319f521d1798bc3",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.fala.title",
+      "value": "FALA app",
+      "reviewedSourceHash": "b135ec50a4b34a557c0257631f753c17837baaef66bc722649330eefc4bde9d0",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.fala.text",
+      "value": "The widest choice, rail tickets included.",
+      "reviewedSourceHash": "a708c58a953060ca4b53558ff12ecc85ca1efd8273760214a1e994277460dcbd",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.apps.title",
+      "value": "Jakdojade and other apps",
+      "reviewedSourceHash": "7bcd111c0455d5b9c8a946b27fb55d2bba09325b9a4484b9fccde0ab8a990cb7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.apps.text",
+      "value": "Metropolitan tickets: Jakdojade, GoPay, moBilet, mPay, SkyCash, zBiletem.",
+      "reviewedSourceHash": "6c36505841d9d48b3426f2026008d0099b2897ad242592b06c9d09150bf0570f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.board.title",
+      "value": "On board",
+      "reviewedSourceHash": "199a7b9321d783142cdaa6e2fa7b1643ed102058ec829b6943798f3f6a5ddd6b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.board.text",
+      "value": "FALA devices, cashless payment only.",
+      "reviewedSourceHash": "754a05669ef9595826cdb9fcef0a34164b13f13fd149c517f474b78a5ec8a95e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.desk.title",
+      "value": "Ticket offices and kiosks",
+      "reviewedSourceHash": "c50e5d3fb525c79d6f3d095d4947498d7b25bb5007feb83bf64b4893d1b86de2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.buy.desk.text",
+      "value": "SKM and ZTM ticket offices, kiosks and post offices.",
+      "reviewedSourceHash": "cbfa1e455d26d3a793e3745e7d8065522ed0cfb7152ab7dc2e936cd85ad50ec2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.tip.card",
+      "value": "With a payment card you can ride without a ticket bought in advance: the FALA system picks the fare itself.",
+      "reviewedSourceHash": "0fa1649b9027c36e38476afbe2e5d66dced5b35f8c2ae1407bdc68b8b4d1d067",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.tip.kompas",
+      "value": "The SKM KomPas app keeps the train timetable offline.",
+      "reviewedSourceHash": "0fc6a5c5f97e33b7bf9b10ab01283edabfc1de5e764c9b5fecd45ccaeb90a2a7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.city.pick",
+      "value": "Places on the schematic",
+      "reviewedSourceHash": "d8696c9e1b24047cbbcd662694ac836f5c412b8212e3489f622b1ff0ee58533c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.city.caption",
+      "value": "A schematic with approximate proportions, not a map. The exact map of the centre is in the link below.",
+      "reviewedSourceHash": "01b6658caafaac990e0e8a1660f7679b37e09a03240d733790876d0ddce3590d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.city.sea",
+      "value": "Baltic Sea",
+      "reviewedSourceHash": "cd6658d8c4929a1ba8a4bd4e687047d3bd610c6e3ba694c6e0cc3d0c77e71dbc",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.city.get",
+      "value": "How to get there",
+      "reviewedSourceHash": "c5056de76c38eb10d262b6964f982b29c71eefbd47cdd91b8f74f625bd1c65fc",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.city.summer",
+      "value": "In summer, beach services run more often.",
+      "reviewedSourceHash": "c749d8aab008345438f7c714847ce4c1e598855da3b9307b54a07a3b41ff1b8c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.kind.centre",
+      "value": "Historic centre",
+      "reviewedSourceHash": "b337c2e83d4a14272417baa0520e0e53e91140930bf88c89b1aff4a5f98e238a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.kind.quarter",
+      "value": "Historic quarter",
+      "reviewedSourceHash": "6245b9616c8a0a78255c6d9f172fbc79dcd371b984d1bffe11526b0cc2c8ef97",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.kind.station",
+      "value": "Main station",
+      "reviewedSourceHash": "e346bd0eb6cbb5000e6ba429df4c017d909e896b4b66a892a1efe7931f696fa0",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.kind.district",
+      "value": "District",
+      "reviewedSourceHash": "1e39b554fdcd92168f244e41b1cff7dee03e47b456208d7d83ea5c3e923a988e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.kind.beach",
+      "value": "Beach",
+      "reviewedSourceHash": "51345fdf10e78f7ad40ae4fee246c351c59d5c21e3529511583efeb4d205cb86",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.kind.island",
+      "value": "Island and beach",
+      "reviewedSourceHash": "aaa6a5c7dbb8380106ab66d1e998a42bc9296033bc18f86b15806a9fa18ee7fa",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.glowne",
+      "value": "The tourist heart of Gdańsk on the Motława river: Długa and Długi Targ streets, the Neptune Fountain, the Town Hall, St Mary’s Church and the Crane.",
+      "reviewedSourceHash": "7064dc82bb7586955456a24274c56716a04d0fc309a67ed8daf8c203fd615546",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.stare",
+      "value": "A separate historic quarter north of Główne Miasto, with St Catherine’s Church and the Great Mill. Its name means “old town”, but the famous sights are in Główne Miasto.",
+      "reviewedSourceHash": "c8097ff0976dcfc72fca420b819cc73d6dc7f03b03cf91fa59ab5803de1f2c28",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.station",
+      "value": "The main railway station. Its tunnels lead out to the tram stops. The rail stop closest to the centre is Gdańsk Śródmieście on the SKM line.",
+      "reviewedSourceHash": "12c98e41d167651e5418a382e4ea7b39646704c34d623b8350446af802816c1a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.wrzeszcz",
+      "value": "The most populous residential district: shops and cafés, villas from the late 19th century, and Wajdeloty street at its heart.",
+      "reviewedSourceHash": "7635fbdd675a5dc62ad39af7ed87bbca6724e2e1465bbee97d4f958cd1b348cb",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.oliwa",
+      "value": "The Cistercian cathedral with its famous organ (concerts; an international organ festival in July and August), Adam Mickiewicz Park and the largest zoo in Poland by area.",
+      "reviewedSourceHash": "d2dfc4d0d8f004e6d3cca655e7ddc2e3ce0c66f938174b9ce6de05218602e566",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.brzezno",
+      "value": "The most popular city beach.",
+      "reviewedSourceHash": "44515b05c4e0ef9ca822b9d30facda6eb89c8b6dae590e855792b723e54bb650",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.jelitkowo",
+      "value": "A family beach near the border with Sopot.",
+      "reviewedSourceHash": "1bcb69cdc0830e810708070147a19837804c5a338ae6989ff281af57e57b838e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.stogiBeach",
+      "value": "A wide, quiet beach.",
+      "reviewedSourceHash": "42752b2328e9068b1b896e34f5390991deabe1fcbf74a7f82a4cff445e72a252",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.stogi.warn",
+      "value": "Siennicki bridge is closed and trams are cut short until 2027, so take the bus.",
+      "reviewedSourceHash": "df00c2e2159e134cd3b794c87477115643aa940fac4ce255433c60d143388f08",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.sobieszewo",
+      "value": "The “wild” green end of the city, with bird reserves.",
+      "reviewedSourceHash": "de50cdde8aba0bf4b4cf23221539474d44ab77156e7fa8b814535fd4334c5fac",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.glowne",
+      "value": "about 10 min on foot from Gdańsk Główny",
+      "reviewedSourceHash": "b6327426539bb1ed8c71455512045800091ef527cb12abab586d154a694f8d09",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.station.walk",
+      "value": "about 10 min on foot to Główne Miasto",
+      "reviewedSourceHash": "43b1ff9bc5a28a51c951a750c8b2f981a1f7e5bc43c1f8f074857a93adac10a2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.station.skm",
+      "value": "SKM: Gdańsk Śródmieście is closer to the centre",
+      "reviewedSourceHash": "475c3a9c5c3b764b7db15926060ecc6974adafe018951ea9f7af855792a0e21d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.wrzeszcz",
+      "value": "SKM or train to Gdańsk Wrzeszcz",
+      "reviewedSourceHash": "f9ff89df17ffc235cdd8943cf24aafcfd151bbbb0812e814549b1148f806215d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.oliwa.tram",
+      "value": "tram 5, also 6",
+      "reviewedSourceHash": "93641e0529f4d78a06a8079a04ccd6da18a398b17ea7682e3e23162ef6dc5194",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.oliwa.skm",
+      "value": "SKM to Gdańsk Oliwa",
+      "reviewedSourceHash": "96beb8caf755b38abc0eed8d5143aa8d8820507ba8c0f50df8eab990499456cf",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.brzezno",
+      "value": "tram 3 to Brzeźno Dom Zdrojowy",
+      "reviewedSourceHash": "c9a695dc70cb0eb8ef970418e08af3380a74af4d1fd71e9e4704c03d7ad48a0c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.jelitkowo",
+      "value": "trams 2 and 4",
+      "reviewedSourceHash": "3daff794cba90608ad1091a844f17f0349a47e384c163e1a5d05f52846041d3f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.stogi",
+      "value": "bus T8 or 158",
+      "reviewedSourceHash": "862269861cd4af658a6df94d47529127892c09bd414e2feb840062273f85917d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.get.sobieszewo",
+      "value": "bus 512",
+      "reviewedSourceHash": "19910f16f5e00629273fb78a236e6ba8dc48a28dce8393d3fcc14bd0fde7da92",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.deliveryLabel",
+      "value": "Food delivery",
+      "reviewedSourceHash": "c2ff6282af8382bdd1c191102d6419ef57e9b40311d3844900779fbdac48e753",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.delivery.lead",
+      "value": "All five services deliver across Gdańsk. Pick a way to pay to see who takes it.",
+      "reviewedSourceHash": "751ff7200ff71d07f6d2b7a922609a999b2b3cdd899c560ed9dab6ef2b5bf416",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.pay",
+      "value": "Way to pay",
+      "reviewedSourceHash": "35e7f4328f6eafc9079a72a1c47b0d0064b6fc001b561098e0fc105e3e744bd1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.any",
+      "value": "Any",
+      "reviewedSourceHash": "16af34904af9324cd39ca5e9c481935ad791871febb482675d2aba58e6828fee",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.card",
+      "value": "Card",
+      "reviewedSourceHash": "324479fa00cf5a61ff9b1da32819b297bbc9342ee1e711232eb6bb390364b196",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.blik",
+      "value": "BLIK",
+      "reviewedSourceHash": "76e9451ffe33cacb19f4553c502ce1edd62b84a947135ad97e8f73621d53a736",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.cash",
+      "value": "Cash",
+      "reviewedSourceHash": "7887e899ee4118bda2494cc4f57047e21b37a8780512ac17e244f5876e3c2f8e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.apple",
+      "value": "Apple Pay",
+      "reviewedSourceHash": "8d0b52f2570013f301549a9d08607cd523dde81c9274cdd176ce5bde2984cc17",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.google",
+      "value": "Google Pay",
+      "reviewedSourceHash": "6123d2cd62b89d86303936ed67114235cef2be5b0278bf85426960c405372ed2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.pay.paypal",
+      "value": "PayPal",
+      "reviewedSourceHash": "900ec4275e1271970e8409422861db0dc925bf0414f9c8b0dfc6aaa91890e569",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.unconfirmed",
+      "value": "not confirmed officially",
+      "reviewedSourceHash": "309d81de03f8fedb64adf7d989f39b738f558a02e53bba4010e5872eb5c664c2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.bolt.note",
+      "value": "cash on delivery",
+      "reviewedSourceHash": "d7707498537a6c6890a6e097bd9d002dfc12f7271a4e3f5d5bd0e95358a7b966",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.note",
+      "value": "A method missing from a service means its official pages do not confirm it — not that it is refused.",
+      "reviewedSourceHash": "1fc49a25bdc35958abaa8bf2da8e49516364d5c15bd97cb67cee8bf5915a37f1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.city",
+      "value": "Paying around town",
+      "reviewedSourceHash": "f4d01953b776912eb62da8700fb173c663143311131e60cf54724f5482b9b6a9",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.cards.title",
+      "value": "Cards and cash",
+      "reviewedSourceHash": "d302d2ec7926f9107ea2b862716569b6c8bbcf7f8544598a4b55add04250fd20",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.cards.meta",
+      "value": "Visa, Mastercard, złoty",
+      "reviewedSourceHash": "157516f61144bd61c2ec90da37ea3a1f1c4368ab75102994a69f75b2345da7a7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.cards.text",
+      "value": "Contactless Visa and Mastercard are the main way to pay for delivery and in shops. Cash in złoty is accepted only where it is clearly marked. There is no official promise that cards or cash work everywhere: the accepted methods are shown at the terminal and at the till.",
+      "reviewedSourceHash": "4bb7216621277290afca546cbe6fd15831f752d763092968b1a778cbfdf85c6f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.title",
+      "value": "BLIK",
+      "reviewedSourceHash": "0508aa1cf69030ada8c9e7ce88223d4dabf29c2d9de0d77965c2055f914236d2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.meta",
+      "value": "Polish mobile payment",
+      "reviewedSourceHash": "694728fef3cddf7b76a8a76cff514139ae4d7ab1a14de270d6cd495ab1855e77",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.need",
+      "value": "You need an account at a participating Polish bank and the bank’s mobile app.",
+      "reviewedSourceHash": "3363b17ae73030fe5fc8faddc2051cc99858ceb021c98390b5e605f01425969d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.online.title",
+      "value": "Online",
+      "reviewedSourceHash": "6e8aba0162c0eafed5692e356f7f6977ae2f22d6d5aa70710b6662b84cb7ca7d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.online.text",
+      "value": "Enter the one-time six-digit code from the app and confirm.",
+      "reviewedSourceHash": "9e6089db4bbea8d855fbe46e8919af6519eab0cce103bb1bea849fbe220b9038",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.till.title",
+      "value": "At the till",
+      "reviewedSourceHash": "c8d6598f415c64ae94cbef0a1902270ca413fba868faf2f9e1a4da33538cbe51",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.till.text",
+      "value": "Pay contactless from the app, or type the same code on the terminal.",
+      "reviewedSourceHash": "726b45c044926007b7b2268fac1dfc80fcd2669fe63e38f2b723f0da51a123d7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.blik.more",
+      "value": "BLIK also sends money to a phone number and withdraws cash at an ATM without a card.",
+      "reviewedSourceHash": "90721d4d3566d45cc6d0c19a511cec8b1c68db6ab2741ad3e346523468b4cc1b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.title",
+      "value": "Gdańska Karta Turysty",
+      "reviewedSourceHash": "b2c4fa48c2cbee335a1251c3dee0eea3a7a96956aeeb5e21e77dbe969148108f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.lead",
+      "value": "A pass with free entries. Prices for November 2026.",
+      "reviewedSourceHash": "79bf056536437f0eb48cfa6c75b2ede55955a36119060684196761cb37f3f189",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.duration",
+      "value": "Valid for",
+      "reviewedSourceHash": "5e348627c2416eb5a626f6a457f465b9322f5a6a82a8aa1df3c24ca471a2533c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.hours",
+      "value": "${n} h",
+      "reviewedSourceHash": "6f42a2df147fa403b281d827a8c815d217b838ece0ef4a448a340ec9f8484570",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.odkrywca.entries",
+      "value": "13 free entries",
+      "reviewedSourceHash": "7c31fc5aea14b038dd483667164b8bb0a0252c498f0d608966255dfa948330e6",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.odkrywca.list",
+      "value": "Among them: the Main Town Hall, the Amber Museum, Hevelianum, the zoo and the National Maritime Museum.",
+      "reviewedSourceHash": "dc3ae5578dfbeadaf8ff1c707d1d3b8ffe729a0c2188b8a3b3226e608bd08dd8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.premium.entries",
+      "value": "23 free entries",
+      "reviewedSourceHash": "583dc9d73ea5231ea15e30be8d9285d7e8468bd60041c459c327a20a63c5c642",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.premium.list",
+      "value": "Everything in Odkrywca plus Artus Court, the Museum of the Second World War, the European Solidarity Centre, the Crane and more.",
+      "reviewedSourceHash": "216f1ddee674cde986a22ab1a7a5f3a3efcc85f6c49925a950931311d3addc6b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.smaki",
+      "value": "Smaki Gdańska Duet — a food pass for two, valid for 30 days.",
+      "reviewedSourceHash": "6369365be4179c35f782cbb71740ea200a672d398d1a6c08014ea21656f8edda",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.transport.title",
+      "value": "Add transport",
+      "reviewedSourceHash": "f146d3b7a48ad9d5a30e2ec1c6fab7c2d801c40c17c6cd025dce570fa57033ae",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.transport.meta",
+      "value": "Bilet Metropolitalny",
+      "reviewedSourceHash": "934671728bd789b27831051b9e5c1a82641fcba3191c99b8668f8a989da55533",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.transport.text",
+      "value": "Transport is bought on top of the pass: buses, trams, SKM and POLREGIO trains in the metropolitan area. The pass and the ticket can be activated on different days.",
+      "reviewedSourceHash": "0ab59472be761f0eb08a5d121f74fedff78b858f31d11b5460bacdd85def2806",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.freeHeading",
+      "value": "Free museum days without the card",
+      "reviewedSourceHash": "39e803c857004f837409f359d27e7c24606f8d80143913b9d43621b64d88064d",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.day",
+      "value": "Day of the week",
+      "reviewedSourceHash": "379b183e77b05e0eda787f7d7127c0e08ffd0862fa6a895b0c546cf42a69498a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.free.badge",
+      "value": "free",
+      "reviewedSourceHash": "cb871ef5de799be172906069b2d2f74bd4308ffbd29d3ef00884e451b910dd68",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.closed.badge",
+      "value": "closed",
+      "reviewedSourceHash": "3ce9da3cf0e7453ffb50b5e16b34b86f9ddf15f8c926f31468dca72e51c7b509",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.museum.gdanska",
+      "value": "Muzeum Gdańska",
+      "reviewedSourceHash": "4980db5a170744902f3ecced3f4090ad6f373fcd2c5ae8b5fae589f13e8231d9",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.museum.ww2",
+      "value": "Museum of the Second World War",
+      "reviewedSourceHash": "c40d554dea893e51ed68c7d629a4b8a1ebbb068bb08692f6bce8998b885a81e6",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.mon.gdanska",
+      "value": "Main Town Hall, Artus Court and Uphagen House 10:00 – 16:00, Amber Museum 10:00 – 18:00.",
+      "reviewedSourceHash": "343e78532c5df72e0513e1701389224d44b6e917279b933441aabad28e842df4",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.mon.ww2",
+      "value": "Usually closed on Mondays.",
+      "reviewedSourceHash": "f6ff5d3ef1450ffa93c6574594f7f1e3b4120bcabd72e052d1ae01b19f61f72f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.tue.ww2",
+      "value": "All exhibitions. The 0 zł ticket is issued only at the ticket desk on the day of the visit, no later than an hour before closing; free tickets cannot be booked online.",
+      "reviewedSourceHash": "67fccab96c8f861450c9b5f644a683c8355fc3090d2c6b512f8df6d0572a83f5",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.tue.gdanska",
+      "value": "The main branches are closed on Tuesdays.",
+      "reviewedSourceHash": "fa99c29c1bdffad44e0961af99d559268130f8753965b7a68cec7ec7b74c7c56",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.other",
+      "value": "These two museums have no regular free entry on this day.",
+      "reviewedSourceHash": "a167d3738cbe71c37e1d1f1df292a7aaba7d56a6a31b739c51bc4690223f3448",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.1",
+      "value": "Mon",
+      "reviewedSourceHash": "56238efc14c631ab394d5090a0ae28795be44622988b1ded44fab0e3639c6d70",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.2",
+      "value": "Tue",
+      "reviewedSourceHash": "2ceed1d728570890820c261f62ccfc970dc9479ceaf744bde76a4ac5f2c881c9",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.3",
+      "value": "Wed",
+      "reviewedSourceHash": "b3d53dca9a5809be46808477ef824afa7ecff5d38aa28467affa94ed190acd9e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.4",
+      "value": "Thu",
+      "reviewedSourceHash": "2b0270a1605b2d7a2d831a7fa505bb8f2bfd5a3977456fe37de1893135ce6bdb",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.5",
+      "value": "Fri",
+      "reviewedSourceHash": "341f3557756d4db558409c94c0bcf0730316e72e133f4e9d406bf59e21f27aba",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.6",
+      "value": "Sat",
+      "reviewedSourceHash": "9a9fe85c9eebd1e8dcd687a4d3e295f027346f1d89a14fd861b1a31e727d0bf8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.day.7",
+      "value": "Sun",
+      "reviewedSourceHash": "aa616bfb614100357af9df403e4200b87dde6ace42e37f84c343caaeb81c89d3",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.u.decimal",
+      "value": ".",
+      "reviewedSourceHash": "9adf5687a4609e5bb6cec922922840a2dee6ffd53deaef990965aaed125f1018",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.notice",
+      "value": "On a free day some temporary exhibitions may be closed, and on public and church holidays museums change their hours. Check each museum’s official page.",
+      "reviewedSourceHash": "6ee83fd1a7c3b316907c938a0c2f29b8eb27785bdee1da8f5b9dcd7e0951589f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.airportBuses",
+      "value": "Buses to and from the airport — airport.gdansk.pl",
+      "reviewedSourceHash": "331a6185ad8170919405627b22e1923e6477e2c70213cf00a5ecabc5d1907f4a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.airportTrains",
+      "value": "Trains to and from the airport — airport.gdansk.pl",
+      "reviewedSourceHash": "f5ece53b31f83af1f8e1a68a07f18460587d7ec2f93de2a7f07ab07c4018cd39",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.ztmSchedule",
+      "value": "ZTM Gdańsk timetables",
+      "reviewedSourceHash": "ddeab1782dac1ac1ff50001d16e49b9ab734f880a0c51aee148263ae4d78eaeb",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.ztmTickets",
+      "value": "ZTM Gdańsk tickets",
+      "reviewedSourceHash": "b645d89d00ec4090f90a98c0e9839d7c08b55fa62a7a4617ead8312b404aca56",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.skmSearch",
+      "value": "SKM connection search",
+      "reviewedSourceHash": "77a54c1011e4d174a448201692c2fd362a381bfbe730e8175730b1e583c38776",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.jakdojade",
+      "value": "Jakdojade — trip planner and tickets",
+      "reviewedSourceHash": "1aac5bbee01eb2f5e87e4a9bb55afd695ddcd0a8c25a5c9573d87e4fb51f4c4a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.mzkzg",
+      "value": "MZKZG metropolitan tickets",
+      "reviewedSourceHash": "59c511de27bdfc54c21c282e67ab5bacfeb10ce1ec070bbff19308b091d31796",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.visitGdanskMap",
+      "value": "Official map of central Gdańsk (PDF)",
+      "reviewedSourceHash": "ca807e7ff5f4f2c4d32d21923ecc50289de28bf31faec957439e28c6eb1c9e37",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.kartaTurysty",
+      "value": "Karta Turysty — packages and prices",
+      "reviewedSourceHash": "44e2300ecbce6d9dcd567a246c03078d5c07ad5c625d4c1976a463ad633f742a",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.muzeumGdanska",
+      "value": "Muzeum Gdańska — free entry",
+      "reviewedSourceHash": "3bee5ab4b298b927fd3111f3301a84977d8256bf800988e1e57deda93853ae70",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.muzeum1939",
+      "value": "Museum of the Second World War — visiting rules",
+      "reviewedSourceHash": "f48e0afc0a0512abc4a87d4a274a00b873f1b4d354ed02fcaa382e288a9adbc8",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.pysznePayment",
+      "value": "Payment in Pyszne.pl",
+      "reviewedSourceHash": "c8274603eb4f4a256c705a6735f2dae3afa311a96d18fc81043a4c9548a04761",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.blikHow",
+      "value": "How to use BLIK — blik.com",
+      "reviewedSourceHash": "22756a7fb58d4dafbeff6953f1f370fd31f304b69591d68ed5e416edfa255468",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+      }
+    },
+    {
+      "id": "native.aboutCity.city.motlawa",
+      "value": "Motława",
+      "reviewedSourceHash": "96b9a1cc981cc071188bed7116bdc884d4a52af4395e9e0dccb2da93d238d2b2",
+      "review": {
+        "outcome": "approved",
+        "note": "Уласнае імя ракі: тэкст супадае ва ўсіх мовах; перанесены з літарала ў каталог паводле гарда no-hardcoded-words (#252, 2026-11-12)."
+      }
     }
   ]
 }

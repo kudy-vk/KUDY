@@ -25,6 +25,8 @@ const runtimeToCanon = {
   colorBadgePaid: 'color.badge.paid',
   colorBadgeFree: 'color.badge.free',
   colorBadgeMixed: 'color.badge.mixed',
+  colorMedalPaper: 'color.medal.paper',
+  colorMedalInk: 'color.medal.ink',
   colorNoticeBg: 'color.notice.bg',
   colorNoticeBorder: 'color.notice.border',
   colorErrorBg: 'color.error.bg',

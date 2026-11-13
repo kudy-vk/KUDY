@@ -334,10 +334,11 @@ mascot-only (a11y-плашка `screens.md`).
     "color.badge.free":       { "value": "#e7f2ec", "use": "фон пазнакі free" },
     "color.badge.mixed":      { "value": "#ece7f8", "use": "фон пазнакі mixed" },
     "color.badge.lock":       { "value": "#eceff1", "use": "фон пазнакі замка" },
-    "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі прататыпа" },
-    "color.medal.paper":      { "value": "#fff6e0", "use": "дыск медальёна часткі карты (M4, M11; kit.css --medal-paper); светлая картаграфія DT-4 — аднолькавы ў абедзвюх тэмах" },
-    "color.medal.rim":        { "value": "#bd852c", "use": "кант і ўнутранае кальцо медальёна (M4, M11; kit.css --medal-rim)" },
-    "color.medal.ink":        { "value": "#4a3b2a", "use": "значок у медальёне (M4, M11; kit.css --medal-ink)" },
+    "color.medal.paper":      { "value": "#fff6e0", "use": "дыск медальёна часткі карты і пункта кола «Пра горад» (M4, M9, M11; kit.css --medal-paper); у цёмнай тэме — карткавае значэнне (M9, #252: у цёмнай тэме дыск цёмны)" },
+    "color.medal.rim":        { "value": "#bd852c", "use": "ручны пескава-залаты кант і ўнутранае кальцо медальёна, адны ў абедзвюх тэмах (светлая зона; M4, M11; kit.css --medal-rim)" },
+    "color.medal.ink":        { "value": "#4a3b2a", "use": "знак у медальёне і на пункце кола (M4, M9, M11; kit.css --medal-ink); у цёмнай тэме — тэмавы ink (M9, #252)" },
+    "color.medal.glow":       { "value": "#f8d580", "use": "бурштынавае свячэнне абранага медальёна і кольца выбранай кропкі на схеме, адно ў абедзвюх тэмах (светлая зона; M9, #252; kit.css --medal-glow)" },
+    "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі пратотыпа" },
     "color.engrave":          { "value": "#7a6248", "use": "штрых гравюрнай панарамы Гданьска на галоўным экране (M5, M11; kit.css --engrave)" },
     "color.panorama.ground":  { "value": "#faf7f2", "use": "заліўка мас панарамы (M5, M11; у цёмнай тэме — darkTheme.tokens)" },
     "font.family":            { "value": "system-ui, sans-serif", "use": "усё тэкставае; правы — раздзел 3" },
@@ -419,7 +420,9 @@ mascot-only (a11y-плашка `screens.md`).
       "color.warn": "#f09a80",
       "color.note": "#33301d",
       "color.engrave": "#c9b59b",
-      "color.panorama.ground": "#1e100c"
+      "color.panorama.ground": "#1e100c",
+      "color.medal.paper": "#3a231b",
+      "color.medal.ink": "#f4eadb"
     },
     "lightCartographyTokens": [
       "color.map",
@@ -430,9 +433,8 @@ mascot-only (a11y-плашка `screens.md`).
       "color.marker.available",
       "color.marker.pending",
       "color.marker.locked",
-      "color.medal.paper",
       "color.medal.rim",
-      "color.medal.ink"
+      "color.medal.glow"
     ],
     "lightMarkerLetterToken": "color.accent-ink",
     "splash": "light"
@@ -470,7 +472,6 @@ mascot-only (a11y-плашка `screens.md`).
     { "fg": "color.accent-ink", "bg": "color.marker.locked", "min": 4.5 },
     { "fg": "color.marker.playing", "bg": "color.map", "min": 3 },
     { "fg": "color.marker.played", "bg": "color.map", "min": 3 },
-    { "fg": "color.medal.ink", "bg": "color.medal.paper", "min": 3 },
     { "fg": "color.marker.available", "bg": "color.map", "min": 3 },
     { "fg": "color.marker.pending", "bg": "color.map", "min": 3 },
     { "fg": "color.marker.locked", "bg": "color.map", "min": 3 },
@@ -493,7 +494,8 @@ mascot-only (a11y-плашка `screens.md`).
     { "fg": "color.ink", "bg": "color.badge.lock", "min": 4.5 },
     { "fg": "color.person", "bg": "color.street", "min": 3 },
     { "fg": "color.warn", "bg": "color.paper", "min": 4.5 },
-    { "fg": "color.warn", "bg": "color.card", "min": 4.5 }
+    { "fg": "color.warn", "bg": "color.card", "min": 4.5 },
+    { "fg": "color.medal.ink", "bg": "color.medal.paper", "min": 4.5 }
   ],
   "supersession": {
     "--kudy-paper":      { "token": "color.paper" },
