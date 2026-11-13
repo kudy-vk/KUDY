@@ -12,9 +12,6 @@ registerIcons({
     ['path', { d: 'm21.854 2.147-10.94 10.939' }],
   ],
 });
-// A written review is short on purpose: less text, less chance of personal data.
-const REVIEW_MAX = 500;
-
 const FB = (key) => `native.feedback.${key}`;
 // The closed reason lists of controllers/useFeedbackController.ts.
 const REASONS = {
@@ -29,13 +26,8 @@ const STRING_IDS = [
   'native.chrome.back', 'native.chrome.loading',
 ];
 
-// New strings of this screen. The app has no records for them yet; these are
-// proposals that need a native-speaker review before they enter the contract.
-// The written review itself is new too: today the form sends only stars and
-// closed reasons, so the field needs a contract and privacy decision first.
+// Mockup-only hint: review translations before adding it to the app contract.
 const NEW = {
-  review: { be: 'Водгук (неабавязкова)', en: 'Review (optional)', uk: 'Відгук (необов’язково)', de: 'Rückmeldung (optional)', es: 'Opinión (opcional)', fr: 'Avis (facultatif)', cs: 'Recenze (nepovinné)', sv: 'Omdöme (valfritt)' },
-  noPersonal: { be: 'Не пішы асабістых даных', en: 'Do not write personal data', uk: 'Не пиши особистих даних', de: 'Bitte keine persönlichen Daten', es: 'No escribas datos personales', fr: 'N’écris pas de données personnelles', cs: 'Nepiš osobní údaje', sv: 'Skriv inga personuppgifter' },
   choose: { be: 'Каб адправіць, выберы ацэнку', en: 'Choose a rating to send', uk: 'Щоб надіслати, вибери оцінку', de: 'Wähle zum Senden eine Bewertung', es: 'Para enviar, elige una valoración', fr: 'Pour envoyer, choisis une note', cs: 'Pro odeslání vyber hodnocení', sv: 'Välj ett betyg för att skicka' },
 };
 
@@ -71,7 +63,6 @@ await mountBoard({
     info.setAttribute('aria-expanded', 'false');
     // Back leaves the form without saving, so it is also the way to skip it.
     const top = el('div', { className: 'topbar' }, iconButton('arrow-left', strings['native.chrome.back'], () => say(leave)), el('div', { className: 'title' }), info);
-    let review = '';
     const scroll = el('div', { className: 'fb-scroll scroll' });
     const foot = el('div', { className: 'fb-foot' });
     body.append(top, hint, scroll, foot);
@@ -123,17 +114,8 @@ await mountBoard({
         chips.append(chip);
       }
 
-      // A short free-text review with a reminder not to put personal data in it.
-      const field = keyed(el('textarea', { className: 'fb-review', rows: 3, maxLength: REVIEW_MAX, value: review, disabled: busy }), 'review');
-      field.setAttribute('aria-label', NEW.review[state.locale]);
-      field.placeholder = NEW.review[state.locale];
-      const counter = el('span', { textContent: `${review.length} / ${REVIEW_MAX}` });
-      field.addEventListener('input', () => { review = field.value; counter.textContent = `${review.length} / ${REVIEW_MAX}`; });
-      const note = el('div', { className: 'fb-write' }, field,
-        el('p', { className: 't-small fb-write-note' }, el('span', { textContent: NEW.noPersonal[state.locale] }), counter));
-
       scroll.replaceChildren(...[header, notice, el('div', {}, stars, ends),
-        el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips), note,
+        el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips),
         // A rating that already exists on the device can be deleted from here.
         conflict && keyed(button(t('deleteButton'), { iconName: 'trash', onPress: () => say('Ацэнка выдаляецца. Калі сеткі няма, выдаленне чакае яе і пра гэта напісана.') }), 'delete')].filter(Boolean));
 
