@@ -1,4 +1,4 @@
-// G06.05 (issue #280) — the big-text floor of the a11y plate (screens.md:
+// G06.05 (16_delivery_backlog.md — G06.05) — the big-text floor of the a11y plate (screens.md:
 // ≥ 1.2× the base size; the canon factor is font.big-text-factor 1.25).
 // React Native scales text with the OS font setting by default, and an
 // unchecked scale (2×+) breaks the fixed surfaces (the peek bar, the marker

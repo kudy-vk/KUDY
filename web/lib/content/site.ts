@@ -97,7 +97,7 @@ export interface LanguageFact {
 
 // Per-locale availability is shown by fact (09 §8): the row lists the locales
 // the index declares for text, and marks which of them actually have audio.
-// G21.45 (issue #669): the row is a user-visible surface too — it derives
+// G21.45 (G21.42-chinese-language.md — G21.45): the row is a user-visible surface too — it derives
 // through the same fact ∩ gate intersection as every advertised URL surface,
 // so a gate-closed code declared in the index never renders as a language
 // fact either (ADR G21.42 §11: everything that makes a locale visible is
@@ -256,7 +256,7 @@ export function routeTextLocales(root: string, routeId: string): Locale[] {
   return resolvedCatalogRoute(root, routeId).offer.availability.text_locales;
 }
 
-// G21.45 (issue #669): the content-locale allowlist (nine codes, the schema
+// G21.45 (G21.42-chinese-language.md — G21.45): the content-locale allowlist (nine codes, the schema
 // owner) is wider than the advertised route set — the G21.50 release gate
 // (web/lib/i18n) opens only codes the UI registry registers complete. The
 // published-text fact a URL surface derives from is the intersection: a

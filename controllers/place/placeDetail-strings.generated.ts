@@ -3,10 +3,10 @@
 //
 // Source of truth: contracts/ui-messages/source.json (the be base text) and
 // contracts/ui-messages/translations/<locale>.json (the reviewed translations).
-// G21.25 (issue #558): the catalogues are generated projections — edit the
+// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the place-detail words (G06.05 #280, AC4/AC5)
+// the place-detail words (G06.05 — 16_delivery_backlog.md, AC4/AC5)
 
 
 export const PLACE_DETAIL_STRINGS_DATA = {

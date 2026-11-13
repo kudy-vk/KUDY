@@ -1,4 +1,4 @@
-// G06.05 (issue #280) — the big-text cap (AC2): every user-facing Text
+// G06.05 (16_delivery_backlog.md — G06.05) — the big-text cap (AC2): every user-facing Text
 // renders through ScaledText with the canon big-text factor as the maximum
 // scaling multiplier — OS big text grows the words up to the a11y plate
 // (≥ 1.2×, the canon is 1.25) and never past it, so the fixed surfaces hold.

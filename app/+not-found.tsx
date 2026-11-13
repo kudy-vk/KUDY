@@ -39,7 +39,7 @@ export default function NotFound() {
   const screenStyles = useScreenStyles();
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const router = useRouter();
@@ -47,7 +47,7 @@ export default function NotFound() {
   // status bar and the notch with the native header off (AC4). A hook —
   // before any early returns.
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1): the chrome words in the display locale.
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the chrome words in the display locale.
   const strings = uiStrings(locale);
   return (
     <ScreenSurface

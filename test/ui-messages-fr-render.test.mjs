@@ -1,4 +1,4 @@
-// G21.12 (issue #546) — the French catalogue's locale-specific rendering
+// G21.12 (2026-10-03-single-source-translations.md — G21.12) — the French catalogue's locale-specific rendering
 // suite. The shipped-locale gate (tools/i18n/check-messages.mjs) proves the
 // fr set's completeness, review evidence and output freshness; this suite
 // proves the French words actually render through the production selectors:

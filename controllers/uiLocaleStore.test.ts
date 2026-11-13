@@ -1,4 +1,4 @@
-// G14.04.d (issue #305) — the UI-locale switch store: the closed be/en/uk
+// G14.04.d (16_delivery_backlog.md — G14.04.d) — the UI-locale switch store: the closed be/en/uk
 // vocabulary (an unknown value is a named error, the state never moves),
 // the listener notification the useSyncExternalStore hook rides, and the
 // optional durable write-through (the consent idiom's seam). The store
@@ -10,17 +10,17 @@ import assert from 'node:assert/strict';
 import { createUiLocaleStore, UiLocaleError } from './uiLocaleStore.ts';
 import { OPEN_UI_LOCALES } from '../contracts/ui-locales.ts';
 
-test('G14.04.d #305: the store starts on be, the first preference', () => {
+test('G14.04.d: the store starts on be, the first preference', () => {
   const store = createUiLocaleStore();
   assert.equal(store.current(), 'be');
 });
 
-test('G14.04.d #305: the store starts on the persisted choice when the port carries one', () => {
+test('G14.04.d: the store starts on the persisted choice when the port carries one', () => {
   const store = createUiLocaleStore({ read: () => 'uk', write: () => {} });
   assert.equal(store.current(), 'uk');
 });
 
-test('G14.04.d #305: set switches the value, notifies and writes through', () => {
+test('G14.04.d: set switches the value, notifies and writes through', () => {
   const written: string[] = [];
   const store = createUiLocaleStore({ read: () => null, write: (locale) => written.push(locale) });
   const events: string[] = [];
@@ -32,7 +32,7 @@ test('G14.04.d #305: set switches the value, notifies and writes through', () =>
   unsubscribe();
 });
 
-test('G14.04.d #305: an unknown value is a named error and moves nothing', () => {
+test('G14.04.d: an unknown value is a named error and moves nothing', () => {
   const written: string[] = [];
   const store = createUiLocaleStore({ read: () => null, write: (locale) => written.push(locale) });
   const events: string[] = [];
@@ -43,7 +43,7 @@ test('G14.04.d #305: an unknown value is a named error and moves nothing', () =>
   assert.deepEqual(events, []);
 });
 
-test('G14.04.d #305: setting the current value is a no-op — no event, no write', () => {
+test('G14.04.d: setting the current value is a no-op — no event, no write', () => {
   const written: string[] = [];
   const store = createUiLocaleStore({ read: () => null, write: (locale) => written.push(locale) });
   const events: string[] = [];
@@ -53,7 +53,7 @@ test('G14.04.d #305: setting the current value is a no-op — no event, no write
   assert.deepEqual(events, []);
 });
 
-test('G14.04.d #305: the listener sees the new value inside the notification', () => {
+test('G14.04.d: the listener sees the new value inside the notification', () => {
   const store = createUiLocaleStore();
   let seen: string | null = null;
   store.subscribe(() => {
@@ -103,23 +103,23 @@ test('G21.15 #549: after a failed write the next switch writes through again', (
   assert.equal(store.current(), 'en');
 });
 
-// G21.50 (issue #711, criterion 3): the switch vocabulary is the OPEN set,
+// G21.50 (G21.42-chinese-language.md — G21.50, criterion 3): the switch vocabulary is the OPEN set,
 // not the complete set. The injected open set is the tests' seam — with no
 // registered-but-closed code in the real registry yet, a two-code fixture
 // plays the gate. Removing the fallback or the open-set check turns these red.
-test('G21.50 #711: a stored registered-but-closed code falls back to be without a write or a throw', () => {
+test('G21.50: a stored registered-but-closed code falls back to be without a write or a throw', () => {
   const written: string[] = [];
   const store = createUiLocaleStore({ read: () => 'en', write: (locale) => written.push(locale) }, ['be', 'uk']);
   assert.equal(store.current(), 'be');
   assert.deepEqual(written, [], 'the stored row is not overwritten');
 });
 
-test('G21.50 #711: the stored code restores on a later read once the open set includes it', () => {
+test('G21.50: the stored code restores on a later read once the open set includes it', () => {
   const store = createUiLocaleStore({ read: () => 'en', write: () => {} }, ['be', 'en', 'uk']);
   assert.equal(store.current(), 'en');
 });
 
-test('G21.50 #711: setting a registered-but-closed code is ui-locale-closed and moves nothing', () => {
+test('G21.50: setting a registered-but-closed code is ui-locale-closed and moves nothing', () => {
   const written: string[] = [];
   const events: string[] = [];
   const store = createUiLocaleStore({ read: () => null, write: (locale) => written.push(locale) }, ['be']);
@@ -133,7 +133,7 @@ test('G21.50 #711: setting a registered-but-closed code is ui-locale-closed and 
   assert.deepEqual(events, []);
 });
 
-test('G21.50 #711: an unregistered code keeps ui-locale-unknown under the open set', () => {
+test('G21.50: an unregistered code keeps ui-locale-unknown under the open set', () => {
   const store = createUiLocaleStore(undefined, ['be']);
   assert.throws(
     () => store.set('ru'),
@@ -141,7 +141,7 @@ test('G21.50 #711: an unregistered code keeps ui-locale-unknown under the open s
   );
 });
 
-test('G21.50 #711: without an injection the open set is the registry fact', () => {
+test('G21.50: without an injection the open set is the registry fact', () => {
   const store = createUiLocaleStore();
   for (const code of OPEN_UI_LOCALES) {
     store.set(code);

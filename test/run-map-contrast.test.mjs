@@ -91,7 +91,7 @@ test('every marker fill keeps ≥3:1 against the canon map background (WCAG 1.4.
 });
 
 test('the peek bar progress strip stays identifiable in light and dark chrome (≥3:1 edge)', () => {
-  // G06.10.f / #436: inspect the single production style owner, and
+  // G06.10.f / docs/design/dark-theme.md: inspect the single production style owner, and
   // resolve both palettes instead of assuming static light tokens.
   const track = styleBlock(strip, 'components/walk-progress.tsx', 'track');
   const edge = tokenOf(track, 'borderColor');

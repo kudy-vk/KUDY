@@ -1,4 +1,4 @@
-// G21.10 (issue #544) — the German catalogue's locale-specific rendering
+// G21.10 (2026-10-03-single-source-translations.md — G21.10) — the German catalogue's locale-specific rendering
 // suite. The shipped-locale gate (tools/i18n/check-messages.mjs) proves the
 // de set's completeness, review evidence and output freshness; this suite
 // proves the German words actually render through the production selectors:

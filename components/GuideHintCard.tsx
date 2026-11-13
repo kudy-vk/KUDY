@@ -12,7 +12,7 @@ import { useSyncExternalStore } from "react";
 import { StyleSheet, View } from "react-native";
 
 // G21.09 (issue #542): the hint card's message shapes live in the shared
-// pure contract zone. G21.25 (issue #558): the words are the generated
+// pure contract zone. G21.25 (2026-10-03-single-source-translations.md — G21.25): the words are the generated
 // projection of the canonical records plus the reviewed translations —
 // the base text never lives in this component.
 import type { GuideHintStrings } from "../contracts/ui-message-types";
@@ -26,10 +26,10 @@ import type { NearbyHintBinding, NearbyHintState } from "../controllers/useNearb
 
 export function guideHintStrings(locale: string): GuideHintStrings {
   // The words are the generated projection of the canonical records plus the
-  // reviewed translations (G21.25, issue #558); uk keeps the documented be
+  // reviewed translations (G21.25 — 2026-10-03-single-source-translations.md); uk keeps the documented be
   // fallback (uk-release-scope §6.4) until its words are authored (G21.19),
-  // de renders its own catalogue (G21.10, issue #544); es too (G21.11, issue
-  // #545); fr too (G21.12, issue #546).
+  // de renders its own catalogue (G21.10 — 2026-10-03-single-source-translations.md); es too (G21.11,
+  // same record); fr too (G21.12, same record).
   return locale === "zh" ? GUIDE_HINT_STRINGS.zh : locale === "sv" ? GUIDE_HINT_STRINGS.sv : locale === "cs" ? GUIDE_HINT_STRINGS.cs : locale === "es" ? GUIDE_HINT_STRINGS.es : locale === "fr" ? GUIDE_HINT_STRINGS.fr : locale === "en" ? GUIDE_HINT_STRINGS.en : locale === "de" ? GUIDE_HINT_STRINGS.de : GUIDE_HINT_STRINGS.be;
 }
 

@@ -628,7 +628,7 @@ test('openDatabase: reopening a store already at the latest version is a no-op',
   assert.ok(getSession(driver, START.sessionId));
 });
 
-// G22.06 (issue #611, spec E6) — the bounded completed-history page read: the
+// G22.06 (2026-10-04-bounded-work.md — G22.06, spec E6) — the bounded completed-history page read: the
 // keyset cursor, the live walk beside the pages, and the in-place index
 // migration. Measurements on synthetic sessions are labeled as measurements,
 // not user-frequency claims.

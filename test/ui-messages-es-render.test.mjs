@@ -1,4 +1,4 @@
-// G21.11 (issue #545) — the Spanish catalogue's locale-specific rendering
+// G21.11 (2026-10-03-single-source-translations.md — G21.11) — the Spanish catalogue's locale-specific rendering
 // suite. The shipped-locale gate (tools/i18n/check-messages.mjs) proves the
 // es set's completeness, review evidence and output freshness; this suite
 // proves the Spanish words through the production selectors themselves: the

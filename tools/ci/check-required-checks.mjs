@@ -109,7 +109,7 @@ if (!/run:\s*npm run arch:check\s*$/m.test(text)) {
 }
 
 // G20.17 revert guard — the portable path-boundary guards must run on Windows
-// (A26-08, issue #488): losing the windows-latest job would drop the main
+// (A26-08 — G20.00-review.md — G20.17): losing the windows-latest job would drop the main
 // development host from CI again. The portable subset is exactly the two
 // dependency-free suites; the symlink-privilege security cases stay mandatory
 // on the Linux tests job and are guarded by npm test there.

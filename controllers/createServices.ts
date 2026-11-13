@@ -167,7 +167,7 @@ export interface ServicePorts {
   // service is not constructed and the surfaces render their named state.
   readonly discoverySnapshot?: DiscoverySnapshotStore;
   readonly discoveryAnalytics?: DiscoveryAnalyticsPort;
-  // G14.04.d (issue #305) — the optional durable seam of the UI-locale
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the optional durable seam of the UI-locale
   // switch: reads the stored choice at composition, writes every switch.
   // Absent (the device db adapter is TR-10) the choice lives for the
   // session; the `settings` row joins with the adapter (the consent idiom).
@@ -201,11 +201,11 @@ export interface ServicePorts {
 
 export interface Services {
   readonly dispose: () => void;
-  // G06.05 (issue #280): the display locale the string catalogs render in —
-  // G14.04.d (issue #305) reads it through the ui-locale store below: the
+  // G06.05 (16_delivery_backlog.md — G06.05): the display locale the string catalogs render in —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) reads it through the ui-locale store below: the
   // value the switch holds, changing without a services rebuild.
   readonly locale: string;
-  // G14.04.d (issue #305) — the UI-locale switch (the L02 selection): the
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the UI-locale switch (the L02 selection): the
   // My KUDY row writes be/en/uk through it, the screens subscribe.
   readonly uiLocale: UiLocaleSwitch;
   readonly contentRepo:
@@ -355,7 +355,7 @@ export function createServices(ports: ServicePorts): Services {
   // content wave lands — G14.04.c/f). One preference value for the catalog
   // service, the preview controller and the moment facts reader.
   const localePreference: readonly string[] = ['be', 'en'];
-  // G14.04.d (issue #305) — the UI-locale switch (the L02 selection G06.05
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the UI-locale switch (the L02 selection G06.05
   // deferred here): the chrome words' display locale, switchable in My KUDY
   // without a restart. The persistence port is optional — absent (the app
   // build today, the device db adapter is TR-10) the choice lives for the
@@ -665,7 +665,7 @@ export function createServices(ports: ServicePorts): Services {
     get locale() {
       return uiLocale.current();
     },
-    // G14.04.d (issue #305) — the switch itself: the My KUDY row writes it,
+    // G14.04.d (16_delivery_backlog.md — G14.04.d) — the switch itself: the My KUDY row writes it,
     // the screens subscribe through useUiLocale.
     uiLocale,
     contentRepo: packageStore && {

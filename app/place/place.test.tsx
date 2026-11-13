@@ -298,7 +298,7 @@ describe("Place detail surface (G07.02)", () => {
     expect(audioPort.commands).toEqual([`play 1:${MOMENT_PATH}`]);
   });
 
-  // UX 01 (issue #347): the moment list scrolls — the fifth teaser renders
+  // UX 01: the moment list scrolls — the fifth teaser renders
   // inside the detail's ScrollView instead of being cut by the fold.
   // Removing the ScrollView drops the scroll testID and fails this
   // (implementation-rules 1).

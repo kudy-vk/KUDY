@@ -64,7 +64,7 @@ function SurfaceLink({ href, label, testID }: { href: string; label: string; tes
 export default function Explore() {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const controller = useCatalogController(services.catalog?.controller);
@@ -72,7 +72,7 @@ export default function Explore() {
   // the status bar and the notch — the top safe-area inset is the screen's
   // own (AC4).
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1): the shared words in the display locale; the
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the shared words in the display locale; the
   // failed catalog load gets its named retry (AC4).
   const strings = uiStrings(locale);
   return (

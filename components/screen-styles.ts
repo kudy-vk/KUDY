@@ -48,7 +48,7 @@ export const screenStyles = StyleSheet.create({
   },
 });
 
-// #436 — preserve the existing light screenStyles export and its typography
+// docs/design/dark-theme.md — preserve the existing light screenStyles export and its typography
 // contract; detail screens select a dark equivalent at render time.
 const { displayTitle } = screenStyles;
 const darkScreenStyles = StyleSheet.create({

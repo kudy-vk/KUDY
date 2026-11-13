@@ -1,11 +1,11 @@
-// UX 01 (issue #347) — the KUDY surface render suite (the display name since
+// UX 01 — the KUDY surface render suite (the display name since
 // issue #426): a finished-run
 // history of ten sessions renders inside the surface's FlatList — the
 // list is reachable by scroll, never cut by the fold. The rows come from a
 // fake session-history port: the screen renders what the durable zone keeps
 // and invents nothing (the G06.04 controller suite covers the states; this
 // suite covers only the scroll surface, implementation-rules 1 — removing
-// the FlatList drops the testID and fails). G22.06 (issue #611): the port
+// the FlatList drops the testID and fails). G22.06 (2026-10-04-bounded-work.md — G22.06): the port
 // serves pages, and the list windows the loaded rows instead of mounting the
 // whole page at once.
 import { describe, expect, test } from "@jest/globals";
@@ -89,7 +89,7 @@ describe("KUDY surface (UX 01)", () => {
   });
 });
 
-// G22.06 (issue #611): the paged history surface — the FlatList windows the
+// G22.06 (2026-10-04-bounded-work.md — G22.06): the paged history surface — the FlatList windows the
 // loaded page (the visible rows mount, never the whole page at once) and the
 // load-more walks the store's cursor through the real screen path.
 describe("KUDY paged history (G22.06)", () => {
@@ -143,7 +143,7 @@ describe("KUDY paged history (G22.06)", () => {
   });
 });
 
-// UX 05 (issue #351): the rows show the catalog's guide title when the
+// UX 05: the rows show the catalog's guide title when the
 // catalog names the route; a route it does not name keeps the raw id — the
 // durable zone's own fact. Removing the lookup (or the fallback) fails one
 // of the two assertions.
@@ -178,7 +178,7 @@ describe("KUDY loading indicator (UX 07)", () => {
   });
 });
 
-// G06.05 (issue #280, AC4): a failed history read is not a dead end — the
+// G06.05 (16_delivery_backlog.md — G06.05, AC4): a failed history read is not a dead end — the
 // named retry re-runs the controller's refresh, and a recovered read renders
 // the rows (implementation-rules 1: removing the retry turns this red).
 test("G06.05: the unavailable history offers the named retry and recovers", async () => {
@@ -216,7 +216,7 @@ describe("KUDY paper grain (G06.10.e)", () => {
   });
 });
 
-// G14.04.d (issue #305, AC3): the language row — the UI-locale switch the
+// G14.04.d (16_delivery_backlog.md — G14.04.d, AC3): the language row — the UI-locale switch the
 // surface offers (uk-release-scope §4). Pressing uk re-renders the chrome
 // words in place: the same mounted surface keeps its history read count (a
 // restart would re-run the boot read), the section header changes from the
@@ -250,12 +250,12 @@ describe("KUDY language row (G14.04.d)", () => {
     expect(screen.getByText("Беларуская")).toBeTruthy();
     expect(screen.getByText("English")).toBeTruthy();
     expect(screen.getByText("Українська")).toBeTruthy();
-    // G21.10 (issue #544): the de catalogue landed, the picker derives the
+    // G21.10 (2026-10-03-single-source-translations.md — G21.10): the de catalogue landed, the picker derives the
     // fourth chip from the registry's complete set.
     expect(screen.getByText("Deutsch")).toBeTruthy();
-    // G21.11 (issue #545): the es catalogue lands, the picker derives the
-    // fifth chip the same way; G21.12 (issue #546) adds the sixth, Français;
-    // G21.13 (issue #547) adds the seventh, Čeština; G21.14 (issue #548)
+    // G21.11 (2026-10-03-single-source-translations.md — G21.11): the es catalogue lands, the picker derives the
+    // fifth chip the same way; G21.12 (2026-10-03-single-source-translations.md — G21.12) adds the sixth, Français;
+    // G21.13 (2026-10-03-single-source-translations.md — G21.13) adds the seventh, Čeština; G21.14 (2026-10-03-single-source-translations.md — G21.14)
     // completes the set with the eighth, Svenska.
     expect(screen.getByText("Español")).toBeTruthy();
     expect(screen.getByText("Français")).toBeTruthy();
@@ -272,7 +272,7 @@ describe("KUDY language row (G14.04.d)", () => {
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
   });
 
-  test("G21.10 (issue #544): picking de re-renders the honest-unavailable line in German", async () => {
+  test("G21.10 (2026-10-03-single-source-translations.md — G21.10): picking de re-renders the honest-unavailable line in German", async () => {
     // No history port behind the surface: the always-present chrome word
     // carries the language probe (the three-locale test's idiom), German
     // here. The no-restart property is proven by the uk sibling above —
@@ -287,7 +287,7 @@ describe("KUDY language row (G14.04.d)", () => {
     expect(screen.getByTestId("btn-ui-locale-de").props.accessibilityState).toEqual({ selected: true });
   });
 
-  test("G21.11 (issue #545): the es switch round-trips through the same store", async () => {
+  test("G21.11 (2026-10-03-single-source-translations.md — G21.11): the es switch round-trips through the same store", async () => {
     // The Spanish merge point's own proof, asserted from the store outward:
     // pick es, the current() moves, the Spanish chrome word renders, and the
     // selector marks the es chip. The no-restart property needs no second
@@ -302,7 +302,7 @@ describe("KUDY language row (G14.04.d)", () => {
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
   });
 
-  test("G21.12 (issue #546): picking fr re-renders the honest-unavailable line in French", async () => {
+  test("G21.12 (2026-10-03-single-source-translations.md — G21.12): picking fr re-renders the honest-unavailable line in French", async () => {
     const services = createServices({});
     renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
@@ -311,7 +311,7 @@ describe("KUDY language row (G14.04.d)", () => {
     expect(screen.getByTestId("btn-ui-locale-fr").props.accessibilityState).toEqual({ selected: true });
   });
 
-  test("G21.13 (issue #547): picking cs re-renders the honest-unavailable line in Czech", async () => {
+  test("G21.13 (2026-10-03-single-source-translations.md — G21.13): picking cs re-renders the honest-unavailable line in Czech", async () => {
     const services = createServices({});
     renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
@@ -322,7 +322,7 @@ describe("KUDY language row (G14.04.d)", () => {
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
   });
 
-  test("G21.14 (issue #548): picking sv completes the row — the honest-unavailable line renders in Swedish", async () => {
+  test("G21.14 (2026-10-03-single-source-translations.md — G21.14): picking sv completes the row — the honest-unavailable line renders in Swedish", async () => {
     const services = createServices({});
     renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
@@ -338,7 +338,7 @@ describe("KUDY language row (G14.04.d)", () => {
   // picks), the honest-unavailable word re-renders through the production
   // strings getter, and each chip carries the selected state. The row's wrap
   // layout keeps every chip reachable at phone width and the scaled font; the
-  // scaled words ride ScaledText's canon cap (its own suite). G21.46 (#670):
+  // scaled words ride ScaledText's canon cap (its own suite). G21.46 (G21.42-chinese-language.md — G21.46):
   // the row advertises the OPEN subset — zh is complete but closed, so the
   // walk stays at the eight open codes (its own suite carries the zh pick).
   test("G21.15 (issue #549): the picker walks every advertised catalogue on one mounted surface", async () => {
@@ -356,7 +356,7 @@ describe("KUDY language row (G14.04.d)", () => {
         selected: true,
       });
     }
-    // G21.46 (#670): zh is registered complete and still closed — the row
+    // G21.46 (G21.42-chinese-language.md — G21.46): zh is registered complete and still closed — the row
     // offers the open eight, and the ninth waits for the release flag.
     expect([...COMPLETE_UI_LOCALES]).toContain("zh");
     expect(screen.queryByTestId("btn-ui-locale-zh")).toBeNull();
@@ -396,7 +396,7 @@ describe("KUDY own ratings (G16.03)", () => {
     expect(screen.getByTestId("my-rating-0")).toBeTruthy();
     expect(screen.getByTestId("my-rating-state-0").props.children).toBe(feedbackStrings("be").stateSent);
     // The row's facts line keeps the bound identity in the canon order — the
-    // content locale, then the pinned version (issue #598).
+    // content locale, then the pinned version.
     const be = feedbackStrings("be");
     expect(screen.getByText(`${be.ratingOf(4)} · ${be.targetLine("be", "1")}`)).toBeTruthy();
     fireEvent.press(screen.getByTestId("btn-rating-edit-0"));

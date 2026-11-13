@@ -379,8 +379,8 @@ function projectGuideOffers(
   return offers;
 }
 
-// The place titles of the discovery index's place offers (UX 05, issue
-// #351): place_id → the localized title. The same dedup discipline as the
+// The place titles of the discovery index's place offers (UX 05):
+// place_id → the localized title. The same dedup discipline as the
 // Nearby list (21 §4 rule 6): offers ordered by the canon comparator, the
 // sorted-first offer of a duplicated place ref wins. An offer without a
 // title contributes no entry — the preview hides the place line rather than
@@ -692,7 +692,7 @@ export async function loadPreview(
   // state, never a fabricated preview (11 §16.1: no invented cards).
   if (!entry) return { kind: 'not-published' };
   // One index read serves both the route's offer and the stop rows' place
-  // titles (UX 05, issue #351) — no second fetch path. A null raw index
+  // titles (UX 05) — no second fetch path. A null raw index
   // (absent pointer, failed pin) degrades both: the route-only card and the
   // hidden place lines — the raw place_id never renders.
   let raw: RawIndex | null = null;

@@ -1,4 +1,4 @@
-// #436 — reverting a dark override or root appearance wiring turns this red.
+// docs/design/dark-theme.md — reverting a dark override or root appearance wiring turns this red.
 // This is a contract guard; native visual/device acceptance is separate.
 import test from 'node:test';
 import assert from 'node:assert/strict';

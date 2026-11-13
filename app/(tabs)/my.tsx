@@ -5,14 +5,14 @@
 // захоўвае лакальную гісторыю сесій»). The rows render the durable zone's
 // own facts — state,
 // dates, heard count — plus the guide's catalog title when the catalog
-// names the route (UX 05, issue #351); without it the row falls back to the
+// names the route (UX 05); without it the row falls back to the
 // raw id, and no title is ever invented. Without the history member (the
 // device db adapter is still to land) it renders its honest unavailable
 // state. The read re-runs on focus: a walk started elsewhere is on the list
 // when the surface returns.
 import { useCallback } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
-// G22.06 (issue #611): the history is a FlatList — only the visible window of
+// G22.06 (2026-10-04-bounded-work.md — G22.06): the history is a FlatList — only the visible window of
 // the completed rows mounts, never the whole loaded history at once.
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -31,7 +31,7 @@ import {
 import { useStoreState } from "../../controllers/useControllerStore";
 // G21.09 (issue #542): the picker derives its options and labels from the
 // one locale registry — the registered complete catalogues only.
-// G21.50 (issue #711, criterion 2): the chips advertise the OPEN subset — a
+// G21.50 (G21.42-chinese-language.md — G21.50, criterion 2): the chips advertise the OPEN subset — a
 // registered-but-closed code is omitted, not styled or disabled.
 import {
   OPEN_UI_LOCALES,
@@ -104,7 +104,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     color: palette.colorAccent,
     fontSize: palette.fontBaseSize,
   },
-  // G14.04.d (issue #305): the language row — three self-named chips in one
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the language row — three self-named chips in one
   // calm line; the selected chip carries the accent border and ink, the
   // others stay muted.
   localeRow: {
@@ -131,7 +131,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     color: palette.colorAccent,
     fontWeight: palette.fontWeightStrong,
   },
-  // G22.06 (issue #611): the FlatList owns the scroll — it fills the surface
+  // G22.06 (2026-10-04-bounded-work.md — G22.06): the FlatList owns the scroll — it fills the surface
   // under the fixed back button.
   list: {
     flex: 1,
@@ -140,7 +140,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
 const lightStyles = createStyles(tokens);
 const darkStyles = createStyles(darkTokens);
 
-// The local calendar day of a durable timestamp (UX 05, issue #351): the
+// The local calendar day of a durable timestamp (UX 05): the
 // day the walk happened in the user's zone. The earlier deterministic UTC
 // day was a conscious decision, changed consciously here together with its
 // test — a UTC day can disagree with the day the person experienced.
@@ -153,7 +153,7 @@ const localDay = (at: number): string => {
 export default function My() {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   // The store handle is stable; the state object is not — the focus refresh
@@ -161,7 +161,7 @@ export default function My() {
   // own result would loop forever).
   const historyStore = services.history?.controller;
   const controller = useMyKudy(historyStore);
-  // UX 05 (issue #351): the catalog's ready projection names the routes —
+  // UX 05: the catalog's ready projection names the routes —
   // the same subscription idiom as the history store (19 §2.2), one lookup
   // at render time, no second catalog read. The store's state carries the
   // surface beside its refresh bookkeeping; the rows render the surface.
@@ -181,12 +181,12 @@ export default function My() {
     }, [historyStore, feedbackController]),
   );
   // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1): the surface's words come from the shared
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the surface's words come from the shared
   // catalog in the display locale.
   const strings = uiStrings(locale);
-  // G22.06 (issue #611): the ready state drives the paged list — the data is
+  // G22.06 (2026-10-04-bounded-work.md — G22.06): the ready state drives the paged list — the data is
   // the loaded completed summaries, the load-more walks the store's cursor.
   const ready = controller !== null && controller.status === "ready" ? controller : null;
   const guideTitle = (routeId: string): string => catalogGuideTitle(catalog, routeId);
@@ -207,7 +207,7 @@ export default function My() {
       {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the surface's one back element (AC2), fixed
           above the scrolling history so it stays reachable. */}
       <BackButton label={strings.back} testID="btn-my-back" />
-      {/* UX 01 (issue #347) + G22.06 (issue #611): the history list scrolls
+      {/* UX 01 + G22.06 (2026-10-04-bounded-work.md — G22.06): the history list scrolls
           and windows — the FlatList mounts the visible rows of the loaded
           pages, the header carries the title, the language row, the ratings
           and the live walk. */}
@@ -226,7 +226,7 @@ export default function My() {
         ListHeaderComponent={
           <>
             <ScaledText style={styles.title}>{strings.myKudy}</ScaledText>
-            {/* G14.04.d (issue #305): the language row (uk-release-scope §4 —
+            {/* G14.04.d (16_delivery_backlog.md — G14.04.d): the language row (uk-release-scope §4 —
                 «Мова прапануецца ў My KUDY») — the one UI-locale switch of the
                 app. The options carry their own native names from the catalog;
                 the chosen one is announced by the selected state, no invented
@@ -342,7 +342,7 @@ function SessionLocaleLine({ row }: { row: { sessionId: string; locale: string }
   );
 }
 
-// UX 05 (issue #351): the title comes verbatim from the catalog's ready
+// UX 05: the title comes verbatim from the catalog's ready
 // projection (the last valid cache of an offline catalog counts); no
 // catalog, or a route it does not name — the row falls back to the raw id,
 // the one fact the durable zone keeps. Module-level so the own-ratings rows
@@ -359,7 +359,7 @@ function catalogGuideTitle(catalog: CatalogSurfaceState | null, routeId: string)
 // stable empty array, never a fresh one per render.
 const NO_ROWS: SessionHistorySummary[] = [];
 
-// G22.06 (issue #611): the live walk's row — the durable zone's own facts
+// G22.06 (2026-10-04-bounded-work.md — G22.06): the live walk's row — the durable zone's own facts
 // (state, day, heard count) plus the catalog title when it names the route.
 function LiveRow({
   row,
@@ -386,7 +386,7 @@ function LiveRow({
   );
 }
 
-// G22.06 (issue #611): a completed history row renders the page summary —
+// G22.06 (2026-10-04-bounded-work.md — G22.06): a completed history row renders the page summary —
 // the same facts the summary projection carries, the heard count derived in
 // the store, never another full-history read inside the row.
 function HistoryRow({
@@ -478,7 +478,7 @@ function OwnRatings({
   );
 }
 
-// G14.04.d (issue #305): the My KUDY language row — the options render their
+// G14.04.d (16_delivery_backlog.md — G14.04.d): the My KUDY language row — the options render their
 // own native names (the same self-name words in every catalog, a language is
 // never named through a translation) and the pick writes the ui-locale store.
 // The selected option rides accessibilityState, the word stays the label.

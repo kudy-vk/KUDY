@@ -1,4 +1,4 @@
-// #436: render the production screens under a dark system scheme. These
+// docs/design/dark-theme.md: render the production screens under a dark system scheme. These
 // assertions fail if a surface reverts to light-only card or frame styles.
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { renderRouter, screen, within } from "expo-router/testing-library";

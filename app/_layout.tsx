@@ -35,7 +35,7 @@ export function useServices(): Services {
   return services;
 }
 
-// G14.04.d (issue #305) — the display locale the words read per render: the
+// G14.04.d (16_delivery_backlog.md — G14.04.d) — the display locale the words read per render: the
 // useSyncExternalStore idiom of the hint mount, over the ui-locale store the
 // My KUDY row writes. Subscribing here is what makes the switch restart-free
 // — a screen showing uk words re-renders in place when the row fires, the
@@ -46,7 +46,7 @@ export function useUiLocale(): string {
 }
 
 export default function RootLayout() {
-  // #436: repaint native chrome on an OS theme change without rebuilding
+  // (docs/design/dark-theme.md): repaint native chrome on an OS theme change without rebuilding
   // services, Run, audio or location ownership.
   const theme = useThemeScheme();
   // G20.20 (issue #491): the ONE production service set comes from the
@@ -69,7 +69,7 @@ export default function RootLayout() {
   useAppFonts();
   return (
     <ServicesContext.Provider value={services}>
-      {/* #428/#436: one root status bar, dark glyphs on light chrome and
+      {/* docs/design/dark-theme.md — Статус-бар: one root status bar, dark glyphs on light chrome and
           light glyphs on dark chrome. The accepted light splash is separate. */}
       <StatusBar style={statusBarStyle(theme)} />
       {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the native header is off — it printed raw route

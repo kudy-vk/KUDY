@@ -91,7 +91,7 @@ export type RunPinnedPackage =
       // inspected's) — read beside the map facts; a damaged stops.json
       // never blocks the walk, the card renders its pending word.
       stories: ReadonlyArray<RunStoryFact>;
-      // G06.05 (issue #280, AC3): the extended layer's story facts when the
+      // G06.05 (16_delivery_backlog.md — G06.05, AC3): the extended layer's story facts when the
       // pin carries the tier — the transcript switch's second source. Empty
       // when the tier is absent or its stops.json is damaged (the same
       // never-blocks rule as the base layer).
@@ -115,14 +115,14 @@ export type RunSurfaceState =
       // The pinned layer's story facts — the panel card's transcript source
       // (11 §3: the transcript is inspected's).
       stories: ReadonlyArray<RunStoryFact>;
-      // G06.05 (issue #280, AC3): the extended layer's story facts when the
+      // G06.05 (16_delivery_backlog.md — G06.05, AC3): the extended layer's story facts when the
       // pin carries the tier.
       storiesExtended: ReadonlyArray<RunStoryFact>;
       // The audio's computed physical state (09 §6.3), read through the
       // session's own service — the strip's progress line reads it per
       // render; the surface keeps no second copy.
       playback: () => PlaybackState;
-      // G06.05 (issue #280, AC4): the location service's live status — the
+      // G06.05 (16_delivery_backlog.md — G06.05, AC4): the location service's live status — the
       // denied/stalled banners of 11 §7 read it per render; the observer
       // below also refreshes the screen when only location state changes.
       locationStatus: () => LocationStatus;
