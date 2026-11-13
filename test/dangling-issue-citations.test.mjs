@@ -29,9 +29,9 @@
 // G21.25–G21.27), G21.42-chinese-language.md (G21.42–G21.50),
 // docs/design/dark-theme.md (the status bar and the dark theme),
 // android-play-readiness/README.md (APR-05), 2026-10-04-bounded-work.md
-// (G22.06) and the dated records whose dead references were de-hashed in
-// place. Carriers are the generator notes plus hand-written comments and
-// docs; generated catalogues follow the generator.
+// (G22.06), review-must-flag.md (598) and the dated records whose dead
+// references were de-hashed in place. Carriers are the generator notes plus
+// hand-written comments and docs; generated catalogues follow the generator.
 // The guard file itself stays scannable: it never spells the dead tokens
 // literally — fixtures build them by concatenation, and the regex is assembled
 // from the number list — otherwise a working scan would fail on this very file.
