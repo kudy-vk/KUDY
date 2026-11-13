@@ -42,7 +42,7 @@ function targetIllustration(kind) {
   const route = isGuide ? svg('path', { class: 'fb-cover-route', d: 'M18 63 L48 49 L82 24' }) : null;
   const dots = points.map(([cx, cy]) => svg('circle', { class: 'fb-cover-pin', cx, cy, r: isGuide ? 5 : 7 }));
   const cover = el('span', { className: 'fb-cover' },
-    svg('svg', { viewBox: '0 0 100 84', 'aria-hidden': 'true' }, streets, route, ...dots));
+    svg('svg', { viewBox: '0 0 100 84', 'aria-hidden': 'true' }, streets, ...(route ? [route] : []), ...dots));
   cover.setAttribute('aria-hidden', 'true');
   return cover;
 }
