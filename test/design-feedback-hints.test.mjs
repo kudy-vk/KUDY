@@ -71,5 +71,8 @@ test('mockup wires neutral stars, friendly copy and labelled Send; no app change
   assert.match(source, /w\('moreIdeas'\)/);
   assert.match(source, /button\(w\('sendReview'\)/);
   assert.match(source, /w\('reviewPlaceholder'\)/);
+  assert.match(source, /w\('intro'\)/);
+  assert.match(source, /be: 'Як прайшло\?'/);
+  assert.doesNotMatch(source, /introGuide|introPlace/);
   assert.doesNotMatch(source, /fab\('send'/);
 });
