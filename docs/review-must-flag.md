@@ -82,7 +82,7 @@
   (б) невядомая UI-мова праз кампазіцыйны корань дае fallback-словы be
   (feedbackStrings), не сыравы стан. Калі facts-радок пачне чытаць з
   UI-лакалі або fallback знікне — тэст павінен упасці.
-  Выпраўлена: app/feedback.test.tsx — issue #598.
+  Выпраўлена: app/feedback.test.tsx — issue 598 (архіўны рэпе).
 
 - key: canon-yaml-not-amended — калі строгая схема (strictObject) кампаніі
   прымае ключ, якога няма ў кананічным YAML-блоку «Кампанія» ў docs/24,

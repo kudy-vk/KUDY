@@ -230,7 +230,7 @@ export default function RoutePreview() {
   const { id, from } = useLocalSearchParams<{ id: string; from?: string }>();
   const router = useRouter();
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const routeId = typeof id === "string" && id.length > 0 ? id : "";
@@ -251,14 +251,14 @@ export default function RoutePreview() {
   }, [controller, from]);
 
   // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the
   // navigation bar. Keep the hook before the early returns.
   const insets = useSafeAreaInsets();
   const frameStyle = [screenStyles.screen, {
     paddingTop: insets.top + tokens.spaceL,
     paddingBottom: insets.bottom + tokens.spaceL,
   }];
-  // G06.05 (issue #280, AC1): the surface and the button's words in the
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the surface and the button's words in the
   // display locale (the button's codes live in the controller).
   const strings = uiStrings(locale);
   const pstrings = previewStrings(locale);
@@ -322,7 +322,7 @@ export default function RoutePreview() {
       {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back sits in the frame above the scroll —
           reachable while the stops list is scrolled (AC2). */}
       <BackButton label={strings.back} testID="btn-preview-back" />
-      {/* UX 01 (issue #347): the surface scrolls — every stop and the main
+      {/* UX 01: the surface scrolls — every stop and the main
           button stay reachable beyond the fold; the §4.1 overlay stays above.
           APR-10.b (issue #959): the content keeps the canon content width on
           wide windows (contentWidthStyle is inert below the cap). */}
@@ -520,7 +520,7 @@ export default function RoutePreview() {
                     <ScaledText style={styles.stopName}>
                       {stop.name ?? strings.stopNumber(stop.position + 1)}
                     </ScaledText>
-                    {/* UX 05 (issue #351): the place's human title from the
+                    {/* UX 05: the place's human title from the
                         catalog, never the raw place id — with no published
                         title the line is hidden, nothing is invented. */}
                     {stop.placeName ? <ScaledText style={styles.stopPlace}>{stop.placeName}</ScaledText> : null}

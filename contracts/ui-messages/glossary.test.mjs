@@ -1,4 +1,4 @@
-// G21.19 (issue #543) — the reviewed terminology glossary contract tests.
+// G21.19 (2026-10-03-single-source-translations.md — G21.19) — the reviewed terminology glossary contract tests.
 // The shipped glossary passes schema + cross-file rules; every named rule
 // ships with an isolating negative fixture; corrupt input answers with
 // diagnostics, never a throw. Anchors are checked against the canonical

@@ -3,7 +3,7 @@
 // may advertise (criterion 4), and the per-locale native catalogue
 // completeness (criterion 5). Deleting a registry entry, a complete code or a
 // catalogue family fails here through the standard runner; the store's
-// unknown-input semantics are asserted unchanged. G21.46 (issue #670) adds the
+// unknown-input semantics are asserted unchanged. G21.46 (G21.42-chinese-language.md — G21.46) adds the
 // ninth code zh with its catalogue — complete and still closed until the
 // G21.50 release flag opens it.
 import test from 'node:test';
@@ -40,7 +40,7 @@ const EIGHT = [
   { code: 'sv', nativeName: 'Svenska' },
 ];
 
-// G21.46 (issue #670): the ninth registered code. The native name is stored
+// G21.46 (G21.42-chinese-language.md — G21.46): the ninth registered code. The native name is stored
 // as \uXXXX escapes in the registry (repo bytes stay CJK-free) and decodes to
 // the real glyphs — the assertion below proves both halves.
 const ZH = { code: 'zh', nativeName: '\u7B80\u4F53\u4E2D\u6587' };
@@ -96,8 +96,8 @@ test('the store derives its vocabulary from the registry and keeps unknown-input
   // Unregistered codes are refused exactly like an incomplete one used to be
   // (the named UiLocaleError, no silent state), and a refused switch keeps
   // the current locale. A complete catalogue joins the store's vocabulary
-  // the commit it lands (es, G21.11 issue #545; fr, G21.12 issue #546; cs,
-  // G21.13 issue #547; sv, G21.14 issue #548 — the eight requested codes are
+  // the commit it lands (es, G21.11 — 2026-10-03-single-source-translations.md; fr, G21.12 — same record; cs,
+  // G21.13 — same record; sv, G21.14 — same record — the eight requested codes are
   // all complete now): the positive siblings of the refusals.
   for (const unregistered of ['ru']) {
     assert.throws(() => store.set(unregistered), UiLocaleError);
@@ -127,8 +127,8 @@ test('the store derives its vocabulary from the registry and keeps unknown-input
   assert.equal(openStore.current(), 'zh');
 });
 
-// G21.50 (issue #711): the open subset is a separate fact from the complete
-// set. zh is the first real gated consumer (it lands with #670 and stays
+// G21.50 (G21.42-chinese-language.md — G21.50): the open subset is a separate fact from the complete
+// set. zh is the first real gated consumer (it lands with G21.46 and stays
 // closed): a code can be complete and still closed, only the flag opens it,
 // and the frozen eight stay open under every flag state. Removing the
 // resolver's union or its complete-set check turns these red.
@@ -158,7 +158,7 @@ test('the release resolver opens a registered complete code only when the flag n
   assert.deepEqual([...releaseOpenUiLocales('zz', TEN)], [...FROZEN_OPEN, 'zz']);
   assert.deepEqual([...releaseOpenUiLocales('  zz ,bogus,ru\t', TEN)], [...FROZEN_OPEN, 'zz']);
   // Additive only: naming an already-open code neither duplicates it nor
-  // removes any of the frozen eight (hiding sv is out of scope, #711).
+  // removes any of the frozen eight (hiding sv is out of scope, G21.50).
   assert.deepEqual([...releaseOpenUiLocales('be, en', TEN)], FROZEN_OPEN);
   assert.deepEqual([...releaseOpenUiLocales('sv, zh, zz', TEN)], TEN);
 });

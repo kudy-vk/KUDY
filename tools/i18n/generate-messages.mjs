@@ -1,4 +1,4 @@
-// G21.25 (issue #558) — the UI-message catalogue generator. The runtime
+// G21.25 (2026-10-03-single-source-translations.md — G21.25) — the UI-message catalogue generator. The runtime
 // native/controller and web catalogues are reproducible projections of
 // contracts/ui-messages/source.json (the be base text) plus the reviewed
 // per-locale translation sets (contracts/ui-messages/translations/) — never
@@ -58,7 +58,7 @@ function parameterTsType(parameter) {
 export const DOMAINS = [
   {
     domain: 'native.chrome',
-    note: 'the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 — results G25.04.md (іконкавы слой) + docs/agent-tasks/app/G06.10.md; UX 05 #351; G15.03 #70)',
+    note: 'the shared UI chrome words (G06.05 — 16_delivery_backlog.md; G14.04.d — 16_delivery_backlog.md; G06.10 — results G25.04.md (іконкавы слой) + docs/agent-tasks/app/G06.10.md; UX 05; G15.03 #70)',
     outputs: [
       {
         file: 'components/ui-strings.generated.ts',
@@ -78,7 +78,7 @@ export const DOMAINS = [
   },
   {
     domain: 'native.guideHint',
-    note: 'the nearby guide-hint card\'s words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 #544), es too (G21.11 #545), fr too (G21.12 #546), cs too (G21.13 #547), sv too (G21.14 #548), zh too (G21.46 #670)',
+    note: 'the nearby guide-hint card\'s words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md)',
     outputs: [
       {
         file: 'components/guide-hint-strings.generated.ts',
@@ -109,7 +109,7 @@ export const DOMAINS = [
   },
   {
     domain: 'native.preview',
-    note: 'the guide preview\'s words (G06.05 #280, AC4/AC5; G08.05 — 16_delivery_backlog.md)',
+    note: 'the guide preview\'s words (G06.05 — 16_delivery_backlog.md, AC4/AC5; G08.05 — 16_delivery_backlog.md)',
     outputs: [
       {
         file: 'controllers/catalog/preview-strings.generated.ts',
@@ -130,7 +130,7 @@ export const DOMAINS = [
   },
   {
     domain: 'native.run',
-    note: 'the run-map surface\'s words (G06.05 #280; UX 05 #351; G07.x run stack)',
+    note: 'the run-map surface\'s words (G06.05 — 16_delivery_backlog.md; UX 05; G07.x run stack)',
     outputs: [
       {
         file: 'controllers/run/runMap-strings.generated.ts',
@@ -141,7 +141,7 @@ export const DOMAINS = [
   },
   {
     domain: 'native.place',
-    note: 'the place-detail words (G06.05 #280, AC4/AC5)',
+    note: 'the place-detail words (G06.05 — 16_delivery_backlog.md, AC4/AC5)',
     outputs: [
       {
         file: 'controllers/place/placeDetail-strings.generated.ts',
@@ -185,7 +185,7 @@ export const DOMAINS = [
   },
   {
     domain: 'web.ui',
-    note: 'the web channel\'s UI words (09 §8: «ніводнага зашытага радка нідзе»; G14.04.d #305)',
+    note: 'the web channel\'s UI words (09 §8: «ніводнага зашытага радка нідзе»; G14.04.d — 16_delivery_backlog.md)',
     outputs: [
       { file: 'web/lib/i18n/be.ts', exportName: 'be', locales: ['be'] },
       { file: 'web/lib/i18n/en.ts', exportName: 'en', locales: ['en'] },
@@ -216,7 +216,7 @@ export function escapeTemplate(text) {
     .replaceAll('\t', '\\t');
 }
 
-// G21.46 (issue #670, criterion 7): repo bytes stay CJK-free. Every Han,
+// G21.46 (G21.42-chinese-language.md — G21.46, criterion 7): repo bytes stay CJK-free. Every Han,
 // CJK-punctuation, kana or fullwidth codepoint in generated static text is
 // written as a \uXXXX escape (\u{...} above the BMP), so the committed
 // generated catalogues carry ASCII bytes while the runtime decodes the real
@@ -361,7 +361,7 @@ const GENERATED_HEADER = [
   '//',
   '// Source of truth: contracts/ui-messages/source.json (the be base text) and',
   '// contracts/ui-messages/translations/<locale>.json (the reviewed translations).',
-  '// G21.25 (issue #558): the catalogues are generated projections — edit the',
+  '// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the',
   "// source/translation data, never this file; the generator's --check mode",
   '// fails on any hand edit.',
 ];

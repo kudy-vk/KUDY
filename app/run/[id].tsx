@@ -395,7 +395,7 @@ export default function Run() {
   }>();
   const router = useRouter();
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const routeId = typeof id === "string" ? id : "";
@@ -413,15 +413,15 @@ export default function Run() {
     if (ready === null) return;
     return ready.onLocationStatusChange(() => setLocationRevision((revision) => revision + 1));
   }, [ready]);
-  // Issue #524: without a ready session the words follow the UI-locale
-  // choice (the #305 store) — the fixed "be" fallback kept Belarusian on
+  // Without a ready session the words follow the UI-locale
+  // choice (the G14.04.d store) — the fixed "be" fallback kept Belarusian on
   // screen after choosing English or Українська. A ready session keeps its
   // pinned locale (a UI switch never substitutes the active walk's language).
   const strings = runMapStrings(ready?.locale ?? locale);
   // G06.10 (results G25.04.md — іконкавы слой): the back word is the shared chrome catalog's, in the
   // run session's own display locale — the run map dictionary holds no copy
   // of it (one back image, one dictionary). The no-session fallback rides
-  // the same UI-locale choice (issue #524).
+  // the same UI-locale choice.
   const back = uiStrings(ready?.locale ?? locale).back;
 
   // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the frame's top inset — the content starts below the
@@ -772,7 +772,7 @@ export default function Run() {
             </>
           ) : null}
           {view.pois.map((poi) => {
-            // UX 05 (issue #351): the label goes through the run strings'
+            // UX 05: the label goes through the run strings'
             // kind dictionary — a kind without an entry renders no label,
             // the raw value never shows (nothing invented).
             const poiLabel = strings.poiKind[poi.kind] ?? null;
@@ -871,7 +871,7 @@ export default function Run() {
           ]}
           testID={`run-panel-${run.panel}`}
         >
-          {/* UX 01 (issue #347): the panel's card content scrolls — a long
+          {/* UX 01: the panel's card content scrolls — a long
               transcript stays readable in Full; the map stays a fixed flex
               child, never a scroll surface. */}
           <ScrollView testID="scroll-run-panel">

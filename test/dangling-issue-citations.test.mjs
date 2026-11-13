@@ -19,6 +19,18 @@
 // (implementation-rules 1). If one of these numbers ever becomes a real issue,
 // remove it from the list with a dated revalidation note in the PR that adds
 // the citation back.
+// #264 (2026-11-13) — the third pass of the same defect class on the
+// localization/status-bar/dark-theme numbers (280, 305, 347, 351, 428, 436,
+// 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 611, 623, 669, 670, 711,
+// 810; all 404 in kudy-vk/KUDY on 2026-11-13, the original cards in
+// vokhandcrafts/KUDY): every citation was re-anchored — 16_delivery_backlog.md
+// (G06.05, G14.04.d), 2026-10-03-single-source-translations.md (G21.10–G21.19,
+// G21.16, G21.25–G21.27), G21.42-chinese-language.md (G21.42–G21.50),
+// docs/design/dark-theme.md (the status bar and the dark theme), android-play-
+// readiness/README.md (APR-05), 2026-10-04-bounded-work.md (G22.06) and the
+// dated records whose dead references were de-hashed in place. Carriers are
+// the generator notes plus hand-written comments and docs; generated
+// catalogues follow the generator.
 // The guard file itself stays scannable: it never spells the dead tokens
 // literally — fixtures build them by concatenation, and the regex is assembled
 // from the number list — otherwise a working scan would fail on this very file.
@@ -37,7 +49,7 @@ const REPO = path.resolve(HERE, '..');
 // repo, all closed). The token is the hash sign glued to a dead number with a
 // word boundary on the right: "3399ff" or "4300" must not match, a citation
 // "(issue " + hash + number + ")" must.
-const DEAD_NUMBERS = [284, 292, 313, 338, 339, 344, 348, 349, 350, 352, 353, 402, 403, 404, 430, 432];
+const DEAD_NUMBERS = [280, 284, 292, 305, 313, 338, 339, 344, 347, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 611, 623, 669, 670, 711, 810];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
 
@@ -72,7 +84,7 @@ test('tracked sources carry no citations of the confirmed-dangling issue numbers
   assert.deepEqual(
     violations,
     [],
-    'citations of non-existent issue numbers (430/339 and the 284–432 series) — anchor the decision to its canonical record instead (design canon / screens-and-transitions.md / docs/agent-tasks/results / 19_class_and_module_map.md / development_setup.md)',
+    'citations of non-existent issue numbers (430/339, the 284–432 series and the localization/status-bar/dark-theme series from 280 to 810) — anchor the decision to its canonical record instead (design canon / screens-and-transitions.md / 16_delivery_backlog.md / 2026-10-03-single-source-translations.md / G21.42-chinese-language.md / docs/design/dark-theme.md / docs/agent-tasks/results / development_setup.md)',
   );
 });
 
@@ -82,6 +94,12 @@ test('the finder flags a citation and names the line', () => {
   ]);
   assert.deepEqual(findDead('рашэнне ўладара 2026-10-03, issue ' + TOKEN(430) + '), тэскі'), [
     { line: 1, match: TOKEN(430) },
+  ]);
+  // The 264 series rides the same matcher: a localization citation and a
+  // dark-theme citation both fail.
+  assert.deepEqual(findDead('catalogue joined (issue ' + TOKEN(544) + '), the dark theme (' + TOKEN(436) + ')'), [
+    { line: 1, match: TOKEN(544) },
+    { line: 1, match: TOKEN(436) },
   ]);
 });
 

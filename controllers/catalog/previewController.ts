@@ -88,8 +88,8 @@ export interface PreviewPorts {
 
 // The one main button (09 §6.5): exactly one meaning at a time. `enabled`
 // false carries its reason — a disabled action states why (11 §7); the
-// purchase is never triggered from the preview (NAV6, D06). G06.05 (issue
-// #280, AC1): the label, reason and detail are verbatim codes — the words
+// purchase is never triggered from the preview (NAV6, D06). G06.05 (
+// 16_delivery_backlog.md — G06.05, AC1): the label, reason and detail are verbatim codes — the words
 // live in previewStrings per locale, the runMapReason idiom.
 export type PreviewButtonAction = 'download' | 'start';
 export type PreviewReason =
@@ -257,7 +257,7 @@ export interface PreviewControllerState {
   // The §4.1 dialog of NAV8: the live walk's title and the candidate's.
   readonly confirm: { readonly liveTitle: string; readonly candidateTitle: string } | null;
   readonly busy: boolean;
-  // G06.05 (issue #280, AC4): the named download failure — the banner's
+  // G06.05 (16_delivery_backlog.md — G06.05, AC4): the named download failure — the banner's
   // reason line, its muted detail and whether the honest manual exit is the
   // storage surface (insufficient-space). A cancelled activation is not a
   // failure — nothing is set.
@@ -509,7 +509,7 @@ export function createPreviewController(
           set({ busy: false });
           return;
         }
-        // G06.05 (issue #280, AC4): a non-complete activation is a named
+        // G06.05 (16_delivery_backlog.md — G06.05, AC4): a non-complete activation is a named
         // failure, not a silent button flip — insufficient-space carries the
         // storage exit, a cancelled run is not a failure at all. The button's
         // own flip still comes from the refreshed inventory facts, never

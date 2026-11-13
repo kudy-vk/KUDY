@@ -16,8 +16,8 @@
 
 import type { CompleteUiLocaleCode } from "./ui-locales.ts";
 
-// G06.05 (issue #280) — the shared UI words of the G06 surfaces, BE/EN per
-// the row's first criterion. G14.04.d (issue #305) adds the third catalog:
+// G06.05 (16_delivery_backlog.md — G06.05) — the shared UI words of the G06 surfaces, BE/EN per
+// the row's first criterion. G14.04.d (16_delivery_backlog.md — G14.04.d) adds the third catalog:
 // uk rides the same mechanism beside be/en (uk-release-scope §3.1 — "тая ж
 // сістэма, новы набор"), with the catalog keys kept equivalent by the
 // parity guard. The catalogs here are presentation-only chrome
@@ -120,7 +120,7 @@ export interface UiStrings {
   readonly seasonName: Record<string, string>;
   readonly reasonText: Record<string, string>;
   readonly differenceText: Record<string, string>;
-  // G14.04.d (issue #305) — the My KUDY language row (uk-release-scope §4:
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the My KUDY language row (uk-release-scope §4:
   // «Мова прапануецца ў My KUDY»): the row's label and the options' self
   // names, which are the same native words in every catalog — a language is
   // never named through a translation.
@@ -130,7 +130,7 @@ export interface UiStrings {
   readonly languageSelfNames: Record<CompleteUiLocaleCode, string>;
 }
 
-// G06.05 (issue #280, AC4/AC5) — the place detail words. The named moment
+// G06.05 (16_delivery_backlog.md — G06.05, AC4/AC5) — the place detail words. The named moment
 // refusals and the play failure's words — a refusal states the reason and the
 // way out, a raw diagnostic code never shows alone. An unknown reason renders
 // as-is (the placeRefusalText idiom).
@@ -153,7 +153,7 @@ export interface PlaceDetailStrings {
   durationUnit: string;
   textLabel: string;
   audioLabel: string;
-  // G06.05 (issue #280, AC4/AC5): the named moment refusals and the play
+  // G06.05 (16_delivery_backlog.md — G06.05, AC4/AC5): the named moment refusals and the play
   // failure's words — a refusal states the reason and the way out, a raw
   // diagnostic code never shows alone. An unknown reason renders as-is.
   readonly refusalText: Record<
@@ -206,7 +206,7 @@ export interface OfferStrings {
 }
 
 // UX 09 (issue #434) — the nearby-guide hint card (GuideHintCard.tsx). The
-// card's four words: since G21.25 (issue #558) they are generated from the
+// card's four words: since G21.25 (2026-10-03-single-source-translations.md — G21.25) they are generated from the
 // canonical records plus the reviewed translations, and uk still renders
 // through the be fallback because the uk words of this domain are not
 // authored yet (uk-release-scope §6.4; the same be fallback the shipped

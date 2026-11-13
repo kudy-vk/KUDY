@@ -1,4 +1,4 @@
-// G21.14 (issue #548) — the Swedish catalogue's locale-specific rendering
+// G21.14 (2026-10-03-single-source-translations.md — G21.14) — the Swedish catalogue's locale-specific rendering
 // suite. The shipped-locale gate (tools/i18n/check-messages.mjs) proves the
 // sv set's completeness, review evidence and output freshness; this suite
 // proves the Swedish words actually render through the production selectors:

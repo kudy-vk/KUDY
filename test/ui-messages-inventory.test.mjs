@@ -54,8 +54,8 @@ function leaves(value, prefix = '') {
 // G21.09 (issue #542): the chrome selfNames subtree is projected from the one
 // locale registry (completeUiLocaleSelfNames()), not from the canonical
 // records — the registry table owns the self-name words, so a complete code
-// the records never carried (de, G21.10 #544; es, G21.11 #545;
-// fr, G21.12 #546; cs, G21.13 #547; sv, G21.14 #548) appears there by
+// the records never carried (de, G21.10 — 2026-10-03-single-source-translations.md; es, G21.11 — same record;
+// fr, G21.12 — same record; cs, G21.13 — same record; sv, G21.14 — same record) appears there by
 // design. The walk skips the subtree together with its legacy migration
 // anchors.
 function registryProjected(key) {

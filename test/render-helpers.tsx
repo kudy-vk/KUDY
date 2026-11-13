@@ -65,12 +65,12 @@ export function layoutWith(services: Services) {
   // The test layout mirrors app/_layout.tsx: the provider around the Stack
   // navigator with the native header off (UX 02 — screens-and-transitions.md, Агульныя правілы пераходаў; expo-router
   // reads the routes from context, children are not rendered explicitly),
-  // and the root status bar pinned to dark content (issue #428) — copied
+  // and the root status bar pinned to dark content (docs/design/dark-theme.md — Статус-бар) — copied
   // verbatim from there, the guard for the real file is app/status-bar.test.tsx.
   return function TestLayout() {
     return (
       <ServicesContext.Provider value={services}>
-        {/* Issue #428: one dark-content config at the navigation root. */}
+        {/* docs/design/dark-theme.md — Статус-бар: one dark-content config at the navigation root. */}
         <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false }} />
       </ServicesContext.Provider>

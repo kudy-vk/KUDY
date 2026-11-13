@@ -2,7 +2,7 @@
 // families idiom, G21.09 #542 criterion 5): every native selector family plus
 // the generated guide-hint data module (GuideHintCard.tsx is JSX — node
 // cannot import it, the golden test's idiom) and the two reason routers.
-// G21.12 (issue #546): extracted when the fr suite joined the de suite —
+// G21.12 (2026-10-03-single-source-translations.md — G21.12): extracted when the fr suite joined the de suite —
 // the selector imports live here once instead of being cloned per locale
 // (AGENTS.md: on a jscpd fail, refactor or reuse).
 import { uiStrings } from '../components/ui-strings.ts';

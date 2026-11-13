@@ -1,4 +1,4 @@
-// G21.26 (issue #559) — the shipped-locale message gate. The repository's
+// G21.26 (2026-10-03-single-source-translations.md — G21.26) — the shipped-locale message gate. The repository's
 // standard checks fail while any shipped UI locale is missing, stale or lacks
 // the required review evidence: a source change cannot slip through npm test
 // (the required CI path runs it) with an incomplete, outdated or unreviewed
@@ -60,7 +60,7 @@ const TRANSLATIONS_DIR = 'contracts/ui-messages/translations';
 const MIGRATION_KIND = 'migration';
 const DECISIONS_FILE = 'docs/reports/localization-sources/decisions.json';
 
-// G21.27 (issue #566) — the approved terminology sources are the G21.33
+// G21.27 (2026-10-03-single-source-translations.md — G21.27) — the approved terminology sources are the G21.33
 // decisions' own words, derived from the decision file rather than restated
 // (implementation-rules 2): every source holding at least one `use` decision
 // is approved for contextual consultation (android, cldr, wiktionary, iate);
@@ -200,7 +200,7 @@ export function checkShippedMessages({ root = ROOT } = {}) {
           reason: `the review pass (provenance.kind ${JSON.stringify(set.provenance?.kind)}) is not the migration and must give every record its renewed-review reason`,
         });
       }
-      // G21.27 (issue #566) — terminology provenance. An unresolved lookup is
+      // G21.27 (2026-10-03-single-source-translations.md — G21.27) — terminology provenance. An unresolved lookup is
       // a contract-legal honest state, but it stops this message's
       // publication: the record stays out of the shipped catalogue until an
       // approved source resolves it. A resolved looked-up trace citing a

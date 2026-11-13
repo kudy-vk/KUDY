@@ -1,4 +1,4 @@
-// #436 — a single native appearance boundary for system light/dark mode.
+// docs/design/dark-theme.md — a single native appearance boundary for system light/dark mode.
 // The manual persisted preference belongs to #798; consumers use this hook
 // rather than subscribing to Appearance or duplicating fallback rules.
 import { useColorScheme } from "react-native";

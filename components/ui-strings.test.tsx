@@ -1,8 +1,8 @@
-// G06.05 (issue #280) — the shared UI words catalog: every locale carries the
+// G06.05 (16_delivery_backlog.md — G06.05) — the shared UI words catalog: every locale carries the
 // same keys with non-empty words (a string added to one language only fails
 // here — the reverted-line check of implementation-rules 1), and the canon
 // wordings the contracts name stay verbatim (11 §7's denied-GPS line rides
-// runMapStrings, this file owns the chrome). G14.04.d (issue #305) adds uk
+// runMapStrings, this file owns the chrome). G14.04.d (16_delivery_backlog.md — G14.04.d) adds uk
 // beside be/en — the same key set, the same non-empty rule.
 import { describe, expect, test } from "@jest/globals";
 
@@ -18,7 +18,7 @@ const keyShape = (locale: string): string =>
 describe("uiStrings (G06.05 AC1)", () => {
   test("all three locales carry the same keys", () => {
     expect(keyShape("be")).toBe(keyShape("en"));
-    // G14.04.d (issue #305): the third file rides the same key set.
+    // G14.04.d (16_delivery_backlog.md — G14.04.d): the third file rides the same key set.
     expect(keyShape("be")).toBe(keyShape("uk"));
     expect(keyShape("be").length).toBeGreaterThan(10);
   });
@@ -63,11 +63,11 @@ describe("uiStrings (G06.05 AC1)", () => {
 
   test("an unknown locale falls back to Belarusian, the first preference", () => {
     // G14.04.d: uk has its own catalog now — the unknown-locale fallback is
-    // asserted on a locale no catalog answers. G21.10 (issue #544): de has
+    // asserted on a locale no catalog answers. G21.10 (2026-10-03-single-source-translations.md — G21.10): de has
     // its own German catalogue too, so the probe moved to the still-planned
-    // «es» — and de now asserts its own honest German words. G21.11 (issue
-    // #545), G21.12 (issue #546), G21.13 (issue #547) and G21.14 (issue
-    // #548) landed es, fr, cs and sv in turn, so the probe finally runs out
+    // «es» — and de now asserts its own honest German words. G21.11 (
+    // 2026-10-03-single-source-translations.md — G21.11), G21.12 (same record), G21.13 (same record) and G21.14
+    // (same record) landed es, fr, cs and sv in turn, so the probe finally runs out
     // of planned codes: all eight requested languages are complete, and the
     // fallback probe rides an unregistered code («pl»). The discriminator is
     // a word the languages do not share («Назад» is the same word in be and uk).

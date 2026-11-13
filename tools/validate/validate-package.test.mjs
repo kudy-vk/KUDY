@@ -530,7 +530,7 @@ test('G14.04.b: a claimed audio locale without its audio files is audio-locale-w
   assert.deepEqual(result.errors.filter((e) => e.rule !== 'audio-locale-without-files'), [], JSON.stringify(result.errors));
 });
 
-// G21.16 (issue #550): in the expanded domain text and audio availability
+// G21.16 (2026-10-03-single-source-translations.md — G21.16): in the expanded domain text and audio availability
 // stay independent — shipped fr text passes audio-free, and a claimed fr
 // audio locale without published audio files fails on its named rule.
 function addFrTextLayer(d) {

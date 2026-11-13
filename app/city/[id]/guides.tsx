@@ -29,14 +29,14 @@ const darkStyles = createStyles(darkTokens);
 export default function Guides() {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const controller = useCatalogController(services.catalog?.controller);
   // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1/AC4): the shared words in the display locale and
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1/AC4): the shared words in the display locale and
   // the failed load's named retry.
   const strings = uiStrings(locale);
   return (

@@ -1,4 +1,4 @@
-// G21.25 (issue #558, criterion 1) — the per-locale translation-set contract
+// G21.25 (2026-10-03-single-source-translations.md — G21.25, criterion 1) — the per-locale translation-set contract
 // (contracts/ui-messages/translations/<locale>.json) and its checker. One
 // record per translated canonical message: the locale's message value/forms,
 // the reviewedSourceHash pinning exactly the reviewed source-record version,

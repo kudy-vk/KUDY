@@ -303,7 +303,7 @@ test('AC4: index computes availability from published content; uk stays text-onl
   assert.equal(index.collections[0].members.length, 2);
 });
 
-// G21.16 (issue #550): the expanded allowlist is availability-neutral — a
+// G21.16 (2026-10-03-single-source-translations.md — G21.16): the expanded allowlist is availability-neutral — a
 // new text locale yields only from its shipped files; audio_locales stays
 // limited to the locales that actually carry .m4a files (21 §3.2
 // «вылічаецца з апублікаванага зместу»).

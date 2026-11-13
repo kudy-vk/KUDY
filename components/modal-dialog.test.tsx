@@ -1,4 +1,4 @@
-// G06.05 (issue #280) — the dialog shell's a11y contract: the two actions
+// G06.05 (16_delivery_backlog.md — G06.05) — the dialog shell's a11y contract: the two actions
 // are buttons with their labels, the card is the modal view, and the dialog
 // never animates (the reduced-motion support of AC2 — nothing to turn off).
 // Restoring an animated transition turns the animation test red

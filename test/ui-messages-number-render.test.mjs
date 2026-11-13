@@ -1,4 +1,4 @@
-// G21.19 (issue #543, criterion 3) — rendered count/number examples through
+// G21.19 (2026-10-03-single-source-translations.md — G21.19, criterion 3) — rendered count/number examples through
 // the live selectors. The golden matrix (ui-messages-render-golden) pins
 // exact strings at 0/1/2/5.5/1000; this suite covers the criterion's value
 // set 0/1/2/5/11/21 plus fractional input, the discreteForms boundaries of

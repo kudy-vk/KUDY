@@ -27,7 +27,7 @@ const STOP_PLACE_CATALOG_TEXT = fixtureText("catalog-discovery-stop-places.json"
 const STOP_PLACE_INDEX_TEXT = fixtureText("index-stop-places.json");
 
 // The same publication with the index extended by route-b1's stop-place
-// offers (UX 05, issue #351): the pointer's pin covers the new text.
+// offers (UX 05): the pointer's pin covers the new text.
 const STOP_PLACE_PUBLISHED = {
   ...CATALOG_FIXTURES,
   "catalog.json": STOP_PLACE_CATALOG_TEXT,
@@ -249,7 +249,7 @@ describe("guide preview surface (G06.01.b)", () => {
     expect(await screen.findByTestId("stop-stop-b1-1")).toBeTruthy();
     expect(screen.getByText("Стары порт")).toBeTruthy();
     // The index-valid fixture names no place for these stops — the place
-    // line is hidden, the raw place id never renders (UX 05, issue #351).
+    // line is hidden, the raw place id never renders (UX 05).
     expect(screen.queryByText(/place-b1/)).toBeNull();
     expect(screen.queryByTestId("stop-locked-stop-b1-1")).toBeNull();
     expect(screen.getByTestId("stop-locked-stop-b1-2")).toBeTruthy();
@@ -414,7 +414,7 @@ describe("guide preview surface (G06.01.b)", () => {
     expect(screen.getByText("Гід не апублікаваны.")).toBeTruthy();
   });
 
-  // UX 01 (issue #347): the surface scrolls — twelve stops and the main
+  // UX 01: the surface scrolls — twelve stops and the main
   // action all render inside the preview's ScrollView. Removing the
   // ScrollView drops the scroll testID and fails this (implementation-rules 1).
   test("the preview scrolls: twelve stops and the main button render inside the ScrollView (UX 01)", async () => {
@@ -479,11 +479,11 @@ describe("guide preview loading indicator (UX 07)", () => {
   });
 });
 
-// G06.05 (issue #280) — the preview's a11y contract and the honest download
+// G06.05 (16_delivery_backlog.md — G06.05) — the preview's a11y contract and the honest download
 // failure: the main button is a named, stateful button for the screen
 // reader; a failed activation is a named banner with a retry and, for
 // insufficient space, the exit to the storage surface — never a dead end.
-describe("G06.05 preview a11y and failure exits (issue #280)", () => {
+describe("G06.05 preview a11y and failure exits", () => {
   test("AC1: the main button is a button with its label and the disabled state", async () => {
     const button = await openB1ButtonPreview();
     expect(button.props.accessibilityRole).toBe("button");

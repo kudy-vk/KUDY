@@ -6,11 +6,23 @@
    "reason": "android-e2e.yml gained the concurrency block and the scope job; the design-QA spec cites the shifted line ranges",
    "replacement": ".github/workflows/android-e2e.yml:2-51"
   },
-  {
-   "kind": "code",
-   "value": ":51-90",
-   "reason": "android-e2e.yml gained the concurrency block and the scope job; the design-QA spec cites the shifted line ranges",
-   "replacement": ":87-126"
-  }
+ {
+  "kind": "code",
+  "value": ":51-90",
+  "reason": "android-e2e.yml gained the concurrency block and the scope job; the design-QA spec cites the shifted line ranges",
+  "replacement": ":87-126"
+ },
+ {
+  "kind": "code",
+  "value": "#711",
+  "reason": "issue #264 de-hashed the archived-repo issue number in the dated ADR — the dangling-citation guard fails on the hash form; the fact stays as the bare number in the same record",
+  "replacement": "docs/architecture/decisions/G21.42-chinese-language.md §8 table (картка 711 архіўнага рэпе) and §11"
+ },
+ {
+  "kind": "code",
+  "value": "Blocked-by: #623",
+  "reason": "issue #264 de-hashed the archived-repo issue number in the dated ADR — the dangling-citation guard fails on the hash form; the fact stays as the bare number in the same record",
+  "replacement": "docs/architecture/decisions/G21.42-chinese-language.md §11 (Blocked-by: 623 — картка архіўнага рэпе)"
+ }
  ]
 }

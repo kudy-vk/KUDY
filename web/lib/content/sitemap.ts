@@ -30,7 +30,7 @@ export function sitemapPaths(root: string): string[] {
     else stopsByRoute.set(route_id, [stop_id]);
   }
   for (const { route_id } of guideStaticParams(root)) {
-    // G21.45 (issue #669): the advertised set is the published-text fact
+    // G21.45 (G21.42-chinese-language.md — G21.45): the advertised set is the published-text fact
     // intersected with the release-gated UI route set — a gate-closed code
     // declared in the index never becomes a sitemap path.
     const textLocales = advertisedTextLocales(routeTextLocales(root, route_id));

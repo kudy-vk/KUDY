@@ -441,7 +441,7 @@ describe('loadPreview — the guide preview assembly (G06.01.b)', () => {
     assert.equal(locked?.tier, 'extended');
   });
 
-  it('joins the stop rows with the index place titles; unknown and untitled places hide the line (UX 05, issue #351)', async () => {
+  it('joins the stop rows with the index place titles; unknown and untitled places hide the line (UX 05)', async () => {
     // The dedup of 21 §4 rule 6 applies inside the title map too: of two
     // offers pinned to one place, the sorted-first title wins.
     const index = {

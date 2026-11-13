@@ -151,7 +151,7 @@ export default function FeedbackForm() {
     locale?: string;
   }>();
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place. The rated target's content locale is
   // a different fact (the facts line) and never follows this switch.
   const uiLocale = useUiLocale();

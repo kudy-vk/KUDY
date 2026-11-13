@@ -1,4 +1,4 @@
-// G14.04.d (issue #305) — the uk catalogs of the controller word
+// G14.04.d (16_delivery_backlog.md — G14.04.d) — the uk catalogs of the controller word
 // dictionaries carry the same key shape as be/en (AC1: «усе ключы трох
 // файлаў эквівалентныя»). A key added to one locale only fails here
 // (implementation-rules 1); so does an empty word. The phrase-shaped lines
@@ -46,7 +46,7 @@ const CATALOGS: Record<string, (locale: string) => unknown> = {
   offer: offerStrings,
 };
 
-test('G14.04.d #305: every controller word dictionary carries the same be/en/uk key shape', () => {
+test('G14.04.d: every controller word dictionary carries the same be/en/uk key shape', () => {
   for (const [name, strings] of Object.entries(CATALOGS)) {
     const be = keyShape(strings('be')).sort();
     const en = keyShape(strings('en')).sort();
@@ -57,7 +57,7 @@ test('G14.04.d #305: every controller word dictionary carries the same be/en/uk 
   }
 });
 
-test('G14.04.d #305: no word is empty in any locale of any controller dictionary', () => {
+test('G14.04.d: no word is empty in any locale of any controller dictionary', () => {
   for (const [name, strings] of Object.entries(CATALOGS)) {
     for (const locale of ['be', 'en', 'uk']) {
       assertNoEmptyWords(strings(locale), `${name}.${locale}`);

@@ -263,7 +263,7 @@ export default function Map() {
   // location guard (the composition root owns both — 19 §4.2).
   const binding = useMemo(() => services.nearby?.create(), [services.nearby]);
   const { surface, locationView } = useNearbySurface(binding);
-  // Issue #523: the chrome words read the UI-locale switch (the #305 store,
+  // The chrome words read the UI-locale switch (the G14.04.d store,
   // the same useUiLocale subscription the catalog row and My KUDY hold) — the
   // binding's locale is the content-display preference (be first), so without
   // the catalog service the chrome stuck to Belarusian. The switch re-renders
@@ -286,7 +286,7 @@ export default function Map() {
   );
   const note = locationNote(locationView, strings);
   // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   return (
     <ScreenSurface
@@ -307,7 +307,7 @@ export default function Map() {
         locale={uiLocale}
         onOpen={(routeId) => router.push(`/route/${routeId}`)}
       />
-      {/* UX 01 (issue #347): the offer list scrolls — the last card is
+      {/* UX 01: the offer list scrolls — the last card is
           reachable beyond the fold, never cut by the screen edge. */}
       <ScrollView testID="scroll-nearby">
         <ScaledText style={styles.title}>{strings.title}</ScaledText>

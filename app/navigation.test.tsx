@@ -67,7 +67,7 @@ describe("route placeholders (19 §2.5)", () => {
 
   // G06.04 criterion 3: the session history — the live walk beside the
   // finished previous runs, the rows exactly what the durable zone keeps.
-  // UX 05 (issue #351): the row's dates are the user's local calendar day.
+  // UX 05: the row's dates are the user's local calendar day.
   // The jest workers' zone is pinned to America/Anchorage (jest.config.js),
   // where 1970-01-01T00:00:05Z is already 1969-12-31 — a revert to the UTC
   // day fails this (implementation-rules 1).

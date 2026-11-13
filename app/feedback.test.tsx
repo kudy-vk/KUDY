@@ -5,7 +5,7 @@
 // bound target (version/locale, no catalog), the kind-closed reason chips,
 // the disclosure block, and the honest delivery words (the offline round
 // stays «захавана на прыладзе», the acknowledged one «адпраўлена»). The
-// language guards (issue #598): the UI-language switch with the form open
+// language guards: the UI-language switch with the form open
 // re-renders the words and keeps the bound target facts, and a stale
 // persisted locale renders the be fallback words. The exit guard (issue
 // #599): the real Back press pops the route and the unmount cleanup leaves
@@ -181,7 +181,7 @@ describe("G16.03: the rating form route (issue #74)", () => {
     expect(screen.queryByText(strings.targetLine("be", "1"))).toBeNull();
     // ...while the facts line keeps the bound identity — the content locale
     // be and the pinned version 1 in the new wording; the target's facts
-    // never follow the UI switch (G14.04.d, issue #598).
+    // never follow the UI switch (G14.04.d).
     expect(screen.getByTestId("feedback-target-line").props.children).toBe(uk.targetLine("be", "1"));
   });
 
@@ -190,10 +190,10 @@ describe("G16.03: the rating form route (issue #74)", () => {
       // A corrupt persisted row seeds the composition root with a code the
       // closed vocabulary does not know: the store trusts read() at
       // construction, and the form must answer with the be fallback words,
-      // never a raw unknown state (issue #598). G21.10 (issue #544): de owns
+      // never a raw unknown state. G21.10 (2026-10-03-single-source-translations.md — G21.10): de owns
       // a complete catalogue now, so the stale probe moved to the
       // still-planned es. G21.11–G21.13 landed es, fr and cs, and G21.14
-      // (issue #548) landed sv — all eight requested codes are complete, so
+      // (2026-10-03-single-source-translations.md — G21.14) landed sv — all eight requested codes are complete, so
       // the stale probe finally rides an unregistered code (pl).
       uiLocalePersistence: { read: () => "pl" as UiLocaleSwitchCode, write: () => {} },
     });

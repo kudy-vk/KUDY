@@ -1,4 +1,4 @@
-// G21.19 (issue #543, criterion 1) — the reviewed terminology glossary
+// G21.19 (2026-10-03-single-source-translations.md — G21.19, criterion 1) — the reviewed terminology glossary
 // contract (contracts/ui-messages/glossary.json) and its checker. One entry
 // per translator-facing term: a short sense summary, anchors to the canonical
 // source records (never a copy of their text/context) and the approved term
