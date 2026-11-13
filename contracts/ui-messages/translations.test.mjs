@@ -151,7 +151,7 @@ test('value_blank_denied: whitespace-only values are rejected', () => {
   assert.deepEqual(rulesOf(setWith([record])), ['value_blank_denied']);
 });
 
-// G21.27 (issue #566) — terminology provenance: the schema holds the shape,
+// G21.27 (2026-10-03-single-source-translations.md — G21.27) — terminology provenance: the schema holds the shape,
 // the contract holds the per-kind completeness of a resolved trace.
 const LOOKED_UP = {
   status: 'resolved',

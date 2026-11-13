@@ -100,7 +100,7 @@ export function checkUiMessageTranslations(doc, sourceDoc, allowedLocales) {
           }
         }
       }
-      // G21.27 (issue #566) — terminology provenance: the trace a translator
+      // G21.27 (2026-10-03-single-source-translations.md — G21.27) — terminology provenance: the trace a translator
       // records when uncertain; the per-kind completeness rule is shared with
       // the glossary checker (terminologyTraceErrors below).
       errors.push(...terminologyTraceErrors(record.terminology, `${path}.terminology`));

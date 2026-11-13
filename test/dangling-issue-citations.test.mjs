@@ -49,7 +49,7 @@ const REPO = path.resolve(HERE, '..');
 // repo, all closed). The token is the hash sign glued to a dead number with a
 // word boundary on the right: "3399ff" or "4300" must not match, a citation
 // "(issue " + hash + number + ")" must.
-const DEAD_NUMBERS = [280, 284, 292, 305, 313, 338, 339, 344, 347, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 611, 623, 669, 670, 711, 810];
+const DEAD_NUMBERS = [280, 284, 292, 305, 313, 338, 339, 344, 347, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
 
