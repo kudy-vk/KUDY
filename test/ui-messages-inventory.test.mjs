@@ -1,7 +1,7 @@
 // G21.24 — the canonical inventory guard (issue #557 criterion 1): the records
 // of contracts/ui-messages/source.json are the actual messages of the shipped
-// catalogs, not an assumed set. Every be leaf of the seven importable catalogs
-// must have exactly one record anchored to it via migratedFrom, plain words
+// catalogs, not an assumed set. Every be leaf of the importable catalogs in
+// CATALOGS below must have exactly one record anchored to it via migratedFrom, plain words
 // verbatim; the guideHint words ride their generated data module (G21.25 —
 // GuideHintCard.tsx itself is JSX, node cannot import it). Deleting a record,
 // renaming a key or editing a catalog word fails this test — the source cannot
