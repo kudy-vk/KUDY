@@ -19,22 +19,24 @@ const REASONS = {
   place: ['worth_visiting', 'description_mismatch', 'hard_to_reach', 'access_problem'],
 };
 const STRING_IDS = [
-  ...['formTitleGuide', 'formTitlePlace', 'targetLine', 'scaleHint', 'starLabel', 'reasonsTitle', 'disclosureTitle', 'disclosureBody',
+  ...['formTitleGuide', 'formTitlePlace', 'scaleHint', 'starLabel', 'reasonsTitle', 'disclosureTitle', 'disclosureBody',
     'disclosureAnalytics', 'send', 'deleteButton', 'resolveConflict', 'stateConflict', 'guideWord', 'placeWord',
     'errorText.feedback-resolution-required'].map(FB),
   ...[...new Set([...REASONS.guide, ...REASONS.place])].map((code) => FB(`reasonText.${code}`)),
   'native.chrome.back', 'native.chrome.loading',
 ];
 
-// Mockup-only hint: review translations before adding it to the app contract.
+// Mockup-only strings need native-speaker review and addition to the app's message contract.
+// The preview does not submit review text to the server; validation belongs to #207.
+const REVIEW_MAX = 500;
 const NEW = {
+  review: { be: 'Водгук (неабавязкова)', en: 'Review (optional)', uk: 'Відгук (необов’язково)', de: 'Rückmeldung (optional)', es: 'Opinión (opcional)', fr: 'Avis (facultatif)', cs: 'Recenze (nepovinné)', sv: 'Omdöme (valfritt)' },
+  noPersonal: { be: 'Не пішы асабістых даных', en: 'Do not write personal data', uk: 'Не пиши особистих даних', de: 'Bitte keine persönlichen Daten', es: 'No escribas datos personales', fr: 'N’écris pas de données personnelles', cs: 'Nepiš osobní údaje', sv: 'Skriv inga personuppgifter' },
   choose: { be: 'Каб адправіць, выберы ацэнку', en: 'Choose a rating to send', uk: 'Щоб надіслати, вибери оцінку', de: 'Wähle zum Senden eine Bewertung', es: 'Para enviar, elige una valoración', fr: 'Pour envoyer, choisis une note', cs: 'Pro odeslání vyber hodnocení', sv: 'Välj ett betyg för att skicka' },
 };
 
-// Illustrative targets, the same made-up names as on the Run mockup; the
-// content language and version in the facts line are examples too.
+// Illustrative targets, the same made-up names as on the Run mockup.
 const TARGET = { guide: 'Шпацыр па старым горадзе', place: 'Ратуша' };
-const FACTS = { locale: 'be', version: '1.2.0' };
 const keyed = (node, key) => { node.dataset.k = key; return node; };
 
 await mountBoard({
@@ -63,6 +65,7 @@ await mountBoard({
     info.setAttribute('aria-expanded', 'false');
     // Back leaves the form without saving, so it is also the way to skip it.
     const top = el('div', { className: 'topbar' }, iconButton('arrow-left', strings['native.chrome.back'], () => say(leave)), el('div', { className: 'title' }), info);
+    let reviewText = '';
     const scroll = el('div', { className: 'fb-scroll scroll' });
     const foot = el('div', { className: 'fb-foot' });
     body.append(top, hint, scroll, foot);
@@ -77,8 +80,7 @@ await mountBoard({
           el('div', { className: 'fb-target-copy' },
             el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
             el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: TARGET[kind] }))),
-        el('h2', { className: 'fb-question', textContent: t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }),
-        el('p', { className: 't-small', textContent: t('targetLine').replace('${locale}', FACTS.locale).replace('${version}', FACTS.version) }));
+        el('h2', { className: 'fb-question', textContent: t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }));
 
       let notice = null;
       if (conflict) {
@@ -118,8 +120,24 @@ await mountBoard({
         chips.append(chip);
       }
 
+      // The draft survives star and chip redraws; the review remains optional.
+      // This is a UI preview only; the live API currently accepts no free-text field.
+      const field = keyed(el('textarea', {
+        className: 'fb-review', rows: 3, maxLength: REVIEW_MAX, value: reviewText, disabled: busy,
+      }), 'review');
+      const counter = el('span', { textContent: `${reviewText.length} / ${REVIEW_MAX}` });
+      field.addEventListener('input', () => {
+        reviewText = field.value;
+        counter.textContent = `${reviewText.length} / ${REVIEW_MAX}`;
+      });
+      const note = el('div', { className: 'fb-write' },
+        el('label', { className: 'fb-review-label' },
+          el('span', { className: 'fb-section', textContent: NEW.review[state.locale] }), field),
+        el('p', { className: 't-small fb-write-note' },
+          el('span', { textContent: NEW.noPersonal[state.locale] }), counter));
+
       scroll.replaceChildren(...[header, notice, el('div', { className: 'card fb-score-card' }, stars, ends),
-        el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips),
+        el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips), note,
         // A rating that already exists on the device can be deleted from here.
         conflict && keyed(button(t('deleteButton'), { iconName: 'trash', onPress: () => say('Ацэнка выдаляецца. Калі сеткі няма, выдаленне чакае яе і пра гэта напісана.') }), 'delete')].filter(Boolean));
 
