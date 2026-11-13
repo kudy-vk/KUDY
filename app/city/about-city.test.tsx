@@ -7,7 +7,7 @@
 // screen (criterion 7), and a locale without its own words shows the English
 // text (criterion 6, decision L1).
 import { describe, expect, jest, test } from "@jest/globals";
-import { fireEvent, renderRouter, screen } from "expo-router/testing-library";
+import { fireEvent, renderRouter, screen, waitFor } from "expo-router/testing-library";
 import { Linking } from "react-native";
 
 import AboutCity from "./[id]/about";
@@ -129,12 +129,17 @@ test("every section link row points at an official page and opens it (criterion 
   spy.mockRestore();
 });
 
-test("a failed open leaves the page address on the screen (criterion 7)", async () => {
-  const spy = jest.spyOn(Linking, "openURL").mockRejectedValue(new Error("offline"));
+test("a failed open leaves the page address on the screen; another open clears it (criterion 7)", async () => {
+  const spy = jest.spyOn(Linking, "openURL").mockRejectedValueOnce(new Error("offline"));
   openGuide();
   fireEvent.press(screen.getByTestId("link-about-airportBuses"));
   // The whole remark is one text node: the sentence and the address.
   expect(await screen.findByText(new RegExp(ABOUT_CITY_LINK_URLS.airportBuses.replace(/[.//]/g, "\\$&")))).toBeTruthy();
+  // The next open succeeds: the stale failed-open notice is gone. Reverting
+  // the clear in openLink fails this half (voka round 3, missing-revert-test).
+  spy.mockResolvedValueOnce(undefined as never);
+  fireEvent.press(screen.getByTestId("link-about-ztmSchedule"));
+  await waitFor(() => expect(screen.queryByText(/Не ўдалося адкрыць старонку/)).toBeNull());
   spy.mockRestore();
 });
 
