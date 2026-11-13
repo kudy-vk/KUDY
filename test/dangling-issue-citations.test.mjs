@@ -50,6 +50,12 @@ const REPO = path.resolve(HERE, '..');
 // repo, all closed). The token is the hash sign glued to a dead number with a
 // word boundary on the right: "3399ff" or "4300" must not match, a citation
 // "(issue " + hash + number + ")" must.
+// The list is the confirmed-and-scanned set, not the whole dead cluster: the
+// further confirmed-dead numbers outside it (the #264 results doc records the
+// cluster, among them the G21.22 card whose hash sat on the same provenance
+// lines this pass de-hashed) stay unscanned on purpose — their carriers
+// pre-date the scan and adding a number here means a re-anchoring pass of its
+// own with the header list and canonical record updated (#276 round-2 finding).
 const DEAD_NUMBERS = [280, 284, 292, 305, 313, 338, 339, 344, 347, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
