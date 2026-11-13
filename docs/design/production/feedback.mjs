@@ -182,7 +182,7 @@ await mountBoard({
           onPress: () => {
             showAllHints = true;
             render();
-            body.querySelector('[data-k="more"]')?.focus({ preventScroll: true });
+            body.querySelector(`[data-k="${availableReasons[4]}"]`)?.focus({ preventScroll: true });
           },
         }), 'more')
         : null;
