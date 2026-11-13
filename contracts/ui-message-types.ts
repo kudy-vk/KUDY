@@ -218,13 +218,11 @@ export interface GuideHintStrings {
   readonly dismiss: string;
 }
 
-// Issue #200 — the words of the «Пра горад» static Gdańsk guide (opened from
-// the map menu's reserve-1 fragment). The document is authored in Belarusian
-// — the generated catalogue renders only be, and every other display locale
-// falls back to it (the guideHint documented-fallback idiom) until a locale
-// set is authored. The verified fact lines embed their own check-date claims
-// — the sources table beside the guide (docs/content/about-city-sources.md)
-// records the official source and check date per changeable fact.
+// Issue #200/#252 — the words of the «Пра горад» guide (opened from the map
+// menu's reserve-1 fragment). The verified fact lines embed their own
+// check-date claims — the sources table beside the guide
+// (docs/content/about-city-sources.md) records the official source and check
+// date per changeable fact.
 // Issue #252 — the «Пра горад» wheel screen's words, the generated
 // catalogue's shape (components/about-city-strings.generated.ts, be + en
 // per decision L1): the ids of the owner-approved mockup word sets

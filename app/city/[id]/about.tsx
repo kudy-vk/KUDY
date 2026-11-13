@@ -175,6 +175,8 @@ export default function AboutCity() {
 
   const openLink = useCallback((linkKey: AboutCityLinkKey) => {
     const url = ABOUT_CITY_LINK_URLS[linkKey];
+    // Opening another row clears the notice of a failed open.
+    setFailedLink(null);
     void Linking.openURL(url).catch(() => setFailedLink(url));
   }, []);
 

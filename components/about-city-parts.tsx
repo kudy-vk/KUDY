@@ -214,11 +214,6 @@ export function Tile({ glyph, title, text }: { glyph: CanonGlyph; title: string;
   );
 }
 
-// The label-to-id helper keeps testIDs stable across locales.
-function labelToId(label: string): string {
-  return label.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-}
-
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   subHeading: {
     color: palette.colorMuted,
