@@ -57,8 +57,10 @@
   .fb-section { margin: 0 0 8px; font-size: calc(15px * var(--fs)); font-weight: 600; }
   .fb-reasons { display: grid; gap: 8px; }
   .fb-reasons .fb-section { margin: 0; }
-  .fb-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .fb-chips .chip { min-height: 44px; text-align: left; gap: 8px; }
+  /* Two stable columns avoid moving neighbours when selections change. */
+  .fb-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .fb-chips .chip { min-width: 0; min-height: 44px; text-align: left; gap: 8px; white-space: normal; }
+  .fb-chips .chip:only-child { grid-column: 1 / -1; }
   .fb-chips .chip[aria-disabled="true"] { border-color: var(--disabled-line); background: transparent; color: var(--disabled-ink); cursor: default; }
   /* Reserve the mark for every state so toggling a reason never changes chip width or wrapping. */
   .fb-chip-mark { flex: none; display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 50%; }
