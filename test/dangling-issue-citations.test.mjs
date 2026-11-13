@@ -21,16 +21,17 @@
 // the citation back.
 // #264 (2026-11-13) — the third pass of the same defect class on the
 // localization/status-bar/dark-theme numbers (280, 305, 347, 351, 428, 436,
-// 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 611, 623, 669, 670, 711,
-// 810; all 404 in kudy-vk/KUDY on 2026-11-13, the original cards in
-// vokhandcrafts/KUDY): every citation was re-anchored — 16_delivery_backlog.md
-// (G06.05, G14.04.d), 2026-10-03-single-source-translations.md (G21.10–G21.19,
-// G21.16, G21.25–G21.27), G21.42-chinese-language.md (G21.42–G21.50),
-// docs/design/dark-theme.md (the status bar and the dark theme), android-play-
-// readiness/README.md (APR-05), 2026-10-04-bounded-work.md (G22.06) and the
-// dated records whose dead references were de-hashed in place. Carriers are
-// the generator notes plus hand-written comments and docs; generated
-// catalogues follow the generator.
+// 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623,
+// 669, 670, 711, 810; all 404 in kudy-vk/KUDY on 2026-11-13, the original
+// cards in vokhandcrafts/KUDY): every citation was re-anchored —
+// 16_delivery_backlog.md (G06.05, G14.04.d),
+// 2026-10-03-single-source-translations.md (G21.10–G21.14, G21.16, G21.19,
+// G21.25–G21.27), G21.42-chinese-language.md (G21.42–G21.50),
+// docs/design/dark-theme.md (the status bar and the dark theme),
+// android-play-readiness/README.md (APR-05), 2026-10-04-bounded-work.md
+// (G22.06), review-must-flag.md (598) and the dated records whose dead
+// references were de-hashed in place. Carriers are the generator notes plus
+// hand-written comments and docs; generated catalogues follow the generator.
 // The guard file itself stays scannable: it never spells the dead tokens
 // literally — fixtures build them by concatenation, and the regex is assembled
 // from the number list — otherwise a working scan would fail on this very file.
@@ -106,4 +107,25 @@ test('the finder flags a citation and names the line', () => {
 test('a real issue number, a hex color and a longer number stay untouched', () => {
   assert.deepEqual(findDead('#236 — dangling issue citations; PR #235 closes it.'), []);
   assert.deepEqual(findDead('ghost-пара `#6b7280`, hex `#3399ff` і `#4300`'), []);
+});
+
+// #275 (2026-11-13) — the header restates the scan classes; a number added to
+// DEAD_NUMBERS without a header mention is the stale-restatement defect the
+// #264 header commit shipped (the three numbers commit 6340bc5 added were
+// missing from it). This walk is the reverted-line check for the header itself
+// (implementation-rules 1). The finder regex never matches this file because
+// the dead tokens stay out of every line below; the same discipline applies to
+// this comment — it names no dead number literally.
+test('the header comment enumerates every dead number the guard scans for', () => {
+  const header = fs
+    .readFileSync(fileURLToPath(import.meta.url), 'utf8')
+    .split(/\r?\n/)
+    .filter((line) => line.startsWith('//'))
+    .join('\n');
+  const missing = DEAD_NUMBERS.filter((n) => !new RegExp(`(?<![0-9])${n}(?![0-9])`).test(header));
+  assert.deepEqual(
+    missing,
+    [],
+    'dead numbers missing from the guard file header — when extending DEAD_NUMBERS, list every new number and its re-anchored card range in the header comment (the stale-restatement defect #275 fixed)',
+  );
 });
