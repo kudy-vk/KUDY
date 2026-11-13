@@ -315,8 +315,9 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
   // сёння?» heading through screenStyles.menuDisplayTitle. Every other
   // screen title (rubrics, place names, collections) stays on the UI
   // family. The walk is the reverted-line check (implementation-rules 1):
-  // re-pointing a rubric or place title at a display role, or a screen
-  // consuming a display token directly, turns this red.
+  // re-pointing a rubric or place title at a display role — through the
+  // screenStyles. spelling or the useScreenStyles() hook idiom alike — or a
+  // screen consuming a display token directly, turns this red.
   const roleSource = readFileSync(join(root, 'components/screen-styles.ts'), 'utf8');
   // \b anchors the key start: a future `subtitle:` must not satisfy the
   // `title:` assertion by substring (pr-review 2026-10-01).
@@ -336,7 +337,7 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
         if (dir === join(root, 'app') && /fontFamilyDisplay/.test(source)) {
           displayConsumers.push(`${repoRel(filePath)}: hard-coded display token`);
         }
-        if (/screenStyles\.(displayTitle|menuDisplayTitle)/.test(source)) {
+        if (/\.(displayTitle|menuDisplayTitle)\b/.test(source)) {
           displayConsumers.push(repoRel(filePath));
         }
       }
@@ -344,8 +345,8 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
   };
   scan(join(root, 'app'));
   scan(join(root, 'components'));
-  assert.deepEqual(displayConsumers.sort(), ['app/route/[id].tsx', 'components/screen-styles.ts'],
-    'the display roles are allowed on the route preview title and the screen-styles definitions only');
+  assert.deepEqual(displayConsumers.sort(), ['app/menu.tsx', 'app/route/[id].tsx', 'components/screen-styles.ts'],
+    'the display roles are allowed on the menu title, the route preview title and the screen-styles definitions only');
 });
 
 test('surface styles consume the canon title token — no hardcoded title size (UX 08)', () => {
