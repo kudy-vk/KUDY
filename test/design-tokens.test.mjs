@@ -316,8 +316,9 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
   // screen title (rubrics, place names, collections) stays on the UI
   // family. The walk is the reverted-line check (implementation-rules 1):
   // re-pointing a rubric or place title at a display role — through the
-  // screenStyles. spelling or the useScreenStyles() hook idiom alike — or a
-  // screen consuming a display token directly, turns this red.
+  // screenStyles. spelling, the dotted useScreenStyles() hook idiom or a
+  // destructuring of the hook result — or a screen consuming a display token
+  // directly, turns this red.
   const roleSource = readFileSync(join(root, 'components/screen-styles.ts'), 'utf8');
   // \b anchors the key start: a future `subtitle:` must not satisfy the
   // `title:` assertion by substring (pr-review 2026-10-01).
@@ -337,7 +338,8 @@ test('the display family renders its two sanctioned roles (canon §3 as amended 
         if (dir === join(root, 'app') && /fontFamilyDisplay/.test(source)) {
           displayConsumers.push(`${repoRel(filePath)}: hard-coded display token`);
         }
-        if (/\.(displayTitle|menuDisplayTitle)\b/.test(source)) {
+        if (/\.(displayTitle|menuDisplayTitle)\b/.test(source) ||
+            /const\s*{[^}]*\b(displayTitle|menuDisplayTitle)\b[^}]*}\s*=\s*useScreenStyles\s*\(/.test(source)) {
           displayConsumers.push(repoRel(filePath));
         }
       }
