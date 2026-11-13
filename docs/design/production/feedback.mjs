@@ -97,7 +97,8 @@ await mountBoard({
           targetIllustration(kind),
           el('div', { className: 'fb-target-copy' },
             el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
-            el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: targetName }))),
+            el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: targetName,
+              lang: targetOffer.localized.title[state.locale] ? state.locale : 'be' }))),
         el('h2', { className: 'fb-question', textContent: kind === 'guide' && state.locale === 'be'
           ? 'Як табе гід?' : t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }));
 
