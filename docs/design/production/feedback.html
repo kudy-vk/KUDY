@@ -10,16 +10,19 @@
   .fb-scroll { padding: 8px 16px 24px; }
   .fb-scroll > * + * { margin-top: 16px; }
   .fb-target { display: grid; gap: 12px; }
-  .fb-target-head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  /* The guide preview uses a light schematic in both themes (DT-4).
+     This miniature uses the same street/path language until a real route image exists. */
+  .fb-target-head { display: flex; align-items: center; gap: 12px; min-width: 0; box-shadow: 0 2px 0 var(--shelf-line); }
   .fb-target-copy { display: grid; justify-items: start; gap: 4px; min-width: 0; }
-  .fb-mark {
-    flex: none; display: grid; place-items: center; position: relative;
-    width: 52px; height: 52px; border: 2px solid var(--medal-rim);
-    border-radius: 50% 49% 51% 48%; background: var(--medal-paper);
-    color: var(--medal-ink); box-shadow: 0 2px 0 var(--shelf-line);
+  .fb-cover {
+    position: relative; flex: none; display: block; width: 92px; height: 82px;
+    border: 1px solid #d6dfd7; border-radius: 8px; overflow: hidden; background: #eef3ee;
   }
-  .fb-mark::after { content: ""; position: absolute; inset: 3px; border: 1px solid var(--medal-rim); border-radius: inherit; opacity: .45; }
-  [data-theme="dark"] .fb-mark { background: var(--card); color: var(--ink); }
+  .fb-cover svg { display: block; width: 100%; height: 100%; }
+  .fb-cover-street { fill: none; stroke: #dfe7df; stroke-width: 7; stroke-linecap: round; }
+  .fb-cover-route { fill: none; stroke: #67707a; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 1 5; }
+  .fb-cover-pin { fill: #8a610e; stroke: #ffffff; stroke-width: 2; }
+  .fb-cover-street, .fb-cover-route, .fb-cover-pin { vector-effect: non-scaling-stroke; }
   .fb-target .name { font-size: calc(22px * var(--fs)); line-height: 1.2; overflow-wrap: anywhere; }
   .fb-target .name:not(.t-display) { font-weight: 600; }
   .fb-question { margin: 2px 0 0; font-size: calc(22px * var(--fs)); font-weight: 600; line-height: 1.2; text-wrap: balance; }
@@ -52,6 +55,8 @@
   .fb-ends span:last-child { text-align: right; }
 
   .fb-section { margin: 0 0 8px; font-size: calc(15px * var(--fs)); font-weight: 600; }
+  .fb-reasons { display: grid; gap: 8px; }
+  .fb-reasons .fb-section { margin: 0; }
   .fb-chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .fb-chips .chip { min-height: 44px; text-align: left; gap: 8px; }
   .fb-chips .chip[aria-disabled="true"] { border-color: var(--disabled-line); background: transparent; color: var(--disabled-ink); cursor: default; }
@@ -76,8 +81,10 @@
   .fb-write-note { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0 0; }
   .fb-write-note > span:last-child { flex: none; font-variant-numeric: tabular-nums; }
 
-  .fb-foot { flex: none; display: flex; align-items: center; gap: 12px; min-height: 80px; padding: 12px 16px; border-top: 1px solid var(--line); }
-  .fb-reason { flex: 1; min-width: 0; margin: 0; font-size: calc(13px * var(--fs)); color: var(--muted); }
+  .fb-foot { flex: none; display: grid; gap: 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); }
+  .fb-foot .btn { width: 100%; min-height: 52px; }
+  .fb-reason { min-width: 0; margin: 0; font-size: calc(13px * var(--fs)); color: var(--muted); }
+  .fb-reason:empty { display: none; }
   .fb-hint { position: absolute; z-index: 4; top: calc(var(--status) + 52px); right: 12px; left: 48px; box-shadow: 0 8px 24px rgb(34 38 43 / 22%); }
   .fb-hint p { margin: 0; }
   .fb-hint p + p { margin-top: 6px; }
@@ -87,7 +94,7 @@
 <body>
 <main class="board">
   <h1>Форма ацэнкі</h1>
-  <p class="lead">Працоўны макет часовай паверхні для першага рэлізу: ацаніць гід або месца пяццю зоркамі, пры жаданні назваць да трох прычын. Форму можна прапусціць, яна нічога не блакуе. Назва гіда і месца — ілюстрацыйныя. Вольны тэкст — неабавязковае поле да 500 знакаў; у дадатак трапіць толькі пасля сервернай абароны, тэстаў і абнаўлення палітыкі прыватнасці (#207).</p>
+  <p class="lead">Працоўны макет часовай паверхні для першага рэлізу: ацаніць гід або месца пяццю зоркамі, пры жаданні назваць да трох прычын. Форму можна прапусціць, яна нічога не блакуе. Назва гіда і месца чытаецца з апублікаванага каталога. Малюнак — схематычная міні-карта з прынятага прэв'ю гіда, а не дакладная геаграфія ці новая фота-вокладка. Прычыны-падказкі залежаць ад зорак і не выбіраюцца аўтаматычна. Кнопка адпраўкі мае подпіс, а не самалёцік. Вольны тэкст — неабавязковае поле да 500 знакаў; у дадатак трапіць толькі пасля сервернай абароны, тэстаў і абнаўлення палітыкі прыватнасці (#207).</p>
 </main>
 <script type="module" src="feedback.mjs"></script>
 </body>
