@@ -33,6 +33,7 @@ const NEW = {
   hintMore: { en: 'Pick up to three if you feel like it. Stars alone are fine too.', be: 'Можаш ткнуць да трох. А можаш пакінуць проста зоркі — усё добра.', uk: 'Можеш вибрати до трьох. Або лишити тільки зірки — теж добре.', de: 'Wähl bis zu drei aus, wenn du magst. Sterne allein reichen auch.', es: 'Marca hasta tres si quieres. Con las estrellas basta también.', fr: 'Choisis-en jusqu’à trois si tu veux. Les étoiles seules suffisent aussi.', cs: 'Vyber klidně až tři. Stačí ale i samotné hvězdičky.', sv: 'Välj upp till tre om du vill. Bara stjärnor går också bra.' },
   reviewPlaceholder: { en: 'Was there a moment you will remember?', be: 'Быў момант, які асабліва запомніўся?', uk: 'Був момент, який особливо запам’ятався?', de: 'Gab es einen Moment, der dir in Erinnerung bleibt?', es: '¿Hubo un momento que recordarás?', fr: 'Un moment que tu garderas en mémoire ?', cs: 'Byl nějaký okamžik, který ti utkvěl?', sv: 'Var det ett ögonblick du minns särskilt?' },
   sendReview: { be: 'Адправіць водгук', en: 'Send feedback', uk: 'Надіслати відгук', de: 'Feedback senden', es: 'Enviar opinión', fr: 'Envoyer mon avis', cs: 'Odeslat hodnocení', sv: 'Skicka omdöme' },
+  moreIdeas: { en: 'A few more ideas (+${count})', be: 'Яшчэ ідэі (+${count})', uk: 'Ще ідеї (+${count})', de: 'Noch mehr Ideen (+${count})', es: 'Más ideas (+${count})', fr: 'Encore des idées (+${count})', cs: 'Další nápady (+${count})', sv: 'Fler idéer (+${count})' },
 };
 
 // A miniature of the route-map diagram from the accepted guide preview
@@ -87,6 +88,7 @@ await mountBoard({
     // Back leaves the form without saving, so it is also the way to skip it.
     const top = el('div', { className: 'topbar' }, iconButton('arrow-left', strings['native.chrome.back'], () => say(leave)), el('div', { className: 'title' }), info);
     let reviewText = '';
+    let showAllHints = false;
     const scroll = el('div', { className: 'fb-scroll scroll' });
     const foot = el('div', { className: 'fb-foot' });
     body.append(top, hint, scroll, foot);
@@ -125,6 +127,7 @@ await mountBoard({
         star.addEventListener('click', () => {
           if (busy) return;
           form.reasons = new Set(keepCompatibleReasons(kind, value, form.reasons));
+          if (form.score !== value) showAllHints = false;
           form.score = value;
           render();
         });
@@ -134,7 +137,12 @@ await mountBoard({
       const ends = el('div', { className: 'fb-ends t-small' }, ...t('scaleHint').split(' · ').map((part) => el('span', { textContent: part.replace(/^\d\s*—\s*/, '') })));
 
       const chips = el('div', { className: 'fb-chips' });
-      for (const code of suggestedReasons(kind, form.score)) {
+      const availableReasons = suggestedReasons(kind, form.score);
+      // The first four prompts keep the optional text field in easy reach.
+      // Keep the full list open when a selected reason would otherwise be hidden.
+      const mustExpand = availableReasons.slice(4).some((code) => form.reasons.has(code));
+      const visibleReasons = showAllHints || mustExpand ? availableReasons : availableReasons.slice(0, 4);
+      for (const code of visibleReasons) {
         const chosen = form.reasons.has(code), off = busy || (!chosen && form.reasons.size >= 3);
         const chip = keyed(el('button', { className: 'chip', type: 'button' },
           el('span', { className: 'fb-chip-mark' }, icon('check', 14)),
@@ -169,10 +177,20 @@ await mountBoard({
       const hintTitle = w(form.score === null ? 'pickStars' :
         form.score === 5 ? 'delighted' : form.score === 4 ? 'positive' :
         form.score === 3 ? 'improve' : 'negative');
+      const more = availableReasons.length > visibleReasons.length
+        ? keyed(button(w('moreIdeas').replace('${count}', String(availableReasons.length - visibleReasons.length)), {
+          onPress: () => {
+            showAllHints = true;
+            render();
+            body.querySelector('[data-k="more"]')?.focus({ preventScroll: true });
+          },
+        }), 'more')
+        : null;
+      if (more) more.classList.add('fb-more');
       const reasonsBlock = el('section', { className: 'fb-reasons' },
         el('h3', { className: 'fb-section', textContent: hintTitle }),
         form.score === null ? null : el('p', { className: 't-small fb-voice-note', textContent: w('hintMore') }),
-        form.score === null ? null : chips);
+        form.score === null ? null : chips, more);
       scroll.replaceChildren(...[header, notice, el('div', { className: 'card fb-score-card' }, stars, ends),
         reasonsBlock, note,
         // A rating that already exists on the device can be deleted from here.
