@@ -65,6 +65,10 @@ test('mockup wires neutral stars, friendly copy and labelled Send; no app change
   assert.match(source, /suggestedReasons\(kind, form\.score\)/);
   assert.match(source, /keepCompatibleReasons\(kind, value, form\.reasons\)/);
   assert.match(source, /positiveLabel\(code, state\.locale\)/);
+  assert.match(source, /availableReasons\.slice\(0, 4\)/);
+  assert.match(source, /showAllHints = true/);
+  assert.match(source, /mustExpand/);
+  assert.match(source, /w\('moreIdeas'\)/);
   assert.match(source, /button\(w\('sendReview'\)/);
   assert.match(source, /w\('reviewPlaceholder'\)/);
   assert.doesNotMatch(source, /fab\('send'/);
