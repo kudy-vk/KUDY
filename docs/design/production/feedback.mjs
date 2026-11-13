@@ -72,8 +72,11 @@ await mountBoard({
 
       // The header names who is rated and what for: a guide's whole experience or a physical place.
       const header = el('div', { className: 'fb-target' },
-        el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
-        el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: TARGET[kind] }),
+        el('div', { className: 'fb-target-head' },
+          el('span', { className: 'fb-mark' }, icon(kind === 'guide' ? 'route' : 'map-pin', 24)),
+          el('div', { className: 'fb-target-copy' },
+            el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
+            el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: TARGET[kind] }))),
         el('h2', { className: 'fb-question', textContent: t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }),
         el('p', { className: 't-small', textContent: t('targetLine').replace('${locale}', FACTS.locale).replace('${version}', FACTS.version) }));
 
@@ -103,7 +106,8 @@ await mountBoard({
       const chips = el('div', { className: 'fb-chips' });
       for (const code of REASONS[kind]) {
         const chosen = form.reasons.has(code), off = busy || (!chosen && form.reasons.size >= 3);
-        const chip = keyed(el('button', { className: 'chip', type: 'button' }, chosen && icon('check', 16), t(`reasonText.${code}`)), code);
+        const chip = keyed(el('button', { className: 'chip', type: 'button' },
+          el('span', { className: 'fb-chip-mark' }, icon('check', 14)), t(`reasonText.${code}`)), code);
         chip.setAttribute('aria-pressed', String(chosen));
         if (off) chip.setAttribute('aria-disabled', 'true');
         chip.addEventListener('click', () => {
@@ -114,7 +118,7 @@ await mountBoard({
         chips.append(chip);
       }
 
-      scroll.replaceChildren(...[header, notice, el('div', {}, stars, ends),
+      scroll.replaceChildren(...[header, notice, el('div', { className: 'card fb-score-card' }, stars, ends),
         el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips),
         // A rating that already exists on the device can be deleted from here.
         conflict && keyed(button(t('deleteButton'), { iconName: 'trash', onPress: () => say('Ацэнка выдаляецца. Калі сеткі няма, выдаленне чакае яе і пра гэта напісана.') }), 'delete')].filter(Boolean));
