@@ -5,16 +5,14 @@
 // «Feedback form (temporary surface)», docs/design/visual-language.md §8.
 import { button, el, icon, iconButton, mountBoard, svg } from './kit.mjs';
 import { discoveryContent, pick } from './offers.mjs';
-import { REASON_SUGGESTIONS, suggestedReasons, keepCompatibleReasons } from './feedback-reasons.mjs';
+import { EXISTING_REASON_CODES, suggestedReasons, keepCompatibleReasons, positiveLabel } from './feedback-reasons.mjs';
 const FB = (key) => `native.feedback.${key}`;
-// Retain every code for translations; only a sentiment-matched subset is shown.
-const REASON_CODES = [...new Set(Object.values(REASON_SUGGESTIONS)
-  .flatMap((groups) => [...groups.positive, ...groups.needsWork]))];
+// Existing reason codes keep their canonical translations; new positive copy is mockup-only.
 const STRING_IDS = [
   ...['formTitleGuide', 'formTitlePlace', 'scaleHint', 'starLabel', 'reasonsTitle', 'disclosureTitle', 'disclosureBody',
     'disclosureAnalytics', 'send', 'deleteButton', 'resolveConflict', 'stateConflict', 'guideWord', 'placeWord',
     'errorText.feedback-resolution-required'].map(FB),
-  ...REASON_CODES.map((code) => FB(`reasonText.${code}`)),
+  ...EXISTING_REASON_CODES.map((code) => FB(`reasonText.${code}`)),
   'native.chrome.back', 'native.chrome.loading',
 ];
 
@@ -22,13 +20,18 @@ const STRING_IDS = [
 // The preview does not submit review text to the server; validation belongs to #207.
 const REVIEW_MAX = 500;
 const NEW = {
-  review: { be: 'Водгук (неабавязкова)', en: 'Review (optional)', uk: 'Відгук (необов’язково)', de: 'Rückmeldung (optional)', es: 'Opinión (opcional)', fr: 'Avis (facultatif)', cs: 'Recenze (nepovinné)', sv: 'Omdöme (valfritt)' },
-  noPersonal: { be: 'Не пішы асабістых даных', en: 'Do not write personal data', uk: 'Не пиши особистих даних', de: 'Bitte keine persönlichen Daten', es: 'No escribas datos personales', fr: 'N’écris pas de données personnelles', cs: 'Nepiš osobní údaje', sv: 'Skriv inga personuppgifter' },
+  review: { en: 'Want to add a few words? We are listening', be: 'Хочаш дадаць пару слоў? Мы слухаем', uk: 'Хочеш додати кілька слів? Ми слухаємо', de: 'Noch ein paar Worte? Wir hören zu', es: '¿Quieres contar algo más? Te escuchamos', fr: 'Tu veux ajouter quelques mots ? On t’écoute', cs: 'Chceš přidat pár slov? Posloucháme', sv: 'Vill du säga några ord till? Vi lyssnar' },
+  noPersonal: { en: 'No personal data, please', be: 'Толькі без асабістых даных, добра?', uk: 'Тільки без особистих даних, гаразд?', de: 'Bitte keine persönlichen Daten', es: 'Sin datos personales, por favor', fr: 'Sans données personnelles, s’il te plaît', cs: 'Prosím bez osobních údajů', sv: 'Inga personuppgifter, tack' },
   choose: { be: 'Каб адправіць, выберы ацэнку', en: 'Choose a rating to send', uk: 'Щоб надіслати, вибери оцінку', de: 'Wähle zum Senden eine Bewertung', es: 'Para enviar, elige una valoración', fr: 'Pour envoyer, choisis une note', cs: 'Pro odeslání vyber hodnocení', sv: 'Välj ett betyg för att skicka' },
-  pickStars: { be: 'Ацані зоркамі — падкажам, што можна адзначыць', en: 'Choose stars to see useful prompts', uk: 'Вибери зірки — запропонуємо підказки', de: 'Wähle Sterne, um Hinweise zu sehen', es: 'Elige estrellas para ver sugerencias', fr: 'Choisis des étoiles pour voir des suggestions', cs: 'Vyber hvězdičky a zobrazí se možnosti', sv: 'Välj stjärnor så visas förslag' },
-  negative: { be: 'Што не спадабалася?', en: 'What did not work?', uk: 'Що не сподобалося?', de: 'Was hat dir nicht gefallen?', es: '¿Qué no te gustó?', fr: 'Qu’est-ce qui ne t’a pas plu ?', cs: 'Co se ti nelíbilo?', sv: 'Vad fungerade inte?' },
-  improve: { be: 'Што можна палепшыць?', en: 'What could be better?', uk: 'Що можна покращити?', de: 'Was könnte besser sein?', es: '¿Qué se podría mejorar?', fr: 'Qu’est-ce qui pourrait être amélioré ?', cs: 'Co by šlo zlepšit?', sv: 'Vad kan bli bättre?' },
-  positive: { be: 'Што спадабалася?', en: 'What did you like?', uk: 'Що сподобалося?', de: 'Was hat dir gefallen?', es: '¿Qué te gustó?', fr: 'Qu’est-ce qui t’a plu ?', cs: 'Co se ti líbilo?', sv: 'Vad gillade du?' },
+  introGuide: { en: 'So, how was that walk?', be: 'Ну як табе гэтая прагулка?', uk: 'Ну як тобі ця прогулянка?', de: 'Na, wie war der Spaziergang?', es: 'Bueno, ¿qué tal el paseo?', fr: 'Alors, cette balade ?', cs: 'Tak co, jaká byla procházka?', sv: 'Nå, hur var promenaden?' },
+  introPlace: { en: 'So, how did you like this place?', be: 'Ну як табе гэтае месца?', uk: 'Ну як тобі це місце?', de: 'Na, wie fandest du diesen Ort?', es: 'Bueno, ¿qué tal este lugar?', fr: 'Alors, cet endroit ?', cs: 'Tak co, jak se ti líbilo tohle místo?', sv: 'Nå, vad tyckte du om platsen?' },
+  pickStars: { en: 'Pick some stars — we will give you a few ideas', be: 'Выберы зоркі — і падкінем пару ідэй', uk: 'Вибери зірки — підкинемо кілька ідей', de: 'Wähle Sterne – wir geben dir ein paar Ideen', es: 'Elige estrellas y te damos algunas ideas', fr: 'Choisis des étoiles, on te souffle quelques idées', cs: 'Vyber hvězdičky a nabídneme pár nápadů', sv: 'Välj stjärnor så får du några idéer' },
+  negative: { en: 'Where did we get it wrong?', be: 'Дзе мы далі маху?', uk: 'Де ми схибили?', de: 'Was haben wir vermasselt?', es: '¿En qué fallamos?', fr: 'Où est-ce qu’on s’est loupés ?', cs: 'Kde jsme šlápli vedle?', sv: 'Vad missade vi?' },
+  improve: { en: 'What should we tune up?', be: 'Што б нам падкруціць?', uk: 'Що нам підкрутити?', de: 'Was können wir besser machen?', es: '¿Qué podemos mejorar?', fr: 'Qu’est-ce qu’on pourrait améliorer ?', cs: 'Co bychom mohli vylepšit?', sv: 'Vad kan vi fila på?' },
+  positive: { en: 'What really worked for you?', be: 'Што табе асабліва зайшло?', uk: 'Що тобі особливо зайшло?', de: 'Was hat dir besonders gefallen?', es: '¿Qué te gustó especialmente?', fr: 'Qu’est-ce qui t’a vraiment plu ?', cs: 'Co tě obzvlášť bavilo?', sv: 'Vad gillade du extra mycket?' },
+  delighted: { en: 'What deserves a special shout-out?', be: 'За што тут асобны рэспект?', uk: 'За що тут окремий респект?', de: 'Was verdient besonderes Lob?', es: '¿Qué merece una mención especial?', fr: 'Qu’est-ce qui mérite un bravo ?', cs: 'Co si zaslouží zvláštní pochvalu?', sv: 'Vad förtjänar extra beröm?' },
+  hintMore: { en: 'Pick up to three if you feel like it. Stars alone are fine too.', be: 'Можаш ткнуць да трох. А можаш пакінуць проста зоркі — усё добра.', uk: 'Можеш вибрати до трьох. Або лишити тільки зірки — теж добре.', de: 'Wähl bis zu drei aus, wenn du magst. Sterne allein reichen auch.', es: 'Marca hasta tres si quieres. Con las estrellas basta también.', fr: 'Choisis-en jusqu’à trois si tu veux. Les étoiles seules suffisent aussi.', cs: 'Vyber klidně až tři. Stačí ale i samotné hvězdičky.', sv: 'Välj upp till tre om du vill. Bara stjärnor går också bra.' },
+  reviewPlaceholder: { en: 'Was there a moment you will remember?', be: 'Быў момант, які асабліва запомніўся?', uk: 'Був момент, який особливо запам’ятався?', de: 'Gab es einen Moment, der dir in Erinnerung bleibt?', es: '¿Hubo un momento que recordarás?', fr: 'Un moment que tu garderas en mémoire ?', cs: 'Byl nějaký okamžik, který ti utkvěl?', sv: 'Var det ett ögonblick du minns särskilt?' },
   sendReview: { be: 'Адправіць водгук', en: 'Send feedback', uk: 'Надіслати відгук', de: 'Feedback senden', es: 'Enviar opinión', fr: 'Envoyer mon avis', cs: 'Odeslat hodnocení', sv: 'Skicka omdöme' },
 };
 
@@ -53,19 +56,20 @@ await mountBoard({
     { id: 'target', label: 'Што ацэньваюць', options: [['guide', 'Гід'], ['place', 'Месца']] },
     { id: 'status', label: 'Стан формы', options: [
       ['none', 'Нічога не выбрана'], ['low', '2 зоркі'], ['middle', '3 зоркі'],
-      ['stars', '4 зоркі'], ['sending', 'Адпраўляецца'], ['conflict', 'Канфлікт з серверам'],
+      ['stars', '4 зоркі'], ['five', '5 зорак'], ['sending', 'Адпраўляецца'], ['conflict', 'Канфлікт з серверам'],
     ] },
   ],
   stringIds: STRING_IDS,
   async build({ body, state, strings, say }) {
     const t = (key) => strings[FB(key)];
+    const w = (key) => NEW[key][state.locale] ?? NEW[key].en;
     const kind = state.target;
     const [discovery] = await discoveryContent();
     const targetOffer = discovery.offers.find((offer) => offer.ref.kind === kind);
     if (!targetOffer) throw new Error(`No published ${kind} target`);
     const targetName = pick(targetOffer.localized.title, state.locale);
     // No preselected score or reasons on entry. The board can preview 2/3/4 stars.
-    const exampleScore = { low: 2, middle: 3, stars: 4, sending: 4, conflict: 4 };
+    const exampleScore = { low: 2, middle: 3, stars: 4, five: 5, sending: 4, conflict: 4 };
     const form = { score: exampleScore[state.status] ?? null, reasons: new Set() };
     const busy = state.status === 'sending', conflict = state.status === 'conflict';
     const leave = 'Форма закрываецца і вяртае на экран, з якога яе адкрылі. Нічога не запісана і нічога не заблакавана.';
@@ -99,8 +103,7 @@ await mountBoard({
             el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
             el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: targetName,
               lang: targetOffer.localized.title[state.locale] ? state.locale : 'be' }))),
-        el('h2', { className: 'fb-question', textContent: kind === 'guide' && state.locale === 'be'
-          ? 'Як табе гід?' : t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }));
+        el('h2', { className: 'fb-question', textContent: w(kind === 'guide' ? 'introGuide' : 'introPlace') }));
 
       let notice = null;
       if (conflict) {
@@ -134,7 +137,8 @@ await mountBoard({
       for (const code of suggestedReasons(kind, form.score)) {
         const chosen = form.reasons.has(code), off = busy || (!chosen && form.reasons.size >= 3);
         const chip = keyed(el('button', { className: 'chip', type: 'button' },
-          el('span', { className: 'fb-chip-mark' }, icon('check', 14)), t(`reasonText.${code}`)), code);
+          el('span', { className: 'fb-chip-mark' }, icon('check', 14)),
+          form.score >= 4 ? positiveLabel(code, state.locale) : t(`reasonText.${code}`)), code);
         chip.setAttribute('aria-pressed', String(chosen));
         if (off) chip.setAttribute('aria-disabled', 'true');
         chip.addEventListener('click', () => {
@@ -148,7 +152,8 @@ await mountBoard({
       // The draft survives star and chip redraws; the review remains optional.
       // This is a UI preview only; the live API currently accepts no free-text field.
       const field = keyed(el('textarea', {
-        className: 'fb-review', rows: 3, maxLength: REVIEW_MAX, value: reviewText, disabled: busy,
+        className: 'fb-review', rows: 3, maxLength: REVIEW_MAX, value: reviewText,
+        placeholder: w('reviewPlaceholder'), disabled: busy,
       }), 'review');
       const counter = el('span', { textContent: `${reviewText.length} / ${REVIEW_MAX}` });
       field.addEventListener('input', () => {
@@ -157,14 +162,16 @@ await mountBoard({
       });
       const note = el('div', { className: 'fb-write' },
         el('label', { className: 'fb-review-label' },
-          el('span', { className: 'fb-section', textContent: NEW.review[state.locale] }), field),
+          el('span', { className: 'fb-section', textContent: w('review') }), field),
         el('p', { className: 't-small fb-write-note' },
-          el('span', { textContent: NEW.noPersonal[state.locale] }), counter));
+          el('span', { textContent: w('noPersonal') }), counter));
 
-      const hintTitle = form.score === null ? NEW.pickStars[state.locale] :
-        NEW[form.score >= 4 ? 'positive' : form.score === 3 ? 'improve' : 'negative'][state.locale];
+      const hintTitle = w(form.score === null ? 'pickStars' :
+        form.score === 5 ? 'delighted' : form.score === 4 ? 'positive' :
+        form.score === 3 ? 'improve' : 'negative');
       const reasonsBlock = el('section', { className: 'fb-reasons' },
         el('h3', { className: 'fb-section', textContent: hintTitle }),
+        form.score === null ? null : el('p', { className: 't-small fb-voice-note', textContent: w('hintMore') }),
         form.score === null ? null : chips);
       scroll.replaceChildren(...[header, notice, el('div', { className: 'card fb-score-card' }, stars, ends),
         reasonsBlock, note,
@@ -173,9 +180,9 @@ await mountBoard({
 
       // Send is off until a star is chosen, while sending and during a conflict;
       // the reason is always written next to it.
-      const reason = form.score === null ? NEW.choose[state.locale] : conflict ? t('errorText.feedback-resolution-required') : null;
+      const reason = form.score === null ? w('choose') : conflict ? t('errorText.feedback-resolution-required') : null;
       const off = busy || reason !== null;
-      const send = keyed(button(NEW.sendReview[state.locale], {
+      const send = keyed(button(w('sendReview'), {
         kind: 'primary', block: true, disabled: off,
         onPress: () => say('Ацэнка захоўваецца на прыладзе і адпраўляецца. Форма закрываецца і вяртае на экран, з якога яе адкрылі.'),
       }), 'send');
