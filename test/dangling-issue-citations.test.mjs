@@ -58,7 +58,12 @@ const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g')
 // an execSync string command would let /bin/sh expand "*.md" to the three root
 // files, narrowing the pathspecs and blinding the guard to docs/** and test/**
 // (the guard-shell-glob-blind defect this file was rewritten against).
-const SCANNED = ['*.ts', '*.tsx', '*.js', '*.jsx', '*.mjs', '*.cjs', '*.md', '*.html', '*.css'];
+// *.json rides the scan since #276: the contract and report carriers (schema
+// descriptions, glossary/translations provenance evidence, report url and
+// duplicate_review fields) held hash citations of the same dead numbers the
+// formats above cannot see. The docs ledger is excluded — its dropped entries
+// deliberately record the dropped hash tokens themselves.
+const SCANNED = ['*.ts', '*.tsx', '*.js', '*.jsx', '*.mjs', '*.cjs', '*.md', '*.html', '*.css', '*.json', ':(exclude)tools/docs-ledger/**'];
 
 function findDead(text) {
   const hits = [];
@@ -116,6 +121,20 @@ test('a real issue number, a hex color and a longer number stay untouched', () =
 // (implementation-rules 1). The finder regex never matches this file because
 // the dead tokens stay out of every line below; the same discipline applies to
 // this comment — it names no dead number literally.
+test('the scanned formats keep *.json with the docs-ledger exclusion', () => {
+  const source = fs.readFileSync(fileURLToPath(import.meta.url), 'utf8');
+  assert.match(
+    source,
+    /'\*\.json'/,
+    'JSON carriers must stay scanned — the #276 pass de-hashed the contract and report carriers; dropping the format silently re-hides the class',
+  );
+  assert.match(
+    source,
+    /':\(exclude\)tools\/docs-ledger\/\*\*'/,
+    'the docs-ledger exclusion must stay — dropped.json deliberately records the dropped hash tokens',
+  );
+});
+
 test('the header comment enumerates every dead number the guard scans for', () => {
   const header = fs
     .readFileSync(fileURLToPath(import.meta.url), 'utf8')

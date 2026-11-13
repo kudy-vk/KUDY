@@ -73,7 +73,7 @@
     {
       "task": "G21.42",
       "issue": 623,
-      "url": "#623",
+      "url": "docs/architecture/decisions/G21.42-chinese-language.md",
       "title": "G21.42 — Approve the Chinese release scope before implementation",
       "blocked_by": [
         619,
@@ -91,7 +91,7 @@
   "project_verification": "unavailable: authentication token missing read:project; no permission refresh or board changes",
   "new_documents_on_main": false,
   "publication_requirement": "Separate PR closing #619 publishes all new runner inputs; research issues depend on #619.",
-  "duplicate_review": "Compared open/closed issues. Reused #566/#543 policy, #553 player identity and #306 Ukrainian narration; no Chinese research contracts existed.",
+  "duplicate_review": "Compared open/closed issues. Reused the 566/543 single-source policy and the 553 player-identity and 306 Ukrainian-narration decisions (cards of the archived repo); no Chinese research contracts existed.",
   "graph_verification": "619 -> closed 565; 620/621/622 -> 619; 623 -> 619/620/621/622; no cycle.",
   "tool_registry": {
     "read": true,
