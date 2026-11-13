@@ -3,26 +3,18 @@
 // of reasons per target kind (at most three), the disclosure next to Send, and
 // an honest delivery state. Rules: docs/design/screens-and-transitions.md
 // «Feedback form (temporary surface)», docs/design/visual-language.md §8.
-import { button, el, fab, icon, iconButton, mountBoard, registerIcons } from './kit.mjs';
-
-// Lucide «send» (lucide-react-native 1.49.0, ISC): the one action of this form.
-registerIcons({
-  send: [
-    ['path', { d: 'M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z' }],
-    ['path', { d: 'm21.854 2.147-10.94 10.939' }],
-  ],
-});
+import { button, el, icon, iconButton, mountBoard, svg } from './kit.mjs';
+import { discoveryContent, pick } from './offers.mjs';
+import { REASON_SUGGESTIONS, suggestedReasons, keepCompatibleReasons } from './feedback-reasons.mjs';
 const FB = (key) => `native.feedback.${key}`;
-// The closed reason lists of controllers/useFeedbackController.ts.
-const REASONS = {
-  guide: ['interesting_stories', 'clear_delivery', 'too_long', 'hard_to_navigate', 'audio_problem', 'description_mismatch'],
-  place: ['worth_visiting', 'description_mismatch', 'hard_to_reach', 'access_problem'],
-};
+// Retain every code for translations; only a sentiment-matched subset is shown.
+const REASON_CODES = [...new Set(Object.values(REASON_SUGGESTIONS)
+  .flatMap((groups) => [...groups.positive, ...groups.needsWork]))];
 const STRING_IDS = [
   ...['formTitleGuide', 'formTitlePlace', 'scaleHint', 'starLabel', 'reasonsTitle', 'disclosureTitle', 'disclosureBody',
     'disclosureAnalytics', 'send', 'deleteButton', 'resolveConflict', 'stateConflict', 'guideWord', 'placeWord',
     'errorText.feedback-resolution-required'].map(FB),
-  ...[...new Set([...REASONS.guide, ...REASONS.place])].map((code) => FB(`reasonText.${code}`)),
+  ...REASON_CODES.map((code) => FB(`reasonText.${code}`)),
   'native.chrome.back', 'native.chrome.loading',
 ];
 
@@ -33,23 +25,48 @@ const NEW = {
   review: { be: 'Водгук (неабавязкова)', en: 'Review (optional)', uk: 'Відгук (необов’язково)', de: 'Rückmeldung (optional)', es: 'Opinión (opcional)', fr: 'Avis (facultatif)', cs: 'Recenze (nepovinné)', sv: 'Omdöme (valfritt)' },
   noPersonal: { be: 'Не пішы асабістых даных', en: 'Do not write personal data', uk: 'Не пиши особистих даних', de: 'Bitte keine persönlichen Daten', es: 'No escribas datos personales', fr: 'N’écris pas de données personnelles', cs: 'Nepiš osobní údaje', sv: 'Skriv inga personuppgifter' },
   choose: { be: 'Каб адправіць, выберы ацэнку', en: 'Choose a rating to send', uk: 'Щоб надіслати, вибери оцінку', de: 'Wähle zum Senden eine Bewertung', es: 'Para enviar, elige una valoración', fr: 'Pour envoyer, choisis une note', cs: 'Pro odeslání vyber hodnocení', sv: 'Välj ett betyg för att skicka' },
+  pickStars: { be: 'Ацані зоркамі — падкажам, што можна адзначыць', en: 'Choose stars to see useful prompts', uk: 'Вибери зірки — запропонуємо підказки', de: 'Wähle Sterne, um Hinweise zu sehen', es: 'Elige estrellas para ver sugerencias', fr: 'Choisis des étoiles pour voir des suggestions', cs: 'Vyber hvězdičky a zobrazí se možnosti', sv: 'Välj stjärnor så visas förslag' },
+  negative: { be: 'Што не спадабалася?', en: 'What did not work?', uk: 'Що не сподобалося?', de: 'Was hat dir nicht gefallen?', es: '¿Qué no te gustó?', fr: 'Qu’est-ce qui ne t’a pas plu ?', cs: 'Co se ti nelíbilo?', sv: 'Vad fungerade inte?' },
+  improve: { be: 'Што можна палепшыць?', en: 'What could be better?', uk: 'Що можна покращити?', de: 'Was könnte besser sein?', es: '¿Qué se podría mejorar?', fr: 'Qu’est-ce qui pourrait être amélioré ?', cs: 'Co by šlo zlepšit?', sv: 'Vad kan bli bättre?' },
+  positive: { be: 'Што спадабалася?', en: 'What did you like?', uk: 'Що сподобалося?', de: 'Was hat dir gefallen?', es: '¿Qué te gustó?', fr: 'Qu’est-ce qui t’a plu ?', cs: 'Co se ti líbilo?', sv: 'Vad gillade du?' },
+  sendReview: { be: 'Адправіць водгук', en: 'Send feedback', uk: 'Надіслати відгук', de: 'Feedback senden', es: 'Enviar opinión', fr: 'Envoyer mon avis', cs: 'Odeslat hodnocení', sv: 'Skicka omdöme' },
 };
 
-// Illustrative targets, the same made-up names as on the Run mockup.
-const TARGET = { guide: 'Шпацыр па старым горадзе', place: 'Ратуша' };
+// A miniature of the route-map diagram from the accepted guide preview
+// (preview.mjs), not a fabricated cover photograph or geographical claim.
+// The map stays light in both themes (DT-4).
+function targetIllustration(kind) {
+  const streets = svg('path', { class: 'fb-cover-street', d: 'M-5 22L105 34M-5 74L105 62M22 -5L30 105M68 -5L60 105' });
+  const isGuide = kind === 'guide';
+  const points = isGuide ? [[18, 63], [48, 49], [82, 24]] : [[50, 42]];
+  const route = isGuide ? svg('path', { class: 'fb-cover-route', d: 'M18 63 L48 49 L82 24' }) : null;
+  const dots = points.map(([cx, cy]) => svg('circle', { class: 'fb-cover-pin', cx, cy, r: isGuide ? 5 : 7 }));
+  const cover = el('span', { className: 'fb-cover' },
+    svg('svg', { viewBox: '0 0 100 84', 'aria-hidden': 'true' }, streets, route, ...dots));
+  cover.setAttribute('aria-hidden', 'true');
+  return cover;
+}
 const keyed = (node, key) => { node.dataset.k = key; return node; };
 
 await mountBoard({
   controls: [
     { id: 'target', label: 'Што ацэньваюць', options: [['guide', 'Гід'], ['place', 'Месца']] },
-    { id: 'status', label: 'Стан формы', options: [['none', 'Нічога не выбрана'], ['stars', 'Зоркі выбраныя'], ['sending', 'Адпраўляецца'], ['conflict', 'Канфлікт з серверам']] },
+    { id: 'status', label: 'Стан формы', options: [
+      ['none', 'Нічога не выбрана'], ['low', '2 зоркі'], ['middle', '3 зоркі'],
+      ['stars', '4 зоркі'], ['sending', 'Адпраўляецца'], ['conflict', 'Канфлікт з серверам'],
+    ] },
   ],
   stringIds: STRING_IDS,
-  build({ body, state, strings, say }) {
+  async build({ body, state, strings, say }) {
     const t = (key) => strings[FB(key)];
     const kind = state.target;
-    // No default score: the form opens empty unless the board asks for a filled example.
-    const form = state.status === 'none' ? { score: null, reasons: new Set() } : { score: 4, reasons: new Set([REASONS[kind][0]]) };
+    const [discovery] = await discoveryContent();
+    const targetOffer = discovery.offers.find((offer) => offer.ref.kind === kind);
+    if (!targetOffer) throw new Error(`No published ${kind} target`);
+    const targetName = pick(targetOffer.localized.title, state.locale);
+    // No preselected score or reasons on entry. The board can preview 2/3/4 stars.
+    const exampleScore = { low: 2, middle: 3, stars: 4, sending: 4, conflict: 4 };
+    const form = { score: exampleScore[state.status] ?? null, reasons: new Set() };
     const busy = state.status === 'sending', conflict = state.status === 'conflict';
     const leave = 'Форма закрываецца і вяртае на экран, з якога яе адкрылі. Нічога не запісана і нічога не заблакавана.';
 
@@ -72,15 +89,17 @@ await mountBoard({
 
     function render() {
       const held = body.contains(document.activeElement) ? document.activeElement.dataset.k : null;
+      const previousScroll = scroll.scrollTop;
 
       // The header names who is rated and what for: a guide's whole experience or a physical place.
       const header = el('div', { className: 'fb-target' },
-        el('div', { className: 'fb-target-head' },
-          el('span', { className: 'fb-mark' }, icon(kind === 'guide' ? 'route' : 'map-pin', 24)),
+        el('div', { className: 'card fb-target-head' },
+          targetIllustration(kind),
           el('div', { className: 'fb-target-copy' },
             el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
-            el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: TARGET[kind] }))),
-        el('h2', { className: 'fb-question', textContent: t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }));
+            el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: targetName }))),
+        el('h2', { className: 'fb-question', textContent: kind === 'guide' && state.locale === 'be'
+          ? 'Як табе гід?' : t(kind === 'guide' ? 'formTitleGuide' : 'formTitlePlace') }));
 
       let notice = null;
       if (conflict) {
@@ -99,14 +118,19 @@ await mountBoard({
         star.setAttribute('aria-label', t('starLabel').replace('${score}', value));
         star.setAttribute('aria-pressed', String(form.score === value));
         if (busy) star.setAttribute('aria-disabled', 'true');
-        star.addEventListener('click', () => { if (!busy) { form.score = value; render(); } });
+        star.addEventListener('click', () => {
+          if (busy) return;
+          form.reasons = new Set(keepCompatibleReasons(kind, value, form.reasons));
+          form.score = value;
+          render();
+        });
         stars.append(star);
       }
       // The two ends of the scale, from the app's own hint, shown without the digits.
       const ends = el('div', { className: 'fb-ends t-small' }, ...t('scaleHint').split(' · ').map((part) => el('span', { textContent: part.replace(/^\d\s*—\s*/, '') })));
 
       const chips = el('div', { className: 'fb-chips' });
-      for (const code of REASONS[kind]) {
+      for (const code of suggestedReasons(kind, form.score)) {
         const chosen = form.reasons.has(code), off = busy || (!chosen && form.reasons.size >= 3);
         const chip = keyed(el('button', { className: 'chip', type: 'button' },
           el('span', { className: 'fb-chip-mark' }, icon('check', 14)), t(`reasonText.${code}`)), code);
@@ -136,8 +160,13 @@ await mountBoard({
         el('p', { className: 't-small fb-write-note' },
           el('span', { textContent: NEW.noPersonal[state.locale] }), counter));
 
+      const hintTitle = form.score === null ? NEW.pickStars[state.locale] :
+        NEW[form.score >= 4 ? 'positive' : form.score === 3 ? 'improve' : 'negative'][state.locale];
+      const reasonsBlock = el('section', { className: 'fb-reasons' },
+        el('h3', { className: 'fb-section', textContent: hintTitle }),
+        form.score === null ? null : chips);
       scroll.replaceChildren(...[header, notice, el('div', { className: 'card fb-score-card' }, stars, ends),
-        el('div', {}, el('h3', { className: 'fb-section', textContent: t('reasonsTitle') }), chips), note,
+        reasonsBlock, note,
         // A rating that already exists on the device can be deleted from here.
         conflict && keyed(button(t('deleteButton'), { iconName: 'trash', onPress: () => say('Ацэнка выдаляецца. Калі сеткі няма, выдаленне чакае яе і пра гэта напісана.') }), 'delete')].filter(Boolean));
 
@@ -145,13 +174,15 @@ await mountBoard({
       // the reason is always written next to it.
       const reason = form.score === null ? NEW.choose[state.locale] : conflict ? t('errorText.feedback-resolution-required') : null;
       const off = busy || reason !== null;
-      const send = keyed(fab('send', t('send'), { disabled: off, onPress: () => say('Ацэнка захоўваецца на прыладзе і адпраўляецца. Форма закрываецца і вяртае на экран, з якога яе адкрылі.') }), 'send');
-      // The footer is the same on every screen with one action: what the action
-      // waits for on the left, the round action on the right.
+      const send = keyed(button(NEW.sendReview[state.locale], {
+        kind: 'primary', block: true, disabled: off,
+        onPress: () => say('Ацэнка захоўваецца на прыладзе і адпраўляецца. Форма закрываецца і вяртае на экран, з якога яе адкрылі.'),
+      }), 'send');
+      // A labelled primary action avoids confusing the send symbol with a route icon.
       const why = el('p', { className: 'fb-reason', textContent: busy ? strings['native.chrome.loading'] : reason ?? '' });
       foot.replaceChildren(why, send);
-
-      if (held) body.querySelector(`[data-k="${held}"]`)?.focus();
+      scroll.scrollTop = previousScroll;
+      if (held) body.querySelector(`[data-k="${held}"]`)?.focus({ preventScroll: true });
     }
     render();
   },
