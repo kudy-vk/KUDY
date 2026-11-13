@@ -1,7 +1,7 @@
 // UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў) — the one shared loading row: a small ActivityIndicator
 // next to the state text, so a pending surface reads as alive, not frozen.
 // Every loading state renders this component instead of a bare Text (the
-// issue forbids five copies). Lives in components/, not app/: expo-router
+// covered-states rule forbids five copies). Lives in components/, not app/: expo-router
 // treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { ActivityIndicator, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 

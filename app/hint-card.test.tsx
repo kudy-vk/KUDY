@@ -1,7 +1,7 @@
 // G07.05 (15_guide_decisions.md — R07) — the hint card render suite over the real composition
 // root (rule 15): the published catalog fixtures, the ONE LocationService the
 // app owns, the accepted values document and the one hint controller. The
-// guards are the issue's proof: the card renders from a ready hint state only
+// guards are the R07 record's proof: the card renders from a ready hint state only
 // (the quiet/background decisions hide it — the controller suite proves the
 // decisions, this suite proves the screen obeys them), a tap opens the guide
 // preview the usual way and starts no audio (R07), and the dismissal clears
