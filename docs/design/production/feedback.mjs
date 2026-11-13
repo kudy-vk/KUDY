@@ -23,8 +23,7 @@ const NEW = {
   review: { en: 'Want to add a few words? We are listening', be: 'Хочаш дадаць пару слоў? Мы слухаем', uk: 'Хочеш додати кілька слів? Ми слухаємо', de: 'Noch ein paar Worte? Wir hören zu', es: '¿Quieres contar algo más? Te escuchamos', fr: 'Tu veux ajouter quelques mots ? On t’écoute', cs: 'Chceš přidat pár slov? Posloucháme', sv: 'Vill du säga några ord till? Vi lyssnar' },
   noPersonal: { en: 'No personal data, please', be: 'Толькі без асабістых даных, добра?', uk: 'Тільки без особистих даних, гаразд?', de: 'Bitte keine persönlichen Daten', es: 'Sin datos personales, por favor', fr: 'Sans données personnelles, s’il te plaît', cs: 'Prosím bez osobních údajů', sv: 'Inga personuppgifter, tack' },
   choose: { be: 'Каб адправіць, выберы ацэнку', en: 'Choose a rating to send', uk: 'Щоб надіслати, вибери оцінку', de: 'Wähle zum Senden eine Bewertung', es: 'Para enviar, elige una valoración', fr: 'Pour envoyer, choisis une note', cs: 'Pro odeslání vyber hodnocení', sv: 'Välj ett betyg för att skicka' },
-  introGuide: { en: 'So, how was that walk?', be: 'Ну як табе гэтая прагулка?', uk: 'Ну як тобі ця прогулянка?', de: 'Na, wie war der Spaziergang?', es: 'Bueno, ¿qué tal el paseo?', fr: 'Alors, cette balade ?', cs: 'Tak co, jaká byla procházka?', sv: 'Nå, hur var promenaden?' },
-  introPlace: { en: 'So, how did you like this place?', be: 'Ну як табе гэтае месца?', uk: 'Ну як тобі це місце?', de: 'Na, wie fandest du diesen Ort?', es: 'Bueno, ¿qué tal este lugar?', fr: 'Alors, cet endroit ?', cs: 'Tak co, jak se ti líbilo tohle místo?', sv: 'Nå, vad tyckte du om platsen?' },
+  intro: { en: 'How did it go?', be: 'Як прайшло?', uk: 'Як пройшло?', de: 'Wie lief’s?', es: '¿Qué tal fue?', fr: 'Comment ça s’est passé ?', cs: 'Jak to šlo?', sv: 'Hur gick det?' },
   pickStars: { en: 'Pick some stars — we will give you a few ideas', be: 'Выберы зоркі — і падкінем пару ідэй', uk: 'Вибери зірки — підкинемо кілька ідей', de: 'Wähle Sterne – wir geben dir ein paar Ideen', es: 'Elige estrellas y te damos algunas ideas', fr: 'Choisis des étoiles, on te souffle quelques idées', cs: 'Vyber hvězdičky a nabídneme pár nápadů', sv: 'Välj stjärnor så får du några idéer' },
   negative: { en: 'Where did we get it wrong?', be: 'Дзе мы далі маху?', uk: 'Де ми схибили?', de: 'Was haben wir vermasselt?', es: '¿En qué fallamos?', fr: 'Où est-ce qu’on s’est loupés ?', cs: 'Kde jsme šlápli vedle?', sv: 'Vad missade vi?' },
   improve: { en: 'What should we tune up?', be: 'Што б нам падкруціць?', uk: 'Що нам підкрутити?', de: 'Was können wir besser machen?', es: '¿Qué podemos mejorar?', fr: 'Qu’est-ce qu’on pourrait améliorer ?', cs: 'Co bychom mohli vylepšit?', sv: 'Vad kan vi fila på?' },
@@ -105,7 +104,7 @@ await mountBoard({
             el('span', { className: 'tag', textContent: t(kind === 'guide' ? 'guideWord' : 'placeWord') }),
             el('span', { className: `name${kind === 'guide' ? ' t-display' : ''}`, textContent: targetName,
               lang: targetOffer.localized.title[state.locale] ? state.locale : 'be' }))),
-        el('h2', { className: 'fb-question', textContent: w(kind === 'guide' ? 'introGuide' : 'introPlace') }));
+        el('h2', { className: 'fb-question', textContent: w('intro') }));
 
       let notice = null;
       if (conflict) {
