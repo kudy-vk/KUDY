@@ -16,7 +16,7 @@
 | Месца | Што гэта | Крыніцы |
 |---|---|---|
 | [Стары горад: Длуга і Марыяцкая](https://www.google.com/maps/search/?api=1&query=ulica%20D%C5%82uga%20Gda%C5%84sk) | Галоўная пешаходная зона з каляровымі фасадамі; на Марыяцкай — бурштынавыя крамы. Побач набярэжная Мотлавы з надпісам «Gdańsk». | S1, S5 |
-| [Журав (Żuraw)](https://www.google.com/maps/search/?api=1&query=%C5%BByraw%20Gda%C5%84sk) | Старадаўні портавы кран, сімвал горада. | S1, S5 |
+| [Журав (Żuraw)](https://www.google.com/maps/search/?api=1&query=%C5%BByuraw%20Gda%C5%84sk) | Старадаўні портавы кран, сімвал горада. | S1, S5 |
 | [Базіліка Марыяцкая](https://www.google.com/maps/search/?api=1&query=Bazylika%20Mariacka%20Gda%C5%84sk) | Вялізарны гатычны касцёл; вежа з відам на дахі (узімку часам зачынена). | S1, S2, S6 |
 | [Ратуша Галоўнага горада](https://www.google.com/maps/search/?api=1&query=Ratusz%20G%C5%82%C3%B3wnego%20Miasta%20Gda%C5%84sk) | Музей і вежа з панарамай. Водгук: «не занадта доўга і не нудна». | S2, S5 |
 | [Музей Другой сусветнай вайны](https://www.google.com/maps/search/?api=1&query=Muzeum%20II%20Wojny%20%C5%9Awiatowej%20Gda%C5%84sk) | Наймацнейшы музей горада; аўдыёгід, плануйце амаль увесь дзень. | S1, S2, S6 |
@@ -156,16 +156,16 @@
 
 ## Крыніцы
 
-| ID | Платформа | Трэд / улік | Пакрыццё |
-|---|---|---|---|
-| S1 | Reddit r/poland | [Tips to tourists visiting Gdansk?](https://www.reddit.com/r/poland/comments/126hrep/tips_to_tourists_visiting_gdansk/) | прачытаны цалкам |
-| S2 | Reddit r/gdansk | [Must sees that aren't tourist-traps](https://www.reddit.com/r/gdansk/comments/102yo3j/must_sees_for_visitors_that_arent_touristtraps/) | прачытаны цалкам |
-| S3 | Reddit r/poland | [What to watch out for in Gdańsk?](https://www.reddit.com/r/poland/comments/1n8vz03/what_to_watch_out_for_in_gda%C5%88sk/) | прачытаны цалкам |
-| S4 | Reddit r/gdansk | [Food recommendations, not tourist traps](https://www.reddit.com/r/gdansk/comments/1ri1pdg/food_and_restaurantplaces_to_eat_recommendations/) | прачытаны цалкам |
-| S5 | Reddit r/poland | [Things not to miss in Gdańsk?](https://www.reddit.com/r/poland/comments/zd4ca3/things_not_to_miss_in_gda%C5%84sk/) | прачытаны цалкам |
-| S6 | Reddit r/gdansk | [Monthly tourist thread 09/2026](https://www.reddit.com/r/gdansk/comments/1w411tl/visiting_gda%C5%84sk_this_is_monthly_tourist_thread/) | прачытаны цалкам |
-| X | X (Twitter) | [kamischka](https://x.com/kamischka) · [AnaMatei](https://x.com/AnaMatei) · [PolandtravelUS](https://x.com/PolandtravelUS) | індэкс |
-| T | Threads | [пошук #gdansk](https://www.threads.net/search?q=Gdansk) | індэкс (113 тыс. постаў) |
+| ID | ID у JSON | Платформа | Трэд / улік | Пакрыццё |
+|---|---|---|---|---|
+| S1 | `reddit-126hrep` | Reddit r/poland | [Tips to tourists visiting Gdansk?](https://www.reddit.com/r/poland/comments/126hrep/tips_to_tourists_visiting_gdansk/) | прачытаны цалкам |
+| S2 | `reddit-102yo3j` | Reddit r/gdansk | [Must sees that aren't tourist-traps](https://www.reddit.com/r/gdansk/comments/102yo3j/must_sees_for_visitors_that_arent_touristtraps/) | прачытаны цалкам |
+| S3 | `reddit-1n8vz03` | Reddit r/poland | [What to watch out for in Gdańsk?](https://www.reddit.com/r/poland/comments/1n8vz03/what_to_watch_out_for_in_gda%C5%88sk/) | прачытаны цалкам |
+| S4 | `reddit-1ri1pdg` | Reddit r/gdansk | [Food recommendations, not tourist traps](https://www.reddit.com/r/gdansk/comments/1ri1pdg/food_and_restaurantplaces_to_eat_recommendations/) | прачытаны цалкам |
+| S5 | `reddit-zd4ca3` | Reddit r/poland | [Things not to miss in Gdańsk?](https://www.reddit.com/r/poland/comments/zd4ca3/things_not_to_miss_in_gda%C5%84sk/) | прачытаны цалкам |
+| S6 | `reddit-1w411tl` | Reddit r/gdansk | [Monthly tourist thread 09/2026](https://www.reddit.com/r/gdansk/comments/1w411tl/visiting_gda%C5%84sk_this_is_monthly_tourist_thread/) | прачытаны цалкам |
+| X | `x-kamischka` · `x-anamatei` · `x-polandtravelus` | X (Twitter) | [kamischka](https://x.com/kamischka) · [AnaMatei](https://x.com/AnaMatei) · [PolandtravelUS](https://x.com/PolandtravelUS) | індэкс |
+| T | `threads-search` | Threads | [пошук #gdansk](https://www.threads.net/search?q=Gdansk) | індэкс (113 тыс. постаў) |
 
 ## Прымяненне для будучай старонкі
 
