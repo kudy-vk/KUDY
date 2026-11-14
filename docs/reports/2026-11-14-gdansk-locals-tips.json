@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "title": "Гданьск: саветы ад рэальных людзей",
+    "created": "2026-11-14",
+    "purpose": "Дадзеныя для будучай старонкі даведніка ў KUDYapp (саветы мясцовых, ежа, лайфхакі, пасткі)",
+    "language": "be",
+    "maps_url_pattern": "https://www.google.com/maps/search/?api=1&query=<URL-enc mapsQuery>",
+    "sources_full_read": ["reddit-126hrep", "reddit-102yo3j", "reddit-1n8vz03", "reddit-1ri1pdg", "reddit-zd4ca3", "reddit-1w411tl"],
+    "notes": "mapsUrl заўсёды вядзе на пошук у Google Maps, а не на канкрэтны маркер — назвы правераныя, але рэдкія месцы лепш пераправерыць перад публікацыяй у прадукце."
+  },
+  "sources": [
+    {"id": "reddit-126hrep", "platform": "reddit", "subreddit": "r/poland", "title": "Tips to tourists visiting Gdansk?", "url": "https://www.reddit.com/r/poland/comments/126hrep/tips_to_tourists_visiting_gdansk/", "coverage": "прачытаны цалкам"},
+    {"id": "reddit-102yo3j", "platform": "reddit", "subreddit": "r/gdansk", "title": "Must sees for visitors that aren't tourist-traps", "url": "https://www.reddit.com/r/gdansk/comments/102yo3j/must_sees_for_visitors_that_arent_touristtraps/", "coverage": "прачытаны цалкам"},
+    {"id": "reddit-1n8vz03", "platform": "reddit", "subreddit": "r/poland", "title": "What to watch out for in Gdańsk?", "url": "https://www.reddit.com/r/poland/comments/1n8vz03/what_to_watch_out_for_in_gda%C5%88sk/", "coverage": "прачытаны цалкам"},
+    {"id": "reddit-1ri1pdg", "platform": "reddit", "subreddit": "r/gdansk", "title": "Food and restaurant recommendations, not tourist traps", "url": "https://www.reddit.com/r/gdansk/comments/1ri1pdg/food_and_restaurantplaces_to_eat_recommendations/", "coverage": "прачытаны цалкам"},
+    {"id": "reddit-zd4ca3", "platform": "reddit", "subreddit": "r/poland", "title": "Things not to miss in Gdańsk?", "url": "https://www.reddit.com/r/poland/comments/zd4ca3/things_not_to_miss_in_gda%C5%84sk/", "coverage": "прачытаны цалкам"},
+    {"id": "reddit-1w411tl", "platform": "reddit", "subreddit": "r/gdansk", "title": "Visiting Gdańsk? This is monthly tourist thread (09/2026)", "url": "https://www.reddit.com/r/gdansk/comments/1w411tl/visiting_gda%C5%84sk_this_is_monthly_tourist_thread/", "coverage": "прачытаны цалкам"},
+    {"id": "x-kamischka", "platform": "x", "title": "kamischka — гайд па Гданьску", "url": "https://x.com/kamischka", "coverage": "пошукавы індэкс (без лагіна глыбіня недаступная)"},
+    {"id": "x-anamatei", "platform": "x", "title": "AnaMatei — «Gdansk, Europe's Best Hidden Gem»", "url": "https://x.com/AnaMatei", "coverage": "пошукавы індэкс"},
+    {"id": "x-polandtravelus", "platform": "x", "title": "PolandtravelUS — афіцыйны турыстычны улік", "url": "https://x.com/PolandtravelUS", "coverage": "пошукавы індэкс"},
+    {"id": "threads-search", "platform": "threads", "title": "Пошук #gdansk на Threads", "url": "https://www.threads.net/search?q=Gdansk", "coverage": "пошукавы індэкс (113 тыс. постаў; без лагіна каментары недаступныя)"}
+  ],
+  "categories": [
+    {
+      "id": "main",
+      "title": "Галоўныя месцы",
+      "places": [
+        {"id": "stary-horad", "name": "Стары горад: Длуга і Марыяцкая", "mapsQuery": "ulica Długa Gdańsk", "district": "Галоўнае мяста", "desc": "Галоўная пешаходная зона з каляровымі фасадамі; на Марыяцкай — бурштынавыя крамы. Побач набярэжная Мотлавы з вялікім надпісам «Gdańsk» для фота.", "sourceIds": ["reddit-126hrep", "reddit-zd4ca3"]},
+        {"id": "zuraw", "name": "Журав (Żuraw)", "mapsQuery": "Żuraw Gdańsk", "district": "Галоўнае мяста", "desc": "Старадаўні портавы кран, сімвал горада. Стаіць на набярэжнай — фота тут робяць усе.", "sourceIds": ["reddit-126hrep", "reddit-zd4ca3"]},
+        {"id": "bazylika-mariacka", "name": "Базіліка Марыяцкая", "mapsQuery": "Bazylika Mariacka Gdańsk", "district": "Галоўнае мяста", "desc": "Вялізарны гатычны касцёл; на вежу можна падняцца за відам на дахі. Узімку вежу часам зачыняюць.", "sourceIds": ["reddit-126hrep", "reddit-102yo3j", "reddit-1w411tl"]},
+        {"id": "ratusz", "name": "Ратуша Галоўнага горада", "mapsQuery": "Ratusz Głównego Miasta Gdańsk", "district": "Галоўнае мяста", "desc": "Музей у ратушы і вежа з панарамай. Водгук: «не занадта доўга і не нудна».", "sourceIds": ["reddit-102yo3j", "reddit-zd4ca3"]},
+        {"id": "muzeum-ww2", "name": "Музей Другой сусветнай вайны", "mapsQuery": "Muzeum II Wojny Światowej Gdańsk", "district": "Падгорце", "desc": "Наймацнейшы музей горада. Бярыце аўдыёгід і плануйце амаль увесь дзень.", "sourceIds": ["reddit-126hrep", "reddit-102yo3j", "reddit-1w411tl"]},
+        {"id": "ecs", "name": "Еўрапейскі цэнтр Салідарнасці", "mapsQuery": "Europejskie Centrum Solidarności Gdańsk", "district": "каля верфі", "desc": "Музей пра прафсаюз «Салідарнасць» і падзенне камунізму. Бярыце аўдыёгід. Водгук: «гэты музей адзін вартае ўсяго падарожжа».", "sourceIds": ["reddit-126hrep", "reddit-102yo3j", "reddit-1w411tl"]},
+        {"id": "muzeum-narodowe", "name": "Нацыянальны музей", "mapsQuery": "Muzeum Narodowe Gdańsk", "desc": "Тут вісіць «Страшны суд» Мемлінга — адна з дзвюх найкаштоўнейшых карцін Польшчы.", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "westerplatte", "name": "Вестэрплатэ", "mapsQuery": "Westerplatte Gdańsk", "desc": "Панвостраў, дзе пачалася Другая сусветная вайна. Можна агледзець руіны бункераў; з узгорка каля помніка — адзін з лепшых відаў на горад. Транспартам сюды даўжэй, чым у іншыя месцы.", "sourceIds": ["reddit-126hrep"]},
+        {"id": "most-milosci", "name": "Мост Кахання (Most Miłości)", "mapsQuery": "Most Miłości Gdańsk", "desc": "Мост з замочкамі кахання — бясплатная прыгожая кропка для здымка.", "sourceIds": ["threads-search"]}
+      ]
+    },
+    {
+      "id": "secret",
+      "title": "Сакрэтныя месцы",
+      "places": [
+        {"id": "gora-gradowa", "name": "Гара Градова (Góra Gradowa)", "mapsQuery": "Góra Gradowa Gdańsk", "desc": "Панарама на стары горад і суднаверф. Турыст пісаў: «прыгожае месца, і людзей там амаль няма».", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "wzgorze-pacholka", "name": "Узгорак Пахолка (Wzgórze Pachołka)", "mapsQuery": "Wzgórze Pachołka Gdańsk", "district": "Оліва", "desc": "Панарама ўсяго горада, лепшая ў яснае надвор'е.", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "wzgorze-lagry", "name": "Узгорак Лагры", "mapsQuery": "Wzgórze Lagry Gdańsk", "desc": "Доўгая прагулка, добрая для фотаздымкаў. Назва са старога водгуку «Lagry Hill» — зверце яе на мапе перад публікацыяй.", "sourceIds": ["reddit-zd4ca3"], "flag": "verify-name"},
+        {"id": "szwedzka-grobla", "name": "Шведская грабля (Szwedzka Grobla)", "mapsQuery": "Szwedzka Grobla Gdańsk", "desc": "Прыгожы веламаршрут уздоўж ракі.", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "oliwa-park", "name": "Аліўскі парк і Аліўскі лес", "mapsQuery": "Park Oliwski Gdańsk", "district": "Оліва", "desc": "Парк прыгожы ў любы сезон; у лесе мясцовыя гуляюць і катаюцца на веласіпедах. Побач кафейня Las Oliwa з кавай і бранчам.", "sourceIds": ["reddit-126hrep", "reddit-zd4ca3"]},
+        {"id": "ulica-elektrykow", "name": "Вуліца Электрыкаў (Ulica Elektryków)", "mapsQuery": "Ulica Elektryków Gdańsk", "district": "суднаверф", "desc": "Баровая вуліца ў суднаверф'і: альтэрнатыўнае начное жыццё, студэнты і мастацтва.", "sourceIds": ["threads-search"]},
+        {"id": "plaza-stogi", "name": "Пляж Стогі", "mapsQuery": "Plaża Stogi Gdańsk", "desc": "Спакойны гарадскі пляж далей ад цэнтра.", "sourceIds": ["threads-search"]},
+        {"id": "wyspa-sobieszewska", "name": "Востраў Собешава", "mapsQuery": "Wyspa Sobieszewska Gdańsk", "desc": "Дзікія пляжы і сосны — сюды едуць, каб уцячы ад натоўпу.", "sourceIds": ["threads-search"]},
+        {"id": "plaza-brzezno", "name": "Пляж Бжэзна", "mapsQuery": "Plaża Brzeźno Gdańsk", "desc": "Адсюль раяць пешую прагулку ўздоўж мора да Сопата.", "sourceIds": ["reddit-126hrep"]}
+      ]
+    },
+    {
+      "id": "tricity",
+      "title": "Трыгарад: Сопат і Гдыня",
+      "places": [
+        {"id": "sopot-molo", "name": "Сопат: мол", "mapsQuery": "Molo Sopot", "city": "Сопат", "desc": "Найдаўжэйшы драўляны мол у Еўропе. Начное жыццё Трыгарада — пераважна тут.", "sourceIds": ["reddit-126hrep", "reddit-1n8vz03"]},
+        {"id": "gdynia-skwer", "name": "Гдыня: сквер Касцюшкі", "mapsQuery": "Skwer Kościuszki Gdynia", "city": "Гдыня", "desc": "Парк каля вады з караблямі; у канцы сквера — Акварыум Гдыня.", "sourceIds": ["reddit-126hrep"]},
+        {"id": "akwarium-gdynia", "name": "Акварыум Гдыня", "mapsQuery": "Akwarium Gdyńskie", "city": "Гдыня", "desc": "«Прыгожы акварыум» (водгук з Reddit).", "sourceIds": ["reddit-126hrep"]}
+      ]
+    },
+    {
+      "id": "food-milkbar",
+      "title": "Ежа: молачныя бары (bar mleczny)",
+      "intro": "Молачны бар — польскі варыянт сталовай: хатняя ежа за смяшныя грошы. Бярыце на паднос, плаціце ў канцы стойкі. Турыстаў звычайна мала.",
+      "places": [
+        {"id": "bar-syrena", "name": "Bar Syrena", "mapsQuery": "Bar Syrena Gdańsk", "district": "Вжэсч", "desc": "Водгук: «я тут часта еў, калі вучыўся ў Гданьску».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "bar-akademicki", "name": "Bar Akademicki", "mapsQuery": "Bar Akademicki Gdańsk", "district": "Вжэсч", "desc": "Студэнцкі раён.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "stolowka-gdanska", "name": "Stołówka Gdańska", "mapsQuery": "Stołówka Gdańska Gdańsk", "district": "Długie Ogrody", "desc": "Бывае чарга, але людзі пішуць: «варта».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "bar-mleczny-jaros", "name": "Bar Mleczny Jaros", "mapsQuery": "Bar Mleczny Jaros Gdańsk", "desc": "Водгук: «найтаннейшыя, там едуць толькі мясцовыя».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "bar-mleczny-fala", "name": "Bar Mleczny Fala", "mapsQuery": "Bar Mleczny Fala Gdańsk", "desc": "Найбольш «схаваны» і танны варыянт з той жа серыі.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "bar-neptun", "name": "Bar Neptun", "mapsQuery": "Bar Neptun Gdańsk", "desc": "Пазбягайце: адзін карыстач назваў яго «найгоршым молачным баром горада».", "sourceIds": ["reddit-1ri1pdg"], "flag": "avoid"}
+      ]
+    },
+    {
+      "id": "food-pierogi",
+      "title": "Ежа: пельмені (pierogi)",
+      "intro": "Пельмені шукайце ў «pierogarnia» — установе-спэцыялісце. У молачных барах гэта не фірмовая страва.",
+      "places": [
+        {"id": "stary-mlyn", "name": "Pierogarnia Stary Młyn", "mapsQuery": "Pierogarnia Stary Młyn Gdańsk", "desc": "Найчасцейшая рэкамендацыя: «вялізныя, свежыя пельмені».", "sourceIds": ["reddit-1ri1pdg", "reddit-102yo3j"]},
+        {"id": "na-pierogi", "name": "Pierogarnia na Pierogi", "mapsQuery": "Pierogarnia na Pierogi Gdańsk", "district": "каля станцыі Жабянка SKM", "desc": "Водгук: «ні турыстаў, толькі мясцовыя, і вельмі смачна».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "kocham-pierogi", "name": "Kocham Pierogi", "mapsQuery": "Kocham Pierogi Gdańsk", "district": "вул. Hynka", "desc": "Рэкамендацыя ў тэме «дзе есьці па-за цэнтрам».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "mandu", "name": "Pierogarnia Mandu", "mapsQuery": "Pierogarnia Mandu Gdańsk", "desc": "Вядомае месца, але мясцовы папярэджвае: «раней была вельмі добрая, цяпер турыстычная пастка». Смачнымі ён прызнае толькі пельмені з чоррызо.", "sourceIds": ["reddit-1ri1pdg"], "flag": "mixed"},
+        {"id": "pierogarnia-pruszcz", "name": "Pierogarnia Pruszcz", "mapsQuery": "Pierogarnia Pruszcz Pruszcz Gdański", "desc": "У прадмесці — для тых, хто хоча далей ад турыстаў.", "sourceIds": ["reddit-1ri1pdg"]}
+      ]
+    },
+    {
+      "id": "food-other",
+      "title": "Ежа: іншае асноўнае",
+      "places": [
+        {"id": "pyra-bar", "name": "Pyra Bar", "mapsQuery": "Pyra Bar Gdańsk", "desc": "Стравы з бульбы: «хутка і сытна». Заўвага: «не ўсе стравы аднолькава добрыя».", "sourceIds": ["reddit-126hrep", "reddit-1ri1pdg"]},
+        {"id": "ostro", "name": "Ostro", "mapsQuery": "Ostro Gdańsk", "desc": "Неапалітанская піца. Водгук: «адна з найлепшых піц у маім жыцці».", "sourceIds": ["reddit-1ri1pdg", "reddit-zd4ca3"]},
+        {"id": "calma", "name": "Calma", "mapsQuery": "Calma Gdańsk", "desc": "Той жа шэф, што ў Ostro, але без чаргаў.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "publiczna", "name": "Publiczna", "mapsQuery": "Publiczna Gdańsk", "desc": "Піца і спецыяльная кава. 15 хвілін пешкі ад цэнтра.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "surf-burger", "name": "Surf Burger", "mapsQuery": "Surf Burger Gdańsk", "desc": "«Добрыя, нядорагія бургеры».", "sourceIds": ["reddit-126hrep", "reddit-1ri1pdg"]},
+        {"id": "burger-stacja", "name": "Burger Stacja", "mapsQuery": "Burger Stacja Gdańsk", "desc": "Рэкамендацыя ад нядаўняга жыхара горада.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "holy-burger", "name": "Holy Burger", "mapsQuery": "Holy Burger Gdańsk", "desc": "Яшчэ адна бургерная рэкамендацыя: «варта спрабаваць».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "rybakowka", "name": "Rybakówka", "mapsQuery": "Rybakówka Gdańsk", "desc": "«Найлепшая смажаная рыба ў Трыгарадзе».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "bar-pod-ryba", "name": "Bar pod Rybą", "mapsQuery": "Bar pod Rybą Gdańsk", "desc": "Фірмовая страва — фаршыраваная бульба. Месца пераехала з цэнтра, таму аўтар водгуку не гарантаваў якасць.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "moja-gruzja", "name": "Moja Gruzja", "mapsQuery": "Moja Gruzja Gdańsk", "desc": "Грузінская ежа: хінкалі, хачапуры.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "aichi", "name": "Aichi", "mapsQuery": "Aichi Gdańsk", "desc": "Карэйская ежа.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "pueblo", "name": "Pueblo", "mapsQuery": "Pueblo Gdańsk", "desc": "Мексіканская ежа.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "wegierski-langos", "name": "Węgierski Langos", "mapsQuery": "Węgierski Langos Gdańsk", "desc": "Венгерскі лангош.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "dym-i-ogien", "name": "Riverside Dym i Ogień", "mapsQuery": "Dym i Ogień Gdańsk", "desc": "Класічная польская рэстаранная ежа.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "nowy-browar", "name": "Nowy Browar Gdańsk", "mapsQuery": "Nowy Browar Gdańsk", "desc": "Пывоварня з ежай — «прыгожае месца».", "sourceIds": ["reddit-1ri1pdg"]}
+      ]
+    },
+    {
+      "id": "food-halls",
+      "title": "Ежа: фуд-холы",
+      "places": [
+        {"id": "100cznia", "name": "100cznia", "mapsQuery": "100cznia Gdańsk", "desc": "Адзін з трох фуд-холаў, названых у адзін голас.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "montownia", "name": "Montownia", "mapsQuery": "Montownia Gdańsk", "desc": "Адзін з той жа тройкі рэкамендацый.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "slony-spichlerz", "name": "Słony Spichlerz", "mapsQuery": "Słony Spichlerz Gdańsk", "desc": "Трэці з тройкі.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "lepione", "name": "Lepione (ТЦ Forum)", "mapsQuery": "Lepione Gdańsk", "desc": "Буфет з добрай цаной. Скідкі пасля 19:00 і 20:00 — але чым пазней, тым менш выбару.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "thali", "name": "Thali", "mapsQuery": "Thali Gdańsk", "desc": "Індыйская ежа. Абед 12:00–15:00 у будні — танна.", "sourceIds": ["reddit-1ri1pdg"]}
+      ]
+    },
+    {
+      "id": "food-drinks",
+      "title": "Кава, бары і дзесерты",
+      "places": [
+        {"id": "cafe-len", "name": "Cafe Leń", "mapsQuery": "Cafe Leń Gdańsk", "desc": "«Цудоўна для ранішняй кавы».", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "kawiarnia-publiczna", "name": "Kawiarnia Publiczna", "mapsQuery": "Kawiarnia Publiczna Gdańsk", "desc": "Не еда, але вартая асобнай згадкі: выдатная спецыяльная кава.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "umam-bakery", "name": "Umam bakery", "mapsQuery": "Umam bakery Gdańsk", "desc": "Пякарня, названая ў тэме «што не прапускаць».", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "eklerownia", "name": "Eklerownia", "mapsQuery": "Eklerownia Gdańsk", "desc": "«Смачныя элеры з кавай».", "sourceIds": ["reddit-102yo3j"]},
+        {"id": "no-to-cyk", "name": "No To Cyk", "mapsQuery": "No To Cyk Gdańsk", "desc": "Маленькі бар: «маленькі і весёлы».", "sourceIds": ["reddit-126hrep"]},
+        {"id": "laka-bar", "name": "Laka bar", "mapsQuery": "Laka bar Gdańsk", "desc": "«Месца на ўвесь дзень»: ежа, напоі, кава. Хайлайт — бранч (кубінскі бенедікт), вялікія порцыі за смяшныя грошы.", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "sliwka-w-kompot", "name": "Śliwka w Kompot", "mapsQuery": "Śliwka w Kompot Gdańsk", "desc": "Рэстаран, хайлайт аднаго сольнага падарожжа ў месячным тредзе.", "sourceIds": ["reddit-1w411tl"]},
+        {"id": "winston", "name": "Winston", "mapsQuery": "Winston bar Gdańsk", "desc": "Кактэйльны бар, другі хайлайт таго ж падарожжа.", "sourceIds": ["reddit-1w411tl"]},
+        {"id": "restauracja-motlawa", "name": "Restauracja Motława", "mapsQuery": "Restauracja Motława Gdańsk", "desc": "Рэстаран, трэці хайлайт: «выдатныя вячэры».", "sourceIds": ["reddit-1w411tl"]},
+        {"id": "piwnica-rajcow", "name": "Piwnica Rajców", "mapsQuery": "Piwnica Rajców Gdańsk", "desc": "Піва і качыны пельмені: «смачныя».", "sourceIds": ["reddit-zd4ca3"]},
+        {"id": "wisniewski", "name": "Wiśniewski", "mapsQuery": "Wiśniewski Gdańsk", "desc": "Вішнёвая настойка: «цудоўны мясцовы напой».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "pulapka", "name": "Pułapka", "mapsQuery": "Pułapka Gdańsk", "desc": "Бар з півам; разам з Labeerynt названы як прыклады ў пытанні пра жывую музыку.", "sourceIds": ["reddit-1w411tl"]},
+        {"id": "labeerynt", "name": "Labeerynt", "mapsQuery": "Labeerynt Gdańsk", "desc": "Другі бар таго ж тыпу.", "sourceIds": ["reddit-1w411tl"]}
+      ]
+    },
+    {
+      "id": "food-daytrip",
+      "title": "Ежа: за горадам",
+      "places": [
+        {"id": "chata-nad-radunia", "name": "Chata nad Radunią (Bąkowo)", "mapsQuery": "Chata nad Radunią Bąkowo", "desc": "«Цудоўная ежа і месца» — названа варыянтам «варта паездкі».", "sourceIds": ["reddit-1ri1pdg"]},
+        {"id": "goscinec-dla-przyjaciol", "name": "Gościniec dla Przyjaciół (Kleszczowo)", "mapsQuery": "Gościniec dla Przyjaciół Kleszczowo", "desc": "Рыба і дробныя хатнія вэнджаныя калбасы на куплю.", "sourceIds": ["reddit-1ri1pdg"]}
+      ]
+    }
+  ],
+  "lifehacks": [
+    {"topic": "Транспарт", "advice": "Устаноўце праграму JakDojade: паказвае маршруты і прадае білеты. Мясцовыя пішуць: «таксі наогул не патрэбнае — у Трыгарадзе выдатны грамадскі транспарт».", "sourceIds": ["reddit-126hrep", "reddit-1n8vz03"]},
+    {"topic": "Цягнік SKM", "advice": "Галоўны транспарт Трыгарада: Гданьск–Сопат–Гдыня на адной лініі. У час пік — каля кожных 10 хвілін.", "sourceIds": ["reddit-126hrep", "reddit-1n8vz03"]},
+    {"topic": "Білет на SKM", "advice": "Купілі білет у кіёску — прабіце яго ў жоўтай скрынцы (валідатары) на платформе да паездкі. Без прабівання — штраф.", "sourceIds": ["reddit-1n8vz03"]},
+    {"topic": "Таксі", "advice": "Паставіце Uber і Bolt: параўнайце кошт аднаго маршруту ў абедзвюх праграмах і бярыце дзешэўшы варыянт.", "sourceIds": ["reddit-126hrep", "reddit-1n8vz03"]},
+    {"topic": "Таксі ля вакзала", "advice": "Не бярыце таксі проста ля галоўнага вакзала (Dworzec Główny): мясцовыя кажуць, што там шмат завышаных коштаў. Лепей адыйдзіце крыху ў бок або бярыце Uber.", "sourceIds": ["reddit-1n8vz03"]},
+    {"topic": "Бясплатныя музеі", "advice": "У шмат якіх музеяў ёсць дзень з бясплатным уваходам. Адзін чалавек пісаў «часта панядзелак», другі засцерагаў, што ў панядзелак музеі могуць якраз не працаваць. Правярайце на сайце канкрэтнага музея. У бясплатны дзень ідзіце раніцай: чэргі доўгія.", "sourceIds": ["reddit-102yo3j", "reddit-1n8vz03"]},
+    {"topic": "Рэчы ў музеях", "advice": "Куртку і торбу пакіньце ў бясплатных шафиках — залог вяртаюць.", "sourceIds": ["reddit-102yo3j"]},
+    {"topic": "Грошы", "advice": "Возьміце гатоўку і мяняйце ў канторы (kantor): курс нашмат лепшы, чым у банку дома або ў аэрапорце. Карту ў Польшчы прымаюць амаль усюды, але невялікі запас грошай не шкодзіць.", "sourceIds": ["reddit-zd4ca3", "reddit-1n8vz03"]},
+    {"topic": "Аўтамабіль", "advice": "Не ездзіце па аб'язной дарозе (Obwodnica, S6/S7) — там часта аварыі і коркі.", "sourceIds": ["reddit-1n8vz03"]},
+    {"topic": "Музей вайны", "advice": "Берыце аўдыёгід і плануйце на ўвесь дзень: людзі пішуць, што іх «выганялі ў час закрыцця».", "sourceIds": ["reddit-126hrep", "reddit-1w411tl"]}
+  ],
+  "traps": [
+    {"title": "Стрып-клубы", "advice": "Галоўная пастка горада. На вуліцы людзі (у Сопаце іх пазнавальная мета — ружовыя парасоны) запрашаюць у стрып-клубы. Некалькі чалавек на Reddit пісалі: там напояць, накручваюць кошт і выбіваюць усе грошы. Правіла простае: не ідзіце і не размаўляйце з імі.", "sourceIds": ["reddit-126hrep", "reddit-1n8vz03"]},
+    {"title": "Запрашэнні з вуліцы і бясплатныя напоі", "advice": "Запрашэнне ў бар ці клуб і бясплатны напой — адна і тая ж схема ў розных формах. Адмаўляйцеся.", "sourceIds": ["reddit-1n8vz03"]},
+    {"title": "Таксі на вакзале", "advice": "Гл. лайфхак «Таксі ля вакзала»: Uber/Bolt, не «дзікія» таксі ля Dworzec Główny.", "sourceIds": ["reddit-1n8vz03"]},
+    {"title": "Muzeum Iluzji", "mapsQuery": "Muzeum Iluzji Gdańsk", "advice": "Адзіная названая турыстычная пастка-музей: «гэта проста маё меркаванне» (водгук мясцовага).", "sourceIds": ["reddit-102yo3j"]},
+    {"title": "AmberSky", "mapsQuery": "AmberSky Gdańsk", "advice": "Калесца агляду над набярэжнай: «завышаная цана». Але ўвечары падчас каляднага кірмашу віды прымальныя.", "sourceIds": ["reddit-102yo3j"]},
+    {"title": "Рэчы на пляжы", "advice": "Не пакідайце рэчы без нагляду і не трымаце тэлефон у задняй кішэні ў натоўпе. Кішэнных злодзеяў у горадзе амаль няма — гэта агульная асцярожнасць.", "sourceIds": ["reddit-1n8vz03"]},
+    {"title": "Ноччу: Dolne Orunia і Nowy Port", "advice": "Раёны Dolne Orunia і Nowy Port мясцовыя раюць праходзіць днём — не з-за злачыннасці, а проста там не найпрыемнейшае асяроддзе. Прытым Nowy Port прызнавалі «насамрэч бяспечным».", "sourceIds": ["reddit-1w411tl"]}
+  ],
+  "quotes": [
+    {"text": "Шмат хто засяроджваецца толькі на старым горадзе Гданьска і прапускае астатнюю агламерацыю. А Сопат і Гдыня варта дзень кожны.", "sourceIds": ["reddit-1n8vz03"]},
+    {"text": "Гданьск вельмі бяспечны; калі ведаеце пражскія махлярствы — тут вы да іх імунныя. Кішэнных злодзеяў амаль няма.", "sourceIds": ["reddit-1n8vz03"]},
+    {"text": "Прагулку ўздоўж абрыва рабіце праз лес па яго верху, а не па пляжу — віды значна лепшыя.", "sourceIds": ["reddit-126hrep"]}
+  ]
+}
