@@ -16,7 +16,7 @@
 | Месца | Што гэта | Крыніцы |
 |---|---|---|
 | [Стары горад: Длуга і Марыяцкая](https://www.google.com/maps/search/?api=1&query=ulica%20D%C5%82uga%20Gda%C5%84sk) | Галоўная пешаходная зона з каляровымі фасадамі; на Марыяцкай — бурштынавыя крамы. Побач набярэжная Мотлавы з надпісам «Gdańsk». | S1, S5 |
-| [Журав (Żuraw)](https://www.google.com/maps/search/?api=1&query=%C5%BByuraw%20Gda%C5%84sk) | Старадаўні портавы кран, сімвал горада. | S1, S5 |
+| [Журав (Żuraw)](https://www.google.com/maps/search/?api=1&query=%C5%BBuraw%20Gda%C5%84sk) | Старадаўні портавы кран, сімвал горада. | S1, S5 |
 | [Базіліка Марыяцкая](https://www.google.com/maps/search/?api=1&query=Bazylika%20Mariacka%20Gda%C5%84sk) | Вялізарны гатычны касцёл; вежа з відам на дахі (узімку часам зачынена). | S1, S2, S6 |
 | [Ратуша Галоўнага горада](https://www.google.com/maps/search/?api=1&query=Ratusz%20G%C5%82%C3%B3wnego%20Miasta%20Gda%C5%84sk) | Музей і вежа з панарамай. Водгук: «не занадта доўга і не нудна». | S2, S5 |
 | [Музей Другой сусветнай вайны](https://www.google.com/maps/search/?api=1&query=Muzeum%20II%20Wojny%20%C5%9Awiatowej%20Gda%C5%84sk) | Наймацнейшы музей горада; аўдыёгід, плануйце амаль увесь дзень. | S1, S2, S6 |
