@@ -79,6 +79,13 @@ if (!/tools\/collector/.test(pkg.scripts?.test ?? '')) {
   failures.push('npm test glob does not include tools/collector');
 }
 
+// Issue #300 revert guard — same class as the tools/docs-ledger glob: losing
+// the tools/content npm-test glob would drop the Tricity area-cards
+// completeness control silently (implementation-rules 1 and 7).
+if (!/tools\/content/.test(pkg.scripts?.test ?? '')) {
+  failures.push('npm test glob does not include tools/content');
+}
+
 // G20.13 revert guard — the Deno entrypoint type-check is config-as-code
 // (implementation-rules 1 and 7): losing the server:typecheck script, its
 // required-checks job or the pinned setup-deno action would drop the check
