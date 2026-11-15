@@ -5,8 +5,10 @@
 Паглядзець і паклікаць макеты можна ў [галерэі](catalog.html). Яна чытае гэты файл, таму запусці з кораня рэпазіторыя просты сервер і адкрый `http://127.0.0.1:4400/docs/design/catalog.html`:
 
 ```sh
-python -m http.server 4400 --bind 127.0.0.1
+python docs/design/production/tools/serve.py
 ```
+
+Сервер [serve.py](production/tools/serve.py) забараняе браўзеру трымаць старыя копіі файлаў; са звычайным `python -m http.server` пасля змен макета браўзер можа паказаць новую старонку са старымі стылямі.
 
 Фінальныя макеты, якія ідуць ва ўкараненне, ляжаць у папцы [production](production/README.md).
 

@@ -21,7 +21,6 @@ export const LINKS = {
   skmSearch: 'https://www.skm.pkp.pl/dla-pasazera/wyszukaj-polaczenie',
   jakdojade: 'https://jakdojade.pl/gdansk/trasa/',
   mzkzg: 'https://mzkzg.org/bilety-metropolitalne/bilety-jednorazowe-czasowe/',
-  visitGdanskMap: 'https://visitgdansk.com/cmsImages/dokumenty/mapa-centrum-gdanska.pdf',
   kartaTurysty: 'https://kartaturysty.visitgdansk.com/cennik',
   muzeumGdanska: 'https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/free-entrance/?L=1',
   muzeum1939: 'https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules',
@@ -34,7 +33,7 @@ export const LINKS = {
 export const SECTIONS = [
   { id: 'airport', icon: 'plane', links: ['airportBuses', 'airportTrains', 'ztmSchedule'] },
   { id: 'transport', icon: 'tram-front', links: ['ztmSchedule', 'ztmTickets', 'skmSearch', 'jakdojade', 'mzkzg'] },
-  { id: 'city', icon: 'map', links: ['visitGdanskMap'] },
+  { id: 'city', icon: 'map', links: [] },
   { id: 'food', icon: 'utensils-crossed', links: ['pysznePayment', 'blikHow'] },
   { id: 'card', icon: 'landmark', links: ['kartaTurysty', 'muzeumGdanska', 'muzeum1939'] },
 ];
@@ -97,20 +96,16 @@ export const PRICES = {
   cardTransport: [['tk.24h', 34, 17], ['tk.72h', 68, 34]],
 };
 
-// Places of the orientation schematic: the dot in percent of the box, where
-// the name stands (right of the dot, left of it, or under it), what kind of
-// place it is and the signs of how to get there.
-export const PLACES = [
-  { id: 'jelitkowo', name: 'Jelitkowo', x: 9, y: 19, side: 'right', kind: 'beach', get: [['tram-front', 'get.jelitkowo']] },
-  { id: 'brzezno', name: 'Brzeźno', x: 30, y: 30, side: 'right', kind: 'beach', get: [['tram-front', 'get.brzezno']] },
-  { id: 'stogi', name: 'Stogi', x: 72, y: 19, side: 'right', kind: 'beach', get: [['bus', 'get.stogi']], warn: 'place.stogi.warn' },
-  { id: 'sobieszewo', name: 'Sobieszewo', title: 'Wyspa Sobieszewska', x: 93, y: 28, side: 'below', kind: 'island', get: [['bus', 'get.sobieszewo']] },
-  { id: 'oliwa', name: 'Oliwa', x: 9, y: 40, side: 'right', kind: 'district', get: [['tram-front', 'get.oliwa.tram'], ['train-front', 'get.oliwa.skm']] },
-  { id: 'wrzeszcz', name: 'Wrzeszcz', x: 30, y: 50, side: 'right', kind: 'district', get: [['train-front', 'get.wrzeszcz']] },
-  { id: 'stare', name: 'Stare Miasto', x: 58, y: 63, side: 'left', kind: 'quarter', get: [] },
-  { id: 'station', name: 'Gdańsk Główny', x: 50, y: 74, side: 'left', kind: 'station', get: [['footprints', 'get.station.walk'], ['train-front', 'get.station.skm']] },
-  { id: 'glowne', name: 'Główne Miasto', x: 58, y: 85, side: 'left', kind: 'centre', main: true, get: [['footprints', 'get.glowne']] },
-];
+// How to get to the places the map's zones mark (about-map.mjs): [sign, text key].
+export const PLACE_WAYS = {
+  glowne: [['footprints', 'get.glowne']],
+  oliwa: [['tram-front', 'get.oliwa.tram'], ['train-front', 'get.oliwa.skm']],
+  wrzeszcz: [['train-front', 'get.wrzeszcz']],
+  brzezno: [['tram-front', 'get.brzezno']],
+  westerplatte: [['bus', 'get.westerplatte']],
+};
+// Zones on city beaches whose summer services run more often.
+export const SUMMER_BEACHES = ['brzezno'];
 
 // Delivery services and the payment methods their official pages confirm.
 export const PAY_METHODS = ['card', 'blik', 'cash', 'apple', 'google', 'paypal'];

@@ -72,6 +72,11 @@ export function buildSteps({ jscpd: version = jscpdVersion() } = {}) {
     // --- required-checks.yml: tests ---
     { id: 'tests/install (root)', job: 'tests', workflow: 'required-checks.yml', cmd: 'npm ci', cwd: '.', install: 'root' },
     { id: 'tests/install (web)', job: 'tests', workflow: 'required-checks.yml', cmd: 'npm ci', cwd: 'web', install: 'web' },
+    // #248: the browser tests in npm test (test/about-map-browser.test.mjs) need Chromium.
+    {
+      id: 'tests/install lockfile-pinned Chromium', job: 'tests', workflow: 'required-checks.yml',
+      cmd: 'npx playwright install --with-deps chromium', cwd: '.', distroDeps: true,
+    },
     { id: 'tests', job: 'tests', workflow: 'required-checks.yml', cmd: 'npm test', cwd: '.' },
     // --- required-checks.yml: windows-portable (skipped on Linux) ---
     {

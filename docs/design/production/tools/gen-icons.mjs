@@ -20,6 +20,8 @@ const NAMES = [
   // «Пра горад» (about.mjs): section signs of the carousel and the guide's facts.
   'bus', 'credit-card', 'landmark', 'plane', 'scan-qr-code', 'smartphone', 'store', 'ticket',
   'train-front', 'tram-front', 'triangle-alert', 'utensils-crossed',
+  // «Пра горад», the map of the city section (about-map.mjs): zoom in, zoom out, the whole map.
+  'plus', 'minus', 'scan',
 ];
 
 const icons = {};

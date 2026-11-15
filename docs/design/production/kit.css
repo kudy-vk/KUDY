@@ -343,6 +343,67 @@ button, select, input { font: inherit; color: inherit; }
 .marker.available::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ffffff; }
 .marker.small.available::after { width: 6px; height: 6px; }
 
+/* ---------- map view, map buttons, layer switches (kit-map.mjs) ---------- */
+
+/* A picture map that zooms and pans. Light in both themes (DT-4): the box
+   carries data-theme="light". The box has the picture's proportions (--ratio),
+   so the whole picture shows at the first look. Names on a map grow only to
+   the app's limit of 1.25 (font.big-text-factor). */
+.zoomview {
+  --ms: min(var(--fs), 1.25);
+  position: relative; width: 100%; aspect-ratio: var(--ratio); overflow: hidden;
+  border: 1px solid #d8d2c6; border-radius: 10px; background: #eef3ee;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.zoomview.dragging { cursor: grabbing; }
+/* The canon's focus ring, 3 px; drawn inwards because the box clips. */
+.zoomview:focus-visible { outline: 3px solid #1d6b4f; outline-offset: -3px; }
+/* No will-change: the browser then draws the picture anew at each zoom, sharp. */
+.zoomview-world { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+.zoomview-world img { display: block; max-width: none; pointer-events: none; }
+.zoomview-world > svg { position: absolute; top: 0; left: 0; overflow: visible; }
+.zoomview-world > svg * { vector-effect: non-scaling-stroke; }
+.zoomview .off { display: none; }
+/* Names of signs: hidden until the screen shows them for a zoom level
+   (data-names) or a pick; a name that would cover a more important one
+   (settleLabels) waits for a closer zoom. */
+.zoomview .mark text {
+  display: none; font: 600 calc(12px * var(--ms)) / 1 "Golos Text", system-ui, sans-serif; fill: #22262b;
+  paint-order: stroke; stroke: #ffffff; stroke-width: 3.5px; stroke-linejoin: round;
+}
+.zoomview .mark.picked text { display: block; }
+.zoomview[data-names] .mark:not(.picked) text.hidden { display: none; }
+/* Map buttons: round, 44 px, the map's own light values in both themes. */
+.zoomview-tools { position: absolute; top: 8px; right: 8px; display: grid; gap: 8px; }
+.zoomview-tools button {
+  display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
+  border: 1px solid #d8d2c6; border-radius: 50%; background: #ffffff; color: #1d6b4f;
+  box-shadow: 0 1px 3px rgb(34 38 43 / 25%); cursor: pointer;
+}
+.zoomview-tools button:active { translate: 0 1px; }
+/* Unavailable: the canon's disabled ink and line, not a faded copy (§5). */
+.zoomview-tools button[aria-disabled="true"] { border-color: #6b7280; color: #6b7280; box-shadow: none; cursor: default; translate: none; }
+.zoomview-tools button:focus-visible { outline: 3px solid #1d6b4f; outline-offset: 2px; }
+/* A small button (a way out of the map): a smaller sign, the press area stays 44 px. */
+.zoomview-tools .small { border: 0; background: none; box-shadow: none; }
+.zoomview-tools .small svg { box-sizing: content-box; width: 18px; height: 18px; padding: 6px; border: 1px solid #d8d2c6; border-radius: 50%; background: #ffffff; }
+
+/* Layer switches under a map: each shows a sample of what it switches on a
+   patch of the map's ground (.sw-wrap), so the colours read in both themes.
+   The screen styles the sample of each layer (.sw.<layer>). */
+.layer-switches { display: grid; grid-template-columns: repeat(auto-fit, minmax(calc(140px * min(var(--fs), 1.25)), 1fr)); gap: 8px; }
+.lchip {
+  display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 44px; padding: 6px 10px 6px 6px;
+  border: 1px solid var(--line); border-radius: 12px; background: transparent; color: var(--muted); overflow-wrap: anywhere;
+  font-size: calc(14px * var(--fs)); line-height: 1.2; text-align: left; cursor: pointer;
+}
+.lchip[aria-pressed="true"] { border-color: var(--accent); background: var(--card); color: var(--ink); }
+.lchip[aria-pressed="false"] .sw-wrap { opacity: .5; }
+.lchip > span:nth-child(2) { flex: 1; min-width: 0; }
+.lcount { flex: none; color: var(--muted); font-size: calc(12px * var(--fs)); }
+.sw-wrap { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #eef3ee; }
+.sw { display: block; }
+
 /* ---------- offer card (offers.mjs) ---------- */
 
 /* Offer card: the list anatomy of the reviewed «Гіды» proposal — a 64×64 photo
