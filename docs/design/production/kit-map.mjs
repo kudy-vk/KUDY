@@ -208,7 +208,14 @@ export function zoomView({ size: [W, H], ground, overlay, marks = [], state, max
     event.preventDefault();
   });
 
-  // The box has its size only once it is on the page.
+  // The box has its size only once it is on the page, and it may change its
+  // width later (a turned screen, a resized window): every new size repaints.
+  // The watcher stops once the box has left the page.
+  const sized = new ResizeObserver(() => {
+    if (!box.isConnected) { sized.disconnect(); return; }
+    paint();
+  });
+  sized.observe(box);
   requestAnimationFrame(paint);
   return { node: box, paint, fly, show, scale };
 }

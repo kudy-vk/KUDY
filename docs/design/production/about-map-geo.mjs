@@ -61,18 +61,33 @@ export const SHAPES = {
 // says which layers are on: { visit, stay, rail, plan }. `current` is the
 // pick before, so pressing again where zones overlap steps to the next one.
 // Returns { kind: 'station' | 'airport' | 'zone', id } or null.
-const FINGER = 22; // screen px: how far from a sign a press still hits it
+//
+// Order: a press right on a sign picks the sign; else the zone under the
+// finger; else a sign within a finger's reach; else a zone just beside the
+// press. So on the whole map, where a station sign stands next to a small
+// zone, the zone stays pressable everywhere but on the sign itself.
+// screen px: a press on the drawn sign — a main stop's dot (4.5 px) or a
+// smaller stop's dot (2.6 px on the whole map) with a few px of finger around it
+const ON_SIGN = { main: 10, other: 7 };
+const FINGER = 22; // screen px: how far from a sign a press still hits it when no zone is under it
 const ZONE_SLOP = 12; // screen px: a press just outside a small zone still hits it
-export function pickAt(point, scale, show, current = null) {
-  const reach = FINGER / scale;
+const AIRPORT_SIGN = 16; // px of the picture: the drawn airport disc
+
+function nearestSign(point, show, reach, airportReach) {
+  const limit = (station) => (typeof reach === 'number' ? reach : reach[station.main ? 'main' : 'other']);
   let best = null;
-  const consider = (kind, id, [x, y]) => {
+  const consider = (kind, id, [x, y], limit) => {
     const distance = Math.hypot(point[0] - x, point[1] - y);
-    if (distance <= reach && (!best || distance < best.distance)) best = { kind, id, distance };
+    if (distance <= limit && (!best || distance < best.distance)) best = { kind, id, distance };
   };
-  consider('airport', SHAPES.airport.id, SHAPES.airport.px);
-  for (const station of SHAPES.stations) if (show[station.planned ? 'plan' : 'rail']) consider('station', station.id, station.px);
-  if (best) return { kind: best.kind, id: best.id };
+  consider('airport', SHAPES.airport.id, SHAPES.airport.px, airportReach);
+  for (const station of SHAPES.stations) if (show[station.planned ? 'plan' : 'rail']) consider('station', station.id, station.px, limit(station));
+  return best && { kind: best.kind, id: best.id };
+}
+
+export function pickAt(point, scale, show, current = null) {
+  const onSign = nearestSign(point, show, { main: ON_SIGN.main / scale, other: ON_SIGN.other / scale }, Math.max(ON_SIGN.main / scale, AIRPORT_SIGN));
+  if (onSign) return onSign;
 
   const zones = SHAPES.zones.filter((zone) => show[zone.kind]);
   // Where zones overlap, a place to visit comes first, then the smaller zone.
@@ -82,6 +97,8 @@ export function pickAt(point, scale, show, current = null) {
     const was = current?.kind === 'zone' ? under.findIndex((zone) => zone.id === current.id) : -1;
     return { kind: 'zone', id: under[(was + 1) % under.length].id };
   }
+  const nearSign = nearestSign(point, show, FINGER / scale, Math.max(FINGER / scale, AIRPORT_SIGN));
+  if (nearSign) return nearSign;
   const near = zones
     .map((zone) => ({ zone, distance: edgeDistance(point, zone.px) }))
     .filter(({ distance }) => distance <= ZONE_SLOP / scale)

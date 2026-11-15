@@ -92,3 +92,29 @@ test('every text the map shows exists in the guide dictionary', () => {
   for (const key of ['layer.visit', 'layer.stay', 'layer.rail', 'layer.plan', 'stop.skm', 'stop.pkm', 'stop.plan', 'stop.plan.from',
     'stop.change', 'zone.stop', 'map.hint', 'air.map', 'air.map.go']) assert.ok(hasText(key), key);
 });
+
+// On the whole map a station sign can stand inside or beside a small zone;
+// the zone must still be pressable somewhere (voka: station-occludes-zone-taps).
+// Fit scales of the narrowest and the common screen: 286 and 356 px wide.
+test('every zone can be picked on the whole map', () => {
+  for (const width of [286, 356]) {
+    const scale = width / MAP_IMAGE.width;
+    for (const item of SHAPES.zones) {
+      const xs = item.px.map(([x]) => x), ys = item.px.map(([, y]) => y);
+      let picked = false;
+      for (let x = Math.min(...xs); x <= Math.max(...xs) && !picked; x += 1) {
+        for (let y = Math.min(...ys); y <= Math.max(...ys) && !picked; y += 1) {
+          if (!inside([x, y], item.px)) continue;
+          // Overlapping zones take turns: up to three presses on one point.
+          let current = null;
+          for (let press = 0; press < 3; press += 1) {
+            current = pickAt([x, y], scale, ALL, current);
+            if (current?.kind !== 'zone') break;
+            if (current.id === item.id) { picked = true; break; }
+          }
+        }
+      }
+      assert.ok(picked, `${item.id}: no point of it picks it at ${width} px`);
+    }
+  }
+});
