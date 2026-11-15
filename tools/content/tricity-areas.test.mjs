@@ -145,7 +145,7 @@ test('a reference to an unknown source row is caught', () => {
 test('an objects item without its own reference is caught', () => {
   const item = FULL.replace(cardMd('oliwa'), `### oliwa\n\n| Поле | BE | EN |\n|---|---|---|\n| what | Жылы раён [S01]. | A residential district [S01]. |\n| why | Рэкамендацыя [S02]. | A thread recommendation [S02]. |\n| objects | Катэдра [S02]; Парк без крыніцы | Cathedral [S02]; Park without source |\n`);
   const { defects } = run(item);
-  assert.ok(defects.some((d) => d.includes('objects item "Парк без крыніцы" has no [S..] reference')), defects.join('\n'));
+  assert.ok(defects.some((d) => d.includes('objects item (be) "Парк без крыніцы" has no [S..] reference')), defects.join('\n'));
 });
 
 test('a source row without URL or without ISO date is caught', () => {
@@ -156,8 +156,10 @@ test('a source row without URL or without ISO date is caught', () => {
 });
 
 test('mixed-script tokens and subjective rating words in cards are caught', () => {
+  // Built from escapes so this source file itself holds no glued token.
+  const glued = 'G\u00f3r' + '\u043d\u0430'; // Gó + на
   const dirty = FULL.replace(cardMd('oliwa'), cardMd('oliwa', {
-    what: { be: 'Раён Górна [S01].', en: 'A district [S01].' },
+    what: { be: `Раён ${glued} [S01].`, en: 'A district [S01].' },
     why: { be: 'Раён небяспечны ўвечары [S02].', en: 'The district is unsafe at night [S02].' },
   }));
   const { defects } = run(dirty);
@@ -171,6 +173,40 @@ test('the real docs hold no mixed-script tokens or rating words in card cells', 
   const sourcesMd = fs.readFileSync(SOURCES_MD, 'utf8');
   const { defects } = run(cardsMd, sourcesMd);
   assert.deepEqual(defects.filter((d) => d.includes('mixed-script') || d.includes('rating word')), []);
+});
+
+test('a repeated field inside one card is caught', () => {
+  const twice = FULL.replace(cardMd('oliwa'), `### oliwa\n\n| Поле | BE | EN |\n|---|---|---|\n| what | Жылы раён [S01]. | A residential district [S01]. |\n| what | Другі раз [S01]. | A second time [S01]. |\n| why | Рэкамендацыя [S02]. | A thread recommendation [S02]. |\n`);
+  const { parseDefects } = run(twice);
+  assert.ok(parseDefects.some((d) => d.includes('card "oliwa" repeats field "what"')), parseDefects.join('\n'));
+});
+
+test('a duplicate card heading is caught', () => {
+  const dup = FULL.replace(cardMd('sopot'), `${cardMd('sopot')}### oliwa\n\n| Поле | BE | EN |\n|---|---|---|\n| what | т [S01] | e [S01] |\n| why | т [S02] | e [S02] |\n`);
+  const { parseDefects } = run(dup);
+  assert.ok(parseDefects.some((d) => d.includes('duplicate card heading "oliwa"')), parseDefects.join('\n'));
+});
+
+test('a Polish diacritic glued to a Cyrillic ending is caught (Latin-Extended class)', () => {
+  const bad = '\u017a\u043d\u043e'; // ź + но
+  const dirty = FULL.replace(cardMd('oliwa'), cardMd('oliwa', { what: { be: `Раён Brzeź${bad.slice(1)} [S01].`, en: 'A district [S01].' } }));
+  const { defects } = run(dirty);
+  assert.ok(defects.some((d) => d.includes('mixed-script token')), defects.join('\n'));
+});
+
+test('registry rows with an unknown city and malformed source rows answer with diagnostics', () => {
+  const badReg = `${REG.replace('| oliwa | gdansk | district | Oliwa | `oliwa` | — |', '| oliwa | warshaw | district | Oliwa | `oliwa` | — |')}## Карткі\n\n${cardMd('oliwa')}${cardMd('sopot')}${cardMd('westerplatte')}${cardMd('przerobka')}`;
+  const { parseDefects: regDefects } = run(badReg);
+  assert.ok(regDefects.some((d) => d.includes('registry row skipped: id-like first cell "oliwa" has unknown city "warshaw"')), regDefects.join('\n'));
+  const badSrc = `${SRC}| S1x | трафік | https://example.org/x | 2026-11-14 | ⚠️ |\n`;
+  const { parseDefects: srcDefects } = run(FULL, badSrc);
+  assert.ok(srcDefects.some((d) => d.includes('malformed source id "S1x"')), srcDefects.join('\n'));
+});
+
+test('an EN objects item without a reference is caught', () => {
+  const en = FULL.replace(cardMd('oliwa'), `### oliwa\n\n| Поле | BE | EN |\n|---|---|---|\n| what | Жылы раён [S01]. | A residential district [S01]. |\n| why | Рэкамендацыя [S02]. | A thread recommendation [S02]. |\n| objects | Катэдра [S02]; Парк [S02] | Cathedral [S02]; Park without source |\n`);
+  const { defects } = run(en);
+  assert.ok(defects.some((d) => d.includes('objects item (en) "Park without source" has no [S..] reference')), defects.join('\n'));
 });
 
 test('corrupt input answers with diagnostics, never a thrown error', () => {

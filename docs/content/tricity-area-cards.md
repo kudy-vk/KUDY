@@ -93,7 +93,7 @@
 |---|---|---|
 | what | Жылы раён з гарадскім пляжам на беразе мора [S13]. | A residential district with the city beach by the sea [S13]. |
 | objects | Пляж Brzeźno — найпапулярнейшы гарадскі пляж Гданьска [S13]; прагулка пляжам ад Brzeźna да Сопата — рэкамендацыя з тэдаў [S29] | Brzeźno beach — the most popular city beach of Gdańsk [S13]; the beach walk from Brzeźno to Sopot — a thread recommendation [S29] |
-| why | Пляж без далёкай паездкі з горада; у тэдах Brzeźно называюць сярод жылых раёнаў [S17]. | A beach without a long trip out of town; threads name Brzeźno among liveable districts [S17]. |
+| why | Пляж без далёкай паездкі з горада; у тэдах Brzeźno называюць сярод жылых раёнаў [S17]. | A beach without a long trip out of town; threads name Brzeźno among liveable districts [S17]. |
 | nav | Трамвай 3 да Brzeźno Dom Zdrojowy [S13]. | Tram 3 to Brzeźno Dom Zdrojowy [S13]. |
 
 ### chelm
@@ -211,7 +211,7 @@
 | Поле | BE | EN |
 |---|---|---|
 | what | Жылы раён уздоўж мора на поўначы горада [S01]. | A residential district along the sea in the north of the city [S01]. |
-| why | Przymorze (абодва раёны) у тэдах называюць сярод удалых па цане і якасці [S17, S22]. | Threads name Przymorze (both districts) among the good value-for-money areas [S17, S22]. |
+| why | Przymorze (абодва раёны) у тэдах называюць сярод удалых па цане і якасці [S17, S22]. | Threads name Przymorze (both districts) among the value-for-money areas [S17, S22]. |
 | nav | Станцыя SKM Gdańsk Przymorze-Uniwersytet [S06]. | The Gdańsk Przymorze-Uniwersytet SKM station [S06]. |
 
 ### przymorze-wielkie
@@ -219,8 +219,8 @@
 | Поле | BE | EN |
 |---|---|---|
 | what | Жылы раён уздоўж мора з марскім паркам і знакавай шматпавярховай забудовай [S07, S08]. | A residential district along the sea with a seaside park and landmark modernist blocks [S07, S08]. |
-| objects | Park im. Ronalda Reagana — марскі парк 2003–2006 ад Jelitkowo да Brzeźна [S07]; Falowiec на Obrońców Wybrzeża — 860 м, найдаўжэйшы будынак Польшчы [S08] | Ronald Reagan Park — a seaside park built 2003–2006 from Jelitkowo to Brzeźno [S07]; the Falowiec on Obrońców Wybrzeża — 860 m, the longest building in Poland [S08] |
-| why | Пляж і парк каля дому; у тэдах Przymorze называюць сярод удалых па цане і якасці [S17, S22]. | Beach and park next to home; threads name Przymorze among the good value-for-money areas [S17, S22]. |
+| objects | Park im. Ronalda Reagana — марскі парк 2003–2006 ад Jelitkowo да Brzeźna [S07]; Falowiec на Obrońców Wybrzeża — 860 м, найдаўжэйшы будынак Польшчы [S08] | Ronald Reagan Park — a seaside park built 2003–2006 from Jelitkowo to Brzeźno [S07]; the Falowiec on Obrońców Wybrzeża — 860 m, the longest building in Poland [S08] |
+| why | Пляж і парк каля дому; у тэдах Przymorze называюць сярод удалых па цане і якасці [S17, S22]. | Beach and park next to home; threads name Przymorze among the value-for-money areas [S17, S22]. |
 | nav | Станцыя SKM Gdańsk Przymorze-Uniwersytet [S06]. | The Gdańsk Przymorze-Uniwersytet SKM station [S06]. |
 
 ### rudniki
@@ -340,7 +340,7 @@
 |---|---|---|
 | what | Жылы раён уздоўж мора, у які ўваходзіць пляжная частка Jelitkowo [S01]. | A residential district along the sea that includes the Jelitkowo beach area [S01]. |
 | objects | Сямейны пляж Jelitkowo каля мяжы з Сопатам [S13] | The family-friendly Jelitkowo beach near the Sopot border [S13] |
-| why | Zabianka мясцовыя называюць сярод добра камунікаваных жылых раёнаў [S17]. | Locals name Zabianka among the well-connected residential districts [S17]. |
+| why | Zabianka мясцовыя называюць сярод жылых раёнаў з зручнай камунікацыяй [S17]. | Locals name Zabianka among the residential districts with convenient transport links [S17]. |
 | nav | Станцыя SKM Gdańsk Żabianka-AWFiS; трамваі 2 і 4 да Jelitkowa [S06, S13]. | The Gdańsk Żabianka-AWFiS SKM station; trams 2 and 4 to Jelitkowo [S06, S13]. |
 
 ## Карткі — Гдыня
@@ -511,7 +511,7 @@
 | Поле | BE | EN |
 |---|---|---|
 | what | Горад-курорт паміж Гданьскам і Гдыняй; афіцыйнага падзелу на раёны не мае [S03]. | A resort town between Gdańsk and Gdynia; it has no official district division [S03]. |
-| objects | Molo — пір драўлянай канструкцыі, «найдаўжэйшы ў Еўропе» [S03]; вул. Bohaterów Monte Cassino, 635 м [S03]; Krzywy Domek [S03]; Opera Leśna з 1909 [S03]; пляжы Гданьскай залівы [S03] | The Molo — a wooden pier, «the longest in Europe» [S03]; Bohaterów Monte Cassino street, 635 m [S03]; the Krzywy Domek [S03]; the Opera Leśna from 1909 [S03]; beaches on Gdańsk Bay [S03] |
+| objects | Molo — пір драўлянай канструкцыі, «найдаўжэйшы ў Еўропе» [S03]; вул. Bohaterów Monte Cassino, 635 м [S03]; Krzywy Domek, Opera Leśna з 1909 і пляжы Гданьскай залівы [S03] | The Molo — a wooden pier, «the longest in Europe» [S03]; Bohaterów Monte Cassino street, 635 m [S03]; the Krzywy Domek, the Opera Leśna from 1909 and the beaches of Gdańsk Bay [S03] |
 | why | Для дня: пір, пляж і Монцяк [S29, S34]; для начлега тэды папярэджваюць: шумна і дорага каля станцыі і Монцяка, раюць жыць у Гданьску або Гдыні [S24, S25]. | For a day trip: pier, beach and Monciak [S29, S34]; for overnight stays threads warn it is noisy and expensive near the station and Monciak and suggest staying in Gdańsk or Gdynia [S24, S25]. |
 | nav | Станцыі SKM: Sopot, Sopot Kamienny Potok, Sopot Wyścigi [S06]. | SKM stations: Sopot, Sopot Kamienny Potok, Sopot Wyścigi [S06]. |
 

@@ -14,12 +14,16 @@
 
 const REFS = /\[S\d+(?:,\s*S\d+)*\]/g;
 const REF_NAME = /\[S\d+(?:,\s*S\d+)*\]/;
-const MIXED_SCRIPT = /[А-Яа-яЁёЎў][A-Za-z]|[A-Za-z][А-Яа-яЁёЎў]/;
+// Unicode-script form: catches a Polish diacritic (ź, ż, ń…) glued to a
+// Cyrillic ending, which the ASCII [A-Za-z] form of the rule-12 grep misses.
+const MIXED_SCRIPT = /\p{Script=Cyrillic}\p{Script=Latin}|\p{Script=Latin}\p{Script=Cyrillic}/u;
 // Criterion 6 of issue #300: no subjective good/bad/dangerous/beautiful
-// ratings in published card cells.
+// ratings in published card cells. Stems are precise on purpose: 'добр'
+// covers добры/добрая/добра; 'good'/'bad' cover the EN mirrors.
 const RATINGS = [
-  'небяспеч', 'небяспек', 'кепск', 'прыгож', 'беспечн', 'безпек',
+  'небяспеч', 'небяспек', 'кепск', 'прыгож', 'беспечн', 'безпек', 'добр',
   'dangerous', 'unsafe', 'beautiful', 'ugly', 'niebezpieczn', 'ładny',
+  'good', 'bad',
 ];
 const TYPES = ['district', 'city', 'landmark'];
 const CITIES = ['gdansk', 'gdynia', 'sopot'];
@@ -67,8 +71,11 @@ function parseRegistry(cardsMd) {
   for (const line of rows) {
     const cells = splitRow(line);
     if (cells.length < 6) continue; // header or separator
-    if (!/^[a-z0-9-]+$/.test(cells[0])) continue; // header | areaId ...
-    if (!CITIES.includes(cells[1])) continue; // separator row |---|---|...
+    if (!/^[a-z][a-z0-9-]*$/.test(cells[0])) continue; // header row "areaId"
+    if (!CITIES.includes(cells[1])) {
+      defects.push(`registry row skipped: id-like first cell "${cells[0]}" has unknown city "${cells[1]}"`);
+      continue;
+    }
     const areaId = cells[0];
     const city = cells[1];
     const type = cells[2];
@@ -107,7 +114,10 @@ function parseCards(cardsMd) {
     }
     if (current && lines[i].startsWith('|')) {
       const cells = splitRow(lines[i]);
-      if (cells.length < 3) continue;
+      if (cells.length < 3) {
+        defects.push(`card "${current.areaId}" table row skipped: fewer than 3 cells`);
+        continue;
+      }
       const key = cells[0];
       if (!FIELDS.includes(key)) continue; // header row "| Поле | BE | EN |"
       if (current.fields[key]) {
@@ -133,9 +143,17 @@ function parseSources(sourcesMd) {
   }
   for (const line of rows) {
     const cells = splitRow(line);
-    if (cells.length < 5) continue;
+    if (cells.length < 5) {
+      if (/^S\d+/i.test(cells[0] ?? '')) defects.push(`source row skipped: "${cells[0]}" has fewer than 5 cells`);
+      continue;
+    }
     const m = /^S\d+$/.test(cells[0]) ? cells[0] : null;
-    if (!m) continue; // header or separator
+    if (!m) {
+      if (/^S/i.test(cells[0]) || /^\d+$/.test(cells[0])) {
+        defects.push(`source row skipped: malformed source id "${cells[0]}"`);
+      }
+      continue; // header or separator
+    }
     const urlMatch = /https?:\/\/[^\s|]+/.exec(cells[2]);
     const dateMatch = /^\d{4}-\d{2}-\d{2}$/.exec(cells[3]);
     if (!urlMatch) defects.push(`source "${m}" has no http(s) URL`);
@@ -191,10 +209,12 @@ function validate({ registry, cards, sources }) {
       for (const lang of ['be', 'en']) {
         if (cell[lang]?.trim()) checkCell(card.areaId, field, lang, cell[lang], sources, defects);
       }
-      if (field === 'objects' && cell.be?.trim()) {
-        for (const item of cell.be.split(';')) {
-          if (item.trim() && !REF_NAME.test(item)) {
-            defects.push(`card "${card.areaId}" objects item "${item.trim().slice(0, 40)}" has no [S..] reference`);
+      if (field === 'objects') {
+        for (const lang of ['be', 'en']) {
+          for (const item of (cell[lang] ?? '').split(';')) {
+            if (item.trim() && !REF_NAME.test(item)) {
+              defects.push(`card "${card.areaId}" objects item (${lang}) "${item.trim().slice(0, 40)}" has no [S..] reference`);
+            }
           }
         }
       }
