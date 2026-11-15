@@ -20,7 +20,7 @@ import { PLACE_WAYS, SUMMER_BEACHES } from './about-content.mjs';
 import { facts, fold, remark, sr } from './about-parts.mjs';
 
 const [W, H] = SHAPES.size;
-// The picture is 892 px wide: closer than ×3 it only gets blurred.
+// The picture has 3 px per unit (MAP_IMAGE.density): at ×3 it is still about sharp on a 3× phone screen.
 const MAX_ZOOM = 3;
 // From which zoom the main stops are named, and from which every stop and the visit zones.
 const LEVELS = [[2.3, 'all'], [1.5, 'main']];

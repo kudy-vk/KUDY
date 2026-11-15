@@ -21,8 +21,10 @@
 // STATIONS: coordinates from PKP Portal Pasażera as collected for #248.
 // The planned PKM Południe stops are approximate (PKM Południe project pages).
 
-// The base picture, px.
-export const MAP_IMAGE = { src: 'about-map.webp', width: 892, height: 971 };
+// The base picture. `width` and `height` are the units every px coordinate
+// of this file is in; the file itself has `density` pixels per unit, so it
+// stays sharp when the map is zoomed in.
+export const MAP_IMAGE = { src: 'about-map.webp', width: 892, height: 971, density: 3 };
 
 // Points found both on the picture (px) and on the ground. `ref` is a stop
 // of STATIONS or the AIRPORT; the others name what they are. On the picture

@@ -358,7 +358,8 @@ button, select, input { font: inherit; color: inherit; }
 .zoomview.dragging { cursor: grabbing; }
 /* The canon's focus ring, 3 px; drawn inwards because the box clips. */
 .zoomview:focus-visible { outline: 3px solid #1d6b4f; outline-offset: -3px; }
-.zoomview-world { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; }
+/* No will-change: the browser then draws the picture anew at each zoom, sharp. */
+.zoomview-world { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
 .zoomview-world img { display: block; max-width: none; pointer-events: none; }
 .zoomview-world > svg { position: absolute; top: 0; left: 0; overflow: visible; }
 .zoomview-world > svg * { vector-effect: non-scaling-stroke; }

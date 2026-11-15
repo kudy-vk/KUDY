@@ -10,9 +10,16 @@
 # water, road numbers and the airport sign stay. The pixel positions below
 # belong to this one source picture.
 #
+# The result is 892 x 971 px. The shipped about-map.webp is that picture
+# upscaled 3x (2676 x 2913 px) outside the repository with ChatGPT on
+# 2026-11-15 and saved as WebP quality 85. The upscale was checked against
+# the 892 px picture: the largest shift is 0.36 px (dense optical flow),
+# every map anchor moves by less than 0.05 px, the sea matches at 99.9 %.
+# A new upscale needs the same check before it replaces the file.
+#
 # Needs Python 3 with numpy and opencv-python. From the repository root:
 #   python docs/design/production/tools/about-map-clean.py \
-#     docs/design/production/tools/about-map-source.png docs/design/production/about-map.webp
+#     docs/design/production/tools/about-map-source.png <out>.png
 import sys
 
 import cv2
