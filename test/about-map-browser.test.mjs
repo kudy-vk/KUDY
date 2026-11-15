@@ -14,6 +14,8 @@ import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { inside } from '../docs/design/production/kit-geo.mjs';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TYPES = {
   '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
@@ -94,14 +96,6 @@ test('the «Пра горад» map answers presses, gestures, keys, layers and 
     const sopot = m.SHAPES.zones.find((zone) => zone.id === 'sopot');
     return { sopot: sopot.px, station: m.SHAPES.stations.find((s) => s.id === 'sopot').px, signs: m.SHAPES.stations.filter((s) => !s.planned).map((s) => s.px) };
   });
-  const insideRing = ([x, y], ring) => {
-    let hit = false;
-    for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
-      const [xi, yi] = ring[i], [xj, yj] = ring[j];
-      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) hit = !hit;
-    }
-    return hit;
-  };
 
   await t.test('on the whole map a press beside a station sign, inside a zone, picks the zone', async () => {
     const { sopot, station, signs } = await geo();
@@ -113,7 +107,7 @@ test('the «Пра горад» map answers presses, gestures, keys, layers and 
     for (let x = Math.min(...xs); x <= Math.max(...xs) && !target; x += 0.5) {
       for (let y = Math.min(...ys); y <= Math.max(...ys) && !target; y += 0.5) {
         const nearest = Math.min(...signs.map(([sx, sy]) => Math.hypot(x - sx, y - sy))) * scale;
-        if (nearest > 12 && nearest < 20 && insideRing([x, y], sopot)) target = [x, y];
+        if (nearest > 12 && nearest < 20 && inside([x, y], sopot)) target = [x, y];
       }
     }
     assert.ok(target, 'the Sopot zone has a point beside the station sign');
