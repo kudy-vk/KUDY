@@ -226,6 +226,31 @@ Peek/Half/Full (09 §6.5, `11` §3.2). Peek-бар: радок now-playing (ул
 Тап па маркеры адкрывае прэв'ю, ніколі не гук. Кропка пазіцыі —
 `color.person`, без сувязі са станамі кропак.
 
+### Ілюстраваная карта Труймяста («Пра горад»)
+
+Паводле [рашэнняў M12 і M13](brand/decisions.md#m12). Падкладка — адзін
+мясцовы малюнак карты, светлы ў абедзвюх тэмах (DT-4); усё, што націскаецца,
+малюецца паверх яго з геаграфічных каардынат. Макет:
+[about.html](production/about.html), агульныя часткі —
+[kit-map.mjs і kit-geo.mjs](production/README.md).
+
+- **Зоны** — свабодныя формы з плаўным і крыху няроўным краем, не квадраты і
+  не авалы. «Месцы для наведвання» — `color.map.zone.visit`, «Зручна
+  спыніцца» — `color.map.zone.stay`, абедзве напаўпразрыстыя; выбраная зона —
+  `color.map.zone.picked`, без абводкі. Зона чытаецца не толькі па колеры:
+  назва віду стаіць у перамыкачы слаёў, у картцы і ў спісе зон.
+- **Лініі** — SKM `color.map.line.skm`, PKM `color.map.line.pkm`, будучая
+  лінія — пункцір `color.map.line.plan`; пад лініяй белая падкладка.
+  Станцыя — белы кружок з контурам колеру лініі, перасадка — двайны кружок.
+- **Назвы** на карце — Golos 600 з белым ахоўным контурам, растуць да
+  `font.big-text-factor`. На ўсёй карце бачныя толькі назвы на малюнку;
+  назвы галоўных станцый з'яўляюцца з ×1,5, астатніх станцый і зон — з ×2,3;
+  назва, якая накрыла б больш важную, чакае бліжэйшага набліжэння.
+- **Кнопкі карты** — круглыя 44 px: «+», «−», «уся карта» і маленькая
+  кнопка Google Maps (M13). Недаступная кнопка — `color.disabled-ink` і
+  `color.disabled-line`, не празрыстасць.
+- Набліжэнне — да ×3; пры ўсёй карце вертыкальны рух пальца пракручвае экран.
+
 ### Дыялог і стужкі
 
 Дыялог — да 400px, зацміценне backdrop 35% чорнага. Notice-блок — цёплая пара
@@ -339,6 +364,12 @@ mascot-only (a11y-плашка `screens.md`).
     "color.medal.ink":        { "value": "#4a3b2a", "use": "знак у медальёне і на пункце кола (M4, M9, M11; kit.css --medal-ink); у цёмнай тэме — тэмавы ink (M9, #252)" },
     "color.medal.glow":       { "value": "#f8d580", "use": "бурштынавае свячэнне абранага медальёна і кольца выбранай кропкі на схеме, адно ў абедзвюх тэмах (светлая зона; M9, #252; kit.css --medal-glow)" },
     "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі пратотыпа" },
+    "color.map.zone.visit":   { "value": "#e9973f", "use": "заліўка зоны «Месцы для наведвання» на карце Труймяста, непразрыстасць 62% (M12, #248; kit about.html --visit)" },
+    "color.map.zone.stay":    { "value": "#3f9461", "use": "заліўка зоны «Зручна спыніцца» на карце Труймяста, непразрыстасць 42% (M12)" },
+    "color.map.zone.picked":  { "value": "#9a5d24", "use": "выбраная зона і кольца выбранай станцыі на карце Труймяста, бронза без абводкі (M12)" },
+    "color.map.line.skm":     { "value": "#1d6b4f", "use": "лінія і контур станцый SKM на карце Труймяста (M12)" },
+    "color.map.line.pkm":     { "value": "#276c8c", "use": "лінія і контур станцый PKM (цягнік да аэрапорта) на карце Труймяста (M12)" },
+    "color.map.line.plan":    { "value": "#6c7520", "use": "пункцір і контур прыпынкаў будучай лініі PKM Południe на карце Труймяста (M12)" },
     "color.engrave":          { "value": "#7a6248", "use": "штрых гравюрнай панарамы Гданьска на галоўным экране (M5, M11; kit.css --engrave)" },
     "color.panorama.ground":  { "value": "#faf7f2", "use": "заліўка мас панарамы (M5, M11; у цёмнай тэме — darkTheme.tokens)" },
     "font.family":            { "value": "system-ui, sans-serif", "use": "усё тэкставае; правы — раздзел 3" },
@@ -434,7 +465,13 @@ mascot-only (a11y-плашка `screens.md`).
       "color.marker.pending",
       "color.marker.locked",
       "color.medal.rim",
-      "color.medal.glow"
+      "color.medal.glow",
+      "color.map.zone.visit",
+      "color.map.zone.stay",
+      "color.map.zone.picked",
+      "color.map.line.skm",
+      "color.map.line.pkm",
+      "color.map.line.plan"
     ],
     "lightMarkerLetterToken": "color.accent-ink",
     "splash": "light"
@@ -481,6 +518,10 @@ mascot-only (a11y-плашка `screens.md`).
     { "fg": "color.marker.pending", "bg": "color.street", "min": 3 },
     { "fg": "color.marker.locked", "bg": "color.street", "min": 3 },
     { "fg": "color.person", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.line.skm", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.line.pkm", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.line.plan", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.zone.picked", "bg": "color.map", "min": 3 },
     { "fg": "color.accent", "bg": "color.paper", "min": 3 },
     { "fg": "color.accent", "bg": "color.card", "min": 3 },
     { "fg": "color.accent", "bg": "color.line", "min": 3 },

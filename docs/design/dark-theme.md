@@ -170,6 +170,9 @@ OpenFreeMap «liberty» як interim паводле ADR G00.02; канчатко
   `color.marker.*` — светлыя значэнні ў абедзвюх тэмах (§3). Літара маркера —
   светлай-тэмавы `color.accent-ink` (#ffffff) у абедзвюх тэмах, пакуль
   картаграфія светлая.
+- Карта Труймяста «Пра горад» (M12, #248): зоны і лініі `color.map.zone.*` і
+  `color.map.line.*` — у зоне картаграфіі, светлыя ў абедзвюх тэмах, як і сам
+  малюнак карты.
 - Медальён: кант і свячэнне (`color.medal.rim`, `color.medal.glow`, M9/M11) —
   у зоне светлай-незмяняльнай графікі. Дыск і знак (`color.medal.paper`,
   `color.medal.ink`) у цёмнай тэме мяняюцца: рашэнне M9 (#252, 2026-11-12) —
@@ -459,7 +462,7 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
   },
   "cartographyZone": {
     "rule": "У MVP картаграфія і маркеры застаюцца са светлай тэмай у абедзвюх тэмах: стыль правайдара (contracts/map-provider.ts, interim ADR G00.02) не тэматызуецца, літара маркера — светлай-тэмавы color.accent-ink у абедзвюх тэмах.",
-    "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked", "color.medal.rim", "color.medal.glow"],
+    "tokens": ["color.map", "color.street", "color.person", "color.marker.played", "color.marker.playing", "color.marker.available", "color.marker.pending", "color.marker.locked", "color.medal.rim", "color.medal.glow", "color.map.zone.visit", "color.map.zone.stay", "color.map.zone.picked", "color.map.line.skm", "color.map.line.pkm", "color.map.line.plan"],
     "reason": "Цёмны accent-ink на светлай заліўцы marker.played дае 2.43:1 — ніжэй за 4.5:1; паасобная тэматызацыя маркераў ламае правіла канона §5.",
     "tier2Proposal": {
       "color.map": "#1b2420",
@@ -472,6 +475,12 @@ playing #e5735a, available #dcaa4e, pending #9aa8b1, locked #8b99a2; літар�
       "color.marker.available": "#dcaa4e",
       "color.marker.pending": "#9aa8b1",
       "color.marker.locked": "#8b99a2",
+      "color.map.zone.visit": "#e9a95c",
+      "color.map.zone.stay": "#5fb880",
+      "color.map.zone.picked": "#d69a5c",
+      "color.map.line.skm": "#6fcf9f",
+      "color.map.line.pkm": "#6fb7d8",
+      "color.map.line.plan": "#b8c25a",
       "markerLetter": "#0d2a1e"
     }
   },
