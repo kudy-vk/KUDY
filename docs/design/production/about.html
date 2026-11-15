@@ -163,47 +163,66 @@
   .tile .icon { color: var(--accent); }
   .tile strong { color: var(--ink); font-size: calc(14px * var(--fs)); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 
-  /* ---------- «Дзе што ў горадзе»: the orientation schematic ---------- */
+  /* ---------- «Гданьск з аднаго погляду»: the illustrated map (about-map.mjs) ---------- */
 
-  /* Light in both themes (DT-4). Its layout is fixed, so its names grow only
-     to the app's limit of 1.25 (font.big-text-factor) and the box grows with them. */
+  /* The map view, its buttons and the layer switches are the shared kit-map
+     (kit.css); here are only this map's own colours and signs. */
   .orientation { display: grid; gap: 6px; }
-  .schematic {
-    --ms: min(var(--fs), 1.25);
-    position: relative; width: 100%; aspect-ratio: 1 / calc(.8 * var(--ms)); overflow: hidden;
-    border: 1px solid #d8d2c6; border-radius: 10px; background: #eef3ee; color: #22262b; font-size: calc(12.8px * var(--ms)); line-height: 1.2;
+  .atlas {
+    --visit: #e9973f; --stay: #3f9461; --pick: #9a5d24;
+    --skm: #1d6b4f; --pkm: #276c8c; --plan: #6c7520;
   }
-  /* The coast and the river carry meaning: the muted tone gives 4.3:1 on the
-     map ground, above the 3:1 asked of graphic objects (canon §9). */
-  .schematic .coast { position: absolute; top: 13%; left: 0; right: 0; height: 1px; background: #6b7280; }
-  .schematic .river { position: absolute; top: 13%; bottom: 0; left: 62%; width: 2px; background: #6b7280; }
-  .schematic .water { position: absolute; white-space: nowrap; }
-  .schematic .sea { top: 3%; left: 4%; }
-  .schematic .motlawa { top: 68%; left: 65.5%; }
-  /* A place is one button: its dot stands on the point (--x, --y) and its
-     name beside it — to the right, to the left, or under it. The button is
-     low (--py) so that the buttons of neighbouring places never share a strip. */
-  .spot {
-    --px: 6px; --py: 2px; --dot: 8px;
-    position: absolute; top: var(--y); display: flex; align-items: center; gap: 5px; padding: var(--py) var(--px);
-    border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; cursor: pointer;
-  }
-  .spot.right { left: var(--x); translate: calc(-1 * (var(--px) + var(--dot) / 2)) -50%; }
-  .spot.left { right: calc(100% - var(--x)); flex-direction: row-reverse; translate: calc(var(--px) + var(--dot) / 2) -50%; }
-  .spot.below {
-    right: calc(100% - var(--x)); flex-direction: column; align-items: flex-end; gap: 2px;
-    translate: calc(var(--px) + var(--dot) / 2 + 12px) calc(-1 * (var(--py) + var(--dot) / 2));
-  }
-  .spot.below .dot { margin-right: 12px; }
-  .spot .dot { flex: none; width: var(--dot); height: var(--dot); border-radius: 50%; background: #22262b; }
-  .spot .name { padding: 1px 4px; border-radius: 4px; white-space: nowrap; }
-  .spot.main { --dot: 10px; }
-  .spot.main .dot { background: #1d6b4f; }
-  .spot.main .name { color: #1d6b4f; }
-  .spot[aria-pressed="true"] .dot { box-shadow: 0 0 0 3px #eef3ee, 0 0 0 6px var(--medal-glow); }
-  .spot[aria-pressed="true"] .name { background: #1d6b4f; color: #ffffff; }
-  /* The canon's focus ring, 3 px; drawn inwards because the box clips. */
-  .spot:focus-visible { outline: 3px solid #1d6b4f; outline-offset: -3px; }
+  /* A zone: a free shape, widened by a rim of the same colour so a small zone
+     stays visible on the whole map. Fill and rim are one colour under one
+     opacity, so there is no outline; the picked zone turns bronze, also with
+     no outline (owner's decision, #248). */
+  .zone { stroke-width: 6; stroke-linejoin: round; }
+  .zone.visit { fill: var(--visit); stroke: var(--visit); opacity: .62; }
+  .zone.stay { fill: var(--stay); stroke: var(--stay); opacity: .42; }
+  .zone.picked { fill: var(--pick); stroke: var(--pick); opacity: .82; }
+  .line path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .line .casing { stroke: #ffffff; stroke-width: 7; stroke-opacity: .9; }
+  .line .ink { stroke-width: 3.5; }
+  .line.skm .ink { stroke: var(--skm); }
+  .line.pkm .ink { stroke: var(--pkm); }
+  .line.plan .ink { stroke: var(--plan); stroke-width: 3; stroke-dasharray: 6 5; }
+  .line.plan .casing { stroke-width: 6; }
+  .line .beyond { stroke-opacity: .45; }
+  .stop .halo, .airport .halo { fill: none; }
+  .stop .dot { fill: #ffffff; stroke-width: 2.4; }
+  /* On the whole map only the main stops are full size. */
+  .atlas[data-names="none"] .stop:not(.main):not(.picked) .dot { r: 2.6px; stroke-width: 1.8; }
+  .stop.skm .dot, .stop .outer { stroke: var(--skm); }
+  .stop.pkm .dot { stroke: var(--pkm); }
+  .stop.plan .dot { stroke: var(--plan); }
+  .stop .outer { fill: #ffffff; stroke-width: 1.6; }
+  .stop.change .dot { stroke: var(--pkm); }
+  /* Names from a zoom level: the main stops first, then every stop and the visit zones. */
+  .atlas[data-names="main"] .stop.main text,
+  .atlas[data-names="all"] .stop text,
+  .atlas[data-names="all"] .zname text { display: block; }
+  .atlas .zname text { font-size: calc(13px * var(--ms)); fill: #6b3a12; }
+  /* The picked sign: a bronze ring and its name, at any zoom. */
+  .stop.picked .halo, .airport.picked .halo { fill: rgb(154 93 36 / 22%); stroke: var(--pick); stroke-width: 2.5; }
+  /* Samples of the layers in the layer switches and the list. */
+  .sw.visit, .sw.stay { width: 16px; height: 16px; border-radius: 50%; }
+  .sw.visit { background: #ecab64; box-shadow: 0 0 0 3px #f2cfa7; }
+  .sw.stay { background: #84b997; box-shadow: 0 0 0 3px #b5d6c0; }
+  .sw.rail { width: 20px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #1d6b4f 50%, #276c8c 50%); }
+  .sw.plan { width: 20px; height: 3px; background: repeating-linear-gradient(90deg, #6c7520 0 5px, transparent 5px 8px); }
+
+  /* The card of the pick. */
+  .atlas-card .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .zone-tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; }
+  .zone-tag.visit::before { background: #e9973f; }
+  .zone-tag.stay::before { background: #3f9461; }
+  .lbadge { display: inline-grid; place-items: center; min-height: 28px; padding: 2px 10px; border-radius: 8px; color: #ffffff; font-size: calc(13px * var(--fs)); font-weight: 600; }
+  .lbadge.skm { background: #1d6b4f; }
+  .lbadge.pkm { background: #276c8c; }
+  .lbadge.plan { border: 2px dashed #6c7520; background: transparent; color: var(--ink); }
+  .atlas-card .btn { justify-self: start; }
+  .page .atlas-card.row { align-items: flex-start; }
+  .g-sub + .card.group { margin-top: -4px; }
   .place { display: grid; gap: 10px; }
   .place-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
   .place-head h4, .pack h4 { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
@@ -257,7 +276,7 @@
     <li>Загаловак раздзела набраны Golos, а не Alegreya: канон пакідае Alegreya назвам гідаў і гісторый.</li>
     <li>Пераключальнікі — пераключальнік тэмы з <a href="settings.html">«Налад»</a>; чыпы спосабу аплаты — чыпы выбару з <a href="discovery.html">«Чым заняцца»</a>.</li>
     <li>Згортванні — прыём доўгіх спісаў з <a href="preview.html">«Прэв'ю гіда»</a>; спіс афіцыйных старонак — радкі <a href="settings.html">«Налад»</a>.</li>
-    <li>Схема арыенціраў светлая ў абедзвюх тэмах, як мапа ў <a href="nearby.html">«Побач»</a> (рашэнне DT-4). Цёмная тэма — шакаладна-цагляная палітра M3.</li>
+    <li>Раздзел «Гданьск з аднаго погляду» — карта Труймяста з мэтавага экрана ўладальніка (#248): малюнак карты з яго ўзятыя як падкладка, а зоны, чыгунка, станцыі і аэрапорт нанесеныя паверх па геаграфічных каардынатах і націскаюцца. Карту можна наблізіць і аддаліць. Як і мапа ў <a href="nearby.html">«Побач»</a>, яна светлая ў абедзвюх тэмах (рашэнне DT-4).</li>
   </ul>
 </main>
 <script type="module" src="about.mjs"></script>

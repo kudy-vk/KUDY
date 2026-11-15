@@ -7,9 +7,10 @@
 // official links at the end of a section do.
 import { el, icon, mountBoard, panorama, topbar, walkButton } from './kit.mjs';
 import {
-  CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, DELIVERY, FREE_DAYS, LINKS, PAY_METHODS, PLACES, PRICES, RIDES, SECTIONS,
+  CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, DELIVERY, FREE_DAYS, LINKS, PAY_METHODS, PRICES, RIDES, SECTIONS,
   guideLanguage, hasText, price, translator,
 } from './about-content.mjs';
+import { atlas, initialAtlas } from './about-map.mjs';
 import { facts, fold, folds, heading, lineBadge, prices, remark, rows, seg, sr, steps, tile } from './about-parts.mjs';
 import { wheel } from './about-wheel.mjs';
 
@@ -99,44 +100,10 @@ function transport(c) {
   ];
 }
 
-// The orientation schematic: light in both themes, like every map of the app
-// (decision DT-4). Each place is a button; the chosen one is described below.
-function city(c) {
-  const { t, ui } = c;
-  const box = el('div', { className: 'schematic' },
-    el('i', { className: 'coast' }), el('i', { className: 'river' }),
-    el('span', { className: 'water sea', textContent: t('city.sea') }),
-    el('span', { className: 'water motlawa', lang: 'pl', textContent: 'Motława' }));
-  box.dataset.theme = 'light';
-  box.setAttribute('role', 'group');
-  box.setAttribute('aria-label', t('city.pick'));
-  for (const place of PLACES) {
-    const button = el('button', { className: `spot ${place.side}${place.main ? ' main' : ''}`, type: 'button' },
-      el('i', { className: 'dot' }), el('span', { className: 'name', lang: 'pl', textContent: place.name }));
-    button.style.setProperty('--x', `${place.x}%`);
-    button.style.setProperty('--y', `${place.y}%`);
-    button.dataset.key = `place:${place.id}`;
-    button.setAttribute('aria-pressed', String(place.id === ui.place));
-    button.addEventListener('click', () => { ui.place = place.id; c.redraw(); });
-    box.append(button);
-  }
-  const chosen = PLACES.find((place) => place.id === ui.place);
-  const beach = chosen.kind === 'beach' || chosen.kind === 'island';
-  const about = card('place',
-    el('div', { className: 'place-head' },
-      el('h4', { lang: 'pl', textContent: chosen.title ?? chosen.name }),
-      el('span', { className: 'tag', textContent: t(`kind.${chosen.kind}`) })),
-    text('', t(`place.${chosen.id}`)),
-    chosen.get.length > 0 && el('div', { className: 'stack' }, sr(`${t('city.get')}: `),
-      ...chosen.get.map(([sign, key]) => facts([[sign, t(key)]]))),
-    chosen.warn && remark('warn', t(chosen.warn)),
-    beach && text('t-secondary', t('city.summer')));
-  about.setAttribute('role', 'status');
-  return [
-    el('div', { className: 'orientation' }, box, text('t-secondary', t('city.caption'))),
-    about,
-  ];
-}
+// The illustrated map of the Tricity with the owner's zones, the railway and
+// the airport (about-map.mjs): light in both themes, like every map of the
+// app (decision DT-4).
+const city = (c) => atlas({ t: c.t, ui: c.ui, lang: c.lang, openSection: c.openSection, openMaps: c.openMaps });
 
 function food(c) {
   const { t, ui } = c;
@@ -236,7 +203,7 @@ const board = await mountBoard({
     const lang = guideLanguage(state.locale);
     const t = translator(state.locale);
     // What the visitor chose and opened inside the sections; it outlives a repaint.
-    const ui = { direction: 'from', zone: 'ztm', place: 'glowne', pay: 'any', hours: 24, day: 1, folds: new Map() };
+    const ui = { direction: 'from', zone: 'ztm', atlas: initialAtlas(), pay: 'any', hours: 24, day: 1, folds: new Map() };
     let current = SECTIONS.find((section) => section.id === state.section);
 
     body.append(topbar({
@@ -251,9 +218,19 @@ const board = await mountBoard({
     const page = el('div', { className: 'page scroll', id: `about-panel-${theme}` });
     page.setAttribute('role', 'tabpanel');
     page.lang = lang;
-    const context = { t, ui, money: (amount, cents) => price(state.locale, amount, cents), redraw: () => paint(false) };
+    const context = {
+      t, ui, lang,
+      money: (amount, cents) => price(state.locale, amount, cents),
+      redraw: () => paint(false),
+      // Turns the wheel to another section, as a press on its item would.
+      openSection: (id) => wheelNode.querySelectorAll('.slot')[SECTIONS.findIndex((section) => section.id === id)].click(),
+      // The app hands the address to the system: Google Maps or the browser opens it.
+      openMaps: (url) => say(`Адкрываецца Google Maps (праграма або браўзер): ${url}. Без сеткі Google Maps пакажа сваю памылку; даведнік застаецца адкрытым.`),
+    };
 
     function sources() {
+      // A section without official pages (the map) has no block for them.
+      if (current.links.length === 0) return [];
       const list = el('div', { className: 'card group' }, ...current.links.map((key) => {
         const label = t(`links.${key}`);
         const row = el('button', { className: 'srow', type: 'button' }, el('span', { className: 'grow', textContent: label }), icon('external-link', 18));
@@ -292,7 +269,7 @@ const board = await mountBoard({
       if (direction) page.classList.add(direction > 0 ? 'from-right' : 'from-left');
     }
 
-    body.append(wheel({
+    const wheelNode = wheel({
       items: SECTIONS.map((section) => ({ id: section.id, icon: section.icon, label: t(`tab.${section.id}`) })),
       index: SECTIONS.indexOf(current),
       // Every item has the same width. It grows a little with the text size
@@ -309,7 +286,8 @@ const board = await mountBoard({
         paint(true, direction);
         board.say(`Кола спынілася на «${boardNames(`tab.${current.id}`)}»: пад ім адкрыты гэты раздзел.`);
       },
-    }), page);
+    });
+    body.append(wheelNode, page);
     paint(true);
   },
 });
