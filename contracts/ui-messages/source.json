@@ -4409,7 +4409,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-words-en.mjs"
+        "components/about-city-strings.generated.ts#tr.buy.jakdojade.title"
       ],
       "sourceHash": "ddfb36d364f082dc85edd1eb18d60f02c81d98bd5065fc2231e0924e083a72d7"
     },
@@ -4420,7 +4420,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-words-en.mjs"
+        "components/about-city-strings.generated.ts#tr.buy.jakdojade.text"
       ],
       "sourceHash": "490993a793bdb6a272cb957156eb61dd32d1897c46ac6d30a748f1fdcca89b0a"
     },
@@ -4431,7 +4431,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-words-en.mjs"
+        "components/about-city-strings.generated.ts#tr.buy.fala.title"
       ],
       "sourceHash": "fb0067ea51de6471c7e56eef0f6b0a804ad7370b09215e19825b9697b622eefc"
     },
@@ -4442,7 +4442,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-words-en.mjs"
+        "components/about-city-strings.generated.ts#tr.buy.fala.text"
       ],
       "sourceHash": "0ce5ee9a04b90d5462d259414d1c459bb9c49555b8c12b9682f78612dac3aff0"
     },
@@ -4453,7 +4453,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-words-en.mjs"
+        "components/about-city-strings.generated.ts#tr.buy.kompas.title"
       ],
       "sourceHash": "492ae045661bc3a62884203121089947dc984386fcf629d90297a2788d2dcb8b"
     },
@@ -4464,7 +4464,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-words-en.mjs"
+        "components/about-city-strings.generated.ts#tr.buy.kompas.text"
       ],
       "sourceHash": "3460839d74f91e834be66b233edc1634a380fcc93c1538182375f420a2fa592c"
     },
