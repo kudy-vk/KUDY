@@ -118,7 +118,7 @@
       "checked_at": "2026-11-16"
     },
     {
-      "id": "src-commons-2756894447337195260",
+      "id": "src-commons-2121423825647009570",
       "kind": "commons",
       "title": "Wikimedia Commons file Bazylika Mariacka DSC01870.jpg",
       "url": "https://commons.wikimedia.org/wiki/File:Bazylika%20Mariacka%20DSC01870.jpg",
@@ -134,7 +134,7 @@
       "checked_at": "2026-11-16"
     },
     {
-      "id": "src-commons-7753027546556025329",
+      "id": "src-commons-4122054299277047608",
       "kind": "commons",
       "title": "Wikimedia Commons file Ayuntamiento Principal, Gdansk, Polonia, 2013-05-20, DD 10.jpg",
       "url": "https://commons.wikimedia.org/wiki/File:Ayuntamiento%20Principal%2C%20Gdansk%2C%20Polonia%2C%202013-05-20%2C%20DD%2010.jpg",
@@ -150,7 +150,7 @@
       "checked_at": "2026-11-16"
     },
     {
-      "id": "src-commons-6373214588688803861",
+      "id": "src-commons-8822800949795003458",
       "kind": "commons",
       "title": "Wikimedia Commons file Museum of the Second World War in Gdańsk 2025b.jpg",
       "url": "https://commons.wikimedia.org/wiki/File:Museum%20of%20the%20Second%20World%20War%20in%20Gda%C5%84sk%202025b.jpg",
@@ -254,7 +254,7 @@
       "checked_at": "2026-11-16"
     },
     {
-      "id": "src-commons-4771350470919755854",
+      "id": "src-commons-6568477687339294273",
       "kind": "commons",
       "title": "Wikimedia Commons file Moja rybka NEMO na plaży - panoramio.jpg",
       "url": "https://commons.wikimedia.org/wiki/File:Moja%20rybka%20NEMO%20na%20pla%C5%BCy%20-%20panoramio.jpg",
@@ -278,7 +278,7 @@
       "checked_at": "2026-11-16"
     },
     {
-      "id": "src-commons-2926703787859672881",
+      "id": "src-commons-1491510711512276090",
       "kind": "commons",
       "title": "Wikimedia Commons file Muelle de Sopot, Polonia, 2013-05-22, DD 21.jpg",
       "url": "https://commons.wikimedia.org/wiki/File:Muelle%20de%20Sopot%2C%20Polonia%2C%202013-05-22%2C%20DD%2021.jpg",
@@ -686,7 +686,7 @@
       "checked_at": "2026-11-16"
     },
     {
-      "id": "src-commons-127110073951997219",
+      "id": "src-commons-4900981172554554813",
       "kind": "commons",
       "title": "Wikimedia Commons file Gdansk Shipyard aerial photograph 2019 P03.jpg",
       "url": "https://commons.wikimedia.org/wiki/File:Gdansk%20Shipyard%20aerial%20photograph%202019%20P03.jpg",
@@ -732,8 +732,9 @@
           "claim_en": "Main pedestrian zone of the Old Town (Długa, Mariacka) with the Motława embankment sign",
           "verdict": "confirmed",
           "source": [
-            "src-osm-rel/5537950"
-          ]
+            "src-osm-relation-5537950"
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -782,15 +783,17 @@
           "verdict": "confirmed",
           "source": [
             "src-nmm-pl",
-            "src-osm-node/13312142213"
-          ]
+            "src-osm-node-13312142213"
+          ],
+          "checked_at": "2026-11-16"
         },
         {
           "claim_en": "Iconic photo spot on the Motława embankment",
           "verdict": "confirmed",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -828,7 +831,7 @@
       "transit": null,
       "photo": {
         "page_url": "https://commons.wikimedia.org/wiki/File:Bazylika%20Mariacka%20DSC01870.jpg",
-        "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Gyddanyzc&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User",
+        "author": "Gyddanyzc",
         "license": "CC0"
       },
       "claims": [
@@ -837,7 +840,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -875,7 +879,7 @@
       "transit": null,
       "photo": {
         "page_url": "https://commons.wikimedia.org/wiki/File:Ayuntamiento%20Principal%2C%20Gdansk%2C%20Polonia%2C%202013-05-20%2C%20DD%2010.jpg",
-        "author": "<bdi><a href=\"https://www.wikidata.org/wiki/Q28147777\" class=\"extiw\" title=\"d:Q28147777\"><span title=\"Spanish photograph",
+        "author": "Diego Delso",
         "license": "CC BY-SA 3.0"
       },
       "claims": [
@@ -883,8 +887,9 @@
           "claim_en": "Ratusz hosts the Historical Museum and a tower with a city panorama",
           "verdict": "confirmed",
           "source": [
-            "src-osm-rel/2167745"
-          ]
+            "src-wd-Q2135657"
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -928,7 +933,7 @@
       "transit": null,
       "photo": {
         "page_url": "https://commons.wikimedia.org/wiki/File:Museum%20of%20the%20Second%20World%20War%20in%20Gda%C5%84sk%202025b.jpg",
-        "author": "<a href=\"//commons.wikimedia.org/wiki/User:Boston9\" title=\"User:Boston9\">Adrian Grycuk</a>",
+        "author": "Adrian Grycuk",
         "license": "CC BY 3.0 pl"
       },
       "claims": [
@@ -937,14 +942,16 @@
           "verdict": "confirmed",
           "source": [
             "src-muzeum1939-bilety"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         },
         {
           "claim_en": "Main exhibition full ticket 33 zł / reduced 23 zł",
           "verdict": "confirmed",
           "source": [
             "src-muzeum1939-bilety"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         },
         {
           "claim_en": "Plan almost a whole day; some visitors were asked to leave at closing time",
@@ -952,7 +959,8 @@
           "source": [
             "src-input",
             "src-muzeum1939-bilety"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -996,7 +1004,7 @@
       "transit": null,
       "photo": {
         "page_url": "https://commons.wikimedia.org/wiki/File:Gdansk%20Shipyard%20aerial%20photograph%202019%20P03.jpg",
-        "author": "<a href=\"//commons.wikimedia.org/wiki/User:Fallaner\" title=\"User:Fallaner\">Fallaner</a>",
+        "author": "Fallaner",
         "license": "CC BY-SA 4.0"
       },
       "claims": [
@@ -1005,14 +1013,16 @@
           "verdict": "confirmed",
           "source": [
             "src-ecs-bilety"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         },
         {
           "claim_en": "Full ticket 40 zł / reduced 35 zł; typically closed on Mondays",
           "verdict": "confirmed",
           "source": [
             "src-ecs-bilety"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1055,7 +1065,8 @@
           "verdict": "confirmed",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1098,7 +1109,8 @@
           "verdict": "confirmed",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1176,7 +1188,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1219,7 +1232,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1228,7 +1242,7 @@
       "id": "wzgorze-lagry",
       "status": "open",
       "status_sources": [
-        "src-osm-way/140487202"
+        "src-osm-way-140487202"
       ],
       "name_local": "Lagry",
       "kind": "viewpoint",
@@ -1261,8 +1275,9 @@
           "claim_en": "'Lagry' hill exists in Gdańsk (VII Dwór area) under the name 'Lagry'",
           "verdict": "confirmed",
           "source": [
-            "src-osm-way/140487202"
-          ]
+            "src-osm-way-140487202"
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1305,7 +1320,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1348,7 +1364,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1391,7 +1408,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1464,7 +1482,7 @@
       "transit": null,
       "photo": {
         "page_url": "https://commons.wikimedia.org/wiki/File:Moja%20rybka%20NEMO%20na%20pla%C5%BCy%20-%20panoramio.jpg",
-        "author": "<a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20161025234828/http://www.panoramio.com/user/6",
+        "author": "marek7400",
         "license": "CC BY 3.0"
       },
       "claims": [
@@ -1473,7 +1491,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1516,7 +1535,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1554,7 +1574,7 @@
       "transit": null,
       "photo": {
         "page_url": "https://commons.wikimedia.org/wiki/File:Muelle%20de%20Sopot%2C%20Polonia%2C%202013-05-22%2C%20DD%2021.jpg",
-        "author": "<bdi><a href=\"https://www.wikidata.org/wiki/Q28147777\" class=\"extiw\" title=\"d:Q28147777\"><span title=\"Spanish photograph",
+        "author": "Diego Delso",
         "license": "CC BY-SA 3.0"
       },
       "claims": [
@@ -1563,7 +1583,8 @@
           "verdict": "confirmed",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1606,7 +1627,8 @@
           "verdict": "confirmed",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1649,7 +1671,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1692,7 +1715,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1770,7 +1794,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1813,7 +1838,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1851,7 +1877,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1894,7 +1921,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1937,7 +1965,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -1980,7 +2009,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2058,7 +2088,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2101,7 +2132,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2144,7 +2176,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2187,7 +2220,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2225,7 +2259,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2267,8 +2302,9 @@
           "claim_en": "Pizza and specialty coffee ~15 min walk from the centre; same venue as Kawiarnia Publiczna",
           "verdict": "confirmed",
           "source": [
-            "src-osm-node/7704294303"
-          ]
+            "src-osm-node-7704294303"
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2311,7 +2347,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2424,7 +2461,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2433,7 +2471,7 @@
       "id": "bar-pod-ryba",
       "status": "open",
       "status_sources": [
-        "src-osm-node/746496122"
+        "src-osm-node-746496122"
       ],
       "name_local": "Pod Rybą",
       "kind": "food",
@@ -2466,8 +2504,9 @@
           "claim_en": "Venue moved from the centre; reviewer could not vouch for quality",
           "verdict": "refuted",
           "source": [
-            "src-osm-node/746496122"
-          ]
+            "src-osm-node-746496122"
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2510,7 +2549,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2553,7 +2593,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2596,7 +2637,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2639,7 +2681,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2677,7 +2720,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2720,7 +2764,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2763,7 +2808,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2876,7 +2922,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2919,7 +2966,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -2962,7 +3010,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3004,8 +3053,9 @@
           "claim_en": "Outstanding specialty coffee; same venue as Publiczna (pizza)",
           "verdict": "confirmed",
           "source": [
-            "src-osm-node/7704294303"
-          ]
+            "src-osm-node-7704294303"
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3048,7 +3098,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3091,7 +3142,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3134,7 +3186,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3177,7 +3230,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3220,7 +3274,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3263,7 +3318,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3301,7 +3357,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3344,7 +3401,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3387,7 +3445,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3430,7 +3489,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3508,7 +3568,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
@@ -3551,7 +3612,8 @@
           "verdict": "unverified",
           "source": [
             "src-input"
-          ]
+          ],
+          "checked_at": "2026-11-16"
         }
       ],
       "checked_at": "2026-11-16"
