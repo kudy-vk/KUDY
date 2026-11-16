@@ -90,7 +90,7 @@
 | Музей | Бясплатна | Умовы | Крыніца | Праверана | Статус |
 |---|---|---|---|---|---|
 | Музей ІІ сусветнай вайны | уторак, усе выставы | білет 0 zł толькі ў касе ў дзень наведвання (≤1 гад да зачынення); онлайн-браніравання бясплатных няма; панядзелкі звычайна закрыты; святы — свой расклад | [visiting rules](https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules) | 2026-11-10 | ✅ |
-| Muzeum Gdańska | панядзелак: Ратуша ГМ, Артуса двор, Дом Уфагена 10:00–16:00; Бурштын 10:00–18:00 | уторак асноўныя аддзелы закрытыя; на бясплатны дзень частка часовых выставак можа не працаваць; закрытыя дні — на афіцыйнай старонцы | [oddziały](https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/oddzialy/), [gdansk.pl — Za darmo do muzeum](https://www.gdansk.pl/wiadomosci/Za-darmo-do-muzeum-Gdzie-i-kiedy,a,299023) | 2026-11-17 | EN-тэкст free-entrance («зіма — уторак») састарэлы; «уторак» у гідаў — пра Нацыянальны музей (MNG) | ✅ |
+| Muzeum Gdańska | панядзелак: Ратуша ГМ, Артуса двор, Дом Уфагена 10:00–16:00; Бурштын 10:00–18:00 | уторак асноўныя аддзелы закрытыя; на бясплатны дзень частка часовых выставак можа не працаваць; закрытыя дні — на афіцыйнай старонцы | [oddziały](https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/oddzialy/), [gdansk.pl — Za darmo do muzeum](https://www.gdansk.pl/wiadomosci/Za-darmo-do-muzeum-Gdzie-i-kiedy,a,299023) | 2026-11-17 | ✅ EN-тэкст free-entrance («зіма — уторак») састарэлы; «уторак» у гідаў — пра Нацыянальны музей (MNG) |
 | ECS | рэгулярнага бясплатнага дня выстаў няма; уторак — тэхнічны дзень; уваход у будынак бясплатны | X–IV: пн, ср–пт 10–17, сб–нд 10–18 | [ecs.gda.pl — godziny](https://ecs.gda.pl/zaplanuj-wizyte/godziny-otwarcia) | 2026-11-10 | ✅ |
 
 ## 8. Мальбарк
