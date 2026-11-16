@@ -38,8 +38,8 @@
 // #305 (2026-11-16) — revalidation: 305 is a live card in kudy-vk/KUDY again
 // (the keyboard access of the Tricity map mockup in docs/design/production),
 // so it leaves the list per the revalidation rule of the #264 note; the bare
-// citation returns in that task's carriers (the mockup, its test header, the
-// design-QA report and the demo). The third fixture below asserts the token
+// citation returns in that task's carriers (its test header, the design-QA
+// report and the demo). The third fixture below asserts the token
 // stays untouched — re-adding the number turns that fixture red.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
