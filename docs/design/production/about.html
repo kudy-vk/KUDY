@@ -204,6 +204,13 @@
   .atlas .zname text { font-size: calc(13px * var(--ms)); fill: #6b3a12; }
   /* The picked sign: a bronze ring and its name, at any zoom. */
   .stop.picked .halo, .airport.picked .halo { fill: rgb(154 93 36 / 22%); stroke: var(--pick); stroke-width: 2.5; }
+  /* A keyboard-focused sign: the canon's 3px accent ring (visual-language,
+     «Фокус»: аднолькавы для ўсіх маркераў), drawn inwards as the halo's
+     stroke — the marks keep the screen size at any zoom, so the ring stays
+     3px; the focused sign shows its name too. */
+  .stop:focus-visible .halo, .airport:focus-visible .halo { stroke: #1d6b4f; stroke-width: 3; }
+  .zoomview .mark:focus-visible text { display: block; }
+  .zoomview[data-names] .mark:focus-visible text.hidden { display: block; }
   /* Samples of the layers in the layer switches and the list. */
   .sw.visit, .sw.stay { width: 16px; height: 16px; border-radius: 50%; }
   .sw.visit { background: #ecab64; box-shadow: 0 0 0 3px #f2cfa7; }

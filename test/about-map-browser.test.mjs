@@ -3,10 +3,12 @@
 // (about-map.test.mjs) cannot see the DOM; these drive the page the way a
 // visitor does: a press on the map, the + − and whole-map buttons, a drag,
 // the mouse wheel, a double press, the keys, a two-finger pinch with real
-// touch events, the layer switches and a width change. Each check fails when
-// its handler is reverted. The page is served from the repository by a local
-// server; nothing leaves the machine. Without a Chromium binary the test
-// skips with the reason (the required CI job installs it).
+// touch events, the layer switches, a width change, and, without a pointer,
+// Tab and Enter or Space picking the airport and a station (#305). Each
+// check fails when its handler is reverted. The page is served from the
+// repository by a local server; nothing leaves the machine. Without a
+// Chromium binary the test skips with the reason (the required CI job
+// installs it).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -191,6 +193,27 @@ test('the «Пра горад» map answers presses, gestures, keys, layers and 
     await phone.locator('.lchip[data-key="layer:visit"]').click();
     assert.ok(await phone.locator('.zone.visit:not(.off)').count() > 0, 'the switch brings them back');
     await phone.locator('.zoomview-tools button').nth(2).click();
+  });
+
+  await t.test('without a pointer, Tab reaches the airport and a station and Enter or Space picks them', async () => {
+    assert.notEqual(await phone.locator('.atlas-svg').getAttribute('aria-hidden'), 'true', 'the map svg is not hidden from the reader');
+    await box.focus();
+    // The signs on the map are named buttons (about-map.mjs drawing()): from
+    // the map box, Tab lands on the first mark, the airport.
+    await page.keyboard.press('Tab');
+    assert.deepEqual(await page.evaluate(() => {
+      const mark = document.activeElement;
+      return { label: mark?.getAttribute('aria-label'), role: mark?.getAttribute('role') };
+    }), { label: 'Port Lotniczy Gdańsk (GDN)', role: 'button' }, 'Tab reaches the airport sign');
+    await page.keyboard.press('Enter');
+    assert.deepEqual(await card(), { name: 'Port Lotniczy Gdańsk', tag: 'GDN' }, 'Enter picks the airport like a press');
+    await page.keyboard.press('Escape');
+    assert.equal(await phone.locator('.atlas-card h4').count(), 0, 'Escape on the mark clears the pick');
+    // The next mark is a station; Space picks it the same way.
+    await page.keyboard.press('Tab');
+    assert.deepEqual(await page.evaluate(() => document.activeElement?.getAttribute('aria-label')), 'Gdynia Główna', 'Tab reaches a station sign');
+    await page.keyboard.press('Space');
+    assert.deepEqual(await card(), { name: 'Gdynia Główna', tag: 'Станцыя' }, 'Space picks the station like a press');
   });
 
   await t.test('a width change repaints the picture to the new width', async () => {
