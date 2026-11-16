@@ -26,6 +26,16 @@ module.exports = {
       presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
       caller: { name: "metro", bundler: "metro", platform: "ios" },
     }],
+    // Issue #303: the about screen reuses the mockup's pure map modules
+    // (kit-geo, about-map-data, about-map-geo) without copying — the same
+    // ESM the design zone serves to the browser; jest needs the Expo
+    // transform the way the magnet/amber pieces get it. The guard is
+    // components/about-city-map.test.tsx: dropping the mapping dies on the
+    // ESM parse error.
+    "production[/\\\\](kit-geo|about-map-data|about-map-geo)\\.mjs$": ["babel-jest", {
+      presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
+      caller: { name: "metro", bundler: "metro", platform: "ios" },
+    }],
   },
   // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): jest reads the "react-native" export condition,
   // which hands lucide-react-native's deep icon imports their ESM .mjs build —

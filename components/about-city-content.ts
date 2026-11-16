@@ -26,7 +26,8 @@ export type AboutCitySectionId = "airport" | "transport" | "city" | "food" | "ca
 export type AboutCityLinkKey = keyof AboutCityStrings["links"];
 
 // One official URL per link label; a change to a URL is a change to the
-// guide's sources table row (same PR).
+// guide's sources table row (same PR). The map section sends the reader to
+// Google Maps beside the map (M13) and carries no official-pages row.
 export const ABOUT_CITY_LINK_URLS = {
   airportBuses: "https://www.airport.gdansk.pl/przed-podroza/dojazd-na-lotnisko/autobus",
   airportTrains: "https://www.airport.gdansk.pl/en/before-travel/getting-to-the-airport/train",
@@ -35,7 +36,6 @@ export const ABOUT_CITY_LINK_URLS = {
   skmSearch: "https://www.skm.pkp.pl/dla-pasazera/wyszukaj-polaczenie",
   jakdojade: "https://jakdojade.pl/gdansk/trasa/",
   mzkzg: "https://mzkzg.org/bilety-metropolitalne/bilety-jednorazowe-czasowe/",
-  visitGdanskMap: "https://visitgdansk.com/cmsImages/dokumenty/mapa-centrum-gdanska.pdf",
   kartaTurysty: "https://kartaturysty.visitgdansk.com/cennik",
   muzeumGdanska: "https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/free-entrance/?L=1",
   muzeum1939: "https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules",
@@ -46,22 +46,28 @@ export const ABOUT_CITY_LINK_URLS = {
 // The carousel, in its order (decision M10 — five sections; «Побач з
 // горадам» moved to the main menu). «Аэрапорт» comes first: it is what a
 // visitor who just landed needs. The official pages each section sends the
-// reader to, in reading order, ride beside it.
+// reader to, in reading order, ride beside it; the map section has none
+// (decision M13 — the Google Maps button lives beside the map).
 export const ABOUT_CITY_SECTIONS = [
   { id: "airport", icon: PlaneIcon, links: ["airportBuses", "airportTrains", "ztmSchedule"] },
   { id: "transport", icon: TramFrontIcon, links: ["ztmSchedule", "ztmTickets", "skmSearch", "jakdojade", "mzkzg"] },
-  { id: "city", icon: MapIcon, links: ["visitGdanskMap"] },
+  { id: "city", icon: MapIcon, links: [] },
   { id: "food", icon: UtensilsCrossedIcon, links: ["pysznePayment", "blikHow"] },
   { id: "card", icon: LandmarkIcon, links: ["kartaTurysty", "muzeumGdanska", "muzeum1939"] },
 ] as const satisfies readonly { id: AboutCitySectionId; icon: CanonGlyph; links: readonly AboutCityLinkKey[] }[];
 
 // The signs the ride facts and the airport steps use; a fact names its sign
-// by key and the section resolves it to the glyph.
+// by key and the section resolves it to the glyph. The map's zone ways use
+// the same sign names as the mockup's about-content.mjs PLACE_WAYS.
 export const ABOUT_CITY_FACT_ICONS = {
+  bus: BusIcon,
   clock: ClockIcon,
-  "refresh-cw": RefreshCwIcon,
-  moon: MoonIcon,
+  "footprints": FootprintsIcon,
   "map-pin": MapPinIcon,
+  moon: MoonIcon,
+  "refresh-cw": RefreshCwIcon,
+  "tram-front": TramFrontIcon,
+  "train-front": TrainFrontIcon,
 } as const satisfies Record<string, CanonGlyph>;
 
 export type AboutCityFactName = keyof typeof ABOUT_CITY_FACT_ICONS;
@@ -142,36 +148,6 @@ export const ABOUT_CITY_PRICES = {
 } as const satisfies Record<string, readonly (readonly [key: string, full: number, reduced: number | null])[]>;
 
 export type AboutCityPriceZone = keyof typeof ABOUT_CITY_PRICES;
-
-// Places of the orientation schematic: the dot in percent of the box, where
-// the name stands (right of the dot, left of it, or under it), what kind of
-// place it is and the signs of how to get there. Relative geography, not
-// cartography — the caption says proportions are approximate; the official
-// map link in the same section is the geographically exact source.
-export type AboutCityPlace = {
-  readonly id: string;
-  readonly name: string;
-  readonly title?: string;
-  readonly x: number;
-  readonly y: number;
-  readonly side: "right" | "left" | "below";
-  readonly kind: keyof AboutCityStrings["kind"];
-  readonly main?: boolean;
-  readonly get: readonly (readonly [sign: CanonGlyph, key: string])[];
-  readonly warn?: string;
-};
-
-export const ABOUT_CITY_PLACES: readonly AboutCityPlace[] = [
-  { id: "jelitkowo", name: "Jelitkowo", x: 9, y: 19, side: "right", kind: "beach", get: [[TramFrontIcon, "get.jelitkowo"]] },
-  { id: "brzezno", name: "Brzeźno", x: 30, y: 30, side: "right", kind: "beach", get: [[TramFrontIcon, "get.brzezno"]] },
-  { id: "stogi", name: "Stogi", x: 72, y: 19, side: "right", kind: "beach", get: [[BusIcon, "get.stogi"]], warn: "place.stogi.warn" },
-  { id: "sobieszewo", name: "Sobieszewo", title: "Wyspa Sobieszewska", x: 93, y: 28, side: "below", kind: "island", get: [[BusIcon, "get.sobieszewo"]] },
-  { id: "oliwa", name: "Oliwa", x: 9, y: 40, side: "right", kind: "district", get: [[TramFrontIcon, "get.oliwa.tram"], [TrainFrontIcon, "get.oliwa.skm"]] },
-  { id: "wrzeszcz", name: "Wrzeszcz", x: 30, y: 50, side: "right", kind: "district", get: [[TrainFrontIcon, "get.wrzeszcz"]] },
-  { id: "stare", name: "Stare Miasto", x: 58, y: 63, side: "left", kind: "quarter", get: [] },
-  { id: "station", name: "Gdańsk Główny", x: 50, y: 74, side: "left", kind: "station", get: [[FootprintsIcon, "get.station.walk"], [TrainFrontIcon, "get.station.skm"]] },
-  { id: "glowne", name: "Główne Miasto", x: 58, y: 85, side: "left", kind: "centre", main: true, get: [[FootprintsIcon, "get.glowne"]] },
-] as const;
 
 // Delivery services and the payment methods their official pages confirm.
 export const ABOUT_CITY_PAY_METHODS = ["card", "blik", "cash", "apple", "google", "paypal"] as const;

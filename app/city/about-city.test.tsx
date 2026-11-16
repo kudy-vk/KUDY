@@ -16,6 +16,15 @@ import { aboutCityStrings } from "../../components/about-city-strings";
 import { ABOUT_CITY_STRINGS } from "../../components/about-city-strings.generated";
 import { frameRoutes } from "../../test/render-helpers";
 
+// The map's gestures run on the RNGH/Reanimated layer jest cannot host; the
+// render suite stubs the gesture builder out through the shared mock (the
+// pick logic runs in the pure modules and is guarded by
+// test/about-map.test.mjs).
+jest.mock("react-native-gesture-handler", () => {
+  const { gestureHandlerMock } = require("../../test/gesture-handler-mock") as typeof import("../../test/gesture-handler-mock");
+  return gestureHandlerMock();
+});
+
 // The official hosts the guide may link to — a URL outside this list fails
 // the wiring guard (the sources table is the only place a new host joins).
 const OFFICIAL_HOSTS = new Set([
@@ -84,13 +93,27 @@ test("the zone switch changes the price list; one list keeps one shape (criterio
   expect(screen.queryByText("4,80 zł")).toBeNull();
 });
 
-test("the schematic places are buttons; the chosen place is described (criterion 5)", () => {
+test("the city section shows the illustrated Tricity map, not the schematic (issue #303)", () => {
   openGuide();
   fireEvent.press(screen.getByTestId("wheel-item-city"));
-  fireEvent.press(screen.getByTestId("city-spot-stogi"));
-  expect(screen.getByText("Шырокі спакойны пляж.")).toBeTruthy();
-  // The named warning of the cut trams stays a visible remark, not a title.
-  expect(screen.getByText(/Мост Siennicki закрыты/)).toBeTruthy();
+  // The map box with the picture, the layer switches and the hint card.
+  expect(screen.getByTestId("city-map")).toBeTruthy();
+  expect(screen.getByTestId("city-map-layers")).toBeTruthy();
+  expect(screen.getByText("Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.")).toBeTruthy();
+  // The map's caption is the mockup's own: the drawing is approximate.
+  expect(screen.getByText(/малюнак прыблізны\. Не для навігацыі\./)).toBeTruthy();
+  // The old schematic's places are gone with it.
+  expect(screen.queryByTestId("city-spot-stogi")).toBeNull();
+});
+
+test("the city section carries no official-pages rows (decision M13)", () => {
+  openGuide();
+  fireEvent.press(screen.getByTestId("wheel-item-city"));
+  expect(screen.queryByText("Афіцыйныя старонкі")).toBeNull();
+  expect(screen.queryByTestId("link-about-visitGdanskMap")).toBeNull();
+  // The other sections keep theirs.
+  fireEvent.press(screen.getByTestId("wheel-item-transport"));
+  expect(screen.getByTestId("link-about-ztmSchedule")).toBeTruthy();
 });
 
 test("the payment filter dims the services that refuse the chosen way (criterion 5)", () => {
