@@ -7,7 +7,7 @@
 // official links at the end of a section do.
 import { el, icon, mountBoard, panorama, topbar, walkButton } from './kit.mjs';
 import {
-  CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, DELIVERY, FREE_DAYS, LINKS, PAY_METHODS, PRICES, RIDES, SECTIONS,
+  APPS, CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, DELIVERY, FREE_DAYS, LINKS, PAY_METHODS, PRICES, RIDES, SECTIONS,
   guideLanguage, hasText, price, translator,
 } from './about-content.mjs';
 import { atlas, initialAtlas } from './about-map.mjs';
@@ -71,7 +71,18 @@ function airport(c) {
 
 function transport(c) {
   const { t, ui } = c;
-  const zones = ['ztm', 'metro', 'rail'];
+  // The ticket apps: the owner's verdict (issue #254, 2026-11-16) keeps the
+  // fares, the ticket catalogue and the activation rules out of the guide —
+  // they live in the apps and on the official pages. The section only names
+  // what to ride and opens the three apps by their icons.
+  const appTile = (app) => {
+    const title = t(`tr.buy.${app.id}.title`);
+    const node = tile(app.icon, title, t(`tr.buy.${app.id}.text`));
+    node.setAttribute('role', 'link');
+    node.setAttribute('tabindex', '0');
+    node.addEventListener('click', () => say(`Адкрываецца аплікацыя «${title}» у браўзеры: ${app.url}. Без сеткі браўзер пакажа сваю памылку; даведнік застаецца адкрытым.`));
+    return node;
+  };
   return [
     heading(t('tr.modes')),
     folds(ui.folds, [
@@ -79,24 +90,8 @@ function transport(c) {
       { id: 'mode-skm', lead: icon('train-front', 22), title: t('tr.skm.title'), meta: t('tr.skm.meta'), body: [text('', t('tr.skm.text')), remark('warn', t('tr.skm.warn'))] },
       { id: 'mode-rail', lead: icon('route', 22), title: t('tr.rail.title'), meta: t('tr.rail.meta'), body: [text('', t('tr.rail.text'))] },
     ]),
-    heading(t('tr.prices')),
-    seg('zone', t('tr.zone'), zones.map((zone) => [zone, t(`tr.zone.${zone}`)]), ui.zone, (value) => { ui.zone = value; c.redraw(); }),
-    card('ticket', text('t-secondary', t(`tr.zone.${ui.zone}.note`)), priceRows(c, PRICES[ui.zone]),
-      ui.zone !== 'rail' && text('t-secondary', t('tk.night'))),
-    heading(t('tr.activate')),
-    folds(ui.folds, [
-      { id: 'act-paper', lead: icon('scan-qr-code', 22), title: t('tr.act.paper.title'), body: [text('', t('tr.act.paper.text'))] },
-      { id: 'act-mobile', lead: icon('smartphone', 22), title: t('tr.act.mobile.title'), body: [text('', t('tr.act.mobile.text'))] },
-      { id: 'act-valid', lead: icon('clock', 22), title: t('tr.act.valid.title'), body: [text('', t('tr.act.valid.text'))] },
-    ]),
     heading(t('tr.buy')),
-    el('div', { className: 'tiles' },
-      tile('smartphone', t('tr.buy.fala.title'), t('tr.buy.fala.text')),
-      tile('ticket', t('tr.buy.apps.title'), t('tr.buy.apps.text')),
-      tile('credit-card', t('tr.buy.board.title'), t('tr.buy.board.text')),
-      tile('store', t('tr.buy.desk.title'), t('tr.buy.desk.text'))),
-    remark('tip', t('tr.tip.card')),
-    remark('tip', t('tr.tip.kompas')),
+    el('div', { className: 'tiles' }, ...APPS.map(appTile)),
   ];
 }
 
@@ -203,7 +198,7 @@ const board = await mountBoard({
     const lang = guideLanguage(state.locale);
     const t = translator(state.locale);
     // What the visitor chose and opened inside the sections; it outlives a repaint.
-    const ui = { direction: 'from', zone: 'ztm', atlas: initialAtlas(), pay: 'any', hours: 24, day: 1, folds: new Map() };
+    const ui = { direction: 'from', atlas: initialAtlas(), pay: 'any', hours: 24, day: 1, folds: new Map() };
     let current = SECTIONS.find((section) => section.id === state.section);
 
     body.append(topbar({

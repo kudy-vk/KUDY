@@ -12,15 +12,15 @@ import { be } from './about-words-be.mjs';
 import { en } from './about-words-en.mjs';
 
 // Addresses of the official pages: ABOUT_CITY_LINK_URLS in
-// components/about-city-content.ts.
+// components/about-city-content.ts. The apps the transport section opens
+// (jakdojade, FALA, KomPas) carry their own URLs in APPS below; the price
+// lists live in those apps and on their official pages, never in the app
+// (owner's verdict, issue #254, 2026-11-16).
 export const LINKS = {
   airportBuses: 'https://www.airport.gdansk.pl/przed-podroza/dojazd-na-lotnisko/autobus',
   airportTrains: 'https://www.airport.gdansk.pl/en/before-travel/getting-to-the-airport/train',
   ztmSchedule: 'https://ztm.gda.pl/rozklady',
-  ztmTickets: 'https://ztm.gda.pl/bilety',
   skmSearch: 'https://www.skm.pkp.pl/dla-pasazera/wyszukaj-polaczenie',
-  jakdojade: 'https://jakdojade.pl/gdansk/trasa/',
-  mzkzg: 'https://mzkzg.org/bilety-metropolitalne/bilety-jednorazowe-czasowe/',
   kartaTurysty: 'https://kartaturysty.visitgdansk.com/cennik',
   muzeumGdanska: 'https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/free-entrance/?L=1',
   muzeum1939: 'https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules',
@@ -28,11 +28,19 @@ export const LINKS = {
   blikHow: 'https://www.blik.com/en/how-to-use-blik',
 };
 
+// The ticket apps the transport section opens, in the owner's order
+// (issue #254, 2026-11-16): jakdojade first, then FALA, then KomPas.
+export const APPS = [
+  { id: 'jakdojade', url: 'https://jakdojade.pl/gdansk/trasa/', icon: 'smartphone' },
+  { id: 'fala', url: 'https://systemfala.pl', icon: 'ticket' },
+  { id: 'kompas', url: 'https://skm.pkp.pl', icon: 'compass' },
+];
+
 // The carousel, in its order. «Аэрапорт» comes first: it is what a visitor who
 // just landed needs.
 export const SECTIONS = [
   { id: 'airport', icon: 'plane', links: ['airportBuses', 'airportTrains', 'ztmSchedule'] },
-  { id: 'transport', icon: 'tram-front', links: ['ztmSchedule', 'ztmTickets', 'skmSearch', 'jakdojade', 'mzkzg'] },
+  { id: 'transport', icon: 'tram-front', links: ['ztmSchedule', 'skmSearch'] },
   { id: 'city', icon: 'map', links: [] },
   { id: 'food', icon: 'utensils-crossed', links: ['pysznePayment', 'blikHow'] },
   { id: 'card', icon: 'landmark', links: ['kartaTurysty', 'muzeumGdanska', 'muzeum1939'] },
@@ -88,11 +96,12 @@ export const RIDES = [
   },
 ];
 
-// Ticket prices in złoty: [name key, full price, reduced price].
+// Ticket prices in złoty: [name key, full price, reduced price]. Only the
+// airport's bus-ticket list and the tourist card's transport add-on keep
+// their prices; the transport section itself shows none — the owner moved
+// every fare detail to the apps and official pages (issue #254, 2026-11-16).
 export const PRICES = {
   ztm: [['tk.single', 4.8, 2.4], ['tk.75', 6, 3], ['tk.24h', 22, 11]],
-  metro: [['tk.single.phone', 4.8, null], ['tk.single.paper', 5.2, null], ['tk.75', 6, 3], ['tk.24h', 24, 12], ['tk.72h', 48, 24]],
-  rail: [['tk.24h.two', 30, 15], ['tk.24h.all', 34, 17], ['tk.72h', 68, 34]],
   cardTransport: [['tk.24h', 34, 17], ['tk.72h', 68, 34]],
 };
 

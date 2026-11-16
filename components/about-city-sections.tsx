@@ -9,15 +9,14 @@ import { Fragment, type ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import BusIcon from "lucide-react-native/icons/bus";
 import CreditCardIcon from "lucide-react-native/icons/credit-card";
+import ExternalLinkIcon from "lucide-react-native/icons/external-link";
 import RouteIcon from "lucide-react-native/icons/route";
-import ScanQrCodeIcon from "lucide-react-native/icons/scan-qr-code";
 import SmartphoneIcon from "lucide-react-native/icons/smartphone";
-import StoreIcon from "lucide-react-native/icons/store";
-import TicketIcon from "lucide-react-native/icons/ticket";
 import TramFrontIcon from "lucide-react-native/icons/tram-front";
 import TrainFrontIcon from "lucide-react-native/icons/train-front";
 
 import {
+  ABOUT_CITY_APPS,
   ABOUT_CITY_CARD_HOURS,
   ABOUT_CITY_CARD_PACKAGES,
   ABOUT_CITY_CARD_SMAKI_PRICE,
@@ -46,7 +45,6 @@ import { ABOUT_CITY_ATLAS_INITIAL, AboutCityMap, type AboutCityAtlasState } from
 // section switch. The map's choices ride `atlas` (the mockup's ui.atlas).
 export type AboutCityUiState = {
   direction: "from" | "to";
-  zone: keyof typeof ABOUT_CITY_PRICES;
   pay: "any" | AboutCityPayMethod;
   hours: (typeof ABOUT_CITY_CARD_HOURS)[number];
   day: number;
@@ -56,7 +54,6 @@ export type AboutCityUiState = {
 
 export const ABOUT_CITY_INITIAL_UI: AboutCityUiState = {
   direction: "from",
-  zone: "ztm",
   pay: "any",
   hours: 24,
   day: 1,
@@ -73,7 +70,9 @@ export type AboutCitySectionStyles = ReturnType<typeof createStyles>;
 // AboutCitySection). `setUi` also takes an updater over the previous state —
 // the map's camera commits ride it, so a stale closure never wipes the
 // visitor's newer pick. `onOpenSection` turns the wheel to a section (the
-// map's airport card uses it, the mockup's openSection).
+// map's airport card uses it, the mockup's openSection). `openLink` hands an
+// address to the system (the transport section's app rows, the mockup's
+// say-on-click) and keeps the failed-open notice on the screen.
 export type AboutCitySectionContext = {
   strings: AboutCityStrings;
   t: AboutCityText;
@@ -81,6 +80,7 @@ export type AboutCitySectionContext = {
   setUi: (patch: Partial<AboutCityUiState> | ((prev: AboutCityUiState) => Partial<AboutCityUiState>)) => void;
   toggleFold: (group: readonly string[], id: string, open: boolean) => void;
   onOpenSection: (id: AboutCitySectionId) => void;
+  openLink: (url: string) => void;
   styles: AboutCitySectionStyles;
 };
 
@@ -102,7 +102,6 @@ function priceRows(ctx: AboutCitySectionContext, list: readonly (readonly [key: 
 
 const AIRPORT_RIDE_IDS = ABOUT_CITY_RIDES.map((ride) => `ride-${ride.id}`);
 const TRANSPORT_MODE_IDS = ["mode-ztm", "mode-skm", "mode-rail"];
-const TRANSPORT_ACT_IDS = ["act-paper", "act-mobile", "act-valid"];
 const FOOD_PAY_IDS = ["pay-cards", "pay-blik"];
 const FOOD_PAY_OPTIONS: readonly ("any" | AboutCityPayMethod)[] = ["any", ...ABOUT_CITY_PAY_METHODS];
 const CARD_DAYS = [1, 2, 3, 4, 5, 6, 7];
@@ -176,7 +175,7 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
 }
 
 function transport(ctx: AboutCitySectionContext): ReactNode {
-  const { t, ui, setUi, toggleFold, styles } = ctx;
+  const { t, ui, toggleFold, styles, openLink } = ctx;
   const fold = (id: string, group: readonly string[], glyph: CanonGlyph, title: string, body: ReactNode, meta?: string) => (
     <Fold
       key={id}
@@ -189,6 +188,32 @@ function transport(ctx: AboutCitySectionContext): ReactNode {
       body={body}
     />
   );
+  // The ticket apps: the owner's verdict (issue #254, 2026-11-16) keeps the
+  // fares, the ticket catalogue and the activation rules out of the guide —
+  // they live in these apps and on their official pages. The section only
+  // names what to ride and opens the three apps by their icons, in the
+  // owner's order: jakdojade, FALA, KomPas.
+  const appRow = (app: (typeof ABOUT_CITY_APPS)[number]) => {
+    const title = t(`tr.buy.${app.key}.title`);
+    const note = t(`tr.buy.${app.key}.text`);
+    return (
+      <PressableSurface
+        accessibilityRole="link"
+        accessibilityLabel={title}
+        key={app.key}
+        onPress={() => openLink(app.url)}
+        style={[styles.card, styles.appRow]}
+        testID={`about-app-${app.key}`}
+      >
+        <CanonIcon glyph={app.glyph} label={title} size={22} color={tokens.colorAccent} />
+        <View style={styles.appLabel}>
+          <ScaledText style={styles.appTitle}>{title}</ScaledText>
+          <ScaledText style={styles.appNote}>{note}</ScaledText>
+        </View>
+        <CanonIcon glyph={ExternalLinkIcon} label={title} color={tokens.colorAccent} size={18} />
+      </PressableSurface>
+    );
+  };
   return (
     <>
       <SubHeading>{t("tr.modes")}</SubHeading>
@@ -207,34 +232,8 @@ function transport(ctx: AboutCitySectionContext): ReactNode {
         )}
         {fold("mode-rail", TRANSPORT_MODE_IDS, RouteIcon, t("tr.rail.title"), <ScaledText style={styles.text}>{t("tr.rail.text")}</ScaledText>, t("tr.rail.meta"))}
       </View>
-      <SubHeading>{t("tr.prices")}</SubHeading>
-      <Seg
-        name="zone"
-        label={t("tr.zoneLabel")}
-        options={(["ztm", "metro", "rail"] as const).map((zone) => [zone, t(`tr.zone.${zone}`)])}
-        value={ui.zone}
-        onChange={(value) => setUi({ zone: value as AboutCityUiState["zone"] })}
-      />
-      <View style={[styles.card, styles.ticket]}>
-        <ScaledText style={styles.note}>{t(`tr.zoneNote.${ui.zone}`)}</ScaledText>
-        {priceRows(ctx, ABOUT_CITY_PRICES[ui.zone])}
-        {ui.zone !== "rail" ? <ScaledText style={styles.note}>{t("tk.night")}</ScaledText> : null}
-      </View>
-      <SubHeading>{t("tr.activate")}</SubHeading>
-      <View style={styles.stack}>
-        {fold("act-paper", TRANSPORT_ACT_IDS, ScanQrCodeIcon, t("tr.act.paper.title"), <ScaledText style={styles.text}>{t("tr.act.paper.text")}</ScaledText>)}
-        {fold("act-mobile", TRANSPORT_ACT_IDS, SmartphoneIcon, t("tr.act.mobile.title"), <ScaledText style={styles.text}>{t("tr.act.mobile.text")}</ScaledText>)}
-        {fold("act-valid", TRANSPORT_ACT_IDS, ABOUT_CITY_FACT_ICONS.clock, t("tr.act.valid.title"), <ScaledText style={styles.text}>{t("tr.act.valid.text")}</ScaledText>)}
-      </View>
       <SubHeading>{t("tr.buyLabel")}</SubHeading>
-      <View style={styles.tiles}>
-        <Tile glyph={SmartphoneIcon} title={t("tr.buy.fala.title")} text={t("tr.buy.fala.text")} />
-        <Tile glyph={TicketIcon} title={t("tr.buy.apps.title")} text={t("tr.buy.apps.text")} />
-        <Tile glyph={CreditCardIcon} title={t("tr.buy.board.title")} text={t("tr.buy.board.text")} />
-        <Tile glyph={StoreIcon} title={t("tr.buy.desk.title")} text={t("tr.buy.desk.text")} />
-      </View>
-      <Remark tone="tip" text={t("tr.tip.card")} />
-      <Remark tone="tip" text={t("tr.tip.kompas")} />
+      <View style={styles.stack}>{ABOUT_CITY_APPS.map(appRow)}</View>
     </>
   );
 }
@@ -440,6 +439,12 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   stack: { gap: 8 },
   text: { color: palette.colorInk, fontSize: 16, lineHeight: 23 },
   note: { color: palette.colorMuted, fontSize: 13, lineHeight: 18 },
+  // The transport section's app rows (#254): an icon, the app's name and a
+  // one-line note; the row opens the app's page.
+  appRow: { alignItems: "center", columnGap: 12, flexDirection: "row", minHeight: 56 },
+  appLabel: { flex: 1, flexShrink: 1, gap: 2 },
+  appTitle: { color: palette.colorAccent, fontSize: 16 },
+  appNote: { color: palette.colorMuted, fontSize: 12 },
   card: {
     backgroundColor: palette.colorCard,
     borderColor: palette.colorLine,

@@ -178,17 +178,18 @@ export default function AboutCity() {
     onSelect(index, index > current ? 1 : -1);
   }, [onSelect, sectionId]);
 
-  const ctx: Omit<AboutCitySectionContext, "styles"> = useMemo(
-    () => ({ strings, t, ui, setUi, toggleFold, onOpenSection }),
-    [strings, t, ui, setUi, toggleFold, onOpenSection],
-  );
-
-  const openLink = useCallback((linkKey: AboutCityLinkKey) => {
-    const url = ABOUT_CITY_LINK_URLS[linkKey];
-    // Opening another row clears the notice of a failed open.
+  // Hands an address to the system; the transport section's app tiles pass
+  // raw URLs (ABOUT_CITY_APPS), the link rows below resolve their key first.
+  const openUrl = useCallback((url: string) => {
     setFailedLink(null);
     void Linking.openURL(url).catch(() => setFailedLink(url));
   }, []);
+  const openLink = useCallback((linkKey: AboutCityLinkKey) => openUrl(ABOUT_CITY_LINK_URLS[linkKey]), [openUrl]);
+
+  const ctx: Omit<AboutCitySectionContext, "styles"> = useMemo(
+    () => ({ strings, t, ui, setUi, toggleFold, onOpenSection, openLink: openUrl }),
+    [strings, t, ui, setUi, toggleFold, onOpenSection, openUrl],
+  );
 
   const section = ABOUT_CITY_SECTIONS.find((item) => item.id === sectionId) ?? ABOUT_CITY_SECTIONS[0];
 

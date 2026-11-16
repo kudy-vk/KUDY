@@ -11,7 +11,7 @@ import { fireEvent, renderRouter, screen, waitFor } from "expo-router/testing-li
 import { Linking } from "react-native";
 
 import AboutCity from "./[id]/about";
-import { ABOUT_CITY_LINK_URLS, ABOUT_CITY_SECTIONS } from "../../components/about-city-content";
+import { ABOUT_CITY_APPS, ABOUT_CITY_LINK_URLS, ABOUT_CITY_SECTIONS } from "../../components/about-city-content";
 import { aboutCityStrings } from "../../components/about-city-strings";
 import { ABOUT_CITY_STRINGS } from "../../components/about-city-strings.generated";
 import { frameRoutes } from "../../test/render-helpers";
@@ -30,9 +30,10 @@ jest.mock("react-native-gesture-handler", () => {
 const OFFICIAL_HOSTS = new Set([
   "www.airport.gdansk.pl",
   "ztm.gda.pl",
+  "skm.pkp.pl",
   "www.skm.pkp.pl",
   "jakdojade.pl",
-  "mzkzg.org",
+  "systemfala.pl",
   "visitgdansk.com",
   "kartaturysty.visitgdansk.com",
   "muzeumgdansk.pl",
@@ -83,14 +84,35 @@ test("a fold group keeps one fold open (criterion 5)", () => {
   expect(screen.getByTestId("fold-mode-ztm").props.accessibilityState).toMatchObject({ expanded: false });
 });
 
-test("the zone switch changes the price list; one list keeps one shape (criterion 5)", () => {
+test("the transport section carries no fares and opens the three apps in the owner's order (#254, criterion 6)", () => {
+  // The owner's verdict: prices, the ticket catalogue and the activation
+  // rules live in the apps, never in the guide. Bringing any of them back
+  // into the transport section fails this test.
   openGuide();
   fireEvent.press(screen.getByTestId("wheel-item-transport"));
-  // The Gdańsk list holds a grosze price, so every price shows grosze.
-  expect(screen.getByText("4,80 zł")).toBeTruthy();
-  fireEvent.press(screen.getByTestId("seg-zone-rail"));
-  expect(screen.getByText("30 zł")).toBeTruthy();
-  expect(screen.queryByText("4,80 zł")).toBeNull();
+  expect(screen.getByText("Дзе купіць")).toBeTruthy();
+  expect(screen.queryByText(/4,80 zł|6,00 zł|30 zł|34 zł/)).toBeNull();
+  expect(screen.queryByTestId("seg-zone")).toBeNull();
+  expect(screen.queryByTestId("seg-zone-rail")).toBeNull();
+  expect(screen.queryByTestId("fold-act-paper")).toBeNull();
+  expect(screen.getByText("Jakdojade")).toBeTruthy();
+  expect(screen.getByText("FALA")).toBeTruthy();
+  expect(screen.getByText("SKM KomPas")).toBeTruthy();
+  // jakdojade first, FALA second, KomPas third — the owner set the order.
+  const renderedOrder = screen.getAllByText(/^(Jakdojade|FALA|SKM KomPas)$/).map((node) => node.props.children);
+  expect(renderedOrder).toEqual(["Jakdojade", "FALA", "SKM KomPas"]);
+});
+
+test("the transport app rows open the official app pages (criterion 6)", () => {
+  for (const app of ABOUT_CITY_APPS) {
+    expect(OFFICIAL_HOSTS.has(new URL(app.url).host)).toBe(true);
+  }
+  const spy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as never);
+  openGuide();
+  fireEvent.press(screen.getByTestId("wheel-item-transport"));
+  fireEvent.press(screen.getByTestId("about-app-fala"));
+  expect(spy).toHaveBeenCalledWith("https://systemfala.pl");
+  spy.mockRestore();
 });
 
 test("the city section shows the illustrated Tricity map, not the schematic (issue #303)", () => {

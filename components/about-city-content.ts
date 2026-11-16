@@ -8,6 +8,7 @@
 // (docs/architecture/19_class_and_module_map.md — the components zone).
 import BusIcon from "lucide-react-native/icons/bus";
 import ClockIcon from "lucide-react-native/icons/clock";
+import CompassIcon from "lucide-react-native/icons/compass";
 import FootprintsIcon from "lucide-react-native/icons/footprints";
 import LandmarkIcon from "lucide-react-native/icons/landmark";
 import MapIcon from "lucide-react-native/icons/map";
@@ -15,6 +16,8 @@ import MapPinIcon from "lucide-react-native/icons/map-pin";
 import MoonIcon from "lucide-react-native/icons/moon";
 import PlaneIcon from "lucide-react-native/icons/plane";
 import RefreshCwIcon from "lucide-react-native/icons/refresh-cw";
+import SmartphoneIcon from "lucide-react-native/icons/smartphone";
+import TicketIcon from "lucide-react-native/icons/ticket";
 import TramFrontIcon from "lucide-react-native/icons/tram-front";
 import TrainFrontIcon from "lucide-react-native/icons/train-front";
 import UtensilsCrossedIcon from "lucide-react-native/icons/utensils-crossed";
@@ -32,16 +35,23 @@ export const ABOUT_CITY_LINK_URLS = {
   airportBuses: "https://www.airport.gdansk.pl/przed-podroza/dojazd-na-lotnisko/autobus",
   airportTrains: "https://www.airport.gdansk.pl/en/before-travel/getting-to-the-airport/train",
   ztmSchedule: "https://ztm.gda.pl/rozklady",
-  ztmTickets: "https://ztm.gda.pl/bilety",
   skmSearch: "https://www.skm.pkp.pl/dla-pasazera/wyszukaj-polaczenie",
-  jakdojade: "https://jakdojade.pl/gdansk/trasa/",
-  mzkzg: "https://mzkzg.org/bilety-metropolitalne/bilety-jednorazowe-czasowe/",
   kartaTurysty: "https://kartaturysty.visitgdansk.com/cennik",
   muzeumGdanska: "https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/free-entrance/?L=1",
   muzeum1939: "https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules",
   pysznePayment: "https://www.pyszne.pl/obsluga-klienta/artykul/z-jakich-metod-platnosci-moge-skorzystac-pl",
   blikHow: "https://www.blik.com/en/how-to-use-blik",
 } satisfies Record<AboutCityLinkKey, string>;
+
+// The ticket apps the transport section opens, in the owner's order
+// (issue #254, 2026-11-16): jakdojade first, then FALA, then KomPas. The
+// fares, the ticket catalogue and the activation rules stay out of the app —
+// they live in these apps and on their official pages.
+export const ABOUT_CITY_APPS = [
+  { key: "jakdojade", url: "https://jakdojade.pl/gdansk/trasa/", glyph: SmartphoneIcon },
+  { key: "fala", url: "https://systemfala.pl", glyph: TicketIcon },
+  { key: "kompas", url: "https://skm.pkp.pl", glyph: CompassIcon },
+] as const satisfies readonly { key: string; url: string; glyph: CanonGlyph }[];
 
 // The carousel, in its order (decision M10 — five sections; «Побач з
 // горадам» moved to the main menu). «Аэрапорт» comes first: it is what a
@@ -50,7 +60,7 @@ export const ABOUT_CITY_LINK_URLS = {
 // (decision M13 — the Google Maps button lives beside the map).
 export const ABOUT_CITY_SECTIONS = [
   { id: "airport", icon: PlaneIcon, links: ["airportBuses", "airportTrains", "ztmSchedule"] },
-  { id: "transport", icon: TramFrontIcon, links: ["ztmSchedule", "ztmTickets", "skmSearch", "jakdojade", "mzkzg"] },
+  { id: "transport", icon: TramFrontIcon, links: ["ztmSchedule", "skmSearch"] },
   { id: "city", icon: MapIcon, links: [] },
   { id: "food", icon: UtensilsCrossedIcon, links: ["pysznePayment", "blikHow"] },
   { id: "card", icon: LandmarkIcon, links: ["kartaTurysty", "muzeumGdanska", "muzeum1939"] },
@@ -139,11 +149,12 @@ export const ABOUT_CITY_RIDES: readonly AboutCityRide[] = [
   },
 ] as const;
 
-// Ticket prices in złoty: [name key, full price, reduced price].
+// Ticket prices in złoty: [name key, full price, reduced price]. Only the
+// airport's bus-ticket list and the tourist card's transport add-on keep
+// their prices; the transport section itself shows none — the owner moved
+// every fare detail to the apps and official pages (issue #254, 2026-11-16).
 export const ABOUT_CITY_PRICES = {
   ztm: [["tk.singleRide", 4.8, 2.4], ["tk.75", 6, 3], ["tk.day24", 22, 11]],
-  metro: [["tk.single.phone", 4.8, null], ["tk.single.paper", 5.2, null], ["tk.75", 6, 3], ["tk.day24", 24, 12], ["tk.72h", 48, 24]],
-  rail: [["tk.24h.two", 30, 15], ["tk.24h.all", 34, 17], ["tk.72h", 68, 34]],
   cardTransport: [["tk.day24", 34, 17], ["tk.72h", 68, 34]],
 } as const satisfies Record<string, readonly (readonly [key: string, full: number, reduced: number | null])[]>;
 
