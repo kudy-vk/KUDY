@@ -35,6 +35,12 @@
 // The guard file itself stays scannable: it never spells the dead tokens
 // literally — fixtures build them by concatenation, and the regex is assembled
 // from the number list — otherwise a working scan would fail on this very file.
+// #305 (2026-11-16) — revalidation: 305 is a live card in kudy-vk/KUDY again
+// (the keyboard access of the Tricity map mockup in docs/design/production),
+// so it leaves the list per the revalidation rule of the #264 note; the bare
+// citation returns in that task's carriers (its test header, the design-QA
+// report and the demo). The third fixture below asserts the token
+// stays untouched — re-adding the number turns that fixture red.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -56,7 +62,7 @@ const REPO = path.resolve(HERE, '..');
 // lines this pass de-hashed) stay unscanned on purpose — their carriers
 // pre-date the scan and adding a number here means a re-anchoring pass of its
 // own with the header list and canonical record updated (#276 round-2 finding).
-const DEAD_NUMBERS = [280, 284, 292, 305, 313, 338, 339, 344, 347, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
+const DEAD_NUMBERS = [280, 284, 292, 313, 338, 339, 344, 347, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
 
@@ -118,6 +124,9 @@ test('the finder flags a citation and names the line', () => {
 test('a real issue number, a hex color and a longer number stay untouched', () => {
   assert.deepEqual(findDead('#236 — dangling issue citations; PR #235 closes it.'), []);
   assert.deepEqual(findDead('ghost-пара `#6b7280`, hex `#3399ff` і `#4300`'), []);
+  // #305 (2026-11-16) — revalidated as a live card: this literal must stay
+  // untouched, so re-adding the number to the list fails here first.
+  assert.deepEqual(findDead('issue #305 restored: the keyboard access of the Tricity map mockup.'), []);
 });
 
 // #275 (2026-11-13) — the header restates the scan classes; a number added to

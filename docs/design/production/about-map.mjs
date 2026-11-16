@@ -6,8 +6,11 @@
 // This module adds what is this map's own: the drawing of zones, lines and
 // stops (about-map-geo.mjs), the card of what is picked and the list of zones.
 // A press picks the nearest station, the airport sign or the zone under the
-// finger; pressing again where zones overlap steps to the next one. The pick
-// stays until another press, and the card under the map tells what it is.
+// finger; pressing again where zones overlap steps to the next one. Without a
+// pointer the same is reachable: the station signs and the airport sign are
+// named buttons on the map — Tab moves between them, Enter or Space picks,
+// Escape clears, through the same handler as a press. The pick stays until
+// another pick, and the card under the map tells what it is.
 //
 // What the visitor chose — zoom, centre, pick, layers — lives in ui.atlas and
 // survives a repaint.
@@ -39,24 +42,34 @@ const count = (kind) => SHAPES.zones.filter((zone) => zone.kind === kind).length
 
 // The drawing over the picture: zones, lines, stops, the names of the visit
 // zones and the ring of the airport sign. Returns the <svg> and its parts.
+//
+// The shapes and the line ink are decoration (the list under the map speaks
+// for the zones), so they are hidden from the reader. The station signs and
+// the airport sign are named buttons: a reader sees them on the map, Tab
+// reaches them, and Enter or Space picks like a press (the wiring is in
+// atlas(), where choose() lives).
 function drawing() {
   const zones = SHAPES.zones.map((zone) => svg('path', { class: `zone ${zone.kind}`, d: ring(zone.px) }));
   const zoneNames = SHAPES.zones.filter((zone) => zone.kind === 'visit').map((zone) => {
-    const node = svg('g', { class: 'mark zname', 'data-layer': 'visit' }, svg('text', { 'text-anchor': 'middle', y: 4 }, zone.name));
+    const node = svg('g', { class: 'mark zname', 'data-layer': 'visit', 'aria-hidden': 'true' }, svg('text', { 'text-anchor': 'middle', y: 4 }, zone.name));
     node.place = zone.centre;
     node.zone = zone.id;
     return node;
   });
   const lines = SHAPES.lines.map((line) => {
     const last = line.px.length - (line.beyond ? 1 : 0);
-    return svg('g', { class: `line ${line.id}`, 'data-layer': line.layer },
+    return svg('g', { class: `line ${line.id}`, 'data-layer': line.layer, 'aria-hidden': 'true' },
       svg('path', { class: 'casing', d: path(line.px.slice(0, last)) }),
       svg('path', { class: 'ink', d: path(line.px.slice(0, last)) }),
       line.beyond ? svg('path', { class: 'ink beyond', d: path(line.px.slice(last - 1)) }) : null);
   });
   const stops = SHAPES.stations.map((station) => {
     const kind = station.planned ? 'plan' : station.lines.includes('skm') ? 'skm' : 'pkm';
-    const node = svg('g', { class: `mark stop ${kind}${station.main ? ' main' : ''}${station.change ? ' change' : ''}`, 'data-layer': station.planned ? 'plan' : 'rail' },
+    const node = svg('g', {
+      class: `mark stop ${kind}${station.main ? ' main' : ''}${station.change ? ' change' : ''}`,
+      'data-layer': station.planned ? 'plan' : 'rail',
+      role: 'button', tabindex: 0, lang: 'pl', 'aria-label': station.name,
+    },
       svg('circle', { class: 'halo', r: 11 }),
       station.change ? svg('circle', { class: 'outer', r: 7 }) : null,
       svg('circle', { class: 'dot', r: 4.5 }),
@@ -65,11 +78,12 @@ function drawing() {
     node.stop = station.id;
     return node;
   });
-  const airport = svg('g', { class: 'mark airport' }, svg('circle', { class: 'halo', r: 19 }));
+  const airport = svg('g', { class: 'mark airport', role: 'button', tabindex: 0, lang: 'pl', 'aria-label': `${SHAPES.airport.name} (${SHAPES.airport.code})` },
+    svg('circle', { class: 'halo', r: 19 }));
   airport.place = SHAPES.airport.px;
-  const node = svg('svg', { class: 'atlas-svg', viewBox: `0 0 ${W} ${H}`, width: W, height: H, 'aria-hidden': 'true' },
+  const node = svg('svg', { class: 'atlas-svg', viewBox: `0 0 ${W} ${H}`, width: W, height: H },
     // Places to stay lie under places to visit where they overlap.
-    svg('g', {}, ...zones.filter((_, i) => SHAPES.zones[i].kind === 'stay'), ...zones.filter((_, i) => SHAPES.zones[i].kind === 'visit')),
+    svg('g', { 'aria-hidden': 'true' }, ...zones.filter((_, i) => SHAPES.zones[i].kind === 'stay'), ...zones.filter((_, i) => SHAPES.zones[i].kind === 'visit')),
     ...lines, ...zoneNames, airport, ...stops);
   return { node, zones, zoneNames, stops, airport };
 }
@@ -160,6 +174,17 @@ export function atlas({ t, ui, lang, openSection, openMaps }) {
     settleLabels(names());
     pickCard(card, pick, { t, openSection });
   }
+
+  // The signs are buttons (drawing()): from the keyboard, Enter or Space picks
+  // through the same choose() as a press, and Escape clears, like on the map.
+  const keyPick = (pick) => (event) => {
+    if (event.key === 'Escape') { if (state.pick) choose(null); return; }
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    choose(pick);
+  };
+  for (const node of art.stops) node.addEventListener('keydown', keyPick({ kind: 'station', id: node.stop }));
+  art.airport.addEventListener('keydown', keyPick({ kind: 'airport' }));
 
   // Google Maps at the picked place, or at the middle of the Tricity: for a
   // route or a street view the visitor already knows where to go.
