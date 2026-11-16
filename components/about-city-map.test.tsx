@@ -131,3 +131,43 @@ test("the zone list picks a stay zone; its ways come from the map data", () => {
   expect(card.getByText("Wrzeszcz")).toBeTruthy();
   expect(card.getByText("Зручна спыніцца")).toBeTruthy();
 });
+
+// #312 — without a pointer the list rows are the screen reader's path to
+// every selectable sign: named buttons over the one production pick path,
+// their cards announced through the live region (the app port of the
+// mockup's subtest «without a pointer…», test/about-map-browser.test.mjs).
+test("without a pointer, the list reaches the airport and a station and picks them like a touch (#312)", () => {
+  renderMap();
+  expect(screen.getByTestId("city-map-card").props.accessibilityLiveRegion).toBe("polite");
+  const airport = screen.getByTestId("city-map-airport");
+  expect(airport.props.accessibilityRole).toBe("button");
+  expect(airport.props.accessibilityLabel).toBe("Port Lotniczy Gdańsk");
+  fireEvent.press(airport);
+  const airportCard = within(screen.getByTestId("city-map-card"));
+  expect(airportCard.getByText("Port Lotniczy Gdańsk")).toBeTruthy();
+  expect(airportCard.getByText("GDN")).toBeTruthy();
+
+  const station = screen.getByTestId("city-map-station-gdynia-glowna");
+  expect(station.props.accessibilityRole).toBe("button");
+  expect(station.props.accessibilityLabel).toBe("Gdynia Główna");
+  fireEvent.press(station);
+  const card = within(screen.getByTestId("city-map-card"));
+  expect(card.getByText("Gdynia Główna")).toBeTruthy();
+  expect(card.getByText("Станцыя")).toBeTruthy();
+});
+
+test("a station row on a hidden layer turns the layer back on and picks the station (#312)", () => {
+  renderMap(atlasWith({ show: { ...ABOUT_CITY_ATLAS_INITIAL.show, rail: false } }));
+  expect(screen.getByTestId("city-map-layer-rail").props.accessibilityState).toMatchObject({ selected: false });
+  fireEvent.press(screen.getByTestId("city-map-station-gdynia-glowna"));
+  expect(screen.getByTestId("city-map-layer-rail").props.accessibilityState).toMatchObject({ selected: true });
+  expect(within(screen.getByTestId("city-map-card")).getByText("Gdynia Główna")).toBeTruthy();
+});
+
+test("a planned station row opens the planned card (#312)", () => {
+  renderMap();
+  fireEvent.press(screen.getByTestId("city-map-station-chelm"));
+  const card = within(screen.getByTestId("city-map-card"));
+  expect(card.getByText("Chełm")).toBeTruthy();
+  expect(card.getByText("Плануецца")).toBeTruthy();
+});
