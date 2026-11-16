@@ -205,13 +205,23 @@ test('the «Пра горад» map answers presses, gestures, keys, layers and 
       const mark = document.activeElement;
       return { label: mark?.getAttribute('aria-label'), role: mark?.getAttribute('role') };
     }), { label: 'Port Lotniczy Gdańsk (GDN)', role: 'button' }, 'Tab reaches the airport sign');
+    // The focused sign is visible to the eye (about.html styles): the canon's
+    // 3px accent ring on the halo — fails when the CSS half of the fix is
+    // reverted. The airport has no name of its own on the map (the picture
+    // draws it), so the name-on-focus check rides the station below.
+    assert.deepEqual(await page.evaluate(() => {
+      const halo = document.activeElement.querySelector('.halo');
+      return { width: getComputedStyle(halo).strokeWidth, ring: getComputedStyle(halo).stroke };
+    }), { width: '3px', ring: 'rgb(29, 107, 79)' }, 'the focused sign shows the canon ring');
     await page.keyboard.press('Enter');
     assert.deepEqual(await card(), { name: 'Port Lotniczy Gdańsk', tag: 'GDN' }, 'Enter picks the airport like a press');
     await page.keyboard.press('Escape');
     assert.equal(await phone.locator('.atlas-card h4').count(), 0, 'Escape on the mark clears the pick');
-    // The next mark is a station; Space picks it the same way.
+    // The next mark is a station; Space picks it the same way. Its name is
+    // an SVG text, shown on focus.
     await page.keyboard.press('Tab');
     assert.deepEqual(await page.evaluate(() => document.activeElement?.getAttribute('aria-label')), 'Gdynia Główna', 'Tab reaches a station sign');
+    assert.equal(await page.evaluate(() => getComputedStyle(document.activeElement.querySelector('text')).display), 'block', 'the focused station shows its name');
     await page.keyboard.press('Space');
     assert.deepEqual(await card(), { name: 'Gdynia Główna', tag: 'Станцыя' }, 'Space picks the station like a press');
   });
