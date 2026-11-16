@@ -8,7 +8,7 @@
 камер — RNGH над чыстым станам, стрыжні і штрыхі трымаюць шырыню экрана.
 Прыклады паведамляюць пра геаметрыю прывязкі, выбар пад пальцам і слоўнік
 дадатку (17 праверак), і пра паводзіны кампанента: перамыкачы слаёў, карткі
-зоны/станцыі/аэрапорта, кнопка Google Maps, спіс зон (20 праверак).
+зоны/станцыі/аэрапорта, кнопка Google Maps, спіс зон (22 праверкі).
 
 ```bash
 set -o pipefail
@@ -30,5 +30,5 @@ npx jest --config jest.config.js --runInBand --silent --runTestsByPath component
 PASS app/city/about-city.test.tsx
 PASS components/about-city-map.test.tsx
 Test Suites: 2 passed, 2 total
-Tests:       21 passed, 21 total
+Tests:       22 passed, 22 total
 ```

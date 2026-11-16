@@ -128,15 +128,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
     "tk": {
       "75": "75 хвілін",
       "singleRide": "Адна паездка",
-      "single": {
-        "phone": "Адна паездка, у тэлефоне",
-        "paper": "Адна паездка, папяровы",
-      },
       "day24": "24 гадзіны",
-      "24h": {
-        "two": "24 гадзіны, два арганізатары",
-        "all": "24 гадзіны, усе арганізатары",
-      },
       "72h": "72 гадзіны",
       "night": "Начныя рэйсы каштуюць столькі ж.",
     },
@@ -158,55 +150,20 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
         "meta": "Аэрапорт, Мальбарк і далей",
         "text": "POLREGIO абслугоўвае лінію PKM да аэрапорта (Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa) і рэгіянальныя цягнікі ў Мальбарк, Слупск і Картузы. Расклад і білеты — polregio.pl.",
       },
-      "prices": "Білеты і цэны",
-      "zoneLabel": "Дзе дзейнічае білет",
-      "zone": {
-        "ztm": "Гданьск",
-        "metro": "Трайместа",
-        "rail": "З цягнікамі",
-      },
-      "zoneNote": {
-        "ztm": "Білеты ZTM Гданьска: аўтобусы і трамваі гарадской сеткі.",
-        "metro": "Метрапалітальныя білеты MZKZG: гарадскі транспарт Гданьска, Сопата, Гдыні і Wejherowo.",
-        "rail": "Білеты MZKZG, якія дзейнічаюць і ў цягніках.",
-      },
-      "activate": "Як актываваць білет",
-      "act": {
-        "paper": {
-          "title": "Папяровы білет з QR-кодам",
-          "text": "Скануй у салоне ў прыладзе FALA: трымай білет пад прыладай на адлегласці 10–15 см да сігналу і надпісу «Bilet aktywny». Або прабі яго ў кампасцеры.",
-        },
-        "mobile": {
-          "title": "Мабільны білет у Jakdojade",
-          "text": "Актывуецца ў момант куплі, таму купляй адразу пасля ўваходу ў салон.",
-        },
-        "valid": {
-          "title": "Колькі дзейнічае",
-          "text": "Адна паездка — да выхаду. 75 хвілін, 24 і 72 гадзіны — ад моманту актывацыі.",
-        },
-      },
       "buyLabel": "Дзе купіць",
       "buy": {
+        "jakdojade": {
+          "title": "Jakdojade",
+          "text": "Планавальнік паездак і білеты Трайместа.",
+        },
         "fala": {
-          "title": "Праграма FALA",
-          "text": "Найбольшы выбар, у тым ліку чыгуначныя білеты.",
+          "title": "FALA",
+          "text": "Білеты Гданьска, метраполіі і цягнікоў у адной сістэме.",
         },
-        "apps": {
-          "title": "Jakdojade і іншыя праграмы",
-          "text": "Метрапалітальныя білеты: Jakdojade, GoPay, moBilet, mPay, SkyCash, zBiletem.",
+        "kompas": {
+          "title": "SKM KomPas",
+          "text": "Аплікацыя SKM: расклад цягнікоў офлайн да трох тыдняў.",
         },
-        "board": {
-          "title": "У салоне",
-          "text": "Прылады FALA, толькі безнаяўная аплата.",
-        },
-        "desk": {
-          "title": "Касы і кіёскі",
-          "text": "Касы SKM і ZTM, кіёскі і пошта.",
-        },
-      },
-      "tip": {
-        "card": "З плацёжнай карткай можна ехаць без загадзя купленага білета: сістэма FALA сама падбірае тарыф.",
-        "kompas": "Праграма SKM KomPas трымае расклад цягнікоў без сеткі.",
       },
     },
     "city": {
@@ -327,10 +284,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "airportBuses": "Аўтобусы ў аэрапорт і назад — airport.gdansk.pl",
       "airportTrains": "Цягнікі ў аэрапорт і назад — airport.gdansk.pl",
       "ztmSchedule": "Расклады ZTM Гданьска",
-      "ztmTickets": "Білеты ZTM Гданьска",
       "skmSearch": "Пошук рэйсаў SKM",
-      "jakdojade": "Jakdojade — планаванне паездак і білеты",
-      "mzkzg": "Метрапалітальныя білеты MZKZG",
       "kartaTurysty": "Karta Turysty — пакеты і цэны",
       "muzeumGdanska": "Muzeum Gdańska — бясплатны ўваход",
       "muzeum1939": "Музей Другой сусветнай вайны — правілы наведвання",
@@ -502,15 +456,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
     "tk": {
       "75": "75 minutes",
       "singleRide": "One ride",
-      "single": {
-        "phone": "One ride, in the phone",
-        "paper": "One ride, paper",
-      },
       "day24": "24 hours",
-      "24h": {
-        "two": "24 hours, two operators",
-        "all": "24 hours, all operators",
-      },
       "72h": "72 hours",
       "night": "Night buses cost the same.",
     },
@@ -532,55 +478,20 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
         "meta": "Airport, Malbork and beyond",
         "text": "POLREGIO runs the PKM line to the airport (Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa) and regional trains to Malbork, Słupsk and Kartuzy. Timetable and tickets: polregio.pl.",
       },
-      "prices": "Tickets and prices",
-      "zoneLabel": "Where the ticket is valid",
-      "zone": {
-        "ztm": "Gdańsk",
-        "metro": "Tricity",
-        "rail": "With trains",
-      },
-      "zoneNote": {
-        "ztm": "ZTM Gdańsk tickets: buses and trams of the city network.",
-        "metro": "MZKZG metropolitan tickets: city transport in Gdańsk, Sopot, Gdynia and Wejherowo.",
-        "rail": "MZKZG tickets that are also valid on trains.",
-      },
-      "activate": "How to activate a ticket",
-      "act": {
-        "paper": {
-          "title": "Paper ticket with a QR code",
-          "text": "Scan it on board at the FALA device: hold the ticket under the device, 10–15 cm away, until the signal sounds and “Bilet aktywny” appears. Or stamp it in the validator.",
-        },
-        "mobile": {
-          "title": "Mobile ticket in Jakdojade",
-          "text": "It activates at the moment of purchase, so buy it right after you board.",
-        },
-        "valid": {
-          "title": "How long it lasts",
-          "text": "One ride — until you get off. 75 minutes, 24 and 72 hours — counted from activation.",
-        },
-      },
       "buyLabel": "Where to buy",
       "buy": {
+        "jakdojade": {
+          "title": "Jakdojade",
+          "text": "Trip planner and tickets: the Tricity and beyond.",
+        },
         "fala": {
-          "title": "FALA app",
-          "text": "The widest choice, rail tickets included.",
+          "title": "FALA",
+          "text": "Gdańsk, metropolitan and rail tickets in one system.",
         },
-        "apps": {
-          "title": "Jakdojade and other apps",
-          "text": "Metropolitan tickets: Jakdojade, GoPay, moBilet, mPay, SkyCash, zBiletem.",
+        "kompas": {
+          "title": "SKM KomPas",
+          "text": "The SKM app: the train timetable offline for three weeks.",
         },
-        "board": {
-          "title": "On board",
-          "text": "FALA devices, cashless payment only.",
-        },
-        "desk": {
-          "title": "Ticket offices and kiosks",
-          "text": "SKM and ZTM ticket offices, kiosks and post offices.",
-        },
-      },
-      "tip": {
-        "card": "With a payment card you can ride without a ticket bought in advance: the FALA system picks the fare itself.",
-        "kompas": "The SKM KomPas app keeps the train timetable offline.",
       },
     },
     "city": {
@@ -701,10 +612,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "airportBuses": "Buses to and from the airport — airport.gdansk.pl",
       "airportTrains": "Trains to and from the airport — airport.gdansk.pl",
       "ztmSchedule": "ZTM Gdańsk timetables",
-      "ztmTickets": "ZTM Gdańsk tickets",
       "skmSearch": "SKM connection search",
-      "jakdojade": "Jakdojade — trip planner and tickets",
-      "mzkzg": "MZKZG metropolitan tickets",
       "kartaTurysty": "Karta Turysty — packages and prices",
       "muzeumGdanska": "Muzeum Gdańska — free entry",
       "muzeum1939": "Museum of the Second World War — visiting rules",

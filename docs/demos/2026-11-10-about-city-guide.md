@@ -12,7 +12,7 @@ npx jest --config jest.config.js app/menu.test.tsx app/city/about-city.test.tsx 
 
 ```output
 Test Suites: 2 passed, 2 total
-Tests:       12 passed, 12 total
+Tests:       26 passed, 26 total
 ```
 
 ```bash

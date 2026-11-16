@@ -4216,28 +4216,6 @@
       "sourceHash": "dffae6c8d783d37f60db26708e31cd3b309a6b984fad36b6eab28de1d2b328ca"
     },
     {
-      "id": "native.aboutCity.tk.single.phone",
-      "source": "Адна паездка, у тэлефоне",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.single.phone"
-      ],
-      "sourceHash": "a878bd29f9097830408f3a2eb553fb6f00d962d3b0829190a6672213cdce7f58"
-    },
-    {
-      "id": "native.aboutCity.tk.single.paper",
-      "source": "Адна паездка, папяровы",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.single.paper"
-      ],
-      "sourceHash": "cb8761659fd95c716ccef1b203a2f9d3c0b8d12c8621efe55d6997f787aabf72"
-    },
-    {
       "id": "native.aboutCity.tk.75",
       "source": "75 хвілін",
       "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
@@ -4258,28 +4236,6 @@
         "components/about-city-strings.generated.ts#tk.day24"
       ],
       "sourceHash": "16d30412ffb509046a58a78efa00ced1e071292b5f1654c3cff61faf8c2213a4"
-    },
-    {
-      "id": "native.aboutCity.tk.24h.two",
-      "source": "24 гадзіны, два арганізатары",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.24h.two"
-      ],
-      "sourceHash": "1d5782469ca37d612b483a5bcd08c332fe614280aaf2dca2726f658a8e3c18e8"
-    },
-    {
-      "id": "native.aboutCity.tk.24h.all",
-      "source": "24 гадзіны, усе арганізатары",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.24h.all"
-      ],
-      "sourceHash": "a5ee1611667e1751120759aec8bc7e0ed0139b49eea610bc1ddf4dd190928186"
     },
     {
       "id": "native.aboutCity.tk.72h",
@@ -4436,171 +4392,6 @@
       "sourceHash": "39049551136d4801d1d1fe4f37cde0c4c7c3012d55a03d8afd0f5e6f74bd71b7"
     },
     {
-      "id": "native.aboutCity.tr.prices",
-      "source": "Білеты і цэны",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.prices"
-      ],
-      "sourceHash": "a5641908c50c33bc2265437fbc4436342a62915a46c199e90b451249ddaa6a20"
-    },
-    {
-      "id": "native.aboutCity.tr.zoneLabel",
-      "source": "Дзе дзейнічае білет",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zoneLabel"
-      ],
-      "sourceHash": "c152cb93d56a8917636bdfa75ea7b61adb456cc98e69bb208cc5cb647720370a"
-    },
-    {
-      "id": "native.aboutCity.tr.zone.ztm",
-      "source": "Гданьск",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zone.ztm"
-      ],
-      "sourceHash": "e7b650663541daddb05d32fd3625b44146dda6b7ba2570d19ca88c3c9f1a38a9"
-    },
-    {
-      "id": "native.aboutCity.tr.zone.metro",
-      "source": "Трайместа",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zone.metro"
-      ],
-      "sourceHash": "0a2e45d8c7e53e8da25038737590d7cb1da4b3d4e1cab65b006205e93597431b"
-    },
-    {
-      "id": "native.aboutCity.tr.zone.rail",
-      "source": "З цягнікамі",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zone.rail"
-      ],
-      "sourceHash": "2cfa49af40cff1a968c7be5f9c50597ae075f03136bdf157b2854739df8956b3"
-    },
-    {
-      "id": "native.aboutCity.tr.zoneNote.ztm",
-      "source": "Білеты ZTM Гданьска: аўтобусы і трамваі гарадской сеткі.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zoneNote.ztm"
-      ],
-      "sourceHash": "48554970ec2c0f388aaab5d935db0902c1e0782512e5ec83d883f88a7465edc4"
-    },
-    {
-      "id": "native.aboutCity.tr.zoneNote.metro",
-      "source": "Метрапалітальныя білеты MZKZG: гарадскі транспарт Гданьска, Сопата, Гдыні і Wejherowo.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zoneNote.metro"
-      ],
-      "sourceHash": "5351b70ae358e250d16c033b07cc48e3e9b1084a2b7b3e4dddde9dddca202dd0"
-    },
-    {
-      "id": "native.aboutCity.tr.zoneNote.rail",
-      "source": "Білеты MZKZG, якія дзейнічаюць і ў цягніках.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.zoneNote.rail"
-      ],
-      "sourceHash": "11d54e957a4403ce0a9e9b864684cd9e944c0dc4bcc327e71cb6d5a44db7511b"
-    },
-    {
-      "id": "native.aboutCity.tr.activate",
-      "source": "Як актываваць білет",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.activate"
-      ],
-      "sourceHash": "4ad0845a6053c271038710e74874bb363e872fa66a91637dd6bcd36d3f7e5cc6"
-    },
-    {
-      "id": "native.aboutCity.tr.act.paper.title",
-      "source": "Папяровы білет з QR-кодам",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.act.paper.title"
-      ],
-      "sourceHash": "df17f344fe2344e4bf67a5b7a1ebd77ee466854f2e5a0ed081d417150fd0c88b"
-    },
-    {
-      "id": "native.aboutCity.tr.act.paper.text",
-      "source": "Скануй у салоне ў прыладзе FALA: трымай білет пад прыладай на адлегласці 10–15 см да сігналу і надпісу «Bilet aktywny». Або прабі яго ў кампасцеры.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.act.paper.text"
-      ],
-      "sourceHash": "23d9f5126da845e39845d2bfd728961c7f2b74f335a77e9de5d00eea858d0778"
-    },
-    {
-      "id": "native.aboutCity.tr.act.mobile.title",
-      "source": "Мабільны білет у Jakdojade",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.act.mobile.title"
-      ],
-      "sourceHash": "82c6d345d44466a8fa35df143660dfd5aa3abfe329018e97ee49c5ecc845db4d"
-    },
-    {
-      "id": "native.aboutCity.tr.act.mobile.text",
-      "source": "Актывуецца ў момант куплі, таму купляй адразу пасля ўваходу ў салон.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.act.mobile.text"
-      ],
-      "sourceHash": "29ea0ab1359da95c899993ab8f1016e1f1f9904a1070895ddc4ec301c959376b"
-    },
-    {
-      "id": "native.aboutCity.tr.act.valid.title",
-      "source": "Колькі дзейнічае",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.act.valid.title"
-      ],
-      "sourceHash": "851f415a0d56ec83e1d67050557436cee9c67d55b7ac7cae22096ff05746283b"
-    },
-    {
-      "id": "native.aboutCity.tr.act.valid.text",
-      "source": "Адна паездка — да выхаду. 75 хвілін, 24 і 72 гадзіны — ад моманту актывацыі.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.act.valid.text"
-      ],
-      "sourceHash": "471731de2e197e9fb9ee6ef7618d56eef7b0d0b3472f984a5f641d85f678e08f"
-    },
-    {
       "id": "native.aboutCity.tr.buyLabel",
       "source": "Дзе купіць",
       "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
@@ -4612,114 +4403,70 @@
       "sourceHash": "e873ccfa67461ab038a72a14d55316f64c7bcacbf2cabc3e7319f521d1798bc3"
     },
     {
+      "id": "native.aboutCity.tr.buy.jakdojade.title",
+      "source": "Jakdojade",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.jakdojade.title"
+      ],
+      "sourceHash": "ddfb36d364f082dc85edd1eb18d60f02c81d98bd5065fc2231e0924e083a72d7"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.jakdojade.text",
+      "source": "Планавальнік паездак і білеты Трайместа.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.jakdojade.text"
+      ],
+      "sourceHash": "490993a793bdb6a272cb957156eb61dd32d1897c46ac6d30a748f1fdcca89b0a"
+    },
+    {
       "id": "native.aboutCity.tr.buy.fala.title",
-      "source": "Праграма FALA",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "source": "FALA",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#tr.buy.fala.title"
       ],
-      "sourceHash": "b135ec50a4b34a557c0257631f753c17837baaef66bc722649330eefc4bde9d0"
+      "sourceHash": "fb0067ea51de6471c7e56eef0f6b0a804ad7370b09215e19825b9697b622eefc"
     },
     {
       "id": "native.aboutCity.tr.buy.fala.text",
-      "source": "Найбольшы выбар, у тым ліку чыгуначныя білеты.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "source": "Білеты Гданьска, метраполіі і цягнікоў у адной сістэме.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#tr.buy.fala.text"
       ],
-      "sourceHash": "a708c58a953060ca4b53558ff12ecc85ca1efd8273760214a1e994277460dcbd"
+      "sourceHash": "0ce5ee9a04b90d5462d259414d1c459bb9c49555b8c12b9682f78612dac3aff0"
     },
     {
-      "id": "native.aboutCity.tr.buy.apps.title",
-      "source": "Jakdojade і іншыя праграмы",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "id": "native.aboutCity.tr.buy.kompas.title",
+      "source": "SKM KomPas",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.buy.apps.title"
+        "components/about-city-strings.generated.ts#tr.buy.kompas.title"
       ],
-      "sourceHash": "7bcd111c0455d5b9c8a946b27fb55d2bba09325b9a4484b9fccde0ab8a990cb7"
+      "sourceHash": "492ae045661bc3a62884203121089947dc984386fcf629d90297a2788d2dcb8b"
     },
     {
-      "id": "native.aboutCity.tr.buy.apps.text",
-      "source": "Метрапалітальныя білеты: Jakdojade, GoPay, moBilet, mPay, SkyCash, zBiletem.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "id": "native.aboutCity.tr.buy.kompas.text",
+      "source": "Аплікацыя SKM: расклад цягнікоў офлайн да трох тыдняў.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.buy.apps.text"
+        "components/about-city-strings.generated.ts#tr.buy.kompas.text"
       ],
-      "sourceHash": "6c36505841d9d48b3426f2026008d0099b2897ad242592b06c9d09150bf0570f"
-    },
-    {
-      "id": "native.aboutCity.tr.buy.board.title",
-      "source": "У салоне",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.buy.board.title"
-      ],
-      "sourceHash": "199a7b9321d783142cdaa6e2fa7b1643ed102058ec829b6943798f3f6a5ddd6b"
-    },
-    {
-      "id": "native.aboutCity.tr.buy.board.text",
-      "source": "Прылады FALA, толькі безнаяўная аплата.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.buy.board.text"
-      ],
-      "sourceHash": "754a05669ef9595826cdb9fcef0a34164b13f13fd149c517f474b78a5ec8a95e"
-    },
-    {
-      "id": "native.aboutCity.tr.buy.desk.title",
-      "source": "Касы і кіёскі",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.buy.desk.title"
-      ],
-      "sourceHash": "c50e5d3fb525c79d6f3d095d4947498d7b25bb5007feb83bf64b4893d1b86de2"
-    },
-    {
-      "id": "native.aboutCity.tr.buy.desk.text",
-      "source": "Касы SKM і ZTM, кіёскі і пошта.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.buy.desk.text"
-      ],
-      "sourceHash": "cbfa1e455d26d3a793e3745e7d8065522ed0cfb7152ab7dc2e936cd85ad50ec2"
-    },
-    {
-      "id": "native.aboutCity.tr.tip.card",
-      "source": "З плацёжнай карткай можна ехаць без загадзя купленага білета: сістэма FALA сама падбірае тарыф.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.tip.card"
-      ],
-      "sourceHash": "0fa1649b9027c36e38476afbe2e5d66dced5b35f8c2ae1407bdc68b8b4d1d067"
-    },
-    {
-      "id": "native.aboutCity.tr.tip.kompas",
-      "source": "Праграма SKM KomPas трымае расклад цягнікоў без сеткі.",
-      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tr.tip.kompas"
-      ],
-      "sourceHash": "0fc6a5c5f97e33b7bf9b10ab01283edabfc1de5e764c9b5fecd45ccaeb90a2a7"
+      "sourceHash": "3460839d74f91e834be66b233edc1634a380fcc93c1538182375f420a2fa592c"
     },
     {
       "id": "native.aboutCity.city.caption",
@@ -5508,17 +5255,6 @@
       "sourceHash": "ddeab1782dac1ac1ff50001d16e49b9ab734f880a0c51aee148263ae4d78eaeb"
     },
     {
-      "id": "native.aboutCity.links.ztmTickets",
-      "source": "Білеты ZTM Гданьска",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.ztmTickets"
-      ],
-      "sourceHash": "b645d89d00ec4090f90a98c0e9839d7c08b55fa62a7a4617ead8312b404aca56"
-    },
-    {
       "id": "native.aboutCity.links.skmSearch",
       "source": "Пошук рэйсаў SKM",
       "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
@@ -5528,28 +5264,6 @@
         "components/about-city-strings.generated.ts#links.skmSearch"
       ],
       "sourceHash": "77a54c1011e4d174a448201692c2fd362a381bfbe730e8175730b1e583c38776"
-    },
-    {
-      "id": "native.aboutCity.links.jakdojade",
-      "source": "Jakdojade — планаванне паездак і білеты",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.jakdojade"
-      ],
-      "sourceHash": "1aac5bbee01eb2f5e87e4a9bb55afd695ddcd0a8c25a5c9573d87e4fb51f4c4a"
-    },
-    {
-      "id": "native.aboutCity.links.mzkzg",
-      "source": "Метрапалітальныя білеты MZKZG",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.mzkzg"
-      ],
-      "sourceHash": "59c511de27bdfc54c21c282e67ab5bacfeb10ce1ec070bbff19308b091d31796"
     },
     {
       "id": "native.aboutCity.links.kartaTurysty",

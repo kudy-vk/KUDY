@@ -350,15 +350,7 @@ export interface AboutCityStrings {
   readonly tk: {
     readonly "75": string;
     readonly singleRide: string;
-    readonly single: {
-      readonly phone: string;
-      readonly paper: string;
-    };
     readonly day24: string;
-    readonly "24h": {
-      readonly two: string;
-      readonly all: string;
-    };
     readonly "72h": string;
     readonly night: string;
   };
@@ -380,55 +372,20 @@ export interface AboutCityStrings {
       readonly meta: string;
       readonly text: string;
     };
-    readonly prices: string;
-    readonly zoneLabel: string;
-    readonly zone: {
-      readonly ztm: string;
-      readonly metro: string;
-      readonly rail: string;
-    };
-    readonly zoneNote: {
-      readonly ztm: string;
-      readonly metro: string;
-      readonly rail: string;
-    };
-    readonly activate: string;
-    readonly act: {
-      readonly paper: {
-        readonly title: string;
-        readonly text: string;
-      };
-      readonly mobile: {
-        readonly title: string;
-        readonly text: string;
-      };
-      readonly valid: {
-        readonly title: string;
-        readonly text: string;
-      };
-    };
     readonly buyLabel: string;
     readonly buy: {
+      readonly jakdojade: {
+        readonly title: string;
+        readonly text: string;
+      };
       readonly fala: {
         readonly title: string;
         readonly text: string;
       };
-      readonly apps: {
+      readonly kompas: {
         readonly title: string;
         readonly text: string;
       };
-      readonly board: {
-        readonly title: string;
-        readonly text: string;
-      };
-      readonly desk: {
-        readonly title: string;
-        readonly text: string;
-      };
-    };
-    readonly tip: {
-      readonly card: string;
-      readonly kompas: string;
     };
   };
   readonly city: {
@@ -601,10 +558,7 @@ export interface AboutCityStrings {
     readonly airportBuses: string;
     readonly airportTrains: string;
     readonly ztmSchedule: string;
-    readonly ztmTickets: string;
     readonly skmSearch: string;
-    readonly jakdojade: string;
-    readonly mzkzg: string;
     readonly kartaTurysty: string;
     readonly muzeumGdanska: string;
     readonly muzeum1939: string;
