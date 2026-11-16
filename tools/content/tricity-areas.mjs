@@ -71,9 +71,17 @@ function parseRegistry(cardsMd) {
   for (const line of rows) {
     const cells = splitRow(line);
     if (cells.length < 6) continue; // header or separator
-    if (!/^[a-z][a-z0-9-]*$/.test(cells[0])) continue; // header row "areaId"
+    const idLike = /^[a-z][a-z0-9-]*$/.test(cells[0]);
     if (!CITIES.includes(cells[1])) {
-      defects.push(`registry row skipped: id-like first cell "${cells[0]}" has unknown city "${cells[1]}"`);
+      // header row "areaId" and separator rows stay silent; an id-like first
+      // cell with an unknown city is a data row and gets a diagnostic
+      if (idLike) defects.push(`registry row skipped: id-like first cell "${cells[0]}" has unknown city "${cells[1]}"`);
+      continue;
+    }
+    if (!idLike) {
+      // a known city makes it a data row: a first cell that breaks the
+      // areaId contract (e.g. capitalized "Oliwa") must not vanish silently
+      defects.push(`registry row skipped: non-id-like areaId "${cells[0]}" with known city "${cells[1]}"`);
       continue;
     }
     const areaId = cells[0];
