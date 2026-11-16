@@ -29,6 +29,7 @@ import FootprintsIcon from "lucide-react-native/icons/footprints";
 import ListIcon from "lucide-react-native/icons/list";
 import MapPinIcon from "lucide-react-native/icons/map-pin";
 import MinusIcon from "lucide-react-native/icons/minus";
+import PlaneIcon from "lucide-react-native/icons/plane";
 import PlusIcon from "lucide-react-native/icons/plus";
 import ScanIcon from "lucide-react-native/icons/scan";
 import TramFrontIcon from "lucide-react-native/icons/tram-front";
@@ -743,17 +744,41 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
     [atlas, setAtlas],
   );
 
-  // The zone list: a press picks the zone and brings it into view (the
-  // mockup's row rule); a hidden layer turns back on.
-  const pickZone = useCallback(
-    (zone: (typeof SHAPES.zones)[number]) => {
-      const show = atlas.show[zone.kind] ? atlas.show : { ...atlas.show, [zone.kind]: true };
-      setAtlas({ show, pick: { kind: "zone", id: zone.id } });
-      const [x0, y0, x1, y1] = bounds(zone.px);
-      const zoomFit = Math.min(MAX_ZOOM, 0.6 * Math.min(MAP_W / Math.max(x1 - x0, 1), MAP_H / Math.max(y1 - y0, 1)));
-      fly(Math.max(cam.zoom, zoomFit), [(x0 + x1) / 2, (y0 + y1) / 2]);
+  // The atlas list: a press picks the shape and brings it into view (the
+  // mockup's row rule); a hidden layer turns back on. A zone fits its
+  // bounds; a station or the airport is a point — it centres on itself at
+  // the zoom from which every stop is named (LEVELS).
+  const pickShape = useCallback(
+    (pick: AboutCityPick) => {
+      const found = lookUp(pick);
+      const show = found.layer && !atlas.show[found.layer] ? { ...atlas.show, [found.layer]: true } : atlas.show;
+      setAtlas({ show, pick });
+      if (found.zone) {
+        const [x0, y0, x1, y1] = bounds(found.zone.px);
+        const zoomFit = Math.min(MAX_ZOOM, 0.6 * Math.min(MAP_W / Math.max(x1 - x0, 1), MAP_H / Math.max(y1 - y0, 1)));
+        fly(Math.max(cam.zoom, zoomFit), [(x0 + x1) / 2, (y0 + y1) / 2]);
+      } else {
+        const [x, y] = found.station ? found.station.px : SHAPES.airport.px;
+        fly(Math.max(cam.zoom, LEVELS[0][0]), [x, y]);
+      }
     },
-    [atlas.show, atlas.zoom, cam.zoom, fly, setAtlas],
+    [atlas.show, cam.zoom, fly, setAtlas],
+  );
+
+  // One named row of the atlas list: a button over the one pick path, so
+  // the screen reader reaches every selectable sign the pointer does (#312).
+  const atlasRow = (pick: AboutCityPick, key: string, name: string, lead: ReactNode, testID: string) => (
+    <Pressable
+      key={key}
+      accessibilityLabel={name}
+      accessibilityRole="button"
+      onPress={() => pickShape(pick)}
+      style={styles.zoneRow}
+      testID={testID}
+    >
+      {lead}
+      <ScaledText style={styles.zoneRowName}>{name}</ScaledText>
+    </Pressable>
   );
 
   const picked = atlas.pick;
@@ -972,8 +997,10 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
       </View>
       {googleFailed ? <Remark tone="error" text={t("link.failed", { url: googleFailed })} /> : null}
 
-      {/* The same zones as a list: a press picks the zone and brings it into
-          view (the mockup's atlas-list fold). */}
+      {/* The zones, the stations and the airport as a list: a press picks
+          the shape and brings it into view (the mockup's atlas-list fold).
+          This list is the screen reader's path to every selectable sign on
+          the map — the signs layer itself stays decorative (#312). */}
       <Fold
         id="atlas-list"
         open={foldOpen}
@@ -987,22 +1014,35 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
               <Fragment key={kind}>
                 <ScaledText style={styles.groupSub}>{t(`layer.${kind}`)}</ScaledText>
                 <View style={styles.card}>
-                  {SHAPES.zones.filter((zone) => zone.kind === kind).map((zone) => (
-                    <Pressable
-                      key={zone.id}
-                      accessibilityLabel={zone.name}
-                      accessibilityRole="button"
-                      onPress={() => pickZone(zone)}
-                      style={styles.zoneRow}
-                      testID={`city-map-zone-${zone.id}`}
-                    >
-                      <LayerSwatch kind={kind} />
-                      <ScaledText style={styles.zoneRowName}>{zone.name}</ScaledText>
-                    </Pressable>
-                  ))}
+                  {SHAPES.zones.filter((zone) => zone.kind === kind).map((zone) =>
+                    atlasRow({ kind: "zone", id: zone.id }, zone.id, zone.name, <LayerSwatch kind={kind} />, `city-map-zone-${zone.id}`),
+                  )}
                 </View>
               </Fragment>
             ))}
+            {([
+              ["rail", SHAPES.stations.filter((station) => !station.planned)],
+              ["plan", SHAPES.stations.filter((station) => station.planned)],
+            ] as const).map(([kind, stops]) => (
+              <Fragment key={kind}>
+                <ScaledText style={styles.groupSub}>{t(`layer.${kind}`)}</ScaledText>
+                <View style={styles.card}>
+                  {stops.map((station) =>
+                    atlasRow({ kind: "station", id: station.id }, station.id, station.name, <LayerSwatch kind={kind} />, `city-map-station-${station.id}`),
+                  )}
+                </View>
+              </Fragment>
+            ))}
+            <ScaledText style={styles.groupSub}>{t("tab.airport")}</ScaledText>
+            <View style={styles.card}>
+              {atlasRow(
+                { kind: "airport", id: "airport" },
+                "airport",
+                SHAPES.airport.name,
+                <CanonIcon glyph={PlaneIcon} label={SHAPES.airport.name} size={18} color={tokens.colorAccent} />,
+                "city-map-airport",
+              )}
+            </View>
           </View>
         }
       />

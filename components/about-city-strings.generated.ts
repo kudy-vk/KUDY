@@ -300,7 +300,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "google": "Адкрыць у Google Maps",
       "layers": "Што паказвае карта",
       "hint": "Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.",
-      "list": "Усе зоны спісам",
+      "list": "Зоны, станцыі і аэрапорт спісам",
       "listMeta": (visit: number, stay: number) => `${visit} для наведвання, ${stay} каб спыніцца`,
     },
     "layer": {
@@ -628,7 +628,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "google": "Open in Google Maps",
       "layers": "What the map shows",
       "hint": "Tap a coloured zone, a station or the airport sign to see what it is.",
-      "list": "All zones as a list",
+      "list": "Zones, stations and the airport as a list",
       "listMeta": (visit: number, stay: number) => `${visit} to visit, ${stay} to stay`,
     },
     "layer": {

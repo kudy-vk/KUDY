@@ -5410,14 +5410,14 @@
     },
     {
       "id": "native.aboutCity.map.list",
-      "source": "Усе зоны спісам",
-      "context": "Раздзел «Гданьск з аднаго погляду»: загаловак згорткі са спісам усіх зон (#303)",
+      "source": "Зоны, станцыі і аэрапорт спісам",
+      "context": "Раздзел «Гданьск з аднаго погляду»: загаловак згорткі са спісам зон, станцый і аэрапорта (#303, #312)",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#map.list"
       ],
-      "sourceHash": "6ba1a58946546f267a4617714fb43026c9967a460bd98c6641643a8a7a37e308"
+      "sourceHash": "b84616b19d7fcd0602dfd767c9ec4e91940ae423a4fa268dfff46ec033c37787"
     },
     {
       "id": "native.aboutCity.map.listMeta",
