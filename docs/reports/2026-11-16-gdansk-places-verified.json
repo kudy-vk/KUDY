@@ -1,0 +1,3737 @@
+{
+  "meta": {
+    "created": "2026-11-16",
+    "input": "docs/reports/2026-11-14-gdansk-locals-tips.json",
+    "notes": "Re-verification of 67 places from the locals-tips dataset for the KUDY 'Чым заняцца' section. Coordinates only from Wikidata (CC0) and OSM/Nominatim (ODbL); photos only from Wikimedia Commons; nothing copied from Google Maps (checked open/closed via google-maps-view search results only where noted). 3 passes of geo harvesting; coverage 63/67 coordinates — 4 places have null coordinates with location_reason (not found in Wikidata/OSM by name: bar-mleczny-fala, calma, dym-i-ogien, restauracja-motlawa). Special questions answered: Wzgórze Lagry exists in OSM as 'Lagry' (VII Dwór, Gdańsk); Kawiarnia Publiczna and Publiczna are the same venue (same OSM node 7704294303, Dolne Miasto). Fact texts in English as required; all advice verdicts sourced (official pages for WW2/ECS tickets, JakDojade, ZTM extra charges; reviews elsewhere)."
+  },
+  "sources": [
+    {
+      "id": "src-input",
+      "kind": "review",
+      "title": "Input dataset: locals tips (2026-11-14)",
+      "url": "https://github.com/kudy-vk/KUDY/blob/main/docs/reports/2026-11-14-gdansk-locals-tips.json",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "reddit-126hrep",
+      "kind": "review",
+      "title": "Tips to tourists visiting Gdansk?",
+      "url": "https://www.reddit.com/r/poland/comments/126hrep/tips_to_tourists_visiting_gdansk/",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "reddit-102yo3j",
+      "kind": "review",
+      "title": "Must sees for visitors that aren't tourist-traps",
+      "url": "https://www.reddit.com/r/gdansk/comments/102yo3j/must_sees_for_visitors_that_arent_touristtraps/",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "reddit-1n8vz03",
+      "kind": "review",
+      "title": "What to watch out for in Gdańsk?",
+      "url": "https://www.reddit.com/r/poland/comments/1n8vz03/what_to_watch_out_for_in_gda%C5%88sk/",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "reddit-1ri1pdg",
+      "kind": "review",
+      "title": "Food and restaurant recommendations, not tourist traps",
+      "url": "https://www.reddit.com/r/gdansk/comments/1ri1pdg/food_and_restaurantplaces_to_eat_recommendations/",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "reddit-zd4ca3",
+      "kind": "review",
+      "title": "Things not to miss in Gdańsk?",
+      "url": "https://www.reddit.com/r/poland/comments/zd4ca3/things_not_to_miss_in_gda%C5%84sk/",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "reddit-1w411tl",
+      "kind": "review",
+      "title": "Visiting Gdańsk? This is monthly tourist thread (09/2026)",
+      "url": "https://www.reddit.com/r/gdansk/comments/1w411tl/visiting_gda%C5%84sk_this_is_monthly_tourist_thread/",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "x-kamischka",
+      "kind": "review",
+      "title": "kamischka — гайд па Гданьску",
+      "url": "https://x.com/kamischka",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "x-anamatei",
+      "kind": "review",
+      "title": "AnaMatei — «Gdansk, Europe's Best Hidden Gem»",
+      "url": "https://x.com/AnaMatei",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "x-polandtravelus",
+      "kind": "review",
+      "title": "PolandtravelUS — афіцыйны турыстычны улік",
+      "url": "https://x.com/PolandtravelUS",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "threads-search",
+      "kind": "review",
+      "title": "Пошук #gdansk на Threads",
+      "url": "https://www.threads.net/search?q=Gdansk",
+      "license": null,
+      "checked_at": "2026-11-14"
+    },
+    {
+      "id": "src-osm-relation-5537950",
+      "kind": "osm",
+      "title": "OSM relation 5537950 (Długi Targ)",
+      "url": "https://www.openstreetmap.org/relation/5537950",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-13312142213",
+      "kind": "osm",
+      "title": "OSM node 13312142213 (Żuraw Gdański)",
+      "url": "https://www.openstreetmap.org/node/13312142213",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q933903",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q933903",
+      "url": "https://www.wikidata.org/wiki/Q933903",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-commons-2756894447337195260",
+      "kind": "commons",
+      "title": "Wikimedia Commons file Bazylika Mariacka DSC01870.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Bazylika%20Mariacka%20DSC01870.jpg",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q2135657",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q2135657",
+      "url": "https://www.wikidata.org/wiki/Q2135657",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-commons-7753027546556025329",
+      "kind": "commons",
+      "title": "Wikimedia Commons file Ayuntamiento Principal, Gdansk, Polonia, 2013-05-20, DD 10.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Ayuntamiento%20Principal%2C%20Gdansk%2C%20Polonia%2C%202013-05-20%2C%20DD%2010.jpg",
+      "license": "CC BY-SA 3.0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q11129717",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q11129717",
+      "url": "https://www.wikidata.org/wiki/Q11129717",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-commons-6373214588688803861",
+      "kind": "commons",
+      "title": "Wikimedia Commons file Museum of the Second World War in Gdańsk 2025b.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Museum%20of%20the%20Second%20World%20War%20in%20Gda%C5%84sk%202025b.jpg",
+      "license": "CC BY 3.0 pl",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q534403",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q534403",
+      "url": "https://www.wikidata.org/wiki/Q534403",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q1968661",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q1968661",
+      "url": "https://www.wikidata.org/wiki/Q1968661",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q517081",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q517081",
+      "url": "https://www.wikidata.org/wiki/Q517081",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-515044620",
+      "kind": "osm",
+      "title": "OSM way 515044620 (Most Chlebowy)",
+      "url": "https://www.openstreetmap.org/way/515044620",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-1902129321",
+      "kind": "osm",
+      "title": "OSM node 1902129321 (Góra Gradowa)",
+      "url": "https://www.openstreetmap.org/node/1902129321",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-2296236121",
+      "kind": "osm",
+      "title": "OSM node 2296236121 (Wzgórze Pachołek)",
+      "url": "https://www.openstreetmap.org/node/2296236121",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-140487202",
+      "kind": "osm",
+      "title": "OSM way 140487202 (Lagry)",
+      "url": "https://www.openstreetmap.org/way/140487202",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-258551212",
+      "kind": "osm",
+      "title": "OSM way 258551212 (Szwedzka Grobla)",
+      "url": "https://www.openstreetmap.org/way/258551212",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-168928581",
+      "kind": "osm",
+      "title": "OSM way 168928581 (Park Oliwski im. Adama Mickiewicza)",
+      "url": "https://www.openstreetmap.org/way/168928581",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-824208844",
+      "kind": "osm",
+      "title": "OSM way 824208844 (Ulica Elektryków)",
+      "url": "https://www.openstreetmap.org/way/824208844",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-1079584733",
+      "kind": "osm",
+      "title": "OSM way 1079584733 (Plaża Stogi)",
+      "url": "https://www.openstreetmap.org/way/1079584733",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q28776999",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q28776999",
+      "url": "https://www.wikidata.org/wiki/Q28776999",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-commons-4771350470919755854",
+      "kind": "commons",
+      "title": "Wikimedia Commons file Moja rybka NEMO na plaży - panoramio.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Moja%20rybka%20NEMO%20na%20pla%C5%BCy%20-%20panoramio.jpg",
+      "license": "CC BY 3.0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-11685726961",
+      "kind": "osm",
+      "title": "OSM node 11685726961 (Plaża Brzeźno)",
+      "url": "https://www.openstreetmap.org/node/11685726961",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-wd-Q3177824",
+      "kind": "wikidata",
+      "title": "Wikidata entity Q3177824",
+      "url": "https://www.wikidata.org/wiki/Q3177824",
+      "license": "CC0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-commons-2926703787859672881",
+      "kind": "commons",
+      "title": "Wikimedia Commons file Muelle de Sopot, Polonia, 2013-05-22, DD 21.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Muelle%20de%20Sopot%2C%20Polonia%2C%202013-05-22%2C%20DD%2021.jpg",
+      "license": "CC BY-SA 3.0",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-11368962210",
+      "kind": "osm",
+      "title": "OSM node 11368962210 (Skwer Kościuszki)",
+      "url": "https://www.openstreetmap.org/node/11368962210",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-139634364",
+      "kind": "osm",
+      "title": "OSM way 139634364 (Bałtycki Port Nowych Technologii)",
+      "url": "https://www.openstreetmap.org/way/139634364",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-2465174574",
+      "kind": "osm",
+      "title": "OSM node 2465174574 (Bar mleczny Syrena)",
+      "url": "https://www.openstreetmap.org/node/2465174574",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-2672974414",
+      "kind": "osm",
+      "title": "OSM node 2672974414 (Bar Akademicki)",
+      "url": "https://www.openstreetmap.org/node/2672974414",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-7170699520",
+      "kind": "osm",
+      "title": "OSM node 7170699520 (Stołówka Gdańska)",
+      "url": "https://www.openstreetmap.org/node/7170699520",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-6917442177",
+      "kind": "osm",
+      "title": "OSM node 6917442177 (Bar Mleczny Jaros)",
+      "url": "https://www.openstreetmap.org/node/6917442177",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-746496017",
+      "kind": "osm",
+      "title": "OSM node 746496017 (Neptun)",
+      "url": "https://www.openstreetmap.org/node/746496017",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-13753089019",
+      "kind": "osm",
+      "title": "OSM node 13753089019 (Stary Młyn)",
+      "url": "https://www.openstreetmap.org/node/13753089019",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-6638571275",
+      "kind": "osm",
+      "title": "OSM node 6638571275 (Pierogarnia \"Na Pierogi\")",
+      "url": "https://www.openstreetmap.org/node/6638571275",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-6258079034",
+      "kind": "osm",
+      "title": "OSM node 6258079034 (Kocham Pierogi)",
+      "url": "https://www.openstreetmap.org/node/6258079034",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-4298418310",
+      "kind": "osm",
+      "title": "OSM node 4298418310 (Pierogarnia Mandu)",
+      "url": "https://www.openstreetmap.org/node/4298418310",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-397227843",
+      "kind": "osm",
+      "title": "OSM way 397227843 (Pierogarnia Pruszcz)",
+      "url": "https://www.openstreetmap.org/way/397227843",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-2382716112",
+      "kind": "osm",
+      "title": "OSM node 2382716112 (Pyra Bar)",
+      "url": "https://www.openstreetmap.org/node/2382716112",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-11016679871",
+      "kind": "osm",
+      "title": "OSM node 11016679871 (Ostro Pizza Napoletana)",
+      "url": "https://www.openstreetmap.org/node/11016679871",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-7704294303",
+      "kind": "osm",
+      "title": "OSM node 7704294303 (Publiczna)",
+      "url": "https://www.openstreetmap.org/node/7704294303",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-3669806433",
+      "kind": "osm",
+      "title": "OSM node 3669806433 (Surf Burger)",
+      "url": "https://www.openstreetmap.org/node/3669806433",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-3592382462",
+      "kind": "osm",
+      "title": "OSM node 3592382462 (Burger Stacja)",
+      "url": "https://www.openstreetmap.org/node/3592382462",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-4583024295",
+      "kind": "osm",
+      "title": "OSM node 4583024295 (Holy Burger)",
+      "url": "https://www.openstreetmap.org/node/4583024295",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-1805967423",
+      "kind": "osm",
+      "title": "OSM node 1805967423 (Rybakówka)",
+      "url": "https://www.openstreetmap.org/node/1805967423",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-746496122",
+      "kind": "osm",
+      "title": "OSM node 746496122 (Pod Rybą)",
+      "url": "https://www.openstreetmap.org/node/746496122",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-12945236202",
+      "kind": "osm",
+      "title": "OSM node 12945236202 (moja gruzja)",
+      "url": "https://www.openstreetmap.org/node/12945236202",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-11637796499",
+      "kind": "osm",
+      "title": "OSM node 11637796499 (AiChi Gotuje)",
+      "url": "https://www.openstreetmap.org/node/11637796499",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-1777255611",
+      "kind": "osm",
+      "title": "OSM node 1777255611 (Restauracja Pueblo)",
+      "url": "https://www.openstreetmap.org/node/1777255611",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-7169582844",
+      "kind": "osm",
+      "title": "OSM node 7169582844 (Węgierski Lángos)",
+      "url": "https://www.openstreetmap.org/node/7169582844",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-9132236793",
+      "kind": "osm",
+      "title": "OSM node 9132236793 (Nowy Browar Gdański)",
+      "url": "https://www.openstreetmap.org/node/9132236793",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-970616964",
+      "kind": "osm",
+      "title": "OSM way 970616964 (100cznia)",
+      "url": "https://www.openstreetmap.org/way/970616964",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-124814007",
+      "kind": "osm",
+      "title": "OSM way 124814007 (Montownia Lofts & Experience)",
+      "url": "https://www.openstreetmap.org/way/124814007",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-5818315164",
+      "kind": "osm",
+      "title": "OSM node 5818315164 (Słony Spichlerz)",
+      "url": "https://www.openstreetmap.org/node/5818315164",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-1553036064",
+      "kind": "osm",
+      "title": "OSM way 1553036064 (Lepione)",
+      "url": "https://www.openstreetmap.org/way/1553036064",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-5630818972",
+      "kind": "osm",
+      "title": "OSM node 5630818972 (Thali)",
+      "url": "https://www.openstreetmap.org/node/5630818972",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-746496020",
+      "kind": "osm",
+      "title": "OSM node 746496020 (Leń)",
+      "url": "https://www.openstreetmap.org/node/746496020",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-9467969735",
+      "kind": "osm",
+      "title": "OSM node 9467969735 (Umam)",
+      "url": "https://www.openstreetmap.org/node/9467969735",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-10924192806",
+      "kind": "osm",
+      "title": "OSM node 10924192806 (Eklerownia)",
+      "url": "https://www.openstreetmap.org/node/10924192806",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-2785644024",
+      "kind": "osm",
+      "title": "OSM node 2785644024 (No to Cyk)",
+      "url": "https://www.openstreetmap.org/node/2785644024",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-7704294301",
+      "kind": "osm",
+      "title": "OSM node 7704294301 (Łąka Bar)",
+      "url": "https://www.openstreetmap.org/node/7704294301",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-14102561501",
+      "kind": "osm",
+      "title": "OSM node 14102561501 (Śliwka w kompot)",
+      "url": "https://www.openstreetmap.org/node/14102561501",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-10139242418",
+      "kind": "osm",
+      "title": "OSM node 10139242418 (Winston Bar)",
+      "url": "https://www.openstreetmap.org/node/10139242418",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-1777255606",
+      "kind": "osm",
+      "title": "OSM node 1777255606 (Piwnica Rajców)",
+      "url": "https://www.openstreetmap.org/node/1777255606",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-5993913085",
+      "kind": "osm",
+      "title": "OSM node 5993913085 (Wiśniewski)",
+      "url": "https://www.openstreetmap.org/node/5993913085",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-3039404766",
+      "kind": "osm",
+      "title": "OSM node 3039404766 (Pułapka)",
+      "url": "https://www.openstreetmap.org/node/3039404766",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-node-5206798121",
+      "kind": "osm",
+      "title": "OSM node 5206798121 (LAbeerYNT)",
+      "url": "https://www.openstreetmap.org/node/5206798121",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-280959018",
+      "kind": "osm",
+      "title": "OSM way 280959018 (Chata nad Radunią)",
+      "url": "https://www.openstreetmap.org/way/280959018",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-osm-way-791931700",
+      "kind": "osm",
+      "title": "OSM way 791931700 (Gościniec dla przyjaciół)",
+      "url": "https://www.openstreetmap.org/way/791931700",
+      "license": "ODbL",
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-muzeum1939-bilety",
+      "kind": "official",
+      "title": "Muzeum II Wojny Światowej — bilety i cennik (official)",
+      "url": "https://www.muzeum1939.pl/wizyta/wizyta-miiws/bilety-i-cennik",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-ecs-bilety",
+      "kind": "official",
+      "title": "ECS — cennik i audioprzewodnik (official)",
+      "url": "https://bilety.ecs.gda.pl/index/cennik.html?lang=en",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-jakdojade",
+      "kind": "official",
+      "title": "JakDojade — ZTM Tri-City official ticket app (company page)",
+      "url": "https://company.jakdojade.pl/trojmiasto-jak-kupic-bilety-ztm-gdansk-gdynia-sopot-wejherowo",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-ztm-oplaty",
+      "kind": "official",
+      "title": "ZTM Gdańsk — opłaty dodatkowe (official)",
+      "url": "https://ztm.gda.pl/bilety/oplaty-dodatkowe,a,3151",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-nmm-pl",
+      "kind": "official",
+      "title": "Narodowe Muzeum Morskie — bilety (official)",
+      "url": "https://nmm.pl",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-skm-official",
+      "kind": "official",
+      "title": "SKM Tricity (PKP SKM) — official",
+      "url": "https://skm.pkp.pl",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-trojmiasto-qr",
+      "kind": "press",
+      "title": "trojmiasto.pl: QR tickets — scan or validate (2025)",
+      "url": "https://www.trojmiasto.pl/wiadomosci/Nowe-bilety-z-kodem-w-Gdansku-QR-Skanowac-czy-kasowac-zeby-nie-dostac-mandatu-n206029.html",
+      "license": null,
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "src-commons-127110073951997219",
+      "kind": "commons",
+      "title": "Wikimedia Commons file Gdansk Shipyard aerial photograph 2019 P03.jpg",
+      "url": "https://commons.wikimedia.org/wiki/File:Gdansk%20Shipyard%20aerial%20photograph%202019%20P03.jpg",
+      "license": "CC BY-SA 4.0",
+      "checked_at": "2026-11-16"
+    }
+  ],
+  "places": [
+    {
+      "id": "stary-horad",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Długi Targ",
+      "kind": "sight",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście (Główne Miasto)",
+      "address": "Długi Targ, Główne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-828",
+      "location": {
+        "lat": 54.3483333,
+        "lng": 18.6538414,
+        "precision": "area",
+        "source": "src-osm-relation-5537950"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Main pedestrian zone of the Old Town (Długa, Mariacka) with the Motława embankment sign",
+          "verdict": "confirmed",
+          "source": [
+            "src-osm-rel/5537950"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "zuraw",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Żuraw Gdański",
+      "kind": "museum",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Szeroka 67/68, 80-835 Gdańsk",
+      "location": {
+        "lat": 54.350566,
+        "lng": 18.657462,
+        "precision": "area",
+        "source": "src-osm-node-13312142213"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 75,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": {
+        "level": "budget",
+        "ticket_pln": 23,
+        "note_en": "single-branch ticket; combined Ołowianka+Żuraw+Sołdek+OKM ticket 64 zł",
+        "source": "src-nmm-pl",
+        "checked_at": "2026-11-15"
+      },
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Medieval port crane, branch of the National Maritime Museum",
+          "verdict": "confirmed",
+          "source": [
+            "src-nmm-pl",
+            "src-osm-node/13312142213"
+          ]
+        },
+        {
+          "claim_en": "Iconic photo spot on the Motława embankment",
+          "verdict": "confirmed",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bazylika-mariacka",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "bazylika konkatedralna Wniebowzięcia Najświętszej Maryi Panny w Gdańsku",
+      "kind": "sight",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": null,
+      "location": {
+        "lat": 54.349841666667,
+        "lng": 18.653497222222,
+        "precision": "building",
+        "source": "src-wd-Q933903"
+      },
+      "location_reason": null,
+      "website": "https://bazylikamariacka.gdansk.pl/",
+      "wikidata": "Q933903",
+      "visit_minutes": {
+        "min": 30,
+        "max": 75,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": {
+        "page_url": "https://commons.wikimedia.org/wiki/File:Bazylika%20Mariacka%20DSC01870.jpg",
+        "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Gyddanyzc&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User",
+        "license": "CC0"
+      },
+      "claims": [
+        {
+          "claim_en": "Bell/observation tower is sometimes closed in winter",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "ratusz",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Ratusz Głównego Miasta w Gdańsku",
+      "kind": "museum",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Długa 46",
+      "location": {
+        "lat": 54.34883,
+        "lng": 18.6527,
+        "precision": "building",
+        "source": "src-wd-Q2135657"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": "Q2135657",
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": {
+        "page_url": "https://commons.wikimedia.org/wiki/File:Ayuntamiento%20Principal%2C%20Gdansk%2C%20Polonia%2C%202013-05-20%2C%20DD%2010.jpg",
+        "author": "<bdi><a href=\"https://www.wikidata.org/wiki/Q28147777\" class=\"extiw\" title=\"d:Q28147777\"><span title=\"Spanish photograph",
+        "license": "CC BY-SA 3.0"
+      },
+      "claims": [
+        {
+          "claim_en": "Ratusz hosts the Historical Museum and a tower with a city panorama",
+          "verdict": "confirmed",
+          "source": [
+            "src-osm-rel/2167745"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "muzeum-ww2",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Muzeum II Wojny Światowej w Gdańsku",
+      "kind": "museum",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "pl. Władysława Bartoszewskiego 1",
+      "location": {
+        "lat": 54.35583333,
+        "lng": 18.66055556,
+        "precision": "building",
+        "source": "src-wd-Q11129717"
+      },
+      "location_reason": null,
+      "website": "https://www.muzeum1939.pl",
+      "wikidata": "Q11129717",
+      "visit_minutes": {
+        "min": 180,
+        "max": 420,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": {
+        "level": "mid",
+        "ticket_pln": 33,
+        "note_en": "main exhibition full ticket 33 zł / reduced 23 zł; audio guide 12 zł extra",
+        "source": "src-muzeum1939-bilety",
+        "checked_at": "2026-11-16"
+      },
+      "transit": null,
+      "photo": {
+        "page_url": "https://commons.wikimedia.org/wiki/File:Museum%20of%20the%20Second%20World%20War%20in%20Gda%C5%84sk%202025b.jpg",
+        "author": "<a href=\"//commons.wikimedia.org/wiki/User:Boston9\" title=\"User:Boston9\">Adrian Grycuk</a>",
+        "license": "CC BY 3.0 pl"
+      },
+      "claims": [
+        {
+          "claim_en": "Audio guide available for the main exhibition (12 zł, not included in ticket)",
+          "verdict": "confirmed",
+          "source": [
+            "src-muzeum1939-bilety"
+          ]
+        },
+        {
+          "claim_en": "Main exhibition full ticket 33 zł / reduced 23 zł",
+          "verdict": "confirmed",
+          "source": [
+            "src-muzeum1939-bilety"
+          ]
+        },
+        {
+          "claim_en": "Plan almost a whole day; some visitors were asked to leave at closing time",
+          "verdict": "partly",
+          "source": [
+            "src-input",
+            "src-muzeum1939-bilety"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "ecs",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Europejskie Centrum Solidarności",
+      "kind": "museum",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "pl. Solidarności 1, 80-863 Gdańsk",
+      "location": {
+        "lat": 54.361234,
+        "lng": 18.649421,
+        "precision": "building",
+        "source": "src-wd-Q534403"
+      },
+      "location_reason": null,
+      "website": "https://ecs.gdansk.pl",
+      "wikidata": "Q534403",
+      "visit_minutes": {
+        "min": 120,
+        "max": 300,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": {
+        "level": "mid",
+        "ticket_pln": 40,
+        "note_en": "full ticket 40 zł / reduced 35 zł; audio guide included",
+        "source": "src-ecs-bilety",
+        "checked_at": "2026-11-16"
+      },
+      "transit": null,
+      "photo": {
+        "page_url": "https://commons.wikimedia.org/wiki/File:Gdansk%20Shipyard%20aerial%20photograph%202019%20P03.jpg",
+        "author": "<a href=\"//commons.wikimedia.org/wiki/User:Fallaner\" title=\"User:Fallaner\">Fallaner</a>",
+        "license": "CC BY-SA 4.0"
+      },
+      "claims": [
+        {
+          "claim_en": "Audio guide is included in the ticket price",
+          "verdict": "confirmed",
+          "source": [
+            "src-ecs-bilety"
+          ]
+        },
+        {
+          "claim_en": "Full ticket 40 zł / reduced 35 zł; typically closed on Mondays",
+          "verdict": "confirmed",
+          "source": [
+            "src-ecs-bilety"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "muzeum-narodowe",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Muzeum Narodowe w Gdańsku",
+      "kind": "museum",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Toruńska 1",
+      "location": {
+        "lat": 54.345425,
+        "lng": 18.64691389,
+        "precision": "building",
+        "source": "src-wd-Q1968661"
+      },
+      "location_reason": null,
+      "website": "http://mng.gda.pl",
+      "wikidata": "Q1968661",
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Hans Memling's 'Last Judgment' is one of the two most valuable paintings in Poland",
+          "verdict": "confirmed",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "westerplatte",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Westerplatte",
+      "kind": "sight",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": null,
+      "address": null,
+      "location": {
+        "lat": 54.4075,
+        "lng": 18.671388888889,
+        "precision": "building",
+        "source": "src-wd-Q517081"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": "Q517081",
+      "visit_minutes": {
+        "min": 45,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Peninsula where WWII started; viewpoint near the monument",
+          "verdict": "confirmed",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "most-milosci",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Most Chlebowy",
+      "kind": "sight",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Most Chlebowy, Korzenna, Osiek, Stare Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-846",
+      "location": {
+        "lat": 54.3536853,
+        "lng": 18.6484927,
+        "precision": "area",
+        "source": "src-osm-way-515044620"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 10,
+        "max": 25,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "gora-gradowa",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Góra Gradowa",
+      "kind": "viewpoint",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Góra Gradowa, Gdańsk, województwo pomorskie, 80-802",
+      "location": {
+        "lat": 54.357641,
+        "lng": 18.6402587,
+        "precision": "area",
+        "source": "src-osm-node-1902129321"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Panorama of the Old Town and shipyard; almost no crowds",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "wzgorze-pacholka",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Wzgórze Pachołek",
+      "kind": "viewpoint",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Oliwa",
+      "address": "Wzgórze Pachołek, Gdańsk, województwo pomorskie, 80-330",
+      "location": {
+        "lat": 54.4116541,
+        "lng": 18.550736,
+        "precision": "area",
+        "source": "src-osm-node-2296236121"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Best panorama of the city in clear weather",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "wzgorze-lagry",
+      "status": "open",
+      "status_sources": [
+        "src-osm-way/140487202"
+      ],
+      "name_local": "Lagry",
+      "kind": "viewpoint",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "VII Dwór",
+      "address": "Lagry, VII Dwór, Gdańsk, województwo pomorskie",
+      "location": {
+        "lat": 54.3848787,
+        "lng": 18.5659882,
+        "precision": "area",
+        "source": "src-osm-way-140487202"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "'Lagry' hill exists in Gdańsk (VII Dwór area) under the name 'Lagry'",
+          "verdict": "confirmed",
+          "source": [
+            "src-osm-way/140487202"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "szwedzka-grobla",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Szwedzka Grobla",
+      "kind": "other",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Szwedzka Grobla, Oliwa, Gdańsk, województwo pomorskie, 80-328",
+      "location": {
+        "lat": 54.3907806,
+        "lng": 18.5357639,
+        "precision": "area",
+        "source": "src-osm-way-258551212"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 180,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Scenic bike route along the river",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "oliwa-park",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Park Oliwski im. Adama Mickiewicza",
+      "kind": "park",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Oliwa",
+      "address": "Park Oliwski im. Adama Mickiewicza, Oliwa, Gdańsk, województwo pomorskie, 80-338",
+      "location": {
+        "lat": 54.4111282,
+        "lng": 18.5625221,
+        "precision": "area",
+        "source": "src-osm-way-168928581"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Café Las Oliwa with coffee and brunch nearby",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "ulica-elektrykow",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Ulica Elektryków",
+      "kind": "street",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście (stocznia)",
+      "address": "Ulica Elektryków, Młode Miasto, Młyniska, Gdańsk, województwo pomorskie",
+      "location": {
+        "lat": 54.3645089,
+        "lng": 18.6483202,
+        "precision": "area",
+        "source": "src-osm-way-824208844"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Bar street at the shipyard: alternative nightlife, students, art",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "plaza-stogi",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Plaża Stogi",
+      "kind": "beach",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Stogi",
+      "address": "Plaża Stogi, Stogi, Gdańsk, województwo pomorskie",
+      "location": {
+        "lat": 54.3761112,
+        "lng": 18.728233,
+        "precision": "area",
+        "source": "src-osm-way-1079584733"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 240,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "wyspa-sobieszewska",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Wyspa Sobieszewska",
+      "kind": "park",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Wyspa Sobieszewska",
+      "address": null,
+      "location": {
+        "lat": 54.336,
+        "lng": 18.871111,
+        "precision": "building",
+        "source": "src-wd-Q28776999"
+      },
+      "location_reason": null,
+      "website": "http://radawyspy.pl/",
+      "wikidata": "Q28776999",
+      "visit_minutes": {
+        "min": 120,
+        "max": 360,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": {
+        "page_url": "https://commons.wikimedia.org/wiki/File:Moja%20rybka%20NEMO%20na%20pla%C5%BCy%20-%20panoramio.jpg",
+        "author": "<a rel=\"nofollow\" class=\"external text\" href=\"https://web.archive.org/web/20161025234828/http://www.panoramio.com/user/6",
+        "license": "CC BY 3.0"
+      },
+      "claims": [
+        {
+          "claim_en": "Wild beaches and pines; escape from crowds",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "plaza-brzezno",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Plaża Brzeźno",
+      "kind": "beach",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Brzeźno",
+      "address": "Plaża Brzeźno, Zdrojowa, Osiedle Łozy, Brzeźno, Gdańsk, województwo pomorskie, 80-515",
+      "location": {
+        "lat": 54.4080869,
+        "lng": 18.6383794,
+        "precision": "area",
+        "source": "src-osm-node-11685726961"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 180,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Recommended coastal walk from Brzeźno towards Sopot",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "sopot-molo",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Molo w Sopocie",
+      "kind": "sight",
+      "food_style": null,
+      "city": "Sopot",
+      "district": "Śródmieście (Sopot)",
+      "address": null,
+      "location": {
+        "lat": 54.4475,
+        "lng": 18.575,
+        "precision": "building",
+        "source": "src-wd-Q3177824"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": "Q3177824",
+      "visit_minutes": {
+        "min": 45,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": {
+        "page_url": "https://commons.wikimedia.org/wiki/File:Muelle%20de%20Sopot%2C%20Polonia%2C%202013-05-22%2C%20DD%2021.jpg",
+        "author": "<bdi><a href=\"https://www.wikidata.org/wiki/Q28147777\" class=\"extiw\" title=\"d:Q28147777\"><span title=\"Spanish photograph",
+        "license": "CC BY-SA 3.0"
+      },
+      "claims": [
+        {
+          "claim_en": "Longest wooden pier in Europe",
+          "verdict": "confirmed",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "gdynia-skwer",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Skwer Kościuszki",
+      "kind": "park",
+      "food_style": null,
+      "city": "Gdynia",
+      "district": "Śródmieście (Gdynia)",
+      "address": "Skwer Kościuszki, Skwer Tadeusza Kościuszki, Śródmieście, Gdynia, województwo pomorskie, 81-370",
+      "location": {
+        "lat": 54.5191784,
+        "lng": 18.542658,
+        "precision": "area",
+        "source": "src-osm-node-11368962210"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "false",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Park by the water with ships; Gdynia Aquarium at the end",
+          "verdict": "confirmed",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "akwarium-gdynia",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Bałtycki Port Nowych Technologii",
+      "kind": "museum",
+      "food_style": null,
+      "city": "Gdynia",
+      "district": "Śródmieście (Gdynia)",
+      "address": "Bałtycki Port Nowych Technologii, 3, Czechosłowacka, Port, Śródmieście, Gdynia, województwo pomorskie, 81-336",
+      "location": {
+        "lat": 54.5331137,
+        "lng": 18.5169275,
+        "precision": "area",
+        "source": "src-osm-way-139634364"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "\"Nice aquarium\" per a Reddit review",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bar-syrena",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Bar mleczny Syrena",
+      "kind": "food",
+      "food_style": "milk-bar",
+      "city": "Gdańsk",
+      "district": "Wrzeszcz",
+      "address": "Bar mleczny Syrena, 71/73, Aleja Grunwaldzka, Wrzeszcz Górny, Gdańsk, województwo pomorskie, 80-241",
+      "location": {
+        "lat": 54.3778192,
+        "lng": 18.6091735,
+        "precision": "area",
+        "source": "src-osm-node-2465174574"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 60,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "\"I ate here often as a student\"",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bar-akademicki",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Bar Akademicki",
+      "kind": "food",
+      "food_style": "milk-bar",
+      "city": "Gdańsk",
+      "district": "Wrzeszcz",
+      "address": "Bar Akademicki, 35, Aleja Grunwaldzka, Wrzeszcz Górny, Gdańsk, województwo pomorskie, 80-241",
+      "location": {
+        "lat": 54.3764358,
+        "lng": 18.6133878,
+        "precision": "area",
+        "source": "src-osm-node-2672974414"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 60,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "stolowka-gdanska",
+      "status": "unclear",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Stołówka Gdańska",
+      "kind": "food",
+      "food_style": "milk-bar",
+      "city": "Gdańsk",
+      "district": "Długie Ogrody",
+      "address": "Stołówka Gdańska, 27, Długie Ogrody, Rudno, Długie Ogrody, Śródmieście, Gdańsk, województwo pomorskie, 80-754",
+      "location": {
+        "lat": 54.3481863,
+        "lng": 18.6657303,
+        "precision": "area",
+        "source": "src-osm-node-7170699520"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 60,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Queues happen but people say it is worth it",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bar-mleczny-jaros",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Bar Mleczny Jaros",
+      "kind": "food",
+      "food_style": "milk-bar",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Bar Mleczny Jaros, 38, Jagiellońska, Przymorze Wielkie, Gdańsk, województwo pomorskie, 80-367",
+      "location": {
+        "lat": 54.413096,
+        "lng": 18.5984638,
+        "precision": "area",
+        "source": "src-osm-node-6917442177"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 60,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Cheapest milk bar; only locals go there",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bar-mleczny-fala",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Bar Mleczny Fala",
+      "kind": "food",
+      "food_style": "milk-bar",
+      "city": "Gdańsk",
+      "district": null,
+      "address": null,
+      "location": null,
+      "location_reason": "Location not found in Wikidata/OSM by name after 3 passes (egress-approved sources); Google Maps coordinates not used per task rules.",
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 60,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "The most hidden and cheapest option of the series",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bar-neptun",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Neptun",
+      "kind": "food",
+      "food_style": "milk-bar",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Długa 33/34",
+      "location": {
+        "lat": 54.3487526,
+        "lng": 18.6516059,
+        "precision": "area",
+        "source": "src-osm-node-746496017"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 60,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "\"Worst milk bar in the city\" per a local reviewer — avoid",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "stary-mlyn",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Stary Młyn",
+      "kind": "food",
+      "food_style": "pierogi",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Św. Ducha 64",
+      "location": {
+        "lat": 54.3481691,
+        "lng": 18.6571211,
+        "precision": "area",
+        "source": "src-osm-node-13753089019"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Most frequent recommendation: huge, fresh pierogi",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "na-pierogi",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Pierogarnia \"Na Pierogi\"",
+      "kind": "food",
+      "food_style": "pierogi",
+      "city": "Gdańsk",
+      "district": "Jelitkowo (Żabianka)",
+      "address": "Pierogarnia \"Na Pierogi\", 47, Juliusza Słowackiego, Osiedle Piastowskie, Budki, Centrum, Piotrków Trybunalski, województwo łódzkie, 97-300",
+      "location": {
+        "lat": 51.4095876,
+        "lng": 19.6804035,
+        "precision": "area",
+        "source": "src-osm-node-6638571275"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "No tourists, only locals, and very tasty",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "kocham-pierogi",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Kocham Pierogi",
+      "kind": "food",
+      "food_style": "pierogi",
+      "city": "Gdańsk",
+      "district": "Wrzeszcz",
+      "address": "ul. Hynka",
+      "location": {
+        "lat": 54.3897681,
+        "lng": 18.5938294,
+        "precision": "area",
+        "source": "src-osm-node-6258079034"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "mandu",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Pierogarnia Mandu",
+      "kind": "food",
+      "food_style": "pierogi",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Elżbietańska 4/8",
+      "location": {
+        "lat": 54.353753,
+        "lng": 18.6467207,
+        "precision": "area",
+        "source": "src-osm-node-4298418310"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Formerly very good, now a tourist trap; only chorizo pierogi still good",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "pierogarnia-pruszcz",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Pierogarnia Pruszcz",
+      "kind": "food",
+      "food_style": "pierogi",
+      "city": "Pruszcz Gdański",
+      "district": null,
+      "address": "Pierogarnia Pruszcz, 26, Grunwaldzka, Osiedle na Wzgórzu, Śródmieście, Pruszcz Gdański, powiat gdański, województwo pomorskie, 83-000",
+      "location": {
+        "lat": 54.2540314,
+        "lng": 18.6325228,
+        "precision": "area",
+        "source": "src-osm-way-397227843"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Option outside the city, away from tourists",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "pyra-bar",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Pyra Bar",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Garbary 6/7",
+      "location": {
+        "lat": 54.3488797,
+        "lng": 18.6481227,
+        "precision": "area",
+        "source": "src-osm-node-2382716112"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Potato dishes; quick and filling; not every dish is equally good",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "ostro",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Ostro Pizza Napoletana",
+      "kind": "food",
+      "food_style": "pizza",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Długie Pobrzeże 15",
+      "location": {
+        "lat": 54.3496494,
+        "lng": 18.6568951,
+        "precision": "area",
+        "source": "src-osm-node-11016679871"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "\"One of the best pizzas of my life\" (Reddit)",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "calma",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Calma",
+      "kind": "food",
+      "food_style": "pizza",
+      "city": "Gdańsk",
+      "district": null,
+      "address": null,
+      "location": null,
+      "location_reason": "Location not found in Wikidata/OSM by name after 3 passes (egress-approved sources); Google Maps coordinates not used per task rules.",
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Same chef as Ostro, without the queues",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "publiczna",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Publiczna",
+      "kind": "food",
+      "food_style": "pizza",
+      "city": "Gdańsk",
+      "district": "Dolne Miasto",
+      "address": "Publiczna, 35/38, Łąkowa, Dolne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-769",
+      "location": {
+        "lat": 54.3416771,
+        "lng": 18.6608748,
+        "precision": "area",
+        "source": "src-osm-node-7704294303"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Pizza and specialty coffee ~15 min walk from the centre; same venue as Kawiarnia Publiczna",
+          "verdict": "confirmed",
+          "source": [
+            "src-osm-node/7704294303"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "surf-burger",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Surf Burger",
+      "kind": "food",
+      "food_style": "burger",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Garncarska 30",
+      "location": {
+        "lat": 54.3379305,
+        "lng": 18.6112644,
+        "precision": "area",
+        "source": "src-osm-node-3669806433"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 75,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Good, inexpensive burgers",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "burger-stacja",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Burger Stacja",
+      "kind": "food",
+      "food_style": "burger",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Burger Stacja, Franciszka Hynka, Zaspa-Młyniec, Gdańsk, województwo pomorskie, 80-465",
+      "location": {
+        "lat": 54.3895734,
+        "lng": 18.5936187,
+        "precision": "area",
+        "source": "src-osm-node-3592382462"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 75,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "holy-burger",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Holy Burger",
+      "kind": "food",
+      "food_style": "burger",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Holy Burger, Świętego Ducha, Osiek, Stare Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-836",
+      "location": {
+        "lat": 54.3513223,
+        "lng": 18.649789,
+        "precision": "area",
+        "source": "src-osm-node-4583024295"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 75,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "rybakowka",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Rybakówka",
+      "kind": "food",
+      "food_style": "fish",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Rybakówka, 7, Stągiewna, Wyspa Spichrzów, Śródmieście, Gdańsk, województwo pomorskie, 80-750",
+      "location": {
+        "lat": 54.3473989,
+        "lng": 18.6580918,
+        "precision": "area",
+        "source": "src-osm-node-1805967423"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Best fried fish in Trójmiasto",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "bar-pod-ryba",
+      "status": "open",
+      "status_sources": [
+        "src-osm-node/746496122"
+      ],
+      "name_local": "Pod Rybą",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Długi Targ 35/38B",
+      "location": {
+        "lat": 54.3483271,
+        "lng": 18.6545627,
+        "precision": "area",
+        "source": "src-osm-node-746496122"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Venue moved from the centre; reviewer could not vouch for quality",
+          "verdict": "refuted",
+          "source": [
+            "src-osm-node/746496122"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "moja-gruzja",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "moja gruzja",
+      "kind": "food",
+      "food_style": "world",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "moja gruzja, 3, Pilotów, Zaspa-Młyniec, Gdańsk, województwo pomorskie, 80-460",
+      "location": {
+        "lat": 54.3924725,
+        "lng": 18.5960729,
+        "precision": "area",
+        "source": "src-osm-node-12945236202"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Georgian food: khinkali, khachapuri",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "aichi",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "AiChi Gotuje",
+      "kind": "food",
+      "food_style": "world",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "AiChi Gotuje, 12/14, Świętego Ducha, Zamczysko, Główne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-834",
+      "location": {
+        "lat": 54.3509421,
+        "lng": 18.6504766,
+        "precision": "area",
+        "source": "src-osm-node-11637796499"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Korean food",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "pueblo",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Restauracja Pueblo",
+      "kind": "food",
+      "food_style": "world",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Restauracja Pueblo, 4, Kołodziejska, Stare Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-836",
+      "location": {
+        "lat": 54.350885,
+        "lng": 18.6495996,
+        "precision": "area",
+        "source": "src-osm-node-1777255611"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Mexican food",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "wegierski-langos",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Węgierski Lángos",
+      "kind": "food",
+      "food_style": "world",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Węgierski Lángos, 34, Wały Jagiellońskie, Grodzisko, Stare Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-853",
+      "location": {
+        "lat": 54.3528717,
+        "lng": 18.6463188,
+        "precision": "area",
+        "source": "src-osm-node-7169582844"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 20,
+        "max": 45,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Hungarian lángos",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "dym-i-ogien",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Riverside Dym i Ogień",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Gdańsk",
+      "district": null,
+      "address": null,
+      "location": null,
+      "location_reason": "Location not found in Wikidata/OSM by name after 3 passes (egress-approved sources); Google Maps coordinates not used per task rules.",
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Classic Polish restaurant food",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "nowy-browar",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Nowy Browar Gdański",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Nowy Browar Gdański, 7E, Jana Kilińskiego, Browar Gdański, Wrzeszcz Dolny, Gdańsk, województwo pomorskie, 80-452",
+      "location": {
+        "lat": 54.3832672,
+        "lng": 18.6077075,
+        "precision": "area",
+        "source": "src-osm-node-9132236793"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Brewery with food; beautiful venue",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "100cznia",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "100cznia",
+      "kind": "food-hall",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Oliwa",
+      "address": "100cznia, 5, Księdza Jerzego Popiełuszki, Drewnica, Młode Miasto, Młyniska, Gdańsk, województwo pomorskie, 80-863",
+      "location": {
+        "lat": 54.3643716,
+        "lng": 18.6452259,
+        "precision": "area",
+        "source": "src-osm-way-970616964"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Named unanimously (one of three food halls)",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "montownia",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Montownia Lofts & Experience",
+      "kind": "food-hall",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Montownia Lofts & Experience, 7, Lisia Grobla, Osiek, Stare Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-860",
+      "location": {
+        "lat": 54.35962,
+        "lng": 18.6541817,
+        "precision": "area",
+        "source": "src-osm-way-124814007"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "slony-spichlerz",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Słony Spichlerz",
+      "kind": "food-hall",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Słony Spichlerz, 10, Chmielna, Wyspa Spichrzów, Śródmieście, Gdańsk, województwo pomorskie, 80-748",
+      "location": {
+        "lat": 54.3490425,
+        "lng": 18.6577299,
+        "precision": "area",
+        "source": "src-osm-node-5818315164"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "lepione",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Lepione",
+      "kind": "food-hall",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Lepione, 141, Aleja Grunwaldzka, Strzyża Dolna, Wrzeszcz Górny, Gdańsk, województwo pomorskie, 80-264",
+      "location": {
+        "lat": 54.3828388,
+        "lng": 18.6006667,
+        "precision": "area",
+        "source": "src-osm-way-1553036064"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 75,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Discounts after 19:00 and 20:00; less choice the later you come",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "thali",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Thali",
+      "kind": "food",
+      "food_style": "world",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Thali, Aleja Grunwaldzka, Wrzeszcz Górny, Gdańsk, województwo pomorskie, 80-236",
+      "location": {
+        "lat": 54.3752906,
+        "lng": 18.6165424,
+        "precision": "area",
+        "source": "src-osm-node-5630818972"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Indian food; weekday lunch 12:00–15:00 is cheap",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "cafe-len",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Leń",
+      "kind": "cafe",
+      "food_style": "dessert",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Piwna 52/53",
+      "location": {
+        "lat": 54.3500891,
+        "lng": 18.6513744,
+        "precision": "area",
+        "source": "src-osm-node-746496020"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Great for morning coffee",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "kawiarnia-publiczna",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Publiczna",
+      "kind": "cafe",
+      "food_style": "dessert",
+      "city": "Gdańsk",
+      "district": "Dolne Miasto",
+      "address": "Publiczna, 35/38, Łąkowa, Dolne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-769",
+      "location": {
+        "lat": 54.3416771,
+        "lng": 18.6608748,
+        "precision": "area",
+        "source": "src-osm-node-7704294303"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Outstanding specialty coffee; same venue as Publiczna (pizza)",
+          "verdict": "confirmed",
+          "source": [
+            "src-osm-node/7704294303"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "umam-bakery",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Umam",
+      "kind": "food",
+      "food_style": "bakery",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Umam, 22, Generała Władysława Andersa, Jasień, Gdańsk, województwo pomorskie, 80-175",
+      "location": {
+        "lat": 54.3514619,
+        "lng": 18.5498751,
+        "precision": "area",
+        "source": "src-osm-node-9467969735"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 15,
+        "max": 45,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Named in the 'what not to miss' thread",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "eklerownia",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Eklerownia",
+      "kind": "cafe",
+      "food_style": "dessert",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Eklerownia, 52/53, Straganiarska, Zamczysko, Ołowianka, Śródmieście, Gdańsk, województwo pomorskie, 80-837",
+      "location": {
+        "lat": 54.3524556,
+        "lng": 18.6561169,
+        "precision": "area",
+        "source": "src-osm-node-10924192806"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 20,
+        "max": 45,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Tasty éclairs with coffee",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "no-to-cyk",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "No to Cyk",
+      "kind": "bar",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Chlebnicka 2",
+      "location": {
+        "lat": 54.348943,
+        "lng": 18.653713,
+        "precision": "area",
+        "source": "src-osm-node-2785644024"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Small and cheerful bar",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "laka-bar",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Łąka Bar",
+      "kind": "cafe",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Dolne Miasto",
+      "address": "Łąka Bar, 35/38, Łąkowa, Dolne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-769",
+      "location": {
+        "lat": 54.3412662,
+        "lng": 18.6611848,
+        "precision": "area",
+        "source": "src-osm-node-7704294301"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 45,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "All-day place; brunch highlight (Cuban eggs benedict), big portions for little money",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "sliwka-w-kompot",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Śliwka w kompot",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Gdańsk",
+      "district": null,
+      "address": "Śliwka w kompot, 10, Szafarnia, Wyspa Spichrzów, Śródmieście, Gdańsk, województwo pomorskie, 80-755",
+      "location": {
+        "lat": 54.3486965,
+        "lng": 18.6606774,
+        "precision": "area",
+        "source": "src-osm-node-14102561501"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Highlight of a solo trip in a monthly thread",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "winston",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Winston Bar",
+      "kind": "bar",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "ul. Długa 70/71",
+      "location": {
+        "lat": 54.3493904,
+        "lng": 18.6499338,
+        "precision": "area",
+        "source": "src-osm-node-10139242418"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 180,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Cocktail bar; second highlight of the same trip",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "restauracja-motlawa",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Restauracja Motława",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": null,
+      "location": null,
+      "location_reason": "Location not found in Wikidata/OSM by name after 3 passes (egress-approved sources); Google Maps coordinates not used per task rules.",
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "\"Excellent dinners\", third highlight of the trip",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "piwnica-rajcow",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Piwnica Rajców",
+      "kind": "bar",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Długi Targ 44",
+      "location": {
+        "lat": 54.3486621,
+        "lng": 18.6532605,
+        "precision": "area",
+        "source": "src-osm-node-1777255606"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Beer and duck pierogi; tasty",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "wisniewski",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Wiśniewski",
+      "kind": "bar",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Wiśniewski, Piwna, Zamczysko, Główne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-831",
+      "location": {
+        "lat": 54.3497453,
+        "lng": 18.6517427,
+        "precision": "area",
+        "source": "src-osm-node-5993913085"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 30,
+        "max": 90,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Cherry liqueur; wonderful local drink",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "pulapka",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Pułapka",
+      "kind": "bar",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "Pułapka, 20, Straganiarska, Zamczysko, Ołowianka, Śródmieście, Gdańsk, województwo pomorskie, 80-837",
+      "location": {
+        "lat": 54.352239,
+        "lng": 18.6562289,
+        "precision": "area",
+        "source": "src-osm-node-3039404766"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Beer bar; named (with Labeerynt) for live music",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "labeerynt",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "LAbeerYNT",
+      "kind": "bar",
+      "food_style": null,
+      "city": "Gdańsk",
+      "district": "Śródmieście",
+      "address": "LAbeerYNT, 97, Szeroka, Zamczysko, Główne Miasto, Śródmieście, Gdańsk, województwo pomorskie, 80-835",
+      "location": {
+        "lat": 54.3512131,
+        "lng": 18.6545028,
+        "precision": "area",
+        "source": "src-osm-node-5206798121"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 150,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "true",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "chata-nad-radunia",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Chata nad Radunią",
+      "kind": "food",
+      "food_style": "polish",
+      "city": "Bąkowo (gmina Kolbudy)",
+      "district": null,
+      "address": "Chata nad Radunią, Spacerowa, Jankowo Gdańskie, gmina Kolbudy, powiat gdański, województwo pomorskie, 83-050",
+      "location": {
+        "lat": 54.2772423,
+        "lng": 18.552221,
+        "precision": "area",
+        "source": "src-osm-way-280959018"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 90,
+        "max": 180,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Wonderful food and place; worth the trip",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "goscinec-dla-przyjaciol",
+      "status": "open",
+      "status_sources": [
+        "src-input"
+      ],
+      "name_local": "Gościniec dla przyjaciół",
+      "kind": "food",
+      "food_style": "fish",
+      "city": "Kleszczowo (gmina Przywidz)",
+      "district": null,
+      "address": "Gościniec dla przyjaciół, 1, Gdańska, Kleszczewo, gmina Trąbki Wielkie, powiat gdański, województwo pomorskie, 83-034",
+      "location": {
+        "lat": 54.19124,
+        "lng": 18.5226521,
+        "precision": "area",
+        "source": "src-osm-way-791931700"
+      },
+      "location_reason": null,
+      "website": null,
+      "wikidata": null,
+      "visit_minutes": {
+        "min": 60,
+        "max": 120,
+        "basis": "estimate",
+        "source": "src-input"
+      },
+      "indoor": "mixed",
+      "seasonal": null,
+      "price": null,
+      "transit": null,
+      "photo": null,
+      "claims": [
+        {
+          "claim_en": "Fish and small home-smoked sausages to buy",
+          "verdict": "unverified",
+          "source": [
+            "src-input"
+          ]
+        }
+      ],
+      "checked_at": "2026-11-16"
+    }
+  ],
+  "advice": [
+    {
+      "id": "jakdojade",
+      "group": "lifehacks",
+      "verdict": "confirmed",
+      "corrected_en": null,
+      "sources": [
+        "src-jakdojade",
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "skm",
+      "group": "lifehacks",
+      "verdict": "confirmed",
+      "corrected_en": "SKM is the main Tricity rail line (Gdańsk–Sopot–Gdynia); peak headways are roughly every 10–15 minutes — check the current timetable.",
+      "sources": [
+        "src-input",
+        "src-skm-official"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "punch",
+      "group": "lifehacks",
+      "verdict": "confirmed",
+      "corrected_en": "Paper single tickets must be validated immediately after boarding (fine 210 zł within 7 days, 300 zł later). NEW QR-code tickets must be SCANNED, not punched — this trips people up (ztm.gda.pl; trojmiasto.pl 2025).",
+      "sources": [
+        "src-ztm-oplaty",
+        "src-trojmiasto-qr"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "apps",
+      "group": "lifehacks",
+      "verdict": "confirmed",
+      "corrected_en": null,
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "station",
+      "group": "lifehacks",
+      "verdict": "partly",
+      "corrected_en": "Prefer Uber/Bolt or a licensed taxi rank near Dworzec Główny; systematic overpricing is anecdotal (local reports), not officially documented.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "free",
+      "group": "lifehacks",
+      "verdict": "partly",
+      "corrected_en": "Some museums have free-admission days, but days differ and many museums close on Mondays — always check the museum's official site; go early on free days.",
+      "sources": [
+        "src-input",
+        "src-ecs-bilety"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "lockers",
+      "group": "lifehacks",
+      "verdict": "unverified",
+      "corrected_en": "Museums generally provide cloakrooms/lockers, but 'free with refundable deposit' could not be confirmed per museum — check each museum's visitor rules.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "cash",
+      "group": "lifehacks",
+      "verdict": "partly",
+      "corrected_en": "City exchange offices (kantory) usually offer better rates than airport desks or paying by a foreign card; card acceptance in Poland is near-universal.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "ring",
+      "group": "lifehacks",
+      "verdict": "unverified",
+      "corrected_en": null,
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "ww2",
+      "group": "lifehacks",
+      "verdict": "partly",
+      "corrected_en": "Audio guide exists but costs 12 zł on top of the 33 zł ticket (muzeum1939.pl); allow most of a day; the 'kicked out at closing' report is anecdotal.",
+      "sources": [
+        "src-muzeum1939-bilety",
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "strip",
+      "group": "traps",
+      "verdict": "confirmed",
+      "corrected_en": "Multiple independent Reddit reports describe the same scam near Sopot (promoters with pink umbrellas).",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "drink",
+      "group": "traps",
+      "verdict": "confirmed",
+      "corrected_en": null,
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "station-dup",
+      "group": "traps",
+      "verdict": "partly",
+      "corrected_en": "Duplicate of lifehack 'station': prefer Uber/Bolt over taxis hailed at Dworzec Główny.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "illusion",
+      "group": "traps",
+      "verdict": "unverified",
+      "corrected_en": "Muzeum Iluzji Gdańsk called a tourist trap by one local reviewer — single subjective opinion.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "amber",
+      "group": "traps",
+      "verdict": "unverified",
+      "corrected_en": "AmberSky observation wheel called overpriced by one local reviewer; evening views during the Christmas market considered acceptable.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "beach",
+      "group": "traps",
+      "verdict": "confirmed",
+      "corrected_en": "Petty theft is rare in Gdańsk; standard caution still applies — do not leave belongings unattended on the beach.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    },
+    {
+      "id": "night",
+      "group": "traps",
+      "verdict": "confirmed",
+      "corrected_en": "Locals recommend walking Dolne Orunia and Nowy Port by day — about the environment, not crime; Nowy Port was called 'actually safe'.",
+      "sources": [
+        "src-input"
+      ],
+      "checked_at": "2026-11-16"
+    }
+  ]
+}
