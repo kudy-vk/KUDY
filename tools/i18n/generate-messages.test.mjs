@@ -1,4 +1,5 @@
-// G21.25 — the generator's own suite. Three planned deliverables of issue #558:
+// G21.25 — the generator's own suite. Three planned deliverables of G21.25
+// (2026-10-03-single-source-translations.md):
 // generator_reproducible (repeated generation is byte-identical and equals the
 // committed files), generated_catalogue_fresh (--check passes on the committed
 // tree and names every missing, edited or stale output, fail-closed on a
@@ -157,7 +158,7 @@ test('parseTemplate and escapeTemplate answer deterministically', () => {
 });
 
 test('escapeRepoBytes keeps committed catalogue bytes ASCII and the glyphs decodable', () => {
-  // G21.46 (issue #670, criterion 7). The input below is written as escapes
+  // G21.46 (G21.42-chinese-language.md — G21.46, criterion 7). The input below is written as escapes
   // too, so this file itself stays ASCII: it decodes to Han, CJK punctuation,
   // kana, a fullwidth letter and one Han character from each CJK extension
   // plane the pattern covers (U+20000 Extension B, U+30011 Extension G).

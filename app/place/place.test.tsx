@@ -298,7 +298,7 @@ describe("Place detail surface (G07.02)", () => {
     expect(audioPort.commands).toEqual([`play 1:${MOMENT_PATH}`]);
   });
 
-  // UX 01 (issue #347): the moment list scrolls — the fifth teaser renders
+  // UX 01: the moment list scrolls — the fifth teaser renders
   // inside the detail's ScrollView instead of being cut by the fold.
   // Removing the ScrollView drops the scroll testID and fails this
   // (implementation-rules 1).
@@ -314,7 +314,7 @@ describe("Place detail surface (G07.02)", () => {
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving catalog fetch holds the detail in
 // loading. Reverting the LoadingIndicator wiring in app/place/[id].tsx turns
 // this red (implementation-rules 1).

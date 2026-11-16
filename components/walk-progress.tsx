@@ -29,7 +29,7 @@ const PROGRESS_TIMING: WithTimingConfig = {
 };
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
-  // The canon strip exactly as UX 04 (issue #350) drew it: 6px accent fill
+  // The canon strip exactly as UX 04 (канон §9 — Чытэльнасць на вуліцы) drew it: 6px accent fill
   // on the line track with the muted 1px edge (≥3:1 on the card) — one home
   // for the strip's visuals now (implementation-rules 2).
   track: {

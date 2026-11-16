@@ -36,7 +36,7 @@ const reducedMotionStub = Reanimated.useReducedMotion as unknown as {
   mockReturnValue: (value: boolean) => void;
 };
 
-// UX 02 (issue #348): the frame's insets are pinned to the same fake the
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the frame's insets are pinned to the same fake the
 // safe-area guard uses — the panel's bottom padding assertions below read
 // spaceM + 34 against it.
 jest.mock("react-native-safe-area-context", () => ({
@@ -136,7 +136,7 @@ const STOPS_JSON = JSON.stringify([
   { story_id: "story-1", place_id: "place-1", voice_id: "voice-1", tier: "base", duration_s: 60, text: "т", transcript: "Транскрыпт мытні", sources: ["с"] },
   { story_id: "story-2", place_id: "place-2", voice_id: "voice-1", tier: "base", duration_s: 60, text: "т", transcript: "Транскрыпт порта", sources: ["с"] },
 ]);
-// G06.05 (issue #280, AC3): the extended layer's own story facts — the
+// G06.05 (16_delivery_backlog.md — G06.05, AC3): the extended layer's own story facts — the
 // transcript switch's second source (read only when the pin carries the
 // tier).
 const EXTENDED_STOPS_JSON = JSON.stringify([
@@ -307,8 +307,8 @@ describe("run map surface", () => {
     expect(textOf("run-status-stop-1")).toBe("Мытня — чакае");
     expect(textOf("run-status-stop-3")).toBe("Вежа — зачынена");
     expect(screen.UNSAFE_getAllByType(PointStatusSign).find((sign) => sign.props.testID === "run-marker-sign-stop-1")?.props.status).toBe("pending");
-    // The POI point is its own kind, not a stop marker. UX 05 (issue
-    // #351): the label goes through the run strings' kind dictionary —
+    // The POI point is its own kind, not a stop marker. UX 05 (
+    // the label goes through the run strings' kind dictionary —
     // «sight» renders its Belarusian word, a kind without an entry renders
     // no label and the raw value never shows. Reverting the screen to
     // `poi.kind` surfaces the raw "cafe" and fails the null query.
@@ -532,7 +532,7 @@ describe("run map surface", () => {
     expect(screen.queryByTestId("run-map")).toBeNull();
   });
 
-  // UX 02 (issue #348): the surface starts at status 'loading' and resolves
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the surface starts at status 'loading' and resolves
   // through the readiness port — a pending readiness holds the state, and
   // the frame's back must be there. Reverting the loading branch's
   // BackButton in app/run/[id].tsx turns this red (implementation-rules 1).
@@ -544,7 +544,7 @@ describe("run map surface", () => {
     // The loading branch itself, not the unavailable one: the honest
     // «Загрузка…» wording is on the screen while readiness stays pending.
     expect(await screen.findByText("Загрузка…")).toBeTruthy();
-    // UX 07 (issue #353): the loading row carries the shared spinner —
+    // UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading row carries the shared spinner —
     // reverting the LoadingIndicator wiring turns this red too.
     expect(await screen.findByTestId("loading-indicator")).toBeTruthy();
     expect(await screen.findByTestId("btn-run-back")).toBeTruthy();
@@ -556,11 +556,11 @@ describe("run map surface", () => {
 
     fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
-    // UX 02 (issue #348): the sheet's bottom padding keeps its content above
+    // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the sheet's bottom padding keeps its content above
     // the home-indicator area — the pinned bottom inset (34) on the base
     // spacing (AC4).
     expect(flatStyle(screen.getByTestId("run-panel-half")).paddingBottom).toBe(tokens.spaceM + 34);
-    // UX 02 (issue #348): the back's label lives in a <Text> — the #344 guard
+    // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back's label lives in a <Text> — the bare-string Pressable guard
     // (within().getByText() reaches only <Text> hosts, a reverted bare string
     // fails here).
     expect(within(screen.getByTestId("btn-run-back")).getByText("Назад")).toBeTruthy();
@@ -669,8 +669,7 @@ describe("run map surface", () => {
     await waitFor(() => expect(screen.queryByTestId("run-paused")).toBeNull());
 
     // One story heard (stop-2's automatic launch), then the finish — legal
-    // after one story, no route completion required (11 §4.3). UX 06 (issue
-    // #352): the destructive finish asks first, the confirmation ends it.
+    // after one story, no route completion required (11 §4.3). UX 06 (канон §5 — Дыялог і стужкі): the destructive finish asks first, the confirmation ends it.
     await soundStop2({ locationPort, advance });
     act(() => {
       audioPort.finish(1);
@@ -747,7 +746,7 @@ describe("run map surface", () => {
     expect(screen.getByTestId("run-unavailable-reason").props.children).toBe("Ужо ёсць жывая прагулка.");
   });
 
-  // UX 06 (issue #352) AC3: the destructive finish asks first; the decline
+  // UX 06 (канон §5 — Дыялог і стужкі) AC3: the destructive finish asks first; the decline
   // (and the system Back, the shell's onRequestClose) leaves the session
   // active and unchanged, the confirmation finishes as before. Reverting
   // btn-run-end to a direct run.end() fails the first half — the dialog
@@ -810,7 +809,7 @@ describe("run map surface", () => {
     ]);
   });
 
-  // UX 01 (issue #347): the Full panel's content scrolls — a long transcript
+  // UX 01: the Full panel's content scrolls — a long transcript
   // renders inside the panel's ScrollView; the family map stays a fixed flex
   // child, never a scroll surface (AC5). Removing the ScrollView drops the
   // scroll testID and fails this (implementation-rules 1).
@@ -855,7 +854,7 @@ describe("run map surface", () => {
     expect(screen.getByTestId("run-map").props.style).toEqual(expect.objectContaining({ flex: 1 }));
   });
 
-  // UX 04 (issue #350): the ODbL attribution is a real link that rides the
+  // UX 04 (канон §9 — Чытэльнасць на вуліцы): the ODbL attribution is a real link that rides the
   // peek bar — the bar's absolute positioning can no longer cover the
   // screen's bottom flow (AC3), and it announces itself as a link (AC4).
   // Reverting the attribution to the in-flow Text under the bar fails the
@@ -878,12 +877,12 @@ describe("run map surface", () => {
     expect(marker.width).toBe(120);
     expect(marker.minHeight).toBeGreaterThanOrEqual(48);
     expect(flatStyle(screen.getByTestId("run-status-stop-1")).fontSize).toBeGreaterThanOrEqual(12);
-    // UX 05 (issue #351): the POI label is the localized kind word, not the
+    // UX 05: the POI label is the localized kind word, not the
     // raw id — the 12dp floor applies to it the same way.
     expect(flatStyle(screen.getByText("Славутасць")).fontSize).toBeGreaterThanOrEqual(12);
   });
 
-  // UX 04 (issue #350, AC2): the canon strip — 6px accent on line with the
+  // UX 04 (канон §9 — Чытэльнасць на вуліцы, AC2): the canon strip — 6px accent on line with the
   // muted 1px edge that keeps the track identifiable on the card.
   test("UX 04: the progress strip keeps its canon height and a ≥3:1 edge on the card (AC2)", async () => {
     const { locationPort, advance } = await mountedRunBe();
@@ -895,13 +894,13 @@ describe("run map surface", () => {
   });
 });
 
-// G06.05 (issue #280) — accessibility and honest failure states: the denied
+// G06.05 (16_delivery_backlog.md — G06.05) — accessibility and honest failure states: the denied
 // GPS banner with its manual exit (11 §7), the failed-play announcement, the
 // restored walk's note with its lost tier, and the story-layer transcript
 // switch. Every assertion here is the reverted-line check of its fix
 // (implementation-rules 1): removing the banner, the label or the switch
 // turns its test red.
-describe("G06.05 accessibility and honest failures (issue #280)", () => {
+describe("G06.05 accessibility and honest failures", () => {
   // A world whose recovery read always answers with the live row — the
   // restart-recovery path (09 §9.1), the only one that can pin the extended
   // tier. The base layer's stop-1 carries the extended story id.
@@ -1120,14 +1119,14 @@ describe("G06.10.f live walk progress (issue #406)", () => {
   });
 });
 
-// Issue #524 — the unavailable and not-ready words follow the UI-locale
-// choice (the #305 store): without a ready session the fixed "be" fallback
+// The unavailable and not-ready words follow the UI-locale
+// choice (the G14.04.d store): without a ready session the fixed "be" fallback
 // kept «Сесія недаступная» on screen after choosing Українська or English.
 // The real store (createServices' uiLocale) drives every case; reverting the
 // `?? locale` fallbacks in app/run/[id].tsx turns the unavailable and
 // loading cases red while the pinned-locale case stays green
 // (implementation-rules 1).
-describe("Run unavailable words follow the UI-locale choice (issue #524)", () => {
+describe("Run unavailable words follow the UI-locale choice", () => {
   // The empty bundles store: readiness cannot pin the package, so the
   // surface answers unavailable with the package reason — a title plus a
   // reason line, all of it in the chosen locale.

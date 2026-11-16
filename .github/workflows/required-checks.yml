@@ -48,6 +48,10 @@ jobs:
       - name: install (web)
         run: npm ci
         working-directory: web
+      # #248: the browser tests inside npm test (the «Пра горад» map,
+      # test/about-map-browser.test.mjs) need Chromium; without it they skip.
+      - name: install lockfile-pinned Chromium
+        run: npx playwright install --with-deps chromium
       - name: tests
         run: npm test
   windows-portable:

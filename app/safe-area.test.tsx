@@ -1,4 +1,4 @@
-// UX 02 (issue #348) — the safe-area frame guard: with the native header
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the safe-area frame guard: with the native header
 // off, every screen's content starts below the status bar and the notch —
 // the top inset is the screen's own padding (AC4). The hook is pinned to a
 // known fake inset; each screen's root must add it on top of the base

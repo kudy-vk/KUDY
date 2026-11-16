@@ -112,7 +112,7 @@ test('guard: telemetry off; the websockets remote and the MCP server are never e
   );
 });
 
-test('guard: the device UI reads the single stories source — no second state list', () => {
+test('guard: the device UI reads the components stories — one state list per component', () => {
   const main = configLines(join('.rnstorybook', 'main.ts'));
   assert.match(main, /\.\.\/components\/\*\*\/\*\.stories\.tsx/, 'the glob must read the components stories');
   const found = [];
@@ -127,5 +127,17 @@ test('guard: the device UI reads the single stories source — no second state l
   for (const entry of readdirSync(root, { withFileTypes: true })) {
     if (entry.isDirectory() && !WALK_SKIP.has(entry.name)) walk(join(root, entry.name));
   }
-  assert.deepEqual(found, [join('components', 'guide-card.stories.tsx')]);
+  // Issue #215 generalizes the DQ-13 single source: the shared kit components
+  // each carry their own stories file, so the guard follows the intent —
+  // every state list lives under components/ and each component has exactly
+  // one (a unique components/… title, no duplicated or split state lists).
+  assert.ok(found.length > 0, 'the stories glob must register at least one file');
+  for (const file of found) {
+    assert.match(file, /^components[/\\]/, `a stories file outside components/ — no second state list: ${file}`);
+  }
+  const titles = found.map((file) => readFileSync(join(root, file), 'utf8').match(/title:\s*"([^"]+)"/)?.[1] ?? null);
+  for (const title of titles) {
+    assert.ok(title && title.startsWith('components/'), `a stories file without a components/… title: ${title}`);
+  }
+  assert.deepEqual(new Set(titles).size, titles.length, `a component with two state lists: ${titles.join(', ')}`);
 });

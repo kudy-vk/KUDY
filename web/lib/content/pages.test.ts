@@ -140,7 +140,7 @@ test('defined rejections fail the site build instead of rendering empty pages', 
 
 test('the be, en and uk string files keep the same key set (09 §8: UI localization from the first page; G14.04.d adds uk)', () => {
   assert.deepEqual(Object.keys(be).sort(), Object.keys(en).sort());
-  // G14.04.d (issue #305): the third file rides the same key set — a key
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the third file rides the same key set — a key
   // added to be/en only fails here (implementation-rules 1).
   assert.deepEqual(Object.keys(be).sort(), Object.keys(uk).sort());
 });

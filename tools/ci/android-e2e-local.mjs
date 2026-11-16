@@ -161,6 +161,16 @@ export function scopeOutcome(stdout) {
 export const summaryLine = ({ ok, suite, sha }) =>
   ok ? `Android E2E: passed on ${sha}` : `Android E2E: failed (${suite}) on ${sha}`;
 
+// The build step's verdict from android-build.mjs's exit code and the APK:
+// 87 means the wrapper never started on this host — NOT-VERIFIED with a
+// reason, never a pass and never "failed (build)" [#211]; any other miss is
+// a real build failure.
+export function buildStepVerdict(exitCode, apkExists) {
+  if (exitCode === 87) return { kind: 'not-verified', reason: 'the Gradle wrapper did not start on this host' };
+  if (exitCode === 0 && apkExists) return { kind: 'ok' };
+  return { kind: 'failed' };
+}
+
 // ---------- child process plumbing ----------
 
 const childEnv = (layout, baseEnv) => {
@@ -451,11 +461,18 @@ async function main() {
     return EXIT.fail;
   }
   log({ step: 'prebuild', exitCode: 0 });
+  const buildLog = path.join(layout.logs, `build-${runStamp}.log`);
   const build = await runCommand(process.execPath, [path.join(layout.checkout, 'tools', 'android-build', 'android-build.mjs'),
     'build', '--build-root', layout.buildRoot, '--sdk', layout.sdk, '--jdk', layout.jdk],
-  { cwd: layout.checkout, env, logFile: path.join(layout.logs, `build-${runStamp}.log`) });
+  { cwd: layout.checkout, env, logFile: buildLog });
   const apkPath = path.join(layout.checkout, 'android', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk');
-  if (build.code !== 0 || !fs.existsSync(apkPath)) {
+  const buildVerdict = buildStepVerdict(build.code, fs.existsSync(apkPath));
+  if (buildVerdict.kind === 'not-verified') {
+    log({ step: 'build', exitCode: build.code, verdict: buildVerdict });
+    console.log(notVerifiedLine(`${buildVerdict.reason}; build log: ${buildLog}`));
+    return EXIT.notVerified;
+  }
+  if (buildVerdict.kind !== 'ok') {
     log({ step: 'build', exitCode: build.code, apk: false });
     console.log(summaryLine({ ok: false, suite: 'build', sha }));
     return EXIT.fail;

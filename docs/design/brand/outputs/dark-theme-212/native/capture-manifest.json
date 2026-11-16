@@ -1,0 +1,45 @@
+{
+  "task": "kudy-vk/KUDY#212",
+  "capturedAt": "2026-11-12T16:49+03:00..2026-11-12T16:58+03:00",
+  "device": {
+    "serial": "emulator-5554",
+    "avd": "kudy-ci",
+    "profile": "pixel_5",
+    "systemImage": "system-images;android-35;google_apis;x86_64",
+    "screenPx": "1080x2340",
+    "host": "Windows 10.0.26200, D:\\KUDY-Android"
+  },
+  "apk": {
+    "sha256": "F582C473D7593AD04D1AE61A5A6EE64582C79D07C36090D80C7FFEFC45F4C476",
+    "note": "аднолькавы APK для абодвух станаў: JS-бандл падаецца Metro, у APK не ўбудоўваецца"
+  },
+  "capture": {
+    "method": "adb exec-out screencap -p, PNG, без маштабавання",
+    "theme": "dark (adb shell cmd uimode night yes)",
+    "fontScale": 1.0,
+    "locale": "сістэмная не зададзеная; дадатак малюе be па змаўчанні"
+  },
+  "states": {
+    "after": {
+      "jsCheckout": "e3aef498640d11f2f26ce88a025c5ca8b7751252 (head PR #245)",
+      "bundleMarkers": { "newPaper2a1510": true, "oldPaper171d1c": false }
+    },
+    "before": {
+      "jsCheckout": "6e2c93d5bc97dfbdd4ce6c807cb2401fa3588481 (база PR #245)",
+      "bundleMarkers": { "oldPaper171d1c": true, "newPaper2a1510": false }
+    }
+  },
+  "files": [
+    "native-after-menu.png",
+    "native-after-explore.png",
+    "native-after-map.png",
+    "native-before-menu.png",
+    "native-before-explore.png",
+    "native-before-map.png"
+  ],
+  "limitations": [
+    "картаграфія ў цёмнай тэме без тайлаў па дызайне (рашэнне пра тайлы — #213); экран map паказваў «Карта горада зʼявіцца пасля рашэння пра тайлы»",
+    "застава не знятая: кароткі таймінг халоднага старту",
+    "экраны explore і map у фазе A (каталог недаступны) — сумленны недаступны стан без origin-фікстуры"
+  ]
+}

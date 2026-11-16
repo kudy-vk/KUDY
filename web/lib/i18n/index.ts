@@ -1,8 +1,8 @@
 // UI strings for the web channel. The string files are generated projections
 // of contracts/ui-messages/source.json (tools/i18n/generate-messages.mjs,
 // G21.25): be and en from the first page (09 §8: «ніводнага зашытага радка
-// нідзе»), uk beside them (G14.04.d, issue #305), de/es/fr/cs/sv
-// (G21.10–G21.14, issues #544–#548) and zh (G21.46, issue #670). The typed
+// нідзе»), uk beside them (G14.04.d — 16_delivery_backlog.md), de/es/fr/cs/sv
+// (G21.10–G21.14 — 2026-10-03-single-source-translations.md) and zh (G21.46 — G21.42-chinese-language.md). The typed
 // UiStrings interface plus the parity test keep the files at the same key set
 // at all times.
 import { be } from './be.ts';
@@ -37,11 +37,11 @@ export { uiLocaleNativeName };
 // text renders the localized empty/unavailable states instead of content
 // fallback. be is the default at the root, every other locale is a URL
 // prefix — the one list the QR builder, the language switch and the route
-// tree derive from. zh joins the catalogue set with G21.46 (#670) and still
+// tree derive from. zh joins the catalogue set with G21.46 (G21.42-chinese-language.md) and still
 // stays out of the route set until the release flag opens it (G21.50).
 export type UiLocale = 'be' | 'en' | 'uk' | 'de' | 'es' | 'fr' | 'cs' | 'sv' | 'zh';
 
-// G21.50 (issue #711): the route set is the OPEN subset — the resolver turns
+// G21.50 (G21.42-chinese-language.md — G21.50): the route set is the OPEN subset — the resolver turns
 // the release flag input into the advertised list, so a registered-but-closed
 // code never becomes a URL prefix, a sitemap path, an hreflang entry or an
 // exported `html lang`. The parity guard below keeps this a subset of the

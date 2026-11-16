@@ -154,7 +154,7 @@ module.exports = {
       },
       to: { path: '^services/', dependencyTypesNot: ['type-only'] },
     },
-    // components/ is the shared UI-support zone (issue #339): the design
+    // components/ is the shared UI-support zone (docs/architecture/19_class_and_module_map.md): the design
     // tokens and the cross-surface view atoms live outside app/ because
     // expo-router treats every app/ file as a route. Screens pass state in —
     // the zone takes no runtime imports from the other zones; type-only
@@ -163,7 +163,7 @@ module.exports = {
     {
       name: 'components-zone-closed',
       comment:
-        'components/ must not import app/, controllers/ (except type-only), services/, core/, web/, tools/, spikes/ (issue #339)',
+        'components/ must not import app/, controllers/ (except type-only), services/, core/, web/, tools/, spikes/ (the components zone — docs/architecture/19_class_and_module_map.md)',
       severity: 'error',
       from: { path: '^components/' },
       to: { path: '^(app|controllers|services|core|web|tools|spikes)/', dependencyTypesNot: ['type-only'] },

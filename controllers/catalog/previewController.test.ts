@@ -419,7 +419,7 @@ describe('asSourceSurface', () => {
   });
 });
 
-// G06.05 (issue #280, AC4): a non-complete activation is a named failure —
+// G06.05 (16_delivery_backlog.md — G06.05, AC4): a non-complete activation is a named failure —
 // insufficient-space carries the storage exit, hash-mismatch names the
 // damaged package, a cancelled run is not a failure at all. The button's
 // own flip still follows the inventory facts, never the result (the Proof).

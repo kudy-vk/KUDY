@@ -6,7 +6,7 @@
 // source the rule covers — preview's reason map plus the download-failure
 // banner, run's reasonText, place's refusalText plus the play-failure line
 // and hint (issue #445); the My history line rides
-// the same rule in components/ui-strings.test.tsx. G14.04.d (issue #305)
+// the same rule in components/ui-strings.test.tsx. G14.04.d (16_delivery_backlog.md — G14.04.d)
 // extends the loop to uk — the capital class carries the Ukrainian І/Ї/Є/Ґ.
 // Reverting any value to the old lowercase or period-less wording fails here
 // (implementation-rules 1).

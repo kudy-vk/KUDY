@@ -141,7 +141,7 @@ table.mtx td code{font-family:ui-monospace,monospace;font-size:11px}
      <span class="btn primary focus">Прагулка</span>
      <span class="btn ghost-primary" aria-disabled="true">Загрузіць</span>
     </div>
-    <p class="note">Полка 4px <code>color.shelf.accent</code>; націск — прыцемненне ≥10% (<code>opacity .9</code>) + пагружэнне 2px, полка трымае ніжнюю мяжу. Выключаная — ghost-пара <code>disabled-ink/-line</code>, празрысты фон, <b>без полкі</b> (рашэнне #430, варыянт А).</p>
+    <p class="note">Полка 4px <code>color.shelf.accent</code>; націск — прыцемненне ≥10% (<code>opacity .9</code>) + пагружэнне 2px, полка трымае ніжнюю мяжу. Выключаная — ghost-пара <code>disabled-ink/-line</code>, празрысты фон, <b>без полкі</b> (рашэнне ўладара 2026-10-03, варыянт А).</p>
     <p class="ann"><b>Копія/a11y:</b> «Прагулка» <code>native.chrome.walk</code>; «Загрузіць» <code>native.preview.label.download</code>; <code>accessibilityRole="button"</code>, <code>accessibilityState.disabled</code>, прычына побач (<code>11 §7</code>). <b>Дзе:</b> components/walk-button.tsx:37, app/route/[id].tsx:524.</p>
    </div>
    <div class="cell"><h3>Контурныя і ціхія</h3>
@@ -233,7 +233,7 @@ table.mtx td code{font-family:ui-monospace,monospace;font-size:11px}
      <span class="mk"><span class="person"></span><i>кропка пазіцыі 18px,<br><code>color.person</code>, без станаў</i></span>
      <span class="mk"><span class="poi"></span><i>POI 14px, <code>badge-mixed</code>+<code>muted</code> — паза канонам §5 (H7)</i></span>
     </div>
-    <p class="note">Стан чытаецца не толькі колерам: літара ўнутры (канон) + «{назва} — {стан}» пад кропкай + <code>aria-label</code> «{назва}, {стан}» + падказка «Прагляд кропкі. Аўдыё не запускаецца.» Тап — прэв'ю, ніколі не гук. Кантраст залівак на <code>map</code>/<code>street</code> ≥3:1 — пары канона. Меткі 12px чытэльныя (UX 04 #350).</p>
+    <p class="note">Стан чытаецца не толькі колерам: літара ўнутры (канон) + «{назва} — {стан}» пад кропкай + <code>aria-label</code> «{назва}, {стан}» + падказка «Прагляд кропкі. Аўдыё не запускаецца.» Тап — прэв'ю, ніколі не гук. Кантраст залівак на <code>map</code>/<code>street</code> ≥3:1 — пары канона. Меткі 12px чытэльныя (UX 04 — канон §9, Чытэльнасць на вуліцы).</p>
     <p class="ann"><b>Копія/a11y:</b> <code>native.run.status.locked/playing/played/available/pending</code> = «зачынена/гучыць/праслухана/даступна/чакае»; «Прагляд кропкі…» <code>native.run.markerHint</code>; POI «Славутасць» <code>native.run.poiKind.sight</code>. Вектарны экспарт — <a href="markers.svg">markers.svg</a>. <b>Дзе:</b> app/run/[id].tsx:699, канон §5 «Маркеры».</p>
    </div>
    <div class="cell" style="grid-column:1/-1"><h3>Схема кропак на фоне мапы</h3>
@@ -281,7 +281,7 @@ table.mtx td code{font-family:ui-monospace,monospace;font-size:11px}
  </section>
 
  <section id="s5">
-  <h2>5. Дыялог <small>UX 06 #352: сапраўдны Modal; анімацыя none — reduced-motion без пункту адключэння</small></h2>
+  <h2>5. Дыялог <small>UX 06 (канон §5 — Дыялог і стужкі): сапраўдны Modal; анімацыя none — reduced-motion без пункту адключэння</small></h2>
   <div class="grid">
    <div class="cell"><h3>Пацвярджэнне завяршэння</h3>
     <div class="stage" style="position:relative;min-height:190px;background:#22262b66">

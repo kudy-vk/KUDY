@@ -31,6 +31,7 @@ import { PressableSurface } from "../components/pressable-surface";
 import { ScaledText } from "../components/scaled-text";
 import { useScreenStyles } from "../components/screen-styles";
 import { uiStrings } from "../components/ui-strings";
+import { ScreenSurface } from "../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   hint: {
@@ -150,7 +151,7 @@ export default function FeedbackForm() {
     locale?: string;
   }>();
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place. The rated target's content locale is
   // a different fact (the facts line) and never follows this switch.
   const uiLocale = useUiLocale();
@@ -184,7 +185,7 @@ export default function FeedbackForm() {
   const insets = useSafeAreaInsets();
   const open = feedback !== null && target !== null && form.kind === "open" ? form : null;
   return (
-    <View style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Feedback">
+    <ScreenSurface style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Feedback">
       <BackButton label={chrome.back} testID="btn-feedback-back" />
       {feedback === null ? (
         <ScaledText style={styles.hint} testID="feedback-unavailable">
@@ -324,6 +325,6 @@ export default function FeedbackForm() {
           ) : null}
         </ScrollView>
       )}
-    </View>
+    </ScreenSurface>
   );
 }

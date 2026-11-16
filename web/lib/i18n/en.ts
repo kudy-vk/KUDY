@@ -3,10 +3,10 @@
 //
 // Source of truth: contracts/ui-messages/source.json (the be base text) and
 // contracts/ui-messages/translations/<locale>.json (the reviewed translations).
-// G21.25 (issue #558): the catalogues are generated projections — edit the
+// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the web channel's UI words (09 §8: «ніводнага зашытага радка нідзе»; G14.04.d #305)
+// the web channel's UI words (09 §8: «ніводнага зашытага радка нідзе»; G14.04.d — 16_delivery_backlog.md)
 
 
 export const en = {

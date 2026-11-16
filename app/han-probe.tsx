@@ -150,7 +150,7 @@ export default function HanProbe() {
 // before any hook call so the release build never mounts the surface (the
 // rules-of-hooks order — a hook after an early return is a lint error).
 function HanProbeSurface() {
-  // UX 02 (issue #348) idiom: the frame's insets on the root style — at 200%
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) idiom: the frame's insets on the root style — at 200%
   // font scale the first row would climb under the status bar and the last
   // row would sink behind the gesture bar without them (observed in the
   // first device pass, fixed here before the recorded runs).

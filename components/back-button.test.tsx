@@ -1,8 +1,8 @@
-// UX 02 (issue #348) — the shared back element's own contract: the label is
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the shared back element's own contract: the label is
 // hosted by a <Text> (within().getByText() reaches only <Text> hosts — a
-// reverted bare string in Pressable fails here, the #344 guard mechanism),
+// reverted bare string in Pressable fails here, the bare-string-Pressable guard mechanism),
 // the touch target is ≥44×44dp (AC2) and a screen-provided onPress wins over
-// the default router.back. G06.10 (issue #432): the one back image is the
+// the default router.back. G06.10 (results G25.04.md — іконкавы слой): the one back image is the
 // Lucide arrow rendered through the icon layer beside the word — a dropped
 // glyph or a recolored one turns the arrow guard red. The navigation
 // behaviour itself is covered by the screen suites (app/back-navigation.test.tsx).
@@ -21,7 +21,7 @@ test("the back label is hosted by a <Text>, the Pressable carries the a11y wirin
   expect(back.props.accessibilityLabel).toBe("Назад");
 });
 
-test("the one back image is the Lucide arrow beside the word (issue #432)", () => {
+test("the one back image is the Lucide arrow beside the word (results G25.04.md — іконкавы слой)", () => {
   renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
   const back = screen.getByTestId("btn-test-back");
   // The glyph rides the deep per-glyph import (the class name pins the

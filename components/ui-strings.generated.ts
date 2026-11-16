@@ -3,10 +3,10 @@
 //
 // Source of truth: contracts/ui-messages/source.json (the be base text) and
 // contracts/ui-messages/translations/<locale>.json (the reviewed translations).
-// G21.25 (issue #558): the catalogues are generated projections — edit the
+// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the shared UI chrome words (G06.05 #280; G14.04.d #305; G06.10 #432, #403; UX 05 #351; G15.03 #70)
+// the shared UI chrome words (G06.05 — 16_delivery_backlog.md; G14.04.d — 16_delivery_backlog.md; G06.10 — results G25.04.md (іконкавы слой) + docs/agent-tasks/app/G06.10.md; UX 05; G15.03 #70)
 
 import { completeUiLocaleSelfNames, type CompleteUiLocaleCode } from "../contracts/ui-locales.ts";
 import type { UiStrings } from "../contracts/ui-message-types.ts";
@@ -14,6 +14,7 @@ import type { UiStrings } from "../contracts/ui-message-types.ts";
 export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   "be": {
     "comingSoon": "Хутка",
+    "aboutCity": "Пра горад",
     "access": {
       "free": "Бясплатна",
       "mixed": "Змешана",
@@ -101,9 +102,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Папярэдні валідны кэш",
     "walk": "Прагулка",
     "whatToDo": "Чым заняцца →",
+    "cityName": "Гданьск",
+    "whereToToday": "Куды сёння?",
   },
   "en": {
     "comingSoon": "Coming soon",
+    "aboutCity": "About the city",
     "access": {
       "free": "Free",
       "mixed": "Mixed",
@@ -191,9 +195,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Previous valid cache",
     "walk": "Walk",
     "whatToDo": "What to do →",
+    "cityName": "Gdańsk",
+    "whereToToday": "Where to today?",
   },
   "uk": {
     "comingSoon": "Скоро",
+    "aboutCity": "Про місто",
     "access": {
       "free": "Безкоштовно",
       "mixed": "Змішано",
@@ -281,9 +288,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Попередній валідний кеш",
     "walk": "Прогулянка",
     "whatToDo": "Чим зайнятися →",
+    "cityName": "Гданськ",
+    "whereToToday": "Куди сьогодні?",
   },
   "de": {
     "comingSoon": "Bald",
+    "aboutCity": "Über die Stadt",
     "access": {
       "free": "Kostenlos",
       "mixed": "Gemischt",
@@ -371,9 +381,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Vorheriger gültiger Cache",
     "walk": "Rundgang",
     "whatToDo": "Was unternehmen →",
+    "cityName": "Danzig",
+    "whereToToday": "Wohin heute?",
   },
   "es": {
     "comingSoon": "Pronto",
+    "aboutCity": "Sobre la ciudad",
     "access": {
       "free": "Gratis",
       "mixed": "Mixto",
@@ -461,9 +474,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Caché válida anterior",
     "walk": "Recorrido",
     "whatToDo": "Qué hacer →",
+    "cityName": "Gdansk",
+    "whereToToday": "¿Adónde hoy?",
   },
   "fr": {
     "comingSoon": "Bientôt",
+    "aboutCity": "À propos de la ville",
     "access": {
       "free": "Gratuit",
       "mixed": "Mixte",
@@ -551,9 +567,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Cache valide précédent",
     "walk": "Visite",
     "whatToDo": "Que faire →",
+    "cityName": "Gdańsk",
+    "whereToToday": "Où aller aujourd’hui ?",
   },
   "cs": {
     "comingSoon": "Brzy",
+    "aboutCity": "O městě",
     "access": {
       "free": "Zdarma",
       "mixed": "Smíšené",
@@ -641,9 +660,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Předchozí platná mezipaměť",
     "walk": "Procházka",
     "whatToDo": "Co dělat →",
+    "cityName": "Gdaňsk",
+    "whereToToday": "Kam dnes?",
   },
   "sv": {
     "comingSoon": "Kommer snart",
+    "aboutCity": "Om staden",
     "access": {
       "free": "Gratis",
       "mixed": "Blandat",
@@ -731,9 +753,12 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "Tidigare giltig cache",
     "walk": "Promenad",
     "whatToDo": "Att göra →",
+    "cityName": "Gdańsk",
+    "whereToToday": "Vart i dag?",
   },
   "zh": {
     "comingSoon": "\u5373\u5C06\u63A8\u51FA",
+    "aboutCity": "\u57CE\u5E02\u6307\u5357",
     "access": {
       "free": "\u514D\u8D39",
       "mixed": "\u90E8\u5206\u514D\u8D39",
@@ -821,5 +846,7 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "validCache": "\u4E0A\u6B21\u6709\u6548\u7F13\u5B58",
     "walk": "\u6563\u6B65",
     "whatToDo": "\u73A9\u4EC0\u4E48 →",
+    "cityName": "\u683C\u4F46\u65AF\u514B",
+    "whereToToday": "\u4ECA\u5929\u53BB\u54EA\u513F\uFF1F",
   },
 };

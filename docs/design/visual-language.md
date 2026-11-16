@@ -42,7 +42,8 @@ production-экранаў G06.01+ і для прататыпа G06.08: асоб�
 цяменшае нацяжэнне існуючых колераў, не новыя брэнд-колеры:
 `color.shelf.accent` выводзіцца з `color.accent`, `color.shelf.line` — з
 `color.line` адным правілам: тон і насычанасць HSL трымаюцца, светлата
-менш на 7 працэнтных пунктаў. Полка — дэкаратыўны пласт пад кнопкай:
+менш на 7 працэнтных пунктаў у светлай тэме; цёмная M3 выкарыстоўвае
+дакладныя значэнні прынятай палітры. Полка — дэкаратыўны пласт пад кнопкай:
 тэкст на ёй не жыве, таму кантрастнай пары для паліў канон не задае
 (правіла §10 пра пары для новых колераў тут не ўжываецца дакладна з
 гэтай прычыны); тэкставая пара `accent-ink`/`accent` застаецца
@@ -50,26 +51,30 @@ production-экранаў G06.01+ і для прататыпа G06.08: асоб�
 
 Зярно паперы (`texture.paper-grain`) — згенераваны тайлавы асет
 непразрыстасцю 4–5% паверх `color.paper`; сам тайл не падмяняе токен
-паперы. У цёмнай тэме зярно светлае на цёмным фоне. Дазволенае месца — фон
+паперы. У цёмнай тэме M3 зярно мае тон `color.muted` і непразрыстасць 4%:
+гэта захоўвае кантраст неактыўнай рамкі на самым светлым участку градыенту. Дазволенае месца — фон
 спакойных экранаў Explore і My KUDY. Забароненыя месцы: панэль Run,
 мапа і ўсякае размяшчэнне пад шчыльным тэкстам (спісы, табліцы,
 доўгія апісанні). Поўны спіс дазволенага і забароненага — у машынным
 блоку (`paperGrain`).
 
-### Цёмная тэма MVP — рашэнне ўладальніка 2026-10-27
+### Цёмная тэма MVP — M3, пацверджана 2026-11-11
 
-Уладальнік [прыняў цёмную палітру і кантрастныя пары](#860)
-са [спецыфікацыі](dark-theme.md) §4–5. Светлыя значэнні застаюцца ў `tokens`,
+Уладальнік [пацвердзіў палітру M3](https://github.com/kudy-vk/KUDY/issues/212)
+2026-11-11 пасля параўнання ў чаце. Яна замяняе значэнні DT-2;
+[спецыфікацыя](dark-theme.md) §4–5 утрымлівае актуальныя пары.
+Фон цёмных экранаў — радыяльны градыент `darkTheme.backgroundGradient`.
+Светлыя значэнні застаюцца ў `tokens`,
 цёмныя — у `darkTheme.tokens` машыннага блока ніжэй. Уся зона картаграфіі
 (`darkTheme.lightCartographyTokens`) застаецца светлай у абедзвюх тэмах;
 гліф маркера выкарыстоўвае светлае `color.accent-ink`. Пары
 `contrastPairs` правяраюцца ў абедзвюх тэмах, з гэтым выключэннем для мапы.
 Змена тэмы не змяняе кантэнтныя выявы і не перазапускае Run, GPS або аўдыё.
 
-Уладальнік тым жа рашэннем пакінуў светлую брэндавую заставу ў MVP нават
+Рашэнне DT-6 ад 2026-10-27 пакідае светлую брэндавую заставу ў MVP нават
 пры цёмнай тэме (`darkTheme.splash = light`). Гэта свядомае абмежаванне,
 не падстава перафарбоўваць прыняты асет #429. Runtime-рэалізацыя і
-прыладавая прыёмка належаць #436; ручны выбар — #798.
+прыладавая прыёмка належаць 436 (архіўны рэпе); ручны выбар — #798.
 
 ## 3. Шрыфты і правы на выкарыстанне
 
@@ -103,7 +108,9 @@ production-экранаў G06.01+ і для прататыпа G06.08: асоб�
   выпушчана Paratype; афіцыйная крыніца —
   https://github.com/googlefonts/golos-text, тэкст ліцэнзіі — OFL.txt
   у тым жа рэпазітары.
-- **Alegreya** — дыплей-серыф, толькі назвы гідаў і гісторый.
+- **Alegreya** — дыплей-серыф: назвы гідаў і гісторый (§3 да M11) і, паводле
+  рашэння M11 (2026-11-12), загаловак «Куды сёння?» галоўнага экрана
+  (рэгулярнае начарканне 400).
   Ліцэнзія OFL 1.1, убудоўванне дазволенае. Аўтар Juan Pablo del
   Peral (Huerta Tipográfica); афіцыйная крыніца —
   https://github.com/huertatipografica/Alegreya, тэкст ліцэнзіі —
@@ -191,7 +198,7 @@ KUDY самім заснавальнікам — майстры згенерав
   празрысты — пара ≥ 4.5:1 (тэкст) і ≥ 3:1 (межа) на падкладцы (папера ці
   белая картка) па WCAG 1.4.3/1.4.11, без полкі і без празрыстасці-падмены;
   прычына недаступнасці заўсёды пазначаная побач (`11` §7). Рашэнне ўладара
-  2026-10-03 (issue #430): голае `opacity 0.5` давала ≈2:1 — амаль нябачны
+  2026-10-03: голае `opacity 0.5` давала ≈2:1 — амаль нябачны
   стан.
 - Фокус: outline 3px `color.accent` з змяшчэннем 1px — аднолькавы для ўсіх
   інтэрактыўных элементаў (кнопкі, чыпы, маркеры, кнопкі шкалы).
@@ -218,6 +225,31 @@ Peek/Half/Full (09 §6.5, `11` §3.2). Peek-бар: радок now-playing (ул
 (`accessibilityLabel` у дадатку, `aria-label` і `title` у вэб-маркеры).
 Тап па маркеры адкрывае прэв'ю, ніколі не гук. Кропка пазіцыі —
 `color.person`, без сувязі са станамі кропак.
+
+### Ілюстраваная карта Труймяста («Пра горад»)
+
+Паводле [рашэнняў M12 і M13](brand/decisions.md#m12). Падкладка — адзін
+мясцовы малюнак карты, светлы ў абедзвюх тэмах (DT-4); усё, што націскаецца,
+малюецца паверх яго з геаграфічных каардынат. Макет:
+[about.html](production/about.html), агульныя часткі —
+[kit-map.mjs і kit-geo.mjs](production/README.md).
+
+- **Зоны** — свабодныя формы з плаўным і крыху няроўным краем, не квадраты і
+  не авалы. «Месцы для наведвання» — `color.map.zone.visit`, «Зручна
+  спыніцца» — `color.map.zone.stay`, абедзве напаўпразрыстыя; выбраная зона —
+  `color.map.zone.picked`, без абводкі. Зона чытаецца не толькі па колеры:
+  назва віду стаіць у перамыкачы слаёў, у картцы і ў спісе зон.
+- **Лініі** — SKM `color.map.line.skm`, PKM `color.map.line.pkm`, будучая
+  лінія — пункцір `color.map.line.plan`; пад лініяй белая падкладка.
+  Станцыя — белы кружок з контурам колеру лініі, перасадка — двайны кружок.
+- **Назвы** на карце — Golos 600 з белым ахоўным контурам, растуць да
+  `font.big-text-factor`. На ўсёй карце бачныя толькі назвы на малюнку;
+  назвы галоўных станцый з'яўляюцца з ×1,5, астатніх станцый і зон — з ×2,3;
+  назва, якая накрыла б больш важную, чакае бліжэйшага набліжэння.
+- **Кнопкі карты** — круглыя 44 px: «+», «−», «уся карта» і маленькая
+  кнопка Google Maps (M13). Недаступная кнопка — `color.disabled-ink` і
+  `color.disabled-line`, не празрыстасць.
+- Набліжэнне — да ×3; пры ўсёй карце вертыкальны рух пальца пракручвае экран.
 
 ### Дыялог і стужкі
 
@@ -304,8 +336,8 @@ mascot-only (a11y-плашка `screens.md`).
     "color.line":             { "value": "#d8d2c6", "use": "межы картак, падзяляльнікі табліц, трэк прагрэсу" },
     "color.shelf.accent":     { "value": "#154f3a", "use": "полка вылепленай primary-кнопкі — цяменшае нацяжэнне color.accent" },
     "color.shelf.line":       { "value": "#c9c1b1", "use": "полка вылепленай звычайнай кнопкі — цяменшае нацяжэнне color.line" },
-    "color.disabled-ink":     { "value": "#6b7280", "use": "тэкст выключанай кнопкі — прыглушаная чытэльная пара на паперы (§5, issue #430)" },
-    "color.disabled-line":    { "value": "#6b7280", "use": "межа выключанай кнопкі (§5, issue #430)" },
+    "color.disabled-ink":     { "value": "#6b7280", "use": "тэкст выключанай кнопкі — прыглушаная чытэльная пара на паперы (§5, 2026-10-03)" },
+    "color.disabled-line":    { "value": "#6b7280", "use": "межа выключанай кнопкі (§5, 2026-10-03)" },
     "color.map":              { "value": "#eef3ee", "use": "фон мапы Побач і Run" },
     "color.street":           { "value": "#dfe7df", "use": "вуліцы на мапе" },
     "color.person":           { "value": "#1f5aa8", "use": "кропка пазіцыі карыстальніка" },
@@ -327,16 +359,29 @@ mascot-only (a11y-плашка `screens.md`).
     "color.badge.free":       { "value": "#e7f2ec", "use": "фон пазнакі free" },
     "color.badge.mixed":      { "value": "#ece7f8", "use": "фон пазнакі mixed" },
     "color.badge.lock":       { "value": "#eceff1", "use": "фон пазнакі замка" },
-    "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі прататыпа" },
+    "color.medal.paper":      { "value": "#fff6e0", "use": "дыск медальёна часткі карты і пункта кола «Пра горад» (M4, M9, M11; kit.css --medal-paper); у цёмнай тэме — карткавае значэнне (M9, #252: у цёмнай тэме дыск цёмны)" },
+    "color.medal.rim":        { "value": "#bd852c", "use": "ручны пескава-залаты кант і ўнутранае кальцо медальёна, адны ў абедзвюх тэмах (светлая зона; M4, M11; kit.css --medal-rim)" },
+    "color.medal.ink":        { "value": "#4a3b2a", "use": "знак у медальёне і на пункце кола (M4, M9, M11; kit.css --medal-ink); у цёмнай тэме — тэмавы ink (M9, #252)" },
+    "color.medal.glow":       { "value": "#f8d580", "use": "бурштынавае свячэнне абранага медальёна і кольца выбранай кропкі на схеме, адно ў абедзвюх тэмах (светлая зона; M9, #252; kit.css --medal-glow)" },
+    "color.note":             { "value": "#fffbe8", "use": "фон дэма-стужкі пратотыпа" },
+    "color.map.zone.visit":   { "value": "#e9973f", "use": "заліўка зоны «Месцы для наведвання» на карце Труймяста, непразрыстасць 62% (M12, #248; kit about.html --visit)" },
+    "color.map.zone.stay":    { "value": "#3f9461", "use": "заліўка зоны «Зручна спыніцца» на карце Труймяста, непразрыстасць 42% (M12)" },
+    "color.map.zone.picked":  { "value": "#9a5d24", "use": "выбраная зона і кольца выбранай станцыі на карце Труймяста, бронза без абводкі (M12)" },
+    "color.map.line.skm":     { "value": "#1d6b4f", "use": "лінія і контур станцый SKM на карце Труймяста (M12)" },
+    "color.map.line.pkm":     { "value": "#276c8c", "use": "лінія і контур станцый PKM (цягнік да аэрапорта) на карце Труймяста (M12)" },
+    "color.map.line.plan":    { "value": "#6c7520", "use": "пункцір і контур прыпынкаў будучай лініі PKM Południe на карце Труймяста (M12)" },
+    "color.engrave":          { "value": "#7a6248", "use": "штрых гравюрнай панарамы Гданьска на галоўным экране (M5, M11; kit.css --engrave)" },
+    "color.panorama.ground":  { "value": "#faf7f2", "use": "заліўка мас панарамы (M5, M11; у цёмнай тэме — darkTheme.tokens)" },
     "font.family":            { "value": "system-ui, sans-serif", "use": "усё тэкставае; правы — раздзел 3" },
     "font.family-ui":         { "value": "Golos Text, system-ui, sans-serif", "use": "інтэрфейсны тэкст; fallback system-ui да падключэння файлаў; правы — раздзел 3" },
-    "font.family-display":    { "value": "Alegreya, serif", "use": "толькі назвы гідаў і гісторый; правы — раздзел 3" },
+    "font.family-display":    { "value": "Alegreya, serif", "use": "назвы гідаў і гісторый і загаловак галоўнага экрана (M11); правы — раздзел 3" },
     "font.family-dragon":     { "value": "Caveat, cursive", "use": "толькі рэплікі і падказкі дракона, ніколі інтэрфейсны тэкст; правы — раздзел 3" },
     "font.base-size":         { "value": "16px", "use": "базавы памер тэксту" },
     "font.line-height":       { "value": "1.45", "use": "міжрадковая адлегласць" },
     "font.weight-regular":    { "value": "400", "use": "звычайнае начарканне" },
     "font.weight-strong":     { "value": "600", "use": "назвы і загалоўкі" },
     "font.size-title":        { "value": "18px", "use": "назва экрана ў верхняй стужцы" },
+    "font.size.menu-title":   { "value": "32px", "use": "загаловак «Куды сёння?» галоўнага экрана (M11, макет menu.html)" },
     "font.size-secondary":    { "value": "13px", "use": "другі радок peek-плэера" },
     "font.size-small":        { "value": "12px", "use": "пазнакі і дэма-стужка" },
     "font.size-table":        { "value": "14px", "use": "табліцы" },
@@ -358,33 +403,57 @@ mascot-only (a11y-плашка `screens.md`).
     "content.max-width":      { "value": "640px", "use": "максімальная шырыня кантэнту экрана на акнах ≥600dp (APR-10.b, зафіксавана 2026-11-02): трымае радок аднакалончнага цела ў межах мэты 45–75 сімвалаў (issue #959, core Line_Length); ніжэй за кап няма эфекту. Двухкалонная сетка гідаў (акно ≥821dp) — зафіксаванае выключэнне (#970): картка ≈295dp — 48.5% унутранай шырыні капа (640dp − 2×16dp), таму радок карткавай анатацыі ≈27–29 сімвалаў, карацей мэты; прыярытэт мае шчыльнасць дзвюх калонак. Вымярэнне 2026-11-02." }
   },
   "darkTheme": {
-    "ownerDecision": "#860",
+    "ownerDecision": "#212",
+    "backgroundGradient": {
+      "cx": "50%",
+      "cy": "0%",
+      "rx": "130%",
+      "ry": "70%",
+      "stops": [
+        {
+          "offset": "0%",
+          "color": "#4a2519"
+        },
+        {
+          "offset": "58%",
+          "color": "#2a1510"
+        },
+        {
+          "offset": "100%",
+          "color": "#1a0d0a"
+        }
+      ]
+    },
     "tokens": {
-      "color.paper": "#171d1c",
-      "color.card": "#232c29",
-      "color.ink": "#f2f1e9",
-      "color.muted": "#c4d0ca",
-      "color.line": "#45534c",
-      "color.accent": "#80d4ad",
-      "color.accent-ink": "#0d2a1e",
-      "color.shelf.accent": "#65cb9c",
-      "color.shelf.line": "#35403a",
-      "color.disabled-ink": "#9aa8a1",
-      "color.disabled-line": "#6d7c72",
-      "color.notice.bg": "#3a3119",
-      "color.notice.border": "#7d6b3a",
-      "color.error.bg": "#3a201b",
-      "color.error.border": "#8a4a42",
-      "color.hint.bg": "#1c2833",
-      "color.hint.border": "#3e5871",
-      "color.moment.bg": "#342a19",
-      "color.moment.border": "#6e5c36",
-      "color.badge.paid": "#493b23",
-      "color.badge.free": "#263b31",
-      "color.badge.mixed": "#332c47",
-      "color.badge.lock": "#2b343b",
-      "color.warn": "#ef8a72",
-      "color.note": "#33301d"
+      "color.paper": "#2a1510",
+      "color.card": "#3a231b",
+      "color.ink": "#f4eadb",
+      "color.muted": "#d6c5b0",
+      "color.line": "#6b4a3d",
+      "color.accent": "#8ad4b0",
+      "color.accent-ink": "#10281d",
+      "color.shelf.accent": "#63b48e",
+      "color.shelf.line": "#1a0d0a",
+      "color.disabled-ink": "#b9a794",
+      "color.disabled-line": "#927a6c",
+      "color.notice.bg": "#4a3618",
+      "color.notice.border": "#8a733a",
+      "color.error.bg": "#4a211b",
+      "color.error.border": "#9a5046",
+      "color.hint.bg": "#2e2c38",
+      "color.hint.border": "#5a5878",
+      "color.moment.bg": "#45301a",
+      "color.moment.border": "#7a6238",
+      "color.badge.paid": "#57421f",
+      "color.badge.free": "#2f4234",
+      "color.badge.mixed": "#40334e",
+      "color.badge.lock": "#3d3530",
+      "color.warn": "#f09a80",
+      "color.note": "#33301d",
+      "color.engrave": "#c9b59b",
+      "color.panorama.ground": "#1e100c",
+      "color.medal.paper": "#3a231b",
+      "color.medal.ink": "#f4eadb"
     },
     "lightCartographyTokens": [
       "color.map",
@@ -394,7 +463,15 @@ mascot-only (a11y-плашка `screens.md`).
       "color.marker.playing",
       "color.marker.available",
       "color.marker.pending",
-      "color.marker.locked"
+      "color.marker.locked",
+      "color.medal.rim",
+      "color.medal.glow",
+      "color.map.zone.visit",
+      "color.map.zone.stay",
+      "color.map.zone.picked",
+      "color.map.line.skm",
+      "color.map.line.pkm",
+      "color.map.line.plan"
     ],
     "lightMarkerLetterToken": "color.accent-ink",
     "splash": "light"
@@ -441,6 +518,10 @@ mascot-only (a11y-плашка `screens.md`).
     { "fg": "color.marker.pending", "bg": "color.street", "min": 3 },
     { "fg": "color.marker.locked", "bg": "color.street", "min": 3 },
     { "fg": "color.person", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.line.skm", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.line.pkm", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.line.plan", "bg": "color.map", "min": 3 },
+    { "fg": "color.map.zone.picked", "bg": "color.map", "min": 3 },
     { "fg": "color.accent", "bg": "color.paper", "min": 3 },
     { "fg": "color.accent", "bg": "color.card", "min": 3 },
     { "fg": "color.accent", "bg": "color.line", "min": 3 },
@@ -454,7 +535,8 @@ mascot-only (a11y-плашка `screens.md`).
     { "fg": "color.ink", "bg": "color.badge.lock", "min": 4.5 },
     { "fg": "color.person", "bg": "color.street", "min": 3 },
     { "fg": "color.warn", "bg": "color.paper", "min": 4.5 },
-    { "fg": "color.warn", "bg": "color.card", "min": 4.5 }
+    { "fg": "color.warn", "bg": "color.card", "min": 4.5 },
+    { "fg": "color.medal.ink", "bg": "color.medal.paper", "min": 4.5 }
   ],
   "supersession": {
     "--kudy-paper":      { "token": "color.paper" },
@@ -533,6 +615,8 @@ mascot-only (a11y-плашка `screens.md`).
   "paperGrain": {
     "token": "texture.paper-grain",
     "opacity": "4–5%",
+    "darkOpacity": 0.04,
+    "darkTintToken": "color.muted",
     "allowed": [
       "фон экранаў Explore і My KUDY (паверх color.paper)"
     ],

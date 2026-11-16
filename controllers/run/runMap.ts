@@ -157,7 +157,7 @@ export interface RunMapStrings {
   // finish — both legal at any moment of a live walk.
   readonly pauseWalk: string;
   readonly endWalk: string;
-  // UX 06 (issue #352): the destructive finish asks first — the dialog's
+  // UX 06 (канон §5 — Дыялог і стужкі): the destructive finish asks first — the dialog's
   // title and the two actions sit with the other surface words.
   readonly endConfirmTitle: string;
   readonly endConfirmAccept: string;
@@ -201,12 +201,12 @@ export interface RunMapStrings {
     | 'fallback',
     string
   >;
-  // UX 05 (issue #351): the POI labels — the package's places.json kind
+  // UX 05: the POI labels — the package's places.json kind
   // string (place.schema.json keeps it a free ≤32-char value) mapped through
   // this per-locale dictionary. A kind without an entry renders no label at
   // all — the raw value never shows, nothing is invented.
   readonly poiKind: Record<string, string>;
-  // G06.05 (issue #280): the honest degradation banners of 11 §7 — the
+  // G06.05 (16_delivery_backlog.md — G06.05): the honest degradation banners of 11 §7 — the
   // denied/stalled GPS lines (the denied wording is the contract's own), the
   // manual-play hint (the manual mode is a full path, not an emergency), the
   // suspended-automation note, the restored-session note with its tier loss,

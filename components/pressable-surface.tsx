@@ -1,18 +1,18 @@
-// UX 03 (issue #349) — the one shared pressed wrapper for the interactive
+// UX 03 (канон §5 — Кнопкі і чыпы) — the one shared pressed wrapper for the interactive
 // elements of the main screens (the design dossier 2026-09-28 finding:
 // «Ніякага pressed-стану»). Every press gets a visible reaction: a ≥10%
 // dim through opacity on every path, plus the android_ripple on Android
 // on top of it. The dim and the ripple color are derived alphas of
 // color.ink, not new canon values — visual-language.md §10 keeps new
 // colors out of the surface layer. Lives in components/, not app/:
-// expo-router treats every app/ file as a route (issue #339).
-// G06.10.d (issue #404) — the clay body: a pressable can carry a bottom
+// expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
+// G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d) — the clay body: a pressable can carry a bottom
 // shelf, the darker tension of its fill from the canon shelf tokens
 // (visual-language §2) through the token mirror, and on press it dips
 // into the shelf — translate plus a reduced shelf, the bottom edge holds.
 // The dim and the ripple stay on top of the dip; a disabled pressable
 // never dips, and the disabled primary reads through the canon ghost pair
-// (canon §5 after the owner's variant А, issue #430:
+// (canon §5 after the owner's variant А of 2026-10-03:
 // color.disabled-ink/line, transparent fill, no shelf) — the old
 // opacity 0.5 contract is gone.
 import { forwardRef, type ComponentRef } from "react";

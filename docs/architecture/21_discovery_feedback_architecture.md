@@ -100,7 +100,7 @@ Collection захоўвае `collection_id`, `content_version`, лакаліза
 | `collections` на адзін індэкс | ≤ 32 |
 | `members` у collection | ≤ 50, без дубляў |
 | `themes` на адзін індэкс / тэм на offer | ≤ 32 / ≤ 8 |
-| лакалаў на `labels`, `localized` і тэкст прычыны | ≤ 8; allowlist BCP-47 = `be`, `en`, `uk`, `de`, `es`, `fr`, `cs`, `sv` (пашыраны G21.16, issue #550; раней MVP be/en/uk) |
+| лакалаў на `labels`, `localized` і тэкст прычыны | ≤ 8; allowlist BCP-47 = `be`, `en`, `uk`, `de`, `es`, `fr`, `cs`, `sv` (пашыраны G21.16; раней MVP be/en/uk) |
 | `title` | ≤ 140 знакаў |
 | `summary`, `why_recommended`, `conditions`, `description`, `overlap_note` | ≤ 400 знакаў |
 | `reason` сезоннай рэкамендацыі | ≤ 280 знакаў |

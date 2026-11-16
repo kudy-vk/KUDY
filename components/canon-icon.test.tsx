@@ -1,4 +1,4 @@
-// G06.10.c (issue #403) — the icon layer's own contract, each check a
+// G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c) — the icon layer's own contract, each check a
 // fail-on-revert guard (implementation-rules 1): color and size resolve from
 // the canon tokens at render time (overriding a token changes the output — a
 // literal in the component would freeze it), the screen-reader label is

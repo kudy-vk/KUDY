@@ -1,4 +1,4 @@
-// UX 05 (issue #351): the jest workers' timezone is pinned before they fork
+// UX 05: the jest workers' timezone is pinned before they fork
 // from this parent process. The My KUDY local-day test can only fail on a
 // UTC revert from a non-UTC zone (GitHub CI runs UTC), so this pin gives
 // the check its teeth (implementation-rules 1). No other suite in this
@@ -20,8 +20,14 @@ module.exports = {
       presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
       caller: { name: "metro", bundler: "metro", platform: "ios" },
     }],
+    // Issue #216 (M11): the panorama builder is ESM the same way — the app
+    // component imports it, so jest needs the Expo transform for it too.
+    "panorama-paths\\.mjs$": ["babel-jest", {
+      presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
+      caller: { name: "metro", bundler: "metro", platform: "ios" },
+    }],
   },
-  // G06.10.c (issue #403): jest reads the "react-native" export condition,
+  // G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c): jest reads the "react-native" export condition,
   // which hands lucide-react-native's deep icon imports their ESM .mjs build —
   // an extension babel-jest's transform pattern never matches. The CJS build
   // of the same glyph is a drop-in for the test run; Metro keeps the device

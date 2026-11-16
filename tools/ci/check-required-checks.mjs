@@ -79,6 +79,13 @@ if (!/tools\/collector/.test(pkg.scripts?.test ?? '')) {
   failures.push('npm test glob does not include tools/collector');
 }
 
+// Issue #300 revert guard — same class as the tools/docs-ledger glob: losing
+// the tools/content npm-test glob would drop the Tricity area-cards
+// completeness control silently (implementation-rules 1 and 7).
+if (!/tools\/content/.test(pkg.scripts?.test ?? '')) {
+  failures.push('npm test glob does not include tools/content');
+}
+
 // G20.13 revert guard — the Deno entrypoint type-check is config-as-code
 // (implementation-rules 1 and 7): losing the server:typecheck script, its
 // required-checks job or the pinned setup-deno action would drop the check
@@ -109,7 +116,7 @@ if (!/run:\s*npm run arch:check\s*$/m.test(text)) {
 }
 
 // G20.17 revert guard — the portable path-boundary guards must run on Windows
-// (A26-08, issue #488): losing the windows-latest job would drop the main
+// (A26-08 — G20.00-review.md — G20.17): losing the windows-latest job would drop the main
 // development host from CI again. The portable subset is exactly the two
 // dependency-free suites; the symlink-privilege security cases stay mandatory
 // on the Linux tests job and are guarded by npm test there.

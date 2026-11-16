@@ -6,7 +6,7 @@
 // The title is chrome, not a guide or story title — canon §3 keeps the
 // display serif for those, so the UI family renders it (G06.10.b).
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BackButton } from "../components/back-button";
@@ -16,6 +16,7 @@ import { ScaledText } from "../components/scaled-text";
 import { useScreenStyles } from "../components/screen-styles";
 import { uiStrings } from "../components/ui-strings";
 import { useServices, useUiLocale } from "./_layout";
+import { ScreenSurface } from "../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   hint: {
@@ -38,18 +39,18 @@ export default function NotFound() {
   const screenStyles = useScreenStyles();
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const router = useRouter();
-  // UX 02 (issue #348): the frame's top inset — the content starts below the
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the frame's top inset — the content starts below the
   // status bar and the notch with the native header off (AC4). A hook —
   // before any early returns.
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1): the chrome words in the display locale.
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the chrome words in the display locale.
   const strings = uiStrings(locale);
   return (
-    <View
+    <ScreenSurface
       style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL }]}
       testID="screen-Not found"
     >
@@ -60,6 +61,6 @@ export default function NotFound() {
       />
       <ScaledText style={styles.title}>{strings.notFoundTitle}</ScaledText>
       <ScaledText style={styles.hint}>{strings.notFoundHint}</ScaledText>
-    </View>
+    </ScreenSurface>
   );
 }

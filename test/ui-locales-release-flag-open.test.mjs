@@ -1,5 +1,5 @@
-// G21.50 (issue #711) — the web route set under a flag that OPENS a gated
-// code. The first real gated consumer (zh) does not exist until #669/#670,
+// G21.50 (G21.42-chinese-language.md — G21.50) — the web route set under a flag that OPENS a gated
+// code. The first real gated consumer (zh) does not exist until G21.45/G21.46,
 // so a mock registry module with a synthetic ninth code plays it: the mock
 // replaces the registry before the web i18n module loads, and reverting the
 // web module to a hard-coded locale list (or reading COMPLETE_UI_LOCALES)

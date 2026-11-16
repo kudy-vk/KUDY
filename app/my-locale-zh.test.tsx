@@ -1,4 +1,4 @@
-// G21.46 (issue #670) — the real Chinese catalogue at the native surface. zh
+// G21.46 (G21.42-chinese-language.md — G21.46) — the real Chinese catalogue at the native surface. zh
 // is the registry's first real gated code: complete (the catalogue ships with
 // this task) and closed (the release flag keeps it off the picker until
 // G21.50 turns it on). Production OPEN_UI_LOCALES therefore omits it, so this
@@ -27,7 +27,7 @@ jest.mock("../contracts/ui-locales", () => {
 
 const opened = OPEN_UI_LOCALES as unknown as string[];
 
-describe("G21.46 (issue #670): the Chinese catalogue renders at the picker", () => {
+describe("G21.46 (G21.42-chinese-language.md — G21.46): the Chinese catalogue renders at the picker", () => {
   test("the native name of the opened code is the registry self-name, not a translation", () => {
     expect(opened).toContain("zh");
     expect(uiLocaleNativeName("zh")).toBe("\u7B80\u4F53\u4E2D\u6587");

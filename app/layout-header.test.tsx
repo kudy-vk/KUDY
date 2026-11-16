@@ -1,4 +1,4 @@
-// UX 02 (issue #348) — the guard over the production layout itself: the
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the guard over the production layout itself: the
 // Stack mounts with the native header off. Reverting app/_layout.tsx to a
 // bare <Stack /> turns this red (implementation-rules 1 — the check fails
 // when the fix is reverted).

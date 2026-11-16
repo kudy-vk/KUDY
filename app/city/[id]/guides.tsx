@@ -1,11 +1,11 @@
-// G06.01.a (issue #313) — the «Гіды» rubric surface: the full list of the
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the «Гіды» rubric surface: the full list of the
 // published guides in the canonical order, each exactly once (11 §16.1), Back
 // to the city (NAV9). The rubric exists only with published content — the
 // empty city renders its honest NAV3 message instead of an empty rubric.
 // The [id] route of 19 §2.5 is display-shaped only in the MVP single-city
 // catalog: the surface renders the active city and does not echo an
 // unvalidated param (21 §3.2 — у MVP толькі актыўны Гданьск).
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useCatalogController } from "../../../controllers/catalog/useCatalogController";
@@ -15,6 +15,7 @@ import { darkTokens, tokens, type ThemeTokens } from "../../../components/design
 import { useThemeStyles } from "../../../components/theme";
 import { CityCatalogBody } from "../../../components/guide-card";
 import { uiStrings } from "../../../components/ui-strings";
+import { ScreenSurface } from "../../../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: {
@@ -28,18 +29,18 @@ const darkStyles = createStyles(darkTokens);
 export default function Guides() {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const controller = useCatalogController(services.catalog?.controller);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1/AC4): the shared words in the display locale and
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1/AC4): the shared words in the display locale and
   // the failed load's named retry.
   const strings = uiStrings(locale);
   return (
-    <View
+    <ScreenSurface
       style={[styles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom }]}
       testID="screen-Guides"
     >
@@ -51,6 +52,6 @@ export default function Guides() {
         locale={locale}
         leading={<BackButton label={strings.backToCity} testID="btn-guides-back" />}
       />
-    </View>
+    </ScreenSurface>
   );
 }

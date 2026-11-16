@@ -1,4 +1,4 @@
-// G07.05 (issue #284) — the R07 guide-hint controller (19 §2.2 reserves this
+// G07.05 (15_guide_decisions.md — R07) — the R07 guide-hint controller (19 §2.2 reserves this
 // module): the quiet «guide nearby» card of the open app, on the accepted
 // ADR G07.04 contract. The controller owns the guide_hint_state/guide_hint_last
 // records (09 §20: the write belongs to the nearby controller alone) and the

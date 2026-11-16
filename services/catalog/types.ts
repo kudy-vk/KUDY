@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the city catalog service types. The service turns
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the city catalog service types. The service turns
 // the published catalog envelope (09 §4, 21 §3.3) plus its optional discovery
 // index into the guide-card view state the City and Guides surfaces render.
 // Ports only — no transport and no digest API live here (the loader port is
@@ -149,7 +149,7 @@ export interface PreviewStop {
   // The place's human title from the discovery index's place offer
   // (localized per the display preference). Null when the index names no
   // such place or publishes no title — the row hides the place line, the
-  // raw place_id never renders (UX 05, issue #351).
+  // raw place_id never renders (UX 05).
   readonly placeName: string | null;
   readonly tier: 'base' | 'extended';
   readonly locked: boolean;

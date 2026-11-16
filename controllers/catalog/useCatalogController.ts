@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the React binding for the catalog controller
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the React binding for the catalog controller
 // (hooks as controllers, 19 §2.2). A screen receives the controller from the
 // composition root's Services; when the root constructed no catalog service
 // (no loader port), the hook yields null and the surface renders its honest

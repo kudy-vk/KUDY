@@ -1,5 +1,5 @@
-// G21.50 (issue #711) — the picker gate at the surface. zh is now the real
-// gated code (it landed complete-but-closed with G21.46/#670), but this suite
+// G21.50 (G21.42-chinese-language.md — G21.50) — the picker gate at the surface. zh is now the real
+// gated code (it landed complete-but-closed with G21.46), but this suite
 // keeps its synthetic ninth code `zz`: registering it as the only complete
 // code besides the eight lets the two scenarios (closed, flag-opened) run
 // without touching the real Chinese release state, which the flag and the
@@ -41,7 +41,7 @@ const setGate = (open: string[], complete: string[]) => {
 
 const EIGHT = ["be", "en", "uk", "de", "es", "fr", "cs", "sv"];
 
-describe("G21.50 (issue #711): the picker advertises the open subset", () => {
+describe("G21.50 (G21.42-chinese-language.md — G21.50): the picker advertises the open subset", () => {
   test("a registered-but-closed code is omitted from the picker; the eight stay present", async () => {
     setGate(EIGHT, [...EIGHT, "zz"]);
     const services = createServices({});

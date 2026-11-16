@@ -336,7 +336,7 @@ describe("Nearby surface (G07.01)", () => {
     expect(env.locationPort.activeSubscriptions()).toBe(1);
   });
 
-  // UX 01 (issue #347): the offer list scrolls — every card, the last of the
+  // UX 01: the offer list scrolls — every card, the last of the
   // review order included, renders inside the surface's ScrollView instead
   // of being cut by the screen edge. Removing the ScrollView drops the
   // scroll testID and fails this (implementation-rules 1).
@@ -349,7 +349,7 @@ describe("Nearby surface (G07.01)", () => {
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving catalog fetch holds the surface in
 // loading. Reverting the LoadingIndicator wiring in app/map.tsx turns this
 // red (implementation-rules 1).
@@ -402,13 +402,13 @@ describe("Map paper grain (G06.10.e)", () => {
   });
 });
 
-// Issue #523: the Nearby chrome words read the UI-locale switch (the #305
+// The Nearby chrome words read the UI-locale switch (the G14.04.d
 // store) instead of the binding's content-display locale — without the
 // catalog service the fixed 'be' fallback kept «Побач» on screen after
 // choosing English or Українська. The real store drives every case;
 // reverting the useUiLocale wiring in app/map.tsx turns all three red
 // (implementation-rules 1).
-describe("Nearby UI-locale words (issue #523)", () => {
+describe("Nearby UI-locale words", () => {
   test("without the service the chosen locale drives the title, the map note, the unavailable word and the back label", async () => {
     const services = createServices({});
     services.uiLocale.set("uk");

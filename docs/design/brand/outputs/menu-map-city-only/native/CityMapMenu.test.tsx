@@ -1,9 +1,11 @@
 import React from 'react';
 import {jest,expect,test,afterEach} from '@jest/globals';
 import {render,fireEvent,screen,act} from '@testing-library/react-native';
-import {processColor,StyleSheet} from 'react-native';
+import {processColor} from 'react-native';
 import {CityMapMenu} from './CityMapMenu';
 import {nativeLayout} from '../native-layout';
+import RouteIcon from 'lucide-react-native/icons/route';
+import HourglassIcon from 'lucide-react-native/icons/hourglass';
 
 const labels={nearby:'Побач',guides:'Гіды',discovery:'Чым заняцца','reserve-1':'Хутка',kudy:'KUDY'};
 const props={width:360,labels,hint:'Утрымлівай і перацягвай',sceneLabels:{water:'Вада',fortifications:'Астатняя карта'},reduceMotion:true};
@@ -28,11 +30,22 @@ test('five native accessibility activations call only their stable menu IDs',()=
   for(const p of nativeLayout.pieces)fireEvent(screen.getByTestId(`city-menu-access-${p.id}`),'accessibilityTap');
   expect(select.mock.calls.map(call=>call[0])).toEqual(nativeLayout.pieces.map(p=>p.id));
 });
+test('the medallion renders only with a host glyph and carries no text caption (M11)',()=>{
+  const {rerender}=render(<CityMapMenu {...props} items={[{id:'guides'},{id:'kudy',disabled:true}]} onSelect={()=>{}}/>);
+  expect(screen.queryByTestId('city-menu-medal-guides',{includeHiddenElements:true})).toBeNull();
+  rerender(<CityMapMenu {...props} items={[{id:'guides',icon:RouteIcon},{id:'kudy',disabled:true,icon:HourglassIcon}]} onSelect={()=>{}}/>);
+  expect(screen.getByTestId('city-menu-medal-guides',{includeHiddenElements:true})).toBeTruthy();
+  expect(screen.getByTestId('city-menu-medal-kudy',{includeHiddenElements:true})).toBeTruthy();
+  expect(screen.queryByText(labels.guides,{includeHiddenElements:true})).toBeNull();
+});
 test('translations change while the native piece positions remain stable',()=>{
   const {rerender}=render(<CityMapMenu {...props} onSelect={()=>{}}/>);
   const before=screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.transform;
   rerender(<CityMapMenu {...props} labels={{...labels,guides:'Stadtführungen durch die Altstadt'}} onSelect={()=>{}}/>);
-  expect(screen.getByText('Stadtführungen durch die Altstadt',{includeHiddenElements:true})).toBeTruthy();
+  // Issue #216 (M11): the caption is the screen-reader name only — no
+  // visible text label renders, the medallion carries the glyph instead.
+  expect(screen.getByTestId('city-menu-access-guides').props.accessibilityLabel).toBe('Stadtführungen durch die Altstadt');
+  expect(screen.queryByText('Stadtführungen durch die Altstadt',{includeHiddenElements:true})).toBeNull();
   expect(screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.transform).toEqual(before);
 });
 test('native responder tap selects, while early movement cancels selection',()=>{
@@ -65,7 +78,6 @@ test('real native drags assemble all five, retain five flows and give the scene 
   expect(select).not.toHaveBeenCalled();
   expect(screen.getByTestId('city-menu-scene-water')).toBeTruthy();
   expect(screen.getByTestId('city-menu-access-guides').props.pointerEvents).toBe('none');
-  expect(StyleSheet.flatten(screen.getByTestId('city-menu-label-guides',{includeHiddenElements:true}).props.style).opacity).toBe(0);
   for(const [id,x,y] of [['nearby',330,485],['guides',650,520],['discovery',850,420],['reserve-1',360,800],['kudy',650,880]] as const){
     act(()=>{canvas.props.onResponderGrant(event((125+x)*scale,(320+y)*scale),gesture);canvas.props.onResponderRelease(event((125+x)*scale,(320+y)*scale),gesture);});
     expect(select).toHaveBeenLastCalledWith(id);

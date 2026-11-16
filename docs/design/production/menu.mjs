@@ -4,7 +4,7 @@
 // brand/outputs/menu-map-city-only; gesture timings are read from its manifest.
 import { findMagnet, joinGroups } from '../brand/outputs/menu-map-city-only/magnet.mjs';
 import { amberMotion, amberPalette, lightThreads } from '../brand/outputs/menu-map-city-only/amber-light.mjs';
-import { adZone, el, iconShapes, mountBoard, panorama, plainLabel, svg, walkButton } from './kit.mjs';
+import { adZone, el, iconShapes, mountBoard, panorama, penStroke, plainLabel, svg, walkButton } from './kit.mjs';
 
 const PKG = new URL('../brand/outputs/menu-map-city-only/', import.meta.url);
 // The whole scene (pieces plus water and fortifications), in source pixels.
@@ -103,10 +103,8 @@ class MenuMap {
       svg('stop', { offset: 0, 'stop-color': amberPalette.core }),
       svg('stop', { offset: 0.4, 'stop-color': amberPalette.glow, 'stop-opacity': 0.9 }),
       svg('stop', { offset: 1, 'stop-color': amberPalette.edge, 'stop-opacity': 0 }));
-    // A slow, shallow displacement: the medallion line wavers like a pen stroke.
-    const handDrawn = svg('filter', { id: `${uid}-hand`, x: '-20%', y: '-20%', width: '140%', height: '140%' },
-      svg('feTurbulence', { type: 'fractalNoise', baseFrequency: 0.07, numOctaves: 2, seed: 7, result: 'noise' }),
-      svg('feDisplacementMap', { in: 'SourceGraphic', in2: 'noise', scale: 2.4, xChannelSelector: 'R', yChannelSelector: 'G' }));
+    // The medallion line wavers like a pen stroke.
+    const handDrawn = penStroke(`${uid}-hand`);
     this.sceneRadius = svg('circle', { cx: SCENE.cx, cy: SCENE.cy, r: 0 });
     this.defs = svg('defs', {}, gradient, handDrawn, svg('clipPath', { id: `${uid}-clip` }, this.sceneRadius));
 

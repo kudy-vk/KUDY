@@ -12,7 +12,6 @@ import type { PropsWithChildren } from "react";
 import {
   Image,
   StyleSheet,
-  View,
   useWindowDimensions,
   type StyleProp,
   type ViewStyle,
@@ -20,6 +19,7 @@ import {
 
 import grainSource from "../assets/paper-grain.png";
 import { tokens } from "./design-tokens";
+import { ScreenSurface } from "./screen-surface";
 import { useThemeScheme, useThemeTokens } from "./theme";
 
 const styles = StyleSheet.create({
@@ -53,17 +53,17 @@ export function PaperSurface({
   const palette = useThemeTokens();
   const theme = useThemeScheme();
   return (
-    <View style={[styles.surface, { backgroundColor: palette.colorPaper }, style]} testID={testID}>
+    <ScreenSurface style={[styles.surface, { backgroundColor: palette.colorPaper }, style]} testID={testID}>
       <Image
         source={grainSource}
         resizeMode="repeat"
-        style={[styles.grain, { width, height }, theme === "dark" ? { tintColor: palette.colorInk } : null]}
+        style={[styles.grain, { width, height, opacity: palette.texturePaperGrainOpacity }, theme === "dark" ? { tintColor: palette.colorMuted } : null]}
         accessible={false}
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
         testID="paper-grain"
       />
       {children}
-    </View>
+    </ScreenSurface>
   );
 }

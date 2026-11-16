@@ -3,10 +3,10 @@
 //
 // Source of truth: contracts/ui-messages/source.json (the be base text) and
 // contracts/ui-messages/translations/<locale>.json (the reviewed translations).
-// G21.25 (issue #558): the catalogues are generated projections — edit the
+// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the run-map surface's words (G06.05 #280; UX 05 #351; G07.x run stack)
+// the run-map surface's words (G06.05 — 16_delivery_backlog.md; UX 05; G07.x run stack)
 
 
 export const RUN_MAP_STRINGS_DATA = {

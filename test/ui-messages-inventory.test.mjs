@@ -1,7 +1,7 @@
 // G21.24 — the canonical inventory guard (issue #557 criterion 1): the records
 // of contracts/ui-messages/source.json are the actual messages of the shipped
-// catalogs, not an assumed set. Every be leaf of the seven importable catalogs
-// must have exactly one record anchored to it via migratedFrom, plain words
+// catalogs, not an assumed set. Every be leaf of the importable catalogs in
+// CATALOGS below must have exactly one record anchored to it via migratedFrom, plain words
 // verbatim; the guideHint words ride their generated data module (G21.25 —
 // GuideHintCard.tsx itself is JSX, node cannot import it). Deleting a record,
 // renaming a key or editing a catalog word fails this test — the source cannot
@@ -18,6 +18,7 @@ import { offerStrings } from '../controllers/commerce/commerceController.ts';
 import { feedbackStrings } from '../controllers/useFeedbackController.ts';
 import { be as webBe } from '../web/lib/i18n/be.ts';
 import { GUIDE_HINT_STRINGS } from '../components/guide-hint-strings.generated.ts';
+import { ABOUT_CITY_STRINGS } from '../components/about-city-strings.generated.ts';
 
 import { loadUiMessagesSource } from '../contracts/ui-messages/ui-messages.mjs';
 
@@ -30,6 +31,10 @@ const CATALOGS = {
   'native.offer': { value: offerStrings('be'), file: 'controllers/commerce/commerceController.ts' },
   'native.feedback': { value: feedbackStrings('be'), file: 'controllers/useFeedbackController.ts' },
   'web.ui': { value: webBe, file: 'web/lib/i18n/be.ts' },
+  // Issue #200/#252: the aboutCity guide's words live in the generated
+  // be+en projection (importable pure TS); the be catalogue mirrors the
+  // canonical be records.
+  'native.aboutCity': { value: ABOUT_CITY_STRINGS.be, file: 'components/about-city-strings.generated.ts' },
 };
 
 // GuideHintCard.tsx cannot be imported under node strip-types (JSX); since
@@ -50,8 +55,8 @@ function leaves(value, prefix = '') {
 // G21.09 (issue #542): the chrome selfNames subtree is projected from the one
 // locale registry (completeUiLocaleSelfNames()), not from the canonical
 // records — the registry table owns the self-name words, so a complete code
-// the records never carried (de, G21.10 #544; es, G21.11 #545;
-// fr, G21.12 #546; cs, G21.13 #547; sv, G21.14 #548) appears there by
+// the records never carried (de, G21.10 — 2026-10-03-single-source-translations.md; es, G21.11 — same record;
+// fr, G21.12 — same record; cs, G21.13 — same record; sv, G21.14 — same record) appears there by
 // design. The walk skips the subtree together with its legacy migration
 // anchors.
 function registryProjected(key) {

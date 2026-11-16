@@ -9,11 +9,11 @@
 //
 // «Complete» (criterion 4) means every message domain of
 // contracts/ui-messages/source.json has a full typed catalogue for the code
-// today: be, en, uk, de (G21.10, issue #544), es (G21.11, issue #545),
-// fr (G21.12, issue #546), cs (G21.13, issue #547), sv (G21.14, issue #548)
-// and zh (G21.46, issue #670) — all eight requested codes plus the Chinese
+// today: be, en, uk, de (G21.10 — 2026-10-03-single-source-translations.md), es (G21.11 — same record),
+// fr (G21.12 — same record), cs (G21.13 — same record), sv (G21.14 — same record)
+// and zh (G21.46 — G21.42-chinese-language.md) — all eight requested codes plus the Chinese
 // release are complete. The selector and picker adapters advertise the OPEN
-// subset (G21.50, issue #711) — today the eight released codes, because zh is
+// subset (G21.50 — G21.42-chinese-language.md) — today the eight released codes, because zh is
 // complete yet closed until the release flag names it. The adapter vocabulary
 // is never anything else.
 //
@@ -49,10 +49,10 @@ export const UI_LOCALES: readonly UiLocaleEntry[] = [
 // The registered complete catalogues (criterion 4): what the selector and
 // picker may expose. G21.12–G21.14 extend this list as each language's
 // catalogue lands — the registry entry and the catalogue arrive together
-// (de joined with the G21.10 catalogue, issue #544; es joins with the
-// G21.11 catalogue, issue #545; fr with the G21.12 catalogue, issue #546;
-// cs with the G21.13 catalogue, issue #547; sv with the G21.14 catalogue,
-// issue #548; zh with the G21.46 catalogue, issue #670).
+// (de joined with the G21.10 catalogue, 2026-10-03-single-source-translations.md; es joins with the
+// G21.11 catalogue, same record; fr with the G21.12 catalogue, same record;
+// cs with the G21.13 catalogue, same record; sv with the G21.14 catalogue,
+// same record; zh with the G21.46 catalogue, G21.42-chinese-language.md).
 export const COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh"];
 
 export function isUiLocaleCode(value: string): value is UiLocaleCode {
@@ -63,7 +63,7 @@ export function isCompleteUiLocale(value: string): value is CompleteUiLocaleCode
   return (COMPLETE_UI_LOCALES as readonly string[]).includes(value);
 }
 
-// G21.50 (issue #711): the open subset the pickers advertise is a separate
+// G21.50 (G21.42-chinese-language.md — G21.50): the open subset the pickers advertise is a separate
 // fact from COMPLETE_UI_LOCALES — a code may be complete and still closed.
 // The frozen default is the G21.50 decision set: the eight advertised codes
 // stay open under every flag state (hiding any of them is out of scope),

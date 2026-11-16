@@ -410,8 +410,8 @@ test('G07.04: both number fields non-finite are each named (#391)', () => {
   );
 });
 
-// G21.45 (issue #669) — the ninth content-locale code zh (ADR G21.42 §4:
-// «enums + zh, ліміты maxProperties/maxItems 8→9»; рашэнне ўладара ў #623).
+// G21.45 (G21.42-chinese-language.md — G21.45) — the ninth content-locale code zh (ADR G21.42 §4:
+// «enums + zh, ліміты maxProperties/maxItems 8→9»; рашэнне ўладара ў G21.42).
 // Any Chinese sample value enters as a \uXXXX escape — repo bytes stay
 // CJK-free (criterion 7 of the issue).
 const ZH_SAMPLE = '\u4E2D\u6587';
@@ -501,7 +501,7 @@ test('G21.45: the 8→9 move is the only count-limit change; the residual mirror
     ['tools/build-bundle/build-bundle.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'LOCALE_ALLOWLIST'],
     ['tools/validate/validate-authoring.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'LOCALES'],
     ['tools/validate/validate-package.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'MEDIA_LOCALES'],
-    // G21.46 (#670): the UI registry's COMPLETE set moved to nine, so the
+    // G21.46 (G21.42-chinese-language.md — G21.46): the UI registry's COMPLETE set moved to nine, so the
     // residual eight in that file is now the frozen release default (the
     // label names the line the literal actually matches). The nine is pinned
     // just below at the source and by the registry suite at runtime.
@@ -511,7 +511,7 @@ test('G21.45: the 8→9 move is the only count-limit change; the residual mirror
     const text = fs.readFileSync(path.join(REPO, file), 'utf8');
     assert.ok(text.includes(eight), `${file} ${label} must stay at the residual eight until a zh task extends it`);
   }
-  // G21.46 (#670): the one owner that DID move — the UI registry's complete
+  // G21.46 (G21.42-chinese-language.md — G21.46): the one owner that DID move — the UI registry's complete
   // set — is pinned at the source too, so a silent revert to eight fails here
   // in the same place the residual pins catch drift in the other direction.
   const registry = fs.readFileSync(path.join(REPO, 'contracts/ui-locales.ts'), 'utf8');

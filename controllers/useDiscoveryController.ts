@@ -22,7 +22,7 @@ import {
 import type { DiscoveryIndexState } from '../services/contentRepo/discoveryIndex.ts';
 import { isUiLocaleCode, OPEN_UI_LOCALES } from '../contracts/ui-locales.ts';
 
-// G21.50 (issue #711, criterion 5): the query's content locale is an OPEN
+// G21.50 (G21.42-chinese-language.md — G21.50, criterion 5): the query's content locale is an OPEN
 // locale — a registered-but-closed code never becomes criteriaLocale or
 // content_locale. The fallback is the same open locale as the picker (be);
 // a closed code arriving through setCriteriaLocale keeps the previous value.

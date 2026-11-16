@@ -1,4 +1,4 @@
-// G21.45 (issue #669) — the fact ∩ gate intersection behind every advertised
+// G21.45 (G21.42-chinese-language.md — G21.45) — the fact ∩ gate intersection behind every advertised
 // URL surface. The content-locale allowlist now carries nine codes (the
 // schema owner accepts zh, ADR G21.42), while the UI route set stays
 // release-gated over the eight-code registry (G21.50): a gate-closed code
@@ -15,7 +15,7 @@ import { buildDemoFixture } from './test-fixture.ts';
 
 test('advertisedTextLocales filters the published-text fact through the release gate', () => {
   // zh is declarable by fact (the schema allowlist accepts it) but closed:
-  // the UI registry registers no zh catalogue until #670, so the gate never
+  // the UI registry registers no zh catalogue until G21.46, so the gate never
   // advertises it — no /zh URL path, no hreflang entry.
   assert.deepEqual(advertisedTextLocales(['zh', 'be', 'sv']), ['be', 'sv']);
   // The eight shipped codes ride unchanged, in fact order (the G21.22

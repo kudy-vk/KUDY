@@ -5,7 +5,7 @@
 // the assembled preview of demo-g0601b-preview.mjs (the assembly demo lives
 // in services/, this table beside the controller — controllers/
 // value-imports services/ only in the composition root, 19 §2.2).
-// G06.05 (issue #280): the derivation produces verbatim codes; the words
+// G06.05 (16_delivery_backlog.md — G06.05): the derivation produces verbatim codes; the words
 // render through previewStrings per locale (the runMapReason idiom), the
 // display locale here is the composition root's first preference.
 // Deterministic: fixed inputs, no clocks, no randomness.

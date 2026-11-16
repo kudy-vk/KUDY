@@ -4,7 +4,7 @@
   "provenance": {
     "kind": "migration",
     "reviewer": "owner",
-    "evidence": "словы перанесены даслоўна з дзеючых uk-каталогаў (G06.05 #280, G14.04.d #305, вэб 09 §8); запісаная роля uk-рэв'ю — уладар (uk-release-scope §6.4) Дадатак G21.22 (#554): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
+    "evidence": "словы перанесены даслоўна з дзеючых uk-каталогаў (G06.05, картка 280 архіўнага рэпе, G14.04.d, картка 305 архіўнага рэпе, вэб 09 §8); запісаная роля uk-рэв'ю — уладар (uk-release-scope §6.4) Дадатак G21.22 (картка 554 архіўнага рэпе): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
   },
   "records": [
     {
@@ -14,6 +14,15 @@
       "review": {
         "outcome": "approved",
         "note": "Даслоўна пераўжытае зацверджанае «хутка» з web.ui.storeComingSoon; новых перакладаў няма."
+      }
+    },
+    {
+      "id": "native.chrome.aboutCity",
+      "value": "Про місто",
+      "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
+      "review": {
+        "outcome": "approved",
+        "note": "Пераклад сесіі #200 (GLM-5.3, ZCode): калка з польскай/беларускай назвы, ужывальная ў даведніках пра горад."
       }
     },
     {
@@ -656,6 +665,24 @@
       "reviewedSourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179",
       "review": {
         "outcome": "approved"
+      }
+    },
+    {
+      "id": "native.chrome.cityName",
+      "value": "Гданськ",
+      "reviewedSourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2",
+      "review": {
+        "outcome": "approved",
+        "note": "З масіва CITY макету menu.html; макет прыняты ўладальнікам цалкам 2026-11-12 (M11, issue #216)"
+      }
+    },
+    {
+      "id": "native.chrome.whereToToday",
+      "value": "Куди сьогодні?",
+      "reviewedSourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956",
+      "review": {
+        "outcome": "approved",
+        "note": "З масіва HEADING макету menu.html; макет прыняты ўладальнікам цалкам 2026-11-12 (M11, issue #216)"
       }
     },
     {

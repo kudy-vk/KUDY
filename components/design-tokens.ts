@@ -1,10 +1,10 @@
-// G06.01.a (issue #313) — the visual values the City and Guides surfaces
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the visual values the City and Guides surfaces
 // consume, copied verbatim from the single design source
 // docs/design/visual-language.md («Дадатак», the machine JSON block, G06.07
 // canon). Only the values these surfaces render live here; the guard in
 // test/design-tokens.test.mjs pins this file to the canon — changing a value
 // here without the canon turns the suite red. Lives in components/, not
-// app/: expo-router treats every app/ file as a route (issue #339).
+// app/: expo-router treats every app/ file as a route (docs/architecture/19_class_and_module_map.md — the components zone).
 export const tokens = {
   colorPaper: '#faf7f2', // color.paper — фон экрана
   colorInk: '#22262b', // color.ink — асноўны тэкст
@@ -13,11 +13,11 @@ export const tokens = {
   colorAccentInk: '#ffffff', // color.accent-ink — тэкст на акцэнце
   colorCard: '#ffffff', // color.card — фон картак
   colorLine: '#d8d2c6', // color.line — межы картак
-  // G06.10.d (issue #404) — палкі вылепленых кнопак: цяменшае нацяжэнне
+  // G06.10.d (docs/agent-tasks/app/G06.10.md — G06.10.d) — палкі вылепленых кнопак: цяменшае нацяжэнне
   // існуючых колераў (канон §2), не новыя брэнд-колеры.
   colorShelfAccent: '#154f3a', // color.shelf.accent — полка вылепленай primary-кнопкі
   colorShelfLine: '#c9c1b1', // color.shelf.line — полка вылепленай звычайнай кнопкі
-  // Issue #430 (рашэнне ўладара 2026-10-03) — чытэльны выключаны стан: значэнне
+  // Рашэнне ўладара 2026-10-03 (канон §5) — чытэльны выключаны стан: значэнне
   // супадае з color.muted, але ролі і пары ў каноне свае (тэкст ≥4.5:1, межа
   // ≥3:1 на паперы, §5).
   colorDisabledInk: '#6b7280', // color.disabled-ink — тэкст выключанай кнопкі
@@ -25,6 +25,13 @@ export const tokens = {
   colorBadgePaid: '#fdf1d7', // color.badge.paid
   colorBadgeFree: '#e7f2ec', // color.badge.free
   colorBadgeMixed: '#ece7f8', // color.badge.mixed
+  // Рашэнні M4/M9 (#252) — мова медальёна: дыск, ручны контур, знак і
+  // бурштынавае свячэнне; у цёмнай тэме дыск і знак мяняюцца, контур і
+  // свячэнне застаюцца (светлая зона канона).
+  colorMedalPaper: '#fff6e0', // color.medal.paper
+  colorMedalRim: '#bd852c', // color.medal.rim
+  colorMedalInk: '#4a3b2a', // color.medal.ink
+  colorMedalGlow: '#f8d580', // color.medal.glow
   colorNoticeBg: '#fdf1d7', // color.notice.bg
   colorNoticeBorder: '#e6c98c', // color.notice.border
   colorErrorBg: '#fdeaea', // color.error.bg
@@ -37,6 +44,9 @@ export const tokens = {
   colorMarkerAvailable: '#8a610e', // color.marker.available
   colorMarkerPending: '#646c77', // color.marker.pending
   colorMarkerLocked: '#67707a', // color.marker.locked
+  // Issue #216 (M5/M11) — гравюрная панарама Гданьска пад блокам частак карты.
+  colorEngrave: '#7a6248', // color.engrave
+  colorPanoramaGround: '#faf7f2', // color.panorama.ground
   radiusBase: 10, // radius.base
   markerSize: 34, // size.marker — дыяметр маркера кропкі
   radiusPill: 99, // radius.pill
@@ -52,9 +62,12 @@ export const tokens = {
   contentMaxWidth: 640, // content.max-width — максімальная шырыня кантэнту
   fontBaseSize: 16, // font.base-size
   fontTitleSize: 18, // font.size-title — памер загалоўка экрана
+  // Issue #216 (M11) — загаловак «Куды сёння?» галоўнага экрана (макет menu.html).
+  fontMenuTitleSize: 32, // font.size.menu-title
   fontWeightStrong: '600', // font.weight-strong
+  fontWeightRegular: '400', // font.weight-regular
   fontBigTextFactor: 1.25, // font.big-text-factor
-  // G06.10.b (issue #402) — the font-family mirror: the named per-weight
+  // G06.10.b (docs/agent-tasks/app/G06.10.md — G06.10.b) — the font-family mirror: the named per-weight
   // faces the @expo-google-fonts packages export, one family per weight
   // (React Native cannot pick a weight inside a family — the Android
   // workaround). Values are not the canon CSS chains verbatim; the guard
@@ -63,6 +76,10 @@ export const tokens = {
   fontFamilyUi: 'GolosText_400Regular', // font.family-ui
   fontFamilyUiStrong: 'GolosText_600SemiBold', // font.family-ui
   fontFamilyDisplay: 'Alegreya_600SemiBold', // font.family-display
+  // Issue #216 (M11): другі выраз сямейства display — рэгулярнае начарканне
+  // загалоўка галоўнага экрана (у макеце Alegreya 400). Токен анкераваны да
+  // таго ж ліцэнзійнага запіса font.family-display.
+  fontFamilyDisplayRegular: 'Alegreya_400Regular', // font.family-display
   fontFamilyDragon: 'Caveat_400Regular', // font.family-dragon
   // G06.10.e (issue #405) — the grain layer opacity over the paper: the
   // canon keeps the approved range in the paperGrain rule, so the guard
@@ -71,32 +88,50 @@ export const tokens = {
 } as const;
 
 
-// #436 — approved DT-2 dark-chrome values from the darkTheme machine block in
+// #212 — owner-approved M3 dark-chrome values from the darkTheme machine block in
 // docs/design/visual-language.md. The light map, marker colors and typography
 // deliberately stay unchanged (DT-4); test/design-runtime-theme.test.mjs pins
 // every override to the accepted canon. Never invert content imagery.
 export const darkTokens = {
   ...tokens,
-  colorPaper: '#171d1c',
-  colorInk: '#f2f1e9',
-  colorMuted: '#c4d0ca',
-  colorAccent: '#80d4ad',
-  colorAccentInk: '#0d2a1e',
-  colorCard: '#232c29',
-  colorLine: '#45534c',
-  colorShelfAccent: '#65cb9c',
-  colorShelfLine: '#35403a',
-  colorDisabledInk: '#9aa8a1',
-  colorDisabledLine: '#6d7c72',
-  colorBadgePaid: '#493b23',
-  colorBadgeFree: '#263b31',
-  colorBadgeMixed: '#332c47',
-  colorNoticeBg: '#3a3119',
-  colorNoticeBorder: '#7d6b3a',
-  colorErrorBg: '#3a201b',
-  colorErrorBorder: '#8a4a42',
-  colorHintBg: '#1c2833',
-  colorHintBorder: '#3e5871',
+  texturePaperGrainOpacity: 0.04,
+  colorPaper: '#2a1510',
+  colorInk: '#f4eadb',
+  colorMuted: '#d6c5b0',
+  colorAccent: '#8ad4b0',
+  colorAccentInk: '#10281d',
+  colorCard: '#3a231b',
+  colorLine: '#6b4a3d',
+  colorShelfAccent: '#63b48e',
+  colorShelfLine: '#1a0d0a',
+  colorDisabledInk: '#b9a794',
+  colorDisabledLine: '#927a6c',
+  colorBadgePaid: '#57421f',
+  colorBadgeFree: '#2f4234',
+  colorBadgeMixed: '#40334e',
+  colorMedalPaper: '#3a231b',
+  colorMedalInk: '#f4eadb',
+  colorNoticeBg: '#4a3618',
+  colorNoticeBorder: '#8a733a',
+  colorErrorBg: '#4a211b',
+  colorErrorBorder: '#9a5046',
+  colorHintBg: '#2e2c38',
+  colorHintBorder: '#5a5878',
+  /* Issue #216 (M5/M11) — панарама ў цёмнай тэме: светлы штрых на цёмным
+     глейзе (kit.css [data-theme="dark"] --engrave / --panorama-ground).
+     Without inline anchors: the dark overrides are pinned by the runtime
+     theme test, not by the light-token guard. */
+  colorEngrave: '#c9b59b',
+  colorPanoramaGround: '#1e100c',
+} as const;
+
+export const darkBackground = {
+  cx: '50%', cy: '0%', rx: '130%', ry: '70%',
+  stops: [
+    { offset: '0%', color: '#4a2519' },
+    { offset: '58%', color: '#2a1510' },
+    { offset: '100%', color: '#1a0d0a' },
+  ],
 } as const;
 
 export type ThemeTokens = typeof tokens | typeof darkTokens;

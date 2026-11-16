@@ -67,7 +67,7 @@ describe("route placeholders (19 §2.5)", () => {
 
   // G06.04 criterion 3: the session history — the live walk beside the
   // finished previous runs, the rows exactly what the durable zone keeps.
-  // UX 05 (issue #351): the row's dates are the user's local calendar day.
+  // UX 05: the row's dates are the user's local calendar day.
   // The jest workers' zone is pinned to America/Anchorage (jest.config.js),
   // where 1970-01-01T00:00:05Z is already 1969-12-31 — a revert to the UTC
   // day fails this (implementation-rules 1).
@@ -218,7 +218,7 @@ describe("route placeholders (19 §2.5)", () => {
 });
 
 describe("city surface on the published catalog (G06.01.a)", () => {
-  // #339 criterion 1: the cold start opens the catalog, not +not-found — the
+  // Router purity (the app/ router guard, test/app-router-purity.test.mjs): the cold start opens the catalog, not +not-found — the
   // index route plays the approved splash (visual-language, 2026-10-28) and
   // redirects to Explore after 7 s, so the cards are awaited past the splash
   // window on real timers (10 s ceiling; RTL cleanup unmounts the timers).

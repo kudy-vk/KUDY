@@ -99,11 +99,11 @@ describe('nearbyStrings (criterion 5)', () => {
   });
 
   it('carries the uk words and falls back to Belarusian for an unknown locale (G14.04.d; 09 §0)', () => {
-    // G14.04.d (issue #305): uk answers from its own catalog now — the
+    // G14.04.d (16_delivery_backlog.md — G14.04.d): uk answers from its own catalog now — the
     // unknown-locale fallback is probed on a locale no catalog answers.
-    // G21.10 (issue #544): de answers from its own catalogue, so the probe
+    // G21.10 (2026-10-03-single-source-translations.md — G21.10): de answers from its own catalogue, so the probe
     // moved to the still-planned es. G21.11–G21.13 landed es, fr and cs, and
-    // G21.14 (issue #548) landed sv — the eight requested codes are all
+    // G21.14 (2026-10-03-single-source-translations.md — G21.14) landed sv — the eight requested codes are all
     // complete, so the unknown-locale probe finally rides an unregistered
     // code (pl); sv asserts its own words beside it.
     assert.equal(nearbyStrings('uk').title, 'Поруч');
