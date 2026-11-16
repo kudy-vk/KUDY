@@ -42,10 +42,11 @@ def pieces_box(margin=24):
     return x0, y0, x1 - x0, y1 - y0
 
 
-def render(jobs):
+def render(jobs, *, software_raster=False):
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / 'jobs.json'
-        path.write_text(json.dumps(jobs), encoding='utf-8')
+        batch = {'jobs': jobs, 'softwareRaster': True} if software_raster else jobs
+        path.write_text(json.dumps(batch), encoding='utf-8')
         subprocess.run(['node', str(HERE / 'render.mjs'), str(path)], check=True)
 
 

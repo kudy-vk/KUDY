@@ -203,6 +203,15 @@ test('registry rows with an unknown city and malformed source rows answer with d
   assert.ok(srcDefects.some((d) => d.includes('malformed source id "S1x"')), srcDefects.join('\n'));
 });
 
+test('a non-id-like areaId with a known city is answered with a diagnostic, not silence', () => {
+  const bad = REG.replace(
+    '| oliwa | gdansk | district | Oliwa | `oliwa` | — |',
+    '| Oliwa | gdansk | district | Oliwa | `oliwa` | — |',
+  );
+  const { parseDefects } = run(`${bad}## Карткі`);
+  assert.ok(parseDefects.some((d) => d.includes('registry row skipped: non-id-like areaId "Oliwa"')), parseDefects.join('\n'));
+});
+
 test('an EN objects item without a reference is caught', () => {
   const en = FULL.replace(cardMd('oliwa'), `### oliwa\n\n| Поле | BE | EN |\n|---|---|---|\n| what | Жылы раён [S01]. | A residential district [S01]. |\n| why | Рэкамендацыя [S02]. | A thread recommendation [S02]. |\n| objects | Катэдра [S02]; Парк [S02] | Cathedral [S02]; Park without source |\n`);
   const { defects } = run(en);
