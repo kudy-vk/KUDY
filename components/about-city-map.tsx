@@ -497,20 +497,40 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
       if (taken.some((o) => box.left < o.right + 2 && o.left < box.right + 2 && box.top < o.bottom && o.top < box.bottom)) next.add(entry.id);
       else taken.push(box);
     }
-    setSettled(next);
+    // The settle runs on every camera frame: a fresh Set identity would
+    // re-render the whole map twice per frame, so the state write happens
+    // only when the membership really changed.
+    const prev = settledRef.current;
+    const same = prev.size === next.size && [...next].every((id) => prev.has(id));
+    if (!same) {
+      settledRef.current = next;
+      setSettled(next);
+    }
   }, [atlas.pick, atlas.show, boxH, boxW, cam.centre, cam.zoom, level, scaleOf]);
   const settleRef = useRef(settle);
   settleRef.current = settle;
+  const settledRef = useRef<ReadonlySet<string>>(new Set());
+  // The one-shot measure rAFs and the flight tween stop with the map.
+  const rafs = useRef<number[]>([]);
+  useEffect(
+    () => () => {
+      for (const id of rafs.current) cancelAnimationFrame(id);
+      rafs.current = [];
+      if (flight.current !== null) cancelAnimationFrame(flight.current);
+    },
+    [],
+  );
 
   // A fresh name measurement re-settles once; the same box does not (the
-  // guard keeps the loop away).
+  // guard keeps the loop away). The rAF id rides the unmount cleanup.
   const measureLabel = useCallback((id: string) => (event: { nativeEvent: { lines: { height: number; width: number }[] } }) => {
     const line = event.nativeEvent.lines[0];
     if (!line) return;
     const prev = labelSizes.current.get(id);
     if (prev && prev.width === line.width && prev.height === line.height) return;
     labelSizes.current.set(id, { height: line.height, width: line.width });
-    requestAnimationFrame(() => settleRef.current());
+    const timer = requestAnimationFrame(() => settleRef.current());
+    rafs.current.push(timer);
   }, []);
 
   // Every settle-worthy change (the camera, the pick, the layers, the label
@@ -696,12 +716,16 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
   // ---- under the map ----
 
   // Google Maps at the picked place, or at the middle of the Tricity (M13).
+  // A failed open leaves the address on the screen (the screen's own rule
+  // for the official rows).
   const googleUrl = useMemo(() => {
     const [lon, lat] = atlas.pick ? lookUp(atlas.pick).at : TRICITY;
     return `https://www.google.com/maps/search/?api=1&query=${lat.toFixed(5)},${lon.toFixed(5)}`;
   }, [atlas.pick]);
+  const [googleFailed, setGoogleFailed] = useState<string | null>(null);
   const openGoogle = useCallback(() => {
-    void Linking.openURL(googleUrl).catch(() => undefined);
+    setGoogleFailed(null);
+    void Linking.openURL(googleUrl).catch(() => setGoogleFailed(googleUrl));
   }, [googleUrl]);
 
   const zoomIn = useCallback(() => fly(cam.zoom * ZOOM_STEP, cam.centre), [cam.centre, cam.zoom, fly]);
@@ -946,6 +970,7 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
           <PickCard onOpenSection={onOpenSection} pick={picked} t={t} />
         )}
       </View>
+      {googleFailed ? <Remark tone="error" text={t("link.failed", { url: googleFailed })} /> : null}
 
       {/* The same zones as a list: a press picks the zone and brings it into
           view (the mockup's atlas-list fold). */}

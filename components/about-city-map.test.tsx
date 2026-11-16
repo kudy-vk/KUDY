@@ -7,7 +7,7 @@
 // the reused mockup modules: dropping the design/production transform from
 // jest.config.js dies here on the ESM parse error.
 import { expect, jest, test } from "@jest/globals";
-import { fireEvent, render, screen, within } from "@testing-library/react-native";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react-native";
 import { useState } from "react";
 import { Linking } from "react-native";
 
@@ -110,6 +110,18 @@ test("the Google Maps button opens the picked place; the hint opens the Tricity 
   expect(spy).toHaveBeenLastCalledWith("https://www.google.com/maps/search/?api=1&query=54.41000,18.60000");
   spy.mockRestore();
   expect(picked).toBeTruthy();
+});
+
+test("a failed Google Maps open leaves the address on the screen", async () => {
+  const spy = jest.spyOn(Linking, "openURL").mockRejectedValueOnce(new Error("offline"));
+  renderMap();
+  fireEvent.press(screen.getByTestId("city-map-google"));
+  expect(await screen.findByText(/google\.com\/maps\/search/)).toBeTruthy();
+  // The next open succeeds: the stale failed-open notice is gone.
+  spy.mockResolvedValueOnce(undefined as never);
+  fireEvent.press(screen.getByTestId("city-map-google"));
+  await waitFor(() => expect(screen.queryByText(/google\.com\/maps\/search/)).toBeNull());
+  spy.mockRestore();
 });
 
 test("the zone list picks a stay zone; its ways come from the map data", () => {

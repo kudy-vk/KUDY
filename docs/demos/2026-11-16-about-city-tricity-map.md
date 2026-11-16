@@ -30,5 +30,5 @@ npx jest --config jest.config.js --runInBand --silent --runTestsByPath component
 PASS app/city/about-city.test.tsx
 PASS components/about-city-map.test.tsx
 Test Suites: 2 passed, 2 total
-Tests:       20 passed, 20 total
+Tests:       21 passed, 21 total
 ```
