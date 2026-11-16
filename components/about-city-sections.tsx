@@ -3,7 +3,8 @@
 // 2026-11-12). Each section is facts, not paragraphs: steps, rides with
 // their numbers, price rows, folds, switches. The visitor's choices inside
 // the sections ride `ui` and survive a section switch; the fold groups keep
-// one fold open (the mockup's folds() rule).
+// one fold open (the mockup's folds() rule). The map section is the #303
+// illustrated Tricity map (components/about-city-map.tsx).
 import { Fragment, type ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import BusIcon from "lucide-react-native/icons/bus";
@@ -24,13 +25,11 @@ import {
   ABOUT_CITY_FACT_ICONS,
   ABOUT_CITY_FREE_DAYS,
   ABOUT_CITY_PAY_METHODS,
-  ABOUT_CITY_PLACES,
   ABOUT_CITY_PRICES,
   ABOUT_CITY_RIDES,
   aboutCityHasText,
   aboutCityMoney,
   type AboutCityPayMethod,
-  type AboutCityPlace,
   type AboutCitySectionId,
   type AboutCityText,
 } from "./about-city-content";
@@ -41,28 +40,29 @@ import { PressableSurface } from "./pressable-surface";
 import { ScaledText } from "./scaled-text";
 import type { AboutCityStrings } from "../contracts/ui-message-types";
 import { useThemeStyles } from "./theme";
+import { ABOUT_CITY_ATLAS_INITIAL, AboutCityMap, type AboutCityAtlasState } from "./about-city-map";
 
 // What the visitor chose and opened inside the sections; it outlives a
-// section switch.
+// section switch. The map's choices ride `atlas` (the mockup's ui.atlas).
 export type AboutCityUiState = {
   direction: "from" | "to";
   zone: keyof typeof ABOUT_CITY_PRICES;
-  place: string;
   pay: "any" | AboutCityPayMethod;
   hours: (typeof ABOUT_CITY_CARD_HOURS)[number];
   day: number;
   folds: Record<string, boolean>;
+  atlas: AboutCityAtlasState;
 };
 
 export const ABOUT_CITY_INITIAL_UI: AboutCityUiState = {
   direction: "from",
   zone: "ztm",
-  place: "glowne",
   pay: "any",
   hours: 24,
   day: 1,
   // The first transport fold starts open, as the mockup says (open: true).
   folds: { "mode-ztm": true },
+  atlas: ABOUT_CITY_ATLAS_INITIAL,
 };
 
 export type AboutCitySectionStyles = ReturnType<typeof createStyles>;
@@ -70,13 +70,17 @@ export type AboutCitySectionStyles = ReturnType<typeof createStyles>;
 // What the section builders receive: the screen owns the words, the choices
 // and the fold memory; the section resolver adds the themed styles (the
 // builders are plain functions, not components — the one hook call lives in
-// AboutCitySection).
+// AboutCitySection). `setUi` also takes an updater over the previous state —
+// the map's camera commits ride it, so a stale closure never wipes the
+// visitor's newer pick. `onOpenSection` turns the wheel to a section (the
+// map's airport card uses it, the mockup's openSection).
 export type AboutCitySectionContext = {
   strings: AboutCityStrings;
   t: AboutCityText;
   ui: AboutCityUiState;
-  setUi: (patch: Partial<AboutCityUiState>) => void;
+  setUi: (patch: Partial<AboutCityUiState> | ((prev: AboutCityUiState) => Partial<AboutCityUiState>)) => void;
   toggleFold: (group: readonly string[], id: string, open: boolean) => void;
+  onOpenSection: (id: AboutCitySectionId) => void;
   styles: AboutCitySectionStyles;
 };
 
@@ -235,89 +239,25 @@ function transport(ctx: AboutCitySectionContext): ReactNode {
   );
 }
 
-// The orientation schematic: light in both themes (decision DT-4), like
-// every map of the app — its styles ride the fixed light tokens, not the
-// theme's palette. Each place is one button; the chosen one is described
-// below.
-function city(ctx: AboutCitySectionContext): ReactNode {
-  const { t, ui, setUi, styles } = ctx;
-  const chosen = ABOUT_CITY_PLACES.find((place) => place.id === ui.place) ?? ABOUT_CITY_PLACES[0];
-  const beach = chosen.kind === "beach" || chosen.kind === "island";
-  return (
-    <>
-      <View style={styles.orientation}>
-        <View style={styles.schematic} testID="city-schematic" accessibilityLabel={t("city.pick")}>
-          <View style={[styles.schematicLine, styles.coast]} />
-          <View style={[styles.schematicLine, styles.river]} />
-          <ScaledText style={[styles.water, styles.sea]}>{t("city.sea")}</ScaledText>
-          <ScaledText style={[styles.water, styles.motlawa]}>{t("city.motlawa")}</ScaledText>
-          {ABOUT_CITY_PLACES.map((place) => (
-            <PlaceSpot
-              key={place.id}
-              place={place}
-              selected={place.id === ui.place}
-              onPress={() => setUi({ place: place.id })}
-            />
-          ))}
-        </View>
-        <ScaledText style={styles.note}>{t("city.caption")}</ScaledText>
-      </View>
-      <View style={[styles.card, styles.place]} accessibilityLiveRegion="polite">
-        <View style={styles.placeHead}>
-          <ScaledText style={styles.placeTitle}>{chosen.title ?? chosen.name}</ScaledText>
-          <ScaledText style={styles.tag}>{t(`kind.${chosen.kind}`)}</ScaledText>
-        </View>
-        <ScaledText style={styles.text}>{t(`place.${chosen.id === "stogi" ? "stogiBeach" : chosen.id}`)}</ScaledText>
-        {chosen.get.length > 0 ? (
-          <View style={styles.stack}>
-            <ScaledText style={styles.note}>{`${t("city.get")}:`}</ScaledText>
-            {chosen.get.map(([sign, key]) => (
-              <Facts key={key} items={[[sign, t(key)]]} />
-            ))}
-          </View>
-        ) : null}
-        {chosen.warn ? <Remark tone="warn" text={t(chosen.warn)} /> : null}
-        {beach ? <ScaledText style={styles.note}>{t("city.summer")}</ScaledText> : null}
-      </View>
-    </>
-  );
-}
+// The illustrated Tricity map (issue #303, decisions M12–M13): the camera,
+// the pick and the layers ride ui.atlas; the airport card turns the wheel
+// back to the airport section. The map is light in both themes (DT-4).
+const ATLAS_FOLD_IDS = ["atlas-list"] as const;
 
-// The one place button: its dot stands on the point (x, y) and its name
-// beside it — to the right, to the left, or under it.
-function PlaceSpot({ place, selected, onPress }: {
-  place: AboutCityPlace;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  const styles = useThemeStyles(lightStyles, darkStyles);
-  const dot = place.main ? 10 : 8;
+function city(ctx: AboutCitySectionContext): ReactNode {
+  const { t, ui, setUi, toggleFold, onOpenSection } = ctx;
   return (
-    <View
-      style={[
-        styles.spot,
-        place.side === "right" ? styles.spotRight : place.side === "left" ? styles.spotLeft : styles.spotBelow,
-        { left: `${place.x}%`, top: `${place.y}%` },
-      ]}
-      pointerEvents="box-none"
-    >
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={place.name}
-        accessibilityState={{ selected }}
-        onPress={onPress}
-        style={styles.spotButton}
-        testID={`city-spot-${place.id}`}
-      >
-        <View style={styles.dotBox}>
-          {selected ? <View style={[styles.dotRing, { borderRadius: (dot + 12) / 2, height: dot + 12, width: dot + 12 }]} /> : null}
-          <View style={[styles.dot, place.main ? styles.dotMain : null, { borderRadius: dot / 2, height: dot, width: dot }]} />
-        </View>
-        <ScaledText style={[styles.spotName, place.main ? styles.spotNameMain : null, selected ? styles.spotNameSelected : null]}>
-          {place.name}
-        </ScaledText>
-      </Pressable>
-    </View>
+    <AboutCityMap
+      t={t}
+      atlas={ui.atlas}
+      // The patch merges into the previous atlas on the screen side: the
+      // camera commits and the picks land from the live state, never from a
+      // captured copy.
+      setAtlas={(patch) => setUi((prev) => ({ atlas: { ...prev.atlas, ...patch } }))}
+      foldOpen={Boolean(ui.folds["atlas-list"])}
+      onToggleFold={(id, open) => toggleFold(ATLAS_FOLD_IDS, id, open)}
+      onOpenSection={onOpenSection}
+    />
   );
 }
 
@@ -511,38 +451,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   ticketHead: { alignItems: "center", columnGap: 8, flexDirection: "row" },
   ticketTitle: { color: palette.colorInk, fontSize: 16, fontWeight: tokens.fontWeightStrong },
   tiles: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  orientation: { gap: 6 },
-  schematic: {
-    aspectRatio: 0.8,
-    backgroundColor: tokens.colorMap,
-    borderColor: tokens.colorLine,
-    borderRadius: tokens.radiusBase,
-    borderWidth: StyleSheet.hairlineWidth,
-    overflow: "hidden",
-  },
-  schematicLine: { backgroundColor: tokens.colorLine, position: "absolute" },
-  coast: { height: 1, left: 0, right: 0, top: "13%" },
-  river: { bottom: 0, left: "62%", top: "13%", width: 2 },
-  water: { color: tokens.colorInk, fontSize: 13, position: "absolute" },
-  sea: { left: "4%", top: "3%" },
-  motlawa: { left: "65.5%", top: "68%" },
-  spot: { position: "absolute" },
-  spotRight: { alignItems: "center", flexDirection: "row", transform: [{ translateX: -4 }, { translateY: "-50%" }] },
-  spotLeft: { alignItems: "center", flexDirection: "row-reverse", transform: [{ translateX: 4 }, { translateY: "-50%" }] },
-  spotBelow: { alignItems: "flex-end", flexDirection: "column", transform: [{ translateX: 12 }, { translateY: -10 }] },
-  spotButton: { alignItems: "center", columnGap: 5, flexDirection: "row", padding: 2 },
-  dotBox: { alignItems: "center", height: 22, justifyContent: "center", width: 22 },
-  dot: { backgroundColor: tokens.colorInk },
-  dotMain: { backgroundColor: tokens.colorAccent },
-  dotRing: { borderColor: tokens.colorMedalGlow, borderWidth: 3, position: "absolute" },
-  spotName: {
-    color: tokens.colorInk,
-    fontSize: 13,
-    paddingHorizontal: 4,
-    paddingVertical: 1,
-  },
-  spotNameMain: { color: tokens.colorAccent },
-  spotNameSelected: { backgroundColor: tokens.colorAccent, borderRadius: 4, color: tokens.colorAccentInk },
   place: { gap: 10 },
   placeHead: { alignItems: "center", columnGap: 10, flexDirection: "row", flexWrap: "wrap", rowGap: 6 },
   placeTitle: { color: palette.colorInk, fontSize: tokens.fontTitleSize, fontWeight: tokens.fontWeightStrong },

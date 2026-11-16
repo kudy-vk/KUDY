@@ -10,6 +10,7 @@ import assert from 'node:assert/strict';
 import { ANCHORS, LINES, MAP_IMAGE, STATIONS, ZONES } from '../docs/design/production/about-map-data.mjs';
 import { SHAPES, anchorMisses, inside, nearestStop, pickAt } from '../docs/design/production/about-map-geo.mjs';
 import { PLACE_WAYS, hasText } from '../docs/design/production/about-content.mjs';
+import { ABOUT_CITY_ZONE_WAYS as APP_ZONE_WAYS } from '../components/about-city-zone-ways.ts';
 
 const ALL = { visit: true, stay: true, rail: true, plan: true };
 const zone = (id) => SHAPES.zones.find((item) => item.id === id);
@@ -118,3 +119,52 @@ test('every zone can be picked on the whole map', () => {
     }
   }
 });
+
+// --- the app version (issue #303) ---
+//
+// The app reuses these same modules (components/about-city-map.tsx imports
+// about-map-data/about-map-geo/kit-geo without copying, the menu-map rule),
+// so the checks above are the app map's own geometry checks. What the app
+// adds is its own word source: the generated ui-messages catalogue replaces
+// the mockup dictionary. These checks fail when the app dictionary loses a
+// word the map shows, in either shipped language.
+import { ABOUT_CITY_STRINGS } from '../components/about-city-strings.generated.ts';
+
+const resolve = (strings, key) => {
+  let node = strings;
+  for (const part of key.split('.')) {
+    if (node === null || typeof node !== 'object') return undefined;
+    node = node[part];
+  }
+  return node;
+};
+
+test('the app dictionary carries every word the map shows, in be and en', () => {
+  const mapKeys = ['map.label', 'map.role', 'map.zoomIn', 'map.zoomOut', 'map.fit', 'map.google',
+    'map.layers', 'map.hint', 'map.list', 'layer.visit', 'layer.stay', 'layer.rail', 'layer.plan',
+    'stop.tag', 'stop.planned', 'stop.skm', 'stop.pkm', 'stop.change', 'stop.plan', 'stop.planFrom',
+    'air.map', 'air.mapGo'];
+  for (const locale of ['be', 'en']) {
+    const strings = ABOUT_CITY_STRINGS[locale];
+    for (const key of [...mapKeys, ...ZONES.map((zone) => zone.text)]) {
+      const word = resolve(strings, key);
+      assert.ok(typeof word === 'string' && word.length > 0, `${locale}: ${key} is missing`);
+    }
+    for (const zone of ZONES) {
+      const ways = zone.ways ? APP_ZONE_WAYS[zone.ways] : null;
+      if (zone.ways) assert.ok(ways, `${locale}: the ways of ${zone.id} are missing`);
+    }
+    // The two templates are functions: the zone's nearest-stop line and the
+    // zone-list count line.
+    assert.equal(typeof resolve(strings, 'zone.stop'), 'function');
+    assert.equal(typeof resolve(strings, 'map.listMeta'), 'function');
+  }
+});
+
+test('the map shows 22 zones: 10 to visit, 12 to stay (the owner list, M12)', () => {
+  assert.equal(ZONES.length, 22);
+  assert.equal(ZONES.filter((zone) => zone.kind === 'visit').length, 10);
+  assert.equal(ZONES.filter((zone) => zone.kind === 'stay').length, 12);
+  assert.deepEqual(Object.keys(APP_ZONE_WAYS), ['glowne', 'oliwa', 'wrzeszcz', 'brzezno', 'westerplatte']);
+});
+

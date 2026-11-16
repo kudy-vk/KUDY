@@ -39,6 +39,14 @@ export const tokens = {
   colorHintBg: '#f6faff', // color.hint.bg
   colorHintBorder: '#bcd2f0', // color.hint.border
   colorMap: '#eef3ee', // color.map — фон мапы Побач і Run
+  // Рашэнні M12 (#248/#303) — ілюстраваная карта Труймяста «Пра горад»:
+  // зоны і лініі на падкладцы малюнка; карта светлая ў абедзвюх тэмах (DT-4).
+  colorMapZoneVisit: '#e9973f', // color.map.zone.visit — заліўка зоны «Месцы для наведвання», непразрыстасць 62%
+  colorMapZoneStay: '#3f9461', // color.map.zone.stay — заліўка зоны «Зручна спыніцца», непразрыстасць 42%
+  colorMapZonePicked: '#9a5d24', // color.map.zone.picked — выбраная зона і кольца выбранай станцыі, бронза без абводкі
+  colorMapLineSkm: '#1d6b4f', // color.map.line.skm — лінія і контур станцый SKM
+  colorMapLinePkm: '#276c8c', // color.map.line.pkm — лінія і контур станцый PKM (цягнік да аэрапорта)
+  colorMapLinePlan: '#6c7520', // color.map.line.plan — пункцір і контур прыпынкаў будучай лініі PKM Południe
   colorMarkerPlaying: '#b3331f', // color.marker.playing
   colorMarkerPlayed: '#1d6b4f', // color.marker.played
   colorMarkerAvailable: '#8a610e', // color.marker.available

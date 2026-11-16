@@ -3450,30 +3450,12 @@
       }
     },
     {
-      "id": "native.aboutCity.city.pick",
-      "value": "Places on the schematic",
-      "reviewedSourceHash": "d8696c9e1b24047cbbcd662694ac836f5c412b8212e3489f622b1ff0ee58533c",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
       "id": "native.aboutCity.city.caption",
-      "value": "A schematic with approximate proportions, not a map. The exact map of the centre is in the link below.",
-      "reviewedSourceHash": "01b6658caafaac990e0e8a1660f7679b37e09a03240d733790876d0ddce3590d",
+      "value": "An illustrated map: stations and zones stand where they are, but the drawing is approximate. Not for navigation.",
+      "reviewedSourceHash": "7fb89e2848f5e12b7ed1728b7e6f58e080913bc7979f426eac6cb134a7ff25ce",
       "review": {
         "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.city.sea",
-      "value": "Baltic Sea",
-      "reviewedSourceHash": "cd6658d8c4929a1ba8a4bd4e687047d3bd610c6e3ba694c6e0cc3d0c77e71dbc",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+        "note": "Тэкст і кантэкст абноўлены да версіі карты макета #248 (#303): карта замяняе схему, подпіс ідзе з макета даслоўна; пераклад адпавядае новаму тэксту."
       }
     },
     {
@@ -3495,90 +3477,9 @@
       }
     },
     {
-      "id": "native.aboutCity.kind.centre",
-      "value": "Historic centre",
-      "reviewedSourceHash": "b337c2e83d4a14272417baa0520e0e53e91140930bf88c89b1aff4a5f98e238a",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.kind.quarter",
-      "value": "Historic quarter",
-      "reviewedSourceHash": "6245b9616c8a0a78255c6d9f172fbc79dcd371b984d1bffe11526b0cc2c8ef97",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.kind.station",
-      "value": "Main station",
-      "reviewedSourceHash": "e346bd0eb6cbb5000e6ba429df4c017d909e896b4b66a892a1efe7931f696fa0",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.kind.district",
-      "value": "District",
-      "reviewedSourceHash": "1e39b554fdcd92168f244e41b1cff7dee03e47b456208d7d83ea5c3e923a988e",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.kind.beach",
-      "value": "Beach",
-      "reviewedSourceHash": "51345fdf10e78f7ad40ae4fee246c351c59d5c21e3529511583efeb4d205cb86",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.kind.island",
-      "value": "Island and beach",
-      "reviewedSourceHash": "aaa6a5c7dbb8380106ab66d1e998a42bc9296033bc18f86b15806a9fa18ee7fa",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
       "id": "native.aboutCity.place.glowne",
       "value": "The tourist heart of Gdańsk on the Motława river: Długa and Długi Targ streets, the Neptune Fountain, the Town Hall, St Mary’s Church and the Crane.",
       "reviewedSourceHash": "7064dc82bb7586955456a24274c56716a04d0fc309a67ed8daf8c203fd615546",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.place.stare",
-      "value": "A separate historic quarter north of Główne Miasto, with St Catherine’s Church and the Great Mill. Its name means “old town”, but the famous sights are in Główne Miasto.",
-      "reviewedSourceHash": "c8097ff0976dcfc72fca420b819cc73d6dc7f03b03cf91fa59ab5803de1f2c28",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.place.station",
-      "value": "The main railway station. Its tunnels lead out to the tram stops. The rail stop closest to the centre is Gdańsk Śródmieście on the SKM line.",
-      "reviewedSourceHash": "12c98e41d167651e5418a382e4ea7b39646704c34d623b8350446af802816c1a",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.place.wrzeszcz",
-      "value": "The most populous residential district: shops and cafés, villas from the late 19th century, and Wajdeloty street at its heart.",
-      "reviewedSourceHash": "7635fbdd675a5dc62ad39af7ed87bbca6724e2e1465bbee97d4f958cd1b348cb",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -3603,63 +3504,9 @@
       }
     },
     {
-      "id": "native.aboutCity.place.jelitkowo",
-      "value": "A family beach near the border with Sopot.",
-      "reviewedSourceHash": "1bcb69cdc0830e810708070147a19837804c5a338ae6989ff281af57e57b838e",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.place.stogiBeach",
-      "value": "A wide, quiet beach.",
-      "reviewedSourceHash": "42752b2328e9068b1b896e34f5390991deabe1fcbf74a7f82a4cff445e72a252",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.place.stogi.warn",
-      "value": "Siennicki bridge is closed and trams are cut short until 2027, so take the bus.",
-      "reviewedSourceHash": "df00c2e2159e134cd3b794c87477115643aa940fac4ce255433c60d143388f08",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.place.sobieszewo",
-      "value": "The “wild” green end of the city, with bird reserves.",
-      "reviewedSourceHash": "de50cdde8aba0bf4b4cf23221539474d44ab77156e7fa8b814535fd4334c5fac",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
       "id": "native.aboutCity.get.glowne",
       "value": "about 10 min on foot from Gdańsk Główny",
       "reviewedSourceHash": "b6327426539bb1ed8c71455512045800091ef527cb12abab586d154a694f8d09",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.get.station.walk",
-      "value": "about 10 min on foot to Główne Miasto",
-      "reviewedSourceHash": "43b1ff9bc5a28a51c951a750c8b2f981a1f7e5bc43c1f8f074857a93adac10a2",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.get.station.skm",
-      "value": "SKM: Gdańsk Śródmieście is closer to the centre",
-      "reviewedSourceHash": "475c3a9c5c3b764b7db15926060ecc6974adafe018951ea9f7af855792a0e21d",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -3696,33 +3543,6 @@
       "id": "native.aboutCity.get.brzezno",
       "value": "tram 3 to Brzeźno Dom Zdrojowy",
       "reviewedSourceHash": "c9a695dc70cb0eb8ef970418e08af3380a74af4d1fd71e9e4704c03d7ad48a0c",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.get.jelitkowo",
-      "value": "trams 2 and 4",
-      "reviewedSourceHash": "3daff794cba90608ad1091a844f17f0349a47e384c163e1a5d05f52846041d3f",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.get.stogi",
-      "value": "bus T8 or 158",
-      "reviewedSourceHash": "862269861cd4af658a6df94d47529127892c09bd414e2feb840062273f85917d",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.get.sobieszewo",
-      "value": "bus 512",
-      "reviewedSourceHash": "19910f16f5e00629273fb78a236e6ba8dc48a28dce8393d3fcc14bd0fde7da92",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -4305,15 +4125,6 @@
       }
     },
     {
-      "id": "native.aboutCity.links.visitGdanskMap",
-      "value": "Official map of central Gdańsk (PDF)",
-      "reviewedSourceHash": "ca807e7ff5f4f2c4d32d21923ecc50289de28bf31faec957439e28c6eb1c9e37",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
       "id": "native.aboutCity.links.kartaTurysty",
       "value": "Karta Turysty — packages and prices",
       "reviewedSourceHash": "44e2300ecbce6d9dcd567a246c03078d5c07ad5c625d4c1976a463ad633f742a",
@@ -4359,12 +4170,399 @@
       }
     },
     {
-      "id": "native.aboutCity.city.motlawa",
-      "value": "Motława",
-      "reviewedSourceHash": "96b9a1cc981cc071188bed7116bdc884d4a52af4395e9e0dccb2da93d238d2b2",
+      "id": "native.aboutCity.get.westerplatte",
+      "value": "bus from Gdańsk Główny or, in summer, a boat from the centre",
+      "reviewedSourceHash": "215083f980e204e33b90f4b5a9154c718617edc0011285987f45803ad89c64c0",
       "review": {
         "outcome": "approved",
-        "note": "Уласнае імя ракі: тэкст супадае ва ўсіх мовах; перанесены з літарала ў каталог паводле гарда no-hardcoded-words (#252, 2026-11-12)."
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.gdynia",
+      "value": "From the station along 10 Lutego and Świętojańska to Kościuszko Square, the South Pier and the museum ships.",
+      "reviewedSourceHash": "18a6da06bfe8c7262b4abb6a39ea92a530b97eee5b557677042b9a81a7fdfa33",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.place.sopot",
+      "value": "The resort centre: Monte Cassino street (Monciak) leads down to the sea and the pier.",
+      "reviewedSourceHash": "aea83a49e748ece35fa08f4b1e0254cc765523d3601c818b912abfb9914fdf6b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.mapGo",
+      "value": "How to get to the city",
+      "reviewedSourceHash": "9b71751cd7cb4d6c801f4a55ee093df08ec73fc4a17ef1126ba030ccc14a7bdc",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.air.map",
+      "value": "PKM train to Gdańsk Wrzeszcz, then SKM to the centre; buses run into the city too.",
+      "reviewedSourceHash": "12847ee5a6125104262f79da833ddc2bd2ab23725d92754fea6680af6a36ad90",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.planFrom",
+      "value": "The planned PKM Południe line will start here; the target is 2030.",
+      "reviewedSourceHash": "9db4fccbfa40fc996cb9ab2df935380dd57228dfc1b8c0ed618c490513ba9cf9",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.plan",
+      "value": "PKM Południe is a planned line: no trains run here yet, the target is 2030. The stop’s place on the map is approximate.",
+      "reviewedSourceHash": "bd7e814c42c82bbbb38dfa8feea2762d17f317344b09ebff3a560c40bd64f2f0",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.change",
+      "value": "Change here between SKM and the airport trains.",
+      "reviewedSourceHash": "e376327cd62cc8c4d1c480fbfbe9f70595114acf298fabcfa040eda50b229d89",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.pkm",
+      "value": "PKM trains run from Gdańsk Wrzeszcz via the airport.",
+      "reviewedSourceHash": "70278a39c9aba411705789385ca81129964ef57f84b57f36ac4e986294b469f0",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.skm",
+      "value": "SKM trains link Gdańsk, Sopot and Gdynia.",
+      "reviewedSourceHash": "42b1e520eccfd9983c3d3aa314ce55d0b053761e1b69b58b6675ec75047b5ce1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.planned",
+      "value": "Planned",
+      "reviewedSourceHash": "1e974e4e23a5f6ff6c10bb5c5c655430e5da6eeba9267b5aa2e46118e878499e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.stop.tag",
+      "value": "Station",
+      "reviewedSourceHash": "6e426a046da321ca4a623ad95e2dd8b1b101c5a1ad4952d96de58144e148b397",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.wzgorze",
+      "value": "A calm hillside area by the SKM station: one stop to central Gdynia, a few to Sopot.",
+      "reviewedSourceHash": "5e71ec80add51b1b41cfe99d3c83551d6852d32c52ce72faf0dc0557322a3c06",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.sopot-west",
+      "value": "On the other side of the railway from Monciak: quieter and usually cheaper, with the sea 10–15 minutes on foot.",
+      "reviewedSourceHash": "77be839400384df5789ca3ead975a1ebc019b91227f8e3e699ba72eccea417db",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.przymorze",
+      "value": "Blocks near SKM and the tram: the sea is a walk away, Sopot and the centre a train ride.",
+      "reviewedSourceHash": "4b544430bf25aca766c4a448401840397361df3d78842c1817652cc66bf158ae",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.wrzeszcz",
+      "value": "Shops, cafés and Galeria Bałtycka, with SKM close by: a few minutes to Gdańsk Główny and about a quarter of an hour to Sopot.",
+      "reviewedSourceHash": "44e90ea7a80a70c9dec4bd8c4b5c88eacfa98c3ba22c0bd3412582d6824c5f6e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.orunia-gorna",
+      "value": "New neighbourhoods by the future PKM Południe stops. Once the line opens (target 2030), the centre will be a few minutes away by train.",
+      "reviewedSourceHash": "6016f9727a9f87cec363cc8bb9e1e391b5f1f946736b35a493e0ac8c785bdf28",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.chelm",
+      "value": "A residential district on the hill with trams into town; the planned PKM Południe line will pass close by.",
+      "reviewedSourceHash": "36cd81e6b8adc71d91dcb441b2d4d56866c12cf5decd8ff6d386f09335205de1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.powstancow",
+      "value": "Quiet residential streets on the slope above Kartuska: a few minutes to the tram into town.",
+      "reviewedSourceHash": "1eb36f74321109ba37abc5e822e00d75efb80a922039b9c8c16eb47961d1a5c0",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.siedlce",
+      "value": "A residential district next to the centre: the tram on Kartuska, or 20–25 minutes into town on foot.",
+      "reviewedSourceHash": "6de49aca7b556e046711144e8cdb55dd139a91784c573cabb6effe6d590abcc1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.kartuska",
+      "value": "Trams run along Kartuska street: Główne Miasto is a few stops away, and rooms are usually cheaper than in the centre.",
+      "reviewedSourceHash": "ae9e4ec49a8a5da4ba662d9d1b3eb2f6e6185f30c52ae48b2570a0ce936cea49",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.dlugie-ogrody",
+      "value": "Across the Motława from Główne Miasto: the sights are a walk away, and evenings are quieter.",
+      "reviewedSourceHash": "20bdf260c07f8821eeb2b63181e227bd66a12be045ad71938aba96a1753b5780",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.nowe-ogrody",
+      "value": "New buildings 10–15 minutes on foot from Główne Miasto and the station; quieter than the very centre.",
+      "reviewedSourceHash": "2d761c3fc185201c71bd84d4c2b66c21ce1083f0aa50b8ebcc23ba2a756962e6",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.centrum",
+      "value": "Everything on foot: sights, cafés, the station and SKM. Pricier, and it can be loud in the evening.",
+      "reviewedSourceHash": "c29d9fc784ec1db094d65a6fee6636899dafda5b1bc7f7855e14c17911af007c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.politechnika",
+      "value": "The historic main building of the University of Technology (1904) and its green campus between Wrzeszcz and the centre.",
+      "reviewedSourceHash": "4fb766765a9a3681f230b11e55b1111f2340eaeb64fe76f0256ecf3fdb642494",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.westerplatte",
+      "value": "Where the Second World War began on 1 September 1939: a guardhouse, the ruined barracks and the defenders’ monument. A fair way from the centre.",
+      "reviewedSourceHash": "72896197401e4ad6f6194f6953a4be52db8f903048bbd07fcc5e0f6f3bdb83a2",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.dolne",
+      "value": "A former working-class quarter across the Motława: restored houses, the Łaźnia contemporary art centre and old fortifications by the water. Worth it if you have an hour to spare.",
+      "reviewedSourceHash": "6c477bd5e02d266341be9461f368c1328b2d8a5d3c04fdd9453893ae94b5edbb",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.przedmiescie",
+      "value": "The National Museum with Memling’s Last Judgment and quiet streets south of Główne Miasto.",
+      "reviewedSourceHash": "65d37043945c38337d2fa3988a1257796a44a7fa3a1c456b103746e2604da373",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.stare",
+      "value": "Calmer than Długi Targ: St Catherine’s Church, the Great Mill and the Old Town Hall, with Gdańsk Główny next door.",
+      "reviewedSourceHash": "10b1d2d5827dd4f8c80cc479210df113b508fa632b74b266369ff6931c871ed7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.zone.stop",
+      "value": "${name}: ${km} km in a straight line",
+      "reviewedSourceHash": "aa750e2cd87f92e95683ed5db2b83d91744a168403e9564215a125911f251b8e",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.layer.plan",
+      "value": "Planned line",
+      "reviewedSourceHash": "a80f4a10c67ae5adfcc60b0bf966859262bf74d8d3bd5b84f64c60ec84b86428",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.layer.rail",
+      "value": "SKM and PKM trains",
+      "reviewedSourceHash": "c84b0cdf3a3f8013573dc76b28dc9c56737bf18944cfddf703507ae409b5158f",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.layer.stay",
+      "value": "Good base to stay",
+      "reviewedSourceHash": "59484ad07f43c4c169c2b0782755c1cab85ebb1d3b62d3daeba201b04da793a1",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.layer.visit",
+      "value": "Places to visit",
+      "reviewedSourceHash": "9df71812ca10e0b3b5e449f1e5626af1145fd0ffa53a1336f4ba274611020e9c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.listMeta",
+      "value": "${visit} to visit, ${stay} to stay",
+      "reviewedSourceHash": "e30a4d09ee9bcf890bf81900c2232313e166dfa404322726504aae431e24c0b3",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.list",
+      "value": "All zones as a list",
+      "reviewedSourceHash": "6ba1a58946546f267a4617714fb43026c9967a460bd98c6641643a8a7a37e308",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.hint",
+      "value": "Tap a coloured zone, a station or the airport sign to see what it is.",
+      "reviewedSourceHash": "81879a433119e0e02483ce4b110aa0e4eaeb7265836af488b287bf3106f84e54",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.layers",
+      "value": "What the map shows",
+      "reviewedSourceHash": "2d7d744aca8b61b8c7578dd5dd4d9382ea29063b2c6611fe137d38b0c3d2a16b",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.google",
+      "value": "Open in Google Maps",
+      "reviewedSourceHash": "bc447522e8a61d485377ad2b7eef3079addd38ebb2cc56ed657f3f46bdf79334",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.fit",
+      "value": "Show the whole map",
+      "reviewedSourceHash": "05baf05871f14bbab8c4bc58fb8cc729b4cfa157e393fb8328b1c57e5741f73c",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.zoomOut",
+      "value": "Zoom out",
+      "reviewedSourceHash": "a02601b9e2f703cbf7e08a3f2564033bba1d22ae5869cba524f901f6cb635bac",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.zoomIn",
+      "value": "Zoom in",
+      "reviewedSourceHash": "13e767472d50f2ce0e4e48c067ae3755d77a179ab59b74c62ab554bedefe8bb7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.role",
+      "value": "map",
+      "reviewedSourceHash": "2dd9359a1a5aa8fe9f3092f4071746126c779709b9942659bfdea080d2fa91df",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.map.label",
+      "value": "Map of the Tricity",
+      "reviewedSourceHash": "7548aa85035242327b14b6ccbd9335e4bd08e0d0e8b7169a03f05f36d27ce2b7",
+      "review": {
+        "outcome": "approved",
+        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
       }
     }
   ]

@@ -305,6 +305,10 @@ export interface AboutCityStrings {
       };
     };
     readonly notice: string;
+    // The map's airport card: how the airport ties to the city and the way
+    // back to the airport section (#303, the mockup's air.map / air.map.go).
+    readonly map: string;
+    readonly mapGo: string;
   };
   readonly ride: {
     readonly "110": {
@@ -428,52 +432,78 @@ export interface AboutCityStrings {
     };
   };
   readonly city: {
-    readonly pick: string;
     readonly caption: string;
-    readonly sea: string;
-    // The river's proper noun, identical in every language; it rides the
-    // catalog like every word (the no-hardcoded-words guard).
-    readonly motlawa: string;
     readonly get: string;
     readonly summer: string;
   };
-  readonly kind: {
-    readonly centre: string;
-    readonly quarter: string;
-    readonly station: string;
-    readonly district: string;
-    readonly beach: string;
-    readonly island: string;
+  // The illustrated Tricity map of the city section (#303, decisions
+  // M12–M13): the map's words, the layer switches, the zone descriptions
+  // (the mockup's about-words sets), the station words and the airport
+  // card. The nesting-rule renames of the mockup's flat ids: map.list.meta
+  // → map.listMeta, stop.plan.from → stop.planFrom, air.map.go → air.mapGo.
+  readonly map: {
+    readonly label: string;
+    readonly role: string;
+    readonly zoomIn: string;
+    readonly zoomOut: string;
+    readonly fit: string;
+    readonly google: string;
+    readonly layers: string;
+    readonly hint: string;
+    readonly list: string;
+    readonly listMeta: (visit: number, stay: number) => string;
+  };
+  readonly layer: {
+    readonly visit: string;
+    readonly stay: string;
+    readonly rail: string;
+    readonly plan: string;
+  };
+  readonly zone: {
+    readonly stop: (name: string, km: string) => string;
+    readonly stare: string;
+    readonly przedmiescie: string;
+    readonly dolne: string;
+    readonly westerplatte: string;
+    readonly politechnika: string;
+    readonly centrum: string;
+    readonly "nowe-ogrody": string;
+    readonly "dlugie-ogrody": string;
+    readonly kartuska: string;
+    readonly siedlce: string;
+    readonly powstancow: string;
+    readonly chelm: string;
+    readonly "orunia-gorna": string;
+    readonly wrzeszcz: string;
+    readonly przymorze: string;
+    readonly "sopot-west": string;
+    readonly wzgorze: string;
+  };
+  readonly stop: {
+    readonly tag: string;
+    readonly planned: string;
+    readonly skm: string;
+    readonly pkm: string;
+    readonly change: string;
+    readonly plan: string;
+    readonly planFrom: string;
   };
   readonly place: {
     readonly glowne: string;
-    readonly stare: string;
-    readonly station: string;
-    readonly wrzeszcz: string;
     readonly oliwa: string;
     readonly brzezno: string;
-    readonly jelitkowo: string;
-    readonly stogiBeach: string;
-    readonly stogi: {
-      readonly warn: string;
-    };
-    readonly sobieszewo: string;
+    readonly sopot: string;
+    readonly gdynia: string;
   };
   readonly get: {
     readonly glowne: string;
-    readonly station: {
-      readonly walk: string;
-      readonly skm: string;
-    };
     readonly wrzeszcz: string;
     readonly oliwa: {
       readonly tram: string;
       readonly skm: string;
     };
     readonly brzezno: string;
-    readonly jelitkowo: string;
-    readonly stogi: string;
-    readonly sobieszewo: string;
+    readonly westerplatte: string;
   };
   readonly food: {
     readonly deliveryLabel: string;
@@ -575,7 +605,6 @@ export interface AboutCityStrings {
     readonly skmSearch: string;
     readonly jakdojade: string;
     readonly mzkzg: string;
-    readonly visitGdanskMap: string;
     readonly kartaTurysty: string;
     readonly muzeumGdanska: string;
     readonly muzeum1939: string;

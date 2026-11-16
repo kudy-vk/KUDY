@@ -4722,37 +4722,15 @@
       "sourceHash": "0fc6a5c5f97e33b7bf9b10ab01283edabfc1de5e764c9b5fecd45ccaeb90a2a7"
     },
     {
-      "id": "native.aboutCity.city.pick",
-      "source": "Месцы на схеме",
-      "context": "Раздзел «Дзе што ў горадзе»: схема арыенціраў і подпісы да яе",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#city.pick"
-      ],
-      "sourceHash": "d8696c9e1b24047cbbcd662694ac836f5c412b8212e3489f622b1ff0ee58533c"
-    },
-    {
       "id": "native.aboutCity.city.caption",
-      "source": "Схема з прыблізнымі прапорцыямі, не мапа. Дакладная мапа цэнтра — па спасылцы ніжэй.",
-      "context": "Раздзел «Дзе што ў горадзе»: схема арыенціраў і подпісы да яе",
+      "source": "Ілюстраваная карта: станцыі і зоны стаяць на сваіх месцах, але малюнак прыблізны. Не для навігацыі.",
+      "context": "Подпіса пад картай Труймяста ў раздзеле «Гданьск з аднаго погляду»: малюнак прыблізны, не для навігацыі (#303; карта замяняе схему)",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#city.caption"
       ],
-      "sourceHash": "01b6658caafaac990e0e8a1660f7679b37e09a03240d733790876d0ddce3590d"
-    },
-    {
-      "id": "native.aboutCity.city.sea",
-      "source": "Балтыйскае мора",
-      "context": "Раздзел «Дзе што ў горадзе»: схема арыенціраў і подпісы да яе",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#city.sea"
-      ],
-      "sourceHash": "cd6658d8c4929a1ba8a4bd4e687047d3bd610c6e3ba694c6e0cc3d0c77e71dbc"
+      "sourceHash": "7fb89e2848f5e12b7ed1728b7e6f58e080913bc7979f426eac6cb134a7ff25ce"
     },
     {
       "id": "native.aboutCity.city.get",
@@ -4777,72 +4755,6 @@
       "sourceHash": "c749d8aab008345438f7c714847ce4c1e598855da3b9307b54a07a3b41ff1b8c"
     },
     {
-      "id": "native.aboutCity.kind.centre",
-      "source": "Гістарычны цэнтр",
-      "context": "Пазнака віду месца на схеме арыенціраў",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#kind.centre"
-      ],
-      "sourceHash": "b337c2e83d4a14272417baa0520e0e53e91140930bf88c89b1aff4a5f98e238a"
-    },
-    {
-      "id": "native.aboutCity.kind.quarter",
-      "source": "Гістарычны квартал",
-      "context": "Пазнака віду месца на схеме арыенціраў",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#kind.quarter"
-      ],
-      "sourceHash": "6245b9616c8a0a78255c6d9f172fbc79dcd371b984d1bffe11526b0cc2c8ef97"
-    },
-    {
-      "id": "native.aboutCity.kind.station",
-      "source": "Галоўны вакзал",
-      "context": "Пазнака віду месца на схеме арыенціраў",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#kind.station"
-      ],
-      "sourceHash": "e346bd0eb6cbb5000e6ba429df4c017d909e896b4b66a892a1efe7931f696fa0"
-    },
-    {
-      "id": "native.aboutCity.kind.district",
-      "source": "Раён",
-      "context": "Пазнака віду месца на схеме арыенціраў",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#kind.district"
-      ],
-      "sourceHash": "1e39b554fdcd92168f244e41b1cff7dee03e47b456208d7d83ea5c3e923a988e"
-    },
-    {
-      "id": "native.aboutCity.kind.beach",
-      "source": "Пляж",
-      "context": "Пазнака віду месца на схеме арыенціраў",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#kind.beach"
-      ],
-      "sourceHash": "51345fdf10e78f7ad40ae4fee246c351c59d5c21e3529511583efeb4d205cb86"
-    },
-    {
-      "id": "native.aboutCity.kind.island",
-      "source": "Востраў і пляж",
-      "context": "Пазнака віду месца на схеме арыенціраў",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#kind.island"
-      ],
-      "sourceHash": "aaa6a5c7dbb8380106ab66d1e998a42bc9296033bc18f86b15806a9fa18ee7fa"
-    },
-    {
       "id": "native.aboutCity.place.glowne",
       "source": "Турыстычнае сэрца Гданьска на рацэ Motława: вуліцы Długa і Długi Targ, фантан Нептуна, Ратуша, касцёл Святой Марыі і Żuraw.",
       "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
@@ -4852,39 +4764,6 @@
         "components/about-city-strings.generated.ts#place.glowne"
       ],
       "sourceHash": "7064dc82bb7586955456a24274c56716a04d0fc309a67ed8daf8c203fd615546"
-    },
-    {
-      "id": "native.aboutCity.place.stare",
-      "source": "Асобны гістарычны квартал на поўнач ад Główne Miasto, з касцёлам Святой Кацярыны і Вялікім млынам. Назва азначае «стары горад», але славутасці, па якія прыязджаюць, — у Główne Miasto.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.stare"
-      ],
-      "sourceHash": "c8097ff0976dcfc72fca420b819cc73d6dc7f03b03cf91fa59ab5803de1f2c28"
-    },
-    {
-      "id": "native.aboutCity.place.station",
-      "source": "Галоўны чыгуначны вакзал. З яго тунэляў ёсць выхады да трамвайных прыпынкаў. Бліжэйшая да цэнтра чыгуначная станцыя — Gdańsk Śródmieście на лініі SKM.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.station"
-      ],
-      "sourceHash": "12c98e41d167651e5418a382e4ea7b39646704c34d623b8350446af802816c1a"
-    },
-    {
-      "id": "native.aboutCity.place.wrzeszcz",
-      "source": "Самы населены жылы раён: крамы і кавярні, вілы канца XIX стагоддзя і вуліца Wajdeloty ў самым сэрцы.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.wrzeszcz"
-      ],
-      "sourceHash": "7635fbdd675a5dc62ad39af7ed87bbca6724e2e1465bbee97d4f958cd1b348cb"
     },
     {
       "id": "native.aboutCity.place.oliwa",
@@ -4909,50 +4788,6 @@
       "sourceHash": "44515b05c4e0ef9ca822b9d30facda6eb89c8b6dae590e855792b723e54bb650"
     },
     {
-      "id": "native.aboutCity.place.jelitkowo",
-      "source": "Сямейны пляж каля мяжы з Сопатам.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.jelitkowo"
-      ],
-      "sourceHash": "1bcb69cdc0830e810708070147a19837804c5a338ae6989ff281af57e57b838e"
-    },
-    {
-      "id": "native.aboutCity.place.stogiBeach",
-      "source": "Шырокі спакойны пляж.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.stogiBeach"
-      ],
-      "sourceHash": "42752b2328e9068b1b896e34f5390991deabe1fcbf74a7f82a4cff445e72a252"
-    },
-    {
-      "id": "native.aboutCity.place.stogi.warn",
-      "source": "Мост Siennicki закрыты, трамваі скарочаныя да 2027 года, таму едзь аўтобусам.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.stogi.warn"
-      ],
-      "sourceHash": "df00c2e2159e134cd3b794c87477115643aa940fac4ce255433c60d143388f08"
-    },
-    {
-      "id": "native.aboutCity.place.sobieszewo",
-      "source": "«Дзікі» зялёны край горада з птушынымі запаведнікамі.",
-      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#place.sobieszewo"
-      ],
-      "sourceHash": "de50cdde8aba0bf4b4cf23221539474d44ab77156e7fa8b814535fd4334c5fac"
-    },
-    {
       "id": "native.aboutCity.get.glowne",
       "source": "каля 10 хв пешкі ад Gdańsk Główny",
       "context": "Радок «як дабрацца» для месца на схеме",
@@ -4962,28 +4797,6 @@
         "components/about-city-strings.generated.ts#get.glowne"
       ],
       "sourceHash": "b6327426539bb1ed8c71455512045800091ef527cb12abab586d154a694f8d09"
-    },
-    {
-      "id": "native.aboutCity.get.station.walk",
-      "source": "каля 10 хв пешкі да Główne Miasto",
-      "context": "Радок «як дабрацца» для месца на схеме",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#get.station.walk"
-      ],
-      "sourceHash": "43b1ff9bc5a28a51c951a750c8b2f981a1f7e5bc43c1f8f074857a93adac10a2"
-    },
-    {
-      "id": "native.aboutCity.get.station.skm",
-      "source": "SKM: Gdańsk Śródmieście бліжэй да цэнтра",
-      "context": "Радок «як дабрацца» для месца на схеме",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#get.station.skm"
-      ],
-      "sourceHash": "475c3a9c5c3b764b7db15926060ecc6974adafe018951ea9f7af855792a0e21d"
     },
     {
       "id": "native.aboutCity.get.wrzeszcz",
@@ -5028,39 +4841,6 @@
         "components/about-city-strings.generated.ts#get.brzezno"
       ],
       "sourceHash": "c9a695dc70cb0eb8ef970418e08af3380a74af4d1fd71e9e4704c03d7ad48a0c"
-    },
-    {
-      "id": "native.aboutCity.get.jelitkowo",
-      "source": "трамваі 2 і 4",
-      "context": "Радок «як дабрацца» для месца на схеме",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#get.jelitkowo"
-      ],
-      "sourceHash": "3daff794cba90608ad1091a844f17f0349a47e384c163e1a5d05f52846041d3f"
-    },
-    {
-      "id": "native.aboutCity.get.stogi",
-      "source": "аўтобус T8 або 158",
-      "context": "Радок «як дабрацца» для месца на схеме",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#get.stogi"
-      ],
-      "sourceHash": "862269861cd4af658a6df94d47529127892c09bd414e2feb840062273f85917d"
-    },
-    {
-      "id": "native.aboutCity.get.sobieszewo",
-      "source": "аўтобус 512",
-      "context": "Радок «як дабрацца» для месца на схеме",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#get.sobieszewo"
-      ],
-      "sourceHash": "19910f16f5e00629273fb78a236e6ba8dc48a28dce8393d3fcc14bd0fde7da92"
     },
     {
       "id": "native.aboutCity.food.deliveryLabel",
@@ -5772,17 +5552,6 @@
       "sourceHash": "59c511de27bdfc54c21c282e67ab5bacfeb10ce1ec070bbff19308b091d31796"
     },
     {
-      "id": "native.aboutCity.links.visitGdanskMap",
-      "source": "Афіцыйная мапа цэнтра Гданьска (PDF)",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.visitGdanskMap"
-      ],
-      "sourceHash": "ca807e7ff5f4f2c4d32d21923ecc50289de28bf31faec957439e28c6eb1c9e37"
-    },
-    {
       "id": "native.aboutCity.links.kartaTurysty",
       "source": "Karta Turysty — пакеты і цэны",
       "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
@@ -5838,15 +5607,506 @@
       "sourceHash": "22756a7fb58d4dafbeff6953f1f370fd31f304b69591d68ed5e416edfa255468"
     },
     {
-      "id": "native.aboutCity.city.motlawa",
-      "source": "Motława",
-      "context": "Назва ракі на схеме арыенціраў раздзела «Дзе што ў горадзе»: уласнае імя, аднолькавае ва ўсіх мовах інтэрфейсу",
+      "id": "native.aboutCity.map.label",
+      "source": "Карта Труймяста",
+      "context": "Раздзел «Гданьск з аднаго погляду»: назва карты Труймяста для экраннага чытальніка (#303; рашэнні M12–M13, макет #248)",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/about-city-strings.generated.ts#city.motlawa"
+        "components/about-city-strings.generated.ts#map.label"
       ],
-      "sourceHash": "96b9a1cc981cc071188bed7116bdc884d4a52af4395e9e0dccb2da93d238d2b2"
+      "sourceHash": "7548aa85035242327b14b6ccbd9335e4bd08e0d0e8b7169a03f05f36d27ce2b7"
+    },
+    {
+      "id": "native.aboutCity.map.role",
+      "source": "карта",
+      "context": "Раздзел «Гданьск з аднаго погляду»: роля карты для экраннага чытальніка (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.role"
+      ],
+      "sourceHash": "2dd9359a1a5aa8fe9f3092f4071746126c779709b9942659bfdea080d2fa91df"
+    },
+    {
+      "id": "native.aboutCity.map.zoomIn",
+      "source": "Наблізіць",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка набліжэння карты (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.zoomIn"
+      ],
+      "sourceHash": "13e767472d50f2ce0e4e48c067ae3755d77a179ab59b74c62ab554bedefe8bb7"
+    },
+    {
+      "id": "native.aboutCity.map.zoomOut",
+      "source": "Аддаліць",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка аддалення карты (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.zoomOut"
+      ],
+      "sourceHash": "a02601b9e2f703cbf7e08a3f2564033bba1d22ae5869cba524f901f6cb635bac"
+    },
+    {
+      "id": "native.aboutCity.map.fit",
+      "source": "Паказаць усю карту",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка «паказаць усю карту» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.fit"
+      ],
+      "sourceHash": "05baf05871f14bbab8c4bc58fb8cc729b4cfa157e393fb8328b1c57e5741f73c"
+    },
+    {
+      "id": "native.aboutCity.map.google",
+      "source": "Адкрыць у Google Maps",
+      "context": "Раздзел «Гданьск з аднаго погляду»: маленькая кнопка каля кнопак маштабу, што адкрывае Google Maps на выбраным месцы (рашэнне M13)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.google"
+      ],
+      "sourceHash": "bc447522e8a61d485377ad2b7eef3079addd38ebb2cc56ed657f3f46bdf79334"
+    },
+    {
+      "id": "native.aboutCity.map.layers",
+      "source": "Што паказвае карта",
+      "context": "Раздзел «Гданьск з аднаго погляду»: назва групы перамыкачаў слаёў карты (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.layers"
+      ],
+      "sourceHash": "2d7d744aca8b61b8c7578dd5dd4d9382ea29063b2c6611fe137d38b0c3d2a16b"
+    },
+    {
+      "id": "native.aboutCity.map.hint",
+      "source": "Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: падказка ў картцы пад картай, пакуль нічога не выбрана (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.hint"
+      ],
+      "sourceHash": "81879a433119e0e02483ce4b110aa0e4eaeb7265836af488b287bf3106f84e54"
+    },
+    {
+      "id": "native.aboutCity.map.list",
+      "source": "Усе зоны спісам",
+      "context": "Раздзел «Гданьск з аднаго погляду»: загаловак згорткі са спісам усіх зон (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.list"
+      ],
+      "sourceHash": "6ba1a58946546f267a4617714fb43026c9967a460bd98c6641643a8a7a37e308"
+    },
+    {
+      "id": "native.aboutCity.map.listMeta",
+      "source": "${visit} для наведвання, ${stay} каб спыніцца",
+      "context": "Раздзел «Гданьск з аднаго погляду»: радок-падпіс спісу зон — колькасць зон для наведвання і для спынку",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "visit",
+          "type": "number"
+        },
+        {
+          "name": "stay",
+          "type": "number"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.listMeta"
+      ],
+      "sourceHash": "e30a4d09ee9bcf890bf81900c2232313e166dfa404322726504aae431e24c0b3"
+    },
+    {
+      "id": "native.aboutCity.layer.visit",
+      "source": "Месцы для наведвання",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю і пазнака віду зоны «месцы для наведвання» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.visit"
+      ],
+      "sourceHash": "9df71812ca10e0b3b5e449f1e5626af1145fd0ffa53a1336f4ba274611020e9c"
+    },
+    {
+      "id": "native.aboutCity.layer.stay",
+      "source": "Зручна спыніцца",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю і пазнака віду зоны «зручна спыніцца» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.stay"
+      ],
+      "sourceHash": "59484ad07f43c4c169c2b0782755c1cab85ebb1d3b62d3daeba201b04da793a1"
+    },
+    {
+      "id": "native.aboutCity.layer.rail",
+      "source": "Цягнікі SKM і PKM",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю цягнікоў SKM і PKM (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.rail"
+      ],
+      "sourceHash": "c84b0cdf3a3f8013573dc76b28dc9c56737bf18944cfddf703507ae409b5158f"
+    },
+    {
+      "id": "native.aboutCity.layer.plan",
+      "source": "Будучая лінія",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю і пазнака будучай лініі PKM Południe (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.plan"
+      ],
+      "sourceHash": "a80f4a10c67ae5adfcc60b0bf966859262bf74d8d3bd5b84f64c60ec84b86428"
+    },
+    {
+      "id": "native.aboutCity.zone.stop",
+      "source": "${name}: ${km} км па прамой",
+      "context": "Раздзел «Гданьск з аднаго погляду»: радок «як дабрацца» ў картцы зоны — бліжэйшая станцыя і адлегласць па прамой",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "km",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.stop"
+      ],
+      "sourceHash": "aa750e2cd87f92e95683ed5db2b83d91744a168403e9564215a125911f251b8e"
+    },
+    {
+      "id": "native.aboutCity.zone.stare",
+      "source": "Спакайней, чым на Długi Targ: касцёл Святой Кацярыны, Вялікі млын і Ратуша Старога Горада, а побач — Gdańsk Główny.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.stare"
+      ],
+      "sourceHash": "10b1d2d5827dd4f8c80cc479210df113b508fa632b74b266369ff6931c871ed7"
+    },
+    {
+      "id": "native.aboutCity.zone.przedmiescie",
+      "source": "Нацыянальны музей са «Страшным судом» Мемлінга і ціхія вуліцы на поўдзень ад Główne Miasto.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.przedmiescie"
+      ],
+      "sourceHash": "65d37043945c38337d2fa3988a1257796a44a7fa3a1c456b103746e2604da373"
+    },
+    {
+      "id": "native.aboutCity.zone.dolne",
+      "source": "Былы рабочы квартал за Motława: адноўленыя камяніцы, цэнтр сучаснага мастацтва Łaźnia і старыя ўмацаванні ля вады. Варта, калі ёсць лішняя гадзіна.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.dolne"
+      ],
+      "sourceHash": "6c477bd5e02d266341be9461f368c1328b2d8a5d3c04fdd9453893ae94b5edbb"
+    },
+    {
+      "id": "native.aboutCity.zone.westerplatte",
+      "source": "Тут 1 верасня 1939 года пачалася Другая сусветная вайна: вартоўня, руіны казармаў і помнік абаронцам. Далекавата ад цэнтра.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.westerplatte"
+      ],
+      "sourceHash": "72896197401e4ad6f6194f6953a4be52db8f903048bbd07fcc5e0f6f3bdb83a2"
+    },
+    {
+      "id": "native.aboutCity.zone.politechnika",
+      "source": "Гістарычны гмах Політэхнікі 1904 года і зялёны кампус паміж Wrzeszcz і цэнтрам.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.politechnika"
+      ],
+      "sourceHash": "4fb766765a9a3681f230b11e55b1111f2340eaeb64fe76f0256ecf3fdb642494"
+    },
+    {
+      "id": "native.aboutCity.zone.centrum",
+      "source": "Усё пешшу: славутасці, кавярні, вакзал і SKM. Даражэй, і ўвечары бывае шумна.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.centrum"
+      ],
+      "sourceHash": "c29d9fc784ec1db094d65a6fee6636899dafda5b1bc7f7855e14c17911af007c"
+    },
+    {
+      "id": "native.aboutCity.zone.nowe-ogrody",
+      "source": "Новыя дамы ў 10–15 хвілінах пешшу ад Główne Miasto і вакзала; цішэй, чым у самым цэнтры.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.nowe-ogrody"
+      ],
+      "sourceHash": "2d761c3fc185201c71bd84d4c2b66c21ce1083f0aa50b8ebcc23ba2a756962e6"
+    },
+    {
+      "id": "native.aboutCity.zone.dlugie-ogrody",
+      "source": "Праз Motława ад Główne Miasto: да славутасцяў пешшу, а ўвечары цішэй.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.dlugie-ogrody"
+      ],
+      "sourceHash": "20bdf260c07f8821eeb2b63181e227bd66a12be045ad71938aba96a1753b5780"
+    },
+    {
+      "id": "native.aboutCity.zone.kartuska",
+      "source": "Уздоўж вуліцы Kartuska ходзяць трамваі: да Główne Miasto некалькі прыпынкаў, жыллё звычайна танней, чым у цэнтры.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.kartuska"
+      ],
+      "sourceHash": "ae9e4ec49a8a5da4ba662d9d1b3eb2f6e6185f30c52ae48b2570a0ce936cea49"
+    },
+    {
+      "id": "native.aboutCity.zone.siedlce",
+      "source": "Жылы раён побач з цэнтрам: трамвай на Kartuska або 20–25 хвілін пешшу.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.siedlce"
+      ],
+      "sourceHash": "6de49aca7b556e046711144e8cdb55dd139a91784c573cabb6effe6d590abcc1"
+    },
+    {
+      "id": "native.aboutCity.zone.powstancow",
+      "source": "Спакойныя жылыя вуліцы на схіле над Kartuska: да трамвая ў цэнтр — некалькі хвілін.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.powstancow"
+      ],
+      "sourceHash": "1eb36f74321109ba37abc5e822e00d75efb80a922039b9c8c16eb47961d1a5c0"
+    },
+    {
+      "id": "native.aboutCity.zone.chelm",
+      "source": "Жылы раён на ўзгорку з трамваямі ў цэнтр; побач пройдзе будучая лінія PKM Południe.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.chelm"
+      ],
+      "sourceHash": "36cd81e6b8adc71d91dcb441b2d4d56866c12cf5decd8ff6d386f09335205de1"
+    },
+    {
+      "id": "native.aboutCity.zone.orunia-gorna",
+      "source": "Новыя кварталы ля будучых прыпынкаў PKM Południe. Калі лінію адкрыюць (мэта — 2030 год), да цэнтра будзе некалькі хвілін цягніком.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.orunia-gorna"
+      ],
+      "sourceHash": "6016f9727a9f87cec363cc8bb9e1e391b5f1f946736b35a493e0ac8c785bdf28"
+    },
+    {
+      "id": "native.aboutCity.zone.wrzeszcz",
+      "source": "Крамы, кавярні і Galeria Bałtycka, а SKM побач: некалькі хвілін да Gdańsk Główny і каля чвэрці гадзіны да Sopot.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.wrzeszcz"
+      ],
+      "sourceHash": "44e90ea7a80a70c9dec4bd8c4b5c88eacfa98c3ba22c0bd3412582d6824c5f6e"
+    },
+    {
+      "id": "native.aboutCity.zone.przymorze",
+      "source": "Кварталы каля SKM і трамвая: да мора можна дайсці пешшу, да Sopot і цэнтра — цягніком.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.przymorze"
+      ],
+      "sourceHash": "4b544430bf25aca766c4a448401840397361df3d78842c1817652cc66bf158ae"
+    },
+    {
+      "id": "native.aboutCity.zone.sopot-west",
+      "source": "Па другі бок чыгункі ад Monciak: цішэй і звычайна танней, а да мора 10–15 хвілін пешшу.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.sopot-west"
+      ],
+      "sourceHash": "77be839400384df5789ca3ead975a1ebc019b91227f8e3e699ba72eccea417db"
+    },
+    {
+      "id": "native.aboutCity.zone.wzgorze",
+      "source": "Спакойны раён на ўзгорку каля станцыі SKM: да цэнтра Gdyni адзін прыпынак, да Sopot — некалькі.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.wzgorze"
+      ],
+      "sourceHash": "5e71ec80add51b1b41cfe99d3c83551d6852d32c52ce72faf0dc0557322a3c06"
+    },
+    {
+      "id": "native.aboutCity.stop.tag",
+      "source": "Станцыя",
+      "context": "Раздзел «Гданьск з аднаго погляду»: пазнака станцыі на карце (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.tag"
+      ],
+      "sourceHash": "6e426a046da321ca4a623ad95e2dd8b1b101c5a1ad4952d96de58144e148b397"
+    },
+    {
+      "id": "native.aboutCity.stop.planned",
+      "source": "Плануецца",
+      "context": "Раздзел «Гданьск з аднаго погляду»: пазнака запланаванага прыпынку на карце (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.planned"
+      ],
+      "sourceHash": "1e974e4e23a5f6ff6c10bb5c5c655430e5da6eeba9267b5aa2e46118e878499e"
+    },
+    {
+      "id": "native.aboutCity.stop.skm",
+      "source": "Цягнікі SKM злучаюць Гданьск, Сопат і Гдыню.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка станцыі — што ходзіць па SKM (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.skm"
+      ],
+      "sourceHash": "42b1e520eccfd9983c3d3aa314ce55d0b053761e1b69b58b6675ec75047b5ce1"
+    },
+    {
+      "id": "native.aboutCity.stop.pkm",
+      "source": "Цягнікі PKM ідуць ад Gdańsk Wrzeszcz праз аэрапорт.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка станцыі — што ходзіць па PKM (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.pkm"
+      ],
+      "sourceHash": "70278a39c9aba411705789385ca81129964ef57f84b57f36ac4e986294b469f0"
+    },
+    {
+      "id": "native.aboutCity.stop.change",
+      "source": "Тут перасадка паміж SKM і цягнікамі да аэрапорта.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка станцыі з перасадкай (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.change"
+      ],
+      "sourceHash": "e376327cd62cc8c4d1c480fbfbe9f70595114acf298fabcfa040eda50b229d89"
+    },
+    {
+      "id": "native.aboutCity.stop.plan",
+      "source": "PKM Południe — запланаваная лінія: цягнікі тут яшчэ не ходзяць, мэта — 2030 год. Месца прыпынку на карце прыблізнае.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: заўвага пра запланаваную лінію PKM Południe ў картке прыпынку (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.plan"
+      ],
+      "sourceHash": "bd7e814c42c82bbbb38dfa8feea2762d17f317344b09ebff3a560c40bd64f2f0"
+    },
+    {
+      "id": "native.aboutCity.stop.planFrom",
+      "source": "Адсюль пачнецца запланаваная лінія PKM Południe; мэта — 2030 год.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: заўвага пра станцыі, ад якіх пачнецца запланаваная лінія (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.planFrom"
+      ],
+      "sourceHash": "9db4fccbfa40fc996cb9ab2df935380dd57228dfc1b8c0ed618c490513ba9cf9"
+    },
+    {
+      "id": "native.aboutCity.air.map",
+      "source": "Цягнік PKM да Gdańsk Wrzeszcz, далей SKM да цэнтра; у горад ходзяць і аўтобусы.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка аэрапорта на карце — як дабрацца ў горад (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.map"
+      ],
+      "sourceHash": "12847ee5a6125104262f79da833ddc2bd2ab23725d92754fea6680af6a36ad90"
+    },
+    {
+      "id": "native.aboutCity.air.mapGo",
+      "source": "Як дабрацца ў горад",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка карткі аэрапорта, што вяртае да раздзела «Аэрапорт» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.mapGo"
+      ],
+      "sourceHash": "9b71751cd7cb4d6c801f4a55ee093df08ec73fc4a17ef1126ba030ccc14a7bdc"
+    },
+    {
+      "id": "native.aboutCity.place.sopot",
+      "source": "Курортны цэнтр: вуліца Monte Cassino (Monciak) вядзе да мора і мола.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: апісанне зоны, якую выбралі на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.sopot"
+      ],
+      "sourceHash": "aea83a49e748ece35fa08f4b1e0254cc765523d3601c818b912abfb9914fdf6b"
+    },
+    {
+      "id": "native.aboutCity.place.gdynia",
+      "source": "Ад вакзала па 10 Lutego і Świętojańska — да Сквера Касцюшкі, Паўднёвага мола і караблёў-музеяў.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: апісанне зоны, якую выбралі на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.gdynia"
+      ],
+      "sourceHash": "18a6da06bfe8c7262b4abb6a39ea92a530b97eee5b557677042b9a81a7fdfa33"
+    },
+    {
+      "id": "native.aboutCity.get.westerplatte",
+      "source": "аўтобус ад Gdańsk Główny або летам катэр з цэнтра",
+      "context": "Раздзел «Гданьск з аднаго погляду»: радок «як дабрацца» для зоны на карце Труймяста (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.westerplatte"
+      ],
+      "sourceHash": "215083f980e204e33b90f4b5a9154c718617edc0011285987f45803ad89c64c0"
     }
   ]
 }

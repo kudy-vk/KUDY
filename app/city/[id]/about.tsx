@@ -129,8 +129,8 @@ export default function AboutCity() {
   // (issue criterion 7). Opening another row clears the notice.
   const [failedLink, setFailedLink] = useState<string | null>(null);
 
-  const setUi = useCallback((patch: Partial<AboutCityUiState>) => {
-    setUiState((prev) => ({ ...prev, ...patch }));
+  const setUi = useCallback((patch: Partial<AboutCityUiState> | ((prev: AboutCityUiState) => Partial<AboutCityUiState>)) => {
+    setUiState((prev) => ({ ...prev, ...(typeof patch === "function" ? patch(prev) : patch) }));
   }, []);
   // The fold groups keep one fold open: opening one closes the others of
   // its group (the mockup's folds() rule).
@@ -143,10 +143,6 @@ export default function AboutCity() {
   }, []);
 
   const t = useMemo(() => aboutCityText(strings), [strings]);
-  const ctx: Omit<AboutCitySectionContext, "styles"> = useMemo(
-    () => ({ strings, t, ui, setUi, toggleFold }),
-    [strings, t, ui, setUi, toggleFold],
-  );
 
   // The section slides in from the side the wheel turned to (the mockup's
   // from-left/from-right, 220 ms); the system «reduce motion» setting jumps
@@ -172,6 +168,20 @@ export default function AboutCity() {
     }
     Animated.timing(slide, { toValue: 0, duration: 220, easing: Easing.out(Easing.ease), useNativeDriver: true }).start();
   }, [sectionId, calm, slide]);
+
+  // The map's airport card turns the wheel back to the airport section
+  // (the mockup's openSection('airport')).
+  const onOpenSection = useCallback((id: AboutCitySectionId) => {
+    const index = ABOUT_CITY_SECTIONS.findIndex((item) => item.id === id);
+    if (index === -1) return;
+    const current = ABOUT_CITY_SECTIONS.findIndex((item) => item.id === sectionId);
+    onSelect(index, index > current ? 1 : -1);
+  }, [onSelect, sectionId]);
+
+  const ctx: Omit<AboutCitySectionContext, "styles"> = useMemo(
+    () => ({ strings, t, ui, setUi, toggleFold, onOpenSection }),
+    [strings, t, ui, setUi, toggleFold, onOpenSection],
+  );
 
   const openLink = useCallback((linkKey: AboutCityLinkKey) => {
     const url = ABOUT_CITY_LINK_URLS[linkKey];
@@ -214,29 +224,33 @@ export default function AboutCity() {
         <Animated.View style={{ transform: [{ translateX: slide }] }}>
           <AboutCitySection key={sectionId} id={sectionId} ctx={ctx} />
         </Animated.View>
-        <View style={styles.sources}>
-          <SubHeading>{t("sources.title")}</SubHeading>
-          <ScaledText style={styles.verified}>{t("sources.note")}</ScaledText>
-          <View style={styles.stack}>
-            {section.links.map((linkKey) => {
-              const label = t(`links.${linkKey}`);
-              return (
-                <PressableSurface
-                  accessibilityRole="link"
-                  accessibilityLabel={label}
-                  key={linkKey}
-                  onPress={() => openLink(linkKey)}
-                  style={[styles.card, styles.linkRow]}
-                  testID={`link-about-${linkKey}`}
-                >
-                  <ScaledText style={styles.linkLabel}>{label}</ScaledText>
-                  <CanonIcon glyph={ExternalLinkIcon} label={label} color={tokens.colorAccent} size={18} />
-                </PressableSurface>
-              );
-            })}
+        {/* The map section carries no official-pages rows (decision M13 —
+            the Google Maps button lives beside the map): the block hides. */}
+        {section.links.length > 0 ? (
+          <View style={styles.sources}>
+            <SubHeading>{t("sources.title")}</SubHeading>
+            <ScaledText style={styles.verified}>{t("sources.note")}</ScaledText>
+            <View style={styles.stack}>
+              {section.links.map((linkKey) => {
+                const label = t(`links.${linkKey}`);
+                return (
+                  <PressableSurface
+                    accessibilityRole="link"
+                    accessibilityLabel={label}
+                    key={linkKey}
+                    onPress={() => openLink(linkKey)}
+                    style={[styles.card, styles.linkRow]}
+                    testID={`link-about-${linkKey}`}
+                  >
+                    <ScaledText style={styles.linkLabel}>{label}</ScaledText>
+                    <CanonIcon glyph={ExternalLinkIcon} label={label} color={tokens.colorAccent} size={18} />
+                  </PressableSurface>
+                );
+              })}
+            </View>
+            {failedLink ? <Remark tone="error" text={t("link.failed", { url: failedLink })} /> : null}
           </View>
-          {failedLink ? <Remark tone="error" text={t("link.failed", { url: failedLink })} /> : null}
-        </View>
+        ) : null}
       </ScrollView>
     </ScreenSurface>
   );
