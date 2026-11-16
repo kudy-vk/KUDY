@@ -18,13 +18,16 @@ test('MAP-04 assets are versioned, bounded and match the canonical inputs', () =
   const fields = ['id', 'x', 'y', 'width', 'height', 'path', 'anchor', 'neighbors'];
   assert.deepEqual(exported.pieces.map(piece => fields.map(key => piece[key])),
     canonical.pieces.map(piece => fields.map(key => piece[key])));
-  const sources = ['MAP-02/vector/map-master-vector.svg', 'MAP-02/vector/render.mjs', '../../visual-language.md',
+  const sources = ['MAP-02/vector/map-master-vector.svg', 'MAP-02/vector/render.mjs', 'MAP-02/vector/export.py',
+    'MAP-04/verify-svg.mjs', '../../visual-language.md',
     'menu-map-city-only/manifest.json',
     'menu-map-city-only/source.png', ...canonical.pieces.map(piece => `menu-map-city-only/${piece.png}`)];
   assert.deepEqual(Object.keys(exported.sources).sort(), sources.sort());
   const ids = [...canonical.pieces.map(piece => piece.id), 'scene'];
   const hashedText = ['docs/design/brand/outputs/MAP-02/vector/map-master-vector.svg',
     'docs/design/brand/outputs/MAP-02/vector/render.mjs',
+    'docs/design/brand/outputs/MAP-02/vector/export.py',
+    'docs/design/brand/outputs/MAP-04/verify-svg.mjs',
     ...ids.map(id => `docs/design/brand/outputs/MAP-04/assets/${id}.svg`),
     'docs/design/brand/outputs/MAP-04/assets/manifest.json'];
   const attributes = execFileSync('git', ['check-attr', 'eol', '--', ...hashedText], { encoding: 'utf8' });

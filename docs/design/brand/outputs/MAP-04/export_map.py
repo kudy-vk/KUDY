@@ -7,6 +7,7 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import xml.etree.ElementTree as XML
 
@@ -53,7 +54,8 @@ def inputs():
         if any(key.lower().startswith('on') or 'href' in key or 'url(' in value
                for key, value in element.attrib.items()):
             raise ValueError('master contains an active or external reference')
-    sources = [MASTER, MASTER.parent / 'render.mjs', PACKAGE / 'manifest.json', PACKAGE / 'source.png']
+    sources = [MASTER, MASTER.parent / 'render.mjs', MASTER.parent / 'export.py', HERE / 'verify-svg.mjs',
+               PACKAGE / 'manifest.json', PACKAGE / 'source.png']
     layers = []
     occupied = np.zeros((height, width), dtype=bool)
     for piece in geometry['pieces']:
@@ -115,9 +117,7 @@ def export(out_dir):
                              ('dark', tokens['darkTheme']['tokens']['color.paper'])]:
             jobs.append({'svg': str(MASTER), 'out': str(stage / f'preview-{theme}-320.png'),
                          'width': 320, 'height': round(320 * height / width), 'background': paper})
-        for job in jobs:
-            job['softwareRaster'] = True
-        VECTOR.render(jobs)
+        VECTOR.render(jobs, software_raster=True)
         # One rasterization per density avoids Chrome's clip-dependent colour rounding.
         for density in DENSITIES:
             reference = cv2.imread(str(stage / f'master@{density}x.png'), -1)
@@ -179,6 +179,7 @@ def verify(out_dir):
             expected_pixels = np.where(scaled[:, :, None], reference[y:y+h, x:x+w], 0)
             if not np.array_equal(image, expected_pixels):
                 raise ValueError(f'pixels differ: {name}')
+    subprocess.run(['node', str(HERE / 'verify-svg.mjs'), str(out_dir)], check=True)
     return manifest
 
 

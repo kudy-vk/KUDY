@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -91,6 +92,21 @@ class ExportTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'browser failed'):
                 exporter.export(self.output)
         self.assertEqual(before, {path.name: path.read_bytes() for path in self.output.iterdir()})
+
+    def test_generator_viewbox_bug_is_rejected_before_publication(self):
+        original = exporter.fragment_svg
+
+        def shifted(root, piece, mask):
+            return original(root, piece, mask).replace(
+                f'viewBox="{piece["x"]} {piece["y"]} ',
+                f'viewBox="{piece["x"] + 1} {piece["y"]} ',
+            )
+
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(exporter, 'fragment_svg', side_effect=shifted):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    exporter.export(Path(temp))
+            self.assertFalse((Path(temp) / 'manifest.json').exists())
 
 
 if __name__ == '__main__':

@@ -107,8 +107,16 @@
       "bytes": 997036
     },
     "MAP-02/vector/render.mjs": {
-      "sha256": "3cc083095ab6436b760cae2d58cb303f2d87ff68813200cdc3f7c52f8fb6947f",
-      "bytes": 2419
+      "sha256": "72924c2a8306291f8e1d423641999166337a5d9a60decc69ee710a7fc0a4987c",
+      "bytes": 3013
+    },
+    "MAP-02/vector/export.py": {
+      "sha256": "a4dbcaa99ce2b12c9115a7b0101313b53baa40b9153434e6fa4ac32a246b1ce8",
+      "bytes": 3263
+    },
+    "MAP-04/verify-svg.mjs": {
+      "sha256": "be966983b604483a3602479a04fc6afde6759bc9c8414cafc86cf09a837f8c8f",
+      "bytes": 6826
     },
     "menu-map-city-only/manifest.json": {
       "sha256": "d74df64cd444dacb39461319c27695dde668f5fdb1b954bcd32faf12d24ac41e",
@@ -139,8 +147,8 @@
       "bytes": 101689
     },
     "../../visual-language.md": {
-      "sha256": "8cd2c83af1d312b207ac7040561f1c82c1a8d0eb63614edbc6426d179cc4292d",
-      "bytes": 41605
+      "sha256": "1590f9fa72d1c6e6c599155fd917131af99615b88da746e54b0408ebf68fb669",
+      "bytes": 48674
     }
   },
   "budgetBytes": 25165824,
@@ -222,8 +230,8 @@
       "bytes": 120528
     },
     "preview-dark-320.png": {
-      "sha256": "9f376e1a376c1b126cbdd379309922fc13e14f3044121b6694c4f188d947bc7d",
-      "bytes": 115338
+      "sha256": "87ef041b7e1ad4403da76e92ce60e3db5a439215cb479ae90b4fa0e9f16b04a9",
+      "bytes": 115262
     },
     "preview-light-320.png": {
       "sha256": "531ad1499dbb75da524d913bada7a8ff0ca4e0955bffc89c71ae172e993547ec",

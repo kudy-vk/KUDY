@@ -61,6 +61,8 @@ docs/design/brand/outputs/MAP-02/vector/map-master-vector.svg eol=lf
 # MAP-04 hashes these text assets byte for byte on Windows and Linux.
 docs/design/brand/outputs/menu-map-city-only/manifest.json -text
 docs/design/brand/outputs/MAP-02/vector/render.mjs eol=lf
+docs/design/brand/outputs/MAP-02/vector/export.py eol=lf
+docs/design/brand/outputs/MAP-04/verify-svg.mjs eol=lf
 docs/design/visual-language.md -text
 docs/design/brand/outputs/MAP-04/assets/*.svg eol=lf
 docs/design/brand/outputs/MAP-04/assets/manifest.json eol=lf
