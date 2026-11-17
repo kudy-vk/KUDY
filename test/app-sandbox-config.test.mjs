@@ -8,10 +8,15 @@ import { execFileSync } from 'node:child_process';
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 
 const expoFor = (env) => {
+  // The negative cases assert flag absence, so the ambient shell must not leak
+  // EXPO_PUBLIC_SANDBOX/EXPO_PUBLIC_DEMO_MODE into the child evaluation.
+  const base = { ...process.env };
+  delete base.EXPO_PUBLIC_SANDBOX;
+  delete base.EXPO_PUBLIC_DEMO_MODE;
   const stdout = execFileSync(
     process.execPath,
     ['-e', 'process.stdout.write(JSON.stringify(require("./app.config.js").expo))'],
-    { cwd: repoRoot, env: { ...process.env, ...env }, encoding: 'utf8' },
+    { cwd: repoRoot, env: { ...base, ...env }, encoding: 'utf8' },
   );
   return JSON.parse(stdout);
 };

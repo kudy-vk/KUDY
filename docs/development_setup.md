@@ -403,9 +403,11 @@ checkout-а ў build-checkout, зборка debug APK праз
 
 | Профіль `eas.json` | application ID (iOS `bundleIdentifier` = Android `package`) | Прызначэнне |
 |---|---|---|
-| `development` | `by.kudy.app.dev` | development client, internal distribution |
-| `sandbox` | `by.kudy.app.sandbox` | sandbox-праверка пакупкі/restore; ASC sandbox-тэстэры / Google Play internal testing — эксплуатацыйныя налады G08 |
+| `development` | `by.kudy.app` (варыянту няма; асобны dev-пакет больш не зададзены) | development client, internal distribution; для раздачы не выкарыстоўваецца |
+| `sandbox` | `by.kudy.app.sandbox` (праз профільны env `EXPO_PUBLIC_SANDBOX=1`) | тэставыя зборкі на тэлефон уласніка/тэстараў (PHONE-01 #322, эпік #95); runbook: `docs/testing/android-test-distribution.md` |
 | `production` | `by.kudy.app` | стор; дэплой толькі па асобным даручэнні |
+
+Application ID resolving з 2026-11-17 (PHONE-01 #322): ідэнтычнасць вар'янту вырашаецца ў `app.config.js` — без флагаў `by.kudy.app`, `EXPO_PUBLIC_SANDBOX=1` → `by.kudy.app.sandbox` («KUDY Sandbox»), `EXPO_PUBLIC_DEMO_MODE=1` → `by.kudy.app.demo` («KUDY Demo», дэмо перамагае пры абодвух). `eas.json` больш не мае `package`/`bundleIdentifier` — eas-cli (>= 27) іх адхіляе па схеме; `cli.appVersionSource: remote` — versionCode вядзе Expo-сервер.
 
 Спайкавы `by.kudy.g0001a` наўмысна не выкарыстоўваецца (ADR §1: «bundle id `by.kudy.g0001a` — толькі спайкавы»).
 
@@ -423,7 +425,8 @@ cp .env.example .env
 |---|---|
 | версіі SDK | `package.json` + `npm install` для lockfile |
 | дазволы, плагіны, New Architecture | `app.json` |
-| application IDs, профілі зборкі | `eas.json` |
+| application IDs і вар'янты дадатку | `app.json` (базавы) + `app.config.js` (`EXPO_PUBLIC_SANDBOX`, `EXPO_PUBLIC_DEMO_MODE`) |
+| профілі EAS-зборкі | `eas.json` |
 | кананічныя назвы env | толькі праз рашэнне ў ADR (гл. ніжэй) |
 | цэлевы Node/npm | `engines` у `package.json` (абгрунтаванне піну — ADR §6; любая змена — разам з перагенераваным lockfile) |
 
