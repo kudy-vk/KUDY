@@ -19,7 +19,7 @@ const expoFor = (env) => {
 test('sandbox variant is a separate install that never collides with the store app', () => {
   const sandbox = expoFor({ EXPO_PUBLIC_SANDBOX: '1' });
   assert.equal(sandbox.name, 'KUDY Sandbox');
-  assert.equal(sandbox.slug, 'kudy-sandbox');
+  assert.equal(sandbox.slug, 'kudy', 'slug stays the linked EAS project slug — only name and package differ');
   assert.equal(sandbox.android.package, 'by.kudy.app.sandbox');
   assert.equal(sandbox.ios.bundleIdentifier, 'by.kudy.app.sandbox');
 });
@@ -42,4 +42,12 @@ test('sandbox keeps the brand icon set, unlike the demo mockup', () => {
   const sandbox = expoFor({ EXPO_PUBLIC_SANDBOX: '1' });
   assert.equal(sandbox.icon, expo.icon, 'sandbox reuses the brand icon');
   assert.deepEqual(sandbox.android.adaptiveIcon, expo.android.adaptiveIcon, 'sandbox keeps the adaptive icon layers');
+});
+
+test('sandbox and store variants carry the pinned EAS project id; demo (local mockup) does not', () => {
+  const id = 'b13fc99c-bf6d-45bc-9017-e689f4f9511d';
+  assert.equal(expoFor({}).extra.eas.projectId, id);
+  assert.equal(expoFor({ EXPO_PUBLIC_SANDBOX: '1' }).extra.eas.projectId, id);
+  assert.equal(expoFor({ EXPO_PUBLIC_SANDBOX: '1' }).slug, 'kudy', 'sandbox keeps the linked EAS project slug');
+  assert.equal(expoFor({ EXPO_PUBLIC_DEMO_MODE: '1' }).extra?.eas, undefined, 'demo never talks to EAS');
 });
