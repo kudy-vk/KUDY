@@ -49,9 +49,11 @@
 
 ## Out of scope
 
-Аўтаматычны трыгер на мерж (PHONE-02), OTA/EAS Update (PHONE-03), гісторыя
-версій і адкат (PHONE-02), Play Console і production-подпіс (#15), iOS,
-dev-client зборкі з Metro, публічнае APK-люстэрка без кантролю доступу.
+Білд па запыце: кнопка на стале (PHONE-01), `workflow_dispatch` у GitHub
+(PHONE-02); аўтазборка на пуш/мерж адкленена ўладальнікам 2026-11-17. Таксама
+па-за скоупам: OTA/EAS Update (PHONE-03), гісторыя версій і адкат (PHONE-02),
+Play Console і production-подпіс (#15), iOS, dev-client зборкі з Metro,
+публічнае APK-люстэрка без кантролю доступу.
 
 ## Dependencies
 

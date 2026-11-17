@@ -48,4 +48,5 @@ test('the detached poller survives a failed eas call and reports unknown status'
   assert.match(script, /"\$unknown" -ge 10/, 'repeated unknown statuses must notify a distinct diagnostic (rule 14), not a fake long queue');
   assert.match(script, /nohup "\$SELF" poll/, 'the poller must be spawned via the absolute script path resolved before cd');
   assert.match(script, /SELF="\$\(cd "\$\(dirname "\$\{BASH_SOURCE\[0\]\}"\)"/, 'self path is resolved before the script cd away');
+  assert.ok(script.indexOf('SELF=') < script.indexOf('cd "$REPO_ROOT"'), 'SELF must be resolved before the script changes directory');
 });
