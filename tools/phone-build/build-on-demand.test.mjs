@@ -34,3 +34,18 @@ test('the launcher reports on the desktop and polls to the final status', () => 
 test('logs stay in the repo scratch dir, not in /tmp', () => {
   assert.match(script, /\.scratch\/phone-build/, 'suite logs must not go to /tmp (repo convention)');
 });
+
+test('the guard suite is wired into npm test (rule 7)', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(dir, '..', '..', 'package.json'), 'utf8'));
+  assert.ok(
+    pkg.scripts.test.includes('tools/phone-build/*.test.mjs'),
+    'removing the glob from npm test must turn a committed check red',
+  );
+});
+
+test('the detached poller survives a failed eas call and reports unknown status', () => {
+  assert.match(script, /\|\| echo '\{\}'/, 'a dead eas build:view must yield an unknown status, not kill the poller (set -e)');
+  assert.match(script, /"\$unknown" -ge 10/, 'repeated unknown statuses must notify a distinct diagnostic (rule 14), not a fake long queue');
+  assert.match(script, /nohup "\$SELF" poll/, 'the poller must be spawned via the absolute script path resolved before cd');
+  assert.match(script, /SELF="\$\(cd "\$\(dirname "\$\{BASH_SOURCE\[0\]\}"\)"/, 'self path is resolved before the script cd away');
+});
