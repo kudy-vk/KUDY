@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="map-title">
+<title id="map-title">Карта</title>
+<defs><radialGradient id="map-sky" cx="46%" cy="38%" r="73%"><stop offset="0" stop-color="#129cdb"/><stop offset="1" stop-color="#0575b9"/></radialGradient><clipPath id="map-clip"><circle cx="128" cy="128" r="101"/></clipPath></defs>
+<circle cx="128" cy="128" r="116" fill="#4d2e1a"/>
+<circle cx="128" cy="128" r="112" fill="#c48950"/>
+<circle cx="128" cy="128" r="108" fill="none" stroke="#f3cf99" stroke-width="3"/>
+<circle cx="128" cy="128" r="102" fill="url(#map-sky)" stroke="#4d2e1a" stroke-width="4"/>
+<g clip-path="url(#map-clip)"><path d="M40 174l15-70 42-17 51 19 51-18 17 87-53 21-53-20-49 20z" fill="#fff0d8" stroke="#482c1b" stroke-width="4.5" stroke-linejoin="round"/>
+<path d="M56 108l42-16 12 78-47 19z" fill="#6eb45b"/><path d="M98 92l50 18 15 79-53-19z" fill="#a3cc7a"/><path d="M148 110l49-17 12 77-46 19z" fill="#62ad59"/>
+<path d="M98 92l12 78m38-60 15 79" stroke="#fff0d8" stroke-width="5" fill="none"/>
+<path d="M66 151c27-17 42-5 55 0s35-12 72-6" fill="none" stroke="#f1e4c5" stroke-width="5" stroke-linecap="round"/>
+<path d="M145 50c-24 0-42 18-42 42 0 26 29 57 42 76 14-19 42-50 42-76 0-24-18-42-42-42z" fill="#e34e36" stroke="#482c1b" stroke-width="4.5"/><circle cx="145" cy="92" r="15" fill="#fff0d8" stroke="#482c1b" stroke-width="3.6"/></g>
+</svg>
