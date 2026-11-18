@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="gdansk-title">
+<title id="gdansk-title">Гданьск</title>
+<defs><radialGradient id="gdansk-sky" cx="46%" cy="38%" r="73%"><stop offset="0" stop-color="#129cdb"/><stop offset="1" stop-color="#0575b9"/></radialGradient><clipPath id="gdansk-clip"><circle cx="128" cy="128" r="101"/></clipPath></defs>
+<circle cx="128" cy="128" r="116" fill="#4d2e1a"/>
+<circle cx="128" cy="128" r="112" fill="#c48950"/>
+<circle cx="128" cy="128" r="108" fill="none" stroke="#f3cf99" stroke-width="3"/>
+<circle cx="128" cy="128" r="102" fill="url(#gdansk-sky)" stroke="#4d2e1a" stroke-width="4"/>
+<g clip-path="url(#gdansk-clip)"><path d="M25 207V141l16-13 16 13v66z" fill="#d95b38" stroke="#482c1b" stroke-width="3.4"/><path d="M25 142l16-19 16 19" fill="none" stroke="#482c1b" stroke-width="3.4"/>
+<path d="M54 207v-67l10-8v-10h10v-9h9v9h10v10l9 8v67z" fill="#efbc70" stroke="#482c1b" stroke-width="3.5"/>
+<path d="M100 207V105h10V87l9-10v-14l9-15 9 15v14l9 10v18h9v102z" fill="#c66e42" stroke="#482c1b" stroke-width="3.5"/>
+<path d="M112 85l16-37 16 37" fill="#4caa71" stroke="#482c1b" stroke-width="3.3"/>
+<path d="M157 207v-66l12-14v-9h11v9l13 14v66z" fill="#dc6241" stroke="#482c1b" stroke-width="3.5"/>
+<path d="M193 207v-67l9-9v-10h10v10l10 9v67z" fill="#fff1d9" stroke="#482c1b" stroke-width="3.4"/>
+<path d="M105 105h46M118 87h20" stroke="#482c1b" stroke-width="3"/>
+<circle cx="128" cy="115" r="9" fill="#fff1d9" stroke="#482c1b" stroke-width="3"/>
+<path d="M128 109v6l4 3" fill="none" stroke="#482c1b" stroke-width="2"/>
+<path d="M38 160h6v10h-6zm0 24h6v10h-6zm29-36h6v10h-6zm14 0h6v10h-6zm-14 23h6v10h-6zm14 0h6v10h-6zm41-26h12v20h-12zm-1 31h14v31h-14zm48-24h7v12h-7zm0 25h7v12h-7zm34-22h7v12h-7zm0 24h7v12h-7z" fill="#57341f"/>
+<path d="M25 207h207" stroke="#482c1b" stroke-width="4"/></g>
+</svg>
