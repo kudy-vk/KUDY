@@ -11,46 +11,9 @@
 // installs it).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import http from 'node:http';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { inside } from '../docs/design/production/kit-geo.mjs';
-
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const TYPES = {
-  '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
-  '.webp': 'image/webp', '.png': 'image/png', '.svg': 'image/svg+xml', '.ttf': 'font/ttf',
-};
-
-function serve() {
-  const server = http.createServer((request, response) => {
-    const file = path.join(root, decodeURIComponent(new URL(request.url, 'http://x').pathname));
-    if (!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
-      response.writeHead(404).end();
-      return;
-    }
-    response.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' });
-    fs.createReadStream(file).pipe(response);
-  });
-  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server)));
-}
-
-async function browserOrSkip(t) {
-  let chromium;
-  try {
-    ({ chromium } = await import('playwright'));
-  } catch {
-    t.skip('playwright is not installed');
-    return null;
-  }
-  if (!fs.existsSync(chromium.executablePath())) {
-    t.skip(`chromium binary is not installed (${chromium.executablePath()}) — run: npx playwright install chromium`);
-    return null;
-  }
-  return chromium;
-}
+import { browserOrSkip, serve } from './browser-page.mjs';
 
 test('the «Пра горад» map answers presses, gestures, keys, layers and a width change', async (t) => {
   const chromium = await browserOrSkip(t);

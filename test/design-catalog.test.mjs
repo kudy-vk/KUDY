@@ -82,3 +82,20 @@ test('the real catalogue: every section the gallery shows has mockups that exist
     }
   }
 });
+
+test('single canonical HTML catalog: every production HTML mockup and test is registered', () => {
+  const html = fs.readFileSync(path.join(here, 'catalog.html'), 'utf8');
+  assert.match(html, /fetch\('catalog\.md'\)/);
+  assert.doesNotMatch(html, /catalog-\d+\.md/);
+  const alternativeCatalogs = fs.readdirSync(here)
+    .filter((name) => /^catalog-(?!data\.)[^/]+\.(?:html|md)$/.test(name));
+  assert.deepEqual(alternativeCatalogs, [], 'Parallel design catalogs are forbidden');
+  const sections = parseCatalog(fs.readFileSync(path.join(here, 'catalog.md'), 'utf8'));
+  const views = new Set(sections.flatMap((section) => section.items.flatMap((item) => item.views.map((view) => view.href))));
+  const production = path.join(here, 'production');
+  const screens = fs.readdirSync(production).filter((name) => name.endsWith('.html'));
+  for (const name of screens) {
+    assert(views.has(`production/${name}`), `Unregistered HTML mockup/test: production/${name}`);
+  }
+  assert(views.has('production/about.html'), 'The approved About City baseline must remain in the catalog');
+});

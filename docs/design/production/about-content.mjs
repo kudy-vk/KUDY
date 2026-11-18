@@ -140,28 +140,37 @@ export const FREE_DAYS = {
   2: [['free', 'museum.ww2', 'card.tue.ww2'], ['closed', 'museum.gdanska', 'card.tue.gdanska']],
 };
 
-const DICTIONARY = { en, be };
-// English is the full set; the Belarusian set must match it key for key.
-for (const key of Object.keys(be)) if (!(key in en)) throw new Error(`be has a key English lacks: ${key}`);
-for (const key of Object.keys(en)) if (!(key in be)) throw new Error(`be lacks the key: ${key}`);
-
-// Whether `key` names a text of the guide (a fact may be a literal instead).
-export const hasText = (key) => key in en;
-
-// The language the guide is shown in: the interface language when it has its
-// own entry, English otherwise.
-export const guideLanguage = (locale) => (locale in DICTIONARY ? locale : 'en');
-
-// Returns t(key, parameters): the text in the guide language, English when
-// that language lacks the key. An unknown key is an error, not an empty string.
-export function translator(locale) {
-  const own = DICTIONARY[guideLanguage(locale)];
-  return (key, parameters = {}) => {
-    const text = own[key] ?? en[key];
-    if (text === undefined) throw new Error(`no guide text: ${key}`);
-    return text.replace(/\{(\w+)\}/g, (_, name) => parameters[name]);
+// Access to a guide's words, one dictionary per language with English the
+// full set (decision L1). A variant of the screen (about-257-content.mjs)
+// builds its own access over its own dictionaries.
+export function guideWords(dictionary) {
+  const { en: english } = dictionary;
+  // English is the full set; every other set must match it key for key.
+  for (const [lang, own] of Object.entries(dictionary)) {
+    for (const key of Object.keys(own)) if (!(key in english)) throw new Error(`${lang} has a key English lacks: ${key}`);
+    for (const key of Object.keys(english)) if (!(key in own)) throw new Error(`${lang} lacks the key: ${key}`);
+  }
+  // The language the guide is shown in: the interface language when it has its
+  // own entry, English otherwise.
+  const guideLanguage = (locale) => (locale in dictionary ? locale : 'en');
+  return {
+    // Whether `key` names a text of the guide (a fact may be a literal instead).
+    hasText: (key) => key in english,
+    guideLanguage,
+    // Returns t(key, parameters): the text in the guide language, English when
+    // that language lacks the key. An unknown key is an error, not an empty string.
+    translator(locale) {
+      const own = dictionary[guideLanguage(locale)];
+      return (key, parameters = {}) => {
+        const text = own[key] ?? english[key];
+        if (text === undefined) throw new Error(`no guide text: ${key}`);
+        return text.replace(/\{(\w+)\}/g, (_, name) => parameters[name]);
+      };
+    },
   };
 }
+
+export const { hasText, guideLanguage, translator } = guideWords({ en, be });
 
 // A price in złoty in the guide language: «4,80 zł» / “4.80 zł”. `cents`
 // shows grosze even for a whole sum, so one list keeps one shape. The decimal
