@@ -81,7 +81,6 @@ export function transport(c, before = []) {
     const title = t(`tr.buy.${app.id}.title`);
     const node = tile(app.icon, title, t(`tr.buy.${app.id}.text`));
     node.setAttribute('role', 'link');
-    node.setAttribute('tabindex', '0');
     node.addEventListener('click', () => c.say(`Адкрываецца аплікацыя «${title}» у браўзеры: ${app.url}. Без сеткі браўзер пакажа сваю памылку; даведнік застаецца адкрытым.`));
     return node;
   };

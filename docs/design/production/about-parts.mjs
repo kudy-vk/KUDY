@@ -120,7 +120,8 @@ export function remark(tone, text) {
 // A small heading inside a section.
 export const heading = (text) => el('h3', { className: 'g-sub', textContent: text });
 
-// A tile with a sign, a name and one line of text.
+// A tile with a sign, a name and one line of text: a native button, so the
+// keyboard activates it; the caller adds `role="link"` and the action.
 export function tile(name, title, text) {
-  return el('div', { className: 'card tile' }, icon(name, 20), el('strong', { textContent: title }), el('span', { textContent: text }));
+  return el('button', { className: 'card tile', type: 'button' }, icon(name, 20), el('strong', { textContent: title }), el('span', { textContent: text }));
 }
