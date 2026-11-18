@@ -3,10 +3,9 @@
 // Words live in a dictionary keyed by id, one file per language
 // (about-words-en.mjs, about-words-be.mjs). English is the full set: a
 // language without its own file shows the English text (decision L1 in
-// docs/design/brand/decisions.md), so today only Belarusian differs. Facts — line numbers, times,
-// prices — are data, not sentences. Every fact comes from the #200 material
-// and its sources table docs/content/about-city-sources.md, checked on
-// 2026-11-10; the ZTM prices were re-read on the official page on 2026-11-12.
+// docs/design/brand/decisions.md), so today only Belarusian differs. Stable
+// route details come from #200 material. Vendor prices and changing offers
+// are left to official sites instead of being copied into this guide.
 // These are proposals: they enter contracts/ui-messages after the verdict.
 import { be } from './about-words-be.mjs';
 import { en } from './about-words-en.mjs';
@@ -14,16 +13,16 @@ import { en } from './about-words-en.mjs';
 // Addresses of the official pages: ABOUT_CITY_LINK_URLS in
 // components/about-city-content.ts. The apps the transport section opens
 // (jakdojade, FALA, KomPas) carry their own URLs in APPS below; the price
-// lists live in those apps and on their official pages, never in the app
-// (owner's verdict, issue #254, 2026-11-16).
+// lists and current commercial terms live on official pages, not in KUDY
+// (owner decisions in #254 and #257, 2026-11-16/17).
 export const LINKS = {
   airportBuses: 'https://www.airport.gdansk.pl/przed-podroza/dojazd-na-lotnisko/autobus',
   airportTrains: 'https://www.airport.gdansk.pl/en/before-travel/getting-to-the-airport/train',
   ztmSchedule: 'https://ztm.gda.pl/rozklady',
   skmSearch: 'https://www.skm.pkp.pl/dla-pasazera/wyszukaj-polaczenie',
-  kartaTurysty: 'https://kartaturysty.visitgdansk.com/cennik',
-  muzeumGdanska: 'https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/free-entrance/?L=1',
-  muzeum1939: 'https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules',
+  kartaTurysty: 'https://kartaturysty.visitgdansk.com/pl/pakiety',
+  muzeumGdanska: 'https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/oddzialy/',
+  muzeum1939: 'https://www.muzeum1939.pl/wizyta/wizyta-miiws/bilety-i-cennik',
   pysznePayment: 'https://www.pyszne.pl/obsluga-klienta/artykul/z-jakich-metod-platnosci-moge-skorzystac-pl',
   blikHow: 'https://www.blik.com/en/how-to-use-blik',
 };
@@ -96,14 +95,8 @@ export const RIDES = [
   },
 ];
 
-// Ticket prices in złoty: [name key, full price, reduced price]. Only the
-// airport's bus-ticket list and the tourist card's transport add-on keep
-// their prices; the transport section itself shows none — the owner moved
-// every fare detail to the apps and official pages (issue #254, 2026-11-16).
-export const PRICES = {
-  ztm: [['tk.single', 4.8, 2.4], ['tk.75', 6, 3], ['tk.24h', 22, 11]],
-  cardTransport: [['tk.24h', 34, 17], ['tk.72h', 68, 34]],
-};
+// Prices and vendor tariffs are deliberately not stored in this mockup.
+// For tickets and passes, consult the official links in LINKS.
 
 // How to get to the places the map's zones mark (about-map.mjs): [sign, text key].
 export const PLACE_WAYS = {
@@ -126,19 +119,7 @@ export const DELIVERY = [
   { name: 'Bolt Food', pay: ['card', 'cash'], note: 'food.bolt.note' },
 ];
 
-// Gdańska Karta Turysty, November 2026: [full, reduced] per validity in hours.
-export const CARD_HOURS = [24, 48, 72];
-export const CARD_PACKAGES = [
-  { id: 'odkrywca', name: 'Odkrywca', prices: { 24: [75, 60], 48: [85, 70], 72: [95, 80] } },
-  { id: 'premium', name: 'Odkrywca Premium', prices: { 24: [90, 70], 48: [110, 85], 72: [130, 100] } },
-];
-export const CARD_SMAKI_PRICE = 216;
-
-// Free museum days: weekday (1 = Monday) → lines of [state, museum key, text key].
-export const FREE_DAYS = {
-  1: [['free', 'museum.gdanska', 'card.mon.gdanska'], ['closed', 'museum.ww2', 'card.mon.ww2']],
-  2: [['free', 'museum.ww2', 'card.tue.ww2'], ['closed', 'museum.gdanska', 'card.tue.gdanska']],
-};
+// The official card and museum links are the source of live offers and rules.
 
 const DICTIONARY = { en, be };
 // English is the full set; the Belarusian set must match it key for key.
@@ -163,10 +144,3 @@ export function translator(locale) {
   };
 }
 
-// A price in złoty in the guide language: «4,80 zł» / “4.80 zł”. `cents`
-// shows grosze even for a whole sum, so one list keeps one shape. The decimal
-// sign comes from the dictionary: a browser may not know every language.
-export function price(locale, amount, cents = !Number.isInteger(amount)) {
-  const sum = cents ? amount.toFixed(2).replace('.', translator(locale)('u.decimal')) : String(amount);
-  return `${sum} zł`;
-}
