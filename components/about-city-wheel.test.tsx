@@ -1,10 +1,14 @@
 // Issue #252 — the wheel's own suite. The coast math is the port of the
 // owner-approved mockup module (docs/design/production/about-wheel.mjs), so
 // the pure-function tests pin the exact approved numbers, and the render
-// test proves the press path: a side item comes to the middle and the
-// section select fires (issue criterion 2 and 4).
+// tests prove the select paths: a press on a side item brings it to the
+// middle and fires the section select, and a section change made outside
+// the wheel (the screen's index echo — the map's airport card) turns the
+// wheel to that item. slotOffset carries the one wrap math the section
+// pages ride (components/about-city-pages.tsx).
 import { describe, expect, jest, test } from "@jest/globals";
-import { fireEvent, render, screen } from "@testing-library/react-native";
+import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { useState } from "react";
 
 import {
   COAST_TIME,
@@ -14,6 +18,7 @@ import {
   TAP_SLOP,
   AboutCityWheel,
   releaseSpeed,
+  slotOffset,
   stopAfterPush,
   type SpeedSample,
 } from "./about-city-wheel";
@@ -76,11 +81,71 @@ describe("stopAfterPush", () => {
   });
 });
 
+describe("slotOffset — the wrap math the medals and the section pages share", () => {
+  test("the middle item sits at 0; the neighbors stand a slot away each side", () => {
+    expect(slotOffset(0, 0, SLOT, 5 * SLOT)).toBe(0);
+    expect(slotOffset(1, 0, SLOT, 5 * SLOT)).toBe(SLOT);
+    expect(slotOffset(2, 0, SLOT, 5 * SLOT)).toBe(2 * SLOT);
+    expect(slotOffset(3, 0, SLOT, 5 * SLOT)).toBe(-2 * SLOT);
+    expect(slotOffset(4, 0, SLOT, 5 * SLOT)).toBe(-SLOT);
+  });
+
+  test("a full ring forward brings every item back to its place", () => {
+    expect(slotOffset(0, 5 * SLOT, SLOT, 5 * SLOT)).toBe(0);
+    expect(slotOffset(3, 5 * SLOT, SLOT, 5 * SLOT)).toBe(-2 * SLOT);
+  });
+
+  test("settling on an item puts it exactly in the middle (the pages' alignment)", () => {
+    // The pages flip by this math: at the settled position the open page
+    // carries no offset — a re-introduced entry nudge would fail here.
+    for (const item of [0, 1, 2, 3, 4]) {
+      expect(slotOffset(item, item * SLOT, SLOT, 5 * SLOT)).toBe(0);
+    }
+  });
+});
+
+// The screen's own contract: the open section comes back through the
+// `index` prop. The harness mirrors it, so a press and an outside change
+// both take the road the production screen gives them.
 test("a press on a side item selects it and fires the section select", () => {
   const onSelect = jest.fn();
-  render(<AboutCityWheel items={ITEMS} slot={SLOT} label="Раздзелы" onSelect={onSelect} />);
+  function Harness() {
+    const [index, setIndex] = useState(0);
+    return (
+      <AboutCityWheel
+        items={ITEMS}
+        index={index}
+        slot={SLOT}
+        label="Раздзелы"
+        onSelect={(next: number, direction: number) => {
+          onSelect(next, direction);
+          setIndex(next);
+        }}
+      />
+    );
+  }
+  render(<Harness />);
   const side = screen.getByTestId("wheel-item-city");
   expect(side.props.accessibilityState).toMatchObject({ selected: false });
   fireEvent.press(side);
   expect(onSelect).toHaveBeenCalledWith(1, expect.any(Number));
+  // The echoed index finds `chosen` already on the item: the wheel stays.
+  expect(screen.getByTestId("wheel-item-city").props.accessibilityState).toMatchObject({ selected: true });
+});
+
+test("a section change made outside the wheel turns the wheel to that item", () => {
+  let setOutside: ((next: number) => void) | null = null;
+  function Harness() {
+    const [index, setIndex] = useState(0);
+    setOutside = setIndex;
+    return (
+      <AboutCityWheel items={ITEMS} index={index} slot={SLOT} label="Раздзелы" onSelect={() => undefined} />
+    );
+  }
+  render(<Harness />);
+  expect(screen.getByTestId("wheel-item-airport").props.accessibilityState).toMatchObject({ selected: true });
+  // The map's airport card road: the screen re-renders with another section.
+  act(() => setOutside?.(1));
+  expect(screen.getByTestId("wheel-item-city").props.accessibilityState).toMatchObject({ selected: true });
+  expect(screen.getByTestId("wheel-item-airport").props.accessibilityState).toMatchObject({ selected: false });
 });

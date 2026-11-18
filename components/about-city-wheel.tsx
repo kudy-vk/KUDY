@@ -8,6 +8,10 @@
 // The geometry and the coast math are the port of the owner-approved mockup
 // module docs/design/production/about-wheel.mjs (#202) — the two pure
 // functions keep its exact numbers and carry the screen's tests.
+// The owner's 2026-11-17 request turns the section pages into the wheel's
+// shadow (components/about-city-pages.tsx): the wheel publishes its live
+// position into the parent's shared value, and a section change made
+// outside the wheel (the map's airport card) turns the wheel itself.
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AccessibilityInfo,
@@ -16,6 +20,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import type { SharedValue } from "react-native-reanimated";
 import Svg, { Line } from "react-native-svg";
 
 import { AboutCityMedal } from "./about-city-medal";
@@ -63,6 +68,19 @@ export function stopAfterPush({ position, speed, slot, count }: {
   return nearestSlot(position + clampTravel(speed * COAST_TIME, cap), slot);
 }
 
+// Signed distance of item i from the middle at wheel position `at`, along
+// the shorter way round the ring. The one wrap math for the medals and for
+// the section pages that shadow them (components/about-city-pages.tsx): a
+// page travels the ring exactly as its medal does, so both stay in step at
+// every drag, coast and wrap. A worklet so the pages' animated styles may
+// call it; on the JS thread it runs as the same plain function.
+export function slotOffset(i: number, at: number, slot: number, ring: number): number {
+  "worklet";
+  let distance = (((i * slot - at) % ring) + ring) % ring;
+  if (distance > ring / 2) distance -= ring;
+  return distance;
+}
+
 export type AboutCityWheelItem = { id: string; icon: CanonGlyph; label: string };
 
 const MEDAL_BOX = 80;
@@ -78,18 +96,24 @@ type Drag = { from: number; moved: boolean; samples: SpeedSample[] };
 // items: the five sections in their order. `slot` is the width of one item
 // in px. onSelect(index, direction) fires as soon as the wheel knows where
 // it stops; direction is +1 when it turned forward, −1 backward.
+// `positionShared` receives the live wheel position (px along the ring) at
+// every step of a drag or a coast — the section pages ride it. The screen
+// echoes the open section back through `index`: a section change made
+// outside the wheel (the map's airport card) turns the wheel to that item.
 export function AboutCityWheel({
   items,
   index = 0,
   slot,
   label,
   onSelect,
+  positionShared,
 }: {
   items: readonly AboutCityWheelItem[];
   index?: number;
   slot: number;
   label: string;
   onSelect: (index: number, direction: number) => void;
+  positionShared?: SharedValue<number>;
 }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const palette = useThemeTokens();
@@ -112,12 +136,15 @@ export function AboutCityWheel({
     };
   }, []);
 
-  // Signed distance of item i from the middle, along the shorter way round.
-  const offset = (i: number, at: number) => {
-    let distance = (((i * slot - at) % ring) + ring) % ring;
-    if (distance > ring / 2) distance -= ring;
-    return distance;
+  // One writer of the wheel's motion: the live copy for the gesture math,
+  // the render state and — when the screen handed one in — the shared value
+  // the section pages follow.
+  const publish = (next: number) => {
+    live.current.position = next;
+    setPosition(next);
+    if (positionShared) positionShared.value = next;
   };
+
   const choose = (next: number, direction: number) => {
     if (live.current.chosen === next) return;
     live.current.chosen = next;
@@ -132,8 +159,7 @@ export function AboutCityWheel({
     live.current.goal = target;
     choose(((Math.round(target / slot) % count) + count) % count, Math.sign(target - live.current.position) || 1);
     if (calm) {
-      live.current.position = target;
-      setPosition(target);
+      publish(target);
       return;
     }
     const from = live.current.position;
@@ -141,18 +167,33 @@ export function AboutCityWheel({
     const tick = () => {
       const next = target - (target - from) * Math.exp(-(Date.now() - started) / time);
       const settled = Math.abs(target - next) < 0.4;
-      live.current.position = settled ? target : next;
-      setPosition(live.current.position);
+      publish(settled ? target : next);
       if (!settled) live.current.frame = requestAnimationFrame(tick);
     };
     live.current.frame = requestAnimationFrame(tick);
   };
+  const coastRef = useRef(coast);
+  coastRef.current = coast;
+
+  // A section change made outside the wheel (the screen's openSection — the
+  // map's airport card): the wheel turns to that item the shorter way. The
+  // wheel's own selects come back through `index` and find `chosen` already
+  // on them — the guard keeps the echo from turning the wheel again.
+  useEffect(() => {
+    if (live.current.chosen === index) return;
+    coastRef.current(live.current.position + slotOffset(index, live.current.position, slot, ring), STEP_TIME);
+  }, [index, slot, ring]);
 
   const drag = useRef<Drag | null>(null);
   // The pan handlers are memoized; the select callback arrives through a ref
   // so a parent re-render never leaves the wheel calling a stale closure.
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  // The strip reads the wheel's position from its own shared value; publish
+  // once at mount so the pages start aligned with the wheel's initial state.
+  useEffect(() => {
+    if (positionShared) positionShared.value = live.current.position;
+  }, [positionShared]);
   const panResponder = useMemo(() => PanResponder.create({
     // A press stays with the item button; the wheel takes the gesture over
     // only when the hand really drags sideways (a vertical page scroll
@@ -177,9 +218,7 @@ export function AboutCityWheel({
       if (!current) return;
       current.samples.push([Date.now(), gesture.moveX]);
       if (current.samples.length > 24) current.samples.shift();
-      const next = current.from - gesture.dx;
-      live.current.position = next;
-      setPosition(next);
+      publish(current.from - gesture.dx);
     },
     onPanResponderRelease: (_, gesture) => {
       const current = drag.current;
@@ -219,7 +258,7 @@ export function AboutCityWheel({
         />
       </Svg>
       {items.map((item, i) => {
-        const distance = offset(i, position);
+        const distance = slotOffset(i, position, slot, ring);
         const near = Math.max(0, 1 - Math.abs(distance) / slot);
         return (
           <View
@@ -231,7 +270,7 @@ export function AboutCityWheel({
               accessibilityRole="tab"
               accessibilityLabel={item.label}
               accessibilityState={{ selected: i === chosen }}
-              onPress={() => coast(live.current.position + offset(i, live.current.position), STEP_TIME)}
+              onPress={() => coast(live.current.position + slotOffset(i, live.current.position, slot, ring), STEP_TIME)}
               style={styles.slotButton}
               testID={`wheel-item-${item.id}`}
             >
