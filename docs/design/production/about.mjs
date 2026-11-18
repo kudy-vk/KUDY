@@ -1,17 +1,17 @@
 // «Пра горад» (app/city/[id]/about.tsx): the practical guide to Gdańsk behind
 // the menu piece. Under the top bar turns the wheel of sections
 // (about-wheel.mjs); below it the screen shows the section that stands in the
-// middle of the wheel. A section is built from facts, not paragraphs: steps,
-// rides with their numbers, price rows, folds, switches (about-parts.mjs).
+// middle of the wheel. Sections present practical steps and navigation; offers,
+// prices and admission conditions belong on official providers' pages.
 // Words and facts: about-content.mjs. The guide needs no network; only the
 // official links at the end of a section do.
 import { el, icon, mountBoard, panorama, topbar, walkButton } from './kit.mjs';
 import {
-  APPS, CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, DELIVERY, FREE_DAYS, LINKS, PAY_METHODS, PRICES, RIDES, SECTIONS,
-  guideLanguage, hasText, price, translator,
+  APPS, DELIVERY, LINKS, PAY_METHODS, RIDES, SECTIONS,
+  guideLanguage, hasText, translator,
 } from './about-content.mjs';
 import { atlas, initialAtlas } from './about-map.mjs';
-import { facts, fold, folds, heading, lineBadge, prices, remark, rows, seg, sr, steps, tile } from './about-parts.mjs';
+import { facts, folds, heading, lineBadge, remark, rows, seg, steps, tile } from './about-parts.mjs';
 import { wheel } from './about-wheel.mjs';
 
 const CHROME = { title: 'native.chrome.aboutCity', back: 'native.chrome.back', walk: 'native.chrome.walk' };
@@ -19,16 +19,8 @@ const CHROME = { title: 'native.chrome.aboutCity', back: 'native.chrome.back', w
 const text = (className, value) => el('p', { className, textContent: value });
 const card = (className, ...children) => el('div', { className: `card ${className}` }, ...children);
 
-// Each section returns its nodes. `c` carries: t (words), money (a price in
-// the guide language), ui (what the visitor chose inside the sections),
-// redraw (repaint the open section in place).
-const priceRows = (c, list) => {
-  // One list, one shape: if any price has grosze, every price shows them.
-  const cents = list.some(([, full, reduced]) => !Number.isInteger(full) || (reduced !== null && !Number.isInteger(reduced)));
-  return prices(list.map(([name, full, reduced]) => [
-    hasText(name) ? c.t(name) : name, c.money(full, cents), reduced === null ? null : c.t('u.reduced', { price: c.money(reduced, cents) }),
-  ]));
-};
+// Each section returns its nodes. `c` carries words, the visitor's section
+// choices and a way to repaint the open section in place.
 
 function airport(c) {
   const { t, ui } = c;
@@ -40,10 +32,8 @@ function airport(c) {
     meta: facts(ride[way].facts.map(([sign, key, values]) => [sign, t(key, values)])),
     body: [rows(ride[way].rows.map(([label, value]) => [t(label), hasText(value) ? t(value) : value]))],
   })));
-  const ticket = (sign, title, where, list) => card('ticket',
+  const ticket = (sign, title, where) => card('ticket',
     el('h5', {}, icon(sign, 18), title),
-    list && priceRows(c, list),
-    list && text('t-secondary', t('tk.night')),
     text('', where));
   return [
     seg('direction', t('air.dir'), [['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, (value) => { ui.direction = value; c.redraw(); }),
@@ -60,8 +50,8 @@ function airport(c) {
       {
         title: t('air.s3.title'),
         body: [
-          ticket('bus', t('air.ticket.bus.title'), t('air.ticket.bus.where'), PRICES.ztm),
-          ticket('train-front', t('air.ticket.train.title'), t('air.ticket.train.where'), null),
+          ticket('bus', t('air.ticket.bus.title'), t('air.ticket.bus.where')),
+          ticket('train-front', t('air.ticket.train.title'), t('air.ticket.train.where')),
         ],
       },
     ]),
@@ -142,45 +132,11 @@ function food(c) {
 }
 
 function touristCard(c) {
-  const { t, ui } = c;
-  const pack = (item) => {
-    const [full, reduced] = item.prices[ui.hours];
-    return card('pack',
-      el('div', { className: 'pack-head' }, el('h4', { textContent: item.name }),
-        el('span', { className: 'pack-price' }, c.money(full), el('small', { textContent: t('u.reduced', { price: c.money(reduced) }) }))),
-      el('span', { className: 'tag free', textContent: t(`card.${item.id}.entries`) }),
-      text('t-secondary', t(`card.${item.id}.list`)));
-  };
-  const week = el('div', { className: 'week' }, ...[1, 2, 3, 4, 5, 6, 7].map((day) => {
-    const free = (FREE_DAYS[day] ?? []).some(([state]) => state === 'free');
-    const node = el('button', { type: 'button' }, el('span', { textContent: t(`day.${day}`) }),
-      free ? el('i', {}, sr(t('card.free.badge'))) : null);
-    node.dataset.key = `day:${day}`;
-    node.setAttribute('aria-pressed', String(day === ui.day));
-    node.addEventListener('click', () => { ui.day = day; c.redraw(); });
-    return node;
-  }));
-  week.setAttribute('role', 'group');
-  week.setAttribute('aria-label', t('card.day'));
-  const lines = FREE_DAYS[ui.day];
-  const day = card('day', ...(lines
-    ? lines.map(([state, museum, key]) => el('div', { className: 'day-line' },
-      el('div', { className: 'day-head' }, el('strong', { textContent: t(museum) }),
-        el('span', { className: `tag${state === 'free' ? ' free' : ''}`, textContent: t(`card.${state}.badge`) })),
-      text('', t(key))))
-    : [text('t-secondary', t('card.other'))]));
-  day.setAttribute('role', 'status');
+  const { t } = c;
   return [
     heading(t('card.title')),
     text('', t('card.lead')),
-    seg('hours', t('card.duration'), CARD_HOURS.map((hours) => [hours, t('card.hours', { n: hours })]), ui.hours, (value) => { ui.hours = value; c.redraw(); }),
-    ...CARD_PACKAGES.map(pack),
-    card('pack', el('div', { className: 'pack-head' }, text('', t('card.smaki')), el('span', { className: 'pack-price', textContent: c.money(CARD_SMAKI_PRICE) }))),
-    fold({ id: 'card-transport', memory: ui.folds, lead: icon('tram-front', 22), title: t('card.transport.title'), meta: t('card.transport.meta'), body: [text('', t('card.transport.text')), priceRows(c, PRICES.cardTransport)] }),
-    heading(t('card.free')),
-    week,
-    day,
-    remark('warn', t('card.notice')),
+    remark('tip', t('card.museumTip')),
   ];
 }
 
@@ -198,7 +154,7 @@ const board = await mountBoard({
     const lang = guideLanguage(state.locale);
     const t = translator(state.locale);
     // What the visitor chose and opened inside the sections; it outlives a repaint.
-    const ui = { direction: 'from', atlas: initialAtlas(), pay: 'any', hours: 24, day: 1, folds: new Map() };
+    const ui = { direction: 'from', atlas: initialAtlas(), pay: 'any', folds: new Map() };
     let current = SECTIONS.find((section) => section.id === state.section);
 
     body.append(topbar({
@@ -215,7 +171,6 @@ const board = await mountBoard({
     page.lang = lang;
     const context = {
       t, ui, lang,
-      money: (amount, cents) => price(state.locale, amount, cents),
       redraw: () => paint(false),
       // Turns the wheel to another section, as a press on its item would.
       openSection: (id) => wheelNode.querySelectorAll('.slot')[SECTIONS.findIndex((section) => section.id === id)].click(),
@@ -251,7 +206,7 @@ const board = await mountBoard({
       page.setAttribute('aria-label', t(`tab.${current.id}`));
       page.replaceChildren(
         el('h3', { className: 'g-head', textContent: t(`head.${current.id}`) }),
-        el('p', { className: 'g-checked' }, icon('check', 14), t('verified')),
+        ...(current.id === 'card' ? [] : [el('p', { className: 'g-checked' }, icon('check', 14), t('verified'))]),
         ...BUILD[current.id](context),
         ...sources(),
         // The engraved view of Gdańsk from the home screen closes every section.
