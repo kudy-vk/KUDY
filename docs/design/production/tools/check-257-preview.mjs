@@ -32,13 +32,31 @@ const rules = (html, prefixes) => [...html.replace(/\/\*[\s\S]*?\*\//g, '').matc
 const SHARED = ['.wheel', '.slot', '.medal', '[data-theme="dark"] .medal', '.seg'];
 assert(rules(baseline, SHARED).length >= 15, 'The baseline wheel and switch rules are found');
 assert.deepEqual(rules(preview, SHARED), rules(baseline, SHARED), 'Wheel, medallion and switch rules differ from about.html');
-assert(!/wheel-color-art|color-art-slot|airport-direction|route-art/i.test(preview),
+assert(!/wheel-color-art|color-art-slot|airport-direction|about-257-route-art\.css|gradient\(\s*1[0-9]{2}deg/i.test(preview),
   'No local art styling in the #257 screen');
 assert(!/icons-257|airport-badge|flight-icons|medallions/.test(screen), 'The wheel draws the canonical medallions only');
 assert(screen.includes("import { wheel } from './about-wheel.mjs'"));
 assert(screen.includes("const directions = seg('direction', t('air.dir'),"));
 assert(screen.includes("[['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, (value) => { ui.direction = value; c.redraw(); });"));
 assert(!screen.includes('replaceChildren(airport'));
+// The direction choices keep the owner's composition (plane → old town and
+// back), drawn in KUDY's manner: the town is the proposal's Gdańsk redrawn as
+// an engraving like the home-screen panorama,
+// the plane is the kit's plane, both in the engraved line; the chosen card
+// speaks the chosen medallion's language (M9). The word stays the name.
+const ROUTE_SIGNS = ['plane'];
+assert(screen.includes('const OLD_TOWN = ['));
+assert(screen.includes("svg('path', { class: `route-${kind}`, d })"));
+assert(screen.includes("...iconShapes('plane')"));
+assert(screen.includes("directions.classList.add('route-pick');"));
+assert(screen.includes("button.setAttribute('aria-label', t(`air.dir.${key}`));"));
+assert(!/<image|\.png|\.svg'/.test(screen.slice(screen.indexOf('function routeArt'), screen.indexOf('function transport'))),
+  'The route art is drawn from shared paths, not pictures');
+const routeCSS = rules(preview, ['.route-']).join('\n');
+for (const token of ['var(--engrave)', 'var(--medal-paper)', 'var(--medal-ink)', 'var(--medal-glow)', 'var(--accent)']) {
+  assert(routeCSS.includes(token), `The route cards use ${token}`);
+}
+assert(!/#[0-9a-f]{3,6}\b/i.test(routeCSS), 'The route cards use tokens only');
 assert(!preview.includes('.museum-fold'));
 // Every sign the screen asks for exists: in the shared kit or registered by
 // the screen itself (a missing one stops the whole section from rendering).
@@ -47,6 +65,7 @@ const contentSource = read('../about-257-content.mjs');
 const signs = new Set([
   ...[...screen.matchAll(/icon\('([a-z-]+)'/g)].map((match) => match[1]),
   ...[...contentSource.matchAll(/icon: '([a-z-]+)'/g)].map((match) => match[1]),
+  ...ROUTE_SIGNS,
 ]);
 const registered = screen.slice(screen.indexOf('registerIcons({'), screen.indexOf('});', screen.indexOf('registerIcons({')));
 for (const sign of signs) {
