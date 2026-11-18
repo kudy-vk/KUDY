@@ -2,42 +2,33 @@
 // (docs/design/production/about.html, decisions L1 and M9 in
 // docs/design/brand/decisions.md): behind the top bar turns the wheel of the
 // five sections (decision M10 — «Побач з горадам» moved to the main menu),
-// and below it the screen shows the section that stands in the middle. The
-// guide needs no network: the whole document renders offline (issue
-// criterion 7); only the official link rows at the end of a section open the
-// browser, and when the device cannot open one, its address stays on the
-// screen. The [id] route of 19 §2.5 is display-shaped only in the MVP
+// and below it the screen shows the section that stands in the middle.
+// The owner's 2026-11-17 request turns the content into the wheel's shadow:
+// the five sections are the pages of components/about-city-pages.tsx, each
+// riding the wheel's live position, so a drag or a push on the wheel flips
+// the content with it like the image carousel of an Instagram post — and
+// the old from-side slide (its shared Animated.Value could stick at the
+// side offset when a fast turn interrupted a running timing) is gone as a
+// mechanism. The screen owns the open section's id and echoes it back into
+// the wheel through `index`, so a section change made outside the wheel
+// (the map's airport card, the mockup's openSection) turns the wheel too.
+// The guide needs no network: the whole document renders offline (issue
+// criterion 7); only the official link rows at the end of a section open
+// the browser, and when the device cannot open one, its address stays on
+// the screen. The [id] route of 19 §2.5 is display-shaped only in the MVP
 // single-city catalog: the surface renders the active city and does not echo
 // an unvalidated param (21 §3.2 — у MVP толькі актыўны Гданьск).
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  AccessibilityInfo,
-  Animated,
-  Easing,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { useCallback, useMemo, useState } from "react";
+import { Linking, StyleSheet, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import CheckIcon from "lucide-react-native/icons/check";
-import ExternalLinkIcon from "lucide-react-native/icons/external-link";
+import { useSharedValue } from "react-native-reanimated";
 
-import {
-  ABOUT_CITY_LINK_URLS,
-  ABOUT_CITY_SECTIONS,
-  aboutCityText,
-  type AboutCityLinkKey,
-  type AboutCitySectionId,
-} from "../../../components/about-city-content";
+import { ABOUT_CITY_SECTIONS, aboutCityText, type AboutCitySectionId } from "../../../components/about-city-content";
 import { aboutCityStrings } from "../../../components/about-city-strings";
-import { ABOUT_CITY_INITIAL_UI, AboutCitySection, type AboutCitySectionContext, type AboutCityUiState } from "../../../components/about-city-sections";
-import { Remark, SubHeading } from "../../../components/about-city-parts";
+import { ABOUT_CITY_INITIAL_UI, type AboutCityUiState } from "../../../components/about-city-sections";
 import { BackButton } from "../../../components/back-button";
-import { CanonIcon } from "../../../components/canon-icon";
+import { AboutCityPages } from "../../../components/about-city-pages";
 import { darkTokens, tokens, type ThemeTokens } from "../../../components/design-tokens";
-import { PressableSurface } from "../../../components/pressable-surface";
 import { ScaledText } from "../../../components/scaled-text";
 import { ScreenSurface } from "../../../components/screen-surface";
 import { useThemeStyles } from "../../../components/theme";
@@ -64,52 +55,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontSize: tokens.fontTitleSize,
     fontWeight: tokens.fontWeightStrong,
   },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    gap: 12,
-    paddingBottom: 24,
-    paddingHorizontal: tokens.spaceL,
-  },
-  head: {
-    color: palette.colorInk,
-    fontSize: 22,
-    fontWeight: tokens.fontWeightStrong,
-    lineHeight: 27,
-  },
-  verified: {
-    color: palette.colorMuted,
-    fontSize: 12,
-    marginTop: -8,
-  },
-  checkedRow: {
-    alignItems: "center",
-    columnGap: 4,
-    flexDirection: "row",
-    marginTop: -8,
-  },
-  stack: { gap: 8 },
-  card: {
-    backgroundColor: palette.colorCard,
-    borderColor: palette.colorLine,
-    borderRadius: tokens.radiusBase,
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-  sources: { gap: 10 },
-  linkRow: {
-    alignItems: "center",
-    columnGap: 12,
-    flexDirection: "row",
-    minHeight: 56,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  linkLabel: {
-    color: palette.colorAccent,
-    flexShrink: 1,
-    fontSize: 16,
-  },
 });
 const lightStyles = createStyles(tokens);
 const darkStyles = createStyles(darkTokens);
@@ -122,7 +67,6 @@ export default function AboutCity() {
   const locale = useUiLocale();
   const strings = aboutCityStrings(locale);
   const chrome = uiStrings(locale);
-  const scrollRef = useRef<ScrollView>(null);
   const [sectionId, setSectionId] = useState<AboutCitySectionId>(ABOUT_CITY_SECTIONS[0].id);
   const [ui, setUiState] = useState<AboutCityUiState>(ABOUT_CITY_INITIAL_UI);
   // The device could not open the page: its address stays on the screen
@@ -144,54 +88,45 @@ export default function AboutCity() {
 
   const t = useMemo(() => aboutCityText(strings), [strings]);
 
-  // The section slides in from the side the wheel turned to (the mockup's
-  // from-left/from-right, 220 ms); the system «reduce motion» setting jumps
-  // it into place.
-  const slide = useRef(new Animated.Value(0)).current;
-  const [calm, setCalm] = useState(false);
-  useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled?.().then(setCalm).catch(() => undefined);
-    const subscription = AccessibilityInfo.addEventListener?.("reduceMotionChanged", setCalm);
-    return () => subscription?.remove();
-  }, []);
-
-  const onSelect = useCallback((index: number, direction: number) => {
+  // The wheel turns, the pages ride it: the select only names the section —
+  // the flip itself is the pages following the wheel's position (the
+  // owner's 2026-11-17 request). A change of section resets the scroll on
+  // the page that becomes the open one (about-city-pages.tsx).
+  const onSelect = useCallback((index: number) => {
     const next = ABOUT_CITY_SECTIONS[index];
     if (!next || next.id === sectionId) return;
     setSectionId(next.id);
-    // A change of section resets the scroll.
-    scrollRef.current?.scrollTo({ animated: false, y: 0 });
-    slide.setValue(direction > 0 ? 18 : -18);
-    if (calm) {
-      slide.setValue(0);
-      return;
-    }
-    Animated.timing(slide, { toValue: 0, duration: 220, easing: Easing.out(Easing.ease), useNativeDriver: true }).start();
-  }, [sectionId, calm, slide]);
+  }, [sectionId]);
 
   // The map's airport card turns the wheel back to the airport section
-  // (the mockup's openSection('airport')).
+  // (the mockup's openSection('airport')): the screen's `index` echo turns
+  // the wheel; the pages follow it the same way.
   const onOpenSection = useCallback((id: AboutCitySectionId) => {
     const index = ABOUT_CITY_SECTIONS.findIndex((item) => item.id === id);
     if (index === -1) return;
-    const current = ABOUT_CITY_SECTIONS.findIndex((item) => item.id === sectionId);
-    onSelect(index, index > current ? 1 : -1);
-  }, [onSelect, sectionId]);
+    onSelect(index);
+  }, [onSelect]);
 
-  // Hands an address to the system; the transport section's app tiles pass
-  // raw URLs (ABOUT_CITY_APPS), the link rows below resolve their key first.
+  // Hands an address to the system; the link rows and the transport app
+  // tiles resolve their addresses first and hand the raw URL in.
   const openUrl = useCallback((url: string) => {
     setFailedLink(null);
     void Linking.openURL(url).catch(() => setFailedLink(url));
   }, []);
-  const openLink = useCallback((linkKey: AboutCityLinkKey) => openUrl(ABOUT_CITY_LINK_URLS[linkKey]), [openUrl]);
 
-  const ctx: Omit<AboutCitySectionContext, "styles"> = useMemo(
+  const ctx = useMemo(
     () => ({ strings, t, ui, setUi, toggleFold, onOpenSection, openLink: openUrl }),
     [strings, t, ui, setUi, toggleFold, onOpenSection, openUrl],
   );
 
-  const section = ABOUT_CITY_SECTIONS.find((item) => item.id === sectionId) ?? ABOUT_CITY_SECTIONS[0];
+  const index = ABOUT_CITY_SECTIONS.findIndex((item) => item.id === sectionId);
+  // Every item has the same width; three items always fit the screen
+  // (the mockup's slot rule).
+  const slot = Math.min(100, Math.floor(device.width / 3));
+  const ring = ABOUT_CITY_SECTIONS.length * slot;
+  // The wheel's own initial position: the first section stands in the
+  // middle, the pages start aligned with it.
+  const pos = useSharedValue(0);
 
   return (
     <ScreenSurface
@@ -209,50 +144,22 @@ export default function AboutCity() {
       </View>
       <AboutCityWheel
         items={ABOUT_CITY_SECTIONS.map(({ id, icon }) => ({ id, icon, label: t(`tab.${id}`) }))}
-        index={ABOUT_CITY_SECTIONS.findIndex((item) => item.id === sectionId)}
-        // Every item has the same width; three items always fit the screen
-        // (the mockup's slot rule).
-        slot={Math.min(100, Math.floor(device.width / 3))}
+        index={index}
+        slot={slot}
         label={t("wheel.label")}
         onSelect={onSelect}
+        positionShared={pos}
       />
-      <ScrollView contentContainerStyle={styles.content} ref={scrollRef} testID="scroll-about">
-        <ScaledText accessibilityRole="header" style={styles.head}>{t(`head.${sectionId}`)}</ScaledText>
-        <View style={styles.checkedRow}>
-          <CanonIcon glyph={CheckIcon} label={t("verified")} size={14} color={tokens.colorAccent} />
-          <ScaledText style={[styles.verified, { marginTop: 0 }]}>{t("verified")}</ScaledText>
-        </View>
-        <Animated.View style={{ transform: [{ translateX: slide }] }}>
-          <AboutCitySection key={sectionId} id={sectionId} ctx={ctx} />
-        </Animated.View>
-        {/* The map section carries no official-pages rows (decision M13 —
-            the Google Maps button lives beside the map): the block hides. */}
-        {section.links.length > 0 ? (
-          <View style={styles.sources}>
-            <SubHeading>{t("sources.title")}</SubHeading>
-            <ScaledText style={styles.verified}>{t("sources.note")}</ScaledText>
-            <View style={styles.stack}>
-              {section.links.map((linkKey) => {
-                const label = t(`links.${linkKey}`);
-                return (
-                  <PressableSurface
-                    accessibilityRole="link"
-                    accessibilityLabel={label}
-                    key={linkKey}
-                    onPress={() => openLink(linkKey)}
-                    style={[styles.card, styles.linkRow]}
-                    testID={`link-about-${linkKey}`}
-                  >
-                    <ScaledText style={styles.linkLabel}>{label}</ScaledText>
-                    <CanonIcon glyph={ExternalLinkIcon} label={label} color={tokens.colorAccent} size={18} />
-                  </PressableSurface>
-                );
-              })}
-            </View>
-            {failedLink ? <Remark tone="error" text={t("link.failed", { url: failedLink })} /> : null}
-          </View>
-        ) : null}
-      </ScrollView>
+      <AboutCityPages
+        sections={ABOUT_CITY_SECTIONS}
+        pos={pos}
+        slot={slot}
+        ring={ring}
+        width={device.width}
+        activeId={sectionId}
+        ctx={ctx}
+        failedLink={failedLink}
+      />
     </ScreenSurface>
   );
 }
