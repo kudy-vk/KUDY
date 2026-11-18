@@ -23,13 +23,7 @@ import { Linking, StyleSheet, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSharedValue } from "react-native-reanimated";
 
-import {
-  ABOUT_CITY_LINK_URLS,
-  ABOUT_CITY_SECTIONS,
-  aboutCityText,
-  type AboutCityLinkKey,
-  type AboutCitySectionId,
-} from "../../../components/about-city-content";
+import { ABOUT_CITY_SECTIONS, aboutCityText, type AboutCitySectionId } from "../../../components/about-city-content";
 import { aboutCityStrings } from "../../../components/about-city-strings";
 import { ABOUT_CITY_INITIAL_UI, type AboutCityUiState } from "../../../components/about-city-sections";
 import { BackButton } from "../../../components/back-button";
@@ -113,13 +107,12 @@ export default function AboutCity() {
     onSelect(index);
   }, [onSelect]);
 
-  // Hands an address to the system; the transport section's app tiles pass
-  // raw URLs (ABOUT_CITY_APPS), the link rows below resolve their key first.
+  // Hands an address to the system; the link rows and the transport app
+  // tiles resolve their addresses first and hand the raw URL in.
   const openUrl = useCallback((url: string) => {
     setFailedLink(null);
     void Linking.openURL(url).catch(() => setFailedLink(url));
   }, []);
-  const openLink = useCallback((linkKey: AboutCityLinkKey) => openUrl(ABOUT_CITY_LINK_URLS[linkKey]), [openUrl]);
 
   const ctx = useMemo(
     () => ({ strings, t, ui, setUi, toggleFold, onOpenSection, openLink: openUrl }),

@@ -10,16 +10,17 @@ Counts: RULE 0 · DIFF 1 · OPINION 1 · NOT-VERIFIED 4
 
 ## Scope
 
+- PR: #327
 - Змена: кантэнт раздзелаў экрана «Пра горад» — паласа з 5 старонак, што едзе пазіцыяй кола (`components/about-city-pages.tsx`, `components/about-city-wheel.tsx`, `app/city/[id]/about.tsx`).
-- Base: a905bb21 (origin/main) · Head: c7e1c9aa (zcode/about-wheel-flip)
+- Base: a905bb21 (origin/main) · Head: c7e1c9aa (zcode/about-wheel-flip) · апошнія правкі знаходак рэвью — на HEAD гэтай галіны
 - Surfaces: экран «Пра горад» (кантэнтная вобласць пад колам); кола, шапка, іншыя экраны — без змен.
 
 ## Sources
 
-- docs/design/visual-language.md — токены не змяняліся; стылі старонак перанесены без правак (головы, verified-радок, крыніцы).
-- docs/design/production/about.mjs § paint — мокап-канон: from-side слайд 220 мс; у гэтым PR созналі адыход паводзінам па просьбе ўладальніка; мокап у design-тэчцы будзе абноўлены асобна (там ідзе WIP).
+- docs/design/visual-language.md — токены не змяняліся; стылі старонак перанесены без правак (загалоўкі, verified-радок, крыніцы).
+- docs/design/production/about.mjs § paint — мокап-канон: from-side слайд 220 мс; у гэтым PR задакументаваны свядомы адыход ад паводзін па просьбе ўладальніка; мокап у design-тэчцы будзе абноўлены асобна (там ідзе WIP).
 - docs/design/brand/decisions.md — L1, M9/M10/M13 не зачэпленыя.
-- Просьба ўладальніка 2026-11-17 (чат гэтай сесіі) — крыніца змены паводзін.
+- Просьба ўладальніка 2026-11-17 — адкрыты запіс у docs/agent-tasks/results/252.md («Разрэшэнне 2026-11-18 — кантэнт перагортваецца з колам»), крыніца змены паводзін.
 
 ## Environment
 
@@ -32,11 +33,11 @@ Counts: RULE 0 · DIFF 1 · OPINION 1 · NOT-VERIFIED 4
 
 ### DIFF
 
-- [DIFF] «Пра горад» / пераход паміж раздзеламі / усе тэмы / усе локалі
-  Baseline: docs/design/production/about.html (from-side слайд 220 мс, class from-left/from-right) — зацверджаны мокап #202/#252.
-  Current: паласа старонак едзе пазіцыяй кола; пры «прыстаць» адкрытая старонка без зруху (тэст «every settled section places its page at exactly zero»).
-  Owner verdict: запрошана ўладальнікам 2026-11-17 (адкрытае пытанне: ці абнаўляе design-тэчка мокап асобным PR).
-  Артефакты: здымкі пераходу — docs/design-qa/evidence/2026-11-18-about-flip/ (залінкаваныя ў Evidence ніжэй).
+| surface/state | approved baseline | current PNG | difference PNG | region/threshold | owner verdict |
+|---|---|---|---|---|---|
+| «Пра горад» / пераход паміж раздзеламі / усе тэмы / усе локалі | docs/design/production/about.html (from-side слайд 220 мс, `from-left`/`from-right`) — мокап #202/#252; pixel-baseline здымка пераходу няма | `docs/design-qa/evidence/2026-11-18-about-flip/` (mid-drag-light, settled-*-light, settled-*-dark) | — (pixel-розніца не здымалася: baseline няма — NOT-VERIFIED) | пераход кантэнтнай вобласці пры павароце кола | запрошана ўладальнікам 2026-11-17 — запіс у `docs/agent-tasks/results/252.md` («Разрэшэнне 2026-11-18»); адкрытае пытанне: ці абнаўляе design-тэчка мокап асобным PR |
+
+Current-паводзіны: паласа старонак едзе пазіцыяй кола; пры «прыстаць» адкрытая старонка без зруху (тэст «every settled section places its page at exactly zero»).
 
 ### OPINION (не блакуе)
 
@@ -61,6 +62,6 @@ Counts: RULE 0 · DIFF 1 · OPINION 1 · NOT-VERIFIED 4
 
 ## Second pass — адхіленыя кандыдаты
 
-- Кандыдат RULE «кантэнт не па каноне мокапа»: адхілены — мокап-правіла не абнуляе віхідную просьбу ўладальніка; у DQ-05 не-accepted мокап-радкі не складаюць RULE, а змена мае прамую acceptance-запіс (чат 2026-11-17). Перавод у DIFF.
+- Кандыдат RULE «кантэнт не па каноне мокапа»: адхілены — мокап-правіла не абнуляе выходную просьбу ўладальніка; у DQ-05 не-accepted мокап-радкі не складаюць RULE, а змена мае прамую acceptance-запіс (чат 2026-11-17). Перавод у DIFF.
 - Кандыдат RULE «скрол не скідаецца пры вяртанні да раздзела»: адхілены — кантракт «змена раздзела скідае скрол» утрыманы (скід на старонцы, што становіцца адкрытай, тэст у about-city-pages.test.tsx праз pointerEvents/скрол-эфект).
-- Кандыдат DIFF «колеры старонак» — адхілены: стылі перанесены бяз правак, токены тые самыя; супадзенне праверана чытаннем дыфа, не здымкам (правіла не мае pixel-праверкі ў гэтай сесіі).
+- Кандыдат DIFF «колеры старонак» — адхілены: стылі перанесены бяз правак, токены тыя самыя; супадзенне праверана чытаннем дыфа, не здымкам (правіла не мае pixel-праверкі ў гэтай сесіі).
