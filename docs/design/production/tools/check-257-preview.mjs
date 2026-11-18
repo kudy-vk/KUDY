@@ -17,7 +17,8 @@ const catalog = read('../../catalog.md');
 
 // One entry in the single catalogue, one view: the screen itself.
 const candidate = parseCatalog(catalog).flatMap((section) => section.items).find((item) => item.title === 'Пра горад — варыянт #257');
-assert.equal(candidate?.kind, 'proposal');
+// The look was accepted by the owner (decision M14, 2026-11-18).
+assert.equal(candidate?.kind, 'accepted');
 assert.deepEqual(candidate?.views.map((view) => view.href), ['production/about-257.html']);
 assert(!catalog.includes('catalog-257.html'));
 
