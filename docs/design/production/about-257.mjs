@@ -5,8 +5,7 @@
 // prices and admission conditions belong on official providers' pages.
 // Words and facts: about-content.mjs. The guide needs no network; only the
 // official links at the end of a section do.
-import { el, icon, iconButton, mountBoard, panorama, svg, topbar, walkButton } from './kit.mjs';
-import { airportCityRouteIcon } from './about-257-flight-icons.mjs';
+import { el, icon, iconButton, mountBoard, panorama, registerIcons, topbar, walkButton } from './kit.mjs';
 import {
   APPS, DELIVERY, LINKS, PAY_METHODS, RIDES, SECTIONS, TOURIST_CARD_LOGO,
   guideLanguage, hasText, translator,
@@ -14,6 +13,14 @@ import {
 import { atlas, initialAtlas } from './about-map.mjs';
 import { facts, fold, folds, heading, lineBadge, remark, rows, seg, tile } from './about-parts.mjs';
 import { wheel } from './about-wheel.mjs';
+
+// Lucide shapes this screen alone needs (lucide-react-native, ISC) — the
+// same signs the app draws: compass for the Kompas app tile
+// (components/about-city-content.ts), house for the resident card.
+registerIcons({
+  compass: [['circle', { cx: '12', cy: '12', r: '10' }], ['path', { d: 'm16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z' }]],
+  house: [['path', { d: 'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8' }], ['path', { d: 'M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' }]],
+});
 
 const CHROME = { title: 'native.chrome.aboutCity', back: 'native.chrome.back', walk: 'native.chrome.walk' };
 
@@ -50,32 +57,11 @@ function airport(c) {
       stepFold.classList.add('airport-step-fold');
       return el('li', { className: 'step' }, stepFold);
     }));
-  const selectDirection = (value) => {
-    ui.direction = value;
-    c.redraw();
-    c.focusDirection(value);
-  };
+  // The direction switch is the shared seg() of the main mockup and the app
+  // (components/about-city-parts.tsx): words, the accent fill on the chosen
+  // one — the canon's pressed state (visual-language §5).
   const directions = seg('direction', t('air.dir'),
-    [['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, selectDirection);
-  directions.classList.add('airport-direction');
-  for (const direction of ['from', 'to']) {
-    const button = directions.querySelector(`[data-key="direction:${direction}"]`);
-    button.replaceChildren(airportCityRouteIcon(direction));
-    button.setAttribute('aria-label', t(`air.dir.${direction}`));
-    button.title = t(`air.dir.${direction}`);
-    button.tabIndex = direction === way ? 0 : -1;
-  }
-  directions.addEventListener('keydown', (event) => {
-    const direction = event.key === 'ArrowLeft' || event.key === 'Home' ? 'from'
-      : event.key === 'ArrowRight' || event.key === 'End' ? 'to' : null;
-    if (!direction) return;
-    event.preventDefault();
-    if (direction === way) {
-      directions.querySelector(`[data-key="direction:${direction}"]`)?.focus();
-    } else {
-      selectDirection(direction);
-    }
-  });
+    [['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, (value) => { ui.direction = value; c.redraw(); });
   return [
     directions,
     collapsibleSteps([
@@ -229,7 +215,6 @@ const boardNames = translator('be');
 const board = await mountBoard({
   controls: [
     { id: 'section', label: 'Раздзел', options: SECTIONS.map((section) => [section.id, boardNames(`tab.${section.id}`)]) },
-    { id: 'medallions', label: 'Іконкі кола', options: [['blue', 'Каляровыя #257 (прапанова)'], ['canon', 'Базавыя з main']] }, 
     { id: 'link', label: 'Спасылка', options: [['ok', 'Адкрылася'], ['failed', 'Не адкрылася']] },
     { id: 'walk', label: 'Прагулка', options: [['no', 'Не ідзе'], ['yes', 'Ідзе']] },
   ],
@@ -257,7 +242,6 @@ const board = await mountBoard({
       t, ui, lang,
       openOfficial: (key) => say('Адкрываецца афіцыйная старонка ў браўзеры: ' + LINKS[key] + '. Без сеткі даведнік застаецца адкрытым.'),
       redraw: () => paint(false),
-      focusDirection: (value) => page.querySelector(`[data-key="direction:${value}"]`)?.focus({ preventScroll: true }),
       // Turns the wheel to another section, as a press on its item would.
       openSection: (id) => wheelNode.querySelectorAll('.slot')[SECTIONS.findIndex((section) => section.id === id)].click(),
       // The app hands the address to the system: Google Maps or the browser opens it.
@@ -328,30 +312,6 @@ const board = await mountBoard({
         board.say(`Кола спынілася на «${boardNames(`tab.${current.id}`)}»: пад ім адкрыты гэты раздзел.`);
       },
     });
-    // #257 art review lives inside the main-derived About City screen, not
-    // a standalone carousel. The approved wheel, its inertia, glow, ring,
-    // tab labels and section content remain unchanged in both variants.
-    if (state.medallions === 'blue') {
-      const artBySection = { airport: 'airport', transport: 'transport', city: 'gdansk', food: 'food' };
-      wheelNode.querySelectorAll('.slot').forEach((slot, index) => {
-        const art = artBySection[SECTIONS[index].id];
-        if (!art) return;
-        const glyph = slot.querySelector('.medal .glyph');
-        if (!glyph) return;
-        const illustration = svg('image', {
-          class: 'wheel-color-art',
-          href: `./icons-257/${art}.svg`,
-          x: -29, y: -29, width: 58, height: 58,
-          preserveAspectRatio: 'xMidYMid meet',
-        });
-        slot.classList.add('color-art-slot');
-        illustration.addEventListener('error', () => {
-          slot.classList.remove('color-art-slot');
-          illustration.replaceWith(glyph);
-        });
-        glyph.replaceWith(illustration);
-      });
-    }
     body.append(wheelNode, page);
     paint(true);
   },

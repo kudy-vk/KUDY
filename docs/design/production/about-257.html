@@ -49,15 +49,6 @@
      fill and the sign the theme's ink, so the wheel is not a light island. */
   .medal { width: 80px; height: 80px; scale: calc(.72 + .28 * var(--near)); filter: drop-shadow(0 1.5px 1.5px rgb(74 52 30 / 38%)); }
   .medal circle { fill: none; }
-  /* Experimental #257 art uses the approved wheel's real SVG shell.
-     Its bronze rim is already drawn inside the new SVG, so only the disc and
-     inner outline are hidden. Glow, pick ring, labels and wheel stay canonical. */
-  .medal .wheel-color-art {
-    pointer-events: none;
-    filter: saturate(calc(.30 + .70 * var(--near))) brightness(calc(.82 + .18 * var(--near)));
-  }
-  .slot.color-art-slot .medal .disc,
-  .slot.color-art-slot .medal .inner { fill: none; stroke: none; }
   .medal .disc { fill: var(--medal-paper); stroke: var(--medal-rim); stroke-width: 2; }
   .medal .inner { stroke: var(--medal-rim); stroke-width: .7; opacity: .45; }
   .medal .glyph * { fill: none; stroke: var(--medal-ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -95,17 +86,6 @@
     font-size: calc(14px * var(--fs)); line-height: 1.2; text-align: center; cursor: pointer;
   }
   .seg button[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); }
-  /* Airport direction is a pair of ordinary KUDY buttons, NOT primary actions.
-     The common .seg is still responsible for keyboard/ARIA state. Only this
-     switch overrides its filled selection: border + ink mark the choice.
-     Tokens, 10px radius and small shelf shadow are from the design canon. */
-  /* The shared airport gradient, button states and SVG sizes live in
-     about-257-route-art.css; only the two-column layout belongs here. */
-  .seg.airport-direction {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
-    padding: 0; border: 0; background: transparent;
-  }
-
   /* Numbered steps joined by a line. */
   .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; }
   /* The number grows with the text size up to the app's limit of 1.25. */
@@ -323,12 +303,11 @@
   .srow .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
   .srow > .icon { color: var(--accent); }
 </style>
-<link rel="stylesheet" href="about-257-route-art.css">
 </head>
 <body>
 <main class="board">
   <h1>Пра горад</h1>
-  <p class="lead">Працоўны варыянт #257 у адзіным HTML-каталогу дызайну. Не зацверджаны. Пераключальнік «Іконкі кола» над тэлефонам паказвае новыя насычана-сінія SVG або базавыя медальёны з main; у абодвух выпадках гэта тое самае кола, а не асобная галерэя.  Практычны даведнік па Гданьску. Уверсе круціцца кола раздзелаў: пацягні яго і адпусці — яно пакоціцца далей з той сілай, з якой яго штурхнулі, і спыніцца роўна на раздзеле. Пад колам адкрыты раздзел, што стаіць пасярэдзіне. Раздзел складзены з крокаў, маршрутаў, пераключальнікаў, падказак і спасылак на афіцыйныя крыніцы. Чужыя цэннікі і камерцыйныя прапановы ў ім не дублююцца. Даведнік паказваецца мовай інтэрфейсу, калі для яе ёсць тэкст, інакш па-англійску (рашэнне L1); цяпер тэкст ёсць па-англійску і па-беларуску. Перамыкачы над тэлефонам да экрана не належаць.</p>
+  <p class="lead">Працоўны варыянт #257 у адзіным HTML-каталогу дызайну. Не зацверджаны. Выгляд — той самы, што ў астатнім дадатку: медальёны кола, пераключальнік кірунку, карткі і згортванні ўзятыя з агульных кампанентаў без мясцовай стылізацыі. Практычны даведнік па Гданьску. Уверсе круціцца кола раздзелаў: пацягні яго і адпусці — яно пакоціцца далей з той сілай, з якой яго штурхнулі, і спыніцца роўна на раздзеле. Пад колам адкрыты раздзел, што стаіць пасярэдзіне. Раздзел складзены з крокаў, маршрутаў, пераключальнікаў, падказак і спасылак на афіцыйныя крыніцы. Чужыя цэннікі і камерцыйныя прапановы ў ім не дублююцца. Даведнік паказваецца мовай інтэрфейсу, калі для яе ёсць тэкст, інакш па-англійску (рашэнне L1); цяпер тэкст ёсць па-англійску і па-беларуску. Перамыкачы над тэлефонам да экрана не належаць.</p>
   <ul class="based">
     <li>Шапка са стрэлкай «Назад» і кнопкай вяртання да прагулкі — як у <a href="place.html">«Месцы»</a> і <a href="discovery.html">«Чым заняцца»</a>.</li>
     <li>Кружочкі кола — медальёны частак карты з <a href="menu.html">галоўнага экрана</a> з няроўным, нібы намаляваным рукой кантам; абраны мае акцэнтнае кольца і бурштынавае свячэнне. У цёмнай тэме дыск цёмны (рашэнне M9).</li>

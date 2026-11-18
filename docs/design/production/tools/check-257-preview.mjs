@@ -5,7 +5,7 @@ import { LINKS, SECTIONS, TOURIST_CARD_LOGO, translator } from '../about-257-con
 import { be } from '../about-257-words-be.mjs';
 import { en } from '../about-257-words-en.mjs';
 
-const read = (file) => readFileSync(new URL(file, import.meta.url), 'utf8');
+const read = (file) => readFileSync(new URL(file, import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const preview = read('../about-257.html');
 const screen = read('../about-257.mjs');
 const css = read('../kit.css');
@@ -15,59 +15,44 @@ const candidate = items.find((item) => item.title === 'Пра горад — в�
 
 assert.equal(candidate?.kind, 'proposal');
 assert.equal(candidate?.views[0]?.href, 'production/about-257.html');
-assert(candidate?.views.some((view) => view.href === 'production/about-257-directions.html'));
-assert(candidate?.views.some((view) => view.href === 'production/about-257-icons.html'));
+assert.deepEqual(candidate?.views.map((view) => view.href), ['production/about-257.html']);
 assert(main.includes('Адзіны пункт уваходу'));
 assert(!main.includes('catalog-257.html'));
 assert(preview.includes('src="about-257.mjs"'));
 assert(preview.includes('href="kit.css"'));
 assert(preview.includes('.brand-lockup'));
-const artCSS = read('../about-257-route-art.css');
-assert(preview.includes('href="about-257-route-art.css"'));
-assert(!preview.includes('.seg.airport-direction button[aria-checked="true"] {'),
-  'The active gradient has one canonical definition');
-assert(artCSS.includes('.seg.airport-direction button,'));
-assert(artCSS.includes('.seg.airport-direction button[aria-checked="true"],'));
-assert(artCSS.includes('background-image: linear-gradient('));
-assert(artCSS.includes('--airport-bronze-middle:'));
-assert(artCSS.includes('--airport-bronze-border:'));
-assert(!preview.includes('.airport-direction button { display: grid; place-items: center; min-height: 56px; }'));
-assert(preview.includes('gap: 8px;\n    padding: 0; border: 0; background: transparent;'));
-assert(screen.includes("import { airportCityRouteIcon } from './about-257-flight-icons.mjs'"));
-// Both baseline and experimental icons live in the actual #257 screen
-// registered in the single main-derived catalog; the shared wheel is untouched.
-const carousel = screen.slice(screen.indexOf('    const wheelNode = wheel({'), screen.indexOf('    body.append(wheelNode, page);'));
-assert(screen.includes("{ id: 'medallions', label: 'Іконкі кола'"));
-assert(screen.includes("['blue', 'Каляровыя #257 (прапанова)']"));
-assert(screen.includes("['canon', 'Базавыя з main']"));
-assert(carousel.includes("if (state.medallions === 'blue')"));
-assert(carousel.includes("const artBySection = { airport: 'airport', transport: 'transport', city: 'gdansk', food: 'food' }"));
-assert(carousel.includes("wheelNode.querySelectorAll('.slot').forEach("));
-assert(carousel.includes("slot.querySelector('.medal .glyph')"));
-assert(carousel.includes("href: `./icons-257/${art}.svg`"));
-assert(carousel.includes("slot.classList.add('color-art-slot')"));
-assert(carousel.includes("slot.classList.remove('color-art-slot')"));
-assert(carousel.includes('illustration.replaceWith(glyph)'));
-assert(preview.includes('.slot.color-art-slot .medal .disc,'));
-assert(preview.includes('.slot.color-art-slot .medal .inner { fill: none; stroke: none; }'));
-assert(preview.includes('.medal .wheel-color-art'));
-assert(preview.includes('saturate(calc(.30 + .70 * var(--near)))'));
-assert(preview.includes('.medal .pick { stroke: var(--accent)'));
-assert(preview.includes('.medal .glow { stroke: var(--medal-glow)'));
-assert(!read('../about-wheel.mjs').includes('icons-257'));
-assert(!screen.includes('airport-badge-blue.svg'));
-assert(screen.includes("const directions = seg('direction', t('air.dir')"));
-assert(screen.includes('button.replaceChildren(airportCityRouteIcon(direction))'));
-assert(artCSS.includes('.seg.airport-direction .airport-route-icon'));
-assert(artCSS.includes('.route-city-image'));
-assert(artCSS.includes('.route-plane-image'));
-assert(screen.includes("button.setAttribute('aria-label', t(`air.dir.${direction}`))"));
-assert(screen.includes('button.tabIndex = direction === way ? 0 : -1'));
-assert(screen.includes('c.focusDirection(value)'));
-assert(screen.includes('focusDirection: (value) => page.querySelector('));
-assert(screen.includes("event.key === 'ArrowLeft'"));
-assert(screen.includes("event.key === 'ArrowRight'"));
+// The #257 screen looks like the rest of the app (decision M9 and
+// visual-language §5): the wheel medallions and the direction switch carry
+// exactly the main mockup's rules, with no local art, gradients or overrides.
+const baseline = read('../about.html');
+// Every whole CSS rule (selector and body) whose selector starts with one of the prefixes.
+const rules = (html, prefixes) => [...html.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/^[ \t]*([^{}\n][^{}]*)\{[^}]*\}/gm)]
+  .filter((match) => prefixes.some((prefix) => match[1].trim().startsWith(prefix)))
+  .map((match) => match[0].trim());
+const SHARED = ['.wheel', '.slot', '.medal', '[data-theme="dark"] .medal', '.seg'];
+assert(rules(baseline, SHARED).length >= 15, 'The baseline wheel and switch rules are found');
+assert.deepEqual(rules(preview, SHARED), rules(baseline, SHARED), 'Wheel, medallion and switch rules differ from about.html');
+assert(!/wheel-color-art|color-art-slot|airport-direction|route-art/i.test(preview),
+  'No local art styling in the #257 screen');
+assert(!/icons-257|airport-badge|flight-icons|medallions/.test(screen), 'The wheel draws the canonical medallions only');
+assert(screen.includes("import { wheel } from './about-wheel.mjs'"));
+assert(screen.includes("const directions = seg('direction', t('air.dir'),"));
+assert(screen.includes("[['from', t('air.dir.from')], ['to', t('air.dir.to')]], way, (value) => { ui.direction = value; c.redraw(); });"));
+assert(!screen.includes('replaceChildren(airport'));
 assert(!preview.includes('.museum-fold'));
+// Every sign the screen asks for exists: in the shared kit or registered by
+// the screen itself (a missing one stops the whole section from rendering).
+const kitIcons = read('../kit-icons.mjs');
+const contentSource = read('../about-257-content.mjs');
+const signs = new Set([
+  ...[...screen.matchAll(/icon\('([a-z-]+)'/g)].map((match) => match[1]),
+  ...[...contentSource.matchAll(/icon: '([a-z-]+)'/g)].map((match) => match[1]),
+]);
+const registered = screen.slice(screen.indexOf('registerIcons({'), screen.indexOf('});', screen.indexOf('registerIcons({')));
+for (const sign of signs) {
+  const known = new RegExp(`(^|[\\s{,])'?${sign}'?:`, 'm');
+  assert(known.test(kitIcons) || known.test(registered), `Unknown icon in the #257 screen: ${sign}`);
+}
 
 assert.deepEqual(SECTIONS.map((section) => section.id), ['airport', 'transport', 'city', 'food']);
 assert.deepEqual(Object.keys(SECTIONS.reduce((r, section) => ({ ...r, [section.id]: true }), {})),
