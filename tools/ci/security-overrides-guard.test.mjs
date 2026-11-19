@@ -4,8 +4,10 @@
 // into its advisory range — at ANY nesting level of either lockfile — must
 // turn this suite red. Nothing else in CI runs npm audit, so a silent revert
 // would otherwise restore the vulnerable tree.
-// A lockfile whose packages map is missing or empty fails closed too (#341):
-// zero entries would otherwise pass vacuously and contradict this header.
+// A lockfile whose packages map is missing, empty or not a plain object fails
+// closed too (#341, #343): zero entries would pass vacuously, and a non-object
+// value (e.g. "junk") would pass over string index keys — both contradict
+// this header.
 //
 // Vulnerable ranges are the audit-DB ranges verified in #337 for the MAJORS
 // the remediated tree uses (a version is guarded against the ranges below; a
@@ -75,8 +77,8 @@ function assertPackageSafe(lock, lockName, pkg, ranges) {
   const matcher = new RegExp(`(^|/)node_modules/${pkg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
   const packages = lock.packages ?? {};
   assert.ok(
-    Object.keys(packages).length > 0,
-    `${lockName}: the packages map is missing or empty — zero entries would pass vacuously; a lockfile without resolved packages must fail closed, not stay green (#341)`,
+    packages && typeof packages === 'object' && !Array.isArray(packages) && Object.keys(packages).length > 0,
+    `${lockName}: the packages map is missing or empty — or not a plain object; a lockfile without resolved packages must fail closed, not stay green (#341, #343)`,
   );
   for (const [key, entry] of Object.entries(packages)) {
     if (!matcher.test(key)) continue;
@@ -159,5 +161,15 @@ test('negative: a web lockfile copy with an empty packages map fails closed (#34
     () => assertPackageSafe(emptied, 'web lockfile copy (empty packages)', 'postcss', WEB_RANGES.postcss),
     (err) => err instanceof assert.AssertionError && /missing or empty/.test(err.message),
     'a lockfile with an empty packages map must fail closed, not iterate zero entries and stay green',
+  );
+});
+
+test('negative: a root lockfile copy with a non-object packages value fails closed (#343)', () => {
+  const lock = readJson('package-lock.json');
+  const corrupted = { ...lock, packages: 'junk' };
+  assert.throws(
+    () => assertPackageSafe(corrupted, 'root lockfile copy (packages: "junk")', 'zod', ROOT_RANGES.zod),
+    (err) => err instanceof assert.AssertionError && /missing or empty/.test(err.message),
+    'a lockfile whose packages holds a non-object value must fail closed, not pass vacuously over string index keys',
   );
 });
