@@ -3972,6 +3972,15 @@
       }
     },
     {
+      "id": "native.aboutCity.card.brandMark",
+      "value": "KT",
+      "reviewedSourceHash": "a18fb24bf836f1ca21f5a5cb12de4d296e35843be5598a0b722e40087e0b032e",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўны запасны знак KT з прынятага макета #257; перанос #334."
+      }
+    },
+    {
       "id": "native.aboutCity.card.lead",
       "value": "Gdańsk’s tourist card gives access to museums and other attractions included in the chosen package. A transport ticket can be purchased separately and is not part of the main package. Check current options and terms on the official website.",
       "reviewedSourceHash": "8dc710fb4b5ee27098def447d67b11de94ae189c7028e79620fef6a99a8a0885",

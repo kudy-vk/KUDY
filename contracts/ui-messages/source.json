@@ -5400,6 +5400,17 @@
       "sourceHash": "257aa51e0105ae67ef8dc5dc8df44af17029f5076f41ce1e2ed255adff45b266"
     },
     {
+      "id": "native.aboutCity.card.brandMark",
+      "source": "KT",
+      "context": "Запасны знак турыстычнай карткі з прынятага макета #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#card.brandMark"
+      ],
+      "sourceHash": "a18fb24bf836f1ca21f5a5cb12de4d296e35843be5598a0b722e40087e0b032e"
+    },
+    {
       "id": "native.aboutCity.card.openOfficial",
       "source": "Адкрыць афіцыйны сайт: ${name}",
       "context": "Макет «Пра горад» #257, M14; перанос #334",

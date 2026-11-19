@@ -220,6 +220,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "title": "Gdańska Karta Turysty",
       "lead": "Турыстычная картка Гданьска дапамагае наведваць музеі і іншыя цікавыя месцы паводле выбранага пакета. Транспартны білет можна набыць дадаткова — ён не ўваходзіць у асноўны пакет. Актуальныя магчымасці і ўмовы правер на афіцыйным сайце.",
       "brandAlt": "Лагатып Gdańska Karta Turysty",
+      "brandMark": "KT",
       "openOfficial": (name: string) => `Адкрыць афіцыйны сайт: ${name}`,
     },
     "links": {
@@ -493,6 +494,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "title": "Gdańska Karta Turysty",
       "lead": "Gdańsk’s tourist card gives access to museums and other attractions included in the chosen package. A transport ticket can be purchased separately and is not part of the main package. Check current options and terms on the official website.",
       "brandAlt": "Gdańska Karta Turysty logo",
+      "brandMark": "KT",
       "openOfficial": (name: string) => `Open official website: ${name}`,
     },
     "links": {

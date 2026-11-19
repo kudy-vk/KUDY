@@ -28,6 +28,7 @@ export const SHAPES: {
 };
 
 export { inside, metres } from "./kit-geo.d.mts";
+export function formatMapKilometres(distance: number, lang: "be" | "en"): string;
 
 /** The stop of a running line nearest to a [lon, lat] point. */
 export function nearestStop(at: readonly [number, number]): { station: MapStation | null; distance: number };

@@ -494,6 +494,7 @@ export interface AboutCityStrings {
     readonly title: string;
     readonly lead: string;
     readonly brandAlt: string;
+    readonly brandMark: string;
     readonly openOfficial: (name: string) => string;
   };
   readonly resident: {

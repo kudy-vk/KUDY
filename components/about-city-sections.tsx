@@ -9,6 +9,7 @@ import { Fragment, type ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import HouseIcon from "lucide-react-native/icons/house";
 import { AirportDirection } from "./about-city-direction";
+import { ABOUT_CITY_STRINGS } from "./about-city-strings.generated";
 import BusIcon from "lucide-react-native/icons/bus";
 import CreditCardIcon from "lucide-react-native/icons/credit-card";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
@@ -216,6 +217,7 @@ function city(ctx: AboutCitySectionContext): ReactNode {
   return (
     <AboutCityMap
       t={t}
+      lang={ctx.strings === ABOUT_CITY_STRINGS.be ? "be" : "en"}
       atlas={ui.atlas}
       // The patch merges into the previous atlas on the screen side: the
       // camera commits and the picks land from the live state, never from a
@@ -325,7 +327,7 @@ export function TouristCard({ context }: { context: Omit<AboutCitySectionContext
   return (
     <View testID="about-tourist-card">
       <Fold id="tourist-card" open={Boolean(ui.folds["tourist-card"])}
-        lead={<View style={styles.brandSymbol}><ScaledText style={styles.brandText} accessibilityLabel={t("card.brandAlt")}>KT</ScaledText></View>}
+        lead={<View style={styles.brandSymbol}><ScaledText style={styles.brandText} accessibilityLabel={t("card.brandAlt")}>{t("card.brandMark")}</ScaledText></View>}
         title={t("card.title")} body={<ScaledText style={styles.note}>{t("card.lead")}</ScaledText>}
         onToggle={(id, open) => toggleFold([id], id, open)}
         trailingAction={<OfficialCardLink ctx={ctx} kind="card" url={ABOUT_CITY_LINK_URLS.kartaTurysty} />} />

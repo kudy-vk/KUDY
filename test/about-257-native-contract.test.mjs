@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DROPPED, en } from '../docs/design/production/about-257-words-en.mjs';
 import { be } from '../docs/design/production/about-257-words-be.mjs';
+import { formatMapKilometres } from '../docs/design/production/about-map-geo.mjs';
 import { OLD_TOWN, PLANE_PATH } from '../docs/design/production/route-art-paths.mjs';
 import { ABOUT_CITY_STRINGS } from '../components/about-city-strings.generated.ts';
 
@@ -26,6 +27,13 @@ test('BE and EN native words match the approved #257 mockup', () => {
       const entry = key.split('.').reduce((node, part) => node[part], ABOUT_CITY_STRINGS[locale]);
       assert.equal(typeof entry === 'function' ? entry('Test') : entry, expected[key].replace('{name}', 'Test'), locale + ': ' + key);
     }
+  }
+});
+
+test('the map formats kilometres without the removed price decimal key', () => {
+  for (const [lang, expected] of [['be', '1,2'], ['en', '1.2']]) {
+    assert.equal(formatMapKilometres(1240, lang), expected);
+    assert.equal(ABOUT_CITY_STRINGS[lang].card.brandMark, 'KT');
   }
 });
 

@@ -44,7 +44,7 @@ import { ScaledText } from "./scaled-text";
 import { useThemeStyles } from "./theme";
 
 import { bounds } from "../docs/design/production/kit-geo.mjs";
-import { SHAPES, nearestStop, pickAt } from "../docs/design/production/about-map-geo.mjs";
+import { SHAPES, nearestStop, pickAt, formatMapKilometres } from "../docs/design/production/about-map-geo.mjs";
 
 const [MAP_W, MAP_H] = SHAPES.size;
 // The picture has 3 px per unit (MAP_IMAGE.density): at ×3 it is still about
@@ -157,24 +157,23 @@ function lookUp(pick: AboutCityPick) {
 
 // A zone's way rows: the mockup appends the nearest running stop within
 // 1.5 km unless the ways already name a train.
-function zoneWayRows(zone: (typeof SHAPES.zones)[number], t: AboutCityText) {
+function zoneWayRows(zone: (typeof SHAPES.zones)[number], t: AboutCityText, lang: "be" | "en") {
   const rows: { glyph: (typeof ABOUT_CITY_FACT_ICONS)[AboutCityFactName]; text: string }[] = [];
   const ways: readonly (readonly [AboutCityFactName, string])[] = zone.ways ? (ABOUT_CITY_ZONE_WAYS[zone.ways as keyof typeof ABOUT_CITY_ZONE_WAYS] ?? []) : [];
-  const decimal = (metres: number) => (metres / 1000).toFixed(1).replace(".", t("u.decimal"));
   for (const [sign, key] of ways) rows.push({ glyph: ABOUT_CITY_FACT_ICONS[sign], text: t(key) });
   if (!ways.some(([sign]) => sign === "train-front")) {
     const near = nearestStop(zone.ground);
     if (near.distance <= NEAR_STOP && near.station) {
-      rows.push({ glyph: ABOUT_CITY_FACT_ICONS["train-front"], text: t("zone.stop", { name: near.station.name, km: decimal(near.distance) }) });
+      rows.push({ glyph: ABOUT_CITY_FACT_ICONS["train-front"], text: t("zone.stop", { name: near.station.name, km: formatMapKilometres(near.distance, lang) }) });
     }
   }
   return rows;
 }
 
 // The zone card body (the mockup's pickCard, zone branch).
-function ZoneCardBody({ zone, t }: { zone: (typeof SHAPES.zones)[number]; t: AboutCityText }) {
+function ZoneCardBody({ zone, t, lang }: { zone: (typeof SHAPES.zones)[number]; t: AboutCityText; lang: "be" | "en" }) {
   const styles = useThemeStyles(pickCardLight, pickCardDark);
-  const rows = zoneWayRows(zone, t);
+  const rows = zoneWayRows(zone, t, lang);
   return (
     <>
       <ScaledText style={styles.text}>{t(zone.text)}</ScaledText>
@@ -220,7 +219,7 @@ function StationCardBody({ station, t }: { station: (typeof SHAPES.stations)[num
 
 // The card of what is picked: the head with the Polish name and its tag,
 // then the body (the mockup's pickCard).
-function PickCard({ pick, t, onOpenSection }: { pick: AboutCityPick; t: AboutCityText; onOpenSection: (id: "airport") => void }) {
+function PickCard({ pick, t, lang, onOpenSection }: { pick: AboutCityPick; t: AboutCityText; lang: "be" | "en"; onOpenSection: (id: "airport") => void }) {
   const styles = useThemeStyles(pickCardLight, pickCardDark);
   const found = lookUp(pick);
   if (found.zone) {
@@ -230,7 +229,7 @@ function PickCard({ pick, t, onOpenSection }: { pick: AboutCityPick; t: AboutCit
           <ScaledText style={styles.title}>{found.zone.name}</ScaledText>
           <ScaledText style={styles.tag}>{t(`layer.${found.zone.kind}`)}</ScaledText>
         </View>
-        <ZoneCardBody zone={found.zone} t={t} />
+        <ZoneCardBody zone={found.zone} t={t} lang={lang} />
       </View>
     );
   }
@@ -403,6 +402,7 @@ function clampAxis(value: number, length: number, half: number): number {
 
 export type AboutCityMapProps = {
   t: AboutCityText;
+  lang: "be" | "en";
   atlas: AboutCityAtlasState;
   setAtlas: (patch: Partial<AboutCityAtlasState>) => void;
   foldOpen: boolean;
@@ -410,7 +410,7 @@ export type AboutCityMapProps = {
   onOpenSection: (id: "airport") => void;
 };
 
-export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpenSection }: AboutCityMapProps): ReactNode {
+export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold, onOpenSection }: AboutCityMapProps): ReactNode {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const [boxW, setBoxW] = useState(0);
   const [zoomed, setZoomed] = useState(atlas.zoom > ZOOMED_AT);
@@ -992,7 +992,7 @@ export function AboutCityMap({ t, atlas, setAtlas, foldOpen, onToggleFold, onOpe
             <ScaledText style={styles.hintText}>{t("map.hint")}</ScaledText>
           </View>
         ) : (
-          <PickCard onOpenSection={onOpenSection} pick={picked} t={t} />
+          <PickCard onOpenSection={onOpenSection} pick={picked} t={t} lang={lang} />
         )}
       </View>
       {googleFailed ? <Remark tone="error" text={t("link.failed", { url: googleFailed })} /> : null}
