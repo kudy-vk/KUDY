@@ -23,12 +23,12 @@
 //         source-map-js (GHSA-68fv-2mgg-jv7q < 1.2.2) -> [0.1.0, 1.2.2)
 //   web:  maplibre-gl (GHSA-jrc7-96c5-q579 critical <= 6.4.0) -> [0.0.0, 6.5.0)
 //         next (4 advisories <= 15.5.27) -> [0.0.0, 15.5.28)
-//         sharp (GHSA-wq5f-xc86-pv6w < 0.5.0) -> [0.0.0, 0.35.5)
+//         sharp (GHSA-wq5f-xc86-pv6w < 0.35.5) -> [0.0.0, 0.35.5)
 //         source-map-js -> [0.1.0, 1.2.2)
 //         postcss -> [0.0.0, 8.5.23)
 // NOTE on decode-uri-component 0.5.1: it is ESM-only, while query-string 7.1.3
 // (expo-router's dependency) requires it directly and calls the CJS export.
-// On CJS require hosts only `query-string/stringify` keeps working (the only
+// On CJS require hosts only `stringify` keeps working (the only
 // path expo-router reaches today); `parse`/`parseUrl`/`pick`/`exclude` would
 // throw `TypeError: decodeComponent is not a function` — a documented latent
 // constraint of the override, re-checked by the audit reruns tracked by
@@ -45,9 +45,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const readJson = (...parts) => JSON.parse(fs.readFileSync(path.join(root, ...parts), 'utf8'));
 
 // [minInclusive, maxExclusive) semver-interval; major-aware for the common
-// case where the advisory spans whole majors.
+// case where the advisory spans whole majors. Prerelease/build suffixes are
+// stripped and their numeric prefix is compared fail-closed: a prerelease
+// whose prefix sits inside the advisory range counts as vulnerable, and a
+// malformed version has no numeric prefix to clear the range.
 function cmp(a, b) {
-  const [aMaj, aMin, aPat] = String(a).split('.').map(Number);
+  const [aMaj, aMin, aPat] = String(a)
+    .replace(/[-+].*$/, '')
+    .split('.')
+    .map((token) => (Number.isNaN(Number(token)) ? -1 : Number(token)));
   const [bMaj, bMin, bPat] = b.split('.').map(Number);
   if (aMaj !== bMaj) return aMaj - bMaj;
   if (aMin !== bMin) return aMin - bMin;
@@ -56,13 +62,14 @@ function cmp(a, b) {
 const inVulnerableRange = (version, [min, max]) =>
   cmp(version, min) >= 0 && cmp(version, max) < 0;
 
-// Every entry of the lockfile whose key ends in /node_modules/<pkg> — the
-// top-level copy and every nested copy — must sit outside the vulnerable
-// ranges. Nested copies re-resolve on dependency bumps, so they get the same
-// check as the root copy.
+// Every entry of either lockfile whose key is the top-level
+// `node_modules/<pkg>` or a nested `.../node_modules/<pkg>` must sit outside
+// the vulnerable ranges. Nested copies re-resolve on dependency bumps, so
+// they get the same check as the root copy.
 function assertPackageSafe(lock, lockName, pkg, ranges) {
+  const matcher = new RegExp(`(^|/)node_modules/${pkg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
   for (const [key, entry] of Object.entries(lock.packages ?? {})) {
-    if (!key.endsWith(`/node_modules/${pkg}`)) continue;
+    if (!matcher.test(key)) continue;
     const version = entry?.version;
     assert.ok(version, `${lockName}: ${key} has no version`);
     const hit = ranges.find((range) => inVulnerableRange(version, range));
