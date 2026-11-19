@@ -98,7 +98,11 @@
     "typescript": "5.9.2",
     "typescript-eslint": "8.71.0",
     "yaml": "2.9.1",
-    "zod": "4.6.5"
+    "zod": "4.6.7"
+  },
+  "overrides": {
+    "decode-uri-component": "0.5.1",
+    "postcss": "^8.5.23"
   },
   "allowScripts": {
     "esbuild@0.28.2": true
