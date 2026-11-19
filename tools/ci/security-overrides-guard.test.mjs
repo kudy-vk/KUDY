@@ -5,10 +5,13 @@
 // turn this suite red. Nothing else in CI runs npm audit, so a silent revert
 // would otherwise restore the vulnerable tree.
 //
-// Vulnerable ranges are the audit-DB ranges verified in #337 (a version is
-// vulnerable iff it falls inside one of them; a floor-style check cannot
-// express multi-range advisories and would false-fail the legitimate nested
-// @expo/cli copy of undici 6.29.1):
+// Vulnerable ranges are the audit-DB ranges verified in #337 for the MAJORS
+// the remediated tree uses (a version is guarded against the ranges below; a
+// floor-style check cannot express multi-range advisories and would
+// false-fail the legitimate nested @expo/cli copy of undici 6.29.1). Majors
+// outside the remediated tree (e.g. undici 7.x, fast-uri 4.x, next 16.x,
+// shell-quote below 1.8.4) are not covered here — they belong to the audit
+// reruns tracked by https://github.com/kudy-vk/KUDY/issues/339:
 //   root: decode-uri-component (GHSA-qr28-fpjm-wq7f high >= 0.5.0? — no:
 //         high <= 0.5.0, fixed 0.5.1; also GHSA-vcc3-ghjq-m6fr moderate
 //         <= 0.4.2) -> vulnerable [0.0.0, 0.5.1)
@@ -72,6 +75,11 @@ function assertPackageSafe(lock, lockName, pkg, ranges) {
     if (!matcher.test(key)) continue;
     const version = entry?.version;
     assert.ok(version, `${lockName}: ${key} has no version`);
+    assert.match(
+      version,
+      /^\d+\.\d+\.\d+(?:[-+].*)?$/,
+      `${lockName}: ${key} resolves "${version}" — not a semver version; a corrupt lockfile must fail closed, not pass silently`,
+    );
     const hit = ranges.find((range) => inVulnerableRange(version, range));
     if (hit) {
       assert.fail(
