@@ -40,6 +40,15 @@ test('the «Пра горад» #257 screen answers the visitor', async (t) => {
     assert.deepEqual(errors, []);
   });
 
+  await t.test('the variant map can pick Sopot without a price-decimal message', async () => {
+    await choose('city');
+    const list = phone.locator('[data-key="fold:atlas-list"]');
+    if (await list.getAttribute('aria-expanded') === 'false') await list.click();
+    await phone.locator('[data-key="zone-row:sopot"]').click();
+    assert.match(await phone.locator('.atlas-card').textContent(), /\d+,\d км па прамой/);
+    assert.deepEqual(errors, []);
+  });
+
   await t.test('the wheel draws the approved medallions: disc, rim and line sign, no pictures', async () => {
     await choose('airport');
     const medals = phone.locator('.wheel .slot .medal');

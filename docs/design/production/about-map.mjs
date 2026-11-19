@@ -18,7 +18,7 @@ import { el, icon, svg } from './kit.mjs';
 import { bounds } from './kit-geo.mjs';
 import { layerSwitches, mapButton, settleLabels, swatch, zoomView } from './kit-map.mjs';
 import { MAP_IMAGE } from './about-map-data.mjs';
-import { SHAPES, nearestStop, pickAt } from './about-map-geo.mjs';
+import { SHAPES, nearestStop, pickAt, formatMapKilometres } from './about-map-geo.mjs';
 import { PLACE_WAYS, SUMMER_BEACHES } from './about-content.mjs';
 import { facts, fold, remark, sr } from './about-parts.mjs';
 
@@ -102,8 +102,7 @@ function lookUp(pick) {
 }
 
 // The card under the map: a hint, or what the pick is. `t` the guide's words.
-function pickCard(card, pick, { t, openSection }) {
-  const km = (metres) => (metres / 1000).toFixed(1).replace('.', t('u.decimal'));
+function pickCard(card, pick, { t, lang, openSection }) {
   const head = (name, tag, tagClass) => el('div', { className: 'place-head' },
     el('h4', { lang: 'pl', textContent: name }), el('span', { className: `tag ${tagClass}`, textContent: tag }));
   const text = (className, value) => el('p', { className, textContent: value });
@@ -122,7 +121,7 @@ function pickCard(card, pick, { t, openSection }) {
     const near = nearestStop(zone.ground);
     const ways = (PLACE_WAYS[zone.ways] ?? []).map(([sign, key]) => [sign, t(key)]);
     // The nearest stop, unless the ways already name a train.
-    if (near.distance <= NEAR_STOP && !ways.some(([sign]) => sign === 'train-front')) ways.push(['train-front', t('zone.stop', { name: near.station.name, km: km(near.distance) })]);
+    if (near.distance <= NEAR_STOP && !ways.some(([sign]) => sign === 'train-front')) ways.push(['train-front', t('zone.stop', { name: near.station.name, km: formatMapKilometres(near.distance, lang) })]);
     fill(
       head(zone.name, t(`layer.${zone.kind}`), `zone-tag ${zone.kind}`),
       text('', t(zone.text)),
@@ -172,7 +171,7 @@ export function atlas({ t, ui, lang, openSection, openMaps }) {
     const picked = art.zones[SHAPES.zones.findIndex((zone) => is('zone', zone.id))];
     if (picked) picked.parentNode.append(picked);
     settleLabels(names());
-    pickCard(card, pick, { t, openSection });
+    pickCard(card, pick, { t, lang, openSection });
   }
 
   // The signs are buttons (drawing()): from the keyboard, Enter or Space picks
