@@ -31,7 +31,8 @@
 // On CJS require hosts only `query-string/stringify` keeps working (the only
 // path expo-router reaches today); `parse`/`parseUrl`/`pick`/`exclude` would
 // throw `TypeError: decodeComponent is not a function` — a documented latent
-// constraint of the override, re-checked by the audit reruns in #339.
+// constraint of the override, re-checked by the audit reruns tracked by
+// https://github.com/kudy-vk/KUDY/issues/339.
 // Floors sit at what this remediation validated (pin-what-you-validated): a
 // conscious future upgrade raises versions and stays green.
 import test from 'node:test';
