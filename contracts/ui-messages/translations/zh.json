@@ -4,12 +4,12 @@
   "provenance": {
     "kind": "authored",
     "reviewer": "агент-рэцэнзент, сесія G21.46",
-    "evidence": "аўтарскі спрошчана-кітайскі (zh-Hans, мацерыковая норма) пераклад у задачы G21.46 (картка 670 архіўнага рэпе): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr/cs/sv (G21.10–G21.14); рэгістр — нейтральная сучасная мацерыковая норма, кнопкі ў загадным ладзе (стандарт кітайскага UI); тэрміны батарэі G21.39 §6.3 занкерваныя на корпус AOSP zh-rCN (上一步/取消/设置/导览/停止/散步/下载/购买/恢复/不可用) са следамі G21.27 у запісах; незалежны рэвью кітайскамоўнага LLM — асобны праход паводле рашэння ўладара 2026-10-14. Незалежнае кітайскамоўнае рэвью выканана 2026-10-17 асобным агентам-рэцэнзентам: на ўваходзе — source.json, зацверджаны en-даведнік, батарэя G21.39 §6.3 з корпусам AOSP і глосарый; правераныя ўсе 295 запісаў па шасці правілах (сэнс, натуральнасць/рэгістр, замацаваныя тэрміны, параметры і формы, адзінства паняццяў, пунктуацыя). Знойдзена 23 знаходкі (0 blocker · 1 major · 7 minor · 15 nit); ніводнае рашэнне батарэі не было аспрэчана. Усе знаходкі закрытыя ў гэтай жа галіне: 24 запісы змененыя, кожны нясе адзнаку рашэння ў review.note."
+    "evidence": "аўтарскі спрошчана-кітайскі (zh-Hans, мацерыковая норма) пераклад у задачы G21.46 (картка 670 архіўнага рэпе): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr/cs/sv (G21.10–G21.14); рэгістр — нейтральная сучасная мацерыковая норма, кнопкі ў загадным ладзе (стандарт кітайскага UI); тэрміны батарэі G21.39 §6.3 занкерваныя на корпус AOSP zh-rCN (\u4E0A\u4E00\u6B65/\u53D6\u6D88/\u8BBE\u7F6E/\u5BFC\u89C8/\u505C\u6B62/\u6563\u6B65/\u4E0B\u8F7D/\u8D2D\u4E70/\u6062\u590D/\u4E0D\u53EF\u7528) са следамі G21.27 у запісах; незалежны рэвью кітайскамоўнага LLM — асобны праход паводле рашэння ўладара 2026-10-14. Незалежнае кітайскамоўнае рэвью выканана 2026-10-17 асобным агентам-рэцэнзентам: на ўваходзе — source.json, зацверджаны en-даведнік, батарэя G21.39 §6.3 з корпусам AOSP і глосарый; правераныя ўсе 295 запісаў па шасці правілах (сэнс, натуральнасць/рэгістр, замацаваныя тэрміны, параметры і формы, адзінства паняццяў, пунктуацыя). Знойдзена 23 знаходкі (0 blocker · 1 major · 7 minor · 15 nit); ніводнае рашэнне батарэі не было аспрэчана. Усе знаходкі закрытыя ў гэтай жа галіне: 24 запісы змененыя, кожны нясе адзнаку рашэння ў review.note."
   },
   "records": [
     {
       "id": "native.chrome.comingSoon",
-      "value": "即将推出",
+      "value": "\u5373\u5C06\u63A8\u51FA",
       "reviewedSourceHash": "ddd8d54d445057e907cd788a7e2a70b26423e2dbe88a1f3dbfd8f884ca624750",
       "review": {
         "outcome": "approved",
@@ -18,16 +18,16 @@
     },
     {
       "id": "native.chrome.aboutCity",
-      "value": "城市指南",
+      "value": "\u57CE\u5E02\u6307\u5357",
       "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
       "review": {
         "outcome": "approved",
-        "note": "Пераклад сесіі #200 (GLM-5.3, ZCode): «指南» адпавядае практычнаму даведніку, не энцыклапедыі."
+        "note": "Пераклад сесіі #200 (GLM-5.3, ZCode): «\u6307\u5357» адпавядае практычнаму даведніку, не энцыклапедыі."
       }
     },
     {
       "id": "native.chrome.access.free",
-      "value": "免费",
+      "value": "\u514D\u8D39",
       "reviewedSourceHash": "82e16c5b12218d14ab2c468f999861493c22fd508e1f225f286674ecffbac141",
       "review": {
         "outcome": "approved",
@@ -36,7 +36,7 @@
     },
     {
       "id": "native.chrome.access.mixed",
-      "value": "部分免费",
+      "value": "\u90E8\u5206\u514D\u8D39",
       "reviewedSourceHash": "d434ea3d59a4874db509a395e9df857ee017bee8ed9cf40bdf911b4c745459c5",
       "review": {
         "outcome": "approved",
@@ -45,34 +45,34 @@
     },
     {
       "id": "native.chrome.access.paid",
-      "value": "付费",
+      "value": "\u4ED8\u8D39",
       "reviewedSourceHash": "4b081dc73d3045c6977b49c2140888c6106630d14333a0bc68abd96750d2dffb",
       "review": {
         "outcome": "approved",
-        "note": "пазнака доступу; пара да 免费 у тым жа стылі"
+        "note": "пазнака доступу; пара да \u514D\u8D39 у тым жа стылі"
       }
     },
     {
       "id": "native.chrome.back",
-      "value": "上一步",
+      "value": "\u4E0A\u4E00\u6B65",
       "reviewedSourceHash": "b1138bccd114e81d7e8305ace5a529060269c32c1dd21e669ff30f4a2f36d7a0",
       "review": {
         "outcome": "approved",
-        "note": "кнопка вяртання на папярэдні экран; мацерыковы корпус AOSP трымае менавіта 上一步, не 返回 (той самы сэнс праз 返回 нясе кнопка вяртання ўводу)"
+        "note": "кнопка вяртання на папярэдні экран; мацерыковы корпус AOSP трымае менавіта \u4E0A\u4E00\u6B65, не \u8FD4\u56DE (той самы сэнс праз \u8FD4\u56DE нясе кнопка вяртання ўводу)"
       },
       "terminology": {
         "status": "resolved",
         "kind": "looked-up",
         "source": "android",
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.back (frameworks/base#back_button_label, zh-rCN)",
-        "term": "上一步",
+        "term": "\u4E0A\u4E00\u6B65",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: кнопка Back у мацерыковым UI — гэта 上一步, а не слоўнікавае 返回; сэнс «вярнуцца на папярэдні экран»"
+        "reason": "батарэя G21.39: кнопка Back у мацерыковым UI — гэта \u4E0A\u4E00\u6B65, а не слоўнікавае \u8FD4\u56DE; сэнс «вярнуцца на папярэдні экран»"
       }
     },
     {
       "id": "native.chrome.backToCity",
-      "value": "城市",
+      "value": "\u57CE\u5E02",
       "reviewedSourceHash": "c3196e598662ddc30063829a3d53b88c16855ef719f72189dcb748a4c7e72200",
       "review": {
         "outcome": "approved",
@@ -81,7 +81,7 @@
     },
     {
       "id": "native.chrome.cancel",
-      "value": "取消",
+      "value": "\u53D6\u6D88",
       "reviewedSourceHash": "0edad8c85ababf7db09011d81672c3470f30745ce80436b8a1e3f77f8fa7150d",
       "review": {
         "outcome": "approved",
@@ -92,14 +92,14 @@
         "kind": "looked-up",
         "source": "android",
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.cancel (frameworks/base#cancel, zh-rCN)",
-        "term": "取消",
+        "term": "\u53D6\u6D88",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: акцыя скасавання дыялога — 取消 у CEDICT/MOE і ў корпусе AOSP (адзіны сэнс)"
+        "reason": "батарэя G21.39: акцыя скасавання дыялога — \u53D6\u6D88 у CEDICT/MOE і ў корпусе AOSP (адзіны сэнс)"
       }
     },
     {
       "id": "native.chrome.catalogTemporarilyUnavailable",
-      "value": "目录暂时不可用",
+      "value": "\u76EE\u5F55\u6682\u65F6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "1db04f4cab5a569077412e68b581db2461473397a0b1f1ba55ce094f9c65f144",
       "review": {
         "outcome": "approved",
@@ -108,7 +108,7 @@
     },
     {
       "id": "native.chrome.catalogUnavailable",
-      "value": "目录不可用",
+      "value": "\u76EE\u5F55\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "5da4e9377f0d520cf9f61c7ff0fa655d10fd902089cdd63b979ff8f8d19d0745",
       "review": {
         "outcome": "approved",
@@ -118,24 +118,24 @@
         "status": "resolved",
         "kind": "looked-up",
         "source": "android",
-        "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.unavailable (frameworks/base, zh-rCN «…不可用»)",
-        "term": "不可用",
+        "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.unavailable (frameworks/base, zh-rCN «…\u4E0D\u53EF\u7528»)",
+        "term": "\u4E0D\u53EF\u7528",
         "date": "2026-10-17",
         "reason": "слоўнікавы прабел (няма ні ў CEDICT, ні ў MOE); сэнс даказваны толькі корпусам AOSP"
       }
     },
     {
       "id": "native.chrome.collectionUnavailable",
-      "value": "精选集不可用",
+      "value": "\u7CBE\u9009\u96C6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "f835b71196437961eeaeb3074ef18024e8204716abc2801515bbdf6a8c4b51d3",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; падборка → 精选集 (куратаваная падборка)"
+        "note": "радок стану; падборка → \u7CBE\u9009\u96C6 (куратаваная падборка)"
       }
     },
     {
       "id": "native.chrome.collectionUnresolved",
-      "value": "精选中部分内容尚未发布。",
+      "value": "\u7CBE\u9009\u4E2D\u90E8\u5206\u5185\u5BB9\u5C1A\u672A\u53D1\u5E03\u3002",
       "reviewedSourceHash": "a5e630ad534dffdc7196d67ccc73dd0266f09f81d681a7a5b811a354ab5fd20b",
       "review": {
         "outcome": "approved",
@@ -144,59 +144,59 @@
     },
     {
       "id": "native.chrome.currentWalk",
-      "value": "当前散步",
+      "value": "\u5F53\u524D\u6563\u6B65",
       "reviewedSourceHash": "f9408779fd160eda48f9d52e41c0a274afa34f1fc10c34ed16c655a630413f88",
       "review": {
         "outcome": "approved",
-        "note": "загаловак секцыі; walk → 散步 па батарэі, актуалізацыя праз 当前"
+        "note": "загаловак секцыі; walk → \u6563\u6B65 па батарэі, актуалізацыя праз \u5F53\u524D"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "散步",
+        "term": "\u6563\u6B65",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 §6.3: walk = 散步 (зацверджаная рашэннем рэкамендацыя); ні AOSP, ні зацверджаныя слоўнікі не даюць піна для гэтага сэнсу, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
+        "reason": "батарэя G21.39 §6.3: walk = \u6563\u6B65 (зацверджаная рашэннем рэкамендацыя); ні AOSP, ні зацверджаныя слоўнікі не даюць піна для гэтага сэнсу, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
       }
     },
     {
       "id": "native.chrome.degradedData",
-      "value": "部分数据暂时不可用",
+      "value": "\u90E8\u5206\u6570\u636E\u6682\u65F6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "c6a254fe804abb64bc54bbe20e172db06ed99322075f21a9f868ba5e35a923b1",
       "review": {
         "outcome": "approved",
-        "note": "банер дэградацыі; частка звестак — 部分数据"
+        "note": "банер дэградацыі; частка звестак — \u90E8\u5206\u6570\u636E"
       }
     },
     {
       "id": "native.chrome.demoNearbyMapAccessibility",
-      "value": "三个地点的示例图",
+      "value": "\u4E09\u4E2A\u5730\u70B9\u7684\u793A\u4F8B\u56FE",
       "reviewedSourceHash": "0e0f487df8a6cdd6b102b55fad23fd34872990e187a2f2ff8045950fbfa6b419",
       "review": {
         "outcome": "approved",
-        "note": "пазнака для чытача экрана; тры кропкі — 三个地点, 示例示意图 — прыкладная схема · Незалежнае рэв'ю (2026-10-17): 示例示意图 → 示例图 (два амаль сінанімічныя азначэнні побач чыталіся цяжка)"
+        "note": "пазнака для чытача экрана; тры кропкі — \u4E09\u4E2A\u5730\u70B9, \u793A\u4F8B\u793A\u610F\u56FE — прыкладная схема · Незалежнае рэв'ю (2026-10-17): \u793A\u4F8B\u793A\u610F\u56FE → \u793A\u4F8B\u56FE (два амаль сінанімічныя азначэнні побач чыталіся цяжка)"
       }
     },
     {
       "id": "native.chrome.demoNearbyMapLabel",
-      "value": "散步示意图 · 演示",
+      "value": "\u6563\u6B65\u793A\u610F\u56FE · \u6F14\u793A",
       "reviewedSourceHash": "1829b6458dc887619cb8377e2ac100758f5cad90061438a550be0a620fa1e833",
       "review": {
         "outcome": "approved",
-        "note": "бачны подпіс прыкладнай схемы; demo → 演示, як у іншых мовах"
+        "note": "бачны подпіс прыкладнай схемы; demo → \u6F14\u793A, як у іншых мовах"
       }
     },
     {
       "id": "native.chrome.demoNoticeDetail",
-      "value": "这里的故事、地点和音频均为示例。这不是可直接用于导航的路线。",
+      "value": "\u8FD9\u91CC\u7684\u6545\u4E8B\u3001\u5730\u70B9\u548C\u97F3\u9891\u5747\u4E3A\u793A\u4F8B\u3002\u8FD9\u4E0D\u662F\u53EF\u76F4\u63A5\u7528\u4E8E\u5BFC\u822A\u7684\u8DEF\u7EBF\u3002",
       "reviewedSourceHash": "25cbc93df0b908ae3ae7b81353ad38253b44c79bc3fd50fedebf5e9391b819e8",
       "review": {
         "outcome": "approved",
-        "note": "заўвага пра прыкладны дэма-кантэнт і забарону навігацыі; два сказы захаваныя · Незалежнае рэв'ю (2026-10-17): 正式路线 → 可直接用于导航的路线: be/en кажуць пра непадрыхтаванасць («не гатовы»), а не пра афіцыйнасць"
+        "note": "заўвага пра прыкладны дэма-кантэнт і забарону навігацыі; два сказы захаваныя · Незалежнае рэв'ю (2026-10-17): \u6B63\u5F0F\u8DEF\u7EBF → \u53EF\u76F4\u63A5\u7528\u4E8E\u5BFC\u822A\u7684\u8DEF\u7EBF: be/en кажуць пра непадрыхтаванасць («не гатовы»), а не пра афіцыйнасць"
       }
     },
     {
       "id": "native.chrome.demoRunMapLabel",
-      "value": "地点示意图 · 演示",
+      "value": "\u5730\u70B9\u793A\u610F\u56FE · \u6F14\u793A",
       "reviewedSourceHash": "2b2cf7128548b97eb8fdc8ed19819669c87c9b8afa19d11ac8a9f77706552f4b",
       "review": {
         "outcome": "approved",
@@ -205,7 +205,7 @@
     },
     {
       "id": "native.chrome.demoVersion",
-      "value": "演示版本",
+      "value": "\u6F14\u793A\u7248\u672C",
       "reviewedSourceHash": "0840fd5f0145a4f2d62a33cc2c765c6d5d478fc0b5591a3fc165311437e3d25d",
       "review": {
         "outcome": "approved",
@@ -214,7 +214,7 @@
     },
     {
       "id": "native.chrome.differenceText.duration_unknown",
-      "value": "未评估时间",
+      "value": "\u672A\u8BC4\u4F30\u65F6\u95F4",
       "reviewedSourceHash": "aa5a112078a2bbce5d31cfb2eaf8e7ffc469607accdc26f9e44e18b8d6dbe659",
       "review": {
         "outcome": "approved",
@@ -223,7 +223,7 @@
     },
     {
       "id": "native.chrome.differenceText.over_time",
-      "value": "超出所请求的时间",
+      "value": "\u8D85\u51FA\u6240\u8BF7\u6C42\u7684\u65F6\u95F4",
       "reviewedSourceHash": "95f858f684ec50f63854358e44ef3e68fb7c3c322ff5732fc957046244703404",
       "review": {
         "outcome": "approved",
@@ -232,7 +232,7 @@
     },
     {
       "id": "native.chrome.differenceText.season_not_recommended",
-      "value": "不适合本季节",
+      "value": "\u4E0D\u9002\u5408\u672C\u5B63\u8282",
       "reviewedSourceHash": "b3976a641f5d9d01ed1186b8256e629a92bff51fc5f65f14563df0f60da468d0",
       "review": {
         "outcome": "approved",
@@ -241,7 +241,7 @@
     },
     {
       "id": "native.chrome.differenceText.season_unassessed",
-      "value": "未评估季节",
+      "value": "\u672A\u8BC4\u4F30\u5B63\u8282",
       "reviewedSourceHash": "e06820b8dbcdffc5d4e083b1b251714326a070dd61d11c589dc48b1ab551da42",
       "review": {
         "outcome": "approved",
@@ -250,7 +250,7 @@
     },
     {
       "id": "native.chrome.differenceText.theme_mismatch",
-      "value": "主题不符",
+      "value": "\u4E3B\u9898\u4E0D\u7B26",
       "reviewedSourceHash": "518dfdb5f1459fb582bff8fef2e6f5130e9b6277546581bb5c06a49da31312e4",
       "review": {
         "outcome": "approved",
@@ -259,7 +259,7 @@
     },
     {
       "id": "native.chrome.discoveryAlternatives",
-      "value": "其他选项",
+      "value": "\u5176\u4ED6\u9009\u9879",
       "reviewedSourceHash": "6b9f5202ccfa8bebff4109104041f656688d06f08ddaa652292d65f40af5ba0e",
       "review": {
         "outcome": "approved",
@@ -268,7 +268,7 @@
     },
     {
       "id": "native.chrome.discoveryEmpty",
-      "value": "没有完全匹配的结果——请放宽条件，或看看其他选项。",
+      "value": "\u6CA1\u6709\u5B8C\u5168\u5339\u914D\u7684\u7ED3\u679C——\u8BF7\u653E\u5BBD\u6761\u4EF6\uFF0C\u6216\u770B\u770B\u5176\u4ED6\u9009\u9879\u3002",
       "reviewedSourceHash": "831cdd7dfd6d729661152d21f5c107ebf2438ec405db988ddc8d2cd62633521d",
       "review": {
         "outcome": "approved",
@@ -277,7 +277,7 @@
     },
     {
       "id": "native.chrome.discoveryTemporarilyUnavailable",
-      "value": "精选内容暂时不可用",
+      "value": "\u7CBE\u9009\u5185\u5BB9\u6682\u65F6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "9252d5d0294115694f781e58a88257ae4b90cca39cb8c14091efd477f0721935",
       "review": {
         "outcome": "approved",
@@ -286,7 +286,7 @@
     },
     {
       "id": "native.chrome.discoveryTitle",
-      "value": "玩什么",
+      "value": "\u73A9\u4EC0\u4E48",
       "reviewedSourceHash": "73a869d121cfe785ef9b06081df8484b6a878a6bb51140ad668c80a4357bd816",
       "review": {
         "outcome": "approved",
@@ -295,16 +295,16 @@
     },
     {
       "id": "native.chrome.discoveryUnavailable",
-      "value": "精选内容不可用",
+      "value": "\u7CBE\u9009\u5185\u5BB9\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "262a86e4e8647e231e8d140b8e62fdbf5d769ab8c08400d9d87afb962676211a",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; падборка → 精选 · Незалежнае рэв'ю (2026-10-17): 精选 → 精选内容: самастойны назоўнік для «падбору» (精选集 застаецца асобным сэнсам «падборка»)"
+        "note": "радок стану; падборка → \u7CBE\u9009 · Незалежнае рэв'ю (2026-10-17): \u7CBE\u9009 → \u7CBE\u9009\u5185\u5BB9: самастойны назоўнік для «падбору» (\u7CBE\u9009\u96C6 застаецца асобным сэнсам «падборка»)"
       }
     },
     {
       "id": "native.chrome.durationLabel",
-      "value": "时长",
+      "value": "\u65F6\u957F",
       "reviewedSourceHash": "367751046f034b1e95b6562ea3eb4809debffb78ea7af63d3de645321bdeecc9",
       "review": {
         "outcome": "approved",
@@ -313,16 +313,16 @@
     },
     {
       "id": "native.chrome.durationMinutes",
-      "value": "时间：${minutes}分钟",
+      "value": "\u65F6\u95F4\uFF1A${minutes}\u5206\u949F",
       "reviewedSourceHash": "e9a5925bfd57c9831a26edeecf7bcb583cbd7d875c8e9fabbbd4d10449028fe4",
       "review": {
         "outcome": "approved",
-        "note": "радок працягласці, адзінае значэнне; паміж лічбай і 分钟 прабелу няма, як патрабуе рашэнне пра вёрстку"
+        "note": "радок працягласці, адзінае значэнне; паміж лічбай і \u5206\u949F прабелу няма, як патрабуе рашэнне пра вёрстку"
       }
     },
     {
       "id": "native.chrome.durationRange",
-      "value": "时间：${minMinutes}–${maxMinutes}分钟",
+      "value": "\u65F6\u95F4\uFF1A${minMinutes}–${maxMinutes}\u5206\u949F",
       "reviewedSourceHash": "78add4278ac05d6aa17374a52f30bb5c313f6da5834ace6e464ed213dcafeee9",
       "review": {
         "outcome": "approved",
@@ -331,45 +331,45 @@
     },
     {
       "id": "native.chrome.freeStopsCount",
-      "value": "免费地点：${count}",
+      "value": "\u514D\u8D39\u5730\u70B9\uFF1A${count}",
       "reviewedSourceHash": "780c5d18130bb93df4355222162c7d4d8cc0cc3510971a9e6376751dff00a953",
       "review": {
         "outcome": "approved",
-        "note": "радок факту; кропкі → 地点 (мясцовы сэнс кропак маршруту)"
+        "note": "радок факту; кропкі → \u5730\u70B9 (мясцовы сэнс кропак маршруту)"
       }
     },
     {
       "id": "native.chrome.guidesLink",
-      "value": "导览 →",
+      "value": "\u5BFC\u89C8 →",
       "reviewedSourceHash": "ae59ec899a5964dea00463b49e7dd6348684069736ce95f6183d3c79b94c389c",
       "review": {
         "outcome": "approved",
-        "note": "ссылка на раздзел гідаў; кітайскі тэрмін электроннага аўдыягіда — 导览 (не 导游, чалавек-экскурсавод)"
+        "note": "ссылка на раздзел гідаў; кітайскі тэрмін электроннага аўдыягіда — \u5BFC\u89C8 (не \u5BFC\u6E38, чалавек-экскурсавод)"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "导览",
+        "term": "\u5BFC\u89C8",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 §6.3: электронны гід = 导览, чалавек-экскурсавод = 导游; ні AOSP, ні зацверджаныя слоўнікі не піняць сэнс, таму рашэнне рэцэнзента"
+        "reason": "батарэя G21.39 §6.3: электронны гід = \u5BFC\u89C8, чалавек-экскурсавод = \u5BFC\u6E38; ні AOSP, ні зацверджаныя слоўнікі не піняць сэнс, таму рашэнне рэцэнзента"
       }
     },
     {
       "id": "native.chrome.heardCount",
-      "value": "已收听：${count}",
+      "value": "\u5DF2\u6536\u542C\uFF1A${count}",
       "reviewedSourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a",
       "review": {
         "outcome": "approved",
-        "note": "лічба праслуханых гісторый; дзеяслоў-вынік 已听 без змены роду · Незалежнае рэв'ю (2026-10-17): 已听 → 已收听: адзін сэнс «праслухана» мае адно слова ва ўсім наборы (як native.run.status.played)"
+        "note": "лічба праслуханых гісторый; дзеяслоў-вынік \u5DF2\u542C без змены роду · Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C → \u5DF2\u6536\u542C: адзін сэнс «праслухана» мае адно слова ва ўсім наборы (як native.run.status.played)"
       }
     },
     {
       "id": "native.chrome.historyUnavailable",
-      "value": "历史记录不可用。",
+      "value": "\u5386\u53F2\u8BB0\u5F55\u4E0D\u53EF\u7528\u3002",
       "reviewedSourceHash": "e533a4767a8b973cf00efbfea8c16a7163f08f541ae657e853eea36baa0ccdc9",
       "review": {
         "outcome": "approved",
-        "note": "радок стану са сказам з кропкай; гісторыя → 历史记录"
+        "note": "радок стану са сказам з кропкай; гісторыя → \u5386\u53F2\u8BB0\u5F55"
       }
     },
     {
@@ -383,7 +383,7 @@
     },
     {
       "id": "native.chrome.languageLabel",
-      "value": "语言",
+      "value": "\u8BED\u8A00",
       "reviewedSourceHash": "85cd11e030ecf41b369de4b859dfd71a507a92c832924c27ff037d43425b9c92",
       "review": {
         "outcome": "approved",
@@ -392,7 +392,7 @@
     },
     {
       "id": "native.chrome.languagesLine",
-      "value": "语言：${textLocales}",
+      "value": "\u8BED\u8A00\uFF1A${textLocales}",
       "reviewedSourceHash": "39f5323a4494e7cca7ba60c1fd4f2820d3336a75365fcac547b6a37319e7f9a0",
       "review": {
         "outcome": "approved",
@@ -401,16 +401,16 @@
     },
     {
       "id": "native.chrome.liveRowLine",
-      "value": "${state} — 从${day}起 — 已收听：${heard}",
+      "value": "${state} — \u4ECE${day}\u8D77 — \u5DF2\u6536\u542C\uFF1A${heard}",
       "reviewedSourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081",
       "review": {
         "outcome": "approved",
-        "note": "цэлы радок жывой прагулкі; працяжнікі і адсутнасць прыназоўніка захаваныя · Незалежнае рэв'ю (2026-10-17): вернутая прыназоўнікавая сувязь 从…起 паводле be «з ${day}» / en «from» (без яе дзень чытаўся як асобная пазнака); 已听 → 已收听 — адно слова на адзін сэнс ва ўсім наборы"
+        "note": "цэлы радок жывой прагулкі; працяжнікі і адсутнасць прыназоўніка захаваныя · Незалежнае рэв'ю (2026-10-17): вернутая прыназоўнікавая сувязь \u4ECE…\u8D77 паводле be «з ${day}» / en «from» (без яе дзень чытаўся як асобная пазнака); \u5DF2\u542C → \u5DF2\u6536\u542C — адно слова на адзін сэнс ва ўсім наборы"
       }
     },
     {
       "id": "native.chrome.loading",
-      "value": "加载中…",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "0f54c6960ddd3180b3b6aac5d89f08b7c6f51017a06bf42789acdb26fca33706",
       "review": {
         "outcome": "approved",
@@ -419,7 +419,7 @@
     },
     {
       "id": "native.chrome.locked",
-      "value": "已锁定",
+      "value": "\u5DF2\u9501\u5B9A",
       "reviewedSourceHash": "ff9f67bdfdb9c424fe56f9a9bda42414eeb402ea9b2e1ceca7551e8626c019db",
       "review": {
         "outcome": "approved",
@@ -437,16 +437,16 @@
     },
     {
       "id": "native.chrome.nearby",
-      "value": "附近 →",
+      "value": "\u9644\u8FD1 →",
       "reviewedSourceHash": "19bbc736b6509867eccfc55e37450d946ccf5ceede28120e16baedd862349d82",
       "review": {
         "outcome": "approved",
-        "note": "пункт ніжняй навігацыі; побач → 附近"
+        "note": "пункт ніжняй навігацыі; побач → \u9644\u8FD1"
       }
     },
     {
       "id": "native.chrome.noCurrentWalk",
-      "value": "当前没有散步",
+      "value": "\u5F53\u524D\u6CA1\u6709\u6563\u6B65",
       "reviewedSourceHash": "71cc9155745464cb983daa06f1a7dbedd11879c5af5a0954cdfafd33bd07f7bd",
       "review": {
         "outcome": "approved",
@@ -455,7 +455,7 @@
     },
     {
       "id": "native.chrome.noPastWalks",
-      "value": "没有历史散步",
+      "value": "\u6CA1\u6709\u5386\u53F2\u6563\u6B65",
       "reviewedSourceHash": "0bfbeda8ef7061ce1ba34816528ba7e430b242d9b3f048e4865475cdf7ba8ebf",
       "review": {
         "outcome": "approved",
@@ -464,16 +464,16 @@
     },
     {
       "id": "native.chrome.notFoundHint",
-      "value": "目录还在等待——请用“上一步”按钮回到目录。",
+      "value": "\u76EE\u5F55\u8FD8\u5728\u7B49\u5F85——\u8BF7\u7528“\u4E0A\u4E00\u6B65”\u6309\u94AE\u56DE\u5230\u76EE\u5F55\u3002",
       "reviewedSourceHash": "28b7420ef0dc476a3c2ffc4b4eeeabd2f9dc647507d9f66a081d1b4fab127d40",
       "review": {
         "outcome": "approved",
-        "note": "падказка на экране адсутнага глыбокага лінку; назва кнопкі ўзятая з гэтага ж набору · Незалежнае рэв'ю (2026-10-17): назва кнопкі выпраўлена на 上一步 — так называецца гэтая ж кнопка ў запісе native.chrome.back (было 返回, гэта значыць карыстальнік шукаў бы кнопку, якой на экране няма)"
+        "note": "падказка на экране адсутнага глыбокага лінку; назва кнопкі ўзятая з гэтага ж набору · Незалежнае рэв'ю (2026-10-17): назва кнопкі выпраўлена на \u4E0A\u4E00\u6B65 — так называецца гэтая ж кнопка ў запісе native.chrome.back (было \u8FD4\u56DE, гэта значыць карыстальнік шукаў бы кнопку, якой на экране няма)"
       }
     },
     {
       "id": "native.chrome.notFoundTitle",
-      "value": "没有这个页面",
+      "value": "\u6CA1\u6709\u8FD9\u4E2A\u9875\u9762",
       "reviewedSourceHash": "f30571fd886be738567f5f0e1e368307332c1d93251f31339d7290de2cf81928",
       "review": {
         "outcome": "approved",
@@ -482,7 +482,7 @@
     },
     {
       "id": "native.chrome.notPublished",
-      "value": "未发布",
+      "value": "\u672A\u53D1\u5E03",
       "reviewedSourceHash": "41760064e818aa82c125dc79e1b2961a5cd566a4419228253f62469206893e03",
       "review": {
         "outcome": "approved",
@@ -491,34 +491,34 @@
     },
     {
       "id": "native.chrome.pastRowLine",
-      "value": "${startedDay} — ${finishedDay} — 已收听：${heard}",
+      "value": "${startedDay} — ${finishedDay} — \u5DF2\u6536\u542C\uFF1A${heard}",
       "reviewedSourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa",
       "review": {
         "outcome": "approved",
-        "note": "цэлы радок завершанай прагулкі; запасное значэнне для ${finishedDay} прыходзіць з кананічнага параметра · Незалежнае рэв'ю (2026-10-17): 已听 → 已收听 для адзінства з native.run.status.played і native.chrome.heardCount"
+        "note": "цэлы радок завершанай прагулкі; запасное значэнне для ${finishedDay} прыходзіць з кананічнага параметра · Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C → \u5DF2\u6536\u542C для адзінства з native.run.status.played і native.chrome.heardCount"
       }
     },
     {
       "id": "native.chrome.pastWalks",
-      "value": "历史散步",
+      "value": "\u5386\u53F2\u6563\u6B65",
       "reviewedSourceHash": "639c686aee401287c7c2224cfce2606da6a128852a23771f4fab41e4275081d8",
       "review": {
         "outcome": "approved",
-        "note": "загаловак секцыі папярэдніх праходаў; пара да 当前散步"
+        "note": "загаловак секцыі папярэдніх праходаў; пара да \u5F53\u524D\u6563\u6B65"
       }
     },
     {
       "id": "native.chrome.previewUnavailable",
-      "value": "预览暂时不可用",
+      "value": "\u9884\u89C8\u6682\u65F6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; прэв'ю → 预览"
+        "note": "радок стану; прэв'ю → \u9884\u89C8"
       }
     },
     {
       "id": "native.chrome.previewTextUnavailable",
-      "value": "所选界面语言下没有这个导览。",
+      "value": "\u6240\u9009\u754C\u9762\u8BED\u8A00\u4E0B\u6CA1\u6709\u8FD9\u4E2A\u5BFC\u89C8\u3002",
       "reviewedSourceHash": "6eb593b874ec34a4594861008c051696cafb4d710a8ff5473c9cdd35ddc730f8",
       "review": {
         "outcome": "approved",
@@ -527,7 +527,7 @@
     },
     {
       "id": "native.chrome.textLocaleEmpty",
-      "value": "这种语言暂时还没有带文本的导览。",
+      "value": "\u8FD9\u79CD\u8BED\u8A00\u6682\u65F6\u8FD8\u6CA1\u6709\u5E26\u6587\u672C\u7684\u5BFC\u89C8\u3002",
       "reviewedSourceHash": "886f9de4222ee5680e6beb950cddb086d31f9eb0793730fda31ceeb52a872c23",
       "review": {
         "outcome": "approved",
@@ -536,7 +536,7 @@
     },
     {
       "id": "native.chrome.reasonText.editorial",
-      "value": "编辑推荐",
+      "value": "\u7F16\u8F91\u63A8\u8350",
       "reviewedSourceHash": "be32560fb8b57fff44f9193fdeac0d3b5fa3312e6d1526ce09f5c88ec8ac9d56",
       "review": {
         "outcome": "approved",
@@ -545,7 +545,7 @@
     },
     {
       "id": "native.chrome.reasonText.season_recommended",
-      "value": "本季推荐",
+      "value": "\u672C\u5B63\u63A8\u8350",
       "reviewedSourceHash": "83c822a95860d2c4821e05dc1b6a51d346b4e5c49e015c2e796ee56b09459002",
       "review": {
         "outcome": "approved",
@@ -554,7 +554,7 @@
     },
     {
       "id": "native.chrome.reasonText.theme_match",
-      "value": "主题相符",
+      "value": "\u4E3B\u9898\u76F8\u7B26",
       "reviewedSourceHash": "fe66528dbcc40721fc40e604ec985777b0d5425401ab8d38f58c81124c37470b",
       "review": {
         "outcome": "approved",
@@ -563,7 +563,7 @@
     },
     {
       "id": "native.chrome.reasonText.within_time",
-      "value": "时间合适",
+      "value": "\u65F6\u95F4\u5408\u9002",
       "reviewedSourceHash": "41dcea7bd6cbb320a2935ace330501a46b878eef030a85cf775fed8029ad2575",
       "review": {
         "outcome": "approved",
@@ -572,7 +572,7 @@
     },
     {
       "id": "native.chrome.retry",
-      "value": "重试",
+      "value": "\u91CD\u8BD5",
       "reviewedSourceHash": "cc165ee110aa25bc187cee0368038bf687085da79f7d388ea91787197328053d",
       "review": {
         "outcome": "approved",
@@ -581,7 +581,7 @@
     },
     {
       "id": "native.chrome.seasonName.autumn",
-      "value": "秋季",
+      "value": "\u79CB\u5B63",
       "reviewedSourceHash": "33f4c1943bc36c7e4550c9987ea85f4a9255b28100446d208517c1a78bd2233d",
       "review": {
         "outcome": "approved",
@@ -590,7 +590,7 @@
     },
     {
       "id": "native.chrome.seasonName.spring",
-      "value": "春季",
+      "value": "\u6625\u5B63",
       "reviewedSourceHash": "94c0fb9dc8cd9aa1175988b7b4a193f53fa1f5348c4e3f1110da3fa842721aa2",
       "review": {
         "outcome": "approved",
@@ -599,7 +599,7 @@
     },
     {
       "id": "native.chrome.seasonName.summer",
-      "value": "夏季",
+      "value": "\u590F\u5B63",
       "reviewedSourceHash": "e58561f7639c8f6bd4aded2de457fa86cdb8c58a31155ca61ba4a34242034346",
       "review": {
         "outcome": "approved",
@@ -608,7 +608,7 @@
     },
     {
       "id": "native.chrome.seasonName.winter",
-      "value": "冬季",
+      "value": "\u51AC\u5B63",
       "reviewedSourceHash": "d585e12a829acc78ad036bad2de425546dd4ca75f5be37b7049201a909ca5f74",
       "review": {
         "outcome": "approved",
@@ -617,7 +617,7 @@
     },
     {
       "id": "native.chrome.sizeMb",
-      "value": "大小：${mb}MB",
+      "value": "\u5927\u5C0F\uFF1A${mb}MB",
       "reviewedSourceHash": "0979953f9427de22d5b78144e7648e877c2056592ac17ca64512e003e83980f2",
       "review": {
         "outcome": "approved",
@@ -626,7 +626,7 @@
     },
     {
       "id": "native.chrome.stateLabel.active",
-      "value": "进行中",
+      "value": "\u8FDB\u884C\u4E2D",
       "reviewedSourceHash": "50f925a180afc7d20f1521f3a9576ad1fc36b264eb1ae21a8aa08a8d2e576a19",
       "review": {
         "outcome": "approved",
@@ -635,7 +635,7 @@
     },
     {
       "id": "native.chrome.stateLabel.finished",
-      "value": "已完成",
+      "value": "\u5DF2\u5B8C\u6210",
       "reviewedSourceHash": "89521119203d65f39c6f1f334394eb73f3d477408af4a8bc9956f0ccb36cc4bc",
       "review": {
         "outcome": "approved",
@@ -644,7 +644,7 @@
     },
     {
       "id": "native.chrome.stateLabel.paused",
-      "value": "已暂停",
+      "value": "\u5DF2\u6682\u505C",
       "reviewedSourceHash": "d4525430de737faa9202eba337ae8fdd6979666e06ec6f5de931d5dab20d0669",
       "review": {
         "outcome": "approved",
@@ -653,23 +653,23 @@
     },
     {
       "id": "native.chrome.stopNumber",
-      "value": "地点 ${position}",
+      "value": "\u5730\u70B9 ${position}",
       "reviewedSourceHash": "732b0324729bf9f41fd27f86c569da9b0d5b75f6c1081c90b3e611c3fd6113c9",
       "review": {
         "outcome": "approved",
-        "note": "нумар кропкі на экране прагулкі; кропкі маршруту — 地点"
+        "note": "нумар кропкі на экране прагулкі; кропкі маршруту — \u5730\u70B9"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "地点",
+        "term": "\u5730\u70B9",
         "date": "2026-10-17",
-        "reason": "назоўнікавы сэнс «прыпынак» у батарэі G21.39 — 巴士站 (транспартны), не падыходзіць для кропак пешай экскурсіі; 地点 — рашэнне рэцэнзента для кропак маршруту"
+        "reason": "назоўнікавы сэнс «прыпынак» у батарэі G21.39 — \u5DF4\u58EB\u7AD9 (транспартны), не падыходзіць для кропак пешай экскурсіі; \u5730\u70B9 — рашэнне рэцэнзента для кропак маршруту"
       }
     },
     {
       "id": "native.chrome.stopsCount",
-      "value": "地点：${count}",
+      "value": "\u5730\u70B9\uFF1A${count}",
       "reviewedSourceHash": "e6c16b6c3a55c0e09e51b370c85d5604eae87ecfda33b559d4598b68d7a37ba7",
       "review": {
         "outcome": "approved",
@@ -678,14 +678,14 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "地点",
+        "term": "\u5730\u70B9",
         "date": "2026-10-17",
-        "reason": "той самы выбар, што і ў native.chrome.stopNumber: кропкі пешага маршруту — 地点, не транспартнае 巴士站"
+        "reason": "той самы выбар, што і ў native.chrome.stopNumber: кропкі пешага маршруту — \u5730\u70B9, не транспартнае \u5DF4\u58EB\u7AD9"
       }
     },
     {
       "id": "native.chrome.stopsLabel",
-      "value": "地点",
+      "value": "\u5730\u70B9",
       "reviewedSourceHash": "543419762c01ac0a64ee4638eca6b11c812136c3c39a11e196be70d391bc7eae",
       "review": {
         "outcome": "approved",
@@ -694,7 +694,7 @@
     },
     {
       "id": "native.chrome.switchAccept",
-      "value": "结束并开始",
+      "value": "\u7ED3\u675F\u5E76\u5F00\u59CB",
       "reviewedSourceHash": "09f9461a08fbf1066bb37f8a0c9afc3f52b9c2cb9919ed054ed16a6ec0f4f482",
       "review": {
         "outcome": "approved",
@@ -703,7 +703,7 @@
     },
     {
       "id": "native.chrome.switchConfirm",
-      "value": "结束“${liveTitle}”并开始“${candidateTitle}”？",
+      "value": "\u7ED3\u675F“${liveTitle}”\u5E76\u5F00\u59CB“${candidateTitle}”\uFF1F",
       "reviewedSourceHash": "7cb787411af9ba9b7fad2486e30c358743ded0e27b84f0d07be6a89e9500fb7d",
       "review": {
         "outcome": "approved",
@@ -712,7 +712,7 @@
     },
     {
       "id": "native.chrome.textAudioLine",
-      "value": "文本：${textLocales}；音频：${audioLocales}",
+      "value": "\u6587\u672C\uFF1A${textLocales}\uFF1B\u97F3\u9891\uFF1A${audioLocales}",
       "reviewedSourceHash": "f4933f8d3f6e148b08c0458cfd8c82eda3f2e49657df777c47f9d5dd55e1bd05",
       "review": {
         "outcome": "approved",
@@ -721,21 +721,21 @@
     },
     {
       "id": "native.chrome.timeCap",
-      "value": "最多${minutes}分钟",
+      "value": "\u6700\u591A${minutes}\u5206\u949F",
       "reviewedSourceHash": "4d2caf84a22f5db795338af5e935fc8654189716b361c93b3dd9cdb468de6eec",
       "review": {
         "outcome": "approved",
         "note": "верхняя мяжа часу; кітайская мова не мае катэгорыі множнага ліку — формы толькі дыскрэтныя, як і ў крыніцы"
       },
       "forms": {
-        "60": "最多一小时",
-        "120": "最多两小时",
-        "240": "半天"
+        "60": "\u6700\u591A\u4E00\u5C0F\u65F6",
+        "120": "\u6700\u591A\u4E24\u5C0F\u65F6",
+        "240": "\u534A\u5929"
       }
     },
     {
       "id": "native.chrome.timeUnlimited",
-      "value": "不限时间",
+      "value": "\u4E0D\u9650\u65F6\u95F4",
       "reviewedSourceHash": "8f02cfdec9242fdb41cbc1944150ea1fe80af35eaaa00df319679c664a2c3573",
       "review": {
         "outcome": "approved",
@@ -744,16 +744,16 @@
     },
     {
       "id": "native.chrome.validCache",
-      "value": "上次有效缓存",
+      "value": "\u4E0A\u6B21\u6709\u6548\u7F13\u5B58",
       "reviewedSourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0",
       "review": {
         "outcome": "approved",
-        "note": "радок стану: паказ папярэдняга валіднага кэша · Незалежнае рэв'ю (2026-10-17): 上一个 → 上次: гаворка пра кэш папярэдняга паспяховага чытання, а не пра адзін з некалькіх кэшаў"
+        "note": "радок стану: паказ папярэдняга валіднага кэша · Незалежнае рэв'ю (2026-10-17): \u4E0A\u4E00\u4E2A → \u4E0A\u6B21: гаворка пра кэш папярэдняга паспяховага чытання, а не пра адзін з некалькіх кэшаў"
       }
     },
     {
       "id": "native.chrome.walk",
-      "value": "散步",
+      "value": "\u6563\u6B65",
       "reviewedSourceHash": "b8fec3bf3468c4b2444846dc70c2c43539c6323117bad9e4b42a9a6455b6de54",
       "review": {
         "outcome": "approved",
@@ -762,14 +762,14 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "散步",
+        "term": "\u6563\u6B65",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 §6.3 фіксуе 散步 як тэрмін прагулкі (альтэрнатыва 漫步 адхіленая); піна ў зацверджаных крыніцах няма, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
+        "reason": "батарэя G21.39 §6.3 фіксуе \u6563\u6B65 як тэрмін прагулкі (альтэрнатыва \u6F2B\u6B65 адхіленая); піна ў зацверджаных крыніцах няма, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
       }
     },
     {
       "id": "native.chrome.whatToDo",
-      "value": "玩什么 →",
+      "value": "\u73A9\u4EC0\u4E48 →",
       "reviewedSourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179",
       "review": {
         "outcome": "approved",
@@ -778,7 +778,7 @@
     },
     {
       "id": "native.chrome.cityName",
-      "value": "格但斯克",
+      "value": "\u683C\u4F46\u65AF\u514B",
       "reviewedSourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2",
       "review": {
         "outcome": "approved",
@@ -787,7 +787,7 @@
     },
     {
       "id": "native.chrome.whereToToday",
-      "value": "今天去哪儿？",
+      "value": "\u4ECA\u5929\u53BB\u54EA\u513F\uFF1F",
       "reviewedSourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956",
       "review": {
         "outcome": "approved",
@@ -796,7 +796,7 @@
     },
     {
       "id": "native.guideHint.dismiss",
-      "value": "隐藏",
+      "value": "\u9690\u85CF",
       "reviewedSourceHash": "ef41daab2552c03555650792656b97d33407771656bc80aea288af4b0527ad24",
       "review": {
         "outcome": "approved",
@@ -805,7 +805,7 @@
     },
     {
       "id": "native.guideHint.heading",
-      "value": "附近有导览…",
+      "value": "\u9644\u8FD1\u6709\u5BFC\u89C8…",
       "reviewedSourceHash": "afa6c69cf50b58dde34a24aa9f742b7ebffee946eeb17e76d90f7ae65a8ae6b7",
       "review": {
         "outcome": "approved",
@@ -814,32 +814,32 @@
     },
     {
       "id": "native.guideHint.openHint",
-      "value": "打开导览说明",
+      "value": "\u6253\u5F00\u5BFC\u89C8\u8BF4\u660E",
       "reviewedSourceHash": "c6c3fe285c1f5c311a4672cef712ff39d26fe314541ef3328e3bd2bf66608d3a",
       "review": {
         "outcome": "approved",
-        "note": "падказка чытача экрана: адкрыццё апісання гіда; guide → 导览"
+        "note": "падказка чытача экрана: адкрыццё апісання гіда; guide → \u5BFC\u89C8"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "导览",
+        "term": "\u5BFC\u89C8",
         "date": "2026-10-17",
-        "reason": "той самы выбар тэрміну, што і ў native.chrome.guidesLink: электронны аўдыягід — 导览"
+        "reason": "той самы выбар тэрміну, што і ў native.chrome.guidesLink: электронны аўдыягід — \u5BFC\u89C8"
       }
     },
     {
       "id": "native.guideHint.paid",
-      "value": "付费",
+      "value": "\u4ED8\u8D39",
       "reviewedSourceHash": "36ba7c558c7b95ed0958922ae1e2269d9c1099bcd8ed1c65e14ce9d34d29cd07",
       "review": {
         "outcome": "approved",
-        "note": "пазнака платнага гіда на радку карткі падказкі; пара да 免费"
+        "note": "пазнака платнага гіда на радку карткі падказкі; пара да \u514D\u8D39"
       }
     },
     {
       "id": "native.nearby.audioLabel",
-      "value": "音频",
+      "value": "\u97F3\u9891",
       "reviewedSourceHash": "cb431707d9d9fd0564a385237b4a2110724296ccb5bc97ac13f1dab07eb4364c",
       "review": {
         "outcome": "approved",
@@ -848,7 +848,7 @@
     },
     {
       "id": "native.nearby.cardHint",
-      "value": "推荐卡片。音频不会播放。",
+      "value": "\u63A8\u8350\u5361\u7247\u3002\u97F3\u9891\u4E0D\u4F1A\u64AD\u653E\u3002",
       "reviewedSourceHash": "cf10a7f77cfd055dd909d8128643901c5d57292f5f2c7e57586c31ed7da56c08",
       "review": {
         "outcome": "approved",
@@ -857,7 +857,7 @@
     },
     {
       "id": "native.nearby.durationUnit",
-      "value": "分钟",
+      "value": "\u5206\u949F",
       "reviewedSourceHash": "079d7b14c190534468f60ebb89dd03327a392891ea21637e93923654586f2fa9",
       "review": {
         "outcome": "approved",
@@ -866,7 +866,7 @@
     },
     {
       "id": "native.nearby.empty",
-      "value": "推荐尚未发布",
+      "value": "\u63A8\u8350\u5C1A\u672A\u53D1\u5E03",
       "reviewedSourceHash": "14efad64c2bf1a387eb5bc911f0fe955d664fb8402c294606a5085094340ae3c",
       "review": {
         "outcome": "approved",
@@ -875,7 +875,7 @@
     },
     {
       "id": "native.nearby.guideLabel",
-      "value": "导览",
+      "value": "\u5BFC\u89C8",
       "reviewedSourceHash": "0f078d9620a6142a92a06859ae6287ba7c43811e3bc9d69951cf9fc1f030161a",
       "review": {
         "outcome": "approved",
@@ -884,14 +884,14 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "导览",
+        "term": "\u5BFC\u89C8",
         "date": "2026-10-17",
-        "reason": "тэрмін электроннага гіда 导览, зацверджаны батарэяй G21.39 §6.3; піна ў зацверджаных крыніцах няма"
+        "reason": "тэрмін электроннага гіда \u5BFC\u89C8, зацверджаны батарэяй G21.39 §6.3; піна ў зацверджаных крыніцах няма"
       }
     },
     {
       "id": "native.nearby.indexDegraded",
-      "value": "推荐索引暂时不可用",
+      "value": "\u63A8\u8350\u7D22\u5F15\u6682\u65F6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "c36e91739b7d13aaae6a9e2a1bb1892c27935ef285c05dfc35384667a87945bf",
       "review": {
         "outcome": "approved",
@@ -900,7 +900,7 @@
     },
     {
       "id": "native.nearby.loading",
-      "value": "加载中…",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "76864c4c66c674c255382af4c8287404979066900d2b793bd18b722acbce8be4",
       "review": {
         "outcome": "approved",
@@ -909,16 +909,16 @@
     },
     {
       "id": "native.nearby.mapNote",
-      "value": "城市地图将在确定瓦片方案后上线",
+      "value": "\u57CE\u5E02\u5730\u56FE\u5C06\u5728\u786E\u5B9A\u74E6\u7247\u65B9\u6848\u540E\u4E0A\u7EBF",
       "reviewedSourceHash": "0be5495b00bd2c309da665137618d7af6ff0427f66e93426eb8944a88bb1e673",
       "review": {
         "outcome": "approved",
-        "note": "заўвага карты; тайлы → 瓦片"
+        "note": "заўвага карты; тайлы → \u74E6\u7247"
       }
     },
     {
       "id": "native.nearby.noteAcquiring",
-      "value": "正在获取位置…",
+      "value": "\u6B63\u5728\u83B7\u53D6\u4F4D\u7F6E…",
       "reviewedSourceHash": "f9fe47bc78d531a4f95a80b4eff4b6c272932890908241d99d23f16dcad1d467",
       "review": {
         "outcome": "approved",
@@ -927,16 +927,16 @@
     },
     {
       "id": "native.nearby.noteDenied",
-      "value": "位置权限未授权——手动浏览",
+      "value": "\u4F4D\u7F6E\u6743\u9650\u672A\u6388\u6743——\u624B\u52A8\u6D4F\u89C8",
       "reviewedSourceHash": "51d96de0382db6c57b90bc679f3fac2001a7cffe7230898f5f8be0d0fa9d2bfe",
       "review": {
         "outcome": "approved",
-        "note": "заўвага: пазіцыя не дазволена; ручны агляд → 手动浏览 · Незалежнае рэв'ю (2026-10-17): 未授权位置 → 位置权限未授权: адмоўлены менавіта дазвол на пазіцыю, а не месца"
+        "note": "заўвага: пазіцыя не дазволена; ручны агляд → \u624B\u52A8\u6D4F\u89C8 · Незалежнае рэв'ю (2026-10-17): \u672A\u6388\u6743\u4F4D\u7F6E → \u4F4D\u7F6E\u6743\u9650\u672A\u6388\u6743: адмоўлены менавіта дазвол на пазіцыю, а не месца"
       }
     },
     {
       "id": "native.nearby.noteHeldByWalk",
-      "value": "散步正在使用位置——手动浏览",
+      "value": "\u6563\u6B65\u6B63\u5728\u4F7F\u7528\u4F4D\u7F6E——\u624B\u52A8\u6D4F\u89C8",
       "reviewedSourceHash": "0da6932f1e990ff833d7c1eacbd3bb65469cda844e7f5e6658b41c2e4bd4db2d",
       "review": {
         "outcome": "approved",
@@ -945,7 +945,7 @@
     },
     {
       "id": "native.nearby.noteUnstable",
-      "value": "位置不稳定",
+      "value": "\u4F4D\u7F6E\u4E0D\u7A33\u5B9A",
       "reviewedSourceHash": "8a9fc12e97a5c012d92b4e4e4d80dd068ce0fcf39c225583dc9dd7ec9f22d7d6",
       "review": {
         "outcome": "approved",
@@ -954,7 +954,7 @@
     },
     {
       "id": "native.nearby.placeLabel",
-      "value": "地点",
+      "value": "\u5730\u70B9",
       "reviewedSourceHash": "13a42dfb51ce1366b0e65f3501044e2c663561c12bceb5e1eefd1c1ba648f15a",
       "review": {
         "outcome": "approved",
@@ -963,7 +963,7 @@
     },
     {
       "id": "native.nearby.proximityHeader",
-      "value": "附近",
+      "value": "\u9644\u8FD1",
       "reviewedSourceHash": "b5941200d2dc75a64cfe58b3c12d1545651c2d2c64bd1991cbca8907bd5fdbce",
       "review": {
         "outcome": "approved",
@@ -972,7 +972,7 @@
     },
     {
       "id": "native.nearby.reviewHeader",
-      "value": "浏览",
+      "value": "\u6D4F\u89C8",
       "reviewedSourceHash": "b0a03f871419d1e16a7933749a3525cadf600c0fa064d06255ebb70426f00c08",
       "review": {
         "outcome": "approved",
@@ -981,7 +981,7 @@
     },
     {
       "id": "native.nearby.textLabel",
-      "value": "文本",
+      "value": "\u6587\u672C",
       "reviewedSourceHash": "aa2bf96ea1849308fd1afb7c10aa4de03d87adc7b9c115e7b4071b777c684e3e",
       "review": {
         "outcome": "approved",
@@ -990,7 +990,7 @@
     },
     {
       "id": "native.nearby.title",
-      "value": "附近",
+      "value": "\u9644\u8FD1",
       "reviewedSourceHash": "ceb1585e913e83295e615727dc433f621f160b3acd8ed18e40faea444c847749",
       "review": {
         "outcome": "approved",
@@ -999,7 +999,7 @@
     },
     {
       "id": "native.nearby.unavailable",
-      "value": "目录不可用",
+      "value": "\u76EE\u5F55\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "04fe5b8f33920f11dafd234f90a5d21ab4b0181eb6d3da85d1d569d755da2a65",
       "review": {
         "outcome": "approved",
@@ -1008,7 +1008,7 @@
     },
     {
       "id": "native.offer.buy",
-      "value": "购买",
+      "value": "\u8D2D\u4E70",
       "reviewedSourceHash": "6e1f4eb2c0e8449facc0335b8898b51fab9b11e827e31dcbecda830f9419d02a",
       "review": {
         "outcome": "approved",
@@ -1017,7 +1017,7 @@
     },
     {
       "id": "native.offer.continueFree",
-      "value": "继续免费",
+      "value": "\u7EE7\u7EED\u514D\u8D39",
       "reviewedSourceHash": "f2baa69bab47ea9162dea9324f9eff5abb2a07b1975929b3bedf9e26d72d3072",
       "review": {
         "outcome": "approved",
@@ -1026,7 +1026,7 @@
     },
     {
       "id": "native.offer.dismiss",
-      "value": "以后再说",
+      "value": "\u4EE5\u540E\u518D\u8BF4",
       "reviewedSourceHash": "e5a837b139f912633fb94f4a98e64036a82ed35e7b6a1bc4b71560c725427e49",
       "review": {
         "outcome": "approved",
@@ -1035,7 +1035,7 @@
     },
     {
       "id": "native.offer.errorBody",
-      "value": "可以重试，或继续免费使用。",
+      "value": "\u53EF\u4EE5\u91CD\u8BD5\uFF0C\u6216\u7EE7\u7EED\u514D\u8D39\u4F7F\u7528\u3002",
       "reviewedSourceHash": "87664abf9c7fce9953aa6feaec27017bb4357b50cf8e3ca6055f12ac1c693b0f",
       "review": {
         "outcome": "approved",
@@ -1044,7 +1044,7 @@
     },
     {
       "id": "native.offer.errorTitle",
-      "value": "购买未完成",
+      "value": "\u8D2D\u4E70\u672A\u5B8C\u6210",
       "reviewedSourceHash": "ad99eb072eccd3dd6856951ed1bf49b93585795feb10cf036caa86b53e5a10ce",
       "review": {
         "outcome": "approved",
@@ -1053,7 +1053,7 @@
     },
     {
       "id": "native.offer.offerBody",
-      "value": "一次购买即可解锁本导览的全部故事。",
+      "value": "\u4E00\u6B21\u8D2D\u4E70\u5373\u53EF\u89E3\u9501\u672C\u5BFC\u89C8\u7684\u5168\u90E8\u6545\u4E8B\u3002",
       "reviewedSourceHash": "889d9131c470607574c44341056ad5a06e938fbd72b2c8d9eba39d86642421be",
       "review": {
         "outcome": "approved",
@@ -1062,7 +1062,7 @@
     },
     {
       "id": "native.offer.offerTitle",
-      "value": "导览的全部故事",
+      "value": "\u5BFC\u89C8\u7684\u5168\u90E8\u6545\u4E8B",
       "reviewedSourceHash": "4a049233a864eaccd079db45a0db5435b7f443eb40f4c4f77e300ee153cce067",
       "review": {
         "outcome": "approved",
@@ -1071,7 +1071,7 @@
     },
     {
       "id": "native.offer.purchasedPending",
-      "value": "已购买 · 需要下载",
+      "value": "\u5DF2\u8D2D\u4E70 · \u9700\u8981\u4E0B\u8F7D",
       "reviewedSourceHash": "73351aee750908e898ef326402d359a6064c68200c51608aba858cd3512cffac",
       "review": {
         "outcome": "approved",
@@ -1080,23 +1080,23 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "购买",
+        "term": "\u8D2D\u4E70",
         "date": "2026-10-17",
-        "reason": "тэрмін пакупкі 购买 па батарэі G21.39 §6.3; адзіная крыніца — рашэнне ўладара, піна ў зацверджаных крыніцах няма"
+        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 §6.3; адзіная крыніца — рашэнне ўладара, піна ў зацверджаных крыніцах няма"
       }
     },
     {
       "id": "native.offer.tryAgain",
-      "value": "重试",
+      "value": "\u91CD\u8BD5",
       "reviewedSourceHash": "a1dbc2b68cb546fc6d006f50fbaae7e8f536bd97c68b0e15aaa9102d8bb237e4",
       "review": {
         "outcome": "approved",
-        "note": "кнопка паўтору пакупкі; пара да агульнага 重试"
+        "note": "кнопка паўтору пакупкі; пара да агульнага \u91CD\u8BD5"
       }
     },
     {
       "id": "native.place.audioLabel",
-      "value": "音频",
+      "value": "\u97F3\u9891",
       "reviewedSourceHash": "9cba9aefe283b909867ca3c7b7fdfa081738a88eda904be2c8857e8b4dbaecda",
       "review": {
         "outcome": "approved",
@@ -1105,7 +1105,7 @@
     },
     {
       "id": "native.place.durationUnit",
-      "value": "分钟",
+      "value": "\u5206\u949F",
       "reviewedSourceHash": "5fb07a573d2f240d1203235ebd8c9730bd39304c864a7b4674fb00c5a40e8cbb",
       "review": {
         "outcome": "approved",
@@ -1114,16 +1114,16 @@
     },
     {
       "id": "native.place.empty",
-      "value": "这个地点没有试听片段",
+      "value": "\u8FD9\u4E2A\u5730\u70B9\u6CA1\u6709\u8BD5\u542C\u7247\u6BB5",
       "reviewedSourceHash": "c10b21985ac88ed9bb6b0ae9d95e3ce080839a622e1d3f09b92ec534ee0040ff",
       "review": {
         "outcome": "approved",
-        "note": "радок стану: тэйзераў для месца няма; тэйзер → 试听片段"
+        "note": "радок стану: тэйзераў для месца няма; тэйзер → \u8BD5\u542C\u7247\u6BB5"
       }
     },
     {
       "id": "native.place.error",
-      "value": "无法打开地点",
+      "value": "\u65E0\u6CD5\u6253\u5F00\u5730\u70B9",
       "reviewedSourceHash": "78a267a1e105f648cf74264ed59e4a3ee9b334ade5135f94b24826e31fd9abda",
       "review": {
         "outcome": "approved",
@@ -1132,7 +1132,7 @@
     },
     {
       "id": "native.place.guideLink",
-      "value": "导览预览",
+      "value": "\u5BFC\u89C8\u9884\u89C8",
       "reviewedSourceHash": "6689ad59dbaf7e5400f58ed1c55c89ef10dfca451dc4c1d9e4d9d257200211d5",
       "review": {
         "outcome": "approved",
@@ -1141,7 +1141,7 @@
     },
     {
       "id": "native.place.guideLinkHint",
-      "value": "打开导览预览，而不是开始散步。",
+      "value": "\u6253\u5F00\u5BFC\u89C8\u9884\u89C8\uFF0C\u800C\u4E0D\u662F\u5F00\u59CB\u6563\u6B65\u3002",
       "reviewedSourceHash": "2d8e625a33b415b8a144097cf43e9b9b7566c68f36fc80fdf472b01d4ca79714",
       "review": {
         "outcome": "approved",
@@ -1150,7 +1150,7 @@
     },
     {
       "id": "native.place.loading",
-      "value": "加载中…",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "9fdf727adcd5b226497b6726d48906a85ffbf4ea7192fb2f52f9c5569577671f",
       "review": {
         "outcome": "approved",
@@ -1159,7 +1159,7 @@
     },
     {
       "id": "native.place.noAudio",
-      "value": "试听音频未发布",
+      "value": "\u8BD5\u542C\u97F3\u9891\u672A\u53D1\u5E03",
       "reviewedSourceHash": "f10b57d945775369b50aa834570f60cb191aad9445d68ea7c11549e2b433aaf3",
       "review": {
         "outcome": "approved",
@@ -1168,7 +1168,7 @@
     },
     {
       "id": "native.place.noFacts",
-      "value": "该地点尚未在目录中发布",
+      "value": "\u8BE5\u5730\u70B9\u5C1A\u672A\u5728\u76EE\u5F55\u4E2D\u53D1\u5E03",
       "reviewedSourceHash": "6a837f315b4fc07df8e72f31ac5802801e3e69123b032eb3ddbe6990ef5ec9be",
       "review": {
         "outcome": "approved",
@@ -1177,7 +1177,7 @@
     },
     {
       "id": "native.place.nowPlaying",
-      "value": "正在播放",
+      "value": "\u6B63\u5728\u64AD\u653E",
       "reviewedSourceHash": "31c53b2b89b3c44e240d3860a4995fab290ac654eaabbfa98283f52915cc70e4",
       "review": {
         "outcome": "approved",
@@ -1186,7 +1186,7 @@
     },
     {
       "id": "native.place.paused",
-      "value": "已暂停",
+      "value": "\u5DF2\u6682\u505C",
       "reviewedSourceHash": "36eaaecbe287e6c605f6875703cfd53540fa068c8b32c36eb140109003df230e",
       "review": {
         "outcome": "approved",
@@ -1195,16 +1195,16 @@
     },
     {
       "id": "native.place.playFailed",
-      "value": "音频未开始播放。",
+      "value": "\u97F3\u9891\u672A\u5F00\u59CB\u64AD\u653E\u3002",
       "reviewedSourceHash": "7057a04fb254bea27c4c76ad7523f0b96822383dbe1b0b3a275667acbde5655d",
       "review": {
         "outcome": "approved",
-        "note": "радок збою запуску гуку; сказ з кропкай, як у крыніцы · Незалежнае рэв'ю (2026-10-17): 声音没有开始 → 音频未开始播放 (натуральная калокацыя; суб'ект 音频 — той самы, што ў native.place.audioLabel і web.ui.audioHeading)"
+        "note": "радок збою запуску гуку; сказ з кропкай, як у крыніцы · Незалежнае рэв'ю (2026-10-17): \u58F0\u97F3\u6CA1\u6709\u5F00\u59CB → \u97F3\u9891\u672A\u5F00\u59CB\u64AD\u653E (натуральная калокацыя; суб'ект \u97F3\u9891 — той самы, што ў native.place.audioLabel і web.ui.audioHeading)"
       }
     },
     {
       "id": "native.place.playFailedHint",
-      "value": "请再试一次。",
+      "value": "\u8BF7\u518D\u8BD5\u4E00\u6B21\u3002",
       "reviewedSourceHash": "a5244be645a80ce3e76fcc8f58e81ba9ecd87663b73973ff264dbf01b068178c",
       "review": {
         "outcome": "approved",
@@ -1213,7 +1213,7 @@
     },
     {
       "id": "native.place.playHint",
-      "value": "通过唯一播放器显式播放试听。",
+      "value": "\u901A\u8FC7\u552F\u4E00\u64AD\u653E\u5668\u663E\u5F0F\u64AD\u653E\u8BD5\u542C\u3002",
       "reviewedSourceHash": "0bd0d8468494d897c96315c9ad3ac8f5633afb4d4a9af15acddcaca6e981f1f6",
       "review": {
         "outcome": "approved",
@@ -1222,7 +1222,7 @@
     },
     {
       "id": "native.place.playLabel",
-      "value": "试听",
+      "value": "\u8BD5\u542C",
       "reviewedSourceHash": "98676c06c005f69e0596c1aa422f373aea133813f59122713f352e99f388cba4",
       "review": {
         "outcome": "approved",
@@ -1231,7 +1231,7 @@
     },
     {
       "id": "native.place.refusalText.moment#audio-unpublished",
-      "value": "试听音频未发布。",
+      "value": "\u8BD5\u542C\u97F3\u9891\u672A\u53D1\u5E03\u3002",
       "reviewedSourceHash": "75adba4e79892068236ecd0f592b01a59142ad866d4e157556c2d8f7ee690a9b",
       "review": {
         "outcome": "approved",
@@ -1240,7 +1240,7 @@
     },
     {
       "id": "native.place.refusalText.moment#session-refused",
-      "value": "试听当前无法播放——请再试一次。",
+      "value": "\u8BD5\u542C\u5F53\u524D\u65E0\u6CD5\u64AD\u653E——\u8BF7\u518D\u8BD5\u4E00\u6B21\u3002",
       "reviewedSourceHash": "27f2c6c3a5f9c950a31c4bd3719c6197ccbb81c08574f11f589d9ee1c548f137",
       "review": {
         "outcome": "approved",
@@ -1249,7 +1249,7 @@
     },
     {
       "id": "native.place.refusalText.moment#session-unroutable",
-      "value": "试听在散步中无法播放——请在此重新播放。",
+      "value": "\u8BD5\u542C\u5728\u6563\u6B65\u4E2D\u65E0\u6CD5\u64AD\u653E——\u8BF7\u5728\u6B64\u91CD\u65B0\u64AD\u653E\u3002",
       "reviewedSourceHash": "b4a69a45fa3ce27bf828742abaf9056f319804794f2ee31db62bca527194b08b",
       "review": {
         "outcome": "approved",
@@ -1258,7 +1258,7 @@
     },
     {
       "id": "native.place.resumeLabel",
-      "value": "继续",
+      "value": "\u7EE7\u7EED",
       "reviewedSourceHash": "b8246a13f259bdb46e8425d790c5ffbeba1bf2905c36f9b0e81c71ae30246870",
       "review": {
         "outcome": "approved",
@@ -1267,23 +1267,23 @@
     },
     {
       "id": "native.place.stopLabel",
-      "value": "停止",
+      "value": "\u505C\u6B62",
       "reviewedSourceHash": "7c29f6636e7181c50f70cb3990251dd5a2b40e1823d9a27135fd168bdf559a90",
       "review": {
         "outcome": "approved",
-        "note": "кнопка: спыніць тэйзер; дзеянне, асобнае ад назоўнікавага 地点"
+        "note": "кнопка: спыніць тэйзер; дзеянне, асобнае ад назоўнікавага \u5730\u70B9"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "停止",
+        "term": "\u505C\u6B62",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 §6.3: дзеянне «спыніць» — 停止; назоўнік-прыпынак (巴士站) не падыходзіць для дзеяння, таму асобны тэрмін"
+        "reason": "батарэя G21.39 §6.3: дзеянне «спыніць» — \u505C\u6B62; назоўнік-прыпынак (\u5DF4\u58EB\u7AD9) не падыходзіць для дзеяння, таму асобны тэрмін"
       }
     },
     {
       "id": "native.place.teaserLabel",
-      "value": "试听",
+      "value": "\u8BD5\u542C",
       "reviewedSourceHash": "e81ae6243c1a8f05cd365f4dfe9c2b18e0ff1ad2419f103a55573d9b9e2991b8",
       "review": {
         "outcome": "approved",
@@ -1292,7 +1292,7 @@
     },
     {
       "id": "native.place.textLabel",
-      "value": "文本",
+      "value": "\u6587\u672C",
       "reviewedSourceHash": "9d32629dfe52f43658702381d2ab2c662cca5a395dbde1e8177280f0b94c43a6",
       "review": {
         "outcome": "approved",
@@ -1301,7 +1301,7 @@
     },
     {
       "id": "native.place.unavailable",
-      "value": "地点详情不可用",
+      "value": "\u5730\u70B9\u8BE6\u60C5\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "04c287ef15935302a75cab52776883ca52481197e2e22798268a4436c64413a9",
       "review": {
         "outcome": "approved",
@@ -1310,30 +1310,30 @@
     },
     {
       "id": "native.preview.detail",
-      "value": "内容包不完整",
+      "value": "\u5185\u5BB9\u5305\u4E0D\u5B8C\u6574",
       "reviewedSourceHash": "22fe4c2b5e44f41bb7cafc1b0262f1f737e96b86317ce4830a1a8160b57e57eb",
       "review": {
         "outcome": "approved",
-        "note": "дэталь стану пакета прэв'ю; названыя формы захаваныя па ключах крыніцы, колькасць у другой форме · Незалежнае рэв'ю (2026-10-17): 安装包 (пакет-усталёўнік APK) → 内容包, як у native.run.transcriptPending і web.ui.audioUnavailable — адно паняцце, адно слова; формы захаваныя, параметр count у missing-files правераны сканам"
+        "note": "дэталь стану пакета прэв'ю; названыя формы захаваныя па ключах крыніцы, колькасць у другой форме · Незалежнае рэв'ю (2026-10-17): \u5B89\u88C5\u5305 (пакет-усталёўнік APK) → \u5185\u5BB9\u5305, як у native.run.transcriptPending і web.ui.audioUnavailable — адно паняцце, адно слова; формы захаваныя, параметр count у missing-files правераны сканам"
       },
       "forms": {
-        "damaged": "内容包已损坏：需要重新下载",
-        "missing-files": "缺少文件：${count}",
-        "stale": "有可用更新"
+        "damaged": "\u5185\u5BB9\u5305\u5DF2\u635F\u574F\uFF1A\u9700\u8981\u91CD\u65B0\u4E0B\u8F7D",
+        "missing-files": "\u7F3A\u5C11\u6587\u4EF6\uFF1A${count}",
+        "stale": "\u6709\u53EF\u7528\u66F4\u65B0"
       }
     },
     {
       "id": "native.preview.downloadFailed",
-      "value": "下载失败。",
+      "value": "\u4E0B\u8F7D\u5931\u8D25\u3002",
       "reviewedSourceHash": "4470dfde12ba5d2478989694d06ff50d49447bc872a0d0ef153c02fda3e77a40",
       "review": {
         "outcome": "approved",
-        "note": "радок збою загрузкі; адзіны корань 下载 для абодвух сэнсаў, як en/uk"
+        "note": "радок збою загрузкі; адзіны корань \u4E0B\u8F7D для абодвух сэнсаў, як en/uk"
       }
     },
     {
       "id": "native.preview.label.download",
-      "value": "下载",
+      "value": "\u4E0B\u8F7D",
       "reviewedSourceHash": "a549fbfb60c21722178889b8deb230cc530a13f81c505c996076e24826545daf",
       "review": {
         "outcome": "approved",
@@ -1344,14 +1344,14 @@
         "kind": "looked-up",
         "source": "android",
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.download (packages/providers/DownloadProvider#root_downloads, zh-rCN)",
-        "term": "下载",
+        "term": "\u4E0B\u8F7D",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: назоўнікавы сэнс «спампоўка» ёсць толькі ў корпусе AOSP (下载/下载内容); у слоўніках толькі дзеяслоў — прабел закрыты корпусам"
+        "reason": "батарэя G21.39: назоўнікавы сэнс «спампоўка» ёсць толькі ў корпусе AOSP (\u4E0B\u8F7D/\u4E0B\u8F7D\u5185\u5BB9); у слоўніках толькі дзеяслоў — прабел закрыты корпусам"
       }
     },
     {
       "id": "native.preview.label.start",
-      "value": "开始",
+      "value": "\u5F00\u59CB",
       "reviewedSourceHash": "d86b1af3ba0b10036ebc2e53b826d50440fda0416b79bdcdcf0b6cc548277293",
       "review": {
         "outcome": "approved",
@@ -1360,16 +1360,16 @@
     },
     {
       "id": "native.preview.reason.preview#download-unavailable",
-      "value": "此版本不支持下载。",
+      "value": "\u6B64\u7248\u672C\u4E0D\u652F\u6301\u4E0B\u8F7D\u3002",
       "reviewedSourceHash": "c92fa779597efd3693633519bd657c144bf3c77398a05850305192c9834424ff",
       "review": {
         "outcome": "approved",
-        "note": "адмова прэв'ю: загрузка недаступная на гэтай зборцы; адмоўная форма без літаральнага 不可用, каб не згубіць сэнс «не падтрымліваецца»"
+        "note": "адмова прэв'ю: загрузка недаступная на гэтай зборцы; адмоўная форма без літаральнага \u4E0D\u53EF\u7528, каб не згубіць сэнс «не падтрымліваецца»"
       }
     },
     {
       "id": "native.preview.reason.preview#not-published",
-      "value": "导览未发布。",
+      "value": "\u5BFC\u89C8\u672A\u53D1\u5E03\u3002",
       "reviewedSourceHash": "f4026de96b2bf6d2f5337774d08a4a6e28073ac9a55e76292f5cf6bc6998359d",
       "review": {
         "outcome": "approved",
@@ -1378,7 +1378,7 @@
     },
     {
       "id": "native.preview.reason.preview#purchase-required",
-      "value": "需要购买。",
+      "value": "\u9700\u8981\u8D2D\u4E70\u3002",
       "reviewedSourceHash": "e786d174f1074f25fbb00fd84bf85cca15b645d1967c920ab8b61812aa8315e4",
       "review": {
         "outcome": "approved",
@@ -1387,14 +1387,14 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "购买",
+        "term": "\u8D2D\u4E70",
         "date": "2026-10-17",
-        "reason": "тэрмін пакупкі 购买 па батарэі G21.39 §6.3; крыніцы-піна няма, рашэнне рэцэнзента"
+        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 §6.3; крыніцы-піна няма, рашэнне рэцэнзента"
       }
     },
     {
       "id": "native.preview.reason.preview#storage-unknown",
-      "value": "存储不可用。",
+      "value": "\u5B58\u50A8\u4E0D\u53EF\u7528\u3002",
       "reviewedSourceHash": "662280ea45ace6b68da87b0c542fdc84235041ae588aa93b2c0e6e45c4137b7a",
       "review": {
         "outcome": "approved",
@@ -1403,7 +1403,7 @@
     },
     {
       "id": "native.preview.reason.preview#verify-unavailable",
-      "value": "校验不可用。",
+      "value": "\u6821\u9A8C\u4E0D\u53EF\u7528\u3002",
       "reviewedSourceHash": "03f7bad1b0dd05221dcbf5a4acf62a639853decfcbe6ca6490ddb5c2cea9b7b0",
       "review": {
         "outcome": "approved",
@@ -1412,7 +1412,7 @@
     },
     {
       "id": "native.preview.retry",
-      "value": "重试",
+      "value": "\u91CD\u8BD5",
       "reviewedSourceHash": "0cc5f813736728a6851f72c2b114f9add2a61f58d47c1a5781e3d445464c9d3b",
       "review": {
         "outcome": "approved",
@@ -1421,7 +1421,7 @@
     },
     {
       "id": "native.preview.storageExit",
-      "value": "在KUDY中释放空间",
+      "value": "\u5728KUDY\u4E2D\u91CA\u653E\u7A7A\u95F4",
       "reviewedSourceHash": "7694206992bd6471e7d0db23d132c82854618caee70263270c8f2fe3e6ef3a35",
       "review": {
         "outcome": "approved",
@@ -1430,7 +1430,7 @@
     },
     {
       "id": "native.preview.storageFullDetail",
-      "value": "空间不足：还需要${mb}MB",
+      "value": "\u7A7A\u95F4\u4E0D\u8DB3\uFF1A\u8FD8\u9700\u8981${mb}MB",
       "reviewedSourceHash": "246c064641fd53a3c0f04b126c2a29f5b161c9b846290e2595292279abf0ae08",
       "review": {
         "outcome": "approved",
@@ -1439,7 +1439,7 @@
     },
     {
       "id": "native.run.attribution",
-      "value": "数据 © OpenStreetMap 贡献者，ODbL",
+      "value": "\u6570\u636E © OpenStreetMap \u8D21\u732E\u8005\uFF0CODbL",
       "reviewedSourceHash": "c2b14d03ca62503c507e49ef77155a31d8423716a313ab878c7b0d751bcd23d3",
       "review": {
         "outcome": "approved",
@@ -1448,7 +1448,7 @@
     },
     {
       "id": "native.run.autoplaySuspendedTitle",
-      "value": "自动故事已暂停",
+      "value": "\u81EA\u52A8\u6545\u4E8B\u5DF2\u6682\u505C",
       "reviewedSourceHash": "127dc05744cfc9564cbbe4cb47cfc30c780ee2c30b55e7a16c84c19d04c134f7",
       "review": {
         "outcome": "approved",
@@ -1457,7 +1457,7 @@
     },
     {
       "id": "native.run.close",
-      "value": "关闭",
+      "value": "\u5173\u95ED",
       "reviewedSourceHash": "fdcf5f36d5dc627a9fe0d52a9fb62fdcad04dae25ac94910de28dcadebf566df",
       "review": {
         "outcome": "approved",
@@ -1466,16 +1466,16 @@
     },
     {
       "id": "native.run.deniedGps",
-      "value": "自动故事无法运行——我无法获取您的位置",
+      "value": "\u81EA\u52A8\u6545\u4E8B\u65E0\u6CD5\u8FD0\u884C——\u6211\u65E0\u6CD5\u83B7\u53D6\u60A8\u7684\u4F4D\u7F6E",
       "reviewedSourceHash": "4c2d57377f5bee5ce40cccc7e2393893218a2c5c87e74e60c3065cff7b28af0b",
       "review": {
         "outcome": "approved",
-        "note": "банер адмовы GPS; гаворка ад першай асобы, як у крыніцы, ветлівая форма 您"
+        "note": "банер адмовы GPS; гаворка ад першай асобы, як у крыніцы, ветлівая форма \u60A8"
       }
     },
     {
       "id": "native.run.endConfirmAccept",
-      "value": "结束",
+      "value": "\u7ED3\u675F",
       "reviewedSourceHash": "a8437ed726559ff94e98019d7f0d093963e380d035f5f61215a0fe521d9871e2",
       "review": {
         "outcome": "approved",
@@ -1484,7 +1484,7 @@
     },
     {
       "id": "native.run.endConfirmCancel",
-      "value": "取消",
+      "value": "\u53D6\u6D88",
       "reviewedSourceHash": "6f2c024243297acae4ebcd87bbd44dadb04f728c836f0c126e069ecb0705bbca",
       "review": {
         "outcome": "approved",
@@ -1493,7 +1493,7 @@
     },
     {
       "id": "native.run.endConfirmTitle",
-      "value": "结束散步？",
+      "value": "\u7ED3\u675F\u6563\u6B65\uFF1F",
       "reviewedSourceHash": "914dc880a971016df429bf5b22ea8f703e1287530f6e50654589ee9a40aa3b34",
       "review": {
         "outcome": "approved",
@@ -1502,7 +1502,7 @@
     },
     {
       "id": "native.run.endWalk",
-      "value": "结束散步",
+      "value": "\u7ED3\u675F\u6563\u6B65",
       "reviewedSourceHash": "1d896d738e1170ab489de6baa61a4fbf015a3482ad6f1ea26d5ace4663e9775c",
       "review": {
         "outcome": "approved",
@@ -1511,7 +1511,7 @@
     },
     {
       "id": "native.run.endedTitle",
-      "value": "散步已结束",
+      "value": "\u6563\u6B65\u5DF2\u7ED3\u675F",
       "reviewedSourceHash": "39f780e448149f38eb59cf40d230c2ab1539f1082ad7d357a191d46bd0f20739",
       "review": {
         "outcome": "approved",
@@ -1520,7 +1520,7 @@
     },
     {
       "id": "native.run.missedStoriesTitle",
-      "value": "还可以收听",
+      "value": "\u8FD8\u53EF\u4EE5\u6536\u542C",
       "reviewedSourceHash": "d97cc467dde15e59ecef9ae960f232f5c4d5b79228abbebb1290fc437978a4a3",
       "review": {
         "outcome": "approved",
@@ -1529,7 +1529,7 @@
     },
     {
       "id": "native.run.gpsStalled",
-      "value": "位置已过期",
+      "value": "\u4F4D\u7F6E\u5DF2\u8FC7\u671F",
       "reviewedSourceHash": "dcb4aab6a116aa3dfec4b0cc420890b7291cec06bb1d00ecc640e66632c25c0d",
       "review": {
         "outcome": "approved",
@@ -1538,7 +1538,7 @@
     },
     {
       "id": "native.run.gpsStalledDetail",
-      "value": "自动播放和队列已暂停",
+      "value": "\u81EA\u52A8\u64AD\u653E\u548C\u961F\u5217\u5DF2\u6682\u505C",
       "reviewedSourceHash": "c0f1d04f075143656fd943a339c28fb79f392bc8837d049a52ba499398f3f55c",
       "review": {
         "outcome": "approved",
@@ -1547,7 +1547,7 @@
     },
     {
       "id": "native.run.loading",
-      "value": "加载中…",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "040940eda93e7404d57a64daf645d628ab55ebf399ce3b32883736cf9bf238fc",
       "review": {
         "outcome": "approved",
@@ -1556,7 +1556,7 @@
     },
     {
       "id": "native.run.lockedHint",
-      "value": "购买后可用",
+      "value": "\u8D2D\u4E70\u540E\u53EF\u7528",
       "reviewedSourceHash": "8a2f3f3dd06cc4f068baefe2af315554d551a6ed4b1920ff46455715bcc3d166",
       "review": {
         "outcome": "approved",
@@ -1565,16 +1565,16 @@
     },
     {
       "id": "native.run.manualPlayHint",
-      "value": "每个故事都需从地点卡片手动播放",
+      "value": "\u6BCF\u4E2A\u6545\u4E8B\u90FD\u9700\u4ECE\u5730\u70B9\u5361\u7247\u624B\u52A8\u64AD\u653E",
       "reviewedSourceHash": "001c5d5c664209b77fd781de374acc525f425af430263b370b05c3de2a980c05",
       "review": {
         "outcome": "approved",
-        "note": "падказка ручнога рэжыму; кропка → 地点"
+        "note": "падказка ручнога рэжыму; кропка → \u5730\u70B9"
       }
     },
     {
       "id": "native.run.markerHint",
-      "value": "地点浏览。音频不会播放。",
+      "value": "\u5730\u70B9\u6D4F\u89C8\u3002\u97F3\u9891\u4E0D\u4F1A\u64AD\u653E\u3002",
       "reviewedSourceHash": "c93b6f3471a36cc43c3089c07070a0a7bc55d14d900f12e49c4454c3cfdf8ee5",
       "review": {
         "outcome": "approved",
@@ -1583,7 +1583,7 @@
     },
     {
       "id": "native.run.nothingPlaying",
-      "value": "没有正在播放的内容",
+      "value": "\u6CA1\u6709\u6B63\u5728\u64AD\u653E\u7684\u5185\u5BB9",
       "reviewedSourceHash": "3fa2e1172cf976d39cdaf06d27f957c31e00afa29d29a2d8caddc8b2690203da",
       "review": {
         "outcome": "approved",
@@ -1592,7 +1592,7 @@
     },
     {
       "id": "native.run.nowPlayingLabel",
-      "value": "正在播放",
+      "value": "\u6B63\u5728\u64AD\u653E",
       "reviewedSourceHash": "0410c32b080f07cb67c2f1263ffe9887008786f97a5f011e7e7c75237dec7759",
       "review": {
         "outcome": "approved",
@@ -1601,7 +1601,7 @@
     },
     {
       "id": "native.run.pauseAudio",
-      "value": "暂停",
+      "value": "\u6682\u505C",
       "reviewedSourceHash": "fb5c796b96e75da399f5c2807919772e99309921718eb232cf8e2081d0bac312",
       "review": {
         "outcome": "approved",
@@ -1610,7 +1610,7 @@
     },
     {
       "id": "native.run.pauseWalk",
-      "value": "暂停散步",
+      "value": "\u6682\u505C\u6563\u6B65",
       "reviewedSourceHash": "9d38a19be03985d1f816485664843efdc5472ef71c462500c868d744d6efd978",
       "review": {
         "outcome": "approved",
@@ -1619,7 +1619,7 @@
     },
     {
       "id": "native.run.pausedTitle",
-      "value": "散步已暂停",
+      "value": "\u6563\u6B65\u5DF2\u6682\u505C",
       "reviewedSourceHash": "166ec9cb061eebb2770a359e48eb2be38c3ecbb4d8f6a613a4c9ad91400a6d2c",
       "review": {
         "outcome": "approved",
@@ -1628,7 +1628,7 @@
     },
     {
       "id": "native.run.playAudio",
-      "value": "播放",
+      "value": "\u64AD\u653E",
       "reviewedSourceHash": "c511387ceea931680ada61ac8be6aefde228ae5a310e471ff5d091f3c09ffb49",
       "review": {
         "outcome": "approved",
@@ -1637,7 +1637,7 @@
     },
     {
       "id": "native.run.playStoryHint",
-      "value": "播放这个故事的声音",
+      "value": "\u64AD\u653E\u8FD9\u4E2A\u6545\u4E8B\u7684\u58F0\u97F3",
       "reviewedSourceHash": "d3c9a3ebd3822df15a6417d6aa92f55565d3572b61cfd9f2f98aba808bafe554",
       "review": {
         "outcome": "approved",
@@ -1646,7 +1646,7 @@
     },
     {
       "id": "native.run.poiKind.sight",
-      "value": "景点",
+      "value": "\u666F\u70B9",
       "reviewedSourceHash": "42e94abcf55015b5817b57f0395ce601910d38d1eb02af1c761d091f1cdbc79b",
       "review": {
         "outcome": "approved",
@@ -1655,7 +1655,7 @@
     },
     {
       "id": "native.run.readMore",
-      "value": "阅读",
+      "value": "\u9605\u8BFB",
       "reviewedSourceHash": "8dfb154f8883603f925a09be40080f3693a1788640a0be59cbcf0e0848dc54db",
       "review": {
         "outcome": "approved",
@@ -1664,7 +1664,7 @@
     },
     {
       "id": "native.run.reasonText.fallback",
-      "value": "失败。",
+      "value": "\u5931\u8D25\u3002",
       "reviewedSourceHash": "0da87870411b9e1873d84f74989b9f36d3178c3bc2f945c6c8b2a73a4bbc8710",
       "review": {
         "outcome": "approved",
@@ -1673,7 +1673,7 @@
     },
     {
       "id": "native.run.reasonText.live-session-exists",
-      "value": "已有进行中的散步。",
+      "value": "\u5DF2\u6709\u8FDB\u884C\u4E2D\u7684\u6563\u6B65\u3002",
       "reviewedSourceHash": "38876047ff189a5c3cc8b4aaad58364154accfcfa128fee9758d8de7b072b59a",
       "review": {
         "outcome": "approved",
@@ -1682,7 +1682,7 @@
     },
     {
       "id": "native.run.reasonText.package-access-locked",
-      "value": "导览尚未解锁。",
+      "value": "\u5BFC\u89C8\u5C1A\u672A\u89E3\u9501\u3002",
       "reviewedSourceHash": "305486b141166aae4f39c37fd522ba73ca70cad152735f62c7b6ea8f4c62b899",
       "review": {
         "outcome": "approved",
@@ -1691,7 +1691,7 @@
     },
     {
       "id": "native.run.reasonText.package-incomplete",
-      "value": "导览不完整。",
+      "value": "\u5BFC\u89C8\u4E0D\u5B8C\u6574\u3002",
       "reviewedSourceHash": "8d26cfe8dc716a252873caead724a2a04f2feba74d796194d51c96f869b943ef",
       "review": {
         "outcome": "approved",
@@ -1700,16 +1700,16 @@
     },
     {
       "id": "native.run.reasonText.package-needs-recovery",
-      "value": "导览需要修复。",
+      "value": "\u5BFC\u89C8\u9700\u8981\u4FEE\u590D\u3002",
       "reviewedSourceHash": "b8b4c2c7f540bb529eb784dc36f405b7b2e7c818a813a2aa5c6001e5eb12861e",
       "review": {
         "outcome": "approved",
-        "note": "адмова старта: гід патрабуе аднаўлення пакета; дзеяслоў 修复 для пакета, не для сесіі"
+        "note": "адмова старта: гід патрабуе аднаўлення пакета; дзеяслоў \u4FEE\u590D для пакета, не для сесіі"
       }
     },
     {
       "id": "native.run.reasonText.run#locale-missing",
-      "value": "未找到导览语言。",
+      "value": "\u672A\u627E\u5230\u5BFC\u89C8\u8BED\u8A00\u3002",
       "reviewedSourceHash": "69fb0a7ed42523063e1634201b51bfbfe554e375e3a5a3a8fe3831bff4b4a937",
       "review": {
         "outcome": "approved",
@@ -1718,7 +1718,7 @@
     },
     {
       "id": "native.run.reasonText.run#package-ambiguous",
-      "value": "磁盘上存在多个导览版本。",
+      "value": "\u78C1\u76D8\u4E0A\u5B58\u5728\u591A\u4E2A\u5BFC\u89C8\u7248\u672C\u3002",
       "reviewedSourceHash": "fdd1faa5c76b85d38f095cfdfdc5a95f2735d003bf0cfd1d04605ca19d3faa19",
       "review": {
         "outcome": "approved",
@@ -1727,25 +1727,25 @@
     },
     {
       "id": "native.run.reasonText.run#package-not-downloaded",
-      "value": "导览未下载。",
+      "value": "\u5BFC\u89C8\u672A\u4E0B\u8F7D\u3002",
       "reviewedSourceHash": "5912049b75ae0d205c03dc16c4766fbb92a49f85a06dd5fbf43979b076f3a6f4",
       "review": {
         "outcome": "approved",
-        "note": "адмова прагулкі: гід не спампаваны; адзіны корань 下载, як і ў кнопкі"
+        "note": "адмова прагулкі: гід не спампаваны; адзіны корань \u4E0B\u8F7D, як і ў кнопкі"
       },
       "terminology": {
         "status": "resolved",
         "kind": "looked-up",
         "source": "android",
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.download (packages/providers/DownloadProvider#root_downloads, zh-rCN)",
-        "term": "下载",
+        "term": "\u4E0B\u8F7D",
         "date": "2026-10-17",
-        "reason": "адзіны корань 下载 для дзеяння і стану; назоўнікавы сэнс — па корпусе AOSP"
+        "reason": "адзіны корань \u4E0B\u8F7D для дзеяння і стану; назоўнікавы сэнс — па корпусе AOSP"
       }
     },
     {
       "id": "native.run.reasonText.run#package-read-failed",
-      "value": "导览无法读取。",
+      "value": "\u5BFC\u89C8\u65E0\u6CD5\u8BFB\u53D6\u3002",
       "reviewedSourceHash": "cb97f828950ec915bd80a937e1c569a2e255c380aa2dc70db18883b66eeeb0ea",
       "review": {
         "outcome": "approved",
@@ -1754,7 +1754,7 @@
     },
     {
       "id": "native.run.reasonText.run#recovery-failed",
-      "value": "读取进行中的会话失败。",
+      "value": "\u8BFB\u53D6\u8FDB\u884C\u4E2D\u7684\u4F1A\u8BDD\u5931\u8D25\u3002",
       "reviewedSourceHash": "dc38ee4a64a7e63371d24d15a8811bec2db3a5cc769f78da944fe0c00d11f75b",
       "review": {
         "outcome": "approved",
@@ -1763,7 +1763,7 @@
     },
     {
       "id": "native.run.reasonText.run#unsafe-route-id",
-      "value": "路线标识符无效。",
+      "value": "\u8DEF\u7EBF\u6807\u8BC6\u7B26\u65E0\u6548\u3002",
       "reviewedSourceHash": "d340822c39b89b886e5951a52bc64b20fca3d6f84871c9e1e5a862235c7b033c",
       "review": {
         "outcome": "approved",
@@ -1772,7 +1772,7 @@
     },
     {
       "id": "native.run.reasonText.switch-no-live-session",
-      "value": "进行中的散步已不存在——请重新开始。",
+      "value": "\u8FDB\u884C\u4E2D\u7684\u6563\u6B65\u5DF2\u4E0D\u5B58\u5728——\u8BF7\u91CD\u65B0\u5F00\u59CB\u3002",
       "reviewedSourceHash": "8db71669436a5adb6fe155900507136c66e4bc436e26865e0408659b50457ecd",
       "review": {
         "outcome": "approved",
@@ -1781,7 +1781,7 @@
     },
     {
       "id": "native.run.restoredTitle",
-      "value": "散步已从保存的会话继续",
+      "value": "\u6563\u6B65\u5DF2\u4ECE\u4FDD\u5B58\u7684\u4F1A\u8BDD\u7EE7\u7EED",
       "reviewedSourceHash": "0e2062fc47a4936d773e4e014d5f1f11c31481de99dceb81a4aa9166acdc30f1",
       "review": {
         "outcome": "approved",
@@ -1790,14 +1790,14 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "从保存的会话继续",
+        "term": "\u4ECE\u4FDD\u5B58\u7684\u4F1A\u8BDD\u7EE7\u7EED",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: слова 恢复 — слоўнікавы пераклад restore, але канон KUDY перадае сэнс праз «працягнута са захаванай сесіі»; выбраная канструкцыя без метафары аднаўлення, як en/uk/de/es/fr/cs/sv"
+        "reason": "батарэя G21.39: слова \u6062\u590D — слоўнікавы пераклад restore, але канон KUDY перадае сэнс праз «працягнута са захаванай сесіі»; выбраная канструкцыя без метафары аднаўлення, як en/uk/de/es/fr/cs/sv"
       }
     },
     {
       "id": "native.run.points",
-      "value": "路线地点",
+      "value": "\u8DEF\u7EBF\u5730\u70B9",
       "reviewedSourceHash": "7f8f19103a112298d7480abecc5107770297f14d6af636c8330fa5847c4c6d52",
       "review": {
         "outcome": "approved",
@@ -1806,7 +1806,7 @@
     },
     {
       "id": "native.run.recenter",
-      "value": "回到我的位置",
+      "value": "\u56DE\u5230\u6211\u7684\u4F4D\u7F6E",
       "reviewedSourceHash": "7c9707a52b4598b4df1427e7609582b876d93d53e78eefc086b2ea6e9d0574cc",
       "review": {
         "outcome": "approved",
@@ -1815,7 +1815,7 @@
     },
     {
       "id": "native.run.resume",
-      "value": "继续",
+      "value": "\u7EE7\u7EED",
       "reviewedSourceHash": "eebc12f1f868df6992e266f4de878022ad7ba731a55d869b203f5e44b2562286",
       "review": {
         "outcome": "approved",
@@ -1824,7 +1824,7 @@
     },
     {
       "id": "native.run.schematicNote",
-      "value": "地图正在加载或不可用——已显示路线地点示意图",
+      "value": "\u5730\u56FE\u6B63\u5728\u52A0\u8F7D\u6216\u4E0D\u53EF\u7528——\u5DF2\u663E\u793A\u8DEF\u7EBF\u5730\u70B9\u793A\u610F\u56FE",
       "reviewedSourceHash": "2dd5575beeb4e2eceddcb133bd66d0755c8731a769f657860033a6605224b3f7",
       "review": {
         "outcome": "approved",
@@ -1833,7 +1833,7 @@
     },
     {
       "id": "native.run.status.available",
-      "value": "可收听",
+      "value": "\u53EF\u6536\u542C",
       "reviewedSourceHash": "9793aad53a23abdc305d5548a29cb946b00e25523d81d73dd6fc44ec65584cf2",
       "review": {
         "outcome": "approved",
@@ -1842,7 +1842,7 @@
     },
     {
       "id": "native.run.status.locked",
-      "value": "已锁定",
+      "value": "\u5DF2\u9501\u5B9A",
       "reviewedSourceHash": "6a99f5e753bfc059766d06244cd27adca7e2aef32f319d076e3df63d742e94a7",
       "review": {
         "outcome": "approved",
@@ -1851,7 +1851,7 @@
     },
     {
       "id": "native.run.status.pending",
-      "value": "待收听",
+      "value": "\u5F85\u6536\u542C",
       "reviewedSourceHash": "9f528a418df5a9a0b3669164831060f48a64ee91f09944317edbf68f59fccda9",
       "review": {
         "outcome": "approved",
@@ -1860,7 +1860,7 @@
     },
     {
       "id": "native.run.status.played",
-      "value": "已收听",
+      "value": "\u5DF2\u6536\u542C",
       "reviewedSourceHash": "a502b3cc111fa9e67cfd2cf9ed81c5255f9e620b48382d72345b3dc81661fe36",
       "review": {
         "outcome": "approved",
@@ -1869,7 +1869,7 @@
     },
     {
       "id": "native.run.status.playing",
-      "value": "播放中",
+      "value": "\u64AD\u653E\u4E2D",
       "reviewedSourceHash": "d1eef5a55b531148b786b73a9273d9f72d6de945391799a4b8c69b6f9b5ad31b",
       "review": {
         "outcome": "approved",
@@ -1878,7 +1878,7 @@
     },
     {
       "id": "native.run.storyBase",
-      "value": "主要故事",
+      "value": "\u4E3B\u8981\u6545\u4E8B",
       "reviewedSourceHash": "6c2b75554d07c595a721ae6fa62de6e6e5f0157b2d7bc79dd445ca7dcbd3fd08",
       "review": {
         "outcome": "approved",
@@ -1887,25 +1887,25 @@
     },
     {
       "id": "native.run.storyExtended",
-      "value": "附加故事",
+      "value": "\u9644\u52A0\u6545\u4E8B",
       "reviewedSourceHash": "3570a8bfad2653d9dcd5fe9b60241a9ec8313f4a1a3ad34085dd92117b7b044b",
       "review": {
         "outcome": "approved",
-        "note": "пазнака дадатковай гісторыі; ярус → 附加"
+        "note": "пазнака дадатковай гісторыі; ярус → \u9644\u52A0"
       }
     },
     {
       "id": "native.run.tierUnavailable",
-      "value": "附加层级在恢复的会话中不可用",
+      "value": "\u9644\u52A0\u5C42\u7EA7\u5728\u6062\u590D\u7684\u4F1A\u8BDD\u4E2D\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c",
       "review": {
         "outcome": "approved",
-        "note": "заўвага: дадатковы ярус недаступны ў адноўленай сесіі; ярус → 层级"
+        "note": "заўвага: дадатковы ярус недаступны ў адноўленай сесіі; ярус → \u5C42\u7EA7"
       }
     },
     {
       "id": "native.run.transcript",
-      "value": "文字稿",
+      "value": "\u6587\u5B57\u7A3F",
       "reviewedSourceHash": "ed28a2f5c9457fcfa1fa39bec597498948a3909f658583f316145309b493a477",
       "review": {
         "outcome": "approved",
@@ -1914,7 +1914,7 @@
     },
     {
       "id": "native.run.transcriptPending",
-      "value": "文本将随内容包一起提供",
+      "value": "\u6587\u672C\u5C06\u968F\u5185\u5BB9\u5305\u4E00\u8D77\u63D0\u4F9B",
       "reviewedSourceHash": "e4d1078ae54a91a1baba09622433a75af468a6b88cbe1d1fb319edf4126fbada",
       "review": {
         "outcome": "approved",
@@ -1923,7 +1923,7 @@
     },
     {
       "id": "native.run.unavailableTitle",
-      "value": "会话不可用",
+      "value": "\u4F1A\u8BDD\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "749dd4d5710f98ecf3c7147c540c4f2f65368b228adcaf1d050f9c738fed73a6",
       "review": {
         "outcome": "approved",
@@ -1932,7 +1932,7 @@
     },
     {
       "id": "web.ui.appBenefitFullRoutes",
-      "value": "完整路线：所有地点和全部音频",
+      "value": "\u5B8C\u6574\u8DEF\u7EBF\uFF1A\u6240\u6709\u5730\u70B9\u548C\u5168\u90E8\u97F3\u9891",
       "reviewedSourceHash": "d4b091d52be3bca3e28259c32c45de553cdae2bff23890f1466f43539a648fb6",
       "review": {
         "outcome": "approved",
@@ -1941,7 +1941,7 @@
     },
     {
       "id": "web.ui.appBenefitGps",
-      "value": "到场后自动播放故事",
+      "value": "\u5230\u573A\u540E\u81EA\u52A8\u64AD\u653E\u6545\u4E8B",
       "reviewedSourceHash": "dd1f0b20a9989171a0f7ee937b8a2b300e77510c6fede71cea44091ffd88075e",
       "review": {
         "outcome": "approved",
@@ -1950,16 +1950,16 @@
     },
     {
       "id": "web.ui.appBenefitOffline",
-      "value": "离线可用：无需网络，路线随时可查",
+      "value": "\u79BB\u7EBF\u53EF\u7528\uFF1A\u65E0\u9700\u7F51\u7EDC\uFF0C\u8DEF\u7EBF\u968F\u65F6\u53EF\u67E5",
       "reviewedSourceHash": "0938d9674742b7ca8d10e18f403e12aec968da0f2d0727b9159f6718ec177d9e",
       "review": {
         "outcome": "approved",
-        "note": "выгода дадатку: офлайн маршруты · Незалежнае рэв'ю (2026-10-17): 随手可得 (кніжная мова) → 路线随时可查: выгода чытаецца проста"
+        "note": "выгода дадатку: офлайн маршруты · Незалежнае рэв'ю (2026-10-17): \u968F\u624B\u53EF\u5F97 (кніжная мова) → \u8DEF\u7EBF\u968F\u65F6\u53EF\u67E5: выгода чытаецца проста"
       }
     },
     {
       "id": "web.ui.appPageStores",
-      "value": "获取应用：",
+      "value": "\u83B7\u53D6\u5E94\u7528\uFF1A",
       "reviewedSourceHash": "41e9d325b3f4b67c7a5286cc11354b0a207839e2fee05e651cc270869ed5f0ec",
       "review": {
         "outcome": "approved",
@@ -1968,7 +1968,7 @@
     },
     {
       "id": "web.ui.appPageTitle",
-      "value": "完整版本——在KUDY应用里",
+      "value": "\u5B8C\u6574\u7248\u672C——\u5728KUDY\u5E94\u7528\u91CC",
       "reviewedSourceHash": "a824a45caa613d7d9d0cb29d968595e6d42c3db635115d8aa4946823e2bbbebe",
       "review": {
         "outcome": "approved",
@@ -1986,7 +1986,7 @@
     },
     {
       "id": "web.ui.audioAndText",
-      "value": "音频和文本",
+      "value": "\u97F3\u9891\u548C\u6587\u672C",
       "reviewedSourceHash": "0f4aff6c5476865b0bd3977657d0f3361fd3d04dcea6e8e4734b6bfdbdba5a0a",
       "review": {
         "outcome": "approved",
@@ -1995,7 +1995,7 @@
     },
     {
       "id": "web.ui.audioHeading",
-      "value": "音频",
+      "value": "\u97F3\u9891",
       "reviewedSourceHash": "42ce7ded17f5749b83970a0155fde0b9503d572f14685c475940bbf1dc3a4022",
       "review": {
         "outcome": "approved",
@@ -2004,7 +2004,7 @@
     },
     {
       "id": "web.ui.audioUnavailable",
-      "value": "公开内容包中没有音频文件；下方故事文本仍可正常阅读。",
+      "value": "\u516C\u5F00\u5185\u5BB9\u5305\u4E2D\u6CA1\u6709\u97F3\u9891\u6587\u4EF6\uFF1B\u4E0B\u65B9\u6545\u4E8B\u6587\u672C\u4ECD\u53EF\u6B63\u5E38\u9605\u8BFB\u3002",
       "reviewedSourceHash": "97c74598be80ccfc34d8de9326cccdd19a2e3131cd88bcd8d5a36907f528157e",
       "review": {
         "outcome": "approved",
@@ -2013,7 +2013,7 @@
     },
     {
       "id": "web.ui.backToGuide",
-      "value": "返回导览页面",
+      "value": "\u8FD4\u56DE\u5BFC\u89C8\u9875\u9762",
       "reviewedSourceHash": "d74d46d2484a23efcb8b7fe0c7c0cad37cd687fd47b549476567a7551dcb1fde",
       "review": {
         "outcome": "approved",
@@ -2031,7 +2031,7 @@
     },
     {
       "id": "web.ui.calmOfferCta",
-      "value": "打开应用",
+      "value": "\u6253\u5F00\u5E94\u7528",
       "reviewedSourceHash": "59b840b0a9ba1fb1402597545ca1e919111a9825e9ddc94d8ab8270c7ddcafef",
       "review": {
         "outcome": "approved",
@@ -2040,16 +2040,16 @@
     },
     {
       "id": "web.ui.calmOfferText",
-      "value": "完整版本在应用中：到场自动播放、离线可用、完整路线。",
+      "value": "\u5B8C\u6574\u7248\u672C\u5728\u5E94\u7528\u4E2D\uFF1A\u5230\u573A\u81EA\u52A8\u64AD\u653E\u3001\u79BB\u7EBF\u53EF\u7528\u3001\u5B8C\u6574\u8DEF\u7EBF\u3002",
       "reviewedSourceHash": "fca9b8721b8f42038c5bd8672d0019ca3e492ba30ac6fa7f2fb175bdf404ea2e",
       "review": {
         "outcome": "approved",
-        "note": "ціхая прапанова дадатку; тры выгоды праз коску, як у крыніцы · Незалежнае рэв'ю (2026-10-17): вернуты GPS-сэнс першай выгоды (到场自动播放), як у суседнім web.ui.appBenefitGps — без яго гублялася галоўная вартасць"
+        "note": "ціхая прапанова дадатку; тры выгоды праз коску, як у крыніцы · Незалежнае рэв'ю (2026-10-17): вернуты GPS-сэнс першай выгоды (\u5230\u573A\u81EA\u52A8\u64AD\u653E), як у суседнім web.ui.appBenefitGps — без яго гублялася галоўная вартасць"
       }
     },
     {
       "id": "web.ui.catalogTitle",
-      "value": "城市导览",
+      "value": "\u57CE\u5E02\u5BFC\u89C8",
       "reviewedSourceHash": "670058fc54d284f2e46f7e8e09997332a46ab937ce627c51f1f2cfaa998f82ff",
       "review": {
         "outcome": "approved",
@@ -2058,7 +2058,7 @@
     },
     {
       "id": "web.ui.distance",
-      "value": "距离",
+      "value": "\u8DDD\u79BB",
       "reviewedSourceHash": "bee0a3a7d35a29807e46345e626e3bca28a4970e701c0b66c236c9d84c074c04",
       "review": {
         "outcome": "approved",
@@ -2067,7 +2067,7 @@
     },
     {
       "id": "web.ui.duration",
-      "value": "时长",
+      "value": "\u65F6\u957F",
       "reviewedSourceHash": "9276104996f45e284d966794e70c4fc2d52b329a5a5f4666515e718f8bf12f16",
       "review": {
         "outcome": "approved",
@@ -2076,7 +2076,7 @@
     },
     {
       "id": "web.ui.homeLink",
-      "value": "回到首页",
+      "value": "\u56DE\u5230\u9996\u9875",
       "reviewedSourceHash": "30e2d60f17153ff35aa1adda3bab5116845e1991e0e4143d79ea1b50bb13389e",
       "review": {
         "outcome": "approved",
@@ -2085,7 +2085,7 @@
     },
     {
       "id": "web.ui.kilometersShort",
-      "value": "公里",
+      "value": "\u516C\u91CC",
       "reviewedSourceHash": "f0799d4b6ae84c9fafe93c5a3e8ae85bf7675912cad3a7737f48c0448aa00f50",
       "review": {
         "outcome": "approved",
@@ -2094,7 +2094,7 @@
     },
     {
       "id": "web.ui.languages",
-      "value": "语言",
+      "value": "\u8BED\u8A00",
       "reviewedSourceHash": "c06833252de3a6b56c05b65b42dfa0b95e4005eedd8189e5bf9f2f64b4490716",
       "review": {
         "outcome": "approved",
@@ -2103,16 +2103,16 @@
     },
     {
       "id": "web.ui.lockedLabel",
-      "value": "已锁定的地点",
+      "value": "\u5DF2\u9501\u5B9A\u7684\u5730\u70B9",
       "reviewedSourceHash": "aafde1b7e9811c639b3f9340e59d0b53d6879b56fffc2cb6bcd74a616b2870e8",
       "review": {
         "outcome": "approved",
-        "note": "пазнака зачыненай кропкі ў спісе; кропка → 地点"
+        "note": "пазнака зачыненай кропкі ў спісе; кропка → \u5730\u70B9"
       }
     },
     {
       "id": "web.ui.mapAttribution",
-      "value": "地图数据 © OpenStreetMap 贡献者（ODbL 许可）",
+      "value": "\u5730\u56FE\u6570\u636E © OpenStreetMap \u8D21\u732E\u8005\uFF08ODbL \u8BB8\u53EF\uFF09",
       "reviewedSourceHash": "1044b87f28683a787262f17f1017ec49cf859cf8ba6c9773717fc8be6f16a536",
       "review": {
         "outcome": "approved",
@@ -2121,7 +2121,7 @@
     },
     {
       "id": "web.ui.mapError",
-      "value": "地图暂时不可用。下方路线列表仍可正常使用。",
+      "value": "\u5730\u56FE\u6682\u65F6\u4E0D\u53EF\u7528\u3002\u4E0B\u65B9\u8DEF\u7EBF\u5217\u8868\u4ECD\u53EF\u6B63\u5E38\u4F7F\u7528\u3002",
       "reviewedSourceHash": "5d6c08e18afd5e725fb09490c6227e3ea83cadb649a78c776408948b6fa9963e",
       "review": {
         "outcome": "approved",
@@ -2130,7 +2130,7 @@
     },
     {
       "id": "web.ui.mapIntro",
-      "value": "浏览公开路线和地点。不会获取或使用访客的位置。",
+      "value": "\u6D4F\u89C8\u516C\u5F00\u8DEF\u7EBF\u548C\u5730\u70B9\u3002\u4E0D\u4F1A\u83B7\u53D6\u6216\u4F7F\u7528\u8BBF\u5BA2\u7684\u4F4D\u7F6E\u3002",
       "reviewedSourceHash": "c597a6c22daf0b31484af6251a55b92c9ddf3827aaac5719073d93a17caec838",
       "review": {
         "outcome": "approved",
@@ -2139,7 +2139,7 @@
     },
     {
       "id": "web.ui.mapRoutesHeading",
-      "value": "地图上的路线",
+      "value": "\u5730\u56FE\u4E0A\u7684\u8DEF\u7EBF",
       "reviewedSourceHash": "35d577ece11ecfe53eb50cc7fd5ce8f60212ada6f4e892602acb5b06449a21f1",
       "review": {
         "outcome": "approved",
@@ -2148,7 +2148,7 @@
     },
     {
       "id": "web.ui.mapTitle",
-      "value": "城市地图",
+      "value": "\u57CE\u5E02\u5730\u56FE",
       "reviewedSourceHash": "9ef7a5aa47a5315ef13466f4ff1aa67b6286c442ff261c0bbaccfc208ab85887",
       "review": {
         "outcome": "approved",
@@ -2157,7 +2157,7 @@
     },
     {
       "id": "web.ui.minutesShort",
-      "value": "分钟",
+      "value": "\u5206\u949F",
       "reviewedSourceHash": "e8c16fd4349955ecde6b8e54ca7e348713cdfc4bea556dfba5ed9c03fd384e93",
       "review": {
         "outcome": "approved",
@@ -2166,18 +2166,18 @@
     },
     {
       "id": "web.ui.nextStop",
-      "value": "下一个地点",
+      "value": "\u4E0B\u4E00\u4E2A\u5730\u70B9",
       "reviewedSourceHash": "371e0d77c5507a43edee3b356ad0cfb56f8b7c21a246ea346daed28f22a10799",
       "review": {
         "outcome": "approved",
-        "note": "кнопка наступнай кропкі; кропка → 地点"
+        "note": "кнопка наступнай кропкі; кропка → \u5730\u70B9"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "地点",
+        "term": "\u5730\u70B9",
         "date": "2026-10-17",
-        "reason": "той самы выбар для кропак пешага маршруту, што і ў натыўнай абалонцы; транспартнае 巴士站 не падыходзіць"
+        "reason": "той самы выбар для кропак пешага маршруту, што і ў натыўнай абалонцы; транспартнае \u5DF4\u58EB\u7AD9 не падыходзіць"
       }
     },
     {
@@ -2191,25 +2191,25 @@
     },
     {
       "id": "web.ui.prevStop",
-      "value": "上一个地点",
+      "value": "\u4E0A\u4E00\u4E2A\u5730\u70B9",
       "reviewedSourceHash": "91521bae33c1fc37a67fc215efdc36f06c0e7fd6c7bab32e70f3e7b7443f53dd",
       "review": {
         "outcome": "approved",
-        "note": "кнопка папярэдняй кропкі; пара да 下一个地点"
+        "note": "кнопка папярэдняй кропкі; пара да \u4E0B\u4E00\u4E2A\u5730\u70B9"
       }
     },
     {
       "id": "web.ui.privacyAnalytics",
-      "value": "只有在明确同意后才会进行分析。事件在同意之后才会发送到服务器；拒绝则日志只保留在设备上，应用仍可完整使用。坐标、姓名和用户输入的文本绝不会被发送。",
+      "value": "\u53EA\u6709\u5728\u660E\u786E\u540C\u610F\u540E\u624D\u4F1A\u8FDB\u884C\u5206\u6790\u3002\u4E8B\u4EF6\u5728\u540C\u610F\u4E4B\u540E\u624D\u4F1A\u53D1\u9001\u5230\u670D\u52A1\u5668\uFF1B\u62D2\u7EDD\u5219\u65E5\u5FD7\u53EA\u4FDD\u7559\u5728\u8BBE\u5907\u4E0A\uFF0C\u5E94\u7528\u4ECD\u53EF\u5B8C\u6574\u4F7F\u7528\u3002\u5750\u6807\u3001\u59D3\u540D\u548C\u7528\u6237\u8F93\u5165\u7684\u6587\u672C\u7EDD\u4E0D\u4F1A\u88AB\u53D1\u9001\u3002",
       "reviewedSourceHash": "d02dc665b1db4856113cad4e30c33fb438f48dd157f66c4da39aa242b941340b",
       "review": {
         "outcome": "approved",
-        "note": "параграф прыватнасці пра аналітыку; тры сказы захаваныя, катэгарычнае 绝不会"
+        "note": "параграф прыватнасці пра аналітыку; тры сказы захаваныя, катэгарычнае \u7EDD\u4E0D\u4F1A"
       }
     },
     {
       "id": "web.ui.privacyAppData",
-      "value": "应用无需账号即可使用。它会在设备上保存本地事件日志（打开过哪些故事、下载过哪些路线），并保存已下载的内容。日志不含姓名和自由文本，只与随机设备标识符关联——这是假名化数据，而非匿名数据。安装时，KUDY 服务器会向设备发放随机标识符和秘密值：服务器保存标识符和秘密值的哈希，秘密值本身只保存在设备上，并作为访问密钥随设备的每个请求发送到 KUDY 服务器。为限制请求频率，服务器保存 IP 地址的单向哈希。在应用中给出的路线和地点评分（评分和所选原因，不含自由文本）也会发送到 KUDY 服务器，并与设备标识符一起保存。",
+      "value": "\u5E94\u7528\u65E0\u9700\u8D26\u53F7\u5373\u53EF\u4F7F\u7528\u3002\u5B83\u4F1A\u5728\u8BBE\u5907\u4E0A\u4FDD\u5B58\u672C\u5730\u4E8B\u4EF6\u65E5\u5FD7\uFF08\u6253\u5F00\u8FC7\u54EA\u4E9B\u6545\u4E8B\u3001\u4E0B\u8F7D\u8FC7\u54EA\u4E9B\u8DEF\u7EBF\uFF09\uFF0C\u5E76\u4FDD\u5B58\u5DF2\u4E0B\u8F7D\u7684\u5185\u5BB9\u3002\u65E5\u5FD7\u4E0D\u542B\u59D3\u540D\u548C\u81EA\u7531\u6587\u672C\uFF0C\u53EA\u4E0E\u968F\u673A\u8BBE\u5907\u6807\u8BC6\u7B26\u5173\u8054——\u8FD9\u662F\u5047\u540D\u5316\u6570\u636E\uFF0C\u800C\u975E\u533F\u540D\u6570\u636E\u3002\u5B89\u88C5\u65F6\uFF0CKUDY \u670D\u52A1\u5668\u4F1A\u5411\u8BBE\u5907\u53D1\u653E\u968F\u673A\u6807\u8BC6\u7B26\u548C\u79D8\u5BC6\u503C\uFF1A\u670D\u52A1\u5668\u4FDD\u5B58\u6807\u8BC6\u7B26\u548C\u79D8\u5BC6\u503C\u7684\u54C8\u5E0C\uFF0C\u79D8\u5BC6\u503C\u672C\u8EAB\u53EA\u4FDD\u5B58\u5728\u8BBE\u5907\u4E0A\uFF0C\u5E76\u4F5C\u4E3A\u8BBF\u95EE\u5BC6\u94A5\u968F\u8BBE\u5907\u7684\u6BCF\u4E2A\u8BF7\u6C42\u53D1\u9001\u5230 KUDY \u670D\u52A1\u5668\u3002\u4E3A\u9650\u5236\u8BF7\u6C42\u9891\u7387\uFF0C\u670D\u52A1\u5668\u4FDD\u5B58 IP \u5730\u5740\u7684\u5355\u5411\u54C8\u5E0C\u3002\u5728\u5E94\u7528\u4E2D\u7ED9\u51FA\u7684\u8DEF\u7EBF\u548C\u5730\u70B9\u8BC4\u5206\uFF08\u8BC4\u5206\u548C\u6240\u9009\u539F\u56E0\uFF0C\u4E0D\u542B\u81EA\u7531\u6587\u672C\uFF09\u4E5F\u4F1A\u53D1\u9001\u5230 KUDY \u670D\u52A1\u5668\uFF0C\u5E76\u4E0E\u8BBE\u5907\u6807\u8BC6\u7B26\u4E00\u8D77\u4FDD\u5B58\u3002",
       "reviewedSourceHash": "4104b0c2d8a23c83895b7efff2f96349560349a8cac4c462f921566bf5c1e71d",
       "review": {
         "outcome": "approved",
@@ -2218,7 +2218,7 @@
     },
     {
       "id": "web.ui.privacyContact",
-      "value": "有关本隐私政策的问题，可以在项目公开仓库的 issues 里提出：",
+      "value": "\u6709\u5173\u672C\u9690\u79C1\u653F\u7B56\u7684\u95EE\u9898\uFF0C\u53EF\u4EE5\u5728\u9879\u76EE\u516C\u5F00\u4ED3\u5E93\u7684 issues \u91CC\u63D0\u51FA\uFF1A",
       "reviewedSourceHash": "8155e69060cfd2c7c434816554419619f7c6880d668891dd3d836b609cf425c6",
       "review": {
         "outcome": "approved",
@@ -2227,7 +2227,7 @@
     },
     {
       "id": "web.ui.privacyDeletion",
-      "value": "删除数据：应用中的“My KUDY”页面有一个删除设备按钮——它会清除服务器上的事件日志和设备记录，连同服务器上的评分数据和设备上的秘密值；已下载的内容会保留。无需发送邮件或申请。该按钮不会删除应用商店和 RevenueCat 中的记录：这些记录由相应服务按其自身规则保存和删除。",
+      "value": "\u5220\u9664\u6570\u636E\uFF1A\u5E94\u7528\u4E2D\u7684“My KUDY”\u9875\u9762\u6709\u4E00\u4E2A\u5220\u9664\u8BBE\u5907\u6309\u94AE——\u5B83\u4F1A\u6E05\u9664\u670D\u52A1\u5668\u4E0A\u7684\u4E8B\u4EF6\u65E5\u5FD7\u548C\u8BBE\u5907\u8BB0\u5F55\uFF0C\u8FDE\u540C\u670D\u52A1\u5668\u4E0A\u7684\u8BC4\u5206\u6570\u636E\u548C\u8BBE\u5907\u4E0A\u7684\u79D8\u5BC6\u503C\uFF1B\u5DF2\u4E0B\u8F7D\u7684\u5185\u5BB9\u4F1A\u4FDD\u7559\u3002\u65E0\u9700\u53D1\u9001\u90AE\u4EF6\u6216\u7533\u8BF7\u3002\u8BE5\u6309\u94AE\u4E0D\u4F1A\u5220\u9664\u5E94\u7528\u5546\u5E97\u548C RevenueCat \u4E2D\u7684\u8BB0\u5F55\uFF1A\u8FD9\u4E9B\u8BB0\u5F55\u7531\u76F8\u5E94\u670D\u52A1\u6309\u5176\u81EA\u8EAB\u89C4\u5219\u4FDD\u5B58\u548C\u5220\u9664\u3002",
       "reviewedSourceHash": "a581b5a8f4c1dca0bc1e1ba3d5e46f810affdd19aca5cb1598e0c12e4598ec62",
       "review": {
         "outcome": "approved",
@@ -2236,25 +2236,25 @@
     },
     {
       "id": "web.ui.privacyIntro",
-      "value": "KUDY 是用于城市散步的音频导览。本页面说明项目处理哪些数据：免费网页渠道和移动应用。",
+      "value": "KUDY \u662F\u7528\u4E8E\u57CE\u5E02\u6563\u6B65\u7684\u97F3\u9891\u5BFC\u89C8\u3002\u672C\u9875\u9762\u8BF4\u660E\u9879\u76EE\u5904\u7406\u54EA\u4E9B\u6570\u636E\uFF1A\u514D\u8D39\u7F51\u9875\u6E20\u9053\u548C\u79FB\u52A8\u5E94\u7528\u3002",
       "reviewedSourceHash": "87c3fd8b911d11bafbc0a20e65b2312422d246dd45ebb630ee9d3942b301e33a",
       "review": {
         "outcome": "approved",
-        "note": "уводзіны палітыкі прыватнасці · Незалежнае рэв'ю (2026-10-17): 网页渠道的公开部分 → 免费网页渠道, як у web.ui.privacyWeb (be «вольны пласт вэб-канала»); у тэксце прыватнасці «публічнасць» — іншае цвярджэнне"
+        "note": "уводзіны палітыкі прыватнасці · Незалежнае рэв'ю (2026-10-17): \u7F51\u9875\u6E20\u9053\u7684\u516C\u5F00\u90E8\u5206 → \u514D\u8D39\u7F51\u9875\u6E20\u9053, як у web.ui.privacyWeb (be «вольны пласт вэб-канала»); у тэксце прыватнасці «публічнасць» — іншае цвярджэнне"
       }
     },
     {
       "id": "web.ui.privacyLocation",
-      "value": "位置仅在应用中使用，且仅在散步进行期间：后台定位在散步期间持续运行，并随散步结束而停止。应用不会把精确的GPS坐标传到KUDY服务器，也不会将其写入事件日志。在线地图从OpenFreeMap加载瓦片：请求会向提供商暴露地图区域，在开启地图跟随时也包括当前位置周边。网页渠道不获取访客的位置。",
+      "value": "\u4F4D\u7F6E\u4EC5\u5728\u5E94\u7528\u4E2D\u4F7F\u7528\uFF0C\u4E14\u4EC5\u5728\u6563\u6B65\u8FDB\u884C\u671F\u95F4\uFF1A\u540E\u53F0\u5B9A\u4F4D\u5728\u6563\u6B65\u671F\u95F4\u6301\u7EED\u8FD0\u884C\uFF0C\u5E76\u968F\u6563\u6B65\u7ED3\u675F\u800C\u505C\u6B62\u3002\u5E94\u7528\u4E0D\u4F1A\u628A\u7CBE\u786E\u7684GPS\u5750\u6807\u4F20\u5230KUDY\u670D\u52A1\u5668\uFF0C\u4E5F\u4E0D\u4F1A\u5C06\u5176\u5199\u5165\u4E8B\u4EF6\u65E5\u5FD7\u3002\u5728\u7EBF\u5730\u56FE\u4ECEOpenFreeMap\u52A0\u8F7D\u74E6\u7247\uFF1A\u8BF7\u6C42\u4F1A\u5411\u63D0\u4F9B\u5546\u66B4\u9732\u5730\u56FE\u533A\u57DF\uFF0C\u5728\u5F00\u542F\u5730\u56FE\u8DDF\u968F\u65F6\u4E5F\u5305\u62EC\u5F53\u524D\u4F4D\u7F6E\u5468\u8FB9\u3002\u7F51\u9875\u6E20\u9053\u4E0D\u83B7\u53D6\u8BBF\u5BA2\u7684\u4F4D\u7F6E\u3002",
       "reviewedSourceHash": "5c86b06615ae7aa3da7eb2585ba4d46a4e77d5828b159601ca6748a411e476fc",
       "review": {
         "outcome": "approved",
-        "note": "параграф прыватнасці: GPS падчас прагулкі і анлайн-тайлы; тры сказы, назвы сэрвісаў не перакладаюцца · Незалежнае рэв'ю (2026-10-17): двайное абмежаванне перапісана праз 仅在…使用，且仅在…; «跟随» без аб'екта заменена на 地图跟随 — у параграфе прыватнасці функцыю трэба назваць"
+        "note": "параграф прыватнасці: GPS падчас прагулкі і анлайн-тайлы; тры сказы, назвы сэрвісаў не перакладаюцца · Незалежнае рэв'ю (2026-10-17): двайное абмежаванне перапісана праз \u4EC5\u5728…\u4F7F\u7528\uFF0C\u4E14\u4EC5\u5728…; «\u8DDF\u968F» без аб'екта заменена на \u5730\u56FE\u8DDF\u968F — у параграфе прыватнасці функцыю трэба назваць"
       }
     },
     {
       "id": "web.ui.privacyPurchases",
-      "value": "购买通过应用商店（App Store、Google Play）进行：支付数据由商店处理，应用只记录购买事件本身——路线、选项、结果——不含银行卡信息。已购内容的权益由独立服务 RevenueCat 管理：应用会把随机设备标识符作为买家标识符发送给它，并发送购买或确认以往购买的请求；支付本身只通过商店进行。KUDY 服务器保存购买事件的技术记录（产品、商店、有效期），不含支付信息。",
+      "value": "\u8D2D\u4E70\u901A\u8FC7\u5E94\u7528\u5546\u5E97\uFF08App Store\u3001Google Play\uFF09\u8FDB\u884C\uFF1A\u652F\u4ED8\u6570\u636E\u7531\u5546\u5E97\u5904\u7406\uFF0C\u5E94\u7528\u53EA\u8BB0\u5F55\u8D2D\u4E70\u4E8B\u4EF6\u672C\u8EAB——\u8DEF\u7EBF\u3001\u9009\u9879\u3001\u7ED3\u679C——\u4E0D\u542B\u94F6\u884C\u5361\u4FE1\u606F\u3002\u5DF2\u8D2D\u5185\u5BB9\u7684\u6743\u76CA\u7531\u72EC\u7ACB\u670D\u52A1 RevenueCat \u7BA1\u7406\uFF1A\u5E94\u7528\u4F1A\u628A\u968F\u673A\u8BBE\u5907\u6807\u8BC6\u7B26\u4F5C\u4E3A\u4E70\u5BB6\u6807\u8BC6\u7B26\u53D1\u9001\u7ED9\u5B83\uFF0C\u5E76\u53D1\u9001\u8D2D\u4E70\u6216\u786E\u8BA4\u4EE5\u5F80\u8D2D\u4E70\u7684\u8BF7\u6C42\uFF1B\u652F\u4ED8\u672C\u8EAB\u53EA\u901A\u8FC7\u5546\u5E97\u8FDB\u884C\u3002KUDY \u670D\u52A1\u5668\u4FDD\u5B58\u8D2D\u4E70\u4E8B\u4EF6\u7684\u6280\u672F\u8BB0\u5F55\uFF08\u4EA7\u54C1\u3001\u5546\u5E97\u3001\u6709\u6548\u671F\uFF09\uFF0C\u4E0D\u542B\u652F\u4ED8\u4FE1\u606F\u3002",
       "reviewedSourceHash": "a702717ee9ee00b5a45328c9959e4663335a1f91be11824d6846b1b967a7ebbe",
       "review": {
         "outcome": "approved",
@@ -2263,23 +2263,23 @@
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
-        "term": "购买",
+        "term": "\u8D2D\u4E70",
         "date": "2026-10-17",
-        "reason": "тэрмін пакупкі 购买 па батарэі G21.39 §6.3; фраза «restore purchases» не слоўнікавая і ў тэксце не ўжываецца"
+        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 §6.3; фраза «restore purchases» не слоўнікавая і ў тэксце не ўжываецца"
       }
     },
     {
       "id": "web.ui.privacyRetention",
-      "value": "保留期限：已发送的原始事件保留14个月，之后由定时任务删除。",
+      "value": "\u4FDD\u7559\u671F\u9650\uFF1A\u5DF2\u53D1\u9001\u7684\u539F\u59CB\u4E8B\u4EF6\u4FDD\u755914\u4E2A\u6708\uFF0C\u4E4B\u540E\u7531\u5B9A\u65F6\u4EFB\u52A1\u5220\u9664\u3002",
       "reviewedSourceHash": "fd59ba45063f461563c0857bc76897e5e03998fc53cc40afb2e488745df0dcb9",
       "review": {
         "outcome": "approved",
-        "note": "параграф прыватнасці: тэрмін захавання сырых падзей · Незалежнае рэв'ю (2026-10-17): парадак азначэнняў (已发送的原始事件) і 定时任务 замест 任务 — акрэслена менавіта планавальнік · #849 крытэр 5, 2026-11-01: сцвярджэнне пра агрэгаваныя лічбы знята (сховішча агрэгатаў не існуе — retention-core.ts); астатні тэкст без зменаў."
+        "note": "параграф прыватнасці: тэрмін захавання сырых падзей · Незалежнае рэв'ю (2026-10-17): парадак азначэнняў (\u5DF2\u53D1\u9001\u7684\u539F\u59CB\u4E8B\u4EF6) і \u5B9A\u65F6\u4EFB\u52A1 замест \u4EFB\u52A1 — акрэслена менавіта планавальнік · #849 крытэр 5, 2026-11-01: сцвярджэнне пра агрэгаваныя лічбы знята (сховішча агрэгатаў не існуе — retention-core.ts); астатні тэкст без зменаў."
       }
     },
     {
       "id": "web.ui.privacyTitle",
-      "value": "隐私",
+      "value": "\u9690\u79C1",
       "reviewedSourceHash": "22162a33a385d2a42f1db6a44f8673e8d8d2f0b0180dfecf547178cfeac498fb",
       "review": {
         "outcome": "approved",
@@ -2288,7 +2288,7 @@
     },
     {
       "id": "web.ui.privacyWeb",
-      "value": "免费网页渠道不收集账号：没有注册和登录，也不索取联系方式。目录、导览和地图页面无需输入个人数据即可打开。",
+      "value": "\u514D\u8D39\u7F51\u9875\u6E20\u9053\u4E0D\u6536\u96C6\u8D26\u53F7\uFF1A\u6CA1\u6709\u6CE8\u518C\u548C\u767B\u5F55\uFF0C\u4E5F\u4E0D\u7D22\u53D6\u8054\u7CFB\u65B9\u5F0F\u3002\u76EE\u5F55\u3001\u5BFC\u89C8\u548C\u5730\u56FE\u9875\u9762\u65E0\u9700\u8F93\u5165\u4E2A\u4EBA\u6570\u636E\u5373\u53EF\u6253\u5F00\u3002",
       "reviewedSourceHash": "4d4fe908d535fe3996570f0917999a33a649dc1b85d21a9444352b0f2ad6341c",
       "review": {
         "outcome": "approved",
@@ -2297,7 +2297,7 @@
     },
     {
       "id": "web.ui.stopListHeading",
-      "value": "路线地点",
+      "value": "\u8DEF\u7EBF\u5730\u70B9",
       "reviewedSourceHash": "379fd21b7a21e645950a361e2a27c81ffb28a9b8c5ff5d3b40ae867ed3aa4244",
       "review": {
         "outcome": "approved",
@@ -2306,7 +2306,7 @@
     },
     {
       "id": "web.ui.stops",
-      "value": "地点",
+      "value": "\u5730\u70B9",
       "reviewedSourceHash": "f01a41e8069f5a10f7446d7892a4663bc206dcc63d79c0f0bcd747d09ef05a9d",
       "review": {
         "outcome": "approved",
@@ -2315,7 +2315,7 @@
     },
     {
       "id": "web.ui.storeComingSoon",
-      "value": "即将推出",
+      "value": "\u5373\u5C06\u63A8\u51FA",
       "reviewedSourceHash": "a4a928d1751b51e8124728e4b4f8cc411f60787f509a56129e2e6ffcbdf6f679",
       "review": {
         "outcome": "approved",
@@ -2324,7 +2324,7 @@
     },
     {
       "id": "web.ui.storyTextHeading",
-      "value": "故事文本",
+      "value": "\u6545\u4E8B\u6587\u672C",
       "reviewedSourceHash": "c8c99c777db7f030957de2c87bb2807e6453c815734d5c6fcfdf762c4649be5a",
       "review": {
         "outcome": "approved",
@@ -2333,7 +2333,7 @@
     },
     {
       "id": "web.ui.textOnly",
-      "value": "仅文本",
+      "value": "\u4EC5\u6587\u672C",
       "reviewedSourceHash": "60adcac9c17b1b2348bdc25bf9408963fe25e9d161f6b51d2a82561c7e470515",
       "review": {
         "outcome": "approved",
@@ -2342,7 +2342,7 @@
     },
     {
       "id": "web.ui.versionUnavailable",
-      "value": "版本不可用",
+      "value": "\u7248\u672C\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "6d0903ab3a0d160167c966e6b09cdce71900eb1271487b48f51ecb738379bd8e",
       "review": {
         "outcome": "approved",
@@ -2351,7 +2351,7 @@
     },
     {
       "id": "web.ui.catalogEmpty",
-      "value": "这种语言暂时还没有带文本的导览。",
+      "value": "\u8FD9\u79CD\u8BED\u8A00\u6682\u65F6\u8FD8\u6CA1\u6709\u5E26\u6587\u672C\u7684\u5BFC\u89C8\u3002",
       "reviewedSourceHash": "2696e018ae715ff1d8dfe7f26331d68f1325eff673496c9c213f3d4abeec1d5e",
       "review": {
         "outcome": "approved",
@@ -2360,7 +2360,7 @@
     },
     {
       "id": "web.ui.textUnavailableTitle",
-      "value": "这种语言下的导览文本暂时不可用",
+      "value": "\u8FD9\u79CD\u8BED\u8A00\u4E0B\u7684\u5BFC\u89C8\u6587\u672C\u6682\u65F6\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "a19ea9ba76a34afce8fd2edd63ecbdc865dce15d8a5cd7d4e1828d7286e6216c",
       "review": {
         "outcome": "approved",
@@ -2369,7 +2369,7 @@
     },
     {
       "id": "web.ui.textUnavailableBody",
-      "value": "这个导览没有所选界面语言的文本。它的文本语言显示在目录的语言列表中。",
+      "value": "\u8FD9\u4E2A\u5BFC\u89C8\u6CA1\u6709\u6240\u9009\u754C\u9762\u8BED\u8A00\u7684\u6587\u672C\u3002\u5B83\u7684\u6587\u672C\u8BED\u8A00\u663E\u793A\u5728\u76EE\u5F55\u7684\u8BED\u8A00\u5217\u8868\u4E2D\u3002",
       "reviewedSourceHash": "07a46c3e0babecfe136297ae2458d4fd0a86e5b2425cead4f1372ac6edb59953",
       "review": {
         "outcome": "approved",
@@ -2378,7 +2378,7 @@
     },
     {
       "id": "native.feedback.unavailable",
-      "value": "评价不可用",
+      "value": "\u8BC4\u4EF7\u4E0D\u53EF\u7528",
       "reviewedSourceHash": "f64d18490a73d3cc2bfe6f4fdd502f5347a84b5ae7d0234ec4a53cbb9ed5169b",
       "review": {
         "outcome": "approved",
@@ -2387,7 +2387,7 @@
     },
     {
       "id": "native.feedback.invalidTarget",
-      "value": "评价链接不完整",
+      "value": "\u8BC4\u4EF7\u94FE\u63A5\u4E0D\u5B8C\u6574",
       "reviewedSourceHash": "13b2ca38180a286de285582a9e0d9af9a6ce1f8c163e55ce33187fbae8a3c081",
       "review": {
         "outcome": "approved",
@@ -2396,7 +2396,7 @@
     },
     {
       "id": "native.feedback.formTitleGuide",
-      "value": "这个导览怎么样？",
+      "value": "\u8FD9\u4E2A\u5BFC\u89C8\u600E\u4E48\u6837\uFF1F",
       "reviewedSourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca",
       "review": {
         "outcome": "approved",
@@ -2405,7 +2405,7 @@
     },
     {
       "id": "native.feedback.formTitlePlace",
-      "value": "这里值得来吗？",
+      "value": "\u8FD9\u91CC\u503C\u5F97\u6765\u5417\uFF1F",
       "reviewedSourceHash": "0154a38c9b8759273bc0d13d11d6db7ec3cbad6506a780c86a8aef5b46bdf0e7",
       "review": {
         "outcome": "approved",
@@ -2414,7 +2414,7 @@
     },
     {
       "id": "native.feedback.targetLine",
-      "value": "内容语言：${locale} · 版本：${version}",
+      "value": "\u5185\u5BB9\u8BED\u8A00\uFF1A${locale} · \u7248\u672C\uFF1A${version}",
       "reviewedSourceHash": "ba6f03bbf78712a759d9a3623817dea04b241abb111d12cf07475fde952c50fb",
       "review": {
         "outcome": "approved",
@@ -2423,7 +2423,7 @@
     },
     {
       "id": "native.feedback.scaleHint",
-      "value": "1——很不喜欢 · 5——很喜欢",
+      "value": "1——\u5F88\u4E0D\u559C\u6B22 · 5——\u5F88\u559C\u6B22",
       "reviewedSourceHash": "763a359b696b12e109cb8be62e435ed8f2b9e0b4fcf1a0a18a345ff13159b8b9",
       "review": {
         "outcome": "approved",
@@ -2432,7 +2432,7 @@
     },
     {
       "id": "native.feedback.starLabel",
-      "value": "5分中的${score}分",
+      "value": "5\u5206\u4E2D\u7684${score}\u5206",
       "reviewedSourceHash": "0ffa854d51fbc16346c56b9bf020629ca9ac9b116243731cdd0e5611c9e401d0",
       "review": {
         "outcome": "approved",
@@ -2441,7 +2441,7 @@
     },
     {
       "id": "native.feedback.reasonsTitle",
-      "value": "原因（可选，最多三项）",
+      "value": "\u539F\u56E0\uFF08\u53EF\u9009\uFF0C\u6700\u591A\u4E09\u9879\uFF09",
       "reviewedSourceHash": "1d9b758cdb750b52ef9c0194691f66b411f1446cf47d274509fe7c43bf465776",
       "review": {
         "outcome": "approved",
@@ -2450,7 +2450,7 @@
     },
     {
       "id": "native.feedback.disclosureTitle",
-      "value": "谁可以看到评价",
+      "value": "\u8C01\u53EF\u4EE5\u770B\u5230\u8BC4\u4EF7",
       "reviewedSourceHash": "7cd4231b4890b4597dee9a5246054c686599f0528b8346290fdbf329cb81087f",
       "review": {
         "outcome": "approved",
@@ -2459,7 +2459,7 @@
     },
     {
       "id": "native.feedback.disclosureBody",
-      "value": "KUDY团队会看到评价，并用它来改进推荐。评价不会公开展示。",
+      "value": "KUDY\u56E2\u961F\u4F1A\u770B\u5230\u8BC4\u4EF7\uFF0C\u5E76\u7528\u5B83\u6765\u6539\u8FDB\u63A8\u8350\u3002\u8BC4\u4EF7\u4E0D\u4F1A\u516C\u5F00\u5C55\u793A\u3002",
       "reviewedSourceHash": "40ac74ccd705297733e68136eb9bbad6d682c6be1a731e09562eb577f35439d8",
       "review": {
         "outcome": "approved",
@@ -2468,16 +2468,16 @@
     },
     {
       "id": "native.feedback.disclosureAnalytics",
-      "value": "这不是分析数据：提交评价不代表同意分析，也不依赖分析同意。",
+      "value": "\u8FD9\u4E0D\u662F\u5206\u6790\u6570\u636E\uFF1A\u63D0\u4EA4\u8BC4\u4EF7\u4E0D\u4EE3\u8868\u540C\u610F\u5206\u6790\uFF0C\u4E5F\u4E0D\u4F9D\u8D56\u5206\u6790\u540C\u610F\u3002",
       "reviewedSourceHash": "5c3e76cd244614b2707e554c450e8f58db3b6a2ab3330ff2e2de572e1f6419d3",
       "review": {
         "outcome": "approved",
-        "note": "тэкст раскрыцця: адпраўка водгуку не звязаная са згодай на аналітыку · Незалежнае рэв'ю (2026-10-17): замест «也与分析无关» (фактычная незалежнасць) — «也不依赖分析同意» паводле be «не залежыць ад яе» / en «nor requires»: у тэксце прыватнасці цвярджэнне нельга пашыраць"
+        "note": "тэкст раскрыцця: адпраўка водгуку не звязаная са згодай на аналітыку · Незалежнае рэв'ю (2026-10-17): замест «\u4E5F\u4E0E\u5206\u6790\u65E0\u5173» (фактычная незалежнасць) — «\u4E5F\u4E0D\u4F9D\u8D56\u5206\u6790\u540C\u610F» паводле be «не залежыць ад яе» / en «nor requires»: у тэксце прыватнасці цвярджэнне нельга пашыраць"
       }
     },
     {
       "id": "native.feedback.send",
-      "value": "提交",
+      "value": "\u63D0\u4EA4",
       "reviewedSourceHash": "5d1b61cf3441db7560a769aee30416dc0c9b5d5e4d0cb6c5e5af2fdc227e7bdb",
       "review": {
         "outcome": "approved",
@@ -2486,7 +2486,7 @@
     },
     {
       "id": "native.feedback.deleteButton",
-      "value": "删除评价",
+      "value": "\u5220\u9664\u8BC4\u4EF7",
       "reviewedSourceHash": "d18d68ce08b0873d2405ed8b503398644dc5a660e3c4c4c326ba456eee781cf9",
       "review": {
         "outcome": "approved",
@@ -2495,16 +2495,16 @@
     },
     {
       "id": "native.feedback.resolveConflict",
-      "value": "检查服务器状态",
+      "value": "\u68C0\u67E5\u670D\u52A1\u5668\u72B6\u6001",
       "reviewedSourceHash": "1c75021c3be06110e2689aed8eaf2ec49e49f0145f7e4daef51eded800b0d138",
       "review": {
         "outcome": "approved",
-        "note": "кнопка вырашэння канфлікту: праверыць стан на серверы · Незалежнае рэв'ю (2026-10-17): 在服务器上检查 (калька, без аб'екта) → 检查服务器状态: кнопка называе аб'ект, як суседні радок памылкі"
+        "note": "кнопка вырашэння канфлікту: праверыць стан на серверы · Незалежнае рэв'ю (2026-10-17): \u5728\u670D\u52A1\u5668\u4E0A\u68C0\u67E5 (калька, без аб'екта) → \u68C0\u67E5\u670D\u52A1\u5668\u72B6\u6001: кнопка называе аб'ект, як суседні радок памылкі"
       }
     },
     {
       "id": "native.feedback.stateDraft",
-      "value": "草稿已保存在设备上",
+      "value": "\u8349\u7A3F\u5DF2\u4FDD\u5B58\u5728\u8BBE\u5907\u4E0A",
       "reviewedSourceHash": "1f9828d67e933d0c4365984ed54b521600ffe764cf76ea26fe372c564c4d70a4",
       "review": {
         "outcome": "approved",
@@ -2513,7 +2513,7 @@
     },
     {
       "id": "native.feedback.statePending",
-      "value": "已保存在设备上——联网后提交",
+      "value": "\u5DF2\u4FDD\u5B58\u5728\u8BBE\u5907\u4E0A——\u8054\u7F51\u540E\u63D0\u4EA4",
       "reviewedSourceHash": "7195387e99f36c3ed874cba5e91a09c9bda100636d233899ecb181ac4950d043",
       "review": {
         "outcome": "approved",
@@ -2522,7 +2522,7 @@
     },
     {
       "id": "native.feedback.stateSent",
-      "value": "已提交",
+      "value": "\u5DF2\u63D0\u4EA4",
       "reviewedSourceHash": "ee6e31c6ff3e7f4a976a16d2cf3e05e945fd2497f20240eead476c966b9cd470",
       "review": {
         "outcome": "approved",
@@ -2531,16 +2531,16 @@
     },
     {
       "id": "native.feedback.stateConflict",
-      "value": "冲突：服务器上有更新的改动",
+      "value": "\u51B2\u7A81\uFF1A\u670D\u52A1\u5668\u4E0A\u6709\u66F4\u65B0\u7684\u6539\u52A8",
       "reviewedSourceHash": "1fefa8a95ccc366bf67ebe9edffb1259c1f3264030082b01a1ab678b762205ac",
       "review": {
         "outcome": "approved",
-        "note": "стан канфлікту версій водгуку · Незалежнае рэв'ю (2026-10-17): 更新的更改 → 更新的改动 (прыбірае сугучную таўталогію, натуральней для радка стану)"
+        "note": "стан канфлікту версій водгуку · Незалежнае рэв'ю (2026-10-17): \u66F4\u65B0\u7684\u66F4\u6539 → \u66F4\u65B0\u7684\u6539\u52A8 (прыбірае сугучную таўталогію, натуральней для радка стану)"
       }
     },
     {
       "id": "native.feedback.stateActionRequired",
-      "value": "提交已停止：需要处理",
+      "value": "\u63D0\u4EA4\u5DF2\u505C\u6B62\uFF1A\u9700\u8981\u5904\u7406",
       "reviewedSourceHash": "9d3a4807b3c9bbffd40f0adb70348a542c4935461df074bcb77bb0bc9fda1b2e",
       "review": {
         "outcome": "approved",
@@ -2549,7 +2549,7 @@
     },
     {
       "id": "native.feedback.stateDeletePending",
-      "value": "删除等待联网",
+      "value": "\u5220\u9664\u7B49\u5F85\u8054\u7F51",
       "reviewedSourceHash": "5e80f91330578bbbc12509891dacb61ccf3d86569cd63e2c19c8b0061b3dac4a",
       "review": {
         "outcome": "approved",
@@ -2558,7 +2558,7 @@
     },
     {
       "id": "native.feedback.inviteTitle",
-      "value": "这个导览怎么样？可以评价——完全自愿。",
+      "value": "\u8FD9\u4E2A\u5BFC\u89C8\u600E\u4E48\u6837\uFF1F\u53EF\u4EE5\u8BC4\u4EF7——\u5B8C\u5168\u81EA\u613F\u3002",
       "reviewedSourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192",
       "review": {
         "outcome": "approved",
@@ -2567,7 +2567,7 @@
     },
     {
       "id": "native.feedback.inviteRate",
-      "value": "评价导览",
+      "value": "\u8BC4\u4EF7\u5BFC\u89C8",
       "reviewedSourceHash": "bff14adc9bcb8d672c62ee6ff83e10e26542a927104e7a053ac287c5bda11c3f",
       "review": {
         "outcome": "approved",
@@ -2576,7 +2576,7 @@
     },
     {
       "id": "native.feedback.inviteDismiss",
-      "value": "不用了，谢谢",
+      "value": "\u4E0D\u7528\u4E86\uFF0C\u8C22\u8C22",
       "reviewedSourceHash": "974b4b9cc64413a1293c3743bc76db631f6dd4c5f5639b0631869c67474cfeaf",
       "review": {
         "outcome": "approved",
@@ -2585,7 +2585,7 @@
     },
     {
       "id": "native.feedback.ratePlace",
-      "value": "评价地点",
+      "value": "\u8BC4\u4EF7\u5730\u70B9",
       "reviewedSourceHash": "6e2584651cd2326b0266694baa27f4fff406f1f8b837f0d8a71ad801cc5d466b",
       "review": {
         "outcome": "approved",
@@ -2594,7 +2594,7 @@
     },
     {
       "id": "native.feedback.placeVisitTitle",
-      "value": "你来过这里吗？",
+      "value": "\u4F60\u6765\u8FC7\u8FD9\u91CC\u5417\uFF1F",
       "reviewedSourceHash": "0994331436fdf28985b497ebebc27eda56b5554fe582e29ce82b2b30f853be3a",
       "review": {
         "outcome": "approved",
@@ -2603,16 +2603,16 @@
     },
     {
       "id": "native.feedback.placeVisitBody",
-      "value": "地点评价是自行申报的到访，并非经核实的访问。",
+      "value": "\u5730\u70B9\u8BC4\u4EF7\u662F\u81EA\u884C\u7533\u62A5\u7684\u5230\u8BBF\uFF0C\u5E76\u975E\u7ECF\u6838\u5B9E\u7684\u8BBF\u95EE\u3002",
       "reviewedSourceHash": "e89b4ab7e51c7a16d7d4fabf295cfec3cda0541e67d1e43625e17ccfaa08efad",
       "review": {
         "outcome": "approved",
-        "note": "тлумачэнне: самаацэнка візіту, не праверанае наведванне · Незалежнае рэв'ю (2026-10-17): 自行确认到访 → 自行申报的到访 і 已核实 → 经核实 — стандартная пара слоў раскрыцця"
+        "note": "тлумачэнне: самаацэнка візіту, не праверанае наведванне · Незалежнае рэв'ю (2026-10-17): \u81EA\u884C\u786E\u8BA4\u5230\u8BBF → \u81EA\u884C\u7533\u62A5\u7684\u5230\u8BBF і \u5DF2\u6838\u5B9E → \u7ECF\u6838\u5B9E — стандартная пара слоў раскрыцця"
       }
     },
     {
       "id": "native.feedback.placeVisitAccept",
-      "value": "来过——去评价",
+      "value": "\u6765\u8FC7——\u53BB\u8BC4\u4EF7",
       "reviewedSourceHash": "0e1ffe61222b1128e9dbd9f7cfa8b3ee8434076f10e2de057164a605e328737a",
       "review": {
         "outcome": "approved",
@@ -2621,7 +2621,7 @@
     },
     {
       "id": "native.feedback.mySection",
-      "value": "我的评价",
+      "value": "\u6211\u7684\u8BC4\u4EF7",
       "reviewedSourceHash": "18fa60ddb291c97c36851de7137bef11352764d5351e9feefa70017f9dd00f46",
       "review": {
         "outcome": "approved",
@@ -2630,7 +2630,7 @@
     },
     {
       "id": "native.feedback.myEmpty",
-      "value": "还没有自己的评价",
+      "value": "\u8FD8\u6CA1\u6709\u81EA\u5DF1\u7684\u8BC4\u4EF7",
       "reviewedSourceHash": "ee12ec4175a34a04399cba704ce02b3f82083d2997d3b3797b32c2310a8bdf8a",
       "review": {
         "outcome": "approved",
@@ -2639,7 +2639,7 @@
     },
     {
       "id": "native.feedback.myEdit",
-      "value": "修改",
+      "value": "\u4FEE\u6539",
       "reviewedSourceHash": "1e2c31b3f9c9402946eb392ff6897700c2c783770a794069b734a01a42a35a04",
       "review": {
         "outcome": "approved",
@@ -2648,16 +2648,16 @@
     },
     {
       "id": "native.feedback.guideWord",
-      "value": "导览",
+      "value": "\u5BFC\u89C8",
       "reviewedSourceHash": "70a569cfca827aef72de7c814f0c0b3760b520f5c21dc43a67fdaad90af74272",
       "review": {
         "outcome": "approved",
-        "note": "слова «гід» у спісе ўласных ацэнак; тэрмін 导览"
+        "note": "слова «гід» у спісе ўласных ацэнак; тэрмін \u5BFC\u89C8"
       }
     },
     {
       "id": "native.feedback.placeWord",
-      "value": "地点",
+      "value": "\u5730\u70B9",
       "reviewedSourceHash": "e176e75a0103ac1243532bb956a4ee2dcc9af7aaad80c35938170679577839f7",
       "review": {
         "outcome": "approved",
@@ -2666,7 +2666,7 @@
     },
     {
       "id": "native.feedback.ratingOf",
-      "value": "5分中的${score}分",
+      "value": "5\u5206\u4E2D\u7684${score}\u5206",
       "reviewedSourceHash": "c71e6b03486be62dcfc58bf64e222b7d93e4f974732e5f621d966b031562bc69",
       "review": {
         "outcome": "approved",
@@ -2675,7 +2675,7 @@
     },
     {
       "id": "native.feedback.reasonText.interesting_stories",
-      "value": "故事有趣",
+      "value": "\u6545\u4E8B\u6709\u8DA3",
       "reviewedSourceHash": "9959daf3a456d2382c1efd4faca72b689f0df1ed2923ab0cd4e821446c3120d6",
       "review": {
         "outcome": "approved",
@@ -2684,7 +2684,7 @@
     },
     {
       "id": "native.feedback.reasonText.clear_delivery",
-      "value": "讲述清晰",
+      "value": "\u8BB2\u8FF0\u6E05\u6670",
       "reviewedSourceHash": "d74083aa9de049473fa1b5f857260c195797d52ddcbe3c1fa64c49748c08adc1",
       "review": {
         "outcome": "approved",
@@ -2693,7 +2693,7 @@
     },
     {
       "id": "native.feedback.reasonText.too_long",
-      "value": "太长",
+      "value": "\u592A\u957F",
       "reviewedSourceHash": "14403d1bc95f6a5d57217237ac27a05879d0191466a34aafa1cd624ee9ebe116",
       "review": {
         "outcome": "approved",
@@ -2702,7 +2702,7 @@
     },
     {
       "id": "native.feedback.reasonText.hard_to_navigate",
-      "value": "难以导航",
+      "value": "\u96BE\u4EE5\u5BFC\u822A",
       "reviewedSourceHash": "079108e7d5462f0bcbd157ec5da0e366f87e54d39e35364ce6debfc82a419ca8",
       "review": {
         "outcome": "approved",
@@ -2711,7 +2711,7 @@
     },
     {
       "id": "native.feedback.reasonText.audio_problem",
-      "value": "音频问题",
+      "value": "\u97F3\u9891\u95EE\u9898",
       "reviewedSourceHash": "c3ef154e822117153d07ef625a31c3a886cf523099025dcf69b3941542c6e61a",
       "review": {
         "outcome": "approved",
@@ -2720,7 +2720,7 @@
     },
     {
       "id": "native.feedback.reasonText.description_mismatch",
-      "value": "与描述不符",
+      "value": "\u4E0E\u63CF\u8FF0\u4E0D\u7B26",
       "reviewedSourceHash": "75d78626465f6da0aa52eaf8b48754720f68b28c6af0c8feeea58eef98bfbce2",
       "review": {
         "outcome": "approved",
@@ -2729,7 +2729,7 @@
     },
     {
       "id": "native.feedback.reasonText.worth_visiting",
-      "value": "值得一游",
+      "value": "\u503C\u5F97\u4E00\u6E38",
       "reviewedSourceHash": "2ae5e44e2805dc7511473cce8c1d43338792b3eef17802eb05c01193bbe53643",
       "review": {
         "outcome": "approved",
@@ -2738,7 +2738,7 @@
     },
     {
       "id": "native.feedback.reasonText.hard_to_reach",
-      "value": "难以到达",
+      "value": "\u96BE\u4EE5\u5230\u8FBE",
       "reviewedSourceHash": "f97aeea0ff8926e5bf06bddaa142ec75cc4be468a7bdb601c486504f12b5f7bd",
       "review": {
         "outcome": "approved",
@@ -2747,25 +2747,25 @@
     },
     {
       "id": "native.feedback.reasonText.access_problem",
-      "value": "出入不便",
+      "value": "\u51FA\u5165\u4E0D\u4FBF",
       "reviewedSourceHash": "f4417031a4fef7cc54c3916e66770fcda831e75baa3bb6e70b3dd08b9cf9f54e",
       "review": {
         "outcome": "approved",
-        "note": "прычына ацэнкі месца · Незалежнае рэв'ю (2026-10-17): 通道问题 (калідор/канал) заменена на 出入不便 — звыклае апісанне праблемы ўваходу ў месца"
+        "note": "прычына ацэнкі месца · Незалежнае рэв'ю (2026-10-17): \u901A\u9053\u95EE\u9898 (калідор/канал) заменена на \u51FA\u5165\u4E0D\u4FBF — звыклае апісанне праблемы ўваходу ў месца"
       }
     },
     {
       "id": "native.feedback.errorText.feedback-input-invalid",
-      "value": "信息未被接受：请检查所选项",
+      "value": "\u4FE1\u606F\u672A\u88AB\u63A5\u53D7\uFF1A\u8BF7\u68C0\u67E5\u6240\u9009\u9879",
       "reviewedSourceHash": "b22dd71560cdeeb665203c01ed389749a1e6a9c1bf8f642df722e8896dd5bd94",
       "review": {
         "outcome": "approved",
-        "note": "памылка водгуку: звесткі не прынятыя · Незалежнае рэв'ю (2026-10-17): 数据 → 信息: карыстальнік адпраўляе звесткі, а не даныя сховішча"
+        "note": "памылка водгуку: звесткі не прынятыя · Незалежнае рэв'ю (2026-10-17): \u6570\u636E → \u4FE1\u606F: карыстальнік адпраўляе звесткі, а не даныя сховішча"
       }
     },
     {
       "id": "native.feedback.errorText.feedback-write-failed",
-      "value": "写入失败：请重试",
+      "value": "\u5199\u5165\u5931\u8D25\uFF1A\u8BF7\u91CD\u8BD5",
       "reviewedSourceHash": "4a76d282ed50222f4700e03541a4b46ea0fa43e4c7f715bd742c082c694b2999",
       "review": {
         "outcome": "approved",
@@ -2774,7 +2774,7 @@
     },
     {
       "id": "native.feedback.errorText.feedback-transport-failed",
-      "value": "网络无响应：请重试",
+      "value": "\u7F51\u7EDC\u65E0\u54CD\u5E94\uFF1A\u8BF7\u91CD\u8BD5",
       "reviewedSourceHash": "ca9f043892af3e9f4cbb37a64b494f6162aef9910123df3b2221f133621b462d",
       "review": {
         "outcome": "approved",
@@ -2783,7 +2783,7 @@
     },
     {
       "id": "native.feedback.errorText.feedback-send-no-draft",
-      "value": "没有可提交的草稿",
+      "value": "\u6CA1\u6709\u53EF\u63D0\u4EA4\u7684\u8349\u7A3F",
       "reviewedSourceHash": "606c54918b744dbaf923e0375c7be1d96fed06d613e39668887c420ab7b3855c",
       "review": {
         "outcome": "approved",
@@ -2792,7 +2792,7 @@
     },
     {
       "id": "native.feedback.errorText.feedback-resolution-required",
-      "value": "请先在服务器上检查状态",
+      "value": "\u8BF7\u5148\u5728\u670D\u52A1\u5668\u4E0A\u68C0\u67E5\u72B6\u6001",
       "reviewedSourceHash": "d16eb424c719e978864af4ab241f6608a78f9eead95acc2db963e3829b630555",
       "review": {
         "outcome": "approved",
@@ -2801,7 +2801,7 @@
     },
     {
       "id": "web.ui.attributionHeading",
-      "value": "来源与署名",
+      "value": "\u6765\u6E90\u4E0E\u7F72\u540D",
       "reviewedSourceHash": "262a71e1ab35a50b648afe2d0ff23ef8717a62f70fba6352bd968d683f484fa0",
       "review": {
         "outcome": "approved",
@@ -2810,7 +2810,7 @@
     },
     {
       "id": "web.ui.authorPhoto",
-      "value": "作者照片",
+      "value": "\u4F5C\u8005\u7167\u7247",
       "reviewedSourceHash": "255e15ab9725891d3876cf7fa0c0e80961748701bb583a51c41bdd5714bb864a",
       "review": {
         "outcome": "approved",
@@ -2819,7 +2819,7 @@
     },
     {
       "id": "web.ui.usageRulesTitle",
-      "value": "使用规则",
+      "value": "\u4F7F\u7528\u89C4\u5219",
       "reviewedSourceHash": "f3e2ee1e865651348bc54a8a9e679279bd31f087ff6057d72569f85a2b043212",
       "review": {
         "outcome": "approved",
@@ -2828,7 +2828,7 @@
     },
     {
       "id": "web.ui.usageRulesIntro",
-      "value": "历史资料的来源标注在导览和地点页面上。",
+      "value": "\u5386\u53F2\u8D44\u6599\u7684\u6765\u6E90\u6807\u6CE8\u5728\u5BFC\u89C8\u548C\u5730\u70B9\u9875\u9762\u4E0A\u3002",
       "reviewedSourceHash": "d2f27dc53f8052c06eb56bac06f8619251d5b371d0f3e4c5c45e9476a0690ff9",
       "review": {
         "outcome": "approved",
@@ -2837,7 +2837,7 @@
     },
     {
       "id": "web.ui.usageRulesReuse",
-      "value": "再次使用资料前，请在原出处核实其权利，或联系权利人。",
+      "value": "\u518D\u6B21\u4F7F\u7528\u8D44\u6599\u524D\uFF0C\u8BF7\u5728\u539F\u51FA\u5904\u6838\u5B9E\u5176\u6743\u5229\uFF0C\u6216\u8054\u7CFB\u6743\u5229\u4EBA\u3002",
       "reviewedSourceHash": "b9dc6996d20d14ad7a565f18f0cb0c1726e49c4ac4d7f8ae1dd3d9f8628ffb94",
       "review": {
         "outcome": "approved",

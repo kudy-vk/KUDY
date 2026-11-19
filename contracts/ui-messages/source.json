@@ -3597,7 +3597,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#sources.title"
+        "components/about-city-strings.generated.ts#sources.title"
       ],
       "sourceHash": "dd504d36958462488f93482663a6d92d205c9c88cb2570e778569836b063bdc6"
     },
@@ -4756,7 +4756,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#card.lead"
+        "components/about-city-strings.generated.ts#card.lead"
       ],
       "sourceHash": "8dc710fb4b5ee27098def447d67b11de94ae189c7028e79620fef6a99a8a0885"
     },
@@ -4811,7 +4811,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#links.kartaTurysty"
+        "components/about-city-strings.generated.ts#links.kartaTurysty"
       ],
       "sourceHash": "ba55d8c691dbeaf1160ba790414beae8fda83817593203db9df38a81e5f7b5b6"
     },
@@ -5346,7 +5346,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#tr.residents"
+        "components/about-city-strings.generated.ts#tr.residents"
       ],
       "sourceHash": "5a786b7676c0f201d018d172bc7b0f463ed1118bdd4e9bd5415b00590aff4829"
     },
@@ -5357,7 +5357,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#resident.title"
+        "components/about-city-strings.generated.ts#resident.title"
       ],
       "sourceHash": "2ce51f65e06e3b01446e8c9941e15c8a001f534f4a3e369c7dfe779f653ad86e"
     },
@@ -5368,7 +5368,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#resident.lead"
+        "components/about-city-strings.generated.ts#resident.lead"
       ],
       "sourceHash": "107829bb5c6600bb013174e5e68e96dd200878c18b0e88893d7c50ad6f2f8caf"
     },
@@ -5384,7 +5384,7 @@
         }
       ],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#resident.openOfficial"
+        "components/about-city-strings.generated.ts#resident.openOfficial"
       ],
       "sourceHash": "97ea2b5e472d9c9e067d8160d6f0c27dce0ed1f44f7eb86a981eb080773a174e"
     },
@@ -5395,7 +5395,7 @@
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#card.brandAlt"
+        "components/about-city-strings.generated.ts#card.brandAlt"
       ],
       "sourceHash": "257aa51e0105ae67ef8dc5dc8df44af17029f5076f41ce1e2ed255adff45b266"
     },
@@ -5411,7 +5411,7 @@
         }
       ],
       "migratedFrom": [
-        "docs/design/production/about-257-words-be.mjs#card.openOfficial"
+        "components/about-city-strings.generated.ts#card.openOfficial"
       ],
       "sourceHash": "6212ff916e5e16c29938d03c624124cd89258b1fa64b5e0737a0dba238984fd7"
     }
