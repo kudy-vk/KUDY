@@ -57,7 +57,7 @@ export function Seg({ name, label, options, value, onChange }: {
   );
 }
 
-// Numbered steps joined by a line. items: [title, body].
+// Numbered steps joined by a line. items: [title, fold].
 export function Steps({ items }: { items: readonly (readonly [title: string, body: ReactNode])[] }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
   return (
@@ -69,7 +69,6 @@ export function Steps({ items }: { items: readonly (readonly [title: string, bod
             {i === items.length - 1 ? null : <View style={styles.stepLine} />}
           </View>
           <View style={styles.stepBody}>
-            <ScaledText style={styles.stepTitle}>{title}</ScaledText>
             {body}
           </View>
         </View>
@@ -123,25 +122,6 @@ export function DetailRows({ rows }: { rows: readonly (readonly [label: string, 
   );
 }
 
-// Price rows: [name, price, reduced price or null]. One list, one shape: if
-// any price has grosze, every price shows them (the caller pre-renders).
-export function PriceRows({ rows }: { rows: readonly (readonly [name: string, price: string, reduced: string | null])[] }) {
-  const styles = useThemeStyles(lightStyles, darkStyles);
-  return (
-    <View>
-      {rows.map(([name, price, reduced]) => (
-        <View key={name} style={styles.priceRow}>
-          <ScaledText style={styles.priceName}>{name}</ScaledText>
-          <View style={styles.priceValue}>
-            <ScaledText style={styles.priceSum}>{price}</ScaledText>
-            {reduced ? <ScaledText style={styles.priceReduced}>{reduced}</ScaledText> : null}
-          </View>
-        </View>
-      ))}
-    </View>
-  );
-}
-
 // A remark: `warn` for what may spoil a trip, `tip` for a useful extra,
 // `error` for a failure.
 const REMARK_GLYPHS = {
@@ -167,7 +147,7 @@ export function Remark({ tone, text }: { tone: "warn" | "tip" | "error"; text: s
 // A fold: a head that is always visible and a body that opens under it.
 // A group keeps one fold open: opening one closes the others (the mockup's
 // folds() rule), so the list never grows into a wall of text.
-export function Fold({ id, open, lead, title, meta, body, onToggle }: {
+export function Fold({ id, open, lead, title, meta, body, onToggle, trailingAction }: {
   id: string;
   open: boolean;
   lead?: ReactNode;
@@ -175,17 +155,17 @@ export function Fold({ id, open, lead, title, meta, body, onToggle }: {
   // The muted line under the title — a word or a facts row (the ride cards).
   meta?: ReactNode;
   body: ReactNode;
+  trailingAction?: ReactNode;
   onToggle: (id: string, open: boolean) => void;
 }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
-  return (
-    <View style={styles.fold}>
+  const header = (
       <PressableSurface
         accessibilityRole="button"
         accessibilityLabel={title}
         accessibilityState={{ expanded: open }}
         onPress={() => onToggle(id, !open)}
-        style={styles.foldHead}
+        style={[styles.foldHead, trailingAction ? styles.foldHeadWithAction : null]}
         testID={`fold-${id}`}
       >
         {lead}
@@ -193,10 +173,16 @@ export function Fold({ id, open, lead, title, meta, body, onToggle }: {
           <ScaledText style={styles.foldName}>{title}</ScaledText>
           {typeof meta === "string" ? <ScaledText style={styles.foldMeta}>{meta}</ScaledText> : meta}
         </View>
-        <View style={[styles.foldChevron, open ? styles.foldChevronOpen : null]} pointerEvents="none">
-          <CanonIcon glyph={ChevronDownIcon} label={title} size={20} />
-        </View>
+        {trailingAction ? null : (
+          <View style={[styles.foldChevron, open ? styles.foldChevronOpen : null]} pointerEvents="none">
+            <CanonIcon glyph={ChevronDownIcon} label={title} size={20} />
+          </View>
+        )}
       </PressableSurface>
+  );
+  return (
+    <View style={styles.fold}>
+      {trailingAction ? <View style={styles.foldHeaderRow}>{header}{trailingAction}</View> : header}
       {open ? <View style={styles.foldBody}>{body}</View> : null}
     </View>
   );
@@ -257,12 +243,13 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     flexDirection: "row",
   },
   stepSpaced: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   stepNumberBox: {
     alignItems: "center",
     alignSelf: "stretch",
     width: 32,
+    paddingTop: 10,
   },
   stepNumber: {
     alignItems: "center",
@@ -287,12 +274,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     flex: 1,
     gap: 10,
     minWidth: 0,
-  },
-  stepTitle: {
-    color: palette.colorInk,
-    fontSize: 17,
-    fontWeight: tokens.fontWeightStrong,
-    lineHeight: 22,
   },
   linePlate: {
     alignItems: "center",
@@ -358,31 +339,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     color: palette.colorInk,
     fontSize: 16,
   },
-  priceRow: {
-    borderTopColor: palette.colorLine,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    columnGap: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 8,
-  },
-  priceName: {
-    color: palette.colorInk,
-    flexShrink: 1,
-    fontSize: 16,
-  },
-  priceValue: {
-    alignItems: "flex-end",
-  },
-  priceSum: {
-    color: palette.colorInk,
-    fontSize: 16,
-    fontWeight: tokens.fontWeightStrong,
-  },
-  priceReduced: {
-    color: palette.colorMuted,
-    fontSize: 12,
-  },
   remark: {
     borderRadius: tokens.radiusBase,
     columnGap: 8,
@@ -427,6 +383,8 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
+  foldHeaderRow: { flexDirection: "row", alignItems: "flex-start", paddingRight: 8 },
+  foldHeadWithAction: { flex: 1, minWidth: 0, minHeight: 64, paddingRight: 4 },
   foldTitle: {
     flex: 1,
     minWidth: 0,

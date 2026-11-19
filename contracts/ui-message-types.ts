@@ -239,19 +239,15 @@ export interface AboutCityStrings {
     readonly transport: string;
     readonly city: string;
     readonly food: string;
-    readonly card: string;
   };
   readonly head: {
     readonly airport: string;
     readonly transport: string;
     readonly city: string;
     readonly food: string;
-    readonly card: string;
   };
-  readonly verified: string;
   readonly sources: {
     readonly title: string;
-    readonly note: string;
   };
   // The device could not open the page: its address stays on the screen.
   readonly link: {
@@ -262,8 +258,6 @@ export interface AboutCityStrings {
     readonly everyWeekdays: (n: number) => string;
     readonly hourly: string;
     readonly aboutHourly: string;
-    readonly reduced: (price: string) => string;
-    readonly decimal: string;
   };
   readonly sr: {
     readonly bus: string;
@@ -304,7 +298,6 @@ export interface AboutCityStrings {
         readonly where: string;
       };
     };
-    readonly notice: string;
     // The map's airport card: how the airport ties to the city and the way
     // back to the airport section (#303, the mockup's air.map / air.map.go).
     readonly map: string;
@@ -347,15 +340,9 @@ export interface AboutCityStrings {
     readonly toWrzeszcz: string;
     readonly operator: string;
   };
-  readonly tk: {
-    readonly "75": string;
-    readonly singleRide: string;
-    readonly day24: string;
-    readonly "72h": string;
-    readonly night: string;
-  };
   readonly tr: {
     readonly modes: string;
+    readonly residents: string;
     readonly ztm: {
       readonly title: string;
       readonly meta: string;
@@ -506,53 +493,13 @@ export interface AboutCityStrings {
   readonly card: {
     readonly title: string;
     readonly lead: string;
-    readonly duration: string;
-    readonly hours: (n: number) => string;
-    readonly odkrywca: {
-      readonly entries: string;
-      readonly list: string;
-    };
-    readonly premium: {
-      readonly entries: string;
-      readonly list: string;
-    };
-    readonly smaki: string;
-    readonly transport: {
-      readonly title: string;
-      readonly meta: string;
-      readonly text: string;
-    };
-    readonly freeHeading: string;
-    readonly day: string;
-    readonly free: {
-      readonly badge: string;
-    };
-    readonly closed: {
-      readonly badge: string;
-    };
-    readonly mon: {
-      readonly gdanska: string;
-      readonly ww2: string;
-    };
-    readonly tue: {
-      readonly ww2: string;
-      readonly gdanska: string;
-    };
-    readonly other: string;
-    readonly notice: string;
+    readonly brandAlt: string;
+    readonly openOfficial: (name: string) => string;
   };
-  readonly museum: {
-    readonly gdanska: string;
-    readonly ww2: string;
-  };
-  readonly day: {
-    readonly "1": string;
-    readonly "2": string;
-    readonly "3": string;
-    readonly "4": string;
-    readonly "5": string;
-    readonly "6": string;
-    readonly "7": string;
+  readonly resident: {
+    readonly title: string;
+    readonly lead: string;
+    readonly openOfficial: (name: string) => string;
   };
   readonly links: {
     readonly airportBuses: string;
@@ -560,8 +507,6 @@ export interface AboutCityStrings {
     readonly ztmSchedule: string;
     readonly skmSearch: string;
     readonly kartaTurysty: string;
-    readonly muzeumGdanska: string;
-    readonly muzeum1939: string;
     readonly pysznePayment: string;
     readonly blikHow: string;
   };

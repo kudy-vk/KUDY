@@ -2505,15 +2505,6 @@
       }
     },
     {
-      "id": "native.aboutCity.tab.card",
-      "value": "Card and museums",
-      "reviewedSourceHash": "1068369a3eedad9845ed1affa359e73fe02d5631f362445ddf08ba844514f6f3",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
       "id": "native.aboutCity.head.airport",
       "value": "To and from the airport",
       "reviewedSourceHash": "456ad27870b31e81ce7a84897a438370a4f0fd0b88bf1a0eb93310801fab6fbc",
@@ -2544,42 +2535,6 @@
       "id": "native.aboutCity.head.food",
       "value": "Food and payment",
       "reviewedSourceHash": "50ac656520b81dd37c5a908c4cd2a25ec8fbd99ca2afdba460839543dfc96516",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.head.card",
-      "value": "Tourist card and free museum days",
-      "reviewedSourceHash": "ead63d1f833542bd3076214630969744d3fa38be4e0258f2cff30941f91d2481",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.verified",
-      "value": "Checked on 10 November 2026",
-      "reviewedSourceHash": "4ef5f398765c20be598a9e0ecb1a915f38401a4651284ce7bfbd43d3f9c7a440",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.sources.title",
-      "value": "Official pages",
-      "reviewedSourceHash": "fa1df8b472311042eb3b01a78071ab1f1e0dc0e7cda3f8082952da18ae842363",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.sources.note",
-      "value": "Timetables, prices and opening hours change. Links open in the browser and need a connection; the guide itself works offline.",
-      "reviewedSourceHash": "de1add891b3bc0d1188a3cd53c568021a222d6b63d7052777a80800159f28e7f",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -2625,15 +2580,6 @@
       "id": "native.aboutCity.u.aboutHourly",
       "value": "about hourly",
       "reviewedSourceHash": "a7f0f61e870a2ce673608d279b4b4261430c69688e5a9f86746d990305c9b3dc",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.u.reduced",
-      "value": "reduced ${price}",
-      "reviewedSourceHash": "2b95c962ba4780b83c0c8f0f83768bde34a65eaf938143cb2e98af263407ca8d",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -3021,60 +2967,6 @@
       "id": "native.aboutCity.air.ticket.train.where",
       "value": "The city ZTM ticket is not valid on the train. Buy a rail ticket at the platform machine or in the Polregio, Jakdojade or FALA app.",
       "reviewedSourceHash": "f2d485b4b07d00b0d2c4f1db94153c8a34f995ad1ea04b3aca7ddf1ca9d5c7ef",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.tk.singleRide",
-      "value": "One ride",
-      "reviewedSourceHash": "dffae6c8d783d37f60db26708e31cd3b309a6b984fad36b6eab28de1d2b328ca",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.tk.75",
-      "value": "75 minutes",
-      "reviewedSourceHash": "c58f1ed3401207570471139888d3fd93ab5fcbcc57db1d3da2ac52acb8544434",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.tk.day24",
-      "value": "24 hours",
-      "reviewedSourceHash": "16d30412ffb509046a58a78efa00ced1e071292b5f1654c3cff61faf8c2213a4",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.tk.72h",
-      "value": "72 hours",
-      "reviewedSourceHash": "903a406079e9ae95802981022603e90fd8602930dcc42cfd8e51c924f8b98587",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.tk.night",
-      "value": "Night buses cost the same.",
-      "reviewedSourceHash": "0930ea5cbad721d8e5cbdf70e89e2c74bf6e9dba7d3a97dc188e6b326b0e57ac",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.air.notice",
-      "value": "Until 12 December 2026 trains run on a temporary timetable; the regular one starts on 13 December 2026. Bus timetables change with the season — check the live timetable before you go.",
-      "reviewedSourceHash": "3ab63b74e96c93d1cf377b47b80ae3273a3849ceed5122a17bada3894847fe38",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -3576,285 +3468,6 @@
       }
     },
     {
-      "id": "native.aboutCity.card.lead",
-      "value": "A pass with free entries. Prices for November 2026.",
-      "reviewedSourceHash": "79bf056536437f0eb48cfa6c75b2ede55955a36119060684196761cb37f3f189",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.duration",
-      "value": "Valid for",
-      "reviewedSourceHash": "5e348627c2416eb5a626f6a457f465b9322f5a6a82a8aa1df3c24ca471a2533c",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.hours",
-      "value": "${n} h",
-      "reviewedSourceHash": "6f42a2df147fa403b281d827a8c815d217b838ece0ef4a448a340ec9f8484570",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.odkrywca.entries",
-      "value": "13 free entries",
-      "reviewedSourceHash": "7c31fc5aea14b038dd483667164b8bb0a0252c498f0d608966255dfa948330e6",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.odkrywca.list",
-      "value": "Among them: the Main Town Hall, the Amber Museum, Hevelianum, the zoo and the National Maritime Museum.",
-      "reviewedSourceHash": "dc3ae5578dfbeadaf8ff1c707d1d3b8ffe729a0c2188b8a3b3226e608bd08dd8",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.premium.entries",
-      "value": "23 free entries",
-      "reviewedSourceHash": "583dc9d73ea5231ea15e30be8d9285d7e8468bd60041c459c327a20a63c5c642",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.premium.list",
-      "value": "Everything in Odkrywca plus Artus Court, the Museum of the Second World War, the European Solidarity Centre, the Crane and more.",
-      "reviewedSourceHash": "216f1ddee674cde986a22ab1a7a5f3a3efcc85f6c49925a950931311d3addc6b",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.smaki",
-      "value": "Smaki Gdańska Duet — a food pass for two, valid for 30 days.",
-      "reviewedSourceHash": "6369365be4179c35f782cbb71740ea200a672d398d1a6c08014ea21656f8edda",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.transport.title",
-      "value": "Add transport",
-      "reviewedSourceHash": "f146d3b7a48ad9d5a30e2ec1c6fab7c2d801c40c17c6cd025dce570fa57033ae",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.transport.meta",
-      "value": "Bilet Metropolitalny",
-      "reviewedSourceHash": "934671728bd789b27831051b9e5c1a82641fcba3191c99b8668f8a989da55533",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.transport.text",
-      "value": "Transport is bought on top of the pass: buses, trams, SKM and POLREGIO trains in the metropolitan area. The pass and the ticket can be activated on different days.",
-      "reviewedSourceHash": "0ab59472be761f0eb08a5d121f74fedff78b858f31d11b5460bacdd85def2806",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.freeHeading",
-      "value": "Free museum days without the card",
-      "reviewedSourceHash": "39e803c857004f837409f359d27e7c24606f8d80143913b9d43621b64d88064d",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.day",
-      "value": "Day of the week",
-      "reviewedSourceHash": "379b183e77b05e0eda787f7d7127c0e08ffd0862fa6a895b0c546cf42a69498a",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.free.badge",
-      "value": "free",
-      "reviewedSourceHash": "cb871ef5de799be172906069b2d2f74bd4308ffbd29d3ef00884e451b910dd68",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.closed.badge",
-      "value": "closed",
-      "reviewedSourceHash": "3ce9da3cf0e7453ffb50b5e16b34b86f9ddf15f8c926f31468dca72e51c7b509",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.museum.gdanska",
-      "value": "Muzeum Gdańska",
-      "reviewedSourceHash": "4980db5a170744902f3ecced3f4090ad6f373fcd2c5ae8b5fae589f13e8231d9",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.museum.ww2",
-      "value": "Museum of the Second World War",
-      "reviewedSourceHash": "c40d554dea893e51ed68c7d629a4b8a1ebbb068bb08692f6bce8998b885a81e6",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.mon.gdanska",
-      "value": "Main Town Hall, Artus Court and Uphagen House 10:00 – 16:00, Amber Museum 10:00 – 18:00.",
-      "reviewedSourceHash": "343e78532c5df72e0513e1701389224d44b6e917279b933441aabad28e842df4",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.mon.ww2",
-      "value": "Usually closed on Mondays.",
-      "reviewedSourceHash": "f6ff5d3ef1450ffa93c6574594f7f1e3b4120bcabd72e052d1ae01b19f61f72f",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.tue.ww2",
-      "value": "All exhibitions. The 0 zł ticket is issued only at the ticket desk on the day of the visit, no later than an hour before closing; free tickets cannot be booked online.",
-      "reviewedSourceHash": "67fccab96c8f861450c9b5f644a683c8355fc3090d2c6b512f8df6d0572a83f5",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.tue.gdanska",
-      "value": "The main branches are closed on Tuesdays.",
-      "reviewedSourceHash": "fa99c29c1bdffad44e0961af99d559268130f8753965b7a68cec7ec7b74c7c56",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.other",
-      "value": "These two museums have no regular free entry on this day.",
-      "reviewedSourceHash": "a167d3738cbe71c37e1d1f1df292a7aaba7d56a6a31b739c51bc4690223f3448",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.1",
-      "value": "Mon",
-      "reviewedSourceHash": "56238efc14c631ab394d5090a0ae28795be44622988b1ded44fab0e3639c6d70",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.2",
-      "value": "Tue",
-      "reviewedSourceHash": "2ceed1d728570890820c261f62ccfc970dc9479ceaf744bde76a4ac5f2c881c9",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.3",
-      "value": "Wed",
-      "reviewedSourceHash": "b3d53dca9a5809be46808477ef824afa7ecff5d38aa28467affa94ed190acd9e",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.4",
-      "value": "Thu",
-      "reviewedSourceHash": "2b0270a1605b2d7a2d831a7fa505bb8f2bfd5a3977456fe37de1893135ce6bdb",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.5",
-      "value": "Fri",
-      "reviewedSourceHash": "341f3557756d4db558409c94c0bcf0730316e72e133f4e9d406bf59e21f27aba",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.6",
-      "value": "Sat",
-      "reviewedSourceHash": "9a9fe85c9eebd1e8dcd687a4d3e295f027346f1d89a14fd861b1a31e727d0bf8",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.day.7",
-      "value": "Sun",
-      "reviewedSourceHash": "aa616bfb614100357af9df403e4200b87dde6ace42e37f84c343caaeb81c89d3",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.u.decimal",
-      "value": ".",
-      "reviewedSourceHash": "9adf5687a4609e5bb6cec922922840a2dee6ffd53deaef990965aaed125f1018",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.card.notice",
-      "value": "On a free day some temporary exhibitions may be closed, and on public and church holidays museums change their hours. Check each museum’s official page.",
-      "reviewedSourceHash": "6ee83fd1a7c3b316907c938a0c2f29b8eb27785bdee1da8f5b9dcd7e0951589f",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
       "id": "native.aboutCity.links.airportBuses",
       "value": "Buses to and from the airport — airport.gdansk.pl",
       "reviewedSourceHash": "331a6185ad8170919405627b22e1923e6477e2c70213cf00a5ecabc5d1907f4a",
@@ -3885,33 +3498,6 @@
       "id": "native.aboutCity.links.skmSearch",
       "value": "SKM connection search",
       "reviewedSourceHash": "77a54c1011e4d174a448201692c2fd362a381bfbe730e8175730b1e583c38776",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.links.kartaTurysty",
-      "value": "Karta Turysty — packages and prices",
-      "reviewedSourceHash": "44e2300ecbce6d9dcd567a246c03078d5c07ad5c625d4c1976a463ad633f742a",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.links.muzeumGdanska",
-      "value": "Muzeum Gdańska — free entry",
-      "reviewedSourceHash": "3bee5ab4b298b927fd3111f3301a84977d8256bf800988e1e57deda93853ae70",
-      "review": {
-        "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
-      }
-    },
-    {
-      "id": "native.aboutCity.links.muzeum1939",
-      "value": "Museum of the Second World War — visiting rules",
-      "reviewedSourceHash": "f48e0afc0a0512abc4a87d4a274a00b873f1b4d354ed02fcaa382e288a9adbc8",
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
@@ -4329,6 +3915,87 @@
       "review": {
         "outcome": "approved",
         "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні M12–M13, #248; набор слоў — about-words-*.mjs макета, #303; апісанні зон зведзеныя з карткамі раёнаў #300)."
+      }
+    },
+    {
+      "id": "native.aboutCity.sources.title",
+      "value": "Official links",
+      "reviewedSourceHash": "dd504d36958462488f93482663a6d92d205c9c88cb2570e778569836b063bdc6",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.tr.residents",
+      "value": "For Gdańsk residents",
+      "reviewedSourceHash": "5a786b7676c0f201d018d172bc7b0f463ed1118bdd4e9bd5415b00590aff4829",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.resident.title",
+      "value": "Jestem z Gdańska",
+      "reviewedSourceHash": "2ce51f65e06e3b01446e8c9941e15c8a001f534f4a3e369c7dfe779f653ad86e",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.resident.lead",
+      "value": "The resident card offers city benefits and transport-related services. Check current tickets, eligibility and terms on the official website.",
+      "reviewedSourceHash": "107829bb5c6600bb013174e5e68e96dd200878c18b0e88893d7c50ad6f2f8caf",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.resident.openOfficial",
+      "value": "Open official website: ${name}",
+      "reviewedSourceHash": "97ea2b5e472d9c9e067d8160d6f0c27dce0ed1f44f7eb86a981eb080773a174e",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.brandAlt",
+      "value": "Gdańska Karta Turysty logo",
+      "reviewedSourceHash": "257aa51e0105ae67ef8dc5dc8df44af17029f5076f41ce1e2ed255adff45b266",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.lead",
+      "value": "Gdańsk’s tourist card gives access to museums and other attractions included in the chosen package. A transport ticket can be purchased separately and is not part of the main package. Check current options and terms on the official website.",
+      "reviewedSourceHash": "8dc710fb4b5ee27098def447d67b11de94ae189c7028e79620fef6a99a8a0885",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.card.openOfficial",
+      "value": "Open official website: ${name}",
+      "reviewedSourceHash": "6212ff916e5e16c29938d03c624124cd89258b1fa64b5e0737a0dba238984fd7",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.links.kartaTurysty",
+      "value": "Karta Turysty — official packages and terms",
+      "reviewedSourceHash": "ba55d8c691dbeaf1160ba790414beae8fda83817593203db9df38a81e5f7b5b6",
+      "review": {
+        "outcome": "approved",
+        "note": "Даслоўна з макета #257; перанос #334."
       }
     }
   ]

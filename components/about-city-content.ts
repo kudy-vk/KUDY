@@ -10,7 +10,6 @@ import BusIcon from "lucide-react-native/icons/bus";
 import ClockIcon from "lucide-react-native/icons/clock";
 import CompassIcon from "lucide-react-native/icons/compass";
 import FootprintsIcon from "lucide-react-native/icons/footprints";
-import LandmarkIcon from "lucide-react-native/icons/landmark";
 import MapIcon from "lucide-react-native/icons/map";
 import MapPinIcon from "lucide-react-native/icons/map-pin";
 import MoonIcon from "lucide-react-native/icons/moon";
@@ -25,7 +24,7 @@ import UtensilsCrossedIcon from "lucide-react-native/icons/utensils-crossed";
 import type { AboutCityStrings } from "../contracts/ui-message-types";
 import type { CanonGlyph } from "./canon-icon";
 
-export type AboutCitySectionId = "airport" | "transport" | "city" | "food" | "card";
+export type AboutCitySectionId = "airport" | "transport" | "city" | "food";
 export type AboutCityLinkKey = keyof AboutCityStrings["links"];
 
 // One official URL per link label; a change to a URL is a change to the
@@ -36,12 +35,11 @@ export const ABOUT_CITY_LINK_URLS = {
   airportTrains: "https://www.airport.gdansk.pl/en/before-travel/getting-to-the-airport/train",
   ztmSchedule: "https://ztm.gda.pl/rozklady",
   skmSearch: "https://www.skm.pkp.pl/dla-pasazera/wyszukaj-polaczenie",
-  kartaTurysty: "https://kartaturysty.visitgdansk.com/cennik",
-  muzeumGdanska: "https://muzeumgdansk.pl/wizyta-w-muzeum-gdanska/free-entrance/?L=1",
-  muzeum1939: "https://www.muzeum1939.pl/en/visit-and-tickets/wwii-museum-visit/sightseeing/visiting-rules",
+  kartaTurysty: "https://kartaturysty.visitgdansk.com/pl/pakiety",
+  jestemZGdanska: "https://jestemzgdanska.pl/",
   pysznePayment: "https://www.pyszne.pl/obsluga-klienta/artykul/z-jakich-metod-platnosci-moge-skorzystac-pl",
   blikHow: "https://www.blik.com/en/how-to-use-blik",
-} satisfies Record<AboutCityLinkKey, string>;
+} satisfies Record<AboutCityLinkKey | "jestemZGdanska", string>;
 
 // The ticket apps the transport section opens, in the owner's order
 // (issue #254, 2026-11-16): jakdojade first, then FALA, then KomPas. The
@@ -53,7 +51,7 @@ export const ABOUT_CITY_APPS = [
   { key: "kompas", url: "https://skm.pkp.pl", glyph: CompassIcon },
 ] as const satisfies readonly { key: string; url: string; glyph: CanonGlyph }[];
 
-// The carousel, in its order (decision M10 — five sections; «Побач з
+// The carousel, in its order (decision M14 — four sections; «Побач з
 // горадам» moved to the main menu). «Аэрапорт» comes first: it is what a
 // visitor who just landed needs. The official pages each section sends the
 // reader to, in reading order, ride beside it; the map section has none
@@ -63,7 +61,6 @@ export const ABOUT_CITY_SECTIONS = [
   { id: "transport", icon: TramFrontIcon, links: ["ztmSchedule", "skmSearch"] },
   { id: "city", icon: MapIcon, links: [] },
   { id: "food", icon: UtensilsCrossedIcon, links: ["pysznePayment", "blikHow"] },
-  { id: "card", icon: LandmarkIcon, links: ["kartaTurysty", "muzeumGdanska", "muzeum1939"] },
 ] as const satisfies readonly { id: AboutCitySectionId; icon: CanonGlyph; links: readonly AboutCityLinkKey[] }[];
 
 // The signs the ride facts and the airport steps use; a fact names its sign
@@ -149,17 +146,6 @@ export const ABOUT_CITY_RIDES: readonly AboutCityRide[] = [
   },
 ] as const;
 
-// Ticket prices in złoty: [name key, full price, reduced price]. Only the
-// airport's bus-ticket list and the tourist card's transport add-on keep
-// their prices; the transport section itself shows none — the owner moved
-// every fare detail to the apps and official pages (issue #254, 2026-11-16).
-export const ABOUT_CITY_PRICES = {
-  ztm: [["tk.singleRide", 4.8, 2.4], ["tk.75", 6, 3], ["tk.day24", 22, 11]],
-  cardTransport: [["tk.day24", 34, 17], ["tk.72h", 68, 34]],
-} as const satisfies Record<string, readonly (readonly [key: string, full: number, reduced: number | null])[]>;
-
-export type AboutCityPriceZone = keyof typeof ABOUT_CITY_PRICES;
-
 // Delivery services and the payment methods their official pages confirm.
 export const ABOUT_CITY_PAY_METHODS = ["card", "blik", "cash", "apple", "google", "paypal"] as const;
 export type AboutCityPayMethod = (typeof ABOUT_CITY_PAY_METHODS)[number];
@@ -177,20 +163,6 @@ export const ABOUT_CITY_DELIVERY: readonly AboutCityDelivery[] = [
   { name: "Uber Eats", pay: ["card", "blik", "apple"] },
   { name: "Bolt Food", pay: ["card", "cash"], note: "food.bolt.note" },
 ];
-
-// Gdańska Karta Turysty, November 2026: [full, reduced] per validity in hours.
-export const ABOUT_CITY_CARD_HOURS = [24, 48, 72] as const;
-export const ABOUT_CITY_CARD_PACKAGES = [
-  { id: "odkrywca", name: "Odkrywca", prices: { 24: [75, 60], 48: [85, 70], 72: [95, 80] } },
-  { id: "premium", name: "Odkrywca Premium", prices: { 24: [90, 70], 48: [110, 85], 72: [130, 100] } },
-] as const;
-export const ABOUT_CITY_CARD_SMAKI_PRICE = 216;
-
-// Free museum days: weekday (1 = Monday) → lines of [state, museum key, text key].
-export const ABOUT_CITY_FREE_DAYS: Readonly<Record<number, readonly (readonly ["free" | "closed", string, string])[]>> = {
-  1: [["free", "museum.gdanska", "card.mon.gdanska"], ["closed", "museum.ww2", "card.mon.ww2"]],
-  2: [["free", "museum.ww2", "card.tue.ww2"], ["closed", "museum.gdanska", "card.tue.gdanska"]],
-};
 
 // The guide's word resolver over the generated catalogue's nested shape: a
 // key walks the path, a template calls its function, an unknown key is an
@@ -225,13 +197,4 @@ export function aboutCityText(strings: AboutCityStrings): AboutCityText {
     if (typeof node !== "string") throw new Error(`no guide text: ${key}`);
     return node;
   };
-}
-
-// A price in złoty in the guide language: «4,80 zł» / “4.80 zł”. `cents`
-// shows grosze even for a whole sum, so one price list keeps one shape —
-// the priceRows rule of the mockup.
-export function aboutCityMoney(strings: AboutCityStrings, amount: number, cents?: boolean): string {
-  const showCents = cents ?? !Number.isInteger(amount);
-  const sum = showCents ? amount.toFixed(2).replace(".", strings.u.decimal) : String(amount);
-  return `${sum} zł`;
 }

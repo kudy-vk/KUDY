@@ -1,12 +1,14 @@
-// Issue #252 — the five «Пра горад» section bodies, the typed port of the
+// Issue #252 — the four «Пра горад» section bodies, the typed port of the
 // mockup's about.mjs builders (docs/design/production/, #202 approved
 // 2026-11-12). Each section is facts, not paragraphs: steps, rides with
-// their numbers, price rows, folds, switches. The visitor's choices inside
+// their numbers, folds, switches. The visitor's choices inside
 // the sections ride `ui` and survive a section switch; the fold groups keep
 // one fold open (the mockup's folds() rule). The map section is the #303
 // illustrated Tricity map (components/about-city-map.tsx).
 import { Fragment, type ReactNode } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import HouseIcon from "lucide-react-native/icons/house";
+import { AirportDirection } from "./about-city-direction";
 import BusIcon from "lucide-react-native/icons/bus";
 import CreditCardIcon from "lucide-react-native/icons/credit-card";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
@@ -17,22 +19,17 @@ import TrainFrontIcon from "lucide-react-native/icons/train-front";
 
 import {
   ABOUT_CITY_APPS,
-  ABOUT_CITY_CARD_HOURS,
-  ABOUT_CITY_CARD_PACKAGES,
-  ABOUT_CITY_CARD_SMAKI_PRICE,
   ABOUT_CITY_DELIVERY,
   ABOUT_CITY_FACT_ICONS,
-  ABOUT_CITY_FREE_DAYS,
   ABOUT_CITY_PAY_METHODS,
-  ABOUT_CITY_PRICES,
   ABOUT_CITY_RIDES,
   aboutCityHasText,
-  aboutCityMoney,
+  ABOUT_CITY_LINK_URLS,
   type AboutCityPayMethod,
   type AboutCitySectionId,
   type AboutCityText,
 } from "./about-city-content";
-import { DetailRows, Facts, Fold, LineBadge, PriceRows, Remark, Seg, Steps, SubHeading, Tile } from "./about-city-parts";
+import { DetailRows, Facts, Fold, LineBadge, Remark, Steps, SubHeading } from "./about-city-parts";
 import { CanonIcon, type CanonGlyph } from "./canon-icon";
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { PressableSurface } from "./pressable-surface";
@@ -46,8 +43,6 @@ import { ABOUT_CITY_ATLAS_INITIAL, AboutCityMap, type AboutCityAtlasState } from
 export type AboutCityUiState = {
   direction: "from" | "to";
   pay: "any" | AboutCityPayMethod;
-  hours: (typeof ABOUT_CITY_CARD_HOURS)[number];
-  day: number;
   folds: Record<string, boolean>;
   atlas: AboutCityAtlasState;
 };
@@ -55,8 +50,6 @@ export type AboutCityUiState = {
 export const ABOUT_CITY_INITIAL_UI: AboutCityUiState = {
   direction: "from",
   pay: "any",
-  hours: 24,
-  day: 1,
   // The first transport fold starts open, as the mockup says (open: true).
   folds: { "mode-ztm": true },
   atlas: ABOUT_CITY_ATLAS_INITIAL,
@@ -84,39 +77,25 @@ export type AboutCitySectionContext = {
   styles: AboutCitySectionStyles;
 };
 
-// The priceRows rule: one list, one shape — if any price has grosze, every
-// price shows them.
-function priceRows(ctx: AboutCitySectionContext, list: readonly (readonly [key: string, full: number, reduced: number | null])[]) {
-  const { t, strings } = ctx;
-  const cents = list.some(([, full, reduced]) => !Number.isInteger(full) || (reduced !== null && !Number.isInteger(reduced)));
-  return (
-    <PriceRows
-      rows={list.map(([name, full, reduced]) => [
-        t(name),
-        aboutCityMoney(strings, full, cents),
-        reduced === null ? null : t("u.reduced", { price: aboutCityMoney(strings, reduced, cents) }),
-      ])}
-    />
-  );
-}
-
 const AIRPORT_RIDE_IDS = ABOUT_CITY_RIDES.map((ride) => `ride-${ride.id}`);
 const TRANSPORT_MODE_IDS = ["mode-ztm", "mode-skm", "mode-rail"];
 const FOOD_PAY_IDS = ["pay-cards", "pay-blik"];
 const FOOD_PAY_OPTIONS: readonly ("any" | AboutCityPayMethod)[] = ["any", ...ABOUT_CITY_PAY_METHODS];
-const CARD_DAYS = [1, 2, 3, 4, 5, 6, 7];
 
 function airport(ctx: AboutCitySectionContext): ReactNode {
   const { t, ui, setUi, toggleFold, styles } = ctx;
   const way = ui.direction;
+  const stepIds = [1, 2, 3].map((n) => `airport-${way}-step-${n}`);
+  const rideIds = AIRPORT_RIDE_IDS.map((id) => `${way}-${id}`);
+  const step = (n: number, title: string, body: ReactNode) => [title, <Fold key={stepIds[n]} id={stepIds[n]} open={Boolean(ui.folds[stepIds[n]])} title={title} body={body} onToggle={(id, open) => toggleFold(stepIds, id, open)} />] as const;
   const rides = (
     <View style={styles.stack}>
       {ABOUT_CITY_RIDES.map((ride) => (
         <Fold
           key={ride.id}
-          id={`ride-${ride.id}`}
-          open={Boolean(ui.folds[`ride-${ride.id}`])}
-          onToggle={(id, open) => toggleFold(AIRPORT_RIDE_IDS, id, open)}
+          id={`${way}-ride-${ride.id}`}
+          open={Boolean(ui.folds[`${way}-ride-${ride.id}`])}
+          onToggle={(id, open) => toggleFold(rideIds, id, open)}
           lead={<LineBadge kind={ride.kind} line={ride.line} kindName={t(`sr.${ride.kind}`)} />}
           title={t(`ride.${ride.id}.${way}`)}
           meta={<Facts items={ride[way].facts.map(([sign, key, params]) => [ABOUT_CITY_FACT_ICONS[sign], t(key, params)])} />}
@@ -125,30 +104,21 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
       ))}
     </View>
   );
-  const ticket = (glyph: CanonGlyph, title: string, where: string, list?: typeof ABOUT_CITY_PRICES.ztm) => (
+  const ticket = (glyph: CanonGlyph, title: string, where: string) => (
     <View key={title} style={[styles.card, styles.ticket]}>
       <View style={styles.ticketHead}>
         <CanonIcon glyph={glyph} label={title} size={18} color={tokens.colorAccent} />
         <ScaledText style={styles.ticketTitle}>{title}</ScaledText>
       </View>
-      {list ? priceRows(ctx, list) : null}
-      {list ? <ScaledText style={styles.note}>{t("tk.night")}</ScaledText> : null}
       <ScaledText style={styles.note}>{where}</ScaledText>
     </View>
   );
   return (
     <>
-      <Seg
-        name="direction"
-        label={t("air.dirLabel")}
-        options={[["from", t("air.dirFrom")], ["to", t("air.dirTo")]]}
-        value={way}
-        onChange={(value) => setUi({ direction: value as AboutCityUiState["direction"] })}
-      />
+      <AirportDirection value={way} onChange={(direction) => setUi({ direction })} t={t} />
       <Steps
         items={[
-          [
-            t(`air.${way}.s1.title`),
+          step(0, t(`air.${way}.s1.title`),
             <Fragment key="s1">
               <ScaledText style={styles.text}>{t(`air.${way}.s1.text`)}</ScaledText>
               {way === "from" ? (
@@ -157,19 +127,15 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
                   <Facts items={[[ABOUT_CITY_FACT_ICONS["map-pin"], t("air.from.s1.stop02")]]} />
                 </View>
               ) : null}
-            </Fragment>,
-          ],
-          [t("air.s2.title"), rides],
-          [
-            t("air.s3.title"),
+            </Fragment>),
+          step(1, t("air.s2.title"), rides),
+          step(2, t("air.s3.title"),
             <View key="s3" style={styles.stack}>
-              {ticket(BusIcon, t("air.ticket.bus.title"), t("air.ticket.bus.where"), ABOUT_CITY_PRICES.ztm)}
+              {ticket(BusIcon, t("air.ticket.bus.title"), t("air.ticket.bus.where"))}
               {ticket(TrainFrontIcon, t("air.ticket.train.title"), t("air.ticket.train.where"))}
-            </View>,
-          ],
+            </View>),
         ]}
       />
-      <Remark tone="warn" text={t("air.notice")} />
     </>
   );
 }
@@ -232,6 +198,8 @@ function transport(ctx: AboutCitySectionContext): ReactNode {
         )}
         {fold("mode-rail", TRANSPORT_MODE_IDS, RouteIcon, t("tr.rail.title"), <ScaledText style={styles.text}>{t("tr.rail.text")}</ScaledText>, t("tr.rail.meta"))}
       </View>
+      <SubHeading>{t("tr.residents")}</SubHeading>
+      <ResidentCard ctx={ctx} />
       <SubHeading>{t("tr.buyLabel")}</SubHeading>
       <View style={styles.stack}>{ABOUT_CITY_APPS.map(appRow)}</View>
     </>
@@ -335,96 +303,53 @@ function food(ctx: AboutCitySectionContext): ReactNode {
   );
 }
 
-function card(ctx: AboutCitySectionContext): ReactNode {
-  const { t, ui, setUi, toggleFold, strings, styles } = ctx;
-  const pack = (item: (typeof ABOUT_CITY_CARD_PACKAGES)[number]) => {
-    const [full, reduced] = item.prices[ui.hours];
-    return (
-      <View key={item.id} style={[styles.card, styles.pack]}>
-        <View style={styles.packHead}>
-          <ScaledText style={styles.packName}>{item.name}</ScaledText>
-          <View style={styles.packPrice}>
-            <ScaledText style={styles.packSum}>{aboutCityMoney(strings, full)}</ScaledText>
-            <ScaledText style={styles.packReduced}>{t("u.reduced", { price: aboutCityMoney(strings, reduced) })}</ScaledText>
-          </View>
-        </View>
-        <ScaledText style={[styles.tag, styles.tagFree]}>{t(`card.${item.id}.entries`)}</ScaledText>
-        <ScaledText style={styles.note}>{t(`card.${item.id}.list`)}</ScaledText>
-      </View>
-    );
-  };
-  const dayLines = ABOUT_CITY_FREE_DAYS[ui.day];
+function OfficialCardLink({ ctx, kind, url }: {
+  ctx: AboutCitySectionContext;
+  kind: "card" | "resident";
+  url: string;
+}) {
+  const { t, openLink, styles } = ctx;
+  const label = t(`${kind}.openOfficial`, { name: t(`${kind}.title`) });
   return (
-    <>
-      <SubHeading>{t("card.title")}</SubHeading>
-      <ScaledText style={styles.text}>{t("card.lead")}</ScaledText>
-      <Seg
-        name="hours"
-        label={t("card.duration")}
-        options={ABOUT_CITY_CARD_HOURS.map((hours) => [String(hours), t("card.hours", { n: hours })])}
-        value={String(ui.hours)}
-        onChange={(value) => setUi({ hours: Number(value) as AboutCityUiState["hours"] })}
-      />
-      {ABOUT_CITY_CARD_PACKAGES.map(pack)}
-      <View style={[styles.card, styles.pack]}>
-        <View style={styles.packHead}>
-          <ScaledText style={styles.packName}>{t("card.smaki")}</ScaledText>
-          <ScaledText style={styles.packSum}>{aboutCityMoney(strings, ABOUT_CITY_CARD_SMAKI_PRICE)}</ScaledText>
-        </View>
-      </View>
-      <Fold
-        id="card-transport"
-        open={Boolean(ui.folds["card-transport"])}
-        onToggle={(id, open) => toggleFold(["card-transport"], id, open)}
-        lead={<CanonIcon glyph={TramFrontIcon} label={t("card.transport.title")} size={22} color={tokens.colorAccent} />}
-        title={t("card.transport.title")}
-        meta={t("card.transport.meta")}
-        body={
-          <View style={styles.stack}>
-            <ScaledText style={styles.text}>{t("card.transport.text")}</ScaledText>
-            {priceRows(ctx, ABOUT_CITY_PRICES.cardTransport)}
-          </View>
-        }
-      />
-      <SubHeading>{t("card.freeHeading")}</SubHeading>
-      <View accessibilityLabel={t("card.day")} style={styles.week}>
-        {CARD_DAYS.map((day) => {
-          const free = (ABOUT_CITY_FREE_DAYS[day] ?? []).some(([state]) => state === "free");
-          return (
-            <PressableSurface
-              key={day}
-              accessibilityRole="button"
-              accessibilityLabel={t(`day.${day}`)}
-              accessibilityState={{ selected: day === ui.day }}
-              onPress={() => setUi({ day })}
-              style={[styles.weekDay, day === ui.day ? styles.weekDaySelected : null]}
-              testID={`card-day-${day}`}
-            >
-              <ScaledText style={[styles.weekDayText, day === ui.day ? styles.chipSelectedText : null]}>{t(`day.${day}`)}</ScaledText>
-              {free ? <View style={[styles.weekDot, day === ui.day ? styles.weekDotSelected : null]} /> : null}
-            </PressableSurface>
-          );
-        })}
-      </View>
-      <View style={[styles.card, styles.place]} accessibilityLiveRegion="polite">
-        {dayLines ? dayLines.map(([state, museum, key]) => (
-          <Fragment key={key}>
-            <View style={styles.placeHead}>
-              <ScaledText style={styles.dayMuseum}>{t(museum)}</ScaledText>
-              <ScaledText style={[styles.tag, state === "free" ? styles.tagFree : null]}>{t(`card.${state}.badge`)}</ScaledText>
-            </View>
-            <ScaledText style={styles.text}>{t(key)}</ScaledText>
-          </Fragment>
-        )) : (
-          <ScaledText style={styles.note}>{t("card.other")}</ScaledText>
-        )}
-      </View>
-      <Remark tone="warn" text={t("card.notice")} />
-    </>
+    <PressableSurface accessibilityRole="link" accessibilityLabel={label} onPress={() => openLink(url)}
+      style={styles.officialButton} testID={`official-${kind}`}>
+      <CanonIcon glyph={ExternalLinkIcon} label={label} size={20} />
+    </PressableSurface>
   );
 }
 
-const BUILD: Record<AboutCitySectionId, (ctx: AboutCitySectionContext) => ReactNode> = { airport, transport, city, food, card };
+export function TouristCard({ context }: { context: Omit<AboutCitySectionContext, "styles"> }) {
+  const styles = useThemeStyles(lightStyles, darkStyles);
+  const ctx = { ...context, styles };
+  const { t, ui, toggleFold } = ctx;
+  return (
+    <View testID="about-tourist-card">
+      <Fold id="tourist-card" open={Boolean(ui.folds["tourist-card"])}
+        lead={<View style={styles.brandSymbol}><ScaledText style={styles.brandText} accessibilityLabel={t("card.brandAlt")}>KT</ScaledText></View>}
+        title={t("card.title")} body={<ScaledText style={styles.note}>{t("card.lead")}</ScaledText>}
+        onToggle={(id, open) => toggleFold([id], id, open)}
+        trailingAction={<OfficialCardLink ctx={ctx} kind="card" url={ABOUT_CITY_LINK_URLS.kartaTurysty} />} />
+    </View>
+  );
+}
+
+function ResidentCard({ ctx }: { ctx: AboutCitySectionContext }) {
+  const { t, styles } = ctx;
+  return (
+    <View style={[styles.card, styles.stack]} testID="about-resident-card">
+      <View style={styles.briefRow}>
+        <View style={[styles.ticketHead, styles.briefContent]}>
+          <View style={styles.residentSymbol}><CanonIcon glyph={HouseIcon} label={t("resident.title")} size={24} /></View>
+          <ScaledText style={[styles.ticketTitle, styles.briefContent]}>{t("resident.title")}</ScaledText>
+        </View>
+        <OfficialCardLink ctx={ctx} kind="resident" url={ABOUT_CITY_LINK_URLS.jestemZGdanska} />
+      </View>
+      <ScaledText style={styles.note}>{t("resident.lead")}</ScaledText>
+    </View>
+  );
+}
+
+const BUILD: Record<AboutCitySectionId, (ctx: AboutCitySectionContext) => ReactNode> = { airport, transport, city, food };
 
 // The open section under the wheel. `ui` keeps what the visitor chose.
 export function AboutCitySection({ id, ctx }: {
@@ -452,14 +377,15 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     padding: 12,
   },
+  briefRow: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
+  briefContent: { flex: 1, minWidth: 0 },
+  officialButton: { alignItems: "center", justifyContent: "center", marginTop: 8 },
+  brandSymbol: { width: 46, height: 46, borderRadius: 9, alignItems: "center", justifyContent: "center", backgroundColor: palette.colorMedalPaper },
+  brandText: { color: palette.colorMedalInk, fontWeight: tokens.fontWeightStrong, fontSize: 15 },
+  residentSymbol: { width: 46, height: 46, borderRadius: 9, alignItems: "center", justifyContent: "center", backgroundColor: palette.colorBadgeFree },
   ticket: { gap: 10 },
   ticketHead: { alignItems: "center", columnGap: 8, flexDirection: "row" },
   ticketTitle: { color: palette.colorInk, fontSize: 16, fontWeight: tokens.fontWeightStrong },
-  tiles: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  place: { gap: 10 },
-  placeHead: { alignItems: "center", columnGap: 10, flexDirection: "row", flexWrap: "wrap", rowGap: 6 },
-  placeTitle: { color: palette.colorInk, fontSize: tokens.fontTitleSize, fontWeight: tokens.fontWeightStrong },
-  dayMuseum: { color: palette.colorInk, fontSize: 16, fontWeight: tokens.fontWeightStrong },
   tag: {
     backgroundColor: palette.colorBadgeMixed,
     borderRadius: tokens.radiusPill,
@@ -486,41 +412,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   serviceName: { color: palette.colorInk, fontSize: 16, fontWeight: tokens.fontWeightStrong },
   serviceNameOff: { color: palette.colorMuted },
   tags: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
-  pack: { gap: 8 },
-  packHead: { alignItems: "flex-start", columnGap: 12, flexDirection: "row" },
-  packName: { color: palette.colorInk, flex: 1, fontSize: tokens.fontTitleSize, fontWeight: tokens.fontWeightStrong },
-  packPrice: { alignItems: "flex-end" },
-  packSum: { color: palette.colorAccent, fontSize: 20, fontWeight: tokens.fontWeightStrong },
-  packReduced: { color: palette.colorMuted, fontSize: 12 },
-  week: {
-    backgroundColor: palette.colorCard,
-    borderColor: palette.colorLine,
-    borderRadius: tokens.radiusBase,
-    borderWidth: StyleSheet.hairlineWidth,
-    flexDirection: "row",
-    gap: 4,
-    padding: 4,
-  },
-  weekDay: {
-    alignItems: "center",
-    borderRadius: 7,
-    flex: 1,
-    justifyContent: "center",
-    minHeight: 48,
-    paddingBottom: 10,
-    paddingTop: 4,
-  },
-  weekDaySelected: { backgroundColor: palette.colorAccent },
-  weekDayText: { color: palette.colorInk, fontSize: 13 },
-  weekDot: {
-    backgroundColor: palette.colorAccent,
-    borderRadius: 3,
-    bottom: 6,
-    height: 6,
-    position: "absolute",
-    width: 6,
-  },
-  weekDotSelected: { backgroundColor: palette.colorAccentInk },
 });
 const lightStyles = createStyles(tokens);
 const darkStyles = createStyles(darkTokens);

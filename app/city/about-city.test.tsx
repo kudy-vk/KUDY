@@ -5,7 +5,7 @@
 // fold open and the blocks follow the layout (criterion 5), every link row
 // points at an official page and a failed open leaves the address on the
 // screen (criterion 7), and a locale without its own words shows the English
-// text (criterion 6, decision L1). The five section pages stay mounted on
+// text (criterion 6, decision L1). The four section pages stay mounted on
 // the wheel's ring (the owner's 2026-11-17 flip request), so the section
 // bodies are asserted inside their own page and through the page's
 // open/hidden state — a query over the whole screen would find hidden pages.
@@ -39,8 +39,7 @@ const OFFICIAL_HOSTS = new Set([
   "systemfala.pl",
   "visitgdansk.com",
   "kartaturysty.visitgdansk.com",
-  "muzeumgdansk.pl",
-  "www.muzeum1939.pl",
+  "jestemzgdanska.pl",
   "www.pyszne.pl",
   "www.blik.com",
 ]);
@@ -76,7 +75,7 @@ test("the guide renders the wheel and the open section without any network call"
   expect(fetchSpy).not.toHaveBeenCalled();
 });
 
-test("the five section pages ride the strip; only the open one meets the screen reader", () => {
+test("the four section pages ride the strip; only the open one meets the screen reader", () => {
   openGuide();
   // Every page stays mounted on the ring (the raw query reaches the hidden
   // ones), and the open page is the only one in the screen-reader tree.
@@ -93,14 +92,14 @@ test("a press on a wheel point opens that section under the wheel (criterion 4)"
   // The food heading doubles as the wheel label, so the section body carries
   // the assertion.
   expect(pageOf("food").getByText("Аплата ў горадзе")).toBeTruthy();
-  fireEvent.press(screen.getByTestId("wheel-item-card"));
-  expectOpenPage("card");
-  expect(pageOf("card").getByText("Картка турыста і бясплатныя дні музеяў")).toBeTruthy();
+  fireEvent.press(screen.getByTestId("wheel-item-airport"));
+  expectOpenPage("airport");
 });
 
 test("the direction switch turns the airport rides around (criterion 5)", () => {
   openGuide();
   fireEvent.press(screen.getByTestId("seg-direction-to"));
+  fireEvent.press(screen.getByTestId("fold-airport-to-step-2"));
   expect(pageOf("airport").getByText("З цэнтра горада")).toBeTruthy();
   expect(pageOf("airport").queryByText("У цэнтр горада")).toBeNull();
 });
@@ -163,10 +162,11 @@ test("the city section shows the illustrated Tricity map, not the schematic (iss
 test("the city section carries no official-pages rows (decision M13)", () => {
   openGuide();
   fireEvent.press(screen.getByTestId("wheel-item-city"));
-  expect(pageOf("city").queryByText("Афіцыйныя старонкі")).toBeNull();
+  expect(pageOf("city").queryByText("Афіцыйныя спасылкі")).toBeNull();
   expect(pageOf("city").queryByTestId("link-about-visitGdanskMap")).toBeNull();
   // The other sections keep theirs.
   fireEvent.press(screen.getByTestId("wheel-item-transport"));
+  fireEvent.press(screen.getByTestId("fold-official-sources-transport"));
   expect(pageOf("transport").getByTestId("link-about-ztmSchedule")).toBeTruthy();
 });
 
@@ -178,21 +178,6 @@ test("the payment filter dims the services that refuse the chosen way (criterion
   expect(pageOf("food").getByText("BLIK: афіцыйна не пацверджана")).toBeTruthy();
 });
 
-test("the tourist card term switch reprices the packages (criterion 5)", () => {
-  openGuide();
-  fireEvent.press(screen.getByTestId("wheel-item-card"));
-  expect(pageOf("card").getByText("75 zł")).toBeTruthy();
-  fireEvent.press(pageOf("card").getByTestId("seg-hours-72"));
-  expect(pageOf("card").getByText("95 zł")).toBeTruthy();
-});
-
-test("the free-days week opens the chosen day's museum lines (criterion 5)", () => {
-  openGuide();
-  fireEvent.press(screen.getByTestId("wheel-item-card"));
-  fireEvent.press(pageOf("card").getByTestId("card-day-2"));
-  expect(pageOf("card").getByText(/Білет за 0 zł выдаюць толькі ў касе/)).toBeTruthy();
-});
-
 test("every section link row points at an official page and opens it (criterion 7)", () => {
   for (const section of ABOUT_CITY_SECTIONS) {
     for (const linkKey of section.links) {
@@ -201,6 +186,7 @@ test("every section link row points at an official page and opens it (criterion 
   }
   const spy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as never);
   openGuide();
+  fireEvent.press(screen.getByTestId("fold-official-sources-airport"));
   fireEvent.press(screen.getByTestId("link-about-airportBuses"));
   expect(spy).toHaveBeenCalledWith(ABOUT_CITY_LINK_URLS.airportBuses);
   spy.mockRestore();
@@ -209,6 +195,7 @@ test("every section link row points at an official page and opens it (criterion 
 test("a failed open leaves the page address on the screen; another open clears it (criterion 7)", async () => {
   const spy = jest.spyOn(Linking, "openURL").mockRejectedValueOnce(new Error("offline"));
   openGuide();
+  fireEvent.press(screen.getByTestId("fold-official-sources-airport"));
   fireEvent.press(screen.getByTestId("link-about-airportBuses"));
   // The whole remark is one text node: the sentence and the address. The
   // failed-open notice stays with its own page.
@@ -231,4 +218,68 @@ test("a locale without its own words shows the English text (criterion 6, L1)", 
   expect(aboutCityStrings("uk").tab.airport).toBe("Airport");
   expect(aboutCityStrings("de").tab.airport).toBe(ABOUT_CITY_STRINGS.en.tab.airport);
   expect(aboutCityStrings("uk").tab.airport).not.toBe(ABOUT_CITY_STRINGS.be.tab.airport);
+});
+
+// #334 — regression guards for the accepted #257 mockup (decision M14).
+test("M14 has exactly four sections in the accepted order", () => {
+  expect(ABOUT_CITY_SECTIONS.map(({ id }) => id)).toEqual(["airport", "transport", "city", "food"]);
+  openGuide();
+  expect(screen.queryByTestId("wheel-item-card", { includeHiddenElements: true })).toBeNull();
+  expect(screen.queryByTestId("about-page-card", { includeHiddenElements: true })).toBeNull();
+});
+
+test("airport directions keep accessible names without printed switch labels", () => {
+  openGuide();
+  const page = pageOf("airport");
+  const from = page.getByRole("radio", { name: "З аэрапорта" });
+  const to = page.getByRole("radio", { name: "У аэрапорт" });
+  expect(from.props.accessibilityState).toMatchObject({ checked: true });
+  expect(to.props.accessibilityState).toMatchObject({ checked: false });
+  expect(page.queryByText("З аэрапорта")).toBeNull();
+  expect(page.queryByText("У аэрапорт")).toBeNull();
+  fireEvent.press(to);
+  expect(page.getByRole("radio", { name: "У аэрапорт" }).props.accessibilityState).toMatchObject({ checked: true });
+  expect(page.getByRole("radio", { name: "З аэрапорта" }).props.accessibilityState).toMatchObject({ checked: false });
+});
+
+test("the airport steps start closed and keep separate direction state", () => {
+  openGuide();
+  const page = pageOf("airport");
+  const first = page.getByRole("button", { name: "Выйдзі з тэрмінала" });
+  const ticket = page.getByRole("button", { name: "Вазьмі білет" });
+  expect(first.props.accessibilityState).toMatchObject({ expanded: false });
+  expect(ticket.props.accessibilityState).toMatchObject({ expanded: false });
+  fireEvent.press(first);
+  expect(page.getByRole("button", { name: "Выйдзі з тэрмінала" }).props.accessibilityState).toMatchObject({ expanded: true });
+  fireEvent.press(page.getByRole("radio", { name: "У аэрапорт" }));
+  expect(page.getByRole("button", { name: "Вазьмі білет" }).props.accessibilityState).toMatchObject({ expanded: false });
+  fireEvent.press(page.getByRole("button", { name: "Вазьмі білет" }));
+  fireEvent.press(page.getByRole("radio", { name: "З аэрапорта" }));
+  expect(page.getByRole("button", { name: "Выйдзі з тэрмінала" }).props.accessibilityState).toMatchObject({ expanded: true });
+  expect(page.getByRole("button", { name: "Вазьмі білет" }).props.accessibilityState).toMatchObject({ expanded: false });
+});
+
+test("official links start collapsed and open the same address when expanded", () => {
+  const spy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as never);
+  try {
+    openGuide();
+    const page = pageOf("airport");
+    const fold = page.getByRole("button", { name: "Афіцыйныя спасылкі" });
+    expect(fold.props.accessibilityState).toMatchObject({ expanded: false });
+    expect(page.queryByTestId("link-about-airportBuses")).toBeNull();
+    fireEvent.press(fold);
+    fireEvent.press(page.getByTestId("link-about-airportBuses"));
+    expect(spy).toHaveBeenCalledWith(ABOUT_CITY_LINK_URLS.airportBuses);
+  } finally {
+    spy.mockRestore();
+  }
+});
+
+test("tourist and resident card links point to the accepted official destinations", () => {
+  expect(ABOUT_CITY_LINK_URLS).toMatchObject({
+    kartaTurysty: "https://kartaturysty.visitgdansk.com/pl/pakiety",
+    jestemZGdanska: "https://jestemzgdanska.pl/",
+  });
+  expect(Object.keys(ABOUT_CITY_LINK_URLS)).not.toContain("muzeumGdanska");
+  expect(Object.keys(ABOUT_CITY_LINK_URLS)).not.toContain("muzeum1939");
 });

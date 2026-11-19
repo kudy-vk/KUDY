@@ -3547,17 +3547,6 @@
       "sourceHash": "fe28625e62075bfbff1038013f622cb199462c1dd47bc308925364f3e9e9ff96"
     },
     {
-      "id": "native.aboutCity.tab.card",
-      "source": "Картка і музеі",
-      "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tab.card"
-      ],
-      "sourceHash": "1068369a3eedad9845ed1affa359e73fe02d5631f362445ddf08ba844514f6f3"
-    },
-    {
       "id": "native.aboutCity.head.airport",
       "source": "З аэрапорта і назад",
       "context": "Загаловак адкрытага раздзела пад колам",
@@ -3602,48 +3591,15 @@
       "sourceHash": "50ac656520b81dd37c5a908c4cd2a25ec8fbd99ca2afdba460839543dfc96516"
     },
     {
-      "id": "native.aboutCity.head.card",
-      "source": "Картка турыста і бясплатныя дні музеяў",
-      "context": "Загаловак адкрытага раздзела пад колам",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#head.card"
-      ],
-      "sourceHash": "ead63d1f833542bd3076214630969744d3fa38be4e0258f2cff30941f91d2481"
-    },
-    {
-      "id": "native.aboutCity.verified",
-      "source": "Праверана 10 лістапада 2026",
-      "context": "Пазнака праверкі фактаў пад загаловакам раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#verified"
-      ],
-      "sourceHash": "4ef5f398765c20be598a9e0ecb1a915f38401a4651284ce7bfbd43d3f9c7a440"
-    },
-    {
       "id": "native.aboutCity.sources.title",
-      "source": "Афіцыйныя старонкі",
-      "context": "Блок афіцыйных старонкі ў канцы кожнага раздзела",
+      "source": "Афіцыйныя спасылкі",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/about-city-strings.generated.ts#sources.title"
+        "docs/design/production/about-257-words-be.mjs#sources.title"
       ],
-      "sourceHash": "fa1df8b472311042eb3b01a78071ab1f1e0dc0e7cda3f8082952da18ae842363"
-    },
-    {
-      "id": "native.aboutCity.sources.note",
-      "source": "Расклады, цэны і гадзіны працы мяняюцца. Спасылкі адкрываюцца ў браўзеры, для іх патрэбная сетка; сам даведнік працуе без сеткі.",
-      "context": "Блок афіцыйных старонкі ў канцы кожнага раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#sources.note"
-      ],
-      "sourceHash": "de1add891b3bc0d1188a3cd53c568021a222d6b63d7052777a80800159f28e7f"
+      "sourceHash": "dd504d36958462488f93482663a6d92d205c9c88cb2570e778569836b063bdc6"
     },
     {
       "id": "native.aboutCity.link.failed",
@@ -3714,22 +3670,6 @@
         "components/about-city-strings.generated.ts#u.aboutHourly"
       ],
       "sourceHash": "a7f0f61e870a2ce673608d279b4b4261430c69688e5a9f86746d990305c9b3dc"
-    },
-    {
-      "id": "native.aboutCity.u.reduced",
-      "source": "льготны ${price}",
-      "context": "Службовы шаблон кароткага факта: час, частата, цана",
-      "format": "template",
-      "parameters": [
-        {
-          "name": "price",
-          "type": "string"
-        }
-      ],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#u.reduced"
-      ],
-      "sourceHash": "2b95c962ba4780b83c0c8f0f83768bde34a65eaf938143cb2e98af263407ca8d"
     },
     {
       "id": "native.aboutCity.sr.bus",
@@ -4203,72 +4143,6 @@
         "components/about-city-strings.generated.ts#air.ticket.train.where"
       ],
       "sourceHash": "f2d485b4b07d00b0d2c4f1db94153c8a34f995ad1ea04b3aca7ddf1ca9d5c7ef"
-    },
-    {
-      "id": "native.aboutCity.tk.singleRide",
-      "source": "Адна паездка",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.singleRide"
-      ],
-      "sourceHash": "dffae6c8d783d37f60db26708e31cd3b309a6b984fad36b6eab28de1d2b328ca"
-    },
-    {
-      "id": "native.aboutCity.tk.75",
-      "source": "75 хвілін",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.75"
-      ],
-      "sourceHash": "c58f1ed3401207570471139888d3fd93ab5fcbcc57db1d3da2ac52acb8544434"
-    },
-    {
-      "id": "native.aboutCity.tk.day24",
-      "source": "24 гадзіны",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.day24"
-      ],
-      "sourceHash": "16d30412ffb509046a58a78efa00ced1e071292b5f1654c3cff61faf8c2213a4"
-    },
-    {
-      "id": "native.aboutCity.tk.72h",
-      "source": "72 гадзіны",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.72h"
-      ],
-      "sourceHash": "903a406079e9ae95802981022603e90fd8602930dcc42cfd8e51c924f8b98587"
-    },
-    {
-      "id": "native.aboutCity.tk.night",
-      "source": "Начныя рэйсы каштуюць столькі ж.",
-      "context": "Назвы білетаў у цэнніках і заўвага пра начныя рэйсы",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#tk.night"
-      ],
-      "sourceHash": "0930ea5cbad721d8e5cbdf70e89e2c74bf6e9dba7d3a97dc188e6b326b0e57ac"
-    },
-    {
-      "id": "native.aboutCity.air.notice",
-      "source": "Да 12 снежня 2026 цягнікі ходзяць па часовым раскладзе, сталы пачынаецца 13 снежня 2026. Расклады аўтобусаў мяняюцца па сезонах — перад паездкай правер актуальны расклад.",
-      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#air.notice"
-      ],
-      "sourceHash": "3ab63b74e96c93d1cf377b47b80ae3273a3849ceed5122a17bada3894847fe38"
     },
     {
       "id": "native.aboutCity.tr.modes",
@@ -4877,349 +4751,14 @@
     },
     {
       "id": "native.aboutCity.card.lead",
-      "source": "Картка з бясплатнымі ўваходамі. Цэны на лістапад 2026.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
+      "source": "Турыстычная картка Гданьска дапамагае наведваць музеі і іншыя цікавыя месцы паводле выбранага пакета. Транспартны білет можна набыць дадаткова — ён не ўваходзіць у асноўны пакет. Актуальныя магчымасці і ўмовы правер на афіцыйным сайце.",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.lead"
+        "docs/design/production/about-257-words-be.mjs#card.lead"
       ],
-      "sourceHash": "79bf056536437f0eb48cfa6c75b2ede55955a36119060684196761cb37f3f189"
-    },
-    {
-      "id": "native.aboutCity.card.duration",
-      "source": "Тэрмін дзеяння",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.duration"
-      ],
-      "sourceHash": "5e348627c2416eb5a626f6a457f465b9322f5a6a82a8aa1df3c24ca471a2533c"
-    },
-    {
-      "id": "native.aboutCity.card.hours",
-      "source": "${n} г",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "template",
-      "parameters": [
-        {
-          "name": "n",
-          "type": "number"
-        }
-      ],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.hours"
-      ],
-      "sourceHash": "6f42a2df147fa403b281d827a8c815d217b838ece0ef4a448a340ec9f8484570"
-    },
-    {
-      "id": "native.aboutCity.card.odkrywca.entries",
-      "source": "13 бясплатных уваходаў",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.odkrywca.entries"
-      ],
-      "sourceHash": "7c31fc5aea14b038dd483667164b8bb0a0252c498f0d608966255dfa948330e6"
-    },
-    {
-      "id": "native.aboutCity.card.odkrywca.list",
-      "source": "Сярод іх: Ратуша Галоўнага горада, Музей бурштыну, Hevelianum, заапарк і Нацыянальны марскі музей.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.odkrywca.list"
-      ],
-      "sourceHash": "dc3ae5578dfbeadaf8ff1c707d1d3b8ffe729a0c2188b8a3b3226e608bd08dd8"
-    },
-    {
-      "id": "native.aboutCity.card.premium.entries",
-      "source": "23 бясплатныя ўваходы",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.premium.entries"
-      ],
-      "sourceHash": "583dc9d73ea5231ea15e30be8d9285d7e8468bd60041c459c327a20a63c5c642"
-    },
-    {
-      "id": "native.aboutCity.card.premium.list",
-      "source": "Усё з Odkrywca, а таксама Двор Артуса, Музей Другой сусветнай вайны, Еўрапейскі цэнтр салідарнасці, Żuraw і іншае.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.premium.list"
-      ],
-      "sourceHash": "216f1ddee674cde986a22ab1a7a5f3a3efcc85f6c49925a950931311d3addc6b"
-    },
-    {
-      "id": "native.aboutCity.card.smaki",
-      "source": "Smaki Gdańska Duet — кулінарны пакет на дваіх, дзейнічае 30 дзён.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.smaki"
-      ],
-      "sourceHash": "6369365be4179c35f782cbb71740ea200a672d398d1a6c08014ea21656f8edda"
-    },
-    {
-      "id": "native.aboutCity.card.transport.title",
-      "source": "Дадаць транспарт",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.transport.title"
-      ],
-      "sourceHash": "f146d3b7a48ad9d5a30e2ec1c6fab7c2d801c40c17c6cd025dce570fa57033ae"
-    },
-    {
-      "id": "native.aboutCity.card.transport.meta",
-      "source": "Bilet Metropolitalny",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.transport.meta"
-      ],
-      "sourceHash": "934671728bd789b27831051b9e5c1a82641fcba3191c99b8668f8a989da55533"
-    },
-    {
-      "id": "native.aboutCity.card.transport.text",
-      "source": "Транспарт купляецца асобна ад карткі: аўтобусы, трамваі, цягнікі SKM і POLREGIO ў метраполіі. Картку і білет можна актываваць у розныя дні.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.transport.text"
-      ],
-      "sourceHash": "0ab59472be761f0eb08a5d121f74fedff78b858f31d11b5460bacdd85def2806"
-    },
-    {
-      "id": "native.aboutCity.card.freeHeading",
-      "source": "Бясплатныя дні музеяў без карткі",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.freeHeading"
-      ],
-      "sourceHash": "39e803c857004f837409f359d27e7c24606f8d80143913b9d43621b64d88064d"
-    },
-    {
-      "id": "native.aboutCity.card.day",
-      "source": "Дзень тыдня",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.day"
-      ],
-      "sourceHash": "379b183e77b05e0eda787f7d7127c0e08ffd0862fa6a895b0c546cf42a69498a"
-    },
-    {
-      "id": "native.aboutCity.card.free.badge",
-      "source": "бясплатна",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.free.badge"
-      ],
-      "sourceHash": "cb871ef5de799be172906069b2d2f74bd4308ffbd29d3ef00884e451b910dd68"
-    },
-    {
-      "id": "native.aboutCity.card.closed.badge",
-      "source": "закрыта",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.closed.badge"
-      ],
-      "sourceHash": "3ce9da3cf0e7453ffb50b5e16b34b86f9ddf15f8c926f31468dca72e51c7b509"
-    },
-    {
-      "id": "native.aboutCity.museum.gdanska",
-      "source": "Muzeum Gdańska",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#museum.gdanska"
-      ],
-      "sourceHash": "4980db5a170744902f3ecced3f4090ad6f373fcd2c5ae8b5fae589f13e8231d9"
-    },
-    {
-      "id": "native.aboutCity.museum.ww2",
-      "source": "Музей Другой сусветнай вайны",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#museum.ww2"
-      ],
-      "sourceHash": "c40d554dea893e51ed68c7d629a4b8a1ebbb068bb08692f6bce8998b885a81e6"
-    },
-    {
-      "id": "native.aboutCity.card.mon.gdanska",
-      "source": "Ратуша Галоўнага горада, Двор Артуса і Дом Уфагена 10:00 – 16:00, Музей бурштыну 10:00 – 18:00.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.mon.gdanska"
-      ],
-      "sourceHash": "343e78532c5df72e0513e1701389224d44b6e917279b933441aabad28e842df4"
-    },
-    {
-      "id": "native.aboutCity.card.mon.ww2",
-      "source": "Па панядзелках звычайна закрыты.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.mon.ww2"
-      ],
-      "sourceHash": "f6ff5d3ef1450ffa93c6574594f7f1e3b4120bcabd72e052d1ae01b19f61f72f"
-    },
-    {
-      "id": "native.aboutCity.card.tue.ww2",
-      "source": "Усе выставы. Білет за 0 zł выдаюць толькі ў касе ў дзень наведвання, не пазней як за гадзіну да закрыцця; забраніраваць бясплатны білет онлайн нельга.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.tue.ww2"
-      ],
-      "sourceHash": "67fccab96c8f861450c9b5f644a683c8355fc3090d2c6b512f8df6d0572a83f5"
-    },
-    {
-      "id": "native.aboutCity.card.tue.gdanska",
-      "source": "Асноўныя аддзелы па аўторках закрытыя.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.tue.gdanska"
-      ],
-      "sourceHash": "fa99c29c1bdffad44e0961af99d559268130f8753965b7a68cec7ec7b74c7c56"
-    },
-    {
-      "id": "native.aboutCity.card.other",
-      "source": "У гэты дзень сталага бясплатнага ўваходу ў гэтых двух музеях няма.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.other"
-      ],
-      "sourceHash": "a167d3738cbe71c37e1d1f1df292a7aaba7d56a6a31b739c51bc4690223f3448"
-    },
-    {
-      "id": "native.aboutCity.day.1",
-      "source": "пн",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.1"
-      ],
-      "sourceHash": "56238efc14c631ab394d5090a0ae28795be44622988b1ded44fab0e3639c6d70"
-    },
-    {
-      "id": "native.aboutCity.day.2",
-      "source": "аўт",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.2"
-      ],
-      "sourceHash": "2ceed1d728570890820c261f62ccfc970dc9479ceaf744bde76a4ac5f2c881c9"
-    },
-    {
-      "id": "native.aboutCity.day.3",
-      "source": "ср",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.3"
-      ],
-      "sourceHash": "b3d53dca9a5809be46808477ef824afa7ecff5d38aa28467affa94ed190acd9e"
-    },
-    {
-      "id": "native.aboutCity.day.4",
-      "source": "чц",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.4"
-      ],
-      "sourceHash": "2b0270a1605b2d7a2d831a7fa505bb8f2bfd5a3977456fe37de1893135ce6bdb"
-    },
-    {
-      "id": "native.aboutCity.day.5",
-      "source": "пт",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.5"
-      ],
-      "sourceHash": "341f3557756d4db558409c94c0bcf0730316e72e133f4e9d406bf59e21f27aba"
-    },
-    {
-      "id": "native.aboutCity.day.6",
-      "source": "сб",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.6"
-      ],
-      "sourceHash": "9a9fe85c9eebd1e8dcd687a4d3e295f027346f1d89a14fd861b1a31e727d0bf8"
-    },
-    {
-      "id": "native.aboutCity.day.7",
-      "source": "нд",
-      "context": "Кароткая назва дня тыдня ў сетцы бясплатных дзён",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#day.7"
-      ],
-      "sourceHash": "aa616bfb614100357af9df403e4200b87dde6ace42e37f84c343caaeb81c89d3"
-    },
-    {
-      "id": "native.aboutCity.u.decimal",
-      "source": ",",
-      "context": "Службовы шаблон кароткага факта: час, частата, цана",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#u.decimal"
-      ],
-      "sourceHash": "9adf5687a4609e5bb6cec922922840a2dee6ffd53deaef990965aaed125f1018"
-    },
-    {
-      "id": "native.aboutCity.card.notice",
-      "source": "У бясплатны дзень частка часовых выстаў можа не працаваць, а ў дзяржаўныя і царкоўныя святы музеі мяняюць расклад. Правярай афіцыйную старонку кожнага музея.",
-      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#card.notice"
-      ],
-      "sourceHash": "6ee83fd1a7c3b316907c938a0c2f29b8eb27785bdee1da8f5b9dcd7e0951589f"
+      "sourceHash": "8dc710fb4b5ee27098def447d67b11de94ae189c7028e79620fef6a99a8a0885"
     },
     {
       "id": "native.aboutCity.links.airportBuses",
@@ -5267,36 +4806,14 @@
     },
     {
       "id": "native.aboutCity.links.kartaTurysty",
-      "source": "Karta Turysty — пакеты і цэны",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "source": "Karta Turysty — афіцыйныя пакеты і ўмовы",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.kartaTurysty"
+        "docs/design/production/about-257-words-be.mjs#links.kartaTurysty"
       ],
-      "sourceHash": "44e2300ecbce6d9dcd567a246c03078d5c07ad5c625d4c1976a463ad633f742a"
-    },
-    {
-      "id": "native.aboutCity.links.muzeumGdanska",
-      "source": "Muzeum Gdańska — бясплатны ўваход",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.muzeumGdanska"
-      ],
-      "sourceHash": "3bee5ab4b298b927fd3111f3301a84977d8256bf800988e1e57deda93853ae70"
-    },
-    {
-      "id": "native.aboutCity.links.muzeum1939",
-      "source": "Музей Другой сусветнай вайны — правілы наведвання",
-      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
-      "format": "plain",
-      "parameters": [],
-      "migratedFrom": [
-        "components/about-city-strings.generated.ts#links.muzeum1939"
-      ],
-      "sourceHash": "f48e0afc0a0512abc4a87d4a274a00b873f1b4d354ed02fcaa382e288a9adbc8"
+      "sourceHash": "ba55d8c691dbeaf1160ba790414beae8fda83817593203db9df38a81e5f7b5b6"
     },
     {
       "id": "native.aboutCity.links.pysznePayment",
@@ -5821,6 +5338,82 @@
         "components/about-city-strings.generated.ts#get.westerplatte"
       ],
       "sourceHash": "215083f980e204e33b90f4b5a9154c718617edc0011285987f45803ad89c64c0"
+    },
+    {
+      "id": "native.aboutCity.tr.residents",
+      "source": "Для жыхароў Гданьска",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "docs/design/production/about-257-words-be.mjs#tr.residents"
+      ],
+      "sourceHash": "5a786b7676c0f201d018d172bc7b0f463ed1118bdd4e9bd5415b00590aff4829"
+    },
+    {
+      "id": "native.aboutCity.resident.title",
+      "source": "Jestem z Gdańska",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "docs/design/production/about-257-words-be.mjs#resident.title"
+      ],
+      "sourceHash": "2ce51f65e06e3b01446e8c9941e15c8a001f534f4a3e369c7dfe779f653ad86e"
+    },
+    {
+      "id": "native.aboutCity.resident.lead",
+      "source": "Картка жыхара: гарадскія прапановы і транспартныя магчымасці. Білеты, льготы і ўмовы правер на афіцыйным сайце.",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "docs/design/production/about-257-words-be.mjs#resident.lead"
+      ],
+      "sourceHash": "107829bb5c6600bb013174e5e68e96dd200878c18b0e88893d7c50ad6f2f8caf"
+    },
+    {
+      "id": "native.aboutCity.resident.openOfficial",
+      "source": "Адкрыць афіцыйны сайт: ${name}",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "docs/design/production/about-257-words-be.mjs#resident.openOfficial"
+      ],
+      "sourceHash": "97ea2b5e472d9c9e067d8160d6f0c27dce0ed1f44f7eb86a981eb080773a174e"
+    },
+    {
+      "id": "native.aboutCity.card.brandAlt",
+      "source": "Лагатып Gdańska Karta Turysty",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "docs/design/production/about-257-words-be.mjs#card.brandAlt"
+      ],
+      "sourceHash": "257aa51e0105ae67ef8dc5dc8df44af17029f5076f41ce1e2ed255adff45b266"
+    },
+    {
+      "id": "native.aboutCity.card.openOfficial",
+      "source": "Адкрыць афіцыйны сайт: ${name}",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "docs/design/production/about-257-words-be.mjs#card.openOfficial"
+      ],
+      "sourceHash": "6212ff916e5e16c29938d03c624124cd89258b1fa64b5e0737a0dba238984fd7"
     }
   ]
 }

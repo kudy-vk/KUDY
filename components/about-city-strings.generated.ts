@@ -20,19 +20,15 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "transport": "Транспарт і білеты",
       "city": "Дзе што ў горадзе",
       "food": "Ежа і аплата",
-      "card": "Картка і музеі",
     },
     "head": {
       "airport": "З аэрапорта і назад",
       "transport": "Як ездзіць па горадзе",
       "city": "Дзе што ў горадзе",
       "food": "Ежа і аплата",
-      "card": "Картка турыста і бясплатныя дні музеяў",
     },
-    "verified": "Праверана 10 лістапада 2026",
     "sources": {
-      "title": "Афіцыйныя старонкі",
-      "note": "Расклады, цэны і гадзіны працы мяняюцца. Спасылкі адкрываюцца ў браўзеры, для іх патрэбная сетка; сам даведнік працуе без сеткі.",
+      "title": "Афіцыйныя спасылкі",
     },
     "link": {
       "failed": (url: string) => `Не ўдалося адкрыць старонку. Яе адрас: ${url}`,
@@ -42,8 +38,6 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "everyWeekdays": (n: number) => `у будні кожныя ${n} хв`,
       "hourly": "штогадзіну",
       "aboutHourly": "прыблізна штогадзіну",
-      "reduced": (price: string) => `льготны ${price}`,
-      "decimal": ",",
     },
     "sr": {
       "bus": "Аўтобус",
@@ -84,7 +78,6 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
           "where": "Гарадскі білет ZTM у цягніку не дзейнічае. Чыгуначны білет купі ў аўтамаце на пероне або ў праграме Polregio, Jakdojade ці FALA.",
         },
       },
-      "notice": "Да 12 снежня 2026 цягнікі ходзяць па часовым раскладзе, сталы пачынаецца 13 снежня 2026. Расклады аўтобусаў мяняюцца па сезонах — перад паездкай правер актуальны расклад.",
       "map": "Цягнік PKM да Gdańsk Wrzeszcz, далей SKM да цэнтра; у горад ходзяць і аўтобусы.",
       "mapGo": "Як дабрацца ў горад",
     },
@@ -125,13 +118,6 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "toWrzeszcz": "У Wrzeszcz",
       "operator": "Перавозчык",
     },
-    "tk": {
-      "75": "75 хвілін",
-      "singleRide": "Адна паездка",
-      "day24": "24 гадзіны",
-      "72h": "72 гадзіны",
-      "night": "Начныя рэйсы каштуюць столькі ж.",
-    },
     "tr": {
       "modes": "Чым ехаць",
       "ztm": {
@@ -165,6 +151,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
           "text": "Аплікацыя SKM: расклад цягнікоў офлайн да трох тыдняў.",
         },
       },
+      "residents": "Для жыхароў Гданьска",
     },
     "city": {
       "caption": "Ілюстраваная карта: станцыі і зоны стаяць на сваіх месцах, але малюнак прыблізны. Не для навігацыі.",
@@ -231,63 +218,16 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
     },
     "card": {
       "title": "Gdańska Karta Turysty",
-      "lead": "Картка з бясплатнымі ўваходамі. Цэны на лістапад 2026.",
-      "duration": "Тэрмін дзеяння",
-      "hours": (n: number) => `${n} г`,
-      "odkrywca": {
-        "entries": "13 бясплатных уваходаў",
-        "list": "Сярод іх: Ратуша Галоўнага горада, Музей бурштыну, Hevelianum, заапарк і Нацыянальны марскі музей.",
-      },
-      "premium": {
-        "entries": "23 бясплатныя ўваходы",
-        "list": "Усё з Odkrywca, а таксама Двор Артуса, Музей Другой сусветнай вайны, Еўрапейскі цэнтр салідарнасці, Żuraw і іншае.",
-      },
-      "smaki": "Smaki Gdańska Duet — кулінарны пакет на дваіх, дзейнічае 30 дзён.",
-      "transport": {
-        "title": "Дадаць транспарт",
-        "meta": "Bilet Metropolitalny",
-        "text": "Транспарт купляецца асобна ад карткі: аўтобусы, трамваі, цягнікі SKM і POLREGIO ў метраполіі. Картку і білет можна актываваць у розныя дні.",
-      },
-      "freeHeading": "Бясплатныя дні музеяў без карткі",
-      "day": "Дзень тыдня",
-      "free": {
-        "badge": "бясплатна",
-      },
-      "closed": {
-        "badge": "закрыта",
-      },
-      "mon": {
-        "gdanska": "Ратуша Галоўнага горада, Двор Артуса і Дом Уфагена 10:00 – 16:00, Музей бурштыну 10:00 – 18:00.",
-        "ww2": "Па панядзелках звычайна закрыты.",
-      },
-      "tue": {
-        "ww2": "Усе выставы. Білет за 0 zł выдаюць толькі ў касе ў дзень наведвання, не пазней як за гадзіну да закрыцця; забраніраваць бясплатны білет онлайн нельга.",
-        "gdanska": "Асноўныя аддзелы па аўторках закрытыя.",
-      },
-      "other": "У гэты дзень сталага бясплатнага ўваходу ў гэтых двух музеях няма.",
-      "notice": "У бясплатны дзень частка часовых выстаў можа не працаваць, а ў дзяржаўныя і царкоўныя святы музеі мяняюць расклад. Правярай афіцыйную старонку кожнага музея.",
-    },
-    "museum": {
-      "gdanska": "Muzeum Gdańska",
-      "ww2": "Музей Другой сусветнай вайны",
-    },
-    "day": {
-      "1": "пн",
-      "2": "аўт",
-      "3": "ср",
-      "4": "чц",
-      "5": "пт",
-      "6": "сб",
-      "7": "нд",
+      "lead": "Турыстычная картка Гданьска дапамагае наведваць музеі і іншыя цікавыя месцы паводле выбранага пакета. Транспартны білет можна набыць дадаткова — ён не ўваходзіць у асноўны пакет. Актуальныя магчымасці і ўмовы правер на афіцыйным сайце.",
+      "brandAlt": "Лагатып Gdańska Karta Turysty",
+      "openOfficial": (name: string) => `Адкрыць афіцыйны сайт: ${name}`,
     },
     "links": {
       "airportBuses": "Аўтобусы ў аэрапорт і назад — airport.gdansk.pl",
       "airportTrains": "Цягнікі ў аэрапорт і назад — airport.gdansk.pl",
       "ztmSchedule": "Расклады ZTM Гданьска",
       "skmSearch": "Пошук рэйсаў SKM",
-      "kartaTurysty": "Karta Turysty — пакеты і цэны",
-      "muzeumGdanska": "Muzeum Gdańska — бясплатны ўваход",
-      "muzeum1939": "Музей Другой сусветнай вайны — правілы наведвання",
+      "kartaTurysty": "Karta Turysty — афіцыйныя пакеты і ўмовы",
       "pysznePayment": "Аплата ў Pyszne.pl",
       "blikHow": "Як карыстацца BLIK — blik.com",
     },
@@ -338,6 +278,11 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "plan": "PKM Południe — запланаваная лінія: цягнікі тут яшчэ не ходзяць, мэта — 2030 год. Месца прыпынку на карце прыблізнае.",
       "planFrom": "Адсюль пачнецца запланаваная лінія PKM Południe; мэта — 2030 год.",
     },
+    "resident": {
+      "title": "Jestem z Gdańska",
+      "lead": "Картка жыхара: гарадскія прапановы і транспартныя магчымасці. Білеты, льготы і ўмовы правер на афіцыйным сайце.",
+      "openOfficial": (name: string) => `Адкрыць афіцыйны сайт: ${name}`,
+    },
   },
   "en": {
     "wheel": {
@@ -348,19 +293,15 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "transport": "Transport and tickets",
       "city": "What’s where",
       "food": "Food and payment",
-      "card": "Card and museums",
     },
     "head": {
       "airport": "To and from the airport",
       "transport": "Getting around",
       "city": "What’s where in the city",
       "food": "Food and payment",
-      "card": "Tourist card and free museum days",
     },
-    "verified": "Checked on 10 November 2026",
     "sources": {
-      "title": "Official pages",
-      "note": "Timetables, prices and opening hours change. Links open in the browser and need a connection; the guide itself works offline.",
+      "title": "Official links",
     },
     "link": {
       "failed": (url: string) => `Could not open the page. Its address: ${url}`,
@@ -370,8 +311,6 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "everyWeekdays": (n: number) => `every ${n} min on weekdays`,
       "hourly": "hourly",
       "aboutHourly": "about hourly",
-      "reduced": (price: string) => `reduced ${price}`,
-      "decimal": ".",
     },
     "sr": {
       "bus": "Bus",
@@ -412,7 +351,6 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
           "where": "The city ZTM ticket is not valid on the train. Buy a rail ticket at the platform machine or in the Polregio, Jakdojade or FALA app.",
         },
       },
-      "notice": "Until 12 December 2026 trains run on a temporary timetable; the regular one starts on 13 December 2026. Bus timetables change with the season — check the live timetable before you go.",
       "map": "PKM train to Gdańsk Wrzeszcz, then SKM to the centre; buses run into the city too.",
       "mapGo": "How to get to the city",
     },
@@ -453,13 +391,6 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "toWrzeszcz": "To Wrzeszcz",
       "operator": "Operator",
     },
-    "tk": {
-      "75": "75 minutes",
-      "singleRide": "One ride",
-      "day24": "24 hours",
-      "72h": "72 hours",
-      "night": "Night buses cost the same.",
-    },
     "tr": {
       "modes": "What to ride",
       "ztm": {
@@ -493,6 +424,7 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
           "text": "The SKM app: the train timetable offline for three weeks.",
         },
       },
+      "residents": "For Gdańsk residents",
     },
     "city": {
       "caption": "An illustrated map: stations and zones stand where they are, but the drawing is approximate. Not for navigation.",
@@ -559,63 +491,16 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
     },
     "card": {
       "title": "Gdańska Karta Turysty",
-      "lead": "A pass with free entries. Prices for November 2026.",
-      "duration": "Valid for",
-      "hours": (n: number) => `${n} h`,
-      "odkrywca": {
-        "entries": "13 free entries",
-        "list": "Among them: the Main Town Hall, the Amber Museum, Hevelianum, the zoo and the National Maritime Museum.",
-      },
-      "premium": {
-        "entries": "23 free entries",
-        "list": "Everything in Odkrywca plus Artus Court, the Museum of the Second World War, the European Solidarity Centre, the Crane and more.",
-      },
-      "smaki": "Smaki Gdańska Duet — a food pass for two, valid for 30 days.",
-      "transport": {
-        "title": "Add transport",
-        "meta": "Bilet Metropolitalny",
-        "text": "Transport is bought on top of the pass: buses, trams, SKM and POLREGIO trains in the metropolitan area. The pass and the ticket can be activated on different days.",
-      },
-      "freeHeading": "Free museum days without the card",
-      "day": "Day of the week",
-      "free": {
-        "badge": "free",
-      },
-      "closed": {
-        "badge": "closed",
-      },
-      "mon": {
-        "gdanska": "Main Town Hall, Artus Court and Uphagen House 10:00 – 16:00, Amber Museum 10:00 – 18:00.",
-        "ww2": "Usually closed on Mondays.",
-      },
-      "tue": {
-        "ww2": "All exhibitions. The 0 zł ticket is issued only at the ticket desk on the day of the visit, no later than an hour before closing; free tickets cannot be booked online.",
-        "gdanska": "The main branches are closed on Tuesdays.",
-      },
-      "other": "These two museums have no regular free entry on this day.",
-      "notice": "On a free day some temporary exhibitions may be closed, and on public and church holidays museums change their hours. Check each museum’s official page.",
-    },
-    "museum": {
-      "gdanska": "Muzeum Gdańska",
-      "ww2": "Museum of the Second World War",
-    },
-    "day": {
-      "1": "Mon",
-      "2": "Tue",
-      "3": "Wed",
-      "4": "Thu",
-      "5": "Fri",
-      "6": "Sat",
-      "7": "Sun",
+      "lead": "Gdańsk’s tourist card gives access to museums and other attractions included in the chosen package. A transport ticket can be purchased separately and is not part of the main package. Check current options and terms on the official website.",
+      "brandAlt": "Gdańska Karta Turysty logo",
+      "openOfficial": (name: string) => `Open official website: ${name}`,
     },
     "links": {
       "airportBuses": "Buses to and from the airport — airport.gdansk.pl",
       "airportTrains": "Trains to and from the airport — airport.gdansk.pl",
       "ztmSchedule": "ZTM Gdańsk timetables",
       "skmSearch": "SKM connection search",
-      "kartaTurysty": "Karta Turysty — packages and prices",
-      "muzeumGdanska": "Muzeum Gdańska — free entry",
-      "muzeum1939": "Museum of the Second World War — visiting rules",
+      "kartaTurysty": "Karta Turysty — official packages and terms",
       "pysznePayment": "Payment in Pyszne.pl",
       "blikHow": "How to use BLIK — blik.com",
     },
@@ -665,6 +550,11 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
       "change": "Change here between SKM and the airport trains.",
       "plan": "PKM Południe is a planned line: no trains run here yet, the target is 2030. The stop’s place on the map is approximate.",
       "planFrom": "The planned PKM Południe line will start here; the target is 2030.",
+    },
+    "resident": {
+      "title": "Jestem z Gdańska",
+      "lead": "The resident card offers city benefits and transport-related services. Check current tickets, eligibility and terms on the official website.",
+      "openOfficial": (name: string) => `Open official website: ${name}`,
     },
   },
 };
