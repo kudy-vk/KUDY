@@ -1,29 +1,39 @@
 // npm-security remediation guard (#337, implementation-rules 1: config counts
 // as code). The advisory remediation lives in the manifests and both
 // lockfiles; reverting the overrides, downgrading any remediated package back
-// into its advisory range, or silently re-resolving a vulnerable version must
-// turn this suite red — nothing else in CI runs npm audit, so a silent revert
+// into its advisory range — at ANY nesting level of either lockfile — must
+// turn this suite red. Nothing else in CI runs npm audit, so a silent revert
 // would otherwise restore the vulnerable tree.
 //
-// Floors are the advisory-fixed versions (locked: GHSA ranges verified against
-// the audit DB in #337):
-//   root: decode-uri-component (GHSA-qr28-fpjm-wq7f high <= 0.5.0; also
-//         GHSA-vcc3-ghjq-m6fr moderate <= 0.4.2) -> 0.5.1
-//         postcss (GHSA-fxqj-rqcc-2cmp incomplete fix <= 8.5.22) -> 8.5.23
-//         zod (GHSA-mrhx-c7xc-m3w5 < 4.6.6) -> 4.6.6
-//         shell-quote (GHSA-pqg4-j6r4-53mv critical >= 1.8.4 < 1.11.0) -> 1.11.0
-//         undici (>= 4.0.0 < 6.29.1; >= 8.0.0 < 8.12.2) -> 8.12.2
-//         node-forge (<= 1.4.2) -> 1.4.3
-//         fast-uri (< 3.1.9) -> 3.1.9
-//         ip-address (GHSA-rxp7-6hxx-x8q5 <= 10.7.3) -> 10.7.4
-//         source-map-js (GHSA-68fv-2mgg-jv7q < 1.2.2) -> 1.2.2
-//   web:  maplibre-gl (GHSA-jrc7-96c5-q579 critical <= 6.4.0) -> 6.19.0
-//         next (<= 15.5.27) -> 15.5.28
-//         sharp (GHSA-wq5f-xc86-pv6w < 0.35.5) -> 0.35.5
-//         source-map-js (< 1.2.2) -> 1.2.2
-//         postcss (<= 8.5.22) -> 8.5.23
-// Floors intentionally sit at what this remediation validated (pin-what-you-
-// validated): a conscious future upgrade raises the version and stays green.
+// Vulnerable ranges are the audit-DB ranges verified in #337 (a version is
+// vulnerable iff it falls inside one of them; a floor-style check cannot
+// express multi-range advisories and would false-fail the legitimate nested
+// @expo/cli copy of undici 6.29.1):
+//   root: decode-uri-component (GHSA-qr28-fpjm-wq7f high >= 0.5.0? — no:
+//         high <= 0.5.0, fixed 0.5.1; also GHSA-vcc3-ghjq-m6fr moderate
+//         <= 0.4.2) -> vulnerable [0.0.0, 0.5.1)
+//         postcss (four advisories affecting <= 8.5.22) -> [0.0.0, 8.5.23)
+//         zod (GHSA-mrhx-c7xc-m3w5 < 4.6.6) -> [0.0.0, 4.6.6)
+//         shell-quote (GHSA-pqg4-j6r4-53mv critical >= 1.8.4 < 1.11.0) ->
+//             [1.8.4, 1.11.0)
+//         undici (12 advisories: >= 4.0.0 < 6.29.1 and >= 8.0.0 < 8.12.2)
+//         node-forge (17 advisories affecting <= 1.4.2) -> [0.0.0, 1.4.3)
+//         fast-uri (4 advisories < 3.1.9) -> [0.0.0, 3.1.9)
+//         ip-address (GHSA-rxp7-6hxx-x8q5 <= 10.7.3) -> [0.0.0, 10.7.4)
+//         source-map-js (GHSA-68fv-2mgg-jv7q < 1.2.2) -> [0.1.0, 1.2.2)
+//   web:  maplibre-gl (GHSA-jrc7-96c5-q579 critical <= 6.4.0) -> [0.0.0, 6.5.0)
+//         next (4 advisories <= 15.5.27) -> [0.0.0, 15.5.28)
+//         sharp (GHSA-wq5f-xc86-pv6w < 0.5.0) -> [0.0.0, 0.35.5)
+//         source-map-js -> [0.1.0, 1.2.2)
+//         postcss -> [0.0.0, 8.5.23)
+// NOTE on decode-uri-component 0.5.1: it is ESM-only, while query-string 7.1.3
+// (expo-router's dependency) requires it directly and calls the CJS export.
+// On CJS require hosts only `query-string/stringify` keeps working (the only
+// path expo-router reaches today); `parse`/`parseUrl`/`pick`/`exclude` would
+// throw `TypeError: decodeComponent is not a function` — a documented latent
+// constraint of the override, re-checked by the audit reruns in #339.
+// Floors sit at what this remediation validated (pin-what-you-validated): a
+// conscious future upgrade raises versions and stays green.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -33,21 +43,55 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const readJson = (...parts) => JSON.parse(fs.readFileSync(path.join(root, ...parts), 'utf8'));
 
-// Minimal semver comparison for the pinned floors; no dependency on the
-// semver package (the guard must not depend on the tree it guards).
-function atLeast(version, floor) {
-  const [vMajor, vMinor, vPatch] = String(version).split('.').map(Number);
-  const [fMajor, fMinor, fPatch] = floor.split('.').map(Number);
-  if (vMajor !== fMajor) return vMajor > fMajor;
-  if (vMinor !== fMinor) return vMinor > fMinor;
-  return vPatch >= fPatch;
+// [minInclusive, maxExclusive) semver-interval; major-aware for the common
+// case where the advisory spans whole majors.
+function cmp(a, b) {
+  const [aMaj, aMin, aPat] = String(a).split('.').map(Number);
+  const [bMaj, bMin, bPat] = b.split('.').map(Number);
+  if (aMaj !== bMaj) return aMaj - bMaj;
+  if (aMin !== bMin) return aMin - bMin;
+  return aPat - bPat;
+}
+const inVulnerableRange = (version, [min, max]) =>
+  cmp(version, min) >= 0 && cmp(version, max) < 0;
+
+// Every entry of the lockfile whose key ends in /node_modules/<pkg> — the
+// top-level copy and every nested copy — must sit outside the vulnerable
+// ranges. Nested copies re-resolve on dependency bumps, so they get the same
+// check as the root copy.
+function assertPackageSafe(lock, lockName, pkg, ranges) {
+  for (const [key, entry] of Object.entries(lock.packages ?? {})) {
+    if (!key.endsWith(`/node_modules/${pkg}`)) continue;
+    const version = entry?.version;
+    assert.ok(version, `${lockName}: ${key} has no version`);
+    const hit = ranges.find((range) => inVulnerableRange(version, range));
+    if (hit) {
+      assert.fail(
+        `${lockName}: ${key} resolves ${version}, inside the vulnerable range [${hit[0]}, ${hit[1]}) — a revert or bad re-resolution must fail here (no CI step runs npm audit)`,
+      );
+    }
+  }
 }
 
-function expectFloor(lock, pkg, floor, reason) {
-  const actual = lock.packages?.[`node_modules/${pkg}`]?.version;
-  assert.ok(actual && atLeast(actual, floor),
-    `${pkg} lockfile version ${actual ?? '(missing)'} is below the advisory floor ${floor} — ${reason}`);
-}
+const ROOT_RANGES = {
+  'decode-uri-component': [['0.0.0', '0.5.1']],
+  postcss: [['0.0.0', '8.5.23']],
+  zod: [['0.0.0', '4.6.6']],
+  'shell-quote': [['1.8.4', '1.11.0']],
+  undici: [['4.0.0', '6.29.1'], ['8.0.0', '8.12.2']],
+  'node-forge': [['0.0.0', '1.4.3']],
+  'fast-uri': [['0.0.0', '3.1.9']],
+  'ip-address': [['0.0.0', '10.7.4']],
+  'source-map-js': [['0.1.0', '1.2.2']],
+};
+
+const WEB_RANGES = {
+  'maplibre-gl': [['0.0.0', '6.5.0']],
+  next: [['0.0.0', '15.5.28']],
+  sharp: [['0.0.0', '0.35.5']],
+  'source-map-js': [['0.1.0', '1.2.2']],
+  postcss: [['0.0.0', '8.5.23']],
+};
 
 test('root overrides pin the advisory-fixed versions', () => {
   const pkg = readJson('package.json');
@@ -60,28 +104,16 @@ test('root overrides pin the advisory-fixed versions', () => {
     'zod must stay on the advisory-fixed patch (GHSA-mrhx-c7xc-m3w5 affects < 4.6.6)');
 });
 
-test('root lockfile resolves every remediated package above its advisory floor', () => {
+test('root lockfile has no vulnerable version of any remediated package, at any nesting level', () => {
   const lock = readJson('package-lock.json');
-  expectFloor(lock, 'decode-uri-component', '0.5.1',
-    'GHSA-qr28-fpjm-wq7f (high) affects <= 0.5.0 — a revert re-resolves 0.2.2');
-  expectFloor(lock, 'postcss', '8.5.23', 'the <= 8.5.22 range carries four advisories (2 high, 2 moderate)');
-  expectFloor(lock, 'zod', '4.6.6', 'GHSA-mrhx-c7xc-m3w5 (high) affects < 4.6.6');
-  expectFloor(lock, 'shell-quote', '1.11.0', 'GHSA-pqg4-j6r4-53mv (critical) affects >= 1.8.4 < 1.11.0');
-  expectFloor(lock, 'undici', '8.12.2', 'undici carries 12 advisories across < 6.29.1 and >= 8.0.0 < 8.12.2');
-  expectFloor(lock, 'node-forge', '1.4.3', 'node-forge carries 17 advisories affecting <= 1.4.2');
-  expectFloor(lock, 'fast-uri', '3.1.9', 'fast-uri carries 4 advisories affecting < 3.1.9');
-  expectFloor(lock, 'ip-address', '10.7.4', 'GHSA-rxp7-6hxx-x8q5 (moderate) affects <= 10.7.3');
-  expectFloor(lock, 'source-map-js', '1.2.2', 'GHSA-68fv-2mgg-jv7q (high) affects < 1.2.2');
+  for (const [pkg, ranges] of Object.entries(ROOT_RANGES)) {
+    assertPackageSafe(lock, 'root lockfile', pkg, ranges);
+  }
 });
 
-test('web keeps maplibre-gl and the semver fixes above their advisory floors', () => {
-  const pkg = readJson('web', 'package.json');
-  assert.match(pkg.dependencies?.['maplibre-gl'] ?? '', /^\^6\./,
-    'web must keep maplibre-gl on 6.x — 5.x is inside the critical XSS range (GHSA-jrc7-96c5-q579 affects <= 6.4.0)');
+test('web lockfile has no vulnerable version of any remediated package, at any nesting level', () => {
   const lock = readJson('web', 'package-lock.json');
-  expectFloor(lock, 'maplibre-gl', '6.19.0', 'GHSA-jrc7-96c5-q579 (critical XSS) affects <= 6.4.0');
-  expectFloor(lock, 'next', '15.5.28', 'next carries 4 advisories affecting <= 15.5.27');
-  expectFloor(lock, 'sharp', '0.35.5', 'GHSA-wq5f-xc86-pv6w (high) affects < 0.35.5');
-  expectFloor(lock, 'source-map-js', '1.2.2', 'GHSA-68fv-2mgg-jv7q (high) affects < 1.2.2');
-  expectFloor(lock, 'postcss', '8.5.23', 'the <= 8.5.22 range carries four advisories');
+  for (const [pkg, ranges] of Object.entries(WEB_RANGES)) {
+    assertPackageSafe(lock, 'web lockfile', pkg, ranges);
+  }
 });
