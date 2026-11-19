@@ -31,8 +31,9 @@ module.exports = {
     // ESM the design zone serves to the browser; jest needs the Expo
     // transform the way the magnet/amber pieces get it. The guard is
     // components/about-city-map.test.tsx: dropping the mapping dies on the
-    // ESM parse error.
-    "production[/\\\\](kit-geo|about-map-data|about-map-geo)\\.mjs$": ["babel-jest", {
+    // ESM parse error. #334 also shares route-art-paths and kit-icons;
+    // components/about-city-pages.test.tsx exercises their native import.
+    "production[/\\\\](kit-geo|about-map-data|about-map-geo|route-art-paths|kit-icons)\\.mjs$": ["babel-jest", {
       presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
       caller: { name: "metro", bundler: "metro", platform: "ios" },
     }],

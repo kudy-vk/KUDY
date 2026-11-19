@@ -26,18 +26,18 @@ jest.mock("react-native-gesture-handler", () => {
   return gestureHandlerMock();
 });
 
-const t = aboutCityText(ABOUT_CITY_STRINGS.be);
 const atlasWith = (patch: Partial<AboutCityAtlasState>): AboutCityAtlasState => ({ ...ABOUT_CITY_ATLAS_INITIAL, ...patch });
 
 // The atlas state is the caller's; the harness holds it the way the section
 // state does, so the map's setAtlas patches land in the render.
-function Harness({ initial }: { initial: AboutCityAtlasState }) {
+function Harness({ initial, lang }: { initial: AboutCityAtlasState; lang: "be" | "en" }) {
   const [atlas, setAtlasState] = useState(initial);
   const onOpenSection = jest.fn();
   harness.onOpenSection = onOpenSection;
   return (
     <AboutCityMap
-      t={t}
+      t={aboutCityText(ABOUT_CITY_STRINGS[lang])}
+      lang={lang}
       atlas={atlas}
       setAtlas={(patch) => setAtlasState((prev) => ({ ...prev, ...patch }))}
       foldOpen
@@ -48,8 +48,8 @@ function Harness({ initial }: { initial: AboutCityAtlasState }) {
 }
 const harness: { onOpenSection: (id: "airport") => void } = { onOpenSection: () => undefined };
 
-function renderMap(atlas: AboutCityAtlasState = ABOUT_CITY_ATLAS_INITIAL) {
-  render(<Harness initial={atlas} />);
+function renderMap(atlas: AboutCityAtlasState = ABOUT_CITY_ATLAS_INITIAL, lang: "be" | "en" = "be") {
+  render(<Harness initial={atlas} lang={lang} />);
   return { onOpenSection: harness.onOpenSection };
 }
 
@@ -79,7 +79,12 @@ test("the zone list picks the zone; the card names it, its kind and the way in",
   expect(card.getByText("Месцы для наведвання")).toBeTruthy();
   expect(card.getByText("Курортны цэнтр: вуліца Monte Cassino (Monciak) вядзе да мора і мола.")).toBeTruthy();
   // The nearest running stop rides the ways (zone.stop, ≤1.5 km).
-  expect(card.getByText(/км па прамой/)).toBeTruthy();
+  expect(card.getByText(/\d+,\d км па прамой/)).toBeTruthy();
+});
+
+test("the English zone card keeps one decimal digit with a point", () => {
+  renderMap(atlasWith({ pick: { kind: "zone", id: "sopot" } }), "en");
+  expect(within(screen.getByTestId("city-map-card")).getByText(/\d+\.\d km in a straight line/)).toBeTruthy();
 });
 
 test("the station card carries the line badges and the change note", () => {

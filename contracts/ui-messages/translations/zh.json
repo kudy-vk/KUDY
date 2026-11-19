@@ -4,7 +4,7 @@
   "provenance": {
     "kind": "authored",
     "reviewer": "агент-рэцэнзент, сесія G21.46",
-    "evidence": "аўтарскі спрошчана-кітайскі (zh-Hans, мацерыковая норма) пераклад у задачы G21.46 (картка 670 архіўнага рэпе): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr/cs/sv (G21.10\u2013G21.14); рэгістр \u2014 нейтральная сучасная мацерыковая норма, кнопкі ў загадным ладзе (стандарт кітайскага UI); тэрміны батарэі G21.39 \u00A76.3 занкерваныя на корпус AOSP zh-rCN (\u4E0A\u4E00\u6B65/\u53D6\u6D88/\u8BBE\u7F6E/\u5BFC\u89C8/\u505C\u6B62/\u6563\u6B65/\u4E0B\u8F7D/\u8D2D\u4E70/\u6062\u590D/\u4E0D\u53EF\u7528) са следамі G21.27 у запісах; незалежны рэвью кітайскамоўнага LLM \u2014 асобны праход паводле рашэння ўладара 2026-10-14. Незалежнае кітайскамоўнае рэвью выканана 2026-10-17 асобным агентам-рэцэнзентам: на ўваходзе \u2014 source.json, зацверджаны en-даведнік, батарэя G21.39 \u00A76.3 з корпусам AOSP і глосарый; правераныя ўсе 295 запісаў па шасці правілах (сэнс, натуральнасць/рэгістр, замацаваныя тэрміны, параметры і формы, адзінства паняццяў, пунктуацыя). Знойдзена 23 знаходкі (0 blocker \u00B7 1 major \u00B7 7 minor \u00B7 15 nit); ніводнае рашэнне батарэі не было аспрэчана. Усе знаходкі закрытыя ў гэтай жа галіне: 24 запісы змененыя, кожны нясе адзнаку рашэння ў review.note."
+    "evidence": "аўтарскі спрошчана-кітайскі (zh-Hans, мацерыковая норма) пераклад у задачы G21.46 (картка 670 архіўнага рэпе): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr/cs/sv (G21.10–G21.14); рэгістр — нейтральная сучасная мацерыковая норма, кнопкі ў загадным ладзе (стандарт кітайскага UI); тэрміны батарэі G21.39 §6.3 занкерваныя на корпус AOSP zh-rCN (\u4E0A\u4E00\u6B65/\u53D6\u6D88/\u8BBE\u7F6E/\u5BFC\u89C8/\u505C\u6B62/\u6563\u6B65/\u4E0B\u8F7D/\u8D2D\u4E70/\u6062\u590D/\u4E0D\u53EF\u7528) са следамі G21.27 у запісах; незалежны рэвью кітайскамоўнага LLM — асобны праход паводле рашэння ўладара 2026-10-14. Незалежнае кітайскамоўнае рэвью выканана 2026-10-17 асобным агентам-рэцэнзентам: на ўваходзе — source.json, зацверджаны en-даведнік, батарэя G21.39 §6.3 з корпусам AOSP і глосарый; правераныя ўсе 295 запісаў па шасці правілах (сэнс, натуральнасць/рэгістр, замацаваныя тэрміны, параметры і формы, адзінства паняццяў, пунктуацыя). Знойдзена 23 знаходкі (0 blocker · 1 major · 7 minor · 15 nit); ніводнае рашэнне батарэі не было аспрэчана. Усе знаходкі закрытыя ў гэтай жа галіне: 24 запісы змененыя, кожны нясе адзнаку рашэння ў review.note."
   },
   "records": [
     {
@@ -15,9 +15,10 @@
         "outcome": "approved",
         "note": "Даслоўна пераўжытае зацверджанае «хутка» з web.ui.storeComingSoon; новых перакладаў няма."
       }
-    },    {
+    },
+    {
       "id": "native.chrome.aboutCity",
-      "value": "\u57ce\u5e02\u6307\u5357",
+      "value": "\u57CE\u5E02\u6307\u5357",
       "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
       "review": {
         "outcome": "approved",
@@ -39,7 +40,7 @@
       "reviewedSourceHash": "d434ea3d59a4874db509a395e9df857ee017bee8ed9cf40bdf911b4c745459c5",
       "review": {
         "outcome": "approved",
-        "note": "пазнака доступу; змешаны доступ: частка змесціва бясплатная \u2014 коратка і без дужак"
+        "note": "пазнака доступу; змешаны доступ: частка змесціва бясплатная — коратка і без дужак"
       }
     },
     {
@@ -66,7 +67,7 @@
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.back (frameworks/base#back_button_label, zh-rCN)",
         "term": "\u4E0A\u4E00\u6B65",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: кнопка Back у мацерыковым UI \u2014 гэта \u4E0A\u4E00\u6B65, а не слоўнікавае \u8FD4\u56DE; сэнс \u00ABвярнуцца на папярэдні экран\u00BB"
+        "reason": "батарэя G21.39: кнопка Back у мацерыковым UI — гэта \u4E0A\u4E00\u6B65, а не слоўнікавае \u8FD4\u56DE; сэнс «вярнуцца на папярэдні экран»"
       }
     },
     {
@@ -75,7 +76,7 @@
       "reviewedSourceHash": "c3196e598662ddc30063829a3d53b88c16855ef719f72189dcb748a4c7e72200",
       "review": {
         "outcome": "approved",
-        "note": "кароткі пункт вяртання да экрана горада, як be \u00ABГорад\u00BB"
+        "note": "кароткі пункт вяртання да экрана горада, як be «Горад»"
       }
     },
     {
@@ -93,7 +94,7 @@
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.cancel (frameworks/base#cancel, zh-rCN)",
         "term": "\u53D6\u6D88",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: акцыя скасавання дыялога \u2014 \u53D6\u6D88 у CEDICT/MOE і ў корпусе AOSP (адзіны сэнс)"
+        "reason": "батарэя G21.39: акцыя скасавання дыялога — \u53D6\u6D88 у CEDICT/MOE і ў корпусе AOSP (адзіны сэнс)"
       }
     },
     {
@@ -102,7 +103,7 @@
       "reviewedSourceHash": "1db04f4cab5a569077412e68b581db2461473397a0b1f1ba55ce094f9c65f144",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; тэрмін недаступнасці \u2014 па батарэі unavailable, \u00ABчасова\u00BB \u2014 звыклая кітайская прыслоўе-прыстаўка"
+        "note": "радок стану; тэрмін недаступнасці — па батарэі unavailable, «часова» — звыклая кітайская прыслоўе-прыстаўка"
       }
     },
     {
@@ -117,7 +118,7 @@
         "status": "resolved",
         "kind": "looked-up",
         "source": "android",
-        "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.unavailable (frameworks/base, zh-rCN \u00AB\u2026\u4E0D\u53EF\u7528\u00BB)",
+        "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.unavailable (frameworks/base, zh-rCN «…\u4E0D\u53EF\u7528»)",
         "term": "\u4E0D\u53EF\u7528",
         "date": "2026-10-17",
         "reason": "слоўнікавы прабел (няма ні ў CEDICT, ні ў MOE); сэнс даказваны толькі корпусам AOSP"
@@ -129,7 +130,7 @@
       "reviewedSourceHash": "f835b71196437961eeaeb3074ef18024e8204716abc2801515bbdf6a8c4b51d3",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; падборка \u2192 \u7CBE\u9009\u96C6 (куратаваная падборка)"
+        "note": "радок стану; падборка → \u7CBE\u9009\u96C6 (куратаваная падборка)"
       }
     },
     {
@@ -147,14 +148,14 @@
       "reviewedSourceHash": "f9408779fd160eda48f9d52e41c0a274afa34f1fc10c34ed16c655a630413f88",
       "review": {
         "outcome": "approved",
-        "note": "загаловак секцыі; walk \u2192 \u6563\u6B65 па батарэі, актуалізацыя праз \u5F53\u524D"
+        "note": "загаловак секцыі; walk → \u6563\u6B65 па батарэі, актуалізацыя праз \u5F53\u524D"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
         "term": "\u6563\u6B65",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 \u00A76.3: walk = \u6563\u6B65 (зацверджаная рашэннем рэкамендацыя); ні AOSP, ні зацверджаныя слоўнікі не даюць піна для гэтага сэнсу, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
+        "reason": "батарэя G21.39 §6.3: walk = \u6563\u6B65 (зацверджаная рашэннем рэкамендацыя); ні AOSP, ні зацверджаныя слоўнікі не даюць піна для гэтага сэнсу, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
       }
     },
     {
@@ -163,7 +164,7 @@
       "reviewedSourceHash": "c6a254fe804abb64bc54bbe20e172db06ed99322075f21a9f868ba5e35a923b1",
       "review": {
         "outcome": "approved",
-        "note": "банер дэградацыі; частка звестак \u2014 \u90E8\u5206\u6570\u636E"
+        "note": "банер дэградацыі; частка звестак — \u90E8\u5206\u6570\u636E"
       }
     },
     {
@@ -172,16 +173,16 @@
       "reviewedSourceHash": "0e0f487df8a6cdd6b102b55fad23fd34872990e187a2f2ff8045950fbfa6b419",
       "review": {
         "outcome": "approved",
-        "note": "пазнака для чытача экрана; тры кропкі \u2014 \u4E09\u4E2A\u5730\u70B9, \u793A\u4F8B\u793A\u610F\u56FE \u2014 прыкладная схема \u00B7 Незалежнае рэв'ю (2026-10-17): \u793A\u4F8B\u793A\u610F\u56FE \u2192 \u793A\u4F8B\u56FE (два амаль сінанімічныя азначэнні побач чыталіся цяжка)"
+        "note": "пазнака для чытача экрана; тры кропкі — \u4E09\u4E2A\u5730\u70B9, \u793A\u4F8B\u793A\u610F\u56FE — прыкладная схема · Незалежнае рэв'ю (2026-10-17): \u793A\u4F8B\u793A\u610F\u56FE → \u793A\u4F8B\u56FE (два амаль сінанімічныя азначэнні побач чыталіся цяжка)"
       }
     },
     {
       "id": "native.chrome.demoNearbyMapLabel",
-      "value": "\u6563\u6B65\u793A\u610F\u56FE \u00B7 \u6F14\u793A",
+      "value": "\u6563\u6B65\u793A\u610F\u56FE · \u6F14\u793A",
       "reviewedSourceHash": "1829b6458dc887619cb8377e2ac100758f5cad90061438a550be0a620fa1e833",
       "review": {
         "outcome": "approved",
-        "note": "бачны подпіс прыкладнай схемы; demo \u2192 \u6F14\u793A, як у іншых мовах"
+        "note": "бачны подпіс прыкладнай схемы; demo → \u6F14\u793A, як у іншых мовах"
       }
     },
     {
@@ -190,12 +191,12 @@
       "reviewedSourceHash": "25cbc93df0b908ae3ae7b81353ad38253b44c79bc3fd50fedebf5e9391b819e8",
       "review": {
         "outcome": "approved",
-        "note": "заўвага пра прыкладны дэма-кантэнт і забарону навігацыі; два сказы захаваныя \u00B7 Незалежнае рэв'ю (2026-10-17): \u6B63\u5F0F\u8DEF\u7EBF \u2192 \u53EF\u76F4\u63A5\u7528\u4E8E\u5BFC\u822A\u7684\u8DEF\u7EBF: be/en кажуць пра непадрыхтаванасць (\u00ABне гатовы\u00BB), а не пра афіцыйнасць"
+        "note": "заўвага пра прыкладны дэма-кантэнт і забарону навігацыі; два сказы захаваныя · Незалежнае рэв'ю (2026-10-17): \u6B63\u5F0F\u8DEF\u7EBF → \u53EF\u76F4\u63A5\u7528\u4E8E\u5BFC\u822A\u7684\u8DEF\u7EBF: be/en кажуць пра непадрыхтаванасць («не гатовы»), а не пра афіцыйнасць"
       }
     },
     {
       "id": "native.chrome.demoRunMapLabel",
-      "value": "\u5730\u70B9\u793A\u610F\u56FE \u00B7 \u6F14\u793A",
+      "value": "\u5730\u70B9\u793A\u610F\u56FE · \u6F14\u793A",
       "reviewedSourceHash": "2b2cf7128548b97eb8fdc8ed19819669c87c9b8afa19d11ac8a9f77706552f4b",
       "review": {
         "outcome": "approved",
@@ -267,7 +268,7 @@
     },
     {
       "id": "native.chrome.discoveryEmpty",
-      "value": "\u6CA1\u6709\u5B8C\u5168\u5339\u914D\u7684\u7ED3\u679C\u2014\u2014\u8BF7\u653E\u5BBD\u6761\u4EF6\uFF0C\u6216\u770B\u770B\u5176\u4ED6\u9009\u9879\u3002",
+      "value": "\u6CA1\u6709\u5B8C\u5168\u5339\u914D\u7684\u7ED3\u679C——\u8BF7\u653E\u5BBD\u6761\u4EF6\uFF0C\u6216\u770B\u770B\u5176\u4ED6\u9009\u9879\u3002",
       "reviewedSourceHash": "831cdd7dfd6d729661152d21f5c107ebf2438ec405db988ddc8d2cd62633521d",
       "review": {
         "outcome": "approved",
@@ -280,7 +281,7 @@
       "reviewedSourceHash": "9252d5d0294115694f781e58a88257ae4b90cca39cb8c14091efd477f0721935",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; той самы тэрмін недаступнасці, што і ў каталога \u00B7 Незалежнае рэв'ю (2026-10-17): тое самае, што discoveryUnavailable \u2014 абедзве радкі стану цяпер адной пабудовы"
+        "note": "радок стану; той самы тэрмін недаступнасці, што і ў каталога · Незалежнае рэв'ю (2026-10-17): тое самае, што discoveryUnavailable — абедзве радкі стану цяпер адной пабудовы"
       }
     },
     {
@@ -298,7 +299,7 @@
       "reviewedSourceHash": "262a86e4e8647e231e8d140b8e62fdbf5d769ab8c08400d9d87afb962676211a",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; падборка \u2192 \u7CBE\u9009 \u00B7 Незалежнае рэв'ю (2026-10-17): \u7CBE\u9009 \u2192 \u7CBE\u9009\u5185\u5BB9: самастойны назоўнік для \u00ABпадбору\u00BB (\u7CBE\u9009\u96C6 застаецца асобным сэнсам \u00ABпадборка\u00BB)"
+        "note": "радок стану; падборка → \u7CBE\u9009 · Незалежнае рэв'ю (2026-10-17): \u7CBE\u9009 → \u7CBE\u9009\u5185\u5BB9: самастойны назоўнік для «падбору» (\u7CBE\u9009\u96C6 застаецца асобным сэнсам «падборка»)"
       }
     },
     {
@@ -321,7 +322,7 @@
     },
     {
       "id": "native.chrome.durationRange",
-      "value": "\u65F6\u95F4\uFF1A${minMinutes}\u2013${maxMinutes}\u5206\u949F",
+      "value": "\u65F6\u95F4\uFF1A${minMinutes}–${maxMinutes}\u5206\u949F",
       "reviewedSourceHash": "78add4278ac05d6aa17374a52f30bb5c313f6da5834ace6e464ed213dcafeee9",
       "review": {
         "outcome": "approved",
@@ -334,23 +335,23 @@
       "reviewedSourceHash": "780c5d18130bb93df4355222162c7d4d8cc0cc3510971a9e6376751dff00a953",
       "review": {
         "outcome": "approved",
-        "note": "радок факту; кропкі \u2192 \u5730\u70B9 (мясцовы сэнс кропак маршруту)"
+        "note": "радок факту; кропкі → \u5730\u70B9 (мясцовы сэнс кропак маршруту)"
       }
     },
     {
       "id": "native.chrome.guidesLink",
-      "value": "\u5BFC\u89C8 \u2192",
+      "value": "\u5BFC\u89C8 →",
       "reviewedSourceHash": "ae59ec899a5964dea00463b49e7dd6348684069736ce95f6183d3c79b94c389c",
       "review": {
         "outcome": "approved",
-        "note": "ссылка на раздзел гідаў; кітайскі тэрмін электроннага аўдыягіда \u2014 \u5BFC\u89C8 (не \u5BFC\u6E38, чалавек-экскурсавод)"
+        "note": "ссылка на раздзел гідаў; кітайскі тэрмін электроннага аўдыягіда — \u5BFC\u89C8 (не \u5BFC\u6E38, чалавек-экскурсавод)"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
         "term": "\u5BFC\u89C8",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 \u00A76.3: электронны гід = \u5BFC\u89C8, чалавек-экскурсавод = \u5BFC\u6E38; ні AOSP, ні зацверджаныя слоўнікі не піняць сэнс, таму рашэнне рэцэнзента"
+        "reason": "батарэя G21.39 §6.3: электронны гід = \u5BFC\u89C8, чалавек-экскурсавод = \u5BFC\u6E38; ні AOSP, ні зацверджаныя слоўнікі не піняць сэнс, таму рашэнне рэцэнзента"
       }
     },
     {
@@ -359,7 +360,7 @@
       "reviewedSourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a",
       "review": {
         "outcome": "approved",
-        "note": "лічба праслуханых гісторый; дзеяслоў-вынік \u5DF2\u542C без змены роду \u00B7 Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C \u2192 \u5DF2\u6536\u542C: адзін сэнс \u00ABпраслухана\u00BB мае адно слова ва ўсім наборы (як native.run.status.played)"
+        "note": "лічба праслуханых гісторый; дзеяслоў-вынік \u5DF2\u542C без змены роду · Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C → \u5DF2\u6536\u542C: адзін сэнс «праслухана» мае адно слова ва ўсім наборы (як native.run.status.played)"
       }
     },
     {
@@ -368,12 +369,12 @@
       "reviewedSourceHash": "e533a4767a8b973cf00efbfea8c16a7163f08f541ae657e853eea36baa0ccdc9",
       "review": {
         "outcome": "approved",
-        "note": "радок стану са сказам з кропкай; гісторыя \u2192 \u5386\u53F2\u8BB0\u5F55"
+        "note": "радок стану са сказам з кропкай; гісторыя → \u5386\u53F2\u8BB0\u5F55"
       }
     },
     {
       "id": "native.chrome.kudyLink",
-      "value": "KUDY \u2192",
+      "value": "KUDY →",
       "reviewedSourceHash": "6215ec8b2ead10ed524e46f5c1ddd0a0567f909e21330a8e7a0229422917383b",
       "review": {
         "outcome": "approved",
@@ -400,16 +401,16 @@
     },
     {
       "id": "native.chrome.liveRowLine",
-      "value": "${state} \u2014 \u4ECE${day}\u8D77 \u2014 \u5DF2\u6536\u542C\uFF1A${heard}",
+      "value": "${state} — \u4ECE${day}\u8D77 — \u5DF2\u6536\u542C\uFF1A${heard}",
       "reviewedSourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081",
       "review": {
         "outcome": "approved",
-        "note": "цэлы радок жывой прагулкі; працяжнікі і адсутнасць прыназоўніка захаваныя \u00B7 Незалежнае рэв'ю (2026-10-17): вернутая прыназоўнікавая сувязь \u4ECE\u2026\u8D77 паводле be \u00ABз ${day}\u00BB / en \u00ABfrom\u00BB (без яе дзень чытаўся як асобная пазнака); \u5DF2\u542C \u2192 \u5DF2\u6536\u542C \u2014 адно слова на адзін сэнс ва ўсім наборы"
+        "note": "цэлы радок жывой прагулкі; працяжнікі і адсутнасць прыназоўніка захаваныя · Незалежнае рэв'ю (2026-10-17): вернутая прыназоўнікавая сувязь \u4ECE…\u8D77 паводле be «з ${day}» / en «from» (без яе дзень чытаўся як асобная пазнака); \u5DF2\u542C → \u5DF2\u6536\u542C — адно слова на адзін сэнс ва ўсім наборы"
       }
     },
     {
       "id": "native.chrome.loading",
-      "value": "\u52A0\u8F7D\u4E2D\u2026",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "0f54c6960ddd3180b3b6aac5d89f08b7c6f51017a06bf42789acdb26fca33706",
       "review": {
         "outcome": "approved",
@@ -431,16 +432,16 @@
       "reviewedSourceHash": "f5ef5b9f4e464f378e5652777e46ce86225013cf03b06a4f66665e92c0b2dfb6",
       "review": {
         "outcome": "approved",
-        "note": "назва паверхні гісторый; рашэнне ўладара \u2014 KUDY без My"
+        "note": "назва паверхні гісторый; рашэнне ўладара — KUDY без My"
       }
     },
     {
       "id": "native.chrome.nearby",
-      "value": "\u9644\u8FD1 \u2192",
+      "value": "\u9644\u8FD1 →",
       "reviewedSourceHash": "19bbc736b6509867eccfc55e37450d946ccf5ceede28120e16baedd862349d82",
       "review": {
         "outcome": "approved",
-        "note": "пункт ніжняй навігацыі; побач \u2192 \u9644\u8FD1"
+        "note": "пункт ніжняй навігацыі; побач → \u9644\u8FD1"
       }
     },
     {
@@ -463,11 +464,11 @@
     },
     {
       "id": "native.chrome.notFoundHint",
-      "value": "\u76EE\u5F55\u8FD8\u5728\u7B49\u5F85\u2014\u2014\u8BF7\u7528\u201C\u4E0A\u4E00\u6B65\u201D\u6309\u94AE\u56DE\u5230\u76EE\u5F55\u3002",
+      "value": "\u76EE\u5F55\u8FD8\u5728\u7B49\u5F85——\u8BF7\u7528“\u4E0A\u4E00\u6B65”\u6309\u94AE\u56DE\u5230\u76EE\u5F55\u3002",
       "reviewedSourceHash": "28b7420ef0dc476a3c2ffc4b4eeeabd2f9dc647507d9f66a081d1b4fab127d40",
       "review": {
         "outcome": "approved",
-        "note": "падказка на экране адсутнага глыбокага лінку; назва кнопкі ўзятая з гэтага ж набору \u00B7 Незалежнае рэв'ю (2026-10-17): назва кнопкі выпраўлена на \u4E0A\u4E00\u6B65 \u2014 так называецца гэтая ж кнопка ў запісе native.chrome.back (было \u8FD4\u56DE, гэта значыць карыстальнік шукаў бы кнопку, якой на экране няма)"
+        "note": "падказка на экране адсутнага глыбокага лінку; назва кнопкі ўзятая з гэтага ж набору · Незалежнае рэв'ю (2026-10-17): назва кнопкі выпраўлена на \u4E0A\u4E00\u6B65 — так называецца гэтая ж кнопка ў запісе native.chrome.back (было \u8FD4\u56DE, гэта значыць карыстальнік шукаў бы кнопку, якой на экране няма)"
       }
     },
     {
@@ -490,11 +491,11 @@
     },
     {
       "id": "native.chrome.pastRowLine",
-      "value": "${startedDay} \u2014 ${finishedDay} \u2014 \u5DF2\u6536\u542C\uFF1A${heard}",
+      "value": "${startedDay} — ${finishedDay} — \u5DF2\u6536\u542C\uFF1A${heard}",
       "reviewedSourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa",
       "review": {
         "outcome": "approved",
-        "note": "цэлы радок завершанай прагулкі; запасное значэнне для ${finishedDay} прыходзіць з кананічнага параметра \u00B7 Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C \u2192 \u5DF2\u6536\u542C для адзінства з native.run.status.played і native.chrome.heardCount"
+        "note": "цэлы радок завершанай прагулкі; запасное значэнне для ${finishedDay} прыходзіць з кананічнага параметра · Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C → \u5DF2\u6536\u542C для адзінства з native.run.status.played і native.chrome.heardCount"
       }
     },
     {
@@ -512,7 +513,7 @@
       "reviewedSourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; прэв'ю \u2192 \u9884\u89C8"
+        "note": "радок стану; прэв'ю → \u9884\u89C8"
       }
     },
     {
@@ -656,14 +657,14 @@
       "reviewedSourceHash": "732b0324729bf9f41fd27f86c569da9b0d5b75f6c1081c90b3e611c3fd6113c9",
       "review": {
         "outcome": "approved",
-        "note": "нумар кропкі на экране прагулкі; кропкі маршруту \u2014 \u5730\u70B9"
+        "note": "нумар кропкі на экране прагулкі; кропкі маршруту — \u5730\u70B9"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
         "term": "\u5730\u70B9",
         "date": "2026-10-17",
-        "reason": "назоўнікавы сэнс \u00ABпрыпынак\u00BB у батарэі G21.39 \u2014 \u5DF4\u58EB\u7AD9 (транспартны), не падыходзіць для кропак пешай экскурсіі; \u5730\u70B9 \u2014 рашэнне рэцэнзента для кропак маршруту"
+        "reason": "назоўнікавы сэнс «прыпынак» у батарэі G21.39 — \u5DF4\u58EB\u7AD9 (транспартны), не падыходзіць для кропак пешай экскурсіі; \u5730\u70B9 — рашэнне рэцэнзента для кропак маршруту"
       }
     },
     {
@@ -679,7 +680,7 @@
         "kind": "reviewer-judgment",
         "term": "\u5730\u70B9",
         "date": "2026-10-17",
-        "reason": "той самы выбар, што і ў native.chrome.stopNumber: кропкі пешага маршруту \u2014 \u5730\u70B9, не транспартнае \u5DF4\u58EB\u7AD9"
+        "reason": "той самы выбар, што і ў native.chrome.stopNumber: кропкі пешага маршруту — \u5730\u70B9, не транспартнае \u5DF4\u58EB\u7AD9"
       }
     },
     {
@@ -702,7 +703,7 @@
     },
     {
       "id": "native.chrome.switchConfirm",
-      "value": "\u7ED3\u675F\u201C${liveTitle}\u201D\u5E76\u5F00\u59CB\u201C${candidateTitle}\u201D\uFF1F",
+      "value": "\u7ED3\u675F“${liveTitle}”\u5E76\u5F00\u59CB“${candidateTitle}”\uFF1F",
       "reviewedSourceHash": "7cb787411af9ba9b7fad2486e30c358743ded0e27b84f0d07be6a89e9500fb7d",
       "review": {
         "outcome": "approved",
@@ -715,7 +716,7 @@
       "reviewedSourceHash": "f4933f8d3f6e148b08c0458cfd8c82eda3f2e49657df777c47f9d5dd55e1bd05",
       "review": {
         "outcome": "approved",
-        "note": "радок \u00ABтэкст/аўдыё\u00BB; падзельнік-кропка з коскай поўнашырынны, аўдыё-сегмент умоўны як і ў крыніцы"
+        "note": "радок «тэкст/аўдыё»; падзельнік-кропка з коскай поўнашырынны, аўдыё-сегмент умоўны як і ў крыніцы"
       }
     },
     {
@@ -724,7 +725,7 @@
       "reviewedSourceHash": "4d2caf84a22f5db795338af5e935fc8654189716b361c93b3dd9cdb468de6eec",
       "review": {
         "outcome": "approved",
-        "note": "верхняя мяжа часу; кітайская мова не мае катэгорыі множнага ліку \u2014 формы толькі дыскрэтныя, як і ў крыніцы"
+        "note": "верхняя мяжа часу; кітайская мова не мае катэгорыі множнага ліку — формы толькі дыскрэтныя, як і ў крыніцы"
       },
       "forms": {
         "60": "\u6700\u591A\u4E00\u5C0F\u65F6",
@@ -747,7 +748,7 @@
       "reviewedSourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0",
       "review": {
         "outcome": "approved",
-        "note": "радок стану: паказ папярэдняга валіднага кэша \u00B7 Незалежнае рэв'ю (2026-10-17): \u4E0A\u4E00\u4E2A \u2192 \u4E0A\u6B21: гаворка пра кэш папярэдняга паспяховага чытання, а не пра адзін з некалькіх кэшаў"
+        "note": "радок стану: паказ папярэдняга валіднага кэша · Незалежнае рэв'ю (2026-10-17): \u4E0A\u4E00\u4E2A → \u4E0A\u6B21: гаворка пра кэш папярэдняга паспяховага чытання, а не пра адзін з некалькіх кэшаў"
       }
     },
     {
@@ -763,12 +764,12 @@
         "kind": "reviewer-judgment",
         "term": "\u6563\u6B65",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 \u00A76.3 фіксуе \u6563\u6B65 як тэрмін прагулкі (альтэрнатыва \u6F2B\u6B65 адхіленая); піна ў зацверджаных крыніцах няма, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
+        "reason": "батарэя G21.39 §6.3 фіксуе \u6563\u6B65 як тэрмін прагулкі (альтэрнатыва \u6F2B\u6B65 адхіленая); піна ў зацверджаных крыніцах няма, таму рашэнне рэцэнзента з апорай на рашэнне ўладара"
       }
     },
     {
       "id": "native.chrome.whatToDo",
-      "value": "\u73A9\u4EC0\u4E48 \u2192",
+      "value": "\u73A9\u4EC0\u4E48 →",
       "reviewedSourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179",
       "review": {
         "outcome": "approved",
@@ -777,7 +778,7 @@
     },
     {
       "id": "native.chrome.cityName",
-      "value": "\u683c\u4f46\u65af\u514b",
+      "value": "\u683C\u4F46\u65AF\u514B",
       "reviewedSourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2",
       "review": {
         "outcome": "approved",
@@ -786,7 +787,7 @@
     },
     {
       "id": "native.chrome.whereToToday",
-      "value": "\u4eca\u5929\u53bb\u54ea\u513f\uff1f",
+      "value": "\u4ECA\u5929\u53BB\u54EA\u513F\uFF1F",
       "reviewedSourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956",
       "review": {
         "outcome": "approved",
@@ -804,7 +805,7 @@
     },
     {
       "id": "native.guideHint.heading",
-      "value": "\u9644\u8FD1\u6709\u5BFC\u89C8\u2026",
+      "value": "\u9644\u8FD1\u6709\u5BFC\u89C8…",
       "reviewedSourceHash": "afa6c69cf50b58dde34a24aa9f742b7ebffee946eeb17e76d90f7ae65a8ae6b7",
       "review": {
         "outcome": "approved",
@@ -817,14 +818,14 @@
       "reviewedSourceHash": "c6c3fe285c1f5c311a4672cef712ff39d26fe314541ef3328e3bd2bf66608d3a",
       "review": {
         "outcome": "approved",
-        "note": "падказка чытача экрана: адкрыццё апісання гіда; guide \u2192 \u5BFC\u89C8"
+        "note": "падказка чытача экрана: адкрыццё апісання гіда; guide → \u5BFC\u89C8"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
         "term": "\u5BFC\u89C8",
         "date": "2026-10-17",
-        "reason": "той самы выбар тэрміну, што і ў native.chrome.guidesLink: электронны аўдыягід \u2014 \u5BFC\u89C8"
+        "reason": "той самы выбар тэрміну, што і ў native.chrome.guidesLink: электронны аўдыягід — \u5BFC\u89C8"
       }
     },
     {
@@ -885,7 +886,7 @@
         "kind": "reviewer-judgment",
         "term": "\u5BFC\u89C8",
         "date": "2026-10-17",
-        "reason": "тэрмін электроннага гіда \u5BFC\u89C8, зацверджаны батарэяй G21.39 \u00A76.3; піна ў зацверджаных крыніцах няма"
+        "reason": "тэрмін электроннага гіда \u5BFC\u89C8, зацверджаны батарэяй G21.39 §6.3; піна ў зацверджаных крыніцах няма"
       }
     },
     {
@@ -899,7 +900,7 @@
     },
     {
       "id": "native.nearby.loading",
-      "value": "\u52A0\u8F7D\u4E2D\u2026",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "76864c4c66c674c255382af4c8287404979066900d2b793bd18b722acbce8be4",
       "review": {
         "outcome": "approved",
@@ -912,12 +913,12 @@
       "reviewedSourceHash": "0be5495b00bd2c309da665137618d7af6ff0427f66e93426eb8944a88bb1e673",
       "review": {
         "outcome": "approved",
-        "note": "заўвага карты; тайлы \u2192 \u74E6\u7247"
+        "note": "заўвага карты; тайлы → \u74E6\u7247"
       }
     },
     {
       "id": "native.nearby.noteAcquiring",
-      "value": "\u6B63\u5728\u83B7\u53D6\u4F4D\u7F6E\u2026",
+      "value": "\u6B63\u5728\u83B7\u53D6\u4F4D\u7F6E…",
       "reviewedSourceHash": "f9fe47bc78d531a4f95a80b4eff4b6c272932890908241d99d23f16dcad1d467",
       "review": {
         "outcome": "approved",
@@ -926,16 +927,16 @@
     },
     {
       "id": "native.nearby.noteDenied",
-      "value": "\u4F4D\u7F6E\u6743\u9650\u672A\u6388\u6743\u2014\u2014\u624B\u52A8\u6D4F\u89C8",
+      "value": "\u4F4D\u7F6E\u6743\u9650\u672A\u6388\u6743——\u624B\u52A8\u6D4F\u89C8",
       "reviewedSourceHash": "51d96de0382db6c57b90bc679f3fac2001a7cffe7230898f5f8be0d0fa9d2bfe",
       "review": {
         "outcome": "approved",
-        "note": "заўвага: пазіцыя не дазволена; ручны агляд \u2192 \u624B\u52A8\u6D4F\u89C8 \u00B7 Незалежнае рэв'ю (2026-10-17): \u672A\u6388\u6743\u4F4D\u7F6E \u2192 \u4F4D\u7F6E\u6743\u9650\u672A\u6388\u6743: адмоўлены менавіта дазвол на пазіцыю, а не месца"
+        "note": "заўвага: пазіцыя не дазволена; ручны агляд → \u624B\u52A8\u6D4F\u89C8 · Незалежнае рэв'ю (2026-10-17): \u672A\u6388\u6743\u4F4D\u7F6E → \u4F4D\u7F6E\u6743\u9650\u672A\u6388\u6743: адмоўлены менавіта дазвол на пазіцыю, а не месца"
       }
     },
     {
       "id": "native.nearby.noteHeldByWalk",
-      "value": "\u6563\u6B65\u6B63\u5728\u4F7F\u7528\u4F4D\u7F6E\u2014\u2014\u624B\u52A8\u6D4F\u89C8",
+      "value": "\u6563\u6B65\u6B63\u5728\u4F7F\u7528\u4F4D\u7F6E——\u624B\u52A8\u6D4F\u89C8",
       "reviewedSourceHash": "0da6932f1e990ff833d7c1eacbd3bb65469cda844e7f5e6658b41c2e4bd4db2d",
       "review": {
         "outcome": "approved",
@@ -993,7 +994,7 @@
       "reviewedSourceHash": "ceb1585e913e83295e615727dc433f621f160b3acd8ed18e40faea444c847749",
       "review": {
         "outcome": "approved",
-        "note": "загаловак экрана \u00ABПобач\u00BB"
+        "note": "загаловак экрана «Побач»"
       }
     },
     {
@@ -1029,7 +1030,7 @@
       "reviewedSourceHash": "e5a837b139f912633fb94f4a98e64036a82ed35e7b6a1bc4b71560c725427e49",
       "review": {
         "outcome": "approved",
-        "note": "кнопка адмовы: не цяпер, без канфліктнага \u00ABніколі\u00BB"
+        "note": "кнопка адмовы: не цяпер, без канфліктнага «ніколі»"
       }
     },
     {
@@ -1070,7 +1071,7 @@
     },
     {
       "id": "native.offer.purchasedPending",
-      "value": "\u5DF2\u8D2D\u4E70 \u00B7 \u9700\u8981\u4E0B\u8F7D",
+      "value": "\u5DF2\u8D2D\u4E70 · \u9700\u8981\u4E0B\u8F7D",
       "reviewedSourceHash": "73351aee750908e898ef326402d359a6064c68200c51608aba858cd3512cffac",
       "review": {
         "outcome": "approved",
@@ -1081,7 +1082,7 @@
         "kind": "reviewer-judgment",
         "term": "\u8D2D\u4E70",
         "date": "2026-10-17",
-        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 \u00A76.3; адзіная крыніца \u2014 рашэнне ўладара, піна ў зацверджаных крыніцах няма"
+        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 §6.3; адзіная крыніца — рашэнне ўладара, піна ў зацверджаных крыніцах няма"
       }
     },
     {
@@ -1117,7 +1118,7 @@
       "reviewedSourceHash": "c10b21985ac88ed9bb6b0ae9d95e3ce080839a622e1d3f09b92ec534ee0040ff",
       "review": {
         "outcome": "approved",
-        "note": "радок стану: тэйзераў для месца няма; тэйзер \u2192 \u8BD5\u542C\u7247\u6BB5"
+        "note": "радок стану: тэйзераў для месца няма; тэйзер → \u8BD5\u542C\u7247\u6BB5"
       }
     },
     {
@@ -1149,7 +1150,7 @@
     },
     {
       "id": "native.place.loading",
-      "value": "\u52A0\u8F7D\u4E2D\u2026",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "9fdf727adcd5b226497b6726d48906a85ffbf4ea7192fb2f52f9c5569577671f",
       "review": {
         "outcome": "approved",
@@ -1180,7 +1181,7 @@
       "reviewedSourceHash": "31c53b2b89b3c44e240d3860a4995fab290ac654eaabbfa98283f52915cc70e4",
       "review": {
         "outcome": "approved",
-        "note": "пазнака \u00ABзараз грае\u00BB для тэйзера"
+        "note": "пазнака «зараз грае» для тэйзера"
       }
     },
     {
@@ -1198,7 +1199,7 @@
       "reviewedSourceHash": "7057a04fb254bea27c4c76ad7523f0b96822383dbe1b0b3a275667acbde5655d",
       "review": {
         "outcome": "approved",
-        "note": "радок збою запуску гуку; сказ з кропкай, як у крыніцы \u00B7 Незалежнае рэв'ю (2026-10-17): \u58F0\u97F3\u6CA1\u6709\u5F00\u59CB \u2192 \u97F3\u9891\u672A\u5F00\u59CB\u64AD\u653E (натуральная калокацыя; суб'ект \u97F3\u9891 \u2014 той самы, што ў native.place.audioLabel і web.ui.audioHeading)"
+        "note": "радок збою запуску гуку; сказ з кропкай, як у крыніцы · Незалежнае рэв'ю (2026-10-17): \u58F0\u97F3\u6CA1\u6709\u5F00\u59CB → \u97F3\u9891\u672A\u5F00\u59CB\u64AD\u653E (натуральная калокацыя; суб'ект \u97F3\u9891 — той самы, што ў native.place.audioLabel і web.ui.audioHeading)"
       }
     },
     {
@@ -1239,7 +1240,7 @@
     },
     {
       "id": "native.place.refusalText.moment#session-refused",
-      "value": "\u8BD5\u542C\u5F53\u524D\u65E0\u6CD5\u64AD\u653E\u2014\u2014\u8BF7\u518D\u8BD5\u4E00\u6B21\u3002",
+      "value": "\u8BD5\u542C\u5F53\u524D\u65E0\u6CD5\u64AD\u653E——\u8BF7\u518D\u8BD5\u4E00\u6B21\u3002",
       "reviewedSourceHash": "27f2c6c3a5f9c950a31c4bd3719c6197ccbb81c08574f11f589d9ee1c548f137",
       "review": {
         "outcome": "approved",
@@ -1248,7 +1249,7 @@
     },
     {
       "id": "native.place.refusalText.moment#session-unroutable",
-      "value": "\u8BD5\u542C\u5728\u6563\u6B65\u4E2D\u65E0\u6CD5\u64AD\u653E\u2014\u2014\u8BF7\u5728\u6B64\u91CD\u65B0\u64AD\u653E\u3002",
+      "value": "\u8BD5\u542C\u5728\u6563\u6B65\u4E2D\u65E0\u6CD5\u64AD\u653E——\u8BF7\u5728\u6B64\u91CD\u65B0\u64AD\u653E\u3002",
       "reviewedSourceHash": "b4a69a45fa3ce27bf828742abaf9056f319804794f2ee31db62bca527194b08b",
       "review": {
         "outcome": "approved",
@@ -1277,7 +1278,7 @@
         "kind": "reviewer-judgment",
         "term": "\u505C\u6B62",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39 \u00A76.3: дзеянне \u00ABспыніць\u00BB \u2014 \u505C\u6B62; назоўнік-прыпынак (\u5DF4\u58EB\u7AD9) не падыходзіць для дзеяння, таму асобны тэрмін"
+        "reason": "батарэя G21.39 §6.3: дзеянне «спыніць» — \u505C\u6B62; назоўнік-прыпынак (\u5DF4\u58EB\u7AD9) не падыходзіць для дзеяння, таму асобны тэрмін"
       }
     },
     {
@@ -1313,7 +1314,7 @@
       "reviewedSourceHash": "22fe4c2b5e44f41bb7cafc1b0262f1f737e96b86317ce4830a1a8160b57e57eb",
       "review": {
         "outcome": "approved",
-        "note": "дэталь стану пакета прэв'ю; названыя формы захаваныя па ключах крыніцы, колькасць у другой форме \u00B7 Незалежнае рэв'ю (2026-10-17): \u5B89\u88C5\u5305 (пакет-усталёўнік APK) \u2192 \u5185\u5BB9\u5305, як у native.run.transcriptPending і web.ui.audioUnavailable \u2014 адно паняцце, адно слова; формы захаваныя, параметр count у missing-files правераны сканам"
+        "note": "дэталь стану пакета прэв'ю; названыя формы захаваныя па ключах крыніцы, колькасць у другой форме · Незалежнае рэв'ю (2026-10-17): \u5B89\u88C5\u5305 (пакет-усталёўнік APK) → \u5185\u5BB9\u5305, як у native.run.transcriptPending і web.ui.audioUnavailable — адно паняцце, адно слова; формы захаваныя, параметр count у missing-files правераны сканам"
       },
       "forms": {
         "damaged": "\u5185\u5BB9\u5305\u5DF2\u635F\u574F\uFF1A\u9700\u8981\u91CD\u65B0\u4E0B\u8F7D",
@@ -1336,7 +1337,7 @@
       "reviewedSourceHash": "a549fbfb60c21722178889b8deb230cc530a13f81c505c996076e24826545daf",
       "review": {
         "outcome": "approved",
-        "note": "кнопка прэв'ю: загрузіць; дзеяслоў і назоўнік \u2014 адно слова"
+        "note": "кнопка прэв'ю: загрузіць; дзеяслоў і назоўнік — адно слова"
       },
       "terminology": {
         "status": "resolved",
@@ -1345,7 +1346,7 @@
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.download (packages/providers/DownloadProvider#root_downloads, zh-rCN)",
         "term": "\u4E0B\u8F7D",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: назоўнікавы сэнс \u00ABспампоўка\u00BB ёсць толькі ў корпусе AOSP (\u4E0B\u8F7D/\u4E0B\u8F7D\u5185\u5BB9); у слоўніках толькі дзеяслоў \u2014 прабел закрыты корпусам"
+        "reason": "батарэя G21.39: назоўнікавы сэнс «спампоўка» ёсць толькі ў корпусе AOSP (\u4E0B\u8F7D/\u4E0B\u8F7D\u5185\u5BB9); у слоўніках толькі дзеяслоў — прабел закрыты корпусам"
       }
     },
     {
@@ -1363,7 +1364,7 @@
       "reviewedSourceHash": "c92fa779597efd3693633519bd657c144bf3c77398a05850305192c9834424ff",
       "review": {
         "outcome": "approved",
-        "note": "адмова прэв'ю: загрузка недаступная на гэтай зборцы; адмоўная форма без літаральнага \u4E0D\u53EF\u7528, каб не згубіць сэнс \u00ABне падтрымліваецца\u00BB"
+        "note": "адмова прэв'ю: загрузка недаступная на гэтай зборцы; адмоўная форма без літаральнага \u4E0D\u53EF\u7528, каб не згубіць сэнс «не падтрымліваецца»"
       }
     },
     {
@@ -1388,7 +1389,7 @@
         "kind": "reviewer-judgment",
         "term": "\u8D2D\u4E70",
         "date": "2026-10-17",
-        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 \u00A76.3; крыніцы-піна няма, рашэнне рэцэнзента"
+        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 §6.3; крыніцы-піна няма, рашэнне рэцэнзента"
       }
     },
     {
@@ -1438,7 +1439,7 @@
     },
     {
       "id": "native.run.attribution",
-      "value": "\u6570\u636E \u00A9 OpenStreetMap \u8D21\u732E\u8005\uFF0CODbL",
+      "value": "\u6570\u636E © OpenStreetMap \u8D21\u732E\u8005\uFF0CODbL",
       "reviewedSourceHash": "c2b14d03ca62503c507e49ef77155a31d8423716a313ab878c7b0d751bcd23d3",
       "review": {
         "outcome": "approved",
@@ -1465,7 +1466,7 @@
     },
     {
       "id": "native.run.deniedGps",
-      "value": "\u81EA\u52A8\u6545\u4E8B\u65E0\u6CD5\u8FD0\u884C\u2014\u2014\u6211\u65E0\u6CD5\u83B7\u53D6\u60A8\u7684\u4F4D\u7F6E",
+      "value": "\u81EA\u52A8\u6545\u4E8B\u65E0\u6CD5\u8FD0\u884C——\u6211\u65E0\u6CD5\u83B7\u53D6\u60A8\u7684\u4F4D\u7F6E",
       "reviewedSourceHash": "4c2d57377f5bee5ce40cccc7e2393893218a2c5c87e74e60c3065cff7b28af0b",
       "review": {
         "outcome": "approved",
@@ -1546,7 +1547,7 @@
     },
     {
       "id": "native.run.loading",
-      "value": "\u52A0\u8F7D\u4E2D\u2026",
+      "value": "\u52A0\u8F7D\u4E2D…",
       "reviewedSourceHash": "040940eda93e7404d57a64daf645d628ab55ebf399ce3b32883736cf9bf238fc",
       "review": {
         "outcome": "approved",
@@ -1568,7 +1569,7 @@
       "reviewedSourceHash": "001c5d5c664209b77fd781de374acc525f425af430263b370b05c3de2a980c05",
       "review": {
         "outcome": "approved",
-        "note": "падказка ручнога рэжыму; кропка \u2192 \u5730\u70B9"
+        "note": "падказка ручнога рэжыму; кропка → \u5730\u70B9"
       }
     },
     {
@@ -1595,7 +1596,7 @@
       "reviewedSourceHash": "0410c32b080f07cb67c2f1263ffe9887008786f97a5f011e7e7c75237dec7759",
       "review": {
         "outcome": "approved",
-        "note": "пазнака \u00ABзараз грае\u00BB на радку вяртання"
+        "note": "пазнака «зараз грае» на радку вяртання"
       }
     },
     {
@@ -1739,7 +1740,7 @@
         "locator": "docs/reports/chinese/language-and-dictionaries-evidence.json#battery.download (packages/providers/DownloadProvider#root_downloads, zh-rCN)",
         "term": "\u4E0B\u8F7D",
         "date": "2026-10-17",
-        "reason": "адзіны корань \u4E0B\u8F7D для дзеяння і стану; назоўнікавы сэнс \u2014 па корпусе AOSP"
+        "reason": "адзіны корань \u4E0B\u8F7D для дзеяння і стану; назоўнікавы сэнс — па корпусе AOSP"
       }
     },
     {
@@ -1771,7 +1772,7 @@
     },
     {
       "id": "native.run.reasonText.switch-no-live-session",
-      "value": "\u8FDB\u884C\u4E2D\u7684\u6563\u6B65\u5DF2\u4E0D\u5B58\u5728\u2014\u2014\u8BF7\u91CD\u65B0\u5F00\u59CB\u3002",
+      "value": "\u8FDB\u884C\u4E2D\u7684\u6563\u6B65\u5DF2\u4E0D\u5B58\u5728——\u8BF7\u91CD\u65B0\u5F00\u59CB\u3002",
       "reviewedSourceHash": "8db71669436a5adb6fe155900507136c66e4bc436e26865e0408659b50457ecd",
       "review": {
         "outcome": "approved",
@@ -1784,14 +1785,14 @@
       "reviewedSourceHash": "0e2062fc47a4936d773e4e014d5f1f11c31481de99dceb81a4aa9166acdc30f1",
       "review": {
         "outcome": "approved",
-        "note": "загаловак аднаўлення; канон restore без метафары аднаўлення \u2014 працяг са захаванай сесіі"
+        "note": "загаловак аднаўлення; канон restore без метафары аднаўлення — працяг са захаванай сесіі"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
         "term": "\u4ECE\u4FDD\u5B58\u7684\u4F1A\u8BDD\u7EE7\u7EED",
         "date": "2026-10-17",
-        "reason": "батарэя G21.39: слова \u6062\u590D \u2014 слоўнікавы пераклад restore, але канон KUDY перадае сэнс праз \u00ABпрацягнута са захаванай сесіі\u00BB; выбраная канструкцыя без метафары аднаўлення, як en/uk/de/es/fr/cs/sv"
+        "reason": "батарэя G21.39: слова \u6062\u590D — слоўнікавы пераклад restore, але канон KUDY перадае сэнс праз «працягнута са захаванай сесіі»; выбраная канструкцыя без метафары аднаўлення, як en/uk/de/es/fr/cs/sv"
       }
     },
     {
@@ -1823,7 +1824,7 @@
     },
     {
       "id": "native.run.schematicNote",
-      "value": "\u5730\u56FE\u6B63\u5728\u52A0\u8F7D\u6216\u4E0D\u53EF\u7528\u2014\u2014\u5DF2\u663E\u793A\u8DEF\u7EBF\u5730\u70B9\u793A\u610F\u56FE",
+      "value": "\u5730\u56FE\u6B63\u5728\u52A0\u8F7D\u6216\u4E0D\u53EF\u7528——\u5DF2\u663E\u793A\u8DEF\u7EBF\u5730\u70B9\u793A\u610F\u56FE",
       "reviewedSourceHash": "2dd5575beeb4e2eceddcb133bd66d0755c8731a769f657860033a6605224b3f7",
       "review": {
         "outcome": "approved",
@@ -1890,7 +1891,7 @@
       "reviewedSourceHash": "3570a8bfad2653d9dcd5fe9b60241a9ec8313f4a1a3ad34085dd92117b7b044b",
       "review": {
         "outcome": "approved",
-        "note": "пазнака дадатковай гісторыі; ярус \u2192 \u9644\u52A0"
+        "note": "пазнака дадатковай гісторыі; ярус → \u9644\u52A0"
       }
     },
     {
@@ -1899,7 +1900,7 @@
       "reviewedSourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c",
       "review": {
         "outcome": "approved",
-        "note": "заўвага: дадатковы ярус недаступны ў адноўленай сесіі; ярус \u2192 \u5C42\u7EA7"
+        "note": "заўвага: дадатковы ярус недаступны ў адноўленай сесіі; ярус → \u5C42\u7EA7"
       }
     },
     {
@@ -1953,7 +1954,7 @@
       "reviewedSourceHash": "0938d9674742b7ca8d10e18f403e12aec968da0f2d0727b9159f6718ec177d9e",
       "review": {
         "outcome": "approved",
-        "note": "выгода дадатку: офлайн маршруты \u00B7 Незалежнае рэв'ю (2026-10-17): \u968F\u624B\u53EF\u5F97 (кніжная мова) \u2192 \u8DEF\u7EBF\u968F\u65F6\u53EF\u67E5: выгода чытаецца проста"
+        "note": "выгода дадатку: офлайн маршруты · Незалежнае рэв'ю (2026-10-17): \u968F\u624B\u53EF\u5F97 (кніжная мова) → \u8DEF\u7EBF\u968F\u65F6\u53EF\u67E5: выгода чытаецца проста"
       }
     },
     {
@@ -1967,7 +1968,7 @@
     },
     {
       "id": "web.ui.appPageTitle",
-      "value": "\u5B8C\u6574\u7248\u672C\u2014\u2014\u5728KUDY\u5E94\u7528\u91CC",
+      "value": "\u5B8C\u6574\u7248\u672C——\u5728KUDY\u5E94\u7528\u91CC",
       "reviewedSourceHash": "a824a45caa613d7d9d0cb29d968595e6d42c3db635115d8aa4946823e2bbbebe",
       "review": {
         "outcome": "approved",
@@ -1980,7 +1981,7 @@
       "reviewedSourceHash": "7047842a47bf44a3707f7389b795b8484c66306e2026e9dcd5ea02e387c9c54c",
       "review": {
         "outcome": "approved",
-        "note": "назва крамы \u2014 брэнд, не перакладаецца"
+        "note": "назва крамы — брэнд, не перакладаецца"
       }
     },
     {
@@ -2043,7 +2044,7 @@
       "reviewedSourceHash": "fca9b8721b8f42038c5bd8672d0019ca3e492ba30ac6fa7f2fb175bdf404ea2e",
       "review": {
         "outcome": "approved",
-        "note": "ціхая прапанова дадатку; тры выгоды праз коску, як у крыніцы \u00B7 Незалежнае рэв'ю (2026-10-17): вернуты GPS-сэнс першай выгоды (\u5230\u573A\u81EA\u52A8\u64AD\u653E), як у суседнім web.ui.appBenefitGps \u2014 без яго гублялася галоўная вартасць"
+        "note": "ціхая прапанова дадатку; тры выгоды праз коску, як у крыніцы · Незалежнае рэв'ю (2026-10-17): вернуты GPS-сэнс першай выгоды (\u5230\u573A\u81EA\u52A8\u64AD\u653E), як у суседнім web.ui.appBenefitGps — без яго гублялася галоўная вартасць"
       }
     },
     {
@@ -2106,12 +2107,12 @@
       "reviewedSourceHash": "aafde1b7e9811c639b3f9340e59d0b53d6879b56fffc2cb6bcd74a616b2870e8",
       "review": {
         "outcome": "approved",
-        "note": "пазнака зачыненай кропкі ў спісе; кропка \u2192 \u5730\u70B9"
+        "note": "пазнака зачыненай кропкі ў спісе; кропка → \u5730\u70B9"
       }
     },
     {
       "id": "web.ui.mapAttribution",
-      "value": "\u5730\u56FE\u6570\u636E \u00A9 OpenStreetMap \u8D21\u732E\u8005\uFF08ODbL \u8BB8\u53EF\uFF09",
+      "value": "\u5730\u56FE\u6570\u636E © OpenStreetMap \u8D21\u732E\u8005\uFF08ODbL \u8BB8\u53EF\uFF09",
       "reviewedSourceHash": "1044b87f28683a787262f17f1017ec49cf859cf8ba6c9773717fc8be6f16a536",
       "review": {
         "outcome": "approved",
@@ -2169,7 +2170,7 @@
       "reviewedSourceHash": "371e0d77c5507a43edee3b356ad0cfb56f8b7c21a246ea346daed28f22a10799",
       "review": {
         "outcome": "approved",
-        "note": "кнопка наступнай кропкі; кропка \u2192 \u5730\u70B9"
+        "note": "кнопка наступнай кропкі; кропка → \u5730\u70B9"
       },
       "terminology": {
         "status": "resolved",
@@ -2185,7 +2186,7 @@
       "reviewedSourceHash": "4d2b5bdd1768b08ed60798c2baf6ea51b51a4a14c75d19063d9f16134116ce03",
       "review": {
         "outcome": "approved",
-        "note": "назва крамы \u2014 брэнд, не перакладаецца"
+        "note": "назва крамы — брэнд, не перакладаецца"
       }
     },
     {
@@ -2208,11 +2209,11 @@
     },
     {
       "id": "web.ui.privacyAppData",
-      "value": "\u5e94\u7528\u65e0\u9700\u8d26\u53f7\u5373\u53ef\u4f7f\u7528\u3002\u5b83\u4f1a\u5728\u8bbe\u5907\u4e0a\u4fdd\u5b58\u672c\u5730\u4e8b\u4ef6\u65e5\u5fd7\uff08\u6253\u5f00\u8fc7\u54ea\u4e9b\u6545\u4e8b\u3001\u4e0b\u8f7d\u8fc7\u54ea\u4e9b\u8def\u7ebf\uff09\uff0c\u5e76\u4fdd\u5b58\u5df2\u4e0b\u8f7d\u7684\u5185\u5bb9\u3002\u65e5\u5fd7\u4e0d\u542b\u59d3\u540d\u548c\u81ea\u7531\u6587\u672c\uff0c\u53ea\u4e0e\u968f\u673a\u8bbe\u5907\u6807\u8bc6\u7b26\u5173\u8054\u2014\u2014\u8fd9\u662f\u5047\u540d\u5316\u6570\u636e\uff0c\u800c\u975e\u533f\u540d\u6570\u636e\u3002\u5b89\u88c5\u65f6\uff0cKUDY \u670d\u52a1\u5668\u4f1a\u5411\u8bbe\u5907\u53d1\u653e\u968f\u673a\u6807\u8bc6\u7b26\u548c\u79d8\u5bc6\u503c\uff1a\u670d\u52a1\u5668\u4fdd\u5b58\u6807\u8bc6\u7b26\u548c\u79d8\u5bc6\u503c\u7684\u54c8\u5e0c\uff0c\u79d8\u5bc6\u503c\u672c\u8eab\u53ea\u4fdd\u5b58\u5728\u8bbe\u5907\u4e0a\uff0c\u5e76\u4f5c\u4e3a\u8bbf\u95ee\u5bc6\u94a5\u968f\u8bbe\u5907\u7684\u6bcf\u4e2a\u8bf7\u6c42\u53d1\u9001\u5230 KUDY \u670d\u52a1\u5668\u3002\u4e3a\u9650\u5236\u8bf7\u6c42\u9891\u7387\uff0c\u670d\u52a1\u5668\u4fdd\u5b58 IP \u5730\u5740\u7684\u5355\u5411\u54c8\u5e0c\u3002\u5728\u5e94\u7528\u4e2d\u7ed9\u51fa\u7684\u8def\u7ebf\u548c\u5730\u70b9\u8bc4\u5206\uff08\u8bc4\u5206\u548c\u6240\u9009\u539f\u56e0\uff0c\u4e0d\u542b\u81ea\u7531\u6587\u672c\uff09\u4e5f\u4f1a\u53d1\u9001\u5230 KUDY \u670d\u52a1\u5668\uff0c\u5e76\u4e0e\u8bbe\u5907\u6807\u8bc6\u7b26\u4e00\u8d77\u4fdd\u5b58\u3002",
+      "value": "\u5E94\u7528\u65E0\u9700\u8D26\u53F7\u5373\u53EF\u4F7F\u7528\u3002\u5B83\u4F1A\u5728\u8BBE\u5907\u4E0A\u4FDD\u5B58\u672C\u5730\u4E8B\u4EF6\u65E5\u5FD7\uFF08\u6253\u5F00\u8FC7\u54EA\u4E9B\u6545\u4E8B\u3001\u4E0B\u8F7D\u8FC7\u54EA\u4E9B\u8DEF\u7EBF\uFF09\uFF0C\u5E76\u4FDD\u5B58\u5DF2\u4E0B\u8F7D\u7684\u5185\u5BB9\u3002\u65E5\u5FD7\u4E0D\u542B\u59D3\u540D\u548C\u81EA\u7531\u6587\u672C\uFF0C\u53EA\u4E0E\u968F\u673A\u8BBE\u5907\u6807\u8BC6\u7B26\u5173\u8054——\u8FD9\u662F\u5047\u540D\u5316\u6570\u636E\uFF0C\u800C\u975E\u533F\u540D\u6570\u636E\u3002\u5B89\u88C5\u65F6\uFF0CKUDY \u670D\u52A1\u5668\u4F1A\u5411\u8BBE\u5907\u53D1\u653E\u968F\u673A\u6807\u8BC6\u7B26\u548C\u79D8\u5BC6\u503C\uFF1A\u670D\u52A1\u5668\u4FDD\u5B58\u6807\u8BC6\u7B26\u548C\u79D8\u5BC6\u503C\u7684\u54C8\u5E0C\uFF0C\u79D8\u5BC6\u503C\u672C\u8EAB\u53EA\u4FDD\u5B58\u5728\u8BBE\u5907\u4E0A\uFF0C\u5E76\u4F5C\u4E3A\u8BBF\u95EE\u5BC6\u94A5\u968F\u8BBE\u5907\u7684\u6BCF\u4E2A\u8BF7\u6C42\u53D1\u9001\u5230 KUDY \u670D\u52A1\u5668\u3002\u4E3A\u9650\u5236\u8BF7\u6C42\u9891\u7387\uFF0C\u670D\u52A1\u5668\u4FDD\u5B58 IP \u5730\u5740\u7684\u5355\u5411\u54C8\u5E0C\u3002\u5728\u5E94\u7528\u4E2D\u7ED9\u51FA\u7684\u8DEF\u7EBF\u548C\u5730\u70B9\u8BC4\u5206\uFF08\u8BC4\u5206\u548C\u6240\u9009\u539F\u56E0\uFF0C\u4E0D\u542B\u81EA\u7531\u6587\u672C\uFF09\u4E5F\u4F1A\u53D1\u9001\u5230 KUDY \u670D\u52A1\u5668\uFF0C\u5E76\u4E0E\u8BBE\u5907\u6807\u8BC6\u7B26\u4E00\u8D77\u4FDD\u5B58\u3002",
       "reviewedSourceHash": "4104b0c2d8a23c83895b7efff2f96349560349a8cac4c462f921566bf5c1e71d",
       "review": {
         "outcome": "approved",
-        "note": "#853: \u0434\u0430\u043f\u043e\u045e\u043d\u0435\u043d\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u0430\u0439 \u0440\u044d\u0433\u0456\u0441\u0442\u0440\u0430\u0446\u044b\u044f\u0439 \u043f\u0440\u044b\u043b\u0430\u0434\u044b, hash IP \u0456 \u0430\u0446\u044d\u043d\u043a\u0430\u043c\u0456 \u043d\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u044b KUDY (D03/D04/D06 \u0456\u043d\u0432\u0435\u043d\u0442\u0430\u0440\u0430 APR-08); \u0441\u044d\u043d\u0441\u0430\u0432\u044b \u0440\u044d\u0432'\u044e \u043f\u0435\u0440\u0430\u043a\u043b\u0430\u0434\u0443 \u2014 \u0443 results/APR-08.b.md \u041f\u0440\u0430\u045e\u043a\u0430 #942 (voka): \u00ab\u043f\u0430\u0434\u043f\u0456\u0441\u0432\u0430\u0435 \u0437\u0430\u043f\u044b\u0442\u044b\u00bb \u0437\u0430\u043c\u0435\u043d\u0435\u043d\u0430 \u043d\u0430 \u0444\u0430\u043a\u0442\u044b\u0447\u043d\u044b bearer-\u043c\u0435\u0445\u0430\u043d\u0456\u0437\u043c."
+        "note": "#853: дапоўнена сервернай рэгістрацыяй прылады, hash IP і ацэнкамі на серверы KUDY (D03/D04/D06 інвентара APR-08); сэнсавы рэв'ю перакладу — у results/APR-08.b.md Праўка #942 (voka): «падпісвае запыты» заменена на фактычны bearer-механізм."
       }
     },
     {
@@ -2226,11 +2227,11 @@
     },
     {
       "id": "web.ui.privacyDeletion",
-      "value": "\u5220\u9664\u6570\u636e\uff1a\u5e94\u7528\u4e2d\u7684\u201cMy KUDY\u201d\u9875\u9762\u6709\u4e00\u4e2a\u5220\u9664\u8bbe\u5907\u6309\u94ae\u2014\u2014\u5b83\u4f1a\u6e05\u9664\u670d\u52a1\u5668\u4e0a\u7684\u4e8b\u4ef6\u65e5\u5fd7\u548c\u8bbe\u5907\u8bb0\u5f55\uff0c\u8fde\u540c\u670d\u52a1\u5668\u4e0a\u7684\u8bc4\u5206\u6570\u636e\u548c\u8bbe\u5907\u4e0a\u7684\u79d8\u5bc6\u503c\uff1b\u5df2\u4e0b\u8f7d\u7684\u5185\u5bb9\u4f1a\u4fdd\u7559\u3002\u65e0\u9700\u53d1\u9001\u90ae\u4ef6\u6216\u7533\u8bf7\u3002\u8be5\u6309\u94ae\u4e0d\u4f1a\u5220\u9664\u5e94\u7528\u5546\u5e97\u548c RevenueCat \u4e2d\u7684\u8bb0\u5f55\uff1a\u8fd9\u4e9b\u8bb0\u5f55\u7531\u76f8\u5e94\u670d\u52a1\u6309\u5176\u81ea\u8eab\u89c4\u5219\u4fdd\u5b58\u548c\u5220\u9664\u3002",
+      "value": "\u5220\u9664\u6570\u636E\uFF1A\u5E94\u7528\u4E2D\u7684“My KUDY”\u9875\u9762\u6709\u4E00\u4E2A\u5220\u9664\u8BBE\u5907\u6309\u94AE——\u5B83\u4F1A\u6E05\u9664\u670D\u52A1\u5668\u4E0A\u7684\u4E8B\u4EF6\u65E5\u5FD7\u548C\u8BBE\u5907\u8BB0\u5F55\uFF0C\u8FDE\u540C\u670D\u52A1\u5668\u4E0A\u7684\u8BC4\u5206\u6570\u636E\u548C\u8BBE\u5907\u4E0A\u7684\u79D8\u5BC6\u503C\uFF1B\u5DF2\u4E0B\u8F7D\u7684\u5185\u5BB9\u4F1A\u4FDD\u7559\u3002\u65E0\u9700\u53D1\u9001\u90AE\u4EF6\u6216\u7533\u8BF7\u3002\u8BE5\u6309\u94AE\u4E0D\u4F1A\u5220\u9664\u5E94\u7528\u5546\u5E97\u548C RevenueCat \u4E2D\u7684\u8BB0\u5F55\uFF1A\u8FD9\u4E9B\u8BB0\u5F55\u7531\u76F8\u5E94\u670D\u52A1\u6309\u5176\u81EA\u8EAB\u89C4\u5219\u4FDD\u5B58\u548C\u5220\u9664\u3002",
       "reviewedSourceHash": "a581b5a8f4c1dca0bc1e1ba3d5e46f810affdd19aca5cb1598e0c12e4598ec62",
       "review": {
         "outcome": "approved",
-        "note": "#853: \u0434\u0430\u0434\u0430\u0434\u0437\u0435\u043d\u044b \u043c\u0435\u0436\u044b \u0432\u044b\u0434\u0430\u043b\u0435\u043d\u043d\u044f (\u043a\u0440\u0430\u043c\u044b \u0456 RevenueCat \u043d\u0435 \u0432\u044b\u0434\u0430\u043b\u044f\u044e\u0446\u0446\u0430) \u0456 \u0430\u0446\u044d\u043d\u043a\u0456/\u0441\u0430\u043a\u0440\u044d\u0442 \u0443 \u043a\u0430\u0441\u043a\u0430\u0434\u0437\u0435 (D03/D06/D07 \u0456\u043d\u0432\u0435\u043d\u0442\u0430\u0440\u0430 APR-08); \u0441\u044d\u043d\u0441\u0430\u0432\u044b \u0440\u044d\u0432'\u044e \u043f\u0435\u0440\u0430\u043a\u043b\u0430\u0434\u0443 \u2014 \u0443 results/APR-08.b.md"
+        "note": "#853: дададзены межы выдалення (крамы і RevenueCat не выдаляюцца) і ацэнкі/сакрэт у каскадзе (D03/D06/D07 інвентара APR-08); сэнсавы рэв'ю перакладу — у results/APR-08.b.md"
       }
     },
     {
@@ -2239,7 +2240,7 @@
       "reviewedSourceHash": "87c3fd8b911d11bafbc0a20e65b2312422d246dd45ebb630ee9d3942b301e33a",
       "review": {
         "outcome": "approved",
-        "note": "уводзіны палітыкі прыватнасці \u00B7 Незалежнае рэв'ю (2026-10-17): \u7F51\u9875\u6E20\u9053\u7684\u516C\u5F00\u90E8\u5206 \u2192 \u514D\u8D39\u7F51\u9875\u6E20\u9053, як у web.ui.privacyWeb (be \u00ABвольны пласт вэб-канала\u00BB); у тэксце прыватнасці \u00ABпублічнасць\u00BB \u2014 іншае цвярджэнне"
+        "note": "уводзіны палітыкі прыватнасці · Незалежнае рэв'ю (2026-10-17): \u7F51\u9875\u6E20\u9053\u7684\u516C\u5F00\u90E8\u5206 → \u514D\u8D39\u7F51\u9875\u6E20\u9053, як у web.ui.privacyWeb (be «вольны пласт вэб-канала»); у тэксце прыватнасці «публічнасць» — іншае цвярджэнне"
       }
     },
     {
@@ -2248,23 +2249,23 @@
       "reviewedSourceHash": "5c86b06615ae7aa3da7eb2585ba4d46a4e77d5828b159601ca6748a411e476fc",
       "review": {
         "outcome": "approved",
-        "note": "параграф прыватнасці: GPS падчас прагулкі і анлайн-тайлы; тры сказы, назвы сэрвісаў не перакладаюцца \u00B7 Незалежнае рэв'ю (2026-10-17): двайное абмежаванне перапісана праз \u4EC5\u5728\u2026\u4F7F\u7528\uFF0C\u4E14\u4EC5\u5728\u2026; \u00AB\u8DDF\u968F\u00BB без аб'екта заменена на \u5730\u56FE\u8DDF\u968F \u2014 у параграфе прыватнасці функцыю трэба назваць"
+        "note": "параграф прыватнасці: GPS падчас прагулкі і анлайн-тайлы; тры сказы, назвы сэрвісаў не перакладаюцца · Незалежнае рэв'ю (2026-10-17): двайное абмежаванне перапісана праз \u4EC5\u5728…\u4F7F\u7528\uFF0C\u4E14\u4EC5\u5728…; «\u8DDF\u968F» без аб'екта заменена на \u5730\u56FE\u8DDF\u968F — у параграфе прыватнасці функцыю трэба назваць"
       }
     },
     {
       "id": "web.ui.privacyPurchases",
-      "value": "\u8d2d\u4e70\u901a\u8fc7\u5e94\u7528\u5546\u5e97\uff08App Store\u3001Google Play\uff09\u8fdb\u884c\uff1a\u652f\u4ed8\u6570\u636e\u7531\u5546\u5e97\u5904\u7406\uff0c\u5e94\u7528\u53ea\u8bb0\u5f55\u8d2d\u4e70\u4e8b\u4ef6\u672c\u8eab\u2014\u2014\u8def\u7ebf\u3001\u9009\u9879\u3001\u7ed3\u679c\u2014\u2014\u4e0d\u542b\u94f6\u884c\u5361\u4fe1\u606f\u3002\u5df2\u8d2d\u5185\u5bb9\u7684\u6743\u76ca\u7531\u72ec\u7acb\u670d\u52a1 RevenueCat \u7ba1\u7406\uff1a\u5e94\u7528\u4f1a\u628a\u968f\u673a\u8bbe\u5907\u6807\u8bc6\u7b26\u4f5c\u4e3a\u4e70\u5bb6\u6807\u8bc6\u7b26\u53d1\u9001\u7ed9\u5b83\uff0c\u5e76\u53d1\u9001\u8d2d\u4e70\u6216\u786e\u8ba4\u4ee5\u5f80\u8d2d\u4e70\u7684\u8bf7\u6c42\uff1b\u652f\u4ed8\u672c\u8eab\u53ea\u901a\u8fc7\u5546\u5e97\u8fdb\u884c\u3002KUDY \u670d\u52a1\u5668\u4fdd\u5b58\u8d2d\u4e70\u4e8b\u4ef6\u7684\u6280\u672f\u8bb0\u5f55\uff08\u4ea7\u54c1\u3001\u5546\u5e97\u3001\u6709\u6548\u671f\uff09\uff0c\u4e0d\u542b\u652f\u4ed8\u4fe1\u606f\u3002",
+      "value": "\u8D2D\u4E70\u901A\u8FC7\u5E94\u7528\u5546\u5E97\uFF08App Store\u3001Google Play\uFF09\u8FDB\u884C\uFF1A\u652F\u4ED8\u6570\u636E\u7531\u5546\u5E97\u5904\u7406\uFF0C\u5E94\u7528\u53EA\u8BB0\u5F55\u8D2D\u4E70\u4E8B\u4EF6\u672C\u8EAB——\u8DEF\u7EBF\u3001\u9009\u9879\u3001\u7ED3\u679C——\u4E0D\u542B\u94F6\u884C\u5361\u4FE1\u606F\u3002\u5DF2\u8D2D\u5185\u5BB9\u7684\u6743\u76CA\u7531\u72EC\u7ACB\u670D\u52A1 RevenueCat \u7BA1\u7406\uFF1A\u5E94\u7528\u4F1A\u628A\u968F\u673A\u8BBE\u5907\u6807\u8BC6\u7B26\u4F5C\u4E3A\u4E70\u5BB6\u6807\u8BC6\u7B26\u53D1\u9001\u7ED9\u5B83\uFF0C\u5E76\u53D1\u9001\u8D2D\u4E70\u6216\u786E\u8BA4\u4EE5\u5F80\u8D2D\u4E70\u7684\u8BF7\u6C42\uFF1B\u652F\u4ED8\u672C\u8EAB\u53EA\u901A\u8FC7\u5546\u5E97\u8FDB\u884C\u3002KUDY \u670D\u52A1\u5668\u4FDD\u5B58\u8D2D\u4E70\u4E8B\u4EF6\u7684\u6280\u672F\u8BB0\u5F55\uFF08\u4EA7\u54C1\u3001\u5546\u5E97\u3001\u6709\u6548\u671F\uFF09\uFF0C\u4E0D\u542B\u652F\u4ED8\u4FE1\u606F\u3002",
       "reviewedSourceHash": "a702717ee9ee00b5a45328c9959e4663335a1f91be11824d6846b1b967a7ebbe",
       "review": {
         "outcome": "approved",
-        "note": "#853: \u043a\u0440\u044b\u043d\u0456\u0446\u0430 \u0434\u0430\u043f\u043e\u045e\u043d\u0435\u043d\u0430 RevenueCat, device UUID \u044f\u043a \u0456\u0434\u044d\u043d\u0442\u044b\u0444\u0456\u043a\u0430\u0442\u0430\u0440\u0430\u043c \u043f\u0430\u043a\u0443\u043f\u043d\u0456\u043a\u0430 \u0456 \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u044b\u043c \u0443\u043b\u0456\u043a\u0430\u043c \u043f\u0430\u0434\u0437\u0435\u0439 (D07/D08 \u0456\u043d\u0432\u0435\u043d\u0442\u0430\u0440\u0430 APR-08); \u0441\u044d\u043d\u0441\u0430\u0432\u044b \u0440\u044d\u0432'\u044e \u043f\u0435\u0440\u0430\u043a\u043b\u0430\u0434\u0443 \u2014 \u0443 results/APR-08.b.md"
+        "note": "#853: крыніца дапоўнена RevenueCat, device UUID як ідэнтыфікатарам пакупніка і серверным улікам падзей (D07/D08 інвентара APR-08); сэнсавы рэв'ю перакладу — у results/APR-08.b.md"
       },
       "terminology": {
         "status": "resolved",
         "kind": "reviewer-judgment",
         "term": "\u8D2D\u4E70",
         "date": "2026-10-17",
-        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 \u00A76.3; фраза \u00ABrestore purchases\u00BB не слоўнікавая і ў тэксце не ўжываецца"
+        "reason": "тэрмін пакупкі \u8D2D\u4E70 па батарэі G21.39 §6.3; фраза «restore purchases» не слоўнікавая і ў тэксце не ўжываецца"
       }
     },
     {
@@ -2273,7 +2274,7 @@
       "reviewedSourceHash": "fd59ba45063f461563c0857bc76897e5e03998fc53cc40afb2e488745df0dcb9",
       "review": {
         "outcome": "approved",
-        "note": "параграф прыватнасці: тэрмін захавання сырых падзей \u00B7 Незалежнае рэв'ю (2026-10-17): парадак азначэнняў (\u5DF2\u53D1\u9001\u7684\u539F\u59CB\u4E8B\u4EF6) і \u5B9A\u65F6\u4EFB\u52A1 замест \u4EFB\u52A1 \u2014 акрэслена менавіта планавальнік · #849 крытэр 5, 2026-11-01: сцвярджэнне пра агрэгаваныя лічбы знята (сховішча агрэгатаў не існуе — retention-core.ts); астатні тэкст без зменаў."
+        "note": "параграф прыватнасці: тэрмін захавання сырых падзей · Незалежнае рэв'ю (2026-10-17): парадак азначэнняў (\u5DF2\u53D1\u9001\u7684\u539F\u59CB\u4E8B\u4EF6) і \u5B9A\u65F6\u4EFB\u52A1 замест \u4EFB\u52A1 — акрэслена менавіта планавальнік · #849 крытэр 5, 2026-11-01: сцвярджэнне пра агрэгаваныя лічбы знята (сховішча агрэгатаў не існуе — retention-core.ts); астатні тэкст без зменаў."
       }
     },
     {
@@ -2318,7 +2319,7 @@
       "reviewedSourceHash": "a4a928d1751b51e8124728e4b4f8cc411f60787f509a56129e2e6ffcbdf6f679",
       "review": {
         "outcome": "approved",
-        "note": "пазнака \u00ABхутка\u00BB для крам"
+        "note": "пазнака «хутка» для крам"
       }
     },
     {
@@ -2399,7 +2400,7 @@
       "reviewedSourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca",
       "review": {
         "outcome": "approved",
-        "note": "загаловак формы ацэнкі гіда; размоўнае пытанне да \u00ABты\u00BB, як у крыніцы"
+        "note": "загаловак формы ацэнкі гіда; размоўнае пытанне да «ты», як у крыніцы"
       }
     },
     {
@@ -2413,7 +2414,7 @@
     },
     {
       "id": "native.feedback.targetLine",
-      "value": "\u5185\u5BB9\u8BED\u8A00\uFF1A${locale} \u00B7 \u7248\u672C\uFF1A${version}",
+      "value": "\u5185\u5BB9\u8BED\u8A00\uFF1A${locale} · \u7248\u672C\uFF1A${version}",
       "reviewedSourceHash": "ba6f03bbf78712a759d9a3623817dea04b241abb111d12cf07475fde952c50fb",
       "review": {
         "outcome": "approved",
@@ -2422,11 +2423,11 @@
     },
     {
       "id": "native.feedback.scaleHint",
-      "value": "1\u2014\u2014\u5F88\u4E0D\u559C\u6B22 \u00B7 5\u2014\u2014\u5F88\u559C\u6B22",
+      "value": "1——\u5F88\u4E0D\u559C\u6B22 · 5——\u5F88\u559C\u6B22",
       "reviewedSourceHash": "763a359b696b12e109cb8be62e435ed8f2b9e0b4fcf1a0a18a345ff13159b8b9",
       "review": {
         "outcome": "approved",
-        "note": "падказка шкалы 1\u20135; дваццаціпрацяжнік замяняе беларускае \u00ABвельмі не\u00BB"
+        "note": "падказка шкалы 1–5; дваццаціпрацяжнік замяняе беларускае «вельмі не»"
       }
     },
     {
@@ -2471,7 +2472,7 @@
       "reviewedSourceHash": "5c3e76cd244614b2707e554c450e8f58db3b6a2ab3330ff2e2de572e1f6419d3",
       "review": {
         "outcome": "approved",
-        "note": "тэкст раскрыцця: адпраўка водгуку не звязаная са згодай на аналітыку \u00B7 Незалежнае рэв'ю (2026-10-17): замест \u00AB\u4E5F\u4E0E\u5206\u6790\u65E0\u5173\u00BB (фактычная незалежнасць) \u2014 \u00AB\u4E5F\u4E0D\u4F9D\u8D56\u5206\u6790\u540C\u610F\u00BB паводле be \u00ABне залежыць ад яе\u00BB / en \u00ABnor requires\u00BB: у тэксце прыватнасці цвярджэнне нельга пашыраць"
+        "note": "тэкст раскрыцця: адпраўка водгуку не звязаная са згодай на аналітыку · Незалежнае рэв'ю (2026-10-17): замест «\u4E5F\u4E0E\u5206\u6790\u65E0\u5173» (фактычная незалежнасць) — «\u4E5F\u4E0D\u4F9D\u8D56\u5206\u6790\u540C\u610F» паводле be «не залежыць ад яе» / en «nor requires»: у тэксце прыватнасці цвярджэнне нельга пашыраць"
       }
     },
     {
@@ -2498,7 +2499,7 @@
       "reviewedSourceHash": "1c75021c3be06110e2689aed8eaf2ec49e49f0145f7e4daef51eded800b0d138",
       "review": {
         "outcome": "approved",
-        "note": "кнопка вырашэння канфлікту: праверыць стан на серверы \u00B7 Незалежнае рэв'ю (2026-10-17): \u5728\u670D\u52A1\u5668\u4E0A\u68C0\u67E5 (калька, без аб'екта) \u2192 \u68C0\u67E5\u670D\u52A1\u5668\u72B6\u6001: кнопка называе аб'ект, як суседні радок памылкі"
+        "note": "кнопка вырашэння канфлікту: праверыць стан на серверы · Незалежнае рэв'ю (2026-10-17): \u5728\u670D\u52A1\u5668\u4E0A\u68C0\u67E5 (калька, без аб'екта) → \u68C0\u67E5\u670D\u52A1\u5668\u72B6\u6001: кнопка называе аб'ект, як суседні радок памылкі"
       }
     },
     {
@@ -2512,7 +2513,7 @@
     },
     {
       "id": "native.feedback.statePending",
-      "value": "\u5DF2\u4FDD\u5B58\u5728\u8BBE\u5907\u4E0A\u2014\u2014\u8054\u7F51\u540E\u63D0\u4EA4",
+      "value": "\u5DF2\u4FDD\u5B58\u5728\u8BBE\u5907\u4E0A——\u8054\u7F51\u540E\u63D0\u4EA4",
       "reviewedSourceHash": "7195387e99f36c3ed874cba5e91a09c9bda100636d233899ecb181ac4950d043",
       "review": {
         "outcome": "approved",
@@ -2534,7 +2535,7 @@
       "reviewedSourceHash": "1fefa8a95ccc366bf67ebe9edffb1259c1f3264030082b01a1ab678b762205ac",
       "review": {
         "outcome": "approved",
-        "note": "стан канфлікту версій водгуку \u00B7 Незалежнае рэв'ю (2026-10-17): \u66F4\u65B0\u7684\u66F4\u6539 \u2192 \u66F4\u65B0\u7684\u6539\u52A8 (прыбірае сугучную таўталогію, натуральней для радка стану)"
+        "note": "стан канфлікту версій водгуку · Незалежнае рэв'ю (2026-10-17): \u66F4\u65B0\u7684\u66F4\u6539 → \u66F4\u65B0\u7684\u6539\u52A8 (прыбірае сугучную таўталогію, натуральней для радка стану)"
       }
     },
     {
@@ -2557,7 +2558,7 @@
     },
     {
       "id": "native.feedback.inviteTitle",
-      "value": "\u8FD9\u4E2A\u5BFC\u89C8\u600E\u4E48\u6837\uFF1F\u53EF\u4EE5\u8BC4\u4EF7\u2014\u2014\u5B8C\u5168\u81EA\u613F\u3002",
+      "value": "\u8FD9\u4E2A\u5BFC\u89C8\u600E\u4E48\u6837\uFF1F\u53EF\u4EE5\u8BC4\u4EF7——\u5B8C\u5168\u81EA\u613F\u3002",
       "reviewedSourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192",
       "review": {
         "outcome": "approved",
@@ -2606,12 +2607,12 @@
       "reviewedSourceHash": "e89b4ab7e51c7a16d7d4fabf295cfec3cda0541e67d1e43625e17ccfaa08efad",
       "review": {
         "outcome": "approved",
-        "note": "тлумачэнне: самаацэнка візіту, не праверанае наведванне \u00B7 Незалежнае рэв'ю (2026-10-17): \u81EA\u884C\u786E\u8BA4\u5230\u8BBF \u2192 \u81EA\u884C\u7533\u62A5\u7684\u5230\u8BBF і \u5DF2\u6838\u5B9E \u2192 \u7ECF\u6838\u5B9E \u2014 стандартная пара слоў раскрыцця"
+        "note": "тлумачэнне: самаацэнка візіту, не праверанае наведванне · Незалежнае рэв'ю (2026-10-17): \u81EA\u884C\u786E\u8BA4\u5230\u8BBF → \u81EA\u884C\u7533\u62A5\u7684\u5230\u8BBF і \u5DF2\u6838\u5B9E → \u7ECF\u6838\u5B9E — стандартная пара слоў раскрыцця"
       }
     },
     {
       "id": "native.feedback.placeVisitAccept",
-      "value": "\u6765\u8FC7\u2014\u2014\u53BB\u8BC4\u4EF7",
+      "value": "\u6765\u8FC7——\u53BB\u8BC4\u4EF7",
       "reviewedSourceHash": "0e1ffe61222b1128e9dbd9f7cfa8b3ee8434076f10e2de057164a605e328737a",
       "review": {
         "outcome": "approved",
@@ -2651,7 +2652,7 @@
       "reviewedSourceHash": "70a569cfca827aef72de7c814f0c0b3760b520f5c21dc43a67fdaad90af74272",
       "review": {
         "outcome": "approved",
-        "note": "слова \u00ABгід\u00BB у спісе ўласных ацэнак; тэрмін \u5BFC\u89C8"
+        "note": "слова «гід» у спісе ўласных ацэнак; тэрмін \u5BFC\u89C8"
       }
     },
     {
@@ -2660,7 +2661,7 @@
       "reviewedSourceHash": "e176e75a0103ac1243532bb956a4ee2dcc9af7aaad80c35938170679577839f7",
       "review": {
         "outcome": "approved",
-        "note": "слова \u00ABмесца\u00BB ў спісе ўласных ацэнак"
+        "note": "слова «месца» ў спісе ўласных ацэнак"
       }
     },
     {
@@ -2750,7 +2751,7 @@
       "reviewedSourceHash": "f4417031a4fef7cc54c3916e66770fcda831e75baa3bb6e70b3dd08b9cf9f54e",
       "review": {
         "outcome": "approved",
-        "note": "прычына ацэнкі месца \u00B7 Незалежнае рэв'ю (2026-10-17): \u901A\u9053\u95EE\u9898 (калідор/канал) заменена на \u51FA\u5165\u4E0D\u4FBF \u2014 звыклае апісанне праблемы ўваходу ў месца"
+        "note": "прычына ацэнкі месца · Незалежнае рэв'ю (2026-10-17): \u901A\u9053\u95EE\u9898 (калідор/канал) заменена на \u51FA\u5165\u4E0D\u4FBF — звыклае апісанне праблемы ўваходу ў месца"
       }
     },
     {
@@ -2759,7 +2760,7 @@
       "reviewedSourceHash": "b22dd71560cdeeb665203c01ed389749a1e6a9c1bf8f642df722e8896dd5bd94",
       "review": {
         "outcome": "approved",
-        "note": "памылка водгуку: звесткі не прынятыя \u00B7 Незалежнае рэв'ю (2026-10-17): \u6570\u636E \u2192 \u4FE1\u606F: карыстальнік адпраўляе звесткі, а не даныя сховішча"
+        "note": "памылка водгуку: звесткі не прынятыя · Незалежнае рэв'ю (2026-10-17): \u6570\u636E → \u4FE1\u606F: карыстальнік адпраўляе звесткі, а не даныя сховішча"
       }
     },
     {

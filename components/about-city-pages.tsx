@@ -13,12 +13,11 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
-import CheckIcon from "lucide-react-native/icons/check";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
 
-import { ABOUT_CITY_LINK_URLS, type AboutCityLinkKey, type AboutCitySectionId } from "./about-city-content";
-import { AboutCitySection, type AboutCitySectionContext } from "./about-city-sections";
-import { Remark, SubHeading } from "./about-city-parts";
+import { ABOUT_CITY_APPS, ABOUT_CITY_LINK_URLS, type AboutCityLinkKey, type AboutCitySectionId } from "./about-city-content";
+import { AboutCitySection, TouristCard, type AboutCitySectionContext } from "./about-city-sections";
+import { Fold, Remark } from "./about-city-parts";
 import { CanonIcon } from "./canon-icon";
 import { slotOffset } from "./about-city-wheel";
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
@@ -56,9 +55,12 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
   const t = ctx.t;
   // The failed-open notice stays with the row that failed: the page shows
   // the address while its own link is the one the device could not open.
-  const failedHere = failedLink !== null && links.some((key) => ABOUT_CITY_LINK_URLS[key] === failedLink)
-    ? failedLink
-    : null;
+  const tourist = id === "airport" && ctx.ui.direction === "from";
+  const foldId = `official-sources-${id}`;
+  const ownsLink = links.some((key) => ABOUT_CITY_LINK_URLS[key] === failedLink)
+    || (tourist && failedLink === ABOUT_CITY_LINK_URLS.kartaTurysty)
+    || (id === "transport" && (failedLink === ABOUT_CITY_LINK_URLS.jestemZGdanska || ABOUT_CITY_APPS.some((app) => app.url === failedLink)));
+  const failedHere = ownsLink ? failedLink : null;
 
   return (
     <Animated.View
@@ -70,16 +72,11 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
     >
       <ScrollView contentContainerStyle={styles.content} ref={scrollRef} style={styles.scroll} testID={`scroll-about-${id}`}>
         <ScaledText accessibilityRole="header" style={styles.head}>{t(`head.${id}`)}</ScaledText>
-        <View style={styles.checkedRow}>
-          <CanonIcon glyph={CheckIcon} label={t("verified")} size={14} color={tokens.colorAccent} />
-          <ScaledText style={[styles.verified, { marginTop: 0 }]}>{t("verified")}</ScaledText>
-        </View>
         <AboutCitySection id={id} ctx={ctx} />
         {links.length > 0 ? (
-          <View style={styles.sources}>
-            <SubHeading>{t("sources.title")}</SubHeading>
-            <ScaledText style={styles.verified}>{t("sources.note")}</ScaledText>
-            <View style={styles.stack}>
+          <Fold id={foldId} title={t("sources.title")} open={Boolean(ctx.ui.folds[foldId])}
+            onToggle={(key, open) => ctx.toggleFold([key], key, open)}
+            body={<View style={styles.stack}>
               {links.map((linkKey) => {
                 const label = t(`links.${linkKey}`);
                 return (
@@ -96,16 +93,16 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
                   </PressableSurface>
                 );
               })}
-            </View>
-            {failedHere ? <Remark tone="error" text={t("link.failed", { url: failedHere })} /> : null}
-          </View>
+            </View>} />
         ) : null}
+        {failedHere ? <Remark tone="error" text={t("link.failed", { url: failedHere })} /> : null}
+        {tourist ? <TouristCard context={ctx} /> : null}
       </ScrollView>
     </Animated.View>
   );
 }
 
-// The strip of the five section pages behind the wheel. The open section
+// The strip of the four section pages behind the wheel. The open section
 // (`activeId`) is the page the reader sees; the others ride hidden along
 // the ring and take the stage as the wheel turns.
 export function AboutCityPages({ sections, pos, slot, ring, width, activeId, ctx, failedLink }: {
@@ -163,17 +160,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontWeight: tokens.fontWeightStrong,
     lineHeight: 27,
   },
-  verified: {
-    color: palette.colorMuted,
-    fontSize: 12,
-    marginTop: -8,
-  },
-  checkedRow: {
-    alignItems: "center",
-    columnGap: 4,
-    flexDirection: "row",
-    marginTop: -8,
-  },
   stack: { gap: 8 },
   card: {
     backgroundColor: palette.colorCard,
@@ -181,7 +167,6 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     borderRadius: tokens.radiusBase,
     borderWidth: StyleSheet.hairlineWidth,
   },
-  sources: { gap: 10 },
   linkRow: {
     alignItems: "center",
     columnGap: 12,

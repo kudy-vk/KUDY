@@ -8,6 +8,12 @@ import { centroid, edgeDistance, inside, metres, organic, pictureFit, smooth } f
 
 export { inside, metres };
 
+// Both guide surfaces display the same one-decimal distance in BE or EN.
+export function formatMapKilometres(distance, lang) {
+  const km = (distance / 1000).toFixed(1);
+  return lang === 'be' ? km.replace('.', ',') : km;
+}
+
 const stationById = new Map(STATIONS.map((station) => [station.id, station]));
 const placeOf = (ref) => (ref === AIRPORT.id ? AIRPORT : stationById.get(ref));
 
