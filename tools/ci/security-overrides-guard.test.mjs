@@ -4,6 +4,8 @@
 // into its advisory range — at ANY nesting level of either lockfile — must
 // turn this suite red. Nothing else in CI runs npm audit, so a silent revert
 // would otherwise restore the vulnerable tree.
+// A lockfile whose packages map is missing or empty fails closed too (#341):
+// zero entries would otherwise pass vacuously and contradict this header.
 //
 // Vulnerable ranges are the audit-DB ranges verified in #337 for the MAJORS
 // the remediated tree uses (a version is guarded against the ranges below; a
@@ -71,7 +73,12 @@ const inVulnerableRange = (version, [min, max]) =>
 // they get the same check as the root copy.
 function assertPackageSafe(lock, lockName, pkg, ranges) {
   const matcher = new RegExp(`(^|/)node_modules/${pkg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
-  for (const [key, entry] of Object.entries(lock.packages ?? {})) {
+  const packages = lock.packages ?? {};
+  assert.ok(
+    Object.keys(packages).length > 0,
+    `${lockName}: the packages map is missing or empty — zero entries would pass vacuously; a lockfile without resolved packages must fail closed, not stay green (#341)`,
+  );
+  for (const [key, entry] of Object.entries(packages)) {
     if (!matcher.test(key)) continue;
     const version = entry?.version;
     assert.ok(version, `${lockName}: ${key} has no version`);
@@ -132,4 +139,25 @@ test('web lockfile has no vulnerable version of any remediated package, at any n
   for (const [pkg, ranges] of Object.entries(WEB_RANGES)) {
     assertPackageSafe(lock, 'web lockfile', pkg, ranges);
   }
+});
+
+test('negative: a root lockfile copy with the packages map dropped fails closed (#341)', () => {
+  const lock = readJson('package-lock.json');
+  const stripped = { ...lock };
+  delete stripped.packages;
+  assert.throws(
+    () => assertPackageSafe(stripped, 'root lockfile copy (packages dropped)', 'zod', ROOT_RANGES.zod),
+    (err) => err instanceof assert.AssertionError && /missing or empty/.test(err.message),
+    'a lockfile without the packages map must fail closed, not iterate zero entries and stay green',
+  );
+});
+
+test('negative: a web lockfile copy with an empty packages map fails closed (#341)', () => {
+  const lock = readJson('web', 'package-lock.json');
+  const emptied = { ...lock, packages: {} };
+  assert.throws(
+    () => assertPackageSafe(emptied, 'web lockfile copy (empty packages)', 'postcss', WEB_RANGES.postcss),
+    (err) => err instanceof assert.AssertionError && /missing or empty/.test(err.message),
+    'a lockfile with an empty packages map must fail closed, not iterate zero entries and stay green',
+  );
 });
