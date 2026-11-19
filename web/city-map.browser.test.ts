@@ -67,7 +67,7 @@ test('G21.03: aborted map requests show the localized failure message; a good lo
     t.skip('no Chromium binary on this host (set KUDY_CHROMIUM to the browser path)');
     return;
   }
-  if (!fs.existsSync(path.join(WEB_ROOT, 'node_modules', 'maplibre-gl', 'dist', 'maplibre-gl.js'))) {
+  if (!fs.existsSync(path.join(WEB_ROOT, 'node_modules', 'maplibre-gl', 'dist', 'maplibre-gl.mjs'))) {
     t.skip('web dependencies are not installed (cd web && npm ci)');
     return;
   }

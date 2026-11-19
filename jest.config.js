@@ -65,4 +65,16 @@ module.exports = {
     "^\\.\\./\\.rnstorybook(/.*)?$": "<rootDir>/test/storybook-ui-mock.tsx",
     "^lucide-react-native/icons/(.*)$": "<rootDir>/node_modules/lucide-react-native/dist/cjs/icons/$1.js",
   },
+  // #337: decode-uri-component 0.5.1 (the npm-advisory fix override) ships
+  // ESM-only — the same shape lucide-react-native hands jest through the
+  // "react-native" export condition. The first pattern is jest-expo's preset
+  // list with decode-uri-component added to the negation group; Metro keeps
+  // the device bundle on the same ESM module, so this is a test-host concern
+  // only. The guard is test/app-jest-wiring.test.mjs plus the app suites that
+  // reach query-string: dropping the entry dies on the ESM parse error.
+  transformIgnorePatterns: [
+    "/node_modules/(?!(.pnpm|react-native|@react-native|@react-native-community|expo|@expo|@expo-google-fonts|react-navigation|@react-navigation|@sentry/react-native|native-base|decode-uri-component))",
+    // Disable transforming the reanimated plugin in multi-platform tests, causing "Reentrant plugin detected trying to load react-native-reanimated/plugin.."
+    "/node_modules/react-native-reanimated/plugin/",
+  ],
 };
