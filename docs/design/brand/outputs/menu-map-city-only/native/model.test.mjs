@@ -61,3 +61,107 @@ test('only the final user snap starts transformation, which can finish safely',(
   assert.equal(m.radius,1000);assert.equal(m.light,0);
   assert.deepEqual(m.position('guides'),{x:125+469,y:320+361});
 });
+// MAP-08 (#81): групы, уласцівасцевыя сцэнары і мяжы дапушчальнага зрушэння.
+const invariants=(m)=>{
+  const links=new Map(nativeLayout.pieces.map(p=>[p.id,[]]));
+  for(const joint of nativeLayout.joints){links.get(joint.a).push(joint.b);links.get(joint.b).push(joint.a);}
+  for(const group of m.groups){
+    const members=new Set(group.members);
+    for(const id of members)assert.equal(m.pieces.get(id).group,group);
+    const seen=new Set(),queue=[[...members][0]];
+    while(queue.length){const id=queue.pop();if(seen.has(id))continue;seen.add(id);for(const next of links.get(id))if(members.has(next))queue.push(next);}
+    assert.equal(seen.size,members.size); // група — злучнае падмноства кананічных стыкаў
+  }
+  const height=m.layout?.height??1800;
+  for(const piece of m.pieces.values()){
+    const home=nativeLayout.pieces.find(p=>p.id===piece.id);
+    assert.ok(piece.x+piece.group.dx>=-55&&piece.x+piece.group.dx+piece.width<=1390,`bounds x: ${piece.id}`);
+    assert.ok(piece.y+piece.group.dy>=-130&&piece.y+piece.group.dy+piece.height<=height-430,`bounds y: ${piece.id}`);
+    assert.equal(piece.width,home?.width);assert.equal(piece.height,home?.height); // павароту няма
+  }
+};
+test('a seeded walk of held drags merges only canonical neighbours and never splits a group',()=>{
+  let seed=20261105>>>0;const rnd=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  const m=new CityPuzzle(360,rnd);
+  const snapshot=()=>JSON.stringify([...m.groups].map(g=>[g.dx,g.dy,[...g.members].sort()]).sort());
+  let clock=0,merges=0;
+  for(let step=0;step<80&&m.phase==='scattered';step++){
+    if(step%5===4){ // кароткія дотыкі без утрымання механіку не змяняюць
+      const before=snapshot(),p=anchor(m,nativeLayout.pieces[Math.floor(rnd()*5)].id);
+      m.begin(p,clock);m.move({x:p.x+220,y:p.y+90},clock+40);assert.equal(m.release(clock+60).kind,'none');
+      assert.equal(snapshot(),before);
+    }else{
+      const before=m.groups.size,p=anchor(m,nativeLayout.pieces[Math.floor(rnd()*5)].id);
+      m.begin(p,clock);m.hold(clock+301);
+      for(let i=0;i<6;i++){const event=m.move({x:p.x+(rnd()*2-1)*170,y:p.y+(rnd()*2-1)*170},clock+310+i*25);if(event.kind==='snap')merges++;}
+      m.release(clock+470); // палец падняты — зрух застаецца, адкрыты жэст не аднаўляецца
+      assert.ok(m.groups.size<=before);
+      if(m.phase!=='scattered')for(let t=clock+500;t<=clock+3000;t+=250)m.advance(t);
+    }
+    invariants(m);clock+=900;
+  }
+  assert.ok(merges>0,'ход мусіць хоць раз злучыць суседзяў');
+  assert.ok(m.groups.size<5,'стыкоўка паменшыла колькасць груп');
+});
+test('a third piece joins the merged group and the whole group moves as one',()=>{
+  const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides'),d=m.pieces.get('discovery');
+  g.group.dx=n.group.dx+20;
+  let p=anchor(m,'guides');m.begin(p,0);m.hold(301);
+  assert.equal(m.move({x:p.x-1,y:p.y},320).kind,'snap');
+  const pair=m.pieces.get('guides').group;
+  d.group.dx=pair.dx+20;d.group.dy=pair.dy;
+  p=anchor(m,'discovery');m.begin(p,500);m.hold(801);
+  assert.equal(m.move({x:p.x-1,y:p.y},820).kind,'snap');
+  const trio=m.pieces.get('guides').group;
+  assert.equal(trio.members.size,3);assert.equal(m.groups.size,3);
+  assert.deepEqual([...trio.members].sort(),['discovery','guides','nearby']);
+  const beforeN=anchor(m,'nearby'),beforeG=anchor(m,'guides');
+  p=anchor(m,'discovery');m.begin(p,1000);m.hold(1301);m.move({x:p.x+40,y:p.y},1320);m.release(1340);
+  const afterN=anchor(m,'nearby'),afterG=anchor(m,'guides');
+  assert.equal(afterN.x-beforeN.x,40);assert.equal(afterG.x-beforeG.x,40); // адзін элемент рухае ўсю групу
+  assert.equal(Math.hypot(afterG.x-afterN.x,afterG.y-afterN.y),Math.hypot(beforeG.x-beforeN.x,beforeG.y-beforeN.y)); // суседства захаванае
+  invariants(m);
+});
+test('a join re-validates the allowed displacement of the merged box',()=>{
+  const m=new CityPuzzle(320,()=>.5); // маштаб 0.2, парог захопу 110 px крыніцы
+  const d=m.pieces.get('discovery'),k=m.pieces.get('kudy');
+  k.group.dx=350;k.group.dy=0; // верх kudy: 1390−940=450 — сваё дазволена
+  d.group.dx=299;d.group.dy=0; // верх discovery: 1390−1091=299 — ягоная мяжа
+  const p=anchor(m,'discovery');m.begin(p,0);m.hold(301);
+  assert.equal(m.move({x:p.x+1,y:p.y},320).kind,'snap'); // зрух 51 ≤ 110
+  assert.equal(m.pieces.get('discovery').group.dx,299); // складзеная група вернутая ў межы
+  assert.ok([...m.pieces.values()].every(piece=>piece.x+piece.group.dx+piece.width<=1390));
+  invariants(m);
+});
+test('partial assembly never starts the reveal and taps stay honest beside it',()=>{
+  const m=puzzle(),a=m.pieces.get('nearby'),b=m.pieces.get('guides');
+  b.group.dx=a.group.dx+20;
+  const p=anchor(m,'guides');m.begin(p,0);m.hold(301);
+  const event=m.move({x:p.x-1,y:p.y},320);
+  assert.equal(event.kind,'snap');assert.equal(event.complete,false);
+  assert.equal(m.phase,'scattered');assert.equal(m.advance(4000),false); // механіку можна проста ігнараваць
+  const q=anchor(m,'discovery');
+  assert.deepEqual(m.begin(q,5000)&&m.release(5050),{kind:'select',id:'discovery'});
+});
+test('the disabled piece snaps like any neighbour while navigation stays host-gated',()=>{
+  const m=puzzle(),r=m.pieces.get('reserve-1'),k=m.pieces.get('kudy');
+  k.group.dx=r.group.dx+20;k.group.dy=r.group.dy;
+  const p=anchor(m,'kudy');m.begin(p,0);m.hold(301);
+  const event=m.move({x:p.x-1,y:p.y},320);
+  assert.equal(event.kind,'snap');assert.equal(event.complete,false);
+  assert.ok(m.pieces.get('kudy').group.members.has('reserve-1'));assert.equal(m.groups.size,4);
+  for(const group of [...m.groups])if(group!==k.group)joinGroups(k.group,group,m.pieces,m.groups);
+  m.completeNow();assert.equal(m.phase,'complete'); // поўная зборка з неактыўным кавалком завершаецца
+});
+test('snapped groups never split: cancel and new drags keep members together',()=>{
+  const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+  g.group.dx=n.group.dx+20;
+  let p=anchor(m,'guides');m.begin(p,0);m.hold(301);
+  assert.equal(m.move({x:p.x-1,y:p.y},320).kind,'snap');
+  const members=n.group.members;
+  p=anchor(m,'nearby');m.begin(p,2000);m.hold(2301);m.move({x:p.x-200,y:p.y},2320);m.cancel();
+  assert.ok(m.pieces.get('nearby').group.members.has('guides')); // раз'яднання няма
+  p=anchor(m,'nearby');m.begin(p,3000);m.hold(3301);m.move({x:p.x+120,y:p.y},3320);m.release(3340);
+  assert.equal(m.pieces.get('nearby').group,m.pieces.get('guides').group);
+  assert.equal(n.group.members,members); // склад групы нязменны ўсялякай цягай
+});
