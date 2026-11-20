@@ -10,8 +10,10 @@
 //
 // The V1 matrix (spec §8.1): light theme × font scale 1 / 1.5 × locale `be`.
 // Surfaces: the four guide-card stories (the specimen screen renders one
-// story per deep link) and the Explore screen in both phases (A — no
-// catalog origin, B — the G23.01 fixture origin). Baselines live under
+// story per deep link), the Explore screen in both phases (A — no
+// catalog origin, B — the G23.01 fixture origin) and the «Пра горад» map
+// section with the atlas-list fold open (`about-city-list`, issue #320).
+// Baselines live under
 // `docs/design-qa/baselines/` and are written ONLY with `--update`
 // (criterion 2) — a run without the flag never touches that directory.
 //
@@ -82,6 +84,7 @@ export const MATRIX = Object.freeze({
   screenSurfaces: Object.freeze([
     Object.freeze({ id: 'explore-a', fixture: 'phase A — no catalog origin (honest unavailable state)' }),
     Object.freeze({ id: 'explore-b', fixture: `tools/e2e-origin G23.01 fixture catalog (${FIXTURE_GUIDE_ROUTE_ID})` }),
+    Object.freeze({ id: 'about-city-list', fixture: 'no catalog origin — the «Пра горад» map section with the atlas-list fold open (owner-accepted state of #312, issue #320)' }),
   ]),
 });
 
@@ -164,6 +167,7 @@ export function planCapture(matrix) {
     exploreA: ids.has('explore-a'),
     stories: matrix.surfaces.some((surface) => surface.story),
     exploreB: ids.has('explore-b'),
+    aboutCity: ids.has('about-city-list'),
   };
 }
 
@@ -511,8 +515,9 @@ async function gitCommit() {
 
 // The live capture: per phase, per scale — cold start (fresh process reads
 // the just-set font scale), settle, screenshot. Phase A carries the Explore
-// screen without the catalog origin plus every story surface; phase B adds
-// the origin and captures Explore with the fixture catalog.
+// screen without the catalog origin, every story surface and the «Пра
+// горад» about surface (the document renders offline); phase B adds the
+// origin and captures Explore with the fixture catalog.
 export async function captureAll({ driver, matrix, capturesDir, metroPort, originPort, logDir }) {
   fs.mkdirSync(capturesDir, { recursive: true });
   const captured = [];
@@ -534,7 +539,7 @@ export async function captureAll({ driver, matrix, capturesDir, metroPort, origi
     // scales; each scale is applied before its cold start so the fresh
     // process reads it. The cold start itself always runs: the bundle load
     // and the font scale it applies are what the story links rely on.
-    if (plan.exploreA || plan.stories) {
+    if (plan.exploreA || plan.stories || plan.aboutCity) {
       metro = await startMetro({ port: metroPort, env: {}, logPath: path.join(logDir, 'metro-a.log') });
       for (const scale of matrix.scales) {
         await applyCaptureSettings(driver, scale);
@@ -558,6 +563,22 @@ export async function captureAll({ driver, matrix, capturesDir, metroPort, origi
             );
             await shot(surface.id, scale);
           }
+        }
+
+        // The «Пра горад» surface (issue #320): the map section of the
+        // offline about document with the atlas-list fold open — the
+        // owner-accepted state of #312 (design-qa report 2026-11-16).
+        // «Дзе што ў горадзе» is not the initial wheel section (the wheel
+        // starts on the airport), and the airport row exists only inside
+        // the open fold body — that row is the selector proving the
+        // accepted state before the shot.
+        if (plan.aboutCity) {
+          await driver.launchDeepLink('kudy://city/gdansk/about');
+          await waitSettled(driver, { testID: 'screen-AboutCity' }, { timeoutMs: 30000, dumpBasename: `dump-about-nav-screen-font${scale}.xml` });
+          await driver.tapSelector({ testID: 'wheel-item-city' }, { timeoutMs: 10000 });
+          await driver.tapSelector({ testID: 'fold-atlas-list' }, { timeoutMs: 10000 });
+          await waitSettled(driver, { testID: 'city-map-airport' }, { timeoutMs: 30000, dumpBasename: dumpBasenameForSlot({ surface: 'about-city-list', story: null, scale }) });
+          await shot('about-city-list', scale);
         }
       }
       await stopGroupProcess(metro, metroPort, 'metro-visual-a');

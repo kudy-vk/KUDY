@@ -77,7 +77,7 @@ test('parseStoryNames is fail-closed: no names and duplicates both throw', () =>
   assert.throws(() => parseStoryNames(null), /must be a string/);
 });
 
-test('the V1 matrix slots: 4 stories + 2 screens × 2 scales', () => {
+test('the V1 matrix slots: 4 stories + 3 screens × 2 scales', () => {
   const matrix = loadMatrix();
   const slots = allSlots(matrix);
   assert.equal(matrix.locale, 'be');
@@ -89,8 +89,9 @@ test('the V1 matrix slots: 4 stories + 2 screens × 2 scales', () => {
     'guide-card-long-title',
     'explore-a',
     'explore-b',
+    'about-city-list',
   ]);
-  assert.equal(slots.length, 12);
+  assert.equal(slots.length, 14);
   assert.deepEqual(
     slots.slice(0, 2).map((slot) => slot.slot),
     ['guide-card-free@font1-be', 'guide-card-free@font1.5-be'],
@@ -271,13 +272,15 @@ test('CLI without the APK exits non-zero with the reason', () => {
 
 test('planCapture: only the selected surfaces schedule their phases', () => {
   const full = loadMatrix();
-  assert.deepEqual(planCapture(full), { exploreA: true, stories: true, exploreB: true });
+  assert.deepEqual(planCapture(full), { exploreA: true, stories: true, exploreB: true, aboutCity: true });
   const storiesOnly = { ...full, surfaces: full.surfaces.filter((surface) => surface.story) };
-  assert.deepEqual(planCapture(storiesOnly), { exploreA: false, stories: true, exploreB: false });
+  assert.deepEqual(planCapture(storiesOnly), { exploreA: false, stories: true, exploreB: false, aboutCity: false });
   const exploreOnly = { ...full, surfaces: full.surfaces.filter((surface) => /^explore-/.test(surface.id)) };
-  assert.deepEqual(planCapture(exploreOnly), { exploreA: true, stories: false, exploreB: true });
+  assert.deepEqual(planCapture(exploreOnly), { exploreA: true, stories: false, exploreB: true, aboutCity: false });
   const exploreBOnly = { ...full, surfaces: full.surfaces.filter((surface) => surface.id === 'explore-b') };
-  assert.deepEqual(planCapture(exploreBOnly), { exploreA: false, stories: false, exploreB: true });
+  assert.deepEqual(planCapture(exploreBOnly), { exploreA: false, stories: false, exploreB: true, aboutCity: false });
+  const aboutOnly = { ...full, surfaces: full.surfaces.filter((surface) => surface.id === 'about-city-list') };
+  assert.deepEqual(planCapture(aboutOnly), { exploreA: false, stories: false, exploreB: false, aboutCity: true });
 });
 
 test('CLI --surface without a value is a usage error, not a crash', () => {
@@ -330,7 +333,7 @@ test('CLI --from with a missing capture file is a FAIL row in the report, not a 
   const result = runCli(['--from', path.join(dir, 'captures'), '--baselines-dir', path.join(dir, 'baselines'), '--out', outDir], {});
   assert.equal(result.status, 1);
   const report = fs.readFileSync(path.join(outDir, 'report.md'), 'utf8');
-  assert.match(report, /FAIL 11/);
+  assert.match(report, /FAIL 13/);
   assert.match(report, /capture file missing/);
 });
 
