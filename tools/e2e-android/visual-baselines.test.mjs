@@ -36,7 +36,8 @@ test('every guide-card story of the V1 matrix has a baseline (DQ-03 criterion 4)
   const matrix = loadMatrix();
   const storySlots = allSlots(matrix).filter((slot) => slot.story);
   assert.ok(storySlots.length > 0, 'the matrix must contain story slots — parseStoryNames is fail-closed');
-  assert.deepEqual(missingBaselineIds(storySlots), [], `missing baselines: ${missingBaselineIds(storySlots).join(', ')}`);
+  const missingStories = missingBaselineIds(storySlots);
+  assert.deepEqual(missingStories, [], `missing baselines: ${missingStories.join(', ')}`);
 });
 
 test('the about-city-list surface of the V1 matrix has baselines (issue #320)', () => {
@@ -47,5 +48,6 @@ test('the about-city-list surface of the V1 matrix has baselines (issue #320)', 
     matrix.scales.length,
     'the matrix must contain the about-city-list surface — dropping it turns this test red (issue #320)',
   );
-  assert.deepEqual(missingBaselineIds(aboutSlots), [], `missing baselines: ${missingBaselineIds(aboutSlots).join(', ')}`);
+  const missingAbout = missingBaselineIds(aboutSlots);
+  assert.deepEqual(missingAbout, [], `missing baselines: ${missingAbout.join(', ')}`);
 });
