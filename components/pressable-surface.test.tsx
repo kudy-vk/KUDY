@@ -31,8 +31,10 @@ jest.mock("./design-tokens", () => {
   return { ...actual, tokens: { ...actual.tokens, colorShelfAccent: "#00aa55" } };
 });
 
-function renderShelf(shade: ShelfShade, pressed = false) {
-  return render(
+async function renderShelf(shade: ShelfShade, pressed = false) {
+  // RNTL 14 render is async: the screen global and the tree bind only after
+  // the await, so every shelf test awaits this helper before querying.
+  return await render(
     <PressableSurface shelf={shade} testOnly_pressed={pressed} testID="surface">
       <Text>Націсні</Text>
     </PressableSurface>,
@@ -61,8 +63,8 @@ function mergedStyle(): MergedStyle {
 }
 
 describe("PressableSurface (UX 03 — канон §5, Кнопкі і чыпы)", () => {
-  test("accessibilityRole reaches the pressable element", () => {
-    render(
+  test("accessibilityRole reaches the pressable element", async () => {
+    await render(
       <PressableSurface accessibilityRole="button" testID="surface">
         <Text>Націсні</Text>
       </PressableSurface>,
@@ -70,8 +72,8 @@ describe("PressableSurface (UX 03 — канон §5, Кнопкі і чыпы)"
     expect(screen.getByRole("button")).toBeTruthy();
   });
 
-  test("APR-04: compact and disabled actions keep a 48×48dp physical target", () => {
-    render(
+  test("APR-04: compact and disabled actions keep a 48×48dp physical target", async () => {
+    await render(
       <PressableSurface
         accessibilityRole="button"
         accessibilityLabel="Паўтарыць"
@@ -90,12 +92,12 @@ describe("PressableSurface (UX 03 — канон §5, Кнопкі і чыпы)"
     expect(mergedStyle()).toMatchObject({ minHeight: 48, minWidth: 48 });
   });
 
-  test("the pressed state dims the surface by ≥10%", () => {
+  test("the pressed state dims the surface by ≥10%", async () => {
     // testOnly_pressed is Pressable's own test seam: it renders the surface
     // in its pressed state deterministically — the pressed branch of the
     // wrapper's style function runs on the production path (the responder
     // wiring itself is Pressability's, not the wrapper's).
-    render(
+    await render(
       <PressableSurface testOnly_pressed testID="surface">
         <Text>Націсні</Text>
       </PressableSurface>,
@@ -104,8 +106,8 @@ describe("PressableSurface (UX 03 — канон §5, Кнопкі і чыпы)"
     expect(pressed.some((s) => s && typeof s === "object" && s.opacity === 0.9)).toBe(true);
   });
 
-  test("the resting surface carries no pressed dim", () => {
-    render(
+  test("the resting surface carries no pressed dim", async () => {
+    await render(
       <PressableSurface testID="surface">
         <Text>Націсні</Text>
       </PressableSurface>,
@@ -114,29 +116,29 @@ describe("PressableSurface (UX 03 — канон §5, Кнопкі і чыпы)"
     expect(resting.some((s) => s && typeof s === "object" && s.opacity === 0.9)).toBe(false);
   });
 
-  test("the Android ripple stays wired in the wrapper source", () => {
+  test("the Android ripple stays wired in the wrapper source", async () => {
     const source = readFileSync(join(process.cwd(), "components", "pressable-surface.tsx"), "utf8");
     expect(source).toMatch(/android_ripple/);
   });
 });
 
 describe("PressableSurface clay shelf (G06.10.d — docs/agent-tasks/app/G06.10.md)", () => {
-  test("the accent shelf renders the token mirror's shade — overriding the token changes the shelf", () => {
-    renderShelf("accent");
+  test("the accent shelf renders the token mirror's shade — overriding the token changes the shelf", async () => {
+    await renderShelf("accent");
     // tokens here is the mocked mirror: #00aa55, not the canon #154f3a. A
     // wrapper that hardcodes the canon literal fails this line.
     expect(mergedStyle().borderBottomColor).toBe(tokens.colorShelfAccent);
     expect(mergedStyle().borderBottomWidth).toBe(4);
   });
 
-  test("the line shelf renders the line shade for the secondary actions", () => {
-    renderShelf("line");
+  test("the line shelf renders the line shade for the secondary actions", async () => {
+    await renderShelf("line");
     expect(mergedStyle().borderBottomColor).toBe(tokens.colorShelfLine);
     expect(mergedStyle().borderBottomWidth).toBe(4);
   });
 
-  test("pressing dips into the shelf — translate plus reduced shelf — while the dim still fires", () => {
-    renderShelf("accent", true);
+  test("pressing dips into the shelf — translate plus reduced shelf — while the dim still fires", async () => {
+    await renderShelf("accent", true);
     const pressed = mergedStyle();
     expect(pressed.transform?.[0]?.translateY).toBe(2);
     expect(pressed.borderBottomWidth).toBe(2);
@@ -144,15 +146,15 @@ describe("PressableSurface clay shelf (G06.10.d — docs/agent-tasks/app/G06.10.
     expect(pressed.opacity).toBe(0.9);
   });
 
-  test("the resting shelf carries no dip", () => {
-    renderShelf("accent");
+  test("the resting shelf carries no dip", async () => {
+    await renderShelf("accent");
     const resting = mergedStyle();
     expect(resting.transform).toBeUndefined();
     expect(resting.borderBottomWidth).toBe(4);
   });
 
-  test("a disabled pressable never dips — the disabled contract stays opacity-only", () => {
-    render(
+  test("a disabled pressable never dips — the disabled contract stays opacity-only", async () => {
+    await render(
       <PressableSurface shelf="accent" disabled testOnly_pressed testID="surface">
         <Text>Націсні</Text>
       </PressableSurface>,

@@ -11,7 +11,7 @@
 // its page like the rest. A page that is not the open one takes no touches
 // and stays out of the screen reader's way.
 import { useEffect, useRef, type ReactNode } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, type ScrollViewInstance } from "react-native";
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
 
@@ -43,7 +43,7 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
   failedLink: string | null;
 }): ReactNode {
   const styles = useThemeStyles(lightStyles, darkStyles);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   // A change of section resets the scroll (the mockup's rule): the page
   // resets itself the moment it becomes the open one.
   useEffect(() => {

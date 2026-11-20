@@ -21,18 +21,18 @@ describe("DQ-13 (issue #914): the Storybook route without the env flag", () => {
     g.__DEV__ = true;
   });
 
-  test("in dev the route shows the honest disabled notice — never a fake surface", () => {
+  test("in dev the route shows the honest disabled notice — never a fake surface", async () => {
     g.__DEV__ = true;
-    render(<Storybook />);
+    await render(<Storybook />);
     expect(screen.getByTestId("storybook/disabled")).toBeTruthy();
     expect(screen.getByTestId("storybook/disabled-text").props.children).toContain(
       "EXPO_PUBLIC_STORYBOOK=1",
     );
   });
 
-  test("outside __DEV__ the route renders nothing", () => {
+  test("outside __DEV__ the route renders nothing", async () => {
     g.__DEV__ = false;
-    render(<Storybook />);
+    await render(<Storybook />);
     expect(screen.queryByTestId("storybook/disabled")).toBeNull();
     expect(screen.queryByTestId("storybook/ui-root")).toBeNull();
   });

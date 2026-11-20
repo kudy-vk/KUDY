@@ -45,7 +45,7 @@ describe("G21.50 (G21.42-chinese-language.md — G21.50): the picker advertises 
   test("a registered-but-closed code is omitted from the picker; the eight stay present", async () => {
     setGate(EIGHT, [...EIGHT, "zz"]);
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
     expect(screen.queryByTestId("btn-ui-locale-zz")).toBeNull();
     for (const code of EIGHT) {
@@ -56,9 +56,9 @@ describe("G21.50 (G21.42-chinese-language.md — G21.50): the picker advertises 
   test("the flag opening the code puts it on the picker and makes it switchable", async () => {
     setGate([...EIGHT, "zz"], [...EIGHT, "zz"]);
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("btn-ui-locale-zz")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-zz"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-zz"));
     expect(services.uiLocale.current()).toBe("zz");
   });
 });

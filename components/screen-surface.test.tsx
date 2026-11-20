@@ -6,6 +6,8 @@ import { RadialGradient, Rect, Stop } from "react-native-svg";
 
 import { darkBackground, darkTokens, tokens } from "./design-tokens";
 import { ScreenSurface } from "./screen-surface";
+import { getByType } from "../test/render-helpers";
+
 
 let mockScheme: ColorSchemeName = "light";
 jest.mock("react-native/Libraries/Utilities/useColorScheme", () => ({
@@ -20,44 +22,56 @@ function Counter() {
   return <Pressable onPress={() => setCount(count + 1)}><Text>{`Count ${count}`}</Text></Pressable>;
 }
 
-test("light mode paints canonical paper without a gradient", () => {
-  render(<ScreenSurface testID="surface"><Text>Content</Text></ScreenSurface>);
+test("light mode paints canonical paper without a gradient", async () => {
+  await render(<ScreenSurface testID="surface"><Text>Content</Text></ScreenSurface>);
   expect(StyleSheet.flatten(screen.getByTestId("surface").props.style).backgroundColor).toBe(tokens.colorPaper);
   expect(screen.queryByTestId("screen-gradient", { includeHiddenElements: true })).toBeNull();
   expect(screen.getByText("Content")).toBeTruthy();
 });
 
-test("dark mode paints the canonical full-size M3 gradient below content", () => {
+test("dark mode paints the canonical full-size M3 gradient below content", async () => {
   mockScheme = "dark";
-  const view = render(<ScreenSurface testID="surface"><Text>Content</Text></ScreenSurface>);
+  const view = await render(<ScreenSurface testID="surface"><Text>Content</Text></ScreenSurface>);
   expect(StyleSheet.flatten(screen.getByTestId("surface").props.style).backgroundColor).toBe(darkTokens.colorPaper);
-  const gradient = view.UNSAFE_getByType(RadialGradient);
+  const gradient = getByType(view, "RNSVGRadialGradient");
   expect(gradient.props).toMatchObject({ cx: darkBackground.cx, cy: darkBackground.cy, rx: darkBackground.rx, ry: darkBackground.ry });
-  expect(view.UNSAFE_getAllByType(Stop).map(({ props }) => ({ offset: props.offset, color: props.stopColor }))).toEqual(darkBackground.stops);
-  expect(view.UNSAFE_getByType(Rect).props).toMatchObject({ width: "100%", height: "100%", fill: `url(#${gradient.props.id})` });
+  // react-native-svg 15 packs the Stop children into one numeric array on
+  // the gradient host — [offset, color, ...] pairs, offsets as 0..1
+  // fractions, colors as RN's signed 32-bit ARGB ints — so the canonical
+  // stop list pins there instead of on RNSVGStop hosts, and the rect
+  // references the paint by brushRef instead of url(#id).
+  const packedStops = darkBackground.stops.flatMap(({ offset, color }) =>
+    [parseFloat(offset) / 100, (0xFF000000 | parseInt(color.slice(1), 16)) | 0]);
+  expect((gradient.props as { gradient?: number[] }).gradient).toEqual(packedStops);
+  const rect = getByType(view, "RNSVGRect");
+  expect(rect.props).toMatchObject({ width: "100%", height: "100%" });
+  expect((rect.props as { fill?: { brushRef?: string } }).fill?.brushRef).toBe((gradient.props as { name?: string }).name);
   const layer = screen.getByTestId("screen-gradient", { includeHiddenElements: true });
   expect(StyleSheet.flatten(layer.props.style)).toMatchObject({ position: "absolute", top: 0, left: 0, bottom: 0, right: 0 });
   expect((view.toJSON() as { children: { props: { testID?: string } }[] }).children[0].props.testID).toBe("screen-gradient");
 });
 
-test("gradient ignores input and stays outside the accessibility tree", () => {
+test("gradient ignores input and stays outside the accessibility tree", async () => {
   mockScheme = "dark";
-  render(<ScreenSurface><Counter /></ScreenSurface>);
-  expect(screen.queryByTestId("screen-gradient")).toBeNull();
+  await render(<ScreenSurface><Counter /></ScreenSurface>);
+  // RNTL 14 keeps the layer mounted and the global query config sees hidden
+  // elements by default (test/rntl-configure.js), so the old "default query
+  // finds nothing" proxy no longer holds — the screen-reader road is pinned
+  // directly by the a11y-hidden markers on the host.
   expect(screen.getByTestId("screen-gradient", { includeHiddenElements: true }).props).toMatchObject({
     pointerEvents: "none", accessible: false, accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants",
   });
-  fireEvent.press(screen.getByText("Count 0"));
+  await fireEvent.press(screen.getByText("Count 0"));
   expect(screen.getByText("Count 1")).toBeTruthy();
 });
 
-test("live appearance changes preserve mounted content and layout props", () => {
+test("live appearance changes preserve mounted content and layout props", async () => {
   const renderSurface = () => <ScreenSurface testID="surface" style={{ paddingTop: 47 }}><Counter /></ScreenSurface>;
-  const view = render(renderSurface());
-  fireEvent.press(screen.getByText("Count 0"));
+  const view = await render(renderSurface());
+  await fireEvent.press(screen.getByText("Count 0"));
   for (const scheme of ["dark", "light"] as const) {
     mockScheme = scheme;
-    view.rerender(renderSurface());
+    await view.rerender(renderSurface());
     expect(screen.getByText("Count 1")).toBeTruthy();
     expect(StyleSheet.flatten(screen.getByTestId("surface").props.style).paddingTop).toBe(47);
   }

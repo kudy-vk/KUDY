@@ -14,7 +14,7 @@ export function ScreenSurface({ children, style, ...props }: ViewProps) {
     <View {...props} style={[{ backgroundColor: palette.colorPaper }, style]}>
       {theme === "dark" ? (
         <Svg
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           width="100%"
           height="100%"
           pointerEvents="none"

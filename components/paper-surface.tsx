@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   // Issue #431: on Android the repeat tile is painted through a
-  // view-sized postprocessor, and with absoluteFillObject the first image
+  // view-sized postprocessor, and with an absolute fill layer the first image
   // submit runs before the view is laid out — the cached result collapses
   // to one raw tile in the corner. The layer is sized from the window
   // instead of measured, so the first submit already sees the full

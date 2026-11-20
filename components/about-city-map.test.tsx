@@ -48,13 +48,13 @@ function Harness({ initial, lang }: { initial: AboutCityAtlasState; lang: "be" |
 }
 const harness: { onOpenSection: (id: "airport") => void } = { onOpenSection: () => undefined };
 
-function renderMap(atlas: AboutCityAtlasState = ABOUT_CITY_ATLAS_INITIAL, lang: "be" | "en" = "be") {
-  render(<Harness initial={atlas} lang={lang} />);
+async function renderMap(atlas: AboutCityAtlasState = ABOUT_CITY_ATLAS_INITIAL, lang: "be" | "en" = "be") {
+  await render(<Harness initial={atlas} lang={lang} />);
   return { onOpenSection: harness.onOpenSection };
 }
 
-test("the map renders with the hint card and the four layer switches", () => {
-  renderMap();
+test("the map renders with the hint card and the four layer switches", async () => {
+  await renderMap();
   expect(screen.getByTestId("city-map")).toBeTruthy();
   expect(screen.getByText("Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.")).toBeTruthy();
   expect(screen.getByTestId("city-map-layer-visit").props.accessibilityState).toMatchObject({ selected: true });
@@ -64,16 +64,16 @@ test("the map renders with the hint card and the four layer switches", () => {
   expect(screen.getByText("12")).toBeTruthy();
 });
 
-test("a layer switch turns its chip off through the atlas state", () => {
-  renderMap();
-  fireEvent.press(screen.getByTestId("city-map-layer-stay"));
+test("a layer switch turns its chip off through the atlas state", async () => {
+  await renderMap();
+  await fireEvent.press(screen.getByTestId("city-map-layer-stay"));
   expect(screen.getByTestId("city-map-layer-stay").props.accessibilityState).toMatchObject({ selected: false });
   expect(screen.getByTestId("city-map-layer-visit").props.accessibilityState).toMatchObject({ selected: true });
 });
 
-test("the zone list picks the zone; the card names it, its kind and the way in", () => {
-  renderMap();
-  fireEvent.press(screen.getByTestId("city-map-zone-sopot"));
+test("the zone list picks the zone; the card names it, its kind and the way in", async () => {
+  await renderMap();
+  await fireEvent.press(screen.getByTestId("city-map-zone-sopot"));
   const card = within(screen.getByTestId("city-map-card"));
   expect(card.getByText("Sopot")).toBeTruthy();
   expect(card.getByText("Месцы для наведвання")).toBeTruthy();
@@ -82,13 +82,13 @@ test("the zone list picks the zone; the card names it, its kind and the way in",
   expect(card.getByText(/\d+,\d км па прамой/)).toBeTruthy();
 });
 
-test("the English zone card keeps one decimal digit with a point", () => {
-  renderMap(atlasWith({ pick: { kind: "zone", id: "sopot" } }), "en");
+test("the English zone card keeps one decimal digit with a point", async () => {
+  await renderMap(atlasWith({ pick: { kind: "zone", id: "sopot" } }), "en");
   expect(within(screen.getByTestId("city-map-card")).getByText(/\d+\.\d km in a straight line/)).toBeTruthy();
 });
 
-test("the station card carries the line badges and the change note", () => {
-  renderMap(atlasWith({ pick: { kind: "station", id: "wrzeszcz" } }));
+test("the station card carries the line badges and the change note", async () => {
+  await renderMap(atlasWith({ pick: { kind: "station", id: "wrzeszcz" } }));
   const card = within(screen.getByTestId("city-map-card"));
   expect(card.getByText("Gdańsk Wrzeszcz")).toBeTruthy();
   expect(card.getByText("Станцыя")).toBeTruthy();
@@ -97,21 +97,21 @@ test("the station card carries the line badges and the change note", () => {
   expect(card.getByText("Тут перасадка паміж SKM і цягнікамі да аэрапорта.")).toBeTruthy();
 });
 
-test("the airport card opens the airport section through the wheel", () => {
-  const { onOpenSection } = renderMap(atlasWith({ pick: { kind: "airport", id: "airport" } }));
+test("the airport card opens the airport section through the wheel", async () => {
+  const { onOpenSection } = await renderMap(atlasWith({ pick: { kind: "airport", id: "airport" } }));
   expect(within(screen.getByTestId("city-map-card")).getByText("Port Lotniczy Gdańsk")).toBeTruthy();
-  fireEvent.press(screen.getByTestId("city-map-airport-go"));
+  await fireEvent.press(screen.getByTestId("city-map-airport-go"));
   expect(onOpenSection).toHaveBeenCalledWith("airport");
 });
 
-test("the Google Maps button opens the picked place; the hint opens the Tricity middle (M13)", () => {
+test("the Google Maps button opens the picked place; the hint opens the Tricity middle (M13)", async () => {
   const spy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as never);
-  const picked = renderMap(atlasWith({ pick: { kind: "zone", id: "glowne" } }));
-  fireEvent.press(screen.getByTestId("city-map-google"));
+  const picked = await renderMap(atlasWith({ pick: { kind: "zone", id: "glowne" } }));
+  await fireEvent.press(screen.getByTestId("city-map-google"));
   expect(spy).toHaveBeenLastCalledWith(expect.stringMatching(/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=54\.3\d+,18\.6\d+$/));
 
-  renderMap();
-  fireEvent.press(screen.getByTestId("city-map-google"));
+  await renderMap();
+  await fireEvent.press(screen.getByTestId("city-map-google"));
   expect(spy).toHaveBeenLastCalledWith("https://www.google.com/maps/search/?api=1&query=54.41000,18.60000");
   spy.mockRestore();
   expect(picked).toBeTruthy();
@@ -119,19 +119,19 @@ test("the Google Maps button opens the picked place; the hint opens the Tricity 
 
 test("a failed Google Maps open leaves the address on the screen", async () => {
   const spy = jest.spyOn(Linking, "openURL").mockRejectedValueOnce(new Error("offline"));
-  renderMap();
-  fireEvent.press(screen.getByTestId("city-map-google"));
+  await renderMap();
+  await fireEvent.press(screen.getByTestId("city-map-google"));
   expect(await screen.findByText(/google\.com\/maps\/search/)).toBeTruthy();
   // The next open succeeds: the stale failed-open notice is gone.
   spy.mockResolvedValueOnce(undefined as never);
-  fireEvent.press(screen.getByTestId("city-map-google"));
+  await fireEvent.press(screen.getByTestId("city-map-google"));
   await waitFor(() => expect(screen.queryByText(/google\.com\/maps\/search/)).toBeNull());
   spy.mockRestore();
 });
 
-test("the zone list picks a stay zone; its ways come from the map data", () => {
-  renderMap();
-  fireEvent.press(screen.getByTestId("city-map-zone-wrzeszcz"));
+test("the zone list picks a stay zone; its ways come from the map data", async () => {
+  await renderMap();
+  await fireEvent.press(screen.getByTestId("city-map-zone-wrzeszcz"));
   const card = within(screen.getByTestId("city-map-card"));
   expect(card.getByText("Wrzeszcz")).toBeTruthy();
   expect(card.getByText("Зручна спыніцца")).toBeTruthy();
@@ -141,13 +141,13 @@ test("the zone list picks a stay zone; its ways come from the map data", () => {
 // every selectable sign: named buttons over the one production pick path,
 // their cards announced through the live region (the app port of the
 // mockup's subtest «without a pointer…», test/about-map-browser.test.mjs).
-test("without a pointer, the list reaches the airport and a station and picks them like a touch (#312)", () => {
-  renderMap();
+test("without a pointer, the list reaches the airport and a station and picks them like a touch (#312)", async () => {
+  await renderMap();
   expect(screen.getByTestId("city-map-card").props.accessibilityLiveRegion).toBe("polite");
   const airport = screen.getByTestId("city-map-airport");
   expect(airport.props.accessibilityRole).toBe("button");
   expect(airport.props.accessibilityLabel).toBe("Port Lotniczy Gdańsk");
-  fireEvent.press(airport);
+  await fireEvent.press(airport);
   const airportCard = within(screen.getByTestId("city-map-card"));
   expect(airportCard.getByText("Port Lotniczy Gdańsk")).toBeTruthy();
   expect(airportCard.getByText("GDN")).toBeTruthy();
@@ -155,23 +155,23 @@ test("without a pointer, the list reaches the airport and a station and picks th
   const station = screen.getByTestId("city-map-station-gdynia-glowna");
   expect(station.props.accessibilityRole).toBe("button");
   expect(station.props.accessibilityLabel).toBe("Gdynia Główna");
-  fireEvent.press(station);
+  await fireEvent.press(station);
   const card = within(screen.getByTestId("city-map-card"));
   expect(card.getByText("Gdynia Główna")).toBeTruthy();
   expect(card.getByText("Станцыя")).toBeTruthy();
 });
 
-test("a station row on a hidden layer turns the layer back on and picks the station (#312)", () => {
-  renderMap(atlasWith({ show: { ...ABOUT_CITY_ATLAS_INITIAL.show, rail: false } }));
+test("a station row on a hidden layer turns the layer back on and picks the station (#312)", async () => {
+  await renderMap(atlasWith({ show: { ...ABOUT_CITY_ATLAS_INITIAL.show, rail: false } }));
   expect(screen.getByTestId("city-map-layer-rail").props.accessibilityState).toMatchObject({ selected: false });
-  fireEvent.press(screen.getByTestId("city-map-station-gdynia-glowna"));
+  await fireEvent.press(screen.getByTestId("city-map-station-gdynia-glowna"));
   expect(screen.getByTestId("city-map-layer-rail").props.accessibilityState).toMatchObject({ selected: true });
   expect(within(screen.getByTestId("city-map-card")).getByText("Gdynia Główna")).toBeTruthy();
 });
 
-test("a planned station row opens the planned card (#312)", () => {
-  renderMap();
-  fireEvent.press(screen.getByTestId("city-map-station-chelm"));
+test("a planned station row opens the planned card (#312)", async () => {
+  await renderMap();
+  await fireEvent.press(screen.getByTestId("city-map-station-chelm"));
   const card = within(screen.getByTestId("city-map-card"));
   expect(card.getByText("Chełm")).toBeTruthy();
   expect(card.getByText("Плануецца")).toBeTruthy();

@@ -8,23 +8,24 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Modal } from "react-native";
 
 import { ModalDialog, ModalDialogAccept, ModalDialogCancel } from "./modal-dialog";
+import { getByType } from "../test/render-helpers";
 
 describe("ModalDialog a11y (G06.05)", () => {
-  test("the dialog never animates — the reduced-motion contract stays pinned", () => {
-    const { UNSAFE_getByType } = render(
+  test("the dialog never animates — the reduced-motion contract stays pinned", async () => {
+    const view = await render(
       <ModalDialog onRequestClose={() => {}} testID="dialog">
         <ModalDialogAccept label="Так" onPress={() => {}} testID="a" />
       </ModalDialog>,
     );
     // react-native's Modal element: the animation prop is the reverted-line
     // check — an added fade/slide fails here.
-    const modal = UNSAFE_getByType(Modal);
+    const modal = getByType(view, "Modal");
     expect(modal.props.animationType).toBe("none");
   });
 
-  test("the actions are buttons announcing their labels", () => {
+  test("the actions are buttons announcing their labels", async () => {
     const pressed: string[] = [];
-    render(
+    await render(
       <ModalDialog onRequestClose={() => {}} testID="dialog">
         <ModalDialogAccept label="Завершыць" onPress={() => pressed.push("accept")} testID="a" />
         <ModalDialogCancel label="Скасаваць" onPress={() => pressed.push("cancel")} testID="c" />
@@ -33,7 +34,7 @@ describe("ModalDialog a11y (G06.05)", () => {
     expect(screen.getByTestId("a").props.accessibilityRole).toBe("button");
     expect(screen.getByTestId("a").props.accessibilityLabel).toBe("Завершыць");
     expect(screen.getByTestId("c").props.accessibilityRole).toBe("button");
-    fireEvent.press(screen.getByTestId("c"));
+    await fireEvent.press(screen.getByTestId("c"));
     expect(pressed).toEqual(["cancel"]);
   });
 });

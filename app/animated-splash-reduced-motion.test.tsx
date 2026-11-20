@@ -17,11 +17,11 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-test("reduced motion opens the map menu immediately without playing the timed intro", () => {
+test("reduced motion opens the map menu immediately without playing the timed intro", async () => {
   reducedMotion.mockReturnValue(true);
   jest.useFakeTimers();
 
-  renderRouter(
+  await renderRouter(
     {
       _layout: layoutWith(createServices({})),
       index: Index,

@@ -46,12 +46,22 @@ export function createExpoDownloadStore(fs: DownloadFileSystem, root: Directory)
       // The rename tail moves both files (staged .part entries) and whole
       // layer directories (the staging tree's commit) — the source kind
       // decides which class moves it.
+      // expo-file-system 58 changed the move semantics the store relies on
+      // (#339): the destination's parent must already exist ("the destination
+      // path does not exist" — the 54 build created intermediates), and a
+      // move onto an existing target needs MoveOptions.overwrite ("a file
+      // with the same name already exists" — the 54 build replaced it; the
+      // node adapter's plain fsRename replace is the contract). The normal
+      // activation path already empties the final layer through its deletion
+      // gate — overwrite covers the re-commit path (a re-download over a
+      // live layer).
+      new Directory(root, ...to.slice(0, -1)).create({ idempotent: true, intermediates: true });
       const file = new File(root, ...from);
       if (file.exists) {
-        file.move(new File(root, ...to));
+        file.move(new File(root, ...to), { overwrite: true });
         return;
       }
-      new Directory(root, ...from).move(new Directory(root, ...to));
+      new Directory(root, ...from).move(new Directory(root, ...to), { overwrite: true });
     },
     async remove(rel: string): Promise<void> {
       const segments = segmentsOf(rel);

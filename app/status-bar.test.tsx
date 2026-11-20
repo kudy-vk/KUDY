@@ -14,15 +14,15 @@ jest.mock("expo-status-bar", () => ({
 import RootLayout from "./_layout";
 import { resolveThemeScheme, statusBarStyle } from "../components/theme";
 
-test("the navigation root mounts the status bar as dark content (docs/design/dark-theme.md — Статус-бар)", () => {
-  renderRouter({ _layout: RootLayout, index: () => null }, { initialUrl: "/" });
+test("the navigation root mounts the status bar as dark content (docs/design/dark-theme.md — Статус-бар)", async () => {
+  await renderRouter({ _layout: RootLayout, index: () => null }, { initialUrl: "/" });
   const dark = mountedStatusBarProps.some(
     (props) => (props as { style?: unknown }).style === "dark",
   );
   expect(dark).toBe(true);
 });
 
-test("the native status bar changes to light glyphs in dark mode (docs/design/dark-theme.md)", () => {
+test("the native status bar changes to light glyphs in dark mode (docs/design/dark-theme.md)", async () => {
   expect(statusBarStyle(resolveThemeScheme("dark"))).toBe("light");
   expect(statusBarStyle(resolveThemeScheme("light"))).toBe("dark");
   expect(statusBarStyle(resolveThemeScheme(null))).toBe("dark");
