@@ -56,8 +56,10 @@ test('guard: the target schema shape matches the validation contract', () => {
   assert.equal(guide.additionalProperties, false);
   assert.equal(place.additionalProperties, false);
   // The registry-side locale enum is the schema's; request validation stays
-  // structural on purpose (the fixture's reserved `pl` must reach the
-  // registry check and answer unknown_target, not invalid_target).
+  // structural on purpose (a well-formed target of an unregistered locale —
+  // the fixture's `ua` in unknown_targets — must reach the registry check and
+  // answer unknown_target, not invalid_target; the fixture's `pl` walks the
+  // same path as a registered-but-unpublished locale since #347).
   assert.deepEqual(REGISTRY_LOCALES, guide.properties.locale.enum);
   assert.equal(schema.title, 'FeedbackTarget (feedback_target_registry)');
   // version: "^[0-9]+$" + maxLength 64 — the combined request pattern must
@@ -111,7 +113,8 @@ test('guard: fixture targets validate structurally; unknown targets reach the re
   for (const target of fixture.targets) {
     assert.equal(validateTarget(target).ok, true, `fixture target ${JSON.stringify(target)} must be structurally valid`);
   }
-  // The imported OSM id and the reserved locale are well-formed targets —
+  // The imported OSM id and the unregistered-locale targets (`ua`; `pl` is a
+  // registered-but-unpublished locale since #347) are well-formed targets —
   // their 422 comes from the registry, not the shape check.
   for (const target of fixture.unknown_targets) {
     assert.equal(validateTarget(target).ok, true, `unknown target ${JSON.stringify(target)} must pass the shape check`);

@@ -115,8 +115,47 @@ test('criterion 3: history, language, transcript, rights and access are checked 
   delete noLicense.license;
   assert.ok(!schema('media.schema.json', noLicense).ok, 'media rights (license) required');
   assert.ok(!schema('media.schema.json', { ...media, credit: '' }).ok, 'credit cannot be an empty string');
-  const plVoice = { ...readJson('fixtures/content/demo-route/voices.json')[0], locale: 'pl' };
-  assert.ok(!schema('voice.schema.json', plVoice).ok, 'reserved locales are not in the allowlist');
+  const unknownVoice = [{ ...readJson('fixtures/content/demo-route/voices.json')[0], locale: 'ua' }];
+  assert.ok(!schema('voice.schema.json', unknownVoice).ok, 'unknown locale codes are not in the allowlist');
+});
+
+// AF6 (Selfer эпік #262, issue #347): pl — дзясятая кантэнтная лакаля
+// (ADR docs/architecture/decisions/347-polish-content-locale.md). pl праходзіць
+// кантэнтныя схемы і ліміты 9→10; невядомыя коды і ліміты застаюцца зачыненымі.
+test('AF6 #347: pl passes the content schemas with limits 9→10; unknown codes still fail', () => {
+  const media = readJson('contracts/examples/media-demo.json');
+  const plMedia = { ...media, locale: 'pl' };
+  delete plMedia.voice_id; // factory narration ships without a voice ref
+  assert.ok(schema('media.schema.json', plMedia).ok, JSON.stringify(schema('media.schema.json', plMedia).errors));
+  assert.ok(!schema('media.schema.json', { ...media, locale: 'ua' }).ok, 'an unknown locale still fails the enum');
+  const plVoice = [{ ...readJson('fixtures/content/demo-route/voices.json')[0], locale: 'pl' }];
+  assert.ok(schema('voice.schema.json', plVoice).ok, 'pl narration enters the voice allowlist with the audio wave (AF6)');
+  const target = { kind: 'guide', route_id: 'demo-route-a1', version: '1', locale: 'pl' };
+  assert.ok(schema('feedback-target.schema.json', target).ok, JSON.stringify(schema('feedback-target.schema.json', target).errors));
+  const ten = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'pl'];
+  const localized10 = Object.fromEntries(ten.map((locale) => [locale, 'тэкст']));
+  assert.ok(schema('localized-text.schema.json', localized10).ok, 'ten content locales fit maxProperties');
+  const localizedCeiling = schema('localized-text.schema.json', { ...localized10, ua: 'тэкст' });
+  assert.ok(!localizedCeiling.ok, 'the 11th locale fails maxProperties');
+  assert.ok(localizedCeiling.errors.some((e) => e.keyword === 'maxProperties'), JSON.stringify(localizedCeiling.errors));
+  const route = readJson('fixtures/content/demo-route/route.json');
+  const envelope = {
+    catalog_schema_version: 1,
+    routes: [{ route_id: route.route_id, version: '1', locales: ten, layers: ['base'], sizes: { base: 1 } }],
+  };
+  assert.ok(schema('catalog.schema.json', envelope).ok, JSON.stringify(schema('catalog.schema.json', envelope).errors));
+  envelope.routes[0].locales = Array(11).fill('be');
+  const catalogCeiling = schema('catalog.schema.json', envelope);
+  assert.ok(!catalogCeiling.ok, 'the 11th catalog locale fails maxItems');
+  assert.ok(catalogCeiling.errors.some((e) => e.keyword === 'maxItems'), JSON.stringify(catalogCeiling.errors));
+  const index = readJson('fixtures/discovery-contract/index-valid.json');
+  const guide = index.offers.find((offer) => offer.ref.kind === 'guide');
+  guide.availability = { text_locales: ten, audio_locales: [...ten] };
+  assert.ok(schema('discovery-index.schema.json', index).ok, JSON.stringify(schema('discovery-index.schema.json', index).errors));
+  guide.availability = { text_locales: Array(11).fill('be'), audio_locales: [] };
+  const discoveryCeiling = schema('discovery-index.schema.json', index);
+  assert.ok(!discoveryCeiling.ok, 'the 11th availability locale fails maxItems');
+  assert.ok(discoveryCeiling.errors.some((e) => e.keyword === 'maxItems'), JSON.stringify(discoveryCeiling.errors));
 });
 
 test('criterion 3: stop tier requires its own story id (if/then required without type)', () => {
@@ -416,30 +455,35 @@ test('G07.04: both number fields non-finite are each named (#391)', () => {
 // CJK-free (criterion 7 of the issue).
 const ZH_SAMPLE = '\u4E2D\u6587';
 
-test('G21.45: localized-text (the allowlist owner) accepts zh and holds the 9-locale ceiling', () => {
+test('G21.45+#347: localized-text (the allowlist owner) accepts zh and pl and holds the 10-locale ceiling', () => {
   const nine = { be: 'x', en: 'x', uk: 'x', de: 'x', es: 'x', fr: 'x', cs: 'x', sv: 'x', zh: ZH_SAMPLE };
   assert.ok(schema('localized-text.schema.json', nine).ok, JSON.stringify(schema('localized-text.schema.json', nine).errors));
   const ten = { ...nine, pl: 'x' };
-  const res = schema('localized-text.schema.json', ten);
-  assert.ok(!res.ok, 'a tenth locale must fail maxProperties');
+  assert.ok(schema('localized-text.schema.json', ten).ok, JSON.stringify(schema('localized-text.schema.json', ten).errors));
+  // The reader reports the enum and the count errors together, so the
+  // keyword assert pins the count bound itself, not just some rejection —
+  // the fill reuses a valid code as hygiene, not as a requirement.
+  const eleven = { ...ten, ua: 'x' };
+  const res = schema('localized-text.schema.json', eleven);
+  assert.ok(!res.ok, 'an 11th locale must fail maxProperties');
   assert.ok(res.errors.some((e) => e.keyword === 'maxProperties'), JSON.stringify(res.errors));
   assert.ok(schema('localized-text.schema.json', { zh: ZH_SAMPLE }).ok, 'zh alone is a valid localized map');
   assert.ok(!schema('localized-text.schema.json', { zh: '' }).ok, 'zh strings keep the minLength-1 rule');
 });
 
-test('G21.45: discovery availability accepts zh in both locale lists under the 9-item ceilings', () => {
+test('G21.45+#347: discovery availability accepts zh and pl in both locale lists under the 10-item ceilings', () => {
   const index = structuredClone(readJson('fixtures/discovery-contract/index-valid.json'));
-  index.offers[0].availability.text_locales.push('zh');
-  index.offers[0].availability.audio_locales.push('zh');
+  index.offers[0].availability.text_locales.push('zh', 'pl');
+  index.offers[0].availability.audio_locales.push('zh', 'pl');
   assert.ok(schema('discovery-index.schema.json', index).ok, JSON.stringify(schema('discovery-index.schema.json', index).errors));
   assert.ok(checkIndexRules(index).ok, JSON.stringify(checkIndexRules(index).errors));
-  // The 10th item isolates maxItems: the enum has exactly nine valid codes,
-  // so the over-ceiling case must reuse a valid code — an unknown code would
-  // fail enum first and pin nothing about the count bound.
-  const ten = structuredClone(index);
-  ten.offers[0].availability.text_locales = Array(10).fill('be');
-  const res = schema('discovery-index.schema.json', ten);
-  assert.ok(!res.ok, 'a tenth text locale must fail maxItems');
+  // The reader reports maxItems regardless of the items' enum validity, so
+  // the keyword assert pins the count bound on its own; the valid-code fill
+  // keeps the case honest about which bound it exercises.
+  const eleven = structuredClone(index);
+  eleven.offers[0].availability.text_locales = Array(11).fill('be');
+  const res = schema('discovery-index.schema.json', eleven);
+  assert.ok(!res.ok, 'an 11th text locale must fail maxItems');
   assert.ok(res.errors.some((e) => e.keyword === 'maxItems'), JSON.stringify(res.errors));
 });
 
@@ -452,29 +496,30 @@ test('G21.45: media locale and both feedback-target branches accept zh', () => {
   assert.ok(schema('feedback-target.schema.json', place).ok, JSON.stringify(schema('feedback-target.schema.json', place).errors));
 });
 
-test('G21.45: the 8→9 move is the only count-limit change; the residual mirrors stay at eight', () => {
+test('G21.45+#347: the 9→10 move is the only count-limit change; the residual mirrors stay at eight', () => {
   const NINE = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh'];
+  const TEN = [...NINE, 'pl'];
   const EIGHT = NINE.slice(0, 8);
-  // Extended spots (issue criteria 1, 3, 4, 5): the owner and its four
-  // declared projections. catalog.routes[].locales is the generator's
+  // Extended spots (issue criteria 1, 3, 4, 5 of G21.45 + #347): the owner and
+  // its four declared projections. catalog.routes[].locales is the generator's
   // fail-closed mirror (assertSameSet) — extending the owner without it
   // fails `npm run contracts:wire:check`.
   const localizedText = readJson('contracts/schemas/localized-text.schema.json');
-  assert.deepEqual(localizedText.propertyNames.enum, NINE);
-  assert.equal(localizedText.maxProperties, 9);
+  assert.deepEqual(localizedText.propertyNames.enum, TEN);
+  assert.equal(localizedText.maxProperties, 10);
   const offer = readJson('contracts/schemas/discovery-index.schema.json').definitions.offer.properties;
   for (const list of ['text_locales', 'audio_locales']) {
-    assert.deepEqual(offer.availability.properties[list].items.enum, NINE, list);
-    assert.equal(offer.availability.properties[list].maxItems, 9, list);
+    assert.deepEqual(offer.availability.properties[list].items.enum, TEN, list);
+    assert.equal(offer.availability.properties[list].maxItems, 10, list);
   }
-  assert.deepEqual(readJson('contracts/schemas/media.schema.json').properties.locale.enum, NINE);
+  assert.deepEqual(readJson('contracts/schemas/media.schema.json').properties.locale.enum, TEN);
   const feedback = readJson('contracts/schemas/feedback-target.schema.json');
   for (const [i, branch] of feedback.oneOf.entries()) {
-    assert.deepEqual(branch.properties.locale.enum, NINE, `feedback branch ${i}`);
+    assert.deepEqual(branch.properties.locale.enum, TEN, `feedback branch ${i}`);
   }
   const catalogLocales = readJson('contracts/schemas/catalog.schema.json').properties.routes.items.properties.locales;
-  assert.deepEqual(catalogLocales.items.enum, NINE);
-  assert.equal(catalogLocales.maxItems, 9);
+  assert.deepEqual(catalogLocales.items.enum, TEN);
+  assert.equal(catalogLocales.maxItems, 10);
   // Residual mirrors (issue notes file list + ADR G21.42 §4 keep them out of
   // this task's scope; the future zh-content/UI tasks extend them the way
   // G21.16 did): these pins make any silent drift — either direction — fail.
@@ -492,7 +537,16 @@ test('G21.45: the 8→9 move is the only count-limit change; the residual mirror
   const placeRefs = readJson('contracts/schemas/place.schema.json').properties.name_audio_refs;
   assert.deepEqual(placeRefs.propertyNames.enum, EIGHT);
   assert.equal(placeRefs.maxProperties, 8);
-  assert.deepEqual(readJson('contracts/schemas/voice.schema.json').items.properties.locale.enum, EIGHT);
+  // #347: the voice allowlist follows the pl audio wave (stories need a
+  // same-locale voice); zh stays out until the G21.49 TTS pilot.
+  assert.deepEqual(readJson('contracts/schemas/voice.schema.json').items.properties.locale.enum, [...EIGHT, 'pl']);
+  // #347: MEDIA_LOCALES is the declared mirror of media.schema.json — its
+  // literal is pinned here at the source, verbatim with the schema enum.
+  const validatorSource = fs.readFileSync(path.join(REPO, 'tools/validate/validate-package.mjs'), 'utf8');
+  assert.ok(
+    validatorSource.includes("new Set(['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'pl'])"),
+    'tools/validate/validate-package.mjs MEDIA_LOCALES must mirror media.schema.json verbatim',
+  );
   // The tools/UI residuals are pinned at their source as well, so the claim
   // "the whole residual list stays at eight" is test-checked, not prose:
   // a silent widening there trips this pin too (and a zh task widening them
@@ -500,7 +554,6 @@ test('G21.45: the 8→9 move is the only count-limit change; the residual mirror
   const residualSources = [
     ['tools/build-bundle/build-bundle.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'LOCALE_ALLOWLIST'],
     ['tools/validate/validate-authoring.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'LOCALES'],
-    ['tools/validate/validate-package.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'MEDIA_LOCALES'],
     // G21.46 (G21.42-chinese-language.md — G21.46): the UI registry's COMPLETE set moved to nine, so the
     // residual eight in that file is now the frozen release default (the
     // label names the line the literal actually matches). The nine is pinned

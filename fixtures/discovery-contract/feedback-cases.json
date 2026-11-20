@@ -10,7 +10,8 @@
   ],
   "unknown_targets": [
     { "kind": "place", "place_id": "ext-osm-981723", "content_version": "1", "locale": "be" },
-    { "kind": "guide", "route_id": "guide-route-a1", "version": "1", "locale": "pl" }
+    { "kind": "guide", "route_id": "guide-route-a1", "version": "1", "locale": "pl" },
+    { "kind": "guide", "route_id": "guide-route-a1", "version": "1", "locale": "ua" }
   ],
   "cases": [
     {
@@ -141,7 +142,7 @@
     },
     {
       "id": "cas-unpublished-locale",
-      "note": "pl is reserved and outside the MVP allowlist; the registry has no guide v1/pl target.",
+      "note": "pl is registered since #347 but not published; the registry has no guide v1/pl target. The ua entry in unknown_targets covers the still-unregistered-locale path.",
       "request": {
         "method": "PUT /v1/feedback",
         "device": "device-b",
