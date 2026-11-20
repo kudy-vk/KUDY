@@ -569,15 +569,23 @@ export async function captureAll({ driver, matrix, capturesDir, metroPort, origi
         // offline about document with the atlas-list fold open — the
         // owner-accepted state of #312 (design-qa report 2026-11-16).
         // «Дзе што ў горадзе» is not the initial wheel section (the wheel
-        // starts on the airport), and the airport row exists only inside
-        // the open fold body — that row is the selector proving the
-        // accepted state before the shot.
+        // starts on the airport), and the first zone row exists only
+        // inside the open fold body — that row is the selector proving
+        // the accepted state before the shot. The map section is taller
+        // than the viewport (the atlas drawing is 892×971), so the fold
+        // head needs the fixed `input swipe` scroll of the discovery
+        // suite before it is tappable.
         if (plan.aboutCity) {
           await driver.launchDeepLink('kudy://city/gdansk/about');
           await waitSettled(driver, { testID: 'screen-AboutCity' }, { timeoutMs: 30000, dumpBasename: `dump-about-nav-screen-font${scale}.xml` });
           await driver.tapSelector({ testID: 'wheel-item-city' }, { timeoutMs: 10000 });
+          for (let attempt = 0; attempt <= 7; attempt += 1) {
+            const dump = await driver.dump(`dump-about-nav-scroll-${scale}-${attempt}.xml`, { timeoutMs: 15000 });
+            if (findNode(parseDump(dump.xml), { testID: 'fold-atlas-list' })) break;
+            await driver.exec(['shell', 'input', 'swipe', '540', '1780', '540', '700', '450']);
+          }
           await driver.tapSelector({ testID: 'fold-atlas-list' }, { timeoutMs: 10000 });
-          await waitSettled(driver, { testID: 'city-map-airport' }, { timeoutMs: 30000, dumpBasename: dumpBasenameForSlot({ surface: 'about-city-list', story: null, scale }) });
+          await waitSettled(driver, { testID: 'city-map-zone-glowne' }, { timeoutMs: 30000, dumpBasename: dumpBasenameForSlot({ surface: 'about-city-list', story: null, scale }) });
           await shot('about-city-list', scale);
         }
       }
