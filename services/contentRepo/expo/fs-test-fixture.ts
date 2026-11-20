@@ -52,9 +52,16 @@ class FakeFile extends Entry {
   delete(): void {
     this.fs.files.delete(this.path);
   }
-  move(destination: FakeFile | FakeDirectory): void {
+  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
     const bytes = this.fs.files.get(this.path);
     if (bytes === undefined) throw new Error(`noent ${this.path}`);
+    // expo-file-system 58 MoveOptions (#339): without overwrite an existing
+    // target rejects; the adapter always passes overwrite (the DownloadStore
+    // contract is the node adapter's fsRename replace).
+    if (this.fs.files.has(destination.path) || this.fs.dirs.has(destination.path)) {
+      if (options?.overwrite !== true) throw new Error(`exists ${destination.path}`);
+      this.fs.dirs.delete(destination.path);
+    }
     this.fs.files.delete(this.path);
     this.fs.files.set(destination.path, bytes);
   }
@@ -93,19 +100,24 @@ class FakeDirectory extends Entry {
     }
   }
   // Expo move semantics (FileSystemPath.getMoveOrCopyPath, expo-file-system
-  // 19.0.24 Android): a directory moved to an existing destination directory
-  // lands inside it — `mv a b` → `b/a`; only an absent destination is the
+  // 58.0.14 Android, #339): a directory moved to an existing destination
+  // directory lands inside it — `mv a b` → `b/a` — unless MoveOptions
+  // .overwrite drops the target first; only an absent destination is the
   // whole rename. A Node-rename stand-in (always replace) would mask the
   // caller-missed-directory class of defect (G20.31 / #793).
-  move(destination: FakeFile | FakeDirectory): void {
+  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
     if (!this.fs.dirs.has(this.path)) throw new Error(`noent ${this.path}`);
-    const target = this.fs.dirs.has(destination.path)
+    const overwrite = options?.overwrite === true;
+    const target = this.fs.dirs.has(destination.path) && !overwrite
       ? `${destination.path}/${this.name}`
       : destination.path;
     // The native `moveTo` runs without REPLACE_EXISTING (FileSystemPath.kt:158):
     // an existing target — the nested `b/a` included — throws instead of
     // merging its old bytes under the moved tree.
-    if (this.fs.dirs.has(target) || this.fs.files.has(target)) throw new Error(`exists ${target}`);
+    if (this.fs.dirs.has(target) || this.fs.files.has(target)) {
+      if (!overwrite) throw new Error(`exists ${target}`);
+      this.fs.dirs.delete(target);
+    }
     for (const key of [...this.fs.files.keys()]) {
       if (key.startsWith(`${this.path}/`)) {
         this.fs.files.set(`${target}${key.slice(this.path.length)}`, this.fs.files.get(key)!);
