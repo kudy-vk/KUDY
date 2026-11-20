@@ -205,8 +205,8 @@
           "required": ["text_locales", "audio_locales"],
           "additionalProperties": false,
           "properties": {
-            "text_locales": { "type": "array", "maxItems": 9, "items": { "enum": ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh"] } },
-            "audio_locales": { "type": "array", "maxItems": 9, "items": { "enum": ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh"] } }
+            "text_locales": { "type": "array", "maxItems": 10, "items": { "enum": ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "pl"] } },
+            "audio_locales": { "type": "array", "maxItems": 10, "items": { "enum": ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "pl"] } }
           }
         },
         "access": {

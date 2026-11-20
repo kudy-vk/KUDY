@@ -119,13 +119,19 @@ test('an unknown field in previews.json is rejected (closed 09 §5 set)', () => 
   if (!res.ok) assert.equal(res.code, 'invalid-preview');
 });
 
-test('reserved and unknown locales are rejected; allowlist locales are known', () => {
-  assert.equal(readBundleBaseStories(publicRoot, 'demo-route-a1', '1', 'pl').ok, false);
-  const res = readBundleBaseStories(publicRoot, 'demo-route-a1', '1', 'pl');
+test('unknown and unregistered locales are rejected; allowlist locales are known', () => {
+  assert.equal(readBundleBaseStories(publicRoot, 'demo-route-a1', '1', 'ua').ok, false);
+  const res = readBundleBaseStories(publicRoot, 'demo-route-a1', '1', 'ua');
   assert.equal(res.ok, false);
   if (!res.ok) assert.equal(res.code, 'unknown-locale');
   assert.equal(isKnownLocale('be'), true);
-  assert.equal(isKnownLocale('pl'), false);
+  // #347: pl joined the content-locale wave — the schema probe now knows it,
+  // and a known-but-unshipped locale reads as not-found, not unknown-locale.
+  assert.equal(isKnownLocale('pl'), true);
+  const plMissing = readBundleBaseStories(publicRoot, 'demo-route-a1', '1', 'pl');
+  assert.equal(plMissing.ok, false);
+  if (!plMissing.ok) assert.equal(plMissing.code, 'not-found');
+  assert.equal(isKnownLocale('ua'), false);
 });
 
 test('path pieces cannot traverse out of the content root', () => {
