@@ -262,7 +262,7 @@ test('a malformed export is rejected before any write', async (t) => {
     { schema_version: 2, status: 'prepared', targets: EXPORT_TARGETS },
     { schema_version: 1, status: 'published', targets: EXPORT_TARGETS },
     { schema_version: 1, status: 'prepared', targets: [] },
-    { schema_version: 1, status: 'prepared', targets: [{ kind: 'guide', route_id: 'guide-route-a1', version: '1', locale: 'pl', status: 'prepared' }] },
+    { schema_version: 1, status: 'prepared', targets: [{ kind: 'guide', route_id: 'guide-route-a1', version: '1', locale: 'ua', status: 'prepared' }] },
     { schema_version: 1, status: 'prepared', targets: [...EXPORT_TARGETS, EXPORT_TARGETS[0]] },
   ];
   for (const doc of broken) {
@@ -270,7 +270,7 @@ test('a malformed export is rejected before any write', async (t) => {
   }
   const empty = await db.query('select count(*)::int as count from feedback_target_registry');
   assert.equal(empty.rows[0]?.count, 0, 'a rejected export imports nothing');
-  assert.deepEqual(REGISTRY_LOCALES, ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh'], 'the registry enum is the schema contract');
+  assert.deepEqual(REGISTRY_LOCALES, ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'pl'], 'the registry enum is the schema contract');
 });
 
 // --- CAS and concurrency semantics ---

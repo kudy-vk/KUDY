@@ -18,6 +18,13 @@ test('only the correct relative side inside the capture radius attracts',()=>{
   right.dx=30;right.dy=31;
   assert.equal(findMagnet(left,actors,joints,10),undefined);
 });
+test('the capture radius is inclusive at the exact threshold and closed beyond it',()=>{
+  const {left,right,actors,joints}=setup();
+  right.dx=left.dx+10;right.dy=left.dy;
+  assert.equal(findMagnet(left,actors,joints,10)?.other,right); // delta = 10 = парог
+  right.dx=left.dx+10.0001;
+  assert.equal(findMagnet(left,actors,joints,10),undefined); // delta ужо за парогам
+});
 test('joining retains the exact source offset and all member identities',()=>{
   const {left,right,actors,groups}=setup();
   joinGroups(left,right,actors,groups);
