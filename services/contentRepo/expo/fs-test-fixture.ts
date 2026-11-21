@@ -45,16 +45,45 @@ class FakeFile extends Entry {
     if (bytes === undefined) throw new Error(`noent ${this.path}`);
     return bytes;
   }
-  write(content: Uint8Array, _options?: { encoding?: string }): void {
-    this.fs.files.set(this.path, content);
-    this.ancestors().forEach((dir) => this.fs.dirs.add(dir));
+  write(content: Uint8Array, _options?: { encoding?: string }): Promise<void> {
+    // The 58 native write resolves a promise the adapter must await: the
+    // mutation lands on a later macrotask, so a skipped `await` lets the next
+    // store step read a stale tree instead of silently passing (issue #354,
+    // implementation-rules 1 — the revert fails the activation suite).
+    return new Promise((resolve) => {
+      setImmediate(() => {
+        this.fs.files.set(this.path, content);
+        this.ancestors().forEach((dir) => this.fs.dirs.add(dir));
+        resolve();
+      });
+    });
   }
   delete(): void {
     this.fs.files.delete(this.path);
   }
-  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
+  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): Promise<void> {
+    // The 58 native move is a suspend fun on Android — a promise the adapter
+    // must await (issue #354): the same macrotask-deferred mutation as write.
+    return new Promise((resolve, reject) => {
+      setImmediate(() => {
+        try {
+          this.moveNow(destination, options);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+  private moveNow(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
     const bytes = this.fs.files.get(this.path);
     if (bytes === undefined) throw new Error(`noent ${this.path}`);
+    // The native Android move requires the destination's parent to exist
+    // (CopyMoveStrategy.kt:72-74 — DestinationDoesNotExistException): the
+    // store ensures it before the move, a direct move into an absent parent
+    // rejects (issue #354).
+    const parent = destination.path.slice(0, destination.path.lastIndexOf('/')) || '/';
+    if (parent !== '/' && !this.fs.dirs.has(parent)) throw new Error(`destination-does-not-exist ${parent}`);
     // expo-file-system 58 MoveOptions (#339): without overwrite an existing
     // target rejects; the adapter always passes overwrite (the DownloadStore
     // contract is the node adapter's fsRename replace).
@@ -105,8 +134,28 @@ class FakeDirectory extends Entry {
   // .overwrite drops the target first; only an absent destination is the
   // whole rename. A Node-rename stand-in (always replace) would mask the
   // caller-missed-directory class of defect (G20.31 / #793).
-  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
+  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): Promise<void> {
+    // The 58 native move is a suspend fun on Android — a promise the adapter
+    // must await (issue #354): the same macrotask-deferred mutation as write.
+    return new Promise((resolve, reject) => {
+      setImmediate(() => {
+        try {
+          this.moveNow(destination, options);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+  private moveNow(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
     if (!this.fs.dirs.has(this.path)) throw new Error(`noent ${this.path}`);
+    // The native Android move requires the destination's parent to exist
+    // (CopyMoveStrategy.kt:72-74 — DestinationDoesNotExistException): the
+    // store ensures it before the move, a direct move into an absent parent
+    // rejects (issue #354).
+    const parent = destination.path.slice(0, destination.path.lastIndexOf('/')) || '/';
+    if (parent !== '/' && !this.fs.dirs.has(parent)) throw new Error(`destination-does-not-exist ${parent}`);
     const overwrite = options?.overwrite === true;
     const target = this.fs.dirs.has(destination.path) && !overwrite
       ? `${destination.path}/${this.name}`
