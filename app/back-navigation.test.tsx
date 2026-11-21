@@ -20,11 +20,11 @@ import { uiStrings } from "../components/ui-strings";
 // element) is theirs regardless of the catalog facts.
 
 test("«Побач» has its one back and it returns to the city (AC2)", async () => {
-  renderRouter(frameRoutes(), { initialUrl: "/explore" });
-  fireEvent.press(await screen.findByTestId("link-nearby"));
+  await renderRouter(frameRoutes(), { initialUrl: "/explore" });
+  await fireEvent.press(await screen.findByTestId("link-nearby"));
   expect(await screen.findByTestId("screen-Map")).toBeTruthy();
   expect(screen.queryAllByText(/←/)).toHaveLength(0);
-  fireEvent.press(screen.getByTestId("btn-map-back"));
+  await fireEvent.press(screen.getByTestId("btn-map-back"));
   expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
 });
 
@@ -37,7 +37,7 @@ test.each([
   ["my", "/my", "btn-my-back", "Назад", "screen-KUDY"],
   ["not-found", "/definitely/missing", "btn-not-found-back", "Назад", "screen-Not found"],
 ])("the %s screen hosts exactly one back and its label lives in a <Text>", async (_name, url, backId, label, screenId) => {
-  renderRouter(frameRoutes(), { initialUrl: url });
+  await renderRouter(frameRoutes(), { initialUrl: url });
   expect(await screen.findByTestId(screenId)).toBeTruthy();
   const back = screen.getByTestId(backId);
   expect(within(back).getByText(label)).toBeTruthy();
@@ -46,12 +46,12 @@ test.each([
 });
 
 test("the start surface stays back-free (AC2)", async () => {
-  renderRouter(frameRoutes(), { initialUrl: "/explore" });
+  await renderRouter(frameRoutes(), { initialUrl: "/explore" });
   expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
   expect(screen.queryAllByText(/←/)).toHaveLength(0);
 });
 
-test("the back word lives in the one chrome dictionary, arrow-free (results G25.04.md — іконкавы слой)", () => {
+test("the back word lives in the one chrome dictionary, arrow-free (results G25.04.md — іконкавы слой)", async () => {
   // The chrome catalog is the single source of the back caption: the value
   // carries no text arrow (the arrow is the Lucide glyph BackButton
   // renders), and neither surface dictionary holds its own copy — a

@@ -7,8 +7,8 @@ import { render, screen } from "@testing-library/react-native";
 import { LoadingIndicator } from "./loading-indicator";
 
 describe("LoadingIndicator (UX 07 — screens-and-transitions.md, Кантроль покрыцця станаў)", () => {
-  test("the spinner stands next to the state text", () => {
-    render(<LoadingIndicator text="Загрузка…" />);
+  test("the spinner stands next to the state text", async () => {
+    await render(<LoadingIndicator text="Загрузка…" />);
     expect(screen.getByTestId("loading-indicator")).toBeTruthy();
     expect(screen.getByText("Загрузка…")).toBeTruthy();
   });

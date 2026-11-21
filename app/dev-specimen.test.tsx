@@ -40,15 +40,15 @@ describe("DQ-02 (issue #911): the dev-only specimen screen", () => {
     g.__DEV__ = true;
   });
 
-  test("outside __DEV__ the surface renders nothing — removing the gate turns this red", () => {
+  test("outside __DEV__ the surface renders nothing — removing the gate turns this red", async () => {
     g.__DEV__ = false;
-    render(<DevSpecimen />);
+    await render(<DevSpecimen />);
     expect(screen.queryByTestId("screen-Dev specimen")).toBeNull();
     expect(screen.queryByTestId("dev-specimen/story-free")).toBeNull();
   });
 
   test("the deep link renders every story through the specimen, each labelled by its name", async () => {
-    renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card" });
+    await renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card" });
     for (const story of namedGuideCardStories()) {
       const block = await screen.findByTestId(`dev-specimen/story-${story.name}`);
       expect(
@@ -58,7 +58,7 @@ describe("DQ-02 (issue #911): the dev-only specimen screen", () => {
   });
 
   test("each rendered story shows the card's access badge", async () => {
-    renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card" });
+    await renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card" });
     for (const story of namedGuideCardStories()) {
       const block = await screen.findByTestId(`dev-specimen/story-${story.name}`);
       expect(within(block).getByTestId(`badge-access-${story.args.card.access}`)).toBeTruthy();
@@ -66,7 +66,7 @@ describe("DQ-02 (issue #911): the dev-only specimen screen", () => {
   });
 
   test("DQ-03: the story param renders one named story alone", async () => {
-    renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card&story=free" });
+    await renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card&story=free" });
     expect(await screen.findByTestId("dev-specimen/story-free")).toBeTruthy();
     for (const other of namedGuideCardStories().filter((story) => story.name !== "free")) {
       expect(screen.queryByTestId(`dev-specimen/story-${other.name}`)).toBeNull();
@@ -74,18 +74,18 @@ describe("DQ-02 (issue #911): the dev-only specimen screen", () => {
   });
 
   test("DQ-03: an unknown story name renders the honest notice, never a story", async () => {
-    renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card&story=nowhere" });
+    await renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=guide-card&story=nowhere" });
     expect(await screen.findByTestId("dev-specimen/unknown")).toBeTruthy();
     expect(screen.queryByTestId("dev-specimen/story-free")).toBeNull();
   });
 
   test("an unknown component name renders the honest notice, never a story", async () => {
-    renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=nowhere" });
+    await renderRouter(specimenRouter(), { initialUrl: "/dev-specimen?component=nowhere" });
     expect(await screen.findByTestId("dev-specimen/unknown")).toBeTruthy();
     expect(screen.queryByTestId("dev-specimen/story-free")).toBeNull();
   });
 
-  test("single source: every named story export sits in the stories array the specimen reads", () => {
+  test("single source: every named story export sits in the stories array the specimen reads", async () => {
     const named = namedGuideCardStories().map((story) => story.name).sort();
     const listed = guideCardStoriesModule.stories.map((story) => story.name).sort();
     expect(named.length).toBeGreaterThan(0);

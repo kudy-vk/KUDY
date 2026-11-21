@@ -14,9 +14,9 @@ import LightbulbIcon from "lucide-react-native/icons/lightbulb";
 
 afterEach(() => { jest.restoreAllMocks(); jest.useRealTimers(); });
 
-function openMenu() {
+async function openMenu() {
   jest.spyOn(Math, "random").mockReturnValue(0.5);
-  renderRouter({ ...frameRoutes(), menu: Menu }, { initialUrl: "/menu" });
+  await renderRouter({ ...frameRoutes(), menu: Menu }, { initialUrl: "/menu" });
 }
 
 test.each([
@@ -27,26 +27,26 @@ test.each([
   // row fails when the transition (or its destination route) is removed.
   ["reserve-1", "screen-AboutCity", "btn-about-back"],
 ])("%s opens its real destination and Back returns to the map menu", async (id, destination, back) => {
-  openMenu();
+  await openMenu();
   const before = screen.getByTestId("city-menu-canvas");
-  fireEvent.press(screen.getByTestId(`city-menu-access-${id}`));
+  await fireEvent.press(screen.getByTestId(`city-menu-access-${id}`));
   expect(await screen.findByTestId(destination)).toBeTruthy();
-  fireEvent.press(screen.getByTestId(back));
+  await fireEvent.press(screen.getByTestId(back));
   expect(await screen.findByTestId("screen-Menu")).toBeTruthy();
   expect(screen.getByTestId("city-menu-canvas")).not.toBe(before);
 });
 
-test("the kudy piece stays visible, named and disabled without navigating", () => {
-  openMenu();
+test("the kudy piece stays visible, named and disabled without navigating", async () => {
+  await openMenu();
   const piece = screen.getByTestId("city-menu-access-kudy");
   expect(piece.props.accessibilityState.disabled).toBe(true);
   expect(piece.props.accessibilityLabel).toContain(uiStrings("be").comingSoon);
-  fireEvent.press(piece);
-  fireEvent(piece, "accessibilityTap");
+  await fireEvent.press(piece);
+  await fireEvent(piece, "accessibilityTap");
   expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
 
-test("menu config names existing geometry and localizable labels for every open locale", () => {
+test("menu config names existing geometry and localizable labels for every open locale", async () => {
   expect(cityMenuConfig.items).toHaveLength(5);
   expect(new Set(cityMenuConfig.items.map(item => item.id)).size).toBe(5);
   // Issue #200: reserve-1 carries the guide destination; only kudy stays null.
@@ -61,10 +61,10 @@ test("menu config names existing geometry and localizable labels for every open 
 test("the active-walk icon returns to the same Run without writing session state", async () => {
   const liveSession = jest.fn(() => ({ routeId: "route-map", title: "Каралеўская" }));
   const services = createServices({ runSession: { liveSession } });
-  renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+  await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
   const button = screen.getByTestId("btn-walk-mode");
   expect(button.props.accessibilityLabel).toBe(uiStrings("be").walk);
-  fireEvent.press(button);
+  await fireEvent.press(button);
   expect(await screen.findByTestId("screen-Run")).toBeTruthy();
   expect(services.walk?.liveSession()?.routeId).toBe("route-map");
 });
@@ -72,8 +72,8 @@ test("the active-walk icon returns to the same Run without writing session state
 // Issue #216 (M11): the header carries the city name on the right and the
 // display heading above the map — both through the contract, for every open
 // interface language.
-test("the header renders the contract city name and the display heading", () => {
-  openMenu();
+test("the header renders the contract city name and the display heading", async () => {
+  await openMenu();
   expect(screen.getAllByText(uiStrings("be").cityName).length).toBeGreaterThan(0);
   expect(screen.getAllByText(uiStrings("be").whereToToday).length).toBeGreaterThan(0);
   for (const locale of OPEN_UI_LOCALES) {
@@ -84,8 +84,8 @@ test("the header renders the contract city name and the display heading", () => 
 
 // Issue #216 (AC4/AC6): pieces carry medallions with unique glyphs, no
 // visible captions; the map-point, route and lamp signs replace the compass.
-test("pieces carry medallions with unique glyphs and no visible captions", () => {
-  openMenu();
+test("pieces carry medallions with unique glyphs and no visible captions", async () => {
+  await openMenu();
   for (const item of cityMenuConfig.items) {
     expect(screen.getByTestId(`city-menu-medal-${item.id}`, { includeHiddenElements: true })).toBeTruthy();
     // The caption stays the screen-reader label only; the disabled entry's
@@ -101,22 +101,22 @@ test("pieces carry medallions with unique glyphs and no visible captions", () =>
 
 // Issue #216 (AC5): pressing the waiting piece lights it back for a moment
 // and nothing opens — the honest no-section answer of the mockup.
-test("pressing the waiting piece lights it back for a moment without navigating", () => {
+test("pressing the waiting piece lights it back for a moment without navigating", async () => {
   jest.useFakeTimers();
-  openMenu();
+  await openMenu();
   const dim = screen.getByTestId("city-menu-dim-kudy", { includeHiddenElements: true });
   expect(dim.props.opacity).toBe(0.55);
-  fireEvent.press(screen.getByTestId("city-menu-access-kudy"));
+  await fireEvent.press(screen.getByTestId("city-menu-access-kudy"));
   expect(dim.props.opacity).toBe(0);
-  act(() => { jest.advanceTimersByTime(701); });
+  await act(() => { jest.advanceTimersByTime(701); });
   expect(dim.props.opacity).toBe(0.55);
   expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
 
 // Issue #216 (AC7): the engraved panorama rests in the free space and the
 // ad zone vanishes while no banner is loaded (M6; the real creative is #101).
-test("the free space carries the panorama and the ad zone stays hidden without a banner", () => {
-  openMenu();
+test("the free space carries the panorama and the ad zone stays hidden without a banner", async () => {
+  await openMenu();
   expect(screen.getByTestId("menu-panorama")).toBeTruthy();
   expect(screen.queryByTestId("menu-ad")).toBeNull();
 });
@@ -124,7 +124,7 @@ test("the free space carries the panorama and the ad zone stays hidden without a
 // Issue #216 (AC3, M1): the parts block ends at 5/8 of the FULL screen
 // height minus the status-bar inset (the README verdict row). Reverting the
 // 5/8 formula or the status subtraction turns this red.
-test("the map block height is 5/8 of the screen height minus the status inset", () => {
+test("the map block height is 5/8 of the screen height minus the status inset", async () => {
   expect(menuTopBlockHeight(844, 47)).toBeCloseTo(480.5);
   expect(menuTopBlockHeight(640, 24)).toBeCloseTo(376);
   expect(menuTopBlockHeight(932, 47)).toBeCloseTo(535.5);

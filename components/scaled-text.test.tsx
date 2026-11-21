@@ -10,9 +10,9 @@ import { tokens } from "./design-tokens";
 import { ScaledText } from "./scaled-text";
 
 describe("ScaledText (G06.05 AC2)", () => {
-  test("the canon big-text factor caps the OS font scaling", () => {
+  test("the canon big-text factor caps the OS font scaling", async () => {
     expect(tokens.fontBigTextFactor).toBe(1.25);
-    const { getByText } = render(<ScaledText>Прывітанне</ScaledText>);
+    const { getByText } = await render(<ScaledText>Прывітанне</ScaledText>);
     expect(getByText("Прывітанне").props.maxFontSizeMultiplier).toBe(1.25);
     expect(getByText("Прывітанне").props.allowFontScaling).not.toBe(false);
   });

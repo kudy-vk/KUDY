@@ -19,16 +19,16 @@ describe("DQ-13 (issue #914): the on-device Storybook route", () => {
     g.__DEV__ = true;
   });
 
-  test("outside __DEV__ the route renders nothing — removing the gate turns this red", () => {
+  test("outside __DEV__ the route renders nothing — removing the gate turns this red", async () => {
     g.__DEV__ = false;
-    render(<Storybook />);
+    await render(<Storybook />);
     expect(screen.queryByTestId("storybook/ui-root")).toBeNull();
     expect(screen.queryByTestId("storybook/disabled")).toBeNull();
   });
 
-  test("in dev the route mounts the Storybook UI root", () => {
+  test("in dev the route mounts the Storybook UI root", async () => {
     g.__DEV__ = true;
-    render(<Storybook />);
+    await render(<Storybook />);
     expect(screen.getByTestId("storybook/ui-root")).toBeTruthy();
   });
 });

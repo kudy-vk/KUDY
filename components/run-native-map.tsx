@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     flex: 1,
     overflow: 'hidden',
   },
-  map: { ...StyleSheet.absoluteFillObject },
-  fallback: { ...StyleSheet.absoluteFillObject },
+  map: { ...StyleSheet.absoluteFill },
+  fallback: { ...StyleSheet.absoluteFill },
   marker: { alignItems: 'center', minHeight: 48, width: 120 },
   poi: {
     backgroundColor: tokens.colorBadgeMixed,

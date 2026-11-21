@@ -11,6 +11,8 @@ import { CanonIcon } from "./canon-icon";
 import { tokens } from "./design-tokens";
 import { Fab } from "./fab";
 import { ScaledText } from "./scaled-text";
+import { getByType, queryAllByType } from "../test/render-helpers";
+
 
 const LABEL = "Пачаць прагулку";
 const REASON = "Сінтэтычная прычына чакання дзеі";
@@ -35,9 +37,9 @@ function layers(element: { props: { style?: unknown } }): Style[] {
   return flat(element.props.style);
 }
 
-test("enabled: the accent round button with the screen-reader name and the clay shelf", () => {
+test("enabled: the accent round button with the screen-reader name and the clay shelf", async () => {
   const onPress = jest.fn();
-  render(<Fab glyph={Footprints} label={LABEL} onPress={onPress} testID="fab" />);
+  await render(<Fab glyph={Footprints} label={LABEL} onPress={onPress} testID="fab" />);
   const button = screen.getByTestId("fab");
   expect(button.props.accessibilityRole).toBe("button");
   expect(button.props.accessibilityLabel).toBe(LABEL);
@@ -45,13 +47,13 @@ test("enabled: the accent round button with the screen-reader name and the clay 
   const stack = layers(button);
   expect(stack[0]).toMatchObject({ backgroundColor: tokens.colorAccent, height: 56, width: 56 });
   expect(stack.some((layer) => layer.borderBottomColor === tokens.colorShelfAccent)).toBe(true);
-  fireEvent.press(button);
+  await fireEvent.press(button);
   expect(onPress).toHaveBeenCalledTimes(1);
 });
 
-test("disabled: the canon §5 ghost pair — transparent fill, disabled frame, disabled glyph, no shelf", () => {
+test("disabled: the canon §5 ghost pair — transparent fill, disabled frame, disabled glyph, no shelf", async () => {
   const onPress = jest.fn();
-  render(<Fab glyph={Footprints} label={LABEL} disabled onPress={onPress} testID="fab" />);
+  await render(<Fab glyph={Footprints} label={LABEL} disabled onPress={onPress} testID="fab" />);
   const button = screen.getByTestId("fab");
   expect(button.props.accessibilityState).toMatchObject({ disabled: true });
   const stack = layers(button);
@@ -64,18 +66,20 @@ test("disabled: the canon §5 ghost pair — transparent fill, disabled frame, d
   expect(stack.some((layer) => layer.borderBottomColor === tokens.colorShelfAccent)).toBe(false);
   // No opacity anywhere in the disabled stack — the canon §5 «без празрыстасці».
   expect(stack.some((layer) => "opacity" in layer)).toBe(false);
-  fireEvent.press(button);
+  await fireEvent.press(button);
   expect(onPress).not.toHaveBeenCalled();
-  // The glyph rides the disabled ink of the ghost pair.
-  const icon = screen.UNSAFE_getByType(CanonIcon);
-  expect(icon.props.color).toBe(tokens.colorDisabledInk);
+  // The glyph rides the disabled ink of the ghost pair. RNTL 14 renders the
+  // host-only tree - the CanonIcon composite is flattened into the lucide
+  // svg host, whose stroke carries the icon color.
+  const icon = getByType(screen, "RNSVGSvgView");
+  expect(icon.props.stroke).toBe(tokens.colorDisabledInk);
 });
 
-test("the reason line renders left of the button when the screen passes one", () => {
-  const view = render(<Fab glyph={Footprints} label={LABEL} reason={REASON} testID="fab" />);
+test("the reason line renders left of the button when the screen passes one", async () => {
+  const view = await render(<Fab glyph={Footprints} label={LABEL} reason={REASON} testID="fab" />);
   // Exactly one text node: the reason, on the shared row before the round
   // action (the pv-foot arrangement — text left, action right).
-  const texts = view.UNSAFE_queryAllByType(Text);
+  const texts = queryAllByType(view, "Text");
   expect(texts).toHaveLength(1);
   expect(texts[0].props.children).toBe(REASON);
   expect(texts[0].props.style).toMatchObject({ flex: 1 });
@@ -85,11 +89,12 @@ test("the reason line renders left of the button when the screen passes one", ()
   while (row && !layers(row).some((layer) => layer.flexDirection === "row")) row = row.parent;
   expect(row).toBeTruthy();
   const kids: TestNode[] = row ? row.children : [];
-  expect(kids[0]?.type).toBe(ScaledText);
+  // The host-only tree flattens the ScaledText composite into its Text host.
+  expect(kids[0]?.props.children).toBe(REASON);
   expect(kids[kids.length - 1]?.props.testID).toBe("fab");
 });
 
-test("no reason passed — no text node, the button stands alone", () => {
-  const view = render(<Fab glyph={Footprints} label={LABEL} testID="fab" />);
-  expect(view.UNSAFE_queryAllByType(Text)).toHaveLength(0);
+test("no reason passed — no text node, the button stands alone", async () => {
+  const view = await render(<Fab glyph={Footprints} label={LABEL} testID="fab" />);
+  expect(queryAllByType(view, "Text")).toHaveLength(0);
 });

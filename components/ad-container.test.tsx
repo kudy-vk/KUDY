@@ -17,14 +17,14 @@ function layers(style: unknown): Style[] {
 }
 
 describe("ad container (#215, decision M6)", () => {
-  test("no ad loaded — the zone vanishes and leaves no empty space", () => {
-    const { toJSON } = render(<AdContainer loaded={false} testID="ad" />);
+  test("no ad loaded — the zone vanishes and leaves no empty space", async () => {
+    const { toJSON } = await render(<AdContainer loaded={false} testID="ad" />);
     expect(screen.queryByTestId("ad")).toBeNull();
     expect(toJSON()).toBeNull();
   });
 
-  test("an ad is loaded — the reserved 90dp slot stands, framed with the line pair", () => {
-    const { toJSON } = render(<AdContainer loaded testID="ad" />);
+  test("an ad is loaded — the reserved 90dp slot stands, framed with the line pair", async () => {
+    const { toJSON } = await render(<AdContainer loaded testID="ad" />);
     const zone = screen.getByTestId("ad");
     expect(layers(zone.props.style)).toMatchObject([
       { paddingBottom: 8, paddingHorizontal: 16, paddingTop: 8 },

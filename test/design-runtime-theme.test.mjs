@@ -71,7 +71,7 @@ test('the root owns one reactive status bar; calm surfaces consume the live pale
 });
 
 
-test('Android appearance config installs the SDK 54 native plugin', () => {
+test('Android appearance config installs the SDK 58 native plugin', () => {
   const config = JSON.parse(readFileSync(join(root, 'app.json'), 'utf8')).expo;
   const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
   const lock = JSON.parse(readFileSync(join(root, 'package-lock.json'), 'utf8'));
@@ -79,9 +79,9 @@ test('Android appearance config installs the SDK 54 native plugin', () => {
     'the native app must not lock dark-mode devices into light appearance');
   assert.ok(config.plugins.includes('expo-system-ui'),
     'the Android userInterfaceStyle setting requires the native Expo plugin');
-  assert.equal(pkg.dependencies['expo-system-ui'], '~6.0.9',
-    'use the module version compatible with Expo SDK 54');
+  assert.equal(pkg.dependencies['expo-system-ui'], '~58.0.7',
+    'use the module version compatible with Expo SDK 58 (#339)');
   assert.equal(lock.packages[''].dependencies['expo-system-ui'], pkg.dependencies['expo-system-ui']);
-  assert.equal(lock.packages['node_modules/expo-system-ui'].version, '6.0.9',
+  assert.equal(lock.packages['node_modules/expo-system-ui'].version, '58.0.7',
     'npm ci must install the native module without changing the lockfile');
 });

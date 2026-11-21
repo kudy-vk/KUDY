@@ -70,8 +70,8 @@ const translateXOf = (id: AboutCitySectionId): number => {
 };
 
 describe("the strip rides the wheel's ring", () => {
-  test("the settled wheel puts the open page exactly in the middle — no entry offset", () => {
-    render(<PagesHarness posValue={0} activeId="airport" />);
+  test("the settled wheel puts the open page exactly in the middle — no entry offset", async () => {
+    await render(<PagesHarness posValue={0} activeId="airport" />);
     expect(translateXOf("airport")).toBe(0);
     // The neighbors stand where their medals do: one slot = one page width.
     expect(translateXOf("transport")).toBe(WIDTH);
@@ -79,36 +79,41 @@ describe("the strip rides the wheel's ring", () => {
     expect(translateXOf("food")).toBe(-WIDTH);
   });
 
-  test("one wheel slot moves a page a full width; a full ring wraps it home", () => {
-    render(<PagesHarness posValue={SLOT} activeId="airport" />);
+  test("one wheel slot moves a page a full width; a full ring wraps it home", async () => {
+    await render(<PagesHarness posValue={SLOT} activeId="airport" />);
     expect(translateXOf("transport")).toBe(0);
     expect(translateXOf("airport")).toBe(-WIDTH);
-    render(<PagesHarness posValue={4 * SLOT} activeId="airport" />);
+    await render(<PagesHarness posValue={4 * SLOT} activeId="airport" />);
     expect(translateXOf("airport")).toBe(0);
     expect(translateXOf("food")).toBe(-WIDTH);
   });
 
-  test("every settled section places its page at exactly zero", () => {
+  test("every settled section places its page at exactly zero", async () => {
     // The Instagram-like flip settles without a residue: at the wheel's
     // settled position the open page's offset is 0 in the exact numbers,
     // not approximately.
-    ABOUT_CITY_SECTIONS.forEach((section, index) => {
-      render(<PagesHarness posValue={index * SLOT} activeId={section.id} />);
+    for (const [index, section] of ABOUT_CITY_SECTIONS.entries()) {
+      await render(<PagesHarness posValue={index * SLOT} activeId={section.id} />);
       expect(translateXOf(section.id)).toBe(0);
-    });
+    }
   });
 });
 
-test("only the open page takes touches and meets the screen reader", () => {
-  render(<PagesHarness posValue={0} activeId="food" />);
+test("only the open page takes touches and meets the screen reader", async () => {
+  await render(<PagesHarness posValue={0} activeId="food" />);
   expect(screen.getByTestId("about-page-food").props.pointerEvents).toBe("auto");
   expect(screen.getByTestId("about-page-food").props.accessibilityElementsHidden).toBe(false);
   for (const { id } of ABOUT_CITY_SECTIONS) {
     if (id === "food") continue;
-    // The hidden page takes no touches, and the default queries — the
-    // screen reader's road — do not reach it at all.
-    expect(screen.getByTestId(`about-page-${id}`, { includeHiddenElements: true }).props.pointerEvents).toBe("none");
-    expect(screen.queryByTestId(`about-page-${id}`)).toBeNull();
+    // The hidden page takes no touches, and the screen reader's road does not
+    // reach it at all. RNTL 14 keeps the retained page mounted and the global
+    // query config sees hidden elements by default (test/rntl-configure.js),
+    // so the old "default query finds nothing" proxy is pinned directly as
+    // the a11y-hidden markers the screen reader honors.
+    const hidden = screen.getByTestId(`about-page-${id}`, { includeHiddenElements: true });
+    expect(hidden.props.pointerEvents).toBe("none");
+    expect(hidden.props.accessibilityElementsHidden).toBe(true);
+    expect(hidden.props.importantForAccessibility).toBe("no-hide-descendants");
   }
 });
 
@@ -134,78 +139,78 @@ function InteractivePages({ activeId = "airport", locale = "be", failedLink = nu
   );
 }
 
-test("M14 displays four sections and direction cards with accessible, unprinted labels", () => {
+test("M14 displays four sections and direction cards with accessible, unprinted labels", async () => {
   expect(ABOUT_CITY_SECTIONS.map(({ id }) => id)).toEqual(["airport", "transport", "city", "food"]);
-  render(<InteractivePages />);
+  await render(<InteractivePages />);
   const page = within(screen.getByTestId("about-page-airport"));
   expect(page.getByRole("radio", { name: "З аэрапорта" }).props.accessibilityState.checked).toBe(true);
   expect(page.getByRole("radio", { name: "У аэрапорт" }).props.accessibilityState.checked).toBe(false);
   expect(page.queryByText("З аэрапорта")).toBeNull();
   expect(page.queryByText("У аэрапорт")).toBeNull();
-  fireEvent.press(page.getByRole("radio", { name: "У аэрапорт" }));
+  await fireEvent.press(page.getByRole("radio", { name: "У аэрапорт" }));
   expect(page.getByRole("radio", { name: "У аэрапорт" }).props.accessibilityState.checked).toBe(true);
   expect(page.getByRole("radio", { name: "З аэрапорта" }).props.accessibilityState.checked).toBe(false);
 });
 
-test("English directions retain their accessible names", () => {
-  render(<InteractivePages locale="en" />);
+test("English directions retain their accessible names", async () => {
+  await render(<InteractivePages locale="en" />);
   const words = ABOUT_CITY_STRINGS.en.air;
   expect(screen.getByRole("radio", { name: words.dirFrom })).toBeTruthy();
   expect(screen.getByRole("radio", { name: words.dirTo })).toBeTruthy();
 });
 
-test("airport steps are collapsed, mutually exclusive and remembered separately", () => {
-  render(<InteractivePages />);
+test("airport steps are collapsed, mutually exclusive and remembered separately", async () => {
+  await render(<InteractivePages />);
   const page = within(screen.getByTestId("about-page-airport"));
   const step = (direction: string, n: number) => page.getByTestId("fold-airport-" + direction + "-step-" + n);
   for (const n of [1, 2, 3]) expect(step("from", n).props.accessibilityState.expanded).toBe(false);
-  fireEvent.press(step("from", 1));
+  await fireEvent.press(step("from", 1));
   expect(step("from", 1).props.accessibilityState.expanded).toBe(true);
-  fireEvent.press(step("from", 3));
+  await fireEvent.press(step("from", 3));
   expect(step("from", 1).props.accessibilityState.expanded).toBe(false);
   expect(step("from", 3).props.accessibilityState.expanded).toBe(true);
   expect(page.queryByText(/\d+(?:[,.]\d{1,2})?\s*zł|12 снежня 2026|Праверана/)).toBeNull();
-  fireEvent.press(page.getByTestId("seg-direction-to"));
+  await fireEvent.press(page.getByTestId("seg-direction-to"));
   for (const n of [1, 2, 3]) expect(step("to", n).props.accessibilityState.expanded).toBe(false);
-  fireEvent.press(step("to", 2));
-  fireEvent.press(page.getByTestId("seg-direction-from"));
+  await fireEvent.press(step("to", 2));
+  await fireEvent.press(page.getByTestId("seg-direction-from"));
   expect(step("from", 3).props.accessibilityState.expanded).toBe(true);
   expect(step("from", 2).props.accessibilityState.expanded).toBe(false);
 });
 
-test("tourist card is offline and only on the journey from the airport", () => {
+test("tourist card is offline and only on the journey from the airport", async () => {
   const openLink = jest.fn();
-  render(<InteractivePages openLink={openLink} />);
+  await render(<InteractivePages openLink={openLink} />);
   const page = within(screen.getByTestId("about-page-airport"));
   const card = within(page.getByTestId("about-tourist-card"));
   expect(card.getByText("KT")).toBeTruthy();
   expect(card.queryByText(ABOUT_CITY_STRINGS.be.card.lead)).toBeNull();
-  fireEvent.press(card.getByTestId("fold-tourist-card"));
+  await fireEvent.press(card.getByTestId("fold-tourist-card"));
   expect(card.getByText(ABOUT_CITY_STRINGS.be.card.lead)).toBeTruthy();
-  fireEvent.press(card.getByTestId("official-card"));
+  await fireEvent.press(card.getByTestId("official-card"));
   expect(openLink).toHaveBeenCalledWith("https://kartaturysty.visitgdansk.com/pl/pakiety");
-  fireEvent.press(page.getByTestId("seg-direction-to"));
+  await fireEvent.press(page.getByTestId("seg-direction-to"));
   expect(page.queryByTestId("about-tourist-card")).toBeNull();
 });
 
-test("resident card opens its official site; other official links start closed", () => {
+test("resident card opens its official site; other official links start closed", async () => {
   const openLink = jest.fn();
-  render(<InteractivePages activeId="transport" openLink={openLink} />);
+  await render(<InteractivePages activeId="transport" openLink={openLink} />);
   const page = within(screen.getByTestId("about-page-transport"));
   const card = within(page.getByTestId("about-resident-card"));
   expect(card.getByText("Jestem z Gdańska")).toBeTruthy();
-  fireEvent.press(card.getByTestId("official-resident"));
+  await fireEvent.press(card.getByTestId("official-resident"));
   expect(openLink).toHaveBeenCalledWith("https://jestemzgdanska.pl/");
   const fold = page.getByRole("button", { name: "Афіцыйныя спасылкі" });
   expect(fold.props.accessibilityState.expanded).toBe(false);
   expect(page.queryByTestId("link-about-ztmSchedule")).toBeNull();
-  fireEvent.press(fold);
-  fireEvent.press(page.getByTestId("link-about-ztmSchedule"));
+  await fireEvent.press(fold);
+  await fireEvent.press(page.getByTestId("link-about-ztmSchedule"));
   expect(openLink).toHaveBeenCalledWith(ABOUT_CITY_LINK_URLS.ztmSchedule);
 });
 
-test("the failed card link is shown even while the official list is closed", () => {
-  render(<InteractivePages activeId="transport" failedLink={ABOUT_CITY_LINK_URLS.jestemZGdanska} />);
+test("the failed card link is shown even while the official list is closed", async () => {
+  await render(<InteractivePages activeId="transport" failedLink={ABOUT_CITY_LINK_URLS.jestemZGdanska} />);
   const page = within(screen.getByTestId("about-page-transport"));
   expect(page.getByText(ABOUT_CITY_STRINGS.be.link.failed(ABOUT_CITY_LINK_URLS.jestemZGdanska))).toBeTruthy();
   expect(page.getByTestId("fold-official-sources-transport").props.accessibilityState.expanded).toBe(false);

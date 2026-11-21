@@ -92,7 +92,15 @@ test('guard: decode-uri-component stays inside the jest transform allowlist (#33
   );
   assert.match(
     jestConfig,
-    /native-base\|decode-uri-component\)\)/,
+    /native-base\|decode-uri-component(?:\|standard-navigation)?\)\)/,
     'transformIgnorePatterns must keep decode-uri-component in the babel transform allowlist — the ESM-only advisory fix otherwise fails 25 suites at load'
+  );
+  // #339: standard-navigation (an expo-router 58 dependency) is ESM-only the
+  // same way and joined the same negation group — the whole SDK 58 suite set
+  // fails at load without it.
+  assert.match(
+    jestConfig,
+    /decode-uri-component\|standard-navigation\)\)/,
+    'transformIgnorePatterns must keep standard-navigation in the babel transform allowlist — the expo-router 58 ESM dependency otherwise fails the render suites at load'
   );
 });
