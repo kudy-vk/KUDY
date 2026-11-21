@@ -71,7 +71,8 @@ describe("uiStrings (G06.05 AC1)", () => {
     // of planned codes: all eight requested languages are complete, and the
     // fallback probe rides an unregistered code («pl»). The discriminator is
     // a word the languages do not share («Назад» is the same word in be and uk).
-    expect(uiStrings("pl").loading).toBe(uiStrings("be").loading);
+    expect(uiStrings("eo").loading).toBe(uiStrings("be").loading);
+    expect(uiStrings("pl").loading).toBe("Ładowanie…");
     expect(uiStrings("en").loading).not.toBe(uiStrings("be").loading);
     expect(uiStrings("uk").loading).not.toBe(uiStrings("be").loading);
     expect(uiStrings("de").loading).toBe("Wird geladen…");

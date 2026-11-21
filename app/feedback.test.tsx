@@ -197,7 +197,7 @@ describe("G16.03: the rating form route (issue #74)", () => {
       // still-planned es. G21.11–G21.13 landed es, fr and cs, and G21.14
       // (2026-10-03-single-source-translations.md — G21.14) landed sv — all eight requested codes are complete, so
       // the stale probe finally rides an unregistered code (pl).
-      uiLocalePersistence: { read: () => "pl" as UiLocaleSwitchCode, write: () => {} },
+      uiLocalePersistence: { read: () => "eo" as UiLocaleSwitchCode, write: () => {} },
     });
     await renderRouter(withRoutes(services), {
       initialUrl: "/feedback?kind=guide&id=guide-route-a1&version=1&locale=be",

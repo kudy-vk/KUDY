@@ -62,20 +62,24 @@ describe("empty_locale_catalogue", () => {
   // all eight requested languages are complete, so the probe rides an
   // unregistered code (pl) and sv asserts its own words beside it.
   test("guides exist in other languages — the filtered-empty state explains the language", async () => {
-    await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="pl" />);
+    await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="eo" />);
     expect(screen.getByTestId("city-message").props.children).toBe(uiStrings("be").textLocaleEmpty);
   });
 
   test("nothing is published at all — NAV3's honest empty stays", async () => {
-    await render(<CatalogStateView state={ready([])} variant="rubric" locale="pl" />);
+    await render(<CatalogStateView state={ready([])} variant="rubric" locale="eo" />);
     expect(screen.getByTestId("city-message").props.children).toBe(uiStrings("be").notPublished);
   });
 
-  test("G21.14 (2026-10-03-single-source-translations.md — G21.14): sv renders its own filtered-empty and not-published words", async () => {
+  test("G21.14 (2026-10-03-single-source-translations.md — G21.14): sv and pl render their own filtered-empty and not-published words", async () => {
     await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="sv" />);
     expect(screen.getByTestId("city-message").props.children).toBe("Det finns ännu inga guider med text på det här språket.");
     await render(<CatalogStateView state={ready([])} variant="rubric" locale="sv" />);
     expect(screen.getByTestId("city-message").props.children).toBe("ej publicerad");
+    await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="pl" />);
+    expect(screen.getByTestId("city-message").props.children).toBe("Brak przewodników z tekstem w tym języku.");
+    await render(<CatalogStateView state={ready([])} variant="rubric" locale="pl" />);
+    expect(screen.getByTestId("city-message").props.children).toBe("nieopublikowane");
   });
 });
 
