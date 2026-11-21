@@ -62,6 +62,13 @@
 // (docs/agent-tasks/results/320.md and its PR body). The finder fixture below
 // asserts the token stays untouched — re-adding the number to the list turns
 // that fixture red.
+// #338 (2026-11-21) — revalidation: 338 is a live card in kudy-vk/KUDY again
+// (the deferred Android acceptance of the M14 «Пра горад» port, issue #334),
+// so it leaves the list per the revalidation rule of the #241 note; the bare
+// citation returns in that task's carriers (docs/design-qa/338.md and
+// docs/agent-tasks/results/338.md). The finder fixture below asserts the
+// token stays untouched — re-adding the number to the list turns that
+// fixture red.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -83,7 +90,7 @@ const REPO = path.resolve(HERE, '..');
 // lines this pass de-hashed) stay unscanned on purpose — their carriers
 // pre-date the scan and adding a number here means a re-anchoring pass of its
 // own with the header list and canonical record updated (#276 round-2 finding).
-const DEAD_NUMBERS = [280, 284, 292, 313, 338, 344, 348, 349, 350, 351, 352, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
+const DEAD_NUMBERS = [280, 284, 292, 313, 344, 348, 349, 350, 351, 352, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
 
@@ -154,6 +161,9 @@ test('a real issue number, a hex color and a longer number stay untouched', () =
   // #353 (2026-11-21) — revalidated as a live card: this literal must stay
   // untouched, so re-adding the number to the list fails here first.
   assert.deepEqual(findDead('issue #353 restored: the guide-card baseline render drift.'), []);
+  // #338 (2026-11-21) — revalidated as a live card: this literal must stay
+  // untouched, so re-adding the number to the list fails here first.
+  assert.deepEqual(findDead('issue #338 restored: the deferred Android acceptance of the M14 port.'), []);
 });
 
 // #275 (2026-11-13) — the header restates the scan classes; a number added to
