@@ -112,11 +112,11 @@ test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, 
 
   // Issue #355: overwrite does not turn Directory→Directory into a whole
   // replace — the source still nests at dest/<name>, and overwrite clears
-  // only that nested child, children included. The keep.json check is the
-  // one assertion the old partial whole-replace (which orphaned file
-  // entries) would have passed; device semantics pin the rest
-  // (CopyMoveStrategy.kt:68-77 builds the nested path before the overwrite
-  // check).
+  // only that nested child, children included. The old partial whole-replace
+  // would also have passed the dirs.has check and the keep.json check — it
+  // orphaned the nested child's dir entry together with its files; device
+  // semantics pin the rest (CopyMoveStrategy.kt:68-77 builds the nested path
+  // before the overwrite check).
   fs.dirs.add('/root/dst');
   fs.files.set('/root/dst/keep.json', utf8('keep'));
   fs.dirs.add('/root/dst/y');
