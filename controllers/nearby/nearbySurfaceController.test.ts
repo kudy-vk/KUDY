@@ -107,7 +107,8 @@ describe('nearbyStrings (criterion 5)', () => {
     // complete, so the unknown-locale probe finally rides an unregistered
     // code (pl); sv asserts its own words beside it.
     assert.equal(nearbyStrings('uk').title, 'Поруч');
-    assert.equal(nearbyStrings('pl').title, 'Побач');
+    assert.equal(nearbyStrings('eo').title, 'Побач');
+    assert.equal(nearbyStrings('pl').title, 'W pobliżu');
     assert.equal(nearbyStrings('es').title, 'Cerca');
     assert.equal(nearbyStrings('cs').title, 'Poblíž');
     assert.equal(nearbyStrings('sv').title, 'I närheten');

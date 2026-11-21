@@ -1022,7 +1022,7 @@ describe("G06.05 accessibility and honest failures", () => {
     await screen.findByTestId("run-restored");
     expect(screen.getByText("Прагулка працягнута са захаванай сесіі")).toBeTruthy();
     // The §3.7 report: the extended layer did not verify — the note says so.
-    expect(screen.getByText("Дадатковы ярус недаступны ў адноўленай сесіі")).toBeTruthy();
+    expect(screen.getByText("Дадатковыя гісторыі недаступныя ў працягнутай прагулцы")).toBeTruthy();
   });
 
   test("AC3/AC4: the card switches story layers, shows each transcript and plays the extended story", async () => {

@@ -122,7 +122,7 @@ describe("route placeholders (19 §2.5)", () => {
     // the heard count. The catalog is absent here — the raw id stays the
     // row's title (UX 05, AC2's honest fallback).
     expect(screen.getByText(/route-other/)).toBeTruthy();
-    expect(screen.getByText(/прыпыненая — з 1969-12-31 — праслышана: 2/)).toBeTruthy();
+    expect(screen.getByText(/прыпыненая — з 1969-12-31 — праслухана: 2/)).toBeTruthy();
   });
 
   // G06.04 (11 §1, NAV7): the live walk puts «Прагулка» on the section-16

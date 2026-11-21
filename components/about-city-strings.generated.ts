@@ -17,9 +17,9 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
     },
     "tab": {
       "airport": "Аэрапорт",
-      "transport": "Транспарт і білеты",
-      "city": "Дзе што ў горадзе",
-      "food": "Ежа і аплата",
+      "transport": "Транспарт",
+      "city": "Раёны і карта",
+      "food": "Ежа і грошы",
     },
     "head": {
       "airport": "З аэрапорта і назад",
@@ -291,9 +291,9 @@ export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
     },
     "tab": {
       "airport": "Airport",
-      "transport": "Transport and tickets",
-      "city": "What’s where",
-      "food": "Food and payment",
+      "transport": "Transport",
+      "city": "City map",
+      "food": "Food & pay",
     },
     "head": {
       "airport": "To and from the airport",

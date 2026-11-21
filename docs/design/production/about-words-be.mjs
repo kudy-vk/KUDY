@@ -3,9 +3,9 @@
 export const be = {
   'wheel.label': 'Раздзелы даведніка',
   'tab.airport': 'Аэрапорт',
-  'tab.transport': 'Транспарт і білеты',
-  'tab.city': 'Гданьск з аднаго погляду',
-  'tab.food': 'Ежа і аплата',
+  'tab.transport': 'Транспарт',
+  'tab.city': 'Раёны і карта',
+  'tab.food': 'Ежа і грошы',
   'tab.card': 'Картка і музеі',
   'head.airport': 'З аэрапорта і назад',
   'head.transport': 'Як ездзіць па горадзе',

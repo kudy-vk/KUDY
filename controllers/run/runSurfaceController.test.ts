@@ -515,7 +515,8 @@ test('BE/EN: the surface locale is the walk pin, the words follow it', async () 
   // G21.14 lands sv, the last planned code. All eight requested codes
   // are complete, so the probe rides an unregistered code (pl); sv asserts
   // its own word beside it.
-  assert.equal(runMapStrings('pl').status.played, 'праслухана');
+  assert.equal(runMapStrings('eo').status.played, 'праслухана');
+  assert.equal(runMapStrings('pl').status.played, 'wysłuchany');
   assert.equal(runMapStrings('cs').status.played, 'vyslechnuté');
   assert.equal(runMapStrings('sv').status.played, 'lyssnat');
   assert.equal(runMapStrings('en').reasonText['package-incomplete'], 'Guide incomplete.');

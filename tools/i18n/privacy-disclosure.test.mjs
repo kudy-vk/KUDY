@@ -55,6 +55,11 @@ const RETENTION_PROBES = {
     aggregate: '\u6309\u8DEF\u7EBF\u6C47\u603B\u7684\u6570\u5B57',
     retention: '14\u4E2A\u6708',
   },
+  nb: { aggregate: 'aggregerte tall', retention: '14 måneder' },
+  pl: { aggregate: 'zagregowane liczby', retention: '14 miesięcy' },
+  da: { aggregate: 'aggregerede tal', retention: '14 måneder' },
+  nl: { aggregate: 'geaggregeerde aantallen', retention: '14 maanden' },
+  pt: { aggregate: 'contagens agregadas', retention: '14 meses' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -122,6 +127,31 @@ const APPDATA_PROBES = {
     ipHash: '\u5355\u5411\u54C8\u5E0C',
     ratings: '\u6240\u9009\u539f\u56e0',
     accessKey: '\u4f5c\u4e3a\u8bbf\u95ee\u5bc6\u94a5',
+  },
+  nb: {
+    ipHash: 'enveis-hash av IP-adressen',
+    ratings: 'valgte årsaker',
+    accessKey: 'som tilgangsnøkkel',
+  },
+  pl: {
+    ipHash: 'jednokierunkowy hash adresu IP',
+    ratings: 'wybrane powody',
+    accessKey: 'jako klucz dostępu',
+  },
+  da: {
+    ipHash: 'envejs-hash af IP-adressen',
+    ratings: 'valgte årsager',
+    accessKey: 'som adgangsnøgle',
+  },
+  nl: {
+    ipHash: 'eenrichtings-hash van het IP-adres',
+    ratings: 'gekozen redenen',
+    accessKey: 'als toegangssleutel',
+  },
+  pt: {
+    ipHash: 'hash unidirecional do endereço IP',
+    ratings: 'motivos selecionados',
+    accessKey: 'como chave de acesso',
   },
 };
 

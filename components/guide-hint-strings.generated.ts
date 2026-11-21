@@ -6,11 +6,11 @@
 // G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md)
+// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too
 
 import type { GuideHintStrings } from "../contracts/ui-message-types.ts";
 
-export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh", GuideHintStrings> = {
+export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt", GuideHintStrings> = {
   "be": {
     "dismiss": "Схаваць",
     "heading": "Побач ёсць гід…",
@@ -58,5 +58,35 @@ export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" 
     "heading": "\u9644\u8FD1\u6709\u5BFC\u89C8…",
     "openHint": "\u6253\u5F00\u5BFC\u89C8\u8BF4\u660E",
     "paid": "\u4ED8\u8D39",
+  },
+  "nb": {
+    "dismiss": "Skjul",
+    "heading": "Det finnes en guide i nærheten…",
+    "openHint": "Åpne guidebeskrivelsen",
+    "paid": "betalt",
+  },
+  "pl": {
+    "dismiss": "Ukryj",
+    "heading": "Przewodnik w pobliżu…",
+    "openHint": "Otwórz opis przewodnika",
+    "paid": "płatny",
+  },
+  "da": {
+    "dismiss": "Skjul",
+    "heading": "En guide er i nærheden…",
+    "openHint": "Åbn guidens beskrivelse",
+    "paid": "betalt",
+  },
+  "nl": {
+    "dismiss": "Verbergen",
+    "heading": "Er is een gids in de buurt…",
+    "openHint": "Open de beschrijving van de gids",
+    "paid": "betaald",
+  },
+  "pt": {
+    "dismiss": "Ocultar",
+    "heading": "Há um guia por perto…",
+    "openHint": "Abrir a descrição do guia",
+    "paid": "pago",
   },
 };

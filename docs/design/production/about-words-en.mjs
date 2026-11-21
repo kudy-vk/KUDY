@@ -3,9 +3,9 @@
 export const en = {
   'wheel.label': 'Guide sections',
   'tab.airport': 'Airport',
-  'tab.transport': 'Transport and tickets',
-  'tab.city': 'Gdańsk at a glance',
-  'tab.food': 'Food and payment',
+  'tab.transport': 'Transport',
+  'tab.city': 'City map',
+  'tab.food': 'Food & pay',
   'tab.card': 'Card and museums',
   'head.airport': 'To and from the airport',
   'head.transport': 'Getting around',
