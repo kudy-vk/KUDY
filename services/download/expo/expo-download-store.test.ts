@@ -109,6 +109,22 @@ test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, 
   await assert.rejects(() => new Directory('/root/b/y').move(new Directory('/root/c')), /exists/);
   assert.deepEqual([...fs.files.get('/root/b/y/stops.json')!], [...utf8('x-bytes')], 'a refused move leaves the source in place');
   assert.deepEqual([...fs.files.get('/root/c/y/stale.json')!], [...utf8('stale')], 'the existing target keeps its bytes');
+
+  // Issue #355: overwrite does not turn Directory→Directory into a whole
+  // replace — the source still nests at dest/<name>, and overwrite clears
+  // only that nested child, children included; the destination's own other
+  // entries survive (a whole-replace stand-in would pass here and fail on
+  // device — CopyMoveStrategy.kt:68-77 builds the nested path before the
+  // overwrite check).
+  fs.dirs.add('/root/dst');
+  fs.files.set('/root/dst/keep.json', utf8('keep'));
+  fs.dirs.add('/root/dst/y');
+  fs.files.set('/root/dst/y/stale.json', utf8('stale'));
+  await new Directory('/root/b/y').move(new Directory('/root/dst'), { overwrite: true });
+  assert.deepEqual([...fs.files.get('/root/dst/y/stops.json')!], [...utf8('x-bytes')], 'the source nested under the destination');
+  assert.equal(fs.files.has('/root/dst/y/stale.json'), false, 'overwrite cleared the nested child');
+  assert.equal(fs.dirs.has('/root/dst/y'), true);
+  assert.deepEqual([...fs.files.get('/root/dst/keep.json')!], [...utf8('keep')], 'the destination survives the overwrite — no whole replace');
 });
 
 test('criterion 4: the rename tail replaces an existing target and ensures the destination parent (issue #354)', async () => {

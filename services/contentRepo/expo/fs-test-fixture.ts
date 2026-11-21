@@ -130,9 +130,13 @@ class FakeDirectory extends Entry {
   }
   // Expo move semantics (FileSystemPath.getMoveOrCopyPath, expo-file-system
   // 58.0.14 Android, #339): a directory moved to an existing destination
-  // directory lands inside it — `mv a b` → `b/a` — unless MoveOptions
-  // .overwrite drops the target first; only an absent destination is the
-  // whole rename. A Node-rename stand-in (always replace) would mask the
+  // directory lands inside it — `mv a b` → `b/a` — and the 58 native keeps
+  // that nesting for Directory→Directory regardless of overwrite
+  // (CopyMoveStrategy.kt:68-77 — prepareAsDestination builds
+  // File(file, fileName) before the overwrite check; iOS
+  // FileSystemPath.swift:57-60+86-88): overwrite clears only the nested
+  // child, children included. Only an absent destination is the whole
+  // rename. A Node-rename stand-in (always replace) would mask the
   // caller-missed-directory class of defect (G20.31 / #793).
   move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): Promise<void> {
     // The 58 native move is a suspend fun on Android — a promise the adapter
@@ -157,7 +161,10 @@ class FakeDirectory extends Entry {
     const parent = destination.path.slice(0, destination.path.lastIndexOf('/')) || '/';
     if (parent !== '/' && !this.fs.dirs.has(parent)) throw new Error(`destination-does-not-exist ${parent}`);
     const overwrite = options?.overwrite === true;
-    const target = this.fs.dirs.has(destination.path) && !overwrite
+    // Issue #355: the nesting holds with overwrite too — the source lands at
+    // dest/<name>, and overwrite clears only that nested child (children
+    // included, deleteRecursively), never the whole destination.
+    const target = this.fs.dirs.has(destination.path)
       ? `${destination.path}/${this.name}`
       : destination.path;
     // The native `moveTo` runs without REPLACE_EXISTING (FileSystemPath.kt:158):
@@ -165,7 +172,12 @@ class FakeDirectory extends Entry {
     // merging its old bytes under the moved tree.
     if (this.fs.dirs.has(target) || this.fs.files.has(target)) {
       if (!overwrite) throw new Error(`exists ${target}`);
-      this.fs.dirs.delete(target);
+      for (const key of [...this.fs.files.keys()]) {
+        if (key === target || key.startsWith(`${target}/`)) this.fs.files.delete(key);
+      }
+      for (const dir of [...this.fs.dirs]) {
+        if (dir === target || dir.startsWith(`${target}/`)) this.fs.dirs.delete(dir);
+      }
     }
     for (const key of [...this.fs.files.keys()]) {
       if (key.startsWith(`${this.path}/`)) {
