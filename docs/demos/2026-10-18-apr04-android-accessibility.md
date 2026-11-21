@@ -17,5 +17,5 @@ PASS components/back-button.test.tsx
 PASS components/pressable-surface.test.tsx
 PASS components/run-native-map.test.tsx
 Test Suites: 6 passed, 6 total
-Tests:       102 passed, 102 total
+Tests:       111 passed, 111 total
 ```
