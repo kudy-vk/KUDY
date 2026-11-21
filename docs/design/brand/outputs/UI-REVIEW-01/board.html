@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI-REVIEW-01 — Play/Pause на Run</title>
+<style>
+@font-face{font-family:Golos;src:url(../G25.06/fonts/GolosText_400Regular.ttf)}
+@font-face{font-family:Golos;src:url(../G25.06/fonts/GolosText_600SemiBold.ttf);font-weight:600}
+:root{--paper:#faf7f2;--ink:#22262b;--muted:#6b7280;--accent:#1d6b4f;--accent-ink:#fff;--card:#fff;--line:#d8d2c6;--disabled-ink:#6b7280;--disabled-line:#6b7280;--map:#eef3ee;--shelf:#154f3a}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--paper);color:var(--ink);font:16px/1.45 Golos,system-ui,sans-serif}
+h1{margin:0;font-size:26px}h2{font-size:18px;margin:0 0 6px}p{margin:4px 0 12px}.note{color:var(--muted)}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 22px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+label{display:grid;gap:3px;font-size:13px}select{font:inherit;font-size:15px;min-height:40px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.cards{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}.variant{width:fit-content;max-width:100%}.variant>p{max-width:390px;font-size:14px}
+.phone{position:relative;width:var(--phone-width,360px);height:calc(var(--phone-width,360px)*2.22222);max-width:100%;overflow:hidden;border:2px solid #49514c;border-radius:26px;background:var(--map);box-shadow:0 8px 22px #22262b26}
+.source-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+.chrome{position:absolute;top:0;left:0;right:0;height:124px;background:var(--paper);color:var(--accent);padding:62px 15px 12px;display:flex;align-items:center;gap:10px;font-size:18px}
+.chrome::before{content:'9:41  ▣';position:absolute;top:13px;left:22px;font:13px system-ui;color:var(--ink)}
+.chrome .arrow{font:26px system-ui}.walk-actions{position:absolute;top:124px;left:0;right:0;min-height:90px;display:flex;align-content:flex-start;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--paper);color:var(--accent);font-size:14px}
+.walk-actions span{display:flex;align-items:center;min-height:36px;padding:5px 8px;border:1px solid var(--accent);border-radius:10px;background:var(--paper);white-space:nowrap}
+.peek{position:absolute;left:0;right:0;bottom:0;min-height:138px;background:var(--card);border-top:1px solid var(--line);padding:12px 12px 22px;color:var(--ink)}
+.bar-row{display:flex;align-items:center;gap:8px;min-height:52px}.now{font-size:calc(15px * var(--text-scale,1));font-weight:600;line-height:1.25;flex:1;min-width:0}.bar-row .now{overflow-wrap:anywhere}
+.audio-button{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;min-width:48px;min-height:48px;border-radius:10px;border:1px solid var(--accent);background:var(--card);color:var(--accent);padding:0 10px;font:600 calc(16px * var(--text-scale,1))/1.2 Golos,system-ui,sans-serif}
+.audio-button svg{display:block;width:24px;height:24px;flex:none}
+.audio-button .outline{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.audio-button .solid{fill:currentColor;stroke:none}
+.variant[data-variant="B"] .audio-button{background:var(--accent);color:var(--accent-ink)}
+.audio-button .word{display:none}
+body[data-state="pressed"] .audio-button{transform:translateY(1px);box-shadow:inset 0 2px 0 var(--shelf);border-width:2px}
+body[data-state="focus"] .audio-button{outline:3px solid var(--accent);outline-offset:1px}
+body[data-state="disabled"] .audio-button{background:transparent;color:var(--disabled-ink);border-color:var(--disabled-line);box-shadow:none;transform:none}
+.unavailable{display:none;font-size:12px;color:var(--ink);margin:4px 0 0;text-align:right}body[data-state="disabled"] .unavailable{display:block}
+.progress{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin:8px 0}.progress::before{content:'';display:block;width:42%;height:100%;background:var(--accent)}
+.credit{font-size:11px;color:var(--muted);line-height:1.25;margin-top:4px}.credit a{color:inherit}
+.screen-label{display:block;font-size:13px;margin-top:5px;color:var(--muted)}
+.specimen{margin:24px 0 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;max-width:1250px}.spec-grid{display:flex;gap:16px;flex-wrap:wrap}.spec-grid>div{min-width:170px}.spec-grid p{font-size:13px}.spec-grid .audio-button{margin:8px 0}
+.contrast{border:1px solid var(--line);padding:9px;border-radius:8px;max-width:640px}
+body[data-theme="dark"]{--paper:#171d1c;--ink:#f2f1e9;--muted:#c4d0ca;--accent:#80d4ad;--accent-ink:#0d2a1e;--card:#232c29;--line:#45534c;--disabled-ink:#9aa8a1;--disabled-line:#6d7c72;--shelf:#65cb9c}
+body[data-theme="dark"] .phone{border-color:#8fa39b}
+body[data-theme="dark"] .source-shot{filter:none} /* DT-4: map imagery stays light. */
+body[data-theme="contrast"]{--paper:#fff;--ink:#000;--muted:#000;--accent:#000;--accent-ink:#fff;--card:#fff;--line:#000;--disabled-ink:#000;--disabled-line:#000;--shelf:#000}
+body[data-theme="contrast"] .phone{border-color:#000}
+body[data-theme="contrast"] .audio-button{border-width:2px}
+@media (forced-colors:active){.audio-button{forced-color-adjust:auto;border:2px solid ButtonText}.audio-button:focus-visible{outline:3px solid Highlight}}
+</style>
+</head>
+<body data-theme="light" data-state="normal" data-playback="playing">
+<h1>Play/Pause у ніжняй панэлі Run</h1>
+<p>Два варыянты іконкі Play/Pause без бачнага подпісу — кірунак пасля заўвагі ўладальніка. <b>ПРАПАНОВЫ ДЛЯ РЭВ’Ю</b>; production не змяняецца. Гэты аркуш параўноўвае толькі знакі, а не канчатковы інтэрфейс. [<a href="run-context.html">Кантэкст Peek/Half/Full з фота, тэкстам і дарожкай</a>]. Падкладка — сапраўдны здымак Run з fixture ад 11.10.2026; цяпер на ёй не было гуку. Верхні header і ніжняя панэль перамаляваныя паводле актуальнага кода, а «Кропка 1» і гукавы стан — дэманстрацыйныя. Гэта не здымак бягучай зборкі.</p>
+<div class="toolbar" aria-label="Умовы параўнання">
+ <label>Шырыня (dp)<select id="width"><option>320</option><option selected>360</option><option>390</option></select></label>
+ <label>Тэма<select id="theme"><option value="light">Светлая</option><option value="dark">Цёмная</option><option value="contrast">Высокі кантраст (макет)</option></select></label>
+ <label>Гук гіда<select id="playback"><option value="playing">Гучыць → кнопка Паўза</option><option value="paused">На паўзе → кнопка Граць</option></select></label>
+ <label>Стан кнопкі<select id="state"><option value="normal">Звычайны</option><option value="pressed">Націснуты</option><option value="focus">Фокус</option><option value="disabled">Выключаны (прапанова)</option></select></label>
+ <label>Шрыфт<select id="scale"><option value="1">1×</option><option value="1.25">1,25×</option></select></label>
+ <label>Мова a11y-назвы<select id="locale"><option value="be">Беларуская</option><option value="en">English</option><option value="de">Deutsch</option></select></label>
+</div>
+<div class="cards">
+ <section class="variant" data-variant="A"><h2>A · Контурны Lucide</h2><p>Контурныя play/pause у звычайнай кнопцы 48×48 dp. Найбліжэй да дзейнага набору іконак, але без бачнага слова.</p><div class="phone"></div><span class="screen-label">Скрынрыдар: асобная лакалізаваная назва дзеяння</span></section>
+ <section class="variant" data-variant="B"><h2>B · Суцэльны знак</h2><p>Плоскі трохкутнік і дзве палоскі на акцэнтнай кнопцы 48×48 dp. Асобная прапанова формы; патрэбен экспарт SVG пасля рашэння.</p><div class="phone"></div><span class="screen-label">Скрынрыдар: тая ж назва дзеяння</span></section>
+</div>
+<section class="specimen"><h2>Станы і межы</h2><div class="spec-grid">
+ <div><b>Ручны Play у картцы</b><p>У кодзе гэта асобная кнопка: выбар гісторыі. У рамках варыянту форма Play паўтараецца, калі ўладальнік зацвердзіць прымяненне да карткі.</p></div>
+ <div><b>Кіраванне прагулкай</b><p>«Прыпыніць прагулку» і «Завяршыць прагулку» застаюцца асобнымі тэкставымі дзеяннямі.</p></div>
+ <div><b>Выключаны стан</b><p>Цяпер недаступная кнопка хаваецца паводле ўмовы. Узоры disabled паказваюць толькі магчымы выгляд; прычына павінна быць побач.</p></div>
+ <div><b>Фокус і дотык</b><p>Вобласць 48×48 dp; фокус 3 px колерам accent з адступам 1 px. На прыладзе і ў TalkBack не праверана.</p></div>
+ </div><p class="contrast">Колеры ўзятыя з <code>visual-language.md</code>. Рэжым «высокі кантраст» тут візуальны ўзор; рэальны forced-colors/TalkBack і піксельны кантраст патрабуюць асобнай праверкі.</p></section>
+<script>
+const source='../../../../../testing/evidence/2026-10-11-g727/run-active.png';
+const words={be:{play:'Граць',pause:'Паўза'},en:{play:'Play',pause:'Pause'},de:{play:'Abspielen',pause:'Pause'}};
+const chromeWords={now:'Зараз грае',back:'Назад',stop:'Кропка 1',walkPause:'Прыпыніць прагулку',walkEnd:'Завяршыць прагулку'};
+const icon=(variant,paused)=>variant==='B' ? (paused?'<svg viewBox="0 0 24 24" aria-hidden="true"><path class="solid" d="M7 4.5 20 12 7 19.5Z"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="6" y="4" width="4" height="16" rx="1"/><rect class="solid" x="14" y="4" width="4" height="16" rx="1"/></svg>') : (paused?'<svg viewBox="0 0 24 24" aria-hidden="true"><path class="outline" d="m7 4 13 8-13 8V4Z"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect class="outline" x="6" y="4" width="4" height="16" rx="1"/><rect class="outline" x="14" y="4" width="4" height="16" rx="1"/></svg>');
+function render(){const width=document.querySelector('#width').value,theme=document.querySelector('#theme').value,playback=document.querySelector('#playback').value,state=document.querySelector('#state').value,scale=document.querySelector('#scale').value,locale=document.querySelector('#locale').value,w=words[locale],c=chromeWords,paused=playback==='paused',action=paused?w.play:w.pause;document.body.dataset.theme=theme;document.body.dataset.state=state;document.body.dataset.playback=playback;document.body.style.setProperty('--phone-width',width+'px');document.body.style.setProperty('--text-scale',scale);for(const section of document.querySelectorAll('.variant')){const variant=section.dataset.variant,phone=section.querySelector('.phone');phone.innerHTML=`<img class="source-shot" src="${source}" alt=""><div class="chrome"><span class="arrow" aria-hidden="true">←</span>${c.back}</div><div class="walk-actions"><span>${c.walkPause}</span><span>${c.walkEnd}</span></div><div class="peek"><div class="bar-row"><div class="now">${c.now}: ${c.stop}</div><button class="audio-button" type="button" aria-label="${action}" ${state==='disabled'?'disabled':''}>${icon(variant,paused)}<span class="word" aria-hidden="true">${action}</span></button></div><div class="unavailable">Аўдыё недаступнае — прычына павінна быць названа</div><div class="progress"></div><div class="credit">Дадзеныя © удзельнікі OpenStreetMap, ODbL</div></div>`;}}
+for(const select of document.querySelectorAll('select'))select.addEventListener('change',render);render();
+</script>
+</body>
+</html>
