@@ -167,6 +167,11 @@ class FakeDirectory extends Entry {
     const target = this.fs.dirs.has(destination.path)
       ? `${destination.path}/${this.name}`
       : destination.path;
+    // Moving a directory onto its own parent resolves target to the source
+    // path itself; the native strategy errors there (deleteRecursively/
+    // removeItem would delete the source) and the deletion loops below would
+    // wipe the source tree before the re-key — reject instead (issue #355).
+    if (target === this.path) throw new Error(`self-move ${this.path}`);
     // The native `moveTo` runs without REPLACE_EXISTING (FileSystemPath.kt:158):
     // an existing target — the nested `b/a` included — throws instead of
     // merging its old bytes under the moved tree.

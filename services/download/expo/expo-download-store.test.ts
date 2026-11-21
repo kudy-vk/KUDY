@@ -126,6 +126,15 @@ test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, 
   assert.equal(fs.files.has('/root/dst/y/stale.json'), false, 'overwrite cleared the nested child');
   assert.equal(fs.dirs.has('/root/dst/y'), true);
   assert.deepEqual([...fs.files.get('/root/dst/keep.json')!], [...utf8('keep')], 'the destination survives the overwrite — no whole replace');
+
+  // A directory moved onto its own parent with overwrite would wipe the
+  // source tree in the deletion loops — the native errors there; the
+  // stand-in rejects instead of silently losing the tree (issue #355).
+  fs.dirs.add('/root/self');
+  fs.dirs.add('/root/self/inner');
+  fs.files.set('/root/self/inner/data.json', utf8('data'));
+  await assert.rejects(() => new Directory('/root/self/inner').move(new Directory('/root/self'), { overwrite: true }), /self-move/);
+  assert.deepEqual([...fs.files.get('/root/self/inner/data.json')!], [...utf8('data')], 'the refused self-move leaves the source intact');
 });
 
 test('criterion 4: the rename tail replaces an existing target and ensures the destination parent (issue #354)', async () => {
