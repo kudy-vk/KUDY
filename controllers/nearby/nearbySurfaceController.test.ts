@@ -103,9 +103,9 @@ describe('nearbyStrings (criterion 5)', () => {
     // unknown-locale fallback is probed on a locale no catalog answers.
     // G21.10 (2026-10-03-single-source-translations.md — G21.10): de answers from its own catalogue, so the probe
     // moved to the still-planned es. G21.11–G21.13 landed es, fr and cs, and
-    // G21.14 (2026-10-03-single-source-translations.md — G21.14) landed sv — the eight requested codes are all
-    // complete, so the unknown-locale probe finally rides an unregistered
-    // code (pl); sv asserts its own words beside it.
+    // G21.14 (2026-10-03-single-source-translations.md — G21.14) landed sv and #376 landed pl —
+    // the unknown-locale probe rides an unregistered code (eo), while pl and sv
+    // assert their own words beside it.
     assert.equal(nearbyStrings('uk').title, 'Поруч');
     assert.equal(nearbyStrings('eo').title, 'Побач');
     assert.equal(nearbyStrings('pl').title, 'W pobliżu');

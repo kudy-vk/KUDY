@@ -195,8 +195,8 @@ describe("G16.03: the rating form route (issue #74)", () => {
       // never a raw unknown state. G21.10 (2026-10-03-single-source-translations.md — G21.10): de owns
       // a complete catalogue now, so the stale probe moved to the
       // still-planned es. G21.11–G21.13 landed es, fr and cs, and G21.14
-      // (2026-10-03-single-source-translations.md — G21.14) landed sv — all eight requested codes are complete, so
-      // the stale probe finally rides an unregistered code (pl).
+      // (2026-10-03-single-source-translations.md — G21.14) landed sv — with pl now registered too,
+      // the stale probe rides an unregistered code (eo).
       uiLocalePersistence: { read: () => "eo" as UiLocaleSwitchCode, write: () => {} },
     });
     await renderRouter(withRoutes(services), {

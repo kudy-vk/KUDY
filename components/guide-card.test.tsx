@@ -58,9 +58,9 @@ describe("selected_text_locale_filter", () => {
 describe("empty_locale_catalogue", () => {
   // The be-fallback probe rotated de→fr→es→cs→sv as G21.10, G21.12
   // (2026-10-03-single-source-translations.md — G21.12), G21.11 and G21.13 landed their catalogues — each landing
-  // retires its code. G21.14 (2026-10-03-single-source-translations.md — G21.14) lands sv, the last planned code:
-  // all eight requested languages are complete, so the probe rides an
-  // unregistered code (pl) and sv asserts its own words beside it.
+  // retires its code. G21.14 (2026-10-03-single-source-translations.md — G21.14) lands sv, and #376 lands pl:
+  // the fallback probe rides an unregistered code (eo), while sv and pl assert
+  // their own words beside it.
   test("guides exist in other languages — the filtered-empty state explains the language", async () => {
     await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="eo" />);
     expect(screen.getByTestId("city-message").props.children).toBe(uiStrings("be").textLocaleEmpty);
