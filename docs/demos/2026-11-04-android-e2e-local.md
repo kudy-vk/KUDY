@@ -12,9 +12,9 @@ node --test tools/ci/android-e2e-local.test.mjs 2>&1 | grep '^ℹ' | grep -v dur
 ```
 
 ```output
-ℹ tests 22
-ℹ suites 11
-ℹ pass 22
+ℹ tests 28
+ℹ suites 12
+ℹ pass 28
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
@@ -32,7 +32,7 @@ KUDY_ANDROID_ROOT='Q:\no-such-root' npm run e2e:android:local; echo "exit=$?"
 > kudy@0.1.0 e2e:android:local
 > node tools/ci/android-e2e-local.mjs
 
-android-e2e scope: run=true (6 changed file(s))
+android-e2e scope: run=true (4 changed file(s))
 Android E2E: NOT-VERIFIED (root Q:\no-such-root must be an absolute path on drive D:)
 Android E2E: NOT-VERIFIED (java path Q:\no-such-root\java is not on drive D:)
 Android E2E: NOT-VERIFIED (sdk path Q:\no-such-root\sdk is not on drive D:)

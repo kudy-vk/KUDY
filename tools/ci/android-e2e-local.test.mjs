@@ -171,6 +171,12 @@ describe('android-e2e-local SDK ninja long-path guard (#326)', () => {
     assert.equal(sdkNinjaLongPathReason(sdk, { windows: true, runVersion: versions }), null);
   });
 
+  it('stays silent when every ninja probe is unreadable (corrupt input; revert: dropping the null filter fakes a reason)', () => {
+    const root = makeTmpRoot();
+    const sdk = makeSdkWithNinja(root, ['3.22.1']);
+    assert.equal(sdkNinjaLongPathReason(sdk, { windows: true, runVersion: () => null }), null);
+  });
+
   it('parses one- and two-component ninja versions', () => {
     assert.deepEqual(parseNinjaVersion('1.12.1\n'), [1, 12, 1]);
     assert.deepEqual(parseNinjaVersion('1.11'), [1, 11, 0]);

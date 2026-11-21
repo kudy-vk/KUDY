@@ -112,10 +112,10 @@ export function findJdk17(javaDir, { exists = fs.existsSync, list = (dir) => fs.
 
 // ninja < 1.11 has no long-path manifest: the SDK 58 codegen object paths on
 // Windows exceed 260 chars and ninja fails to stat them ("Filename longer
-// than 260 characters", issue #326). Windows-only by nature; a host without a
-// cmake dir is already reported by the package checks above, an unreadable
-// ninja is left to the build step's own error, and a mixed cmake install
-// where any ninja satisfies the minimum stays silent (the guard cannot know
+// than 260 characters", issue #326). Windows-only by nature. Silent by
+// design when the SDK has no cmake dir and when no ninja version is
+// readable — the build step's own error names those — and when a mixed
+// cmake install has any ninja satisfying the minimum (the guard cannot know
 // which cmake version the project pins).
 const NINJA_LONG_PATH_MIN = [1, 11];
 

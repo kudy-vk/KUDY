@@ -16,6 +16,7 @@ node --test --experimental-strip-types --experimental-test-module-mocks --test-r
   ✔ names an SDK ninja older than 1.11 (revert: the swap in docs/development_setup.md is undone → reason is gone, the build fails cryptically)
   ✔ passes with ninja >= 1.11, with no cmake dir, and never fires on POSIX
   ✔ stays silent while any SDK ninja satisfies the minimum (mixed cmake installs)
+  ✔ stays silent when every ninja probe is unreadable (corrupt input; revert: dropping the null filter fakes a reason)
   ✔ parses one- and two-component ninja versions
 ```
 
