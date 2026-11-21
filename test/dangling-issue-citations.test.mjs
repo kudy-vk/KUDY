@@ -64,7 +64,7 @@
 // that fixture red.
 // #338 (2026-11-21) — revalidation: 338 is a live card in kudy-vk/KUDY again
 // (the deferred Android acceptance of the M14 «Пра горад» port, issue #334),
-// so it leaves the list per the revalidation rule of the #264 note; the bare
+// so it leaves the list per the revalidation rule of the #241 note; the bare
 // citation returns in that task's carriers (docs/design-qa/338.md and
 // docs/agent-tasks/results/338.md). The finder fixture below asserts the
 // token stays untouched — re-adding the number to the list turns that
