@@ -109,6 +109,32 @@ test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, 
   await assert.rejects(() => new Directory('/root/b/y').move(new Directory('/root/c')), /exists/);
   assert.deepEqual([...fs.files.get('/root/b/y/stops.json')!], [...utf8('x-bytes')], 'a refused move leaves the source in place');
   assert.deepEqual([...fs.files.get('/root/c/y/stale.json')!], [...utf8('stale')], 'the existing target keeps its bytes');
+
+  // Issue #355: overwrite does not turn Directory→Directory into a whole
+  // replace — the source still nests at dest/<name>, and overwrite clears
+  // only that nested child, children included. The old partial whole-replace
+  // would also have passed the dirs.has check and the keep.json check — it
+  // orphaned the nested child's dir entry together with its files; device
+  // semantics pin the rest (CopyMoveStrategy.kt:68-77 builds the nested path
+  // before the overwrite check).
+  fs.dirs.add('/root/dst');
+  fs.files.set('/root/dst/keep.json', utf8('keep'));
+  fs.dirs.add('/root/dst/y');
+  fs.files.set('/root/dst/y/stale.json', utf8('stale'));
+  await new Directory('/root/b/y').move(new Directory('/root/dst'), { overwrite: true });
+  assert.deepEqual([...fs.files.get('/root/dst/y/stops.json')!], [...utf8('x-bytes')], 'the source nested under the destination');
+  assert.equal(fs.files.has('/root/dst/y/stale.json'), false, 'overwrite cleared the nested child');
+  assert.equal(fs.dirs.has('/root/dst/y'), true);
+  assert.deepEqual([...fs.files.get('/root/dst/keep.json')!], [...utf8('keep')], 'the destination survives the overwrite — no whole replace');
+
+  // A directory moved onto its own parent with overwrite would wipe the
+  // source tree in the deletion loops — the native errors there; the
+  // stand-in rejects instead of silently losing the tree (issue #355).
+  fs.dirs.add('/root/self');
+  fs.dirs.add('/root/self/inner');
+  fs.files.set('/root/self/inner/data.json', utf8('data'));
+  await assert.rejects(() => new Directory('/root/self/inner').move(new Directory('/root/self'), { overwrite: true }), /self-move/);
+  assert.deepEqual([...fs.files.get('/root/self/inner/data.json')!], [...utf8('data')], 'the refused self-move leaves the source intact');
 });
 
 test('criterion 4: the rename tail replaces an existing target and ensures the destination parent (issue #354)', async () => {
