@@ -293,6 +293,8 @@ export default function My() {
           </>
         }
         ListFooterComponent={
+          // RN 0.88 dropped `null` from the ListFooter/ListEmpty prop types —
+          // the empty branch is `undefined` (nothing renders the same way).
           ready !== null && (ready.loadingMore || ready.moreError !== null) ? (
             <View>
               {ready.loadingMore ? <LoadingIndicator text={strings.loading} /> : null}
@@ -313,10 +315,10 @@ export default function My() {
                 </View>
               ) : null}
             </View>
-          ) : null
+          ) : undefined
         }
         ListEmptyComponent={
-          ready !== null ? <ScaledText style={styles.rowLine}>{strings.noPastWalks}</ScaledText> : null
+          ready !== null ? <ScaledText style={styles.rowLine}>{strings.noPastWalks}</ScaledText> : undefined
         }
       />
     </PaperSurface>

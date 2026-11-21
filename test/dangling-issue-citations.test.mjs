@@ -41,6 +41,13 @@
 // citation returns in that task's carriers (its test header, the design-QA
 // report and the demo). The third fixture below asserts the token
 // stays untouched — re-adding the number turns that fixture red.
+// #339 (2026-11-20) — revalidation: 339 is a live card in kudy-vk/KUDY again
+// (the Expo/metro toolchain major upgrade the residual npm advisories from
+// #337/#340 need), so it leaves the list per the revalidation rule above; the
+// bare citation returns in that task's carriers (jest.config.js, the render
+// helpers, the jest wiring guard and the RNTL 14 setup files). The 339
+// fixtures below now assert the token stays untouched — re-adding the number
+// to DEAD_NUMBERS turns them red.
 // #347 (2026-11-20) — revalidation: 347 is a live card in kudy-vk/KUDY again
 // (the pl content-locale wave of the Selfer audio factory — media.schema.json
 // and its same-wave schemas), so it leaves the list per the revalidation rule
@@ -69,7 +76,7 @@ const REPO = path.resolve(HERE, '..');
 // lines this pass de-hashed) stay unscanned on purpose — their carriers
 // pre-date the scan and adding a number here means a re-anchoring pass of its
 // own with the header list and canonical record updated (#276 round-2 finding).
-const DEAD_NUMBERS = [280, 284, 292, 313, 338, 339, 344, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
+const DEAD_NUMBERS = [280, 284, 292, 313, 338, 344, 348, 349, 350, 351, 352, 353, 402, 403, 404, 428, 430, 432, 436, 523, 524, 543, 544, 545, 546, 547, 548, 550, 558, 559, 566, 598, 611, 623, 669, 670, 711, 810];
 const TOKEN = (n) => `#${n}`;
 const DEAD = new RegExp('#(' + DEAD_NUMBERS.join('|') + ')(?![0-9A-Za-z])', 'g');
 
@@ -114,9 +121,9 @@ test('tracked sources carry no citations of the confirmed-dangling issue numbers
 });
 
 test('the finder flags a citation and names the line', () => {
-  assert.deepEqual(findDead('// Lives in components/, not app/ (issue ' + TOKEN(339) + ').'), [
-    { line: 1, match: TOKEN(339) },
-  ]);
+  // #339 revalidation: the once-dead number is a live card — the finder
+  // must leave it untouched.
+  assert.deepEqual(findDead('// Lives in components/, not app/ (issue ' + TOKEN(339) + ').'), []);
   assert.deepEqual(findDead('рашэнне ўладара 2026-10-03, issue ' + TOKEN(430) + '), тэскі'), [
     { line: 1, match: TOKEN(430) },
   ]);

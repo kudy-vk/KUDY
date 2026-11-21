@@ -32,9 +32,9 @@ describe("G06.10.f walk progress (issue #406)", () => {
   // AC1's render test: the animated component mounted with the canon track —
   // and the mount itself starts no animation (the bar appears at its own
   // value; only a change eases).
-  test("AC1: mounted with the canon 6px track and token colors — nothing animates on mount", () => {
+  test("AC1: mounted with the canon 6px track and token colors — nothing animates on mount", async () => {
     const spy = jest.spyOn(Reanimated, "withTiming");
-    render(<WalkProgress progress={0.25} />);
+    await render(<WalkProgress progress={0.25} />);
     const track = mergedStyle(screen.getByTestId("walk-progress"));
     expect(track.height).toBe(6);
     expect(track.backgroundColor).toBe(tokens.colorLine);
@@ -48,20 +48,24 @@ describe("G06.10.f walk progress (issue #406)", () => {
   // AC1: a change eases to the new value — withTiming carries the shared
   // pace; reverting the fill to the static percent-width style turns this
   // red (the Proof).
-  test("AC1: the fill eases to the new value — withTiming carries the shared pace", () => {
+  test("AC1: the fill eases to the new value — withTiming carries the shared pace", async () => {
     const spy = jest.spyOn(Reanimated, "withTiming");
-    const { rerender } = render(<WalkProgress progress={0.25} />);
-    rerender(<WalkProgress progress={0.8} />);
+    const { rerender } = await render(<WalkProgress progress={0.25} />);
+    // RNTL 14: rerender is async like render — await it so the eased width
+    // and the spy see the new value.
+    await rerender(<WalkProgress progress={0.8} />);
     expect(spy).toHaveBeenCalledWith(80, expect.objectContaining({ duration: 400 }));
     expect(mergedStyle(screen.getByTestId("walk-progress-fill")).width).toBe("80%");
   });
 
   // AC1: the figure, where shown, cross-fades — the outgoing word fades out
   // while the incoming fades in, both on the fill's pace.
-  test("AC1: the figure cross-fades — the outgoing layer fades out, the incoming in", () => {
+  test("AC1: the figure cross-fades — the outgoing layer fades out, the incoming in", async () => {
     const spy = jest.spyOn(Reanimated, "withTiming");
-    const { rerender } = render(<WalkProgress progress={0.25} figure="25%" />);
-    rerender(<WalkProgress progress={0.75} figure="75%" />);
+    const { rerender } = await render(<WalkProgress progress={0.25} figure="25%" />);
+    // RNTL 14: rerender is async like render — await it so both figure
+    // layers land before the assertions.
+    await rerender(<WalkProgress progress={0.75} figure="75%" />);
     const previous = screen.getByTestId("walk-progress-figure-previous", { includeHiddenElements: true });
     expect(previous.props.children).toBe("25%");
     expect(mergedStyle(previous).opacity).toBe(0);
@@ -75,22 +79,26 @@ describe("G06.10.f walk progress (issue #406)", () => {
   // AC2: with the reduce-motion setting on (the stub here, the base's own
   // system-aware mode on device), a change applies the final width
   // immediately — no transition values present.
-  test("AC2: with reduce-motion on, a change lands at the final width instantly", () => {
+  test("AC2: with reduce-motion on, a change lands at the final width instantly", async () => {
     reducedMotion.mockReturnValue(true);
     const spy = jest.spyOn(Reanimated, "withTiming");
-    const { rerender } = render(<WalkProgress progress={0.25} />);
-    rerender(<WalkProgress progress={0.8} />);
+    const { rerender } = await render(<WalkProgress progress={0.25} />);
+    // RNTL 14: rerender is async like render — await it so the reduce-motion
+    // change lands before the assertion.
+    await rerender(<WalkProgress progress={0.8} />);
     expect(mergedStyle(screen.getByTestId("walk-progress-fill")).width).toBe("80%");
     expect(spy).not.toHaveBeenCalled();
   });
 
   // AC2: the reduce-motion figure swap is instant — no outgoing layer, no
   // fades; stripping the reduce-motion branch turns this red (the Proof).
-  test("AC2: with reduce-motion on, the figure swaps instantly — no outgoing layer", () => {
+  test("AC2: with reduce-motion on, the figure swaps instantly — no outgoing layer", async () => {
     reducedMotion.mockReturnValue(true);
     const spy = jest.spyOn(Reanimated, "withTiming");
-    const { rerender } = render(<WalkProgress progress={0.25} figure="25%" />);
-    rerender(<WalkProgress progress={0.75} figure="75%" />);
+    const { rerender } = await render(<WalkProgress progress={0.25} figure="25%" />);
+    // RNTL 14: rerender is async like render — await it so the instant swap
+    // (no outgoing layer) is judged on the landed tree.
+    await rerender(<WalkProgress progress={0.75} figure="75%" />);
     expect(screen.queryByTestId("walk-progress-figure-previous", { includeHiddenElements: true })).toBeNull();
     expect(screen.getByTestId("walk-progress-figure").props.children).toBe("75%");
     expect(spy).not.toHaveBeenCalled();

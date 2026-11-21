@@ -12,41 +12,43 @@ import { Svg } from "react-native-svg";
 
 import { BackButton } from "./back-button";
 import { tokens } from "./design-tokens";
+import { getByType } from "../test/render-helpers";
 
-test("the back label is hosted by a <Text>, the Pressable carries the a11y wiring", () => {
-  renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
+
+test("the back label is hosted by a <Text>, the Pressable carries the a11y wiring", async () => {
+  await renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
   const back = screen.getByTestId("btn-test-back");
   expect(within(back).getByText("Назад")).toBeTruthy();
   expect(back.props.accessibilityRole).toBe("button");
   expect(back.props.accessibilityLabel).toBe("Назад");
 });
 
-test("the one back image is the Lucide arrow beside the word (results G25.04.md — іконкавы слой)", () => {
-  renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
+test("the one back image is the Lucide arrow beside the word (results G25.04.md — іконкавы слой)", async () => {
+  await renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
   const back = screen.getByTestId("btn-test-back");
   // The glyph rides the deep per-glyph import (the class name pins the
   // arrow, a swapped glyph changes it) and the caption's own accent — the
   // arrow is part of the caption, not an ink-colored decoration.
-  const svg = within(back).UNSAFE_getByType(Svg);
+  const svg = getByType(back, "RNSVGSvgView");
   expect(svg.props.className).toBe("lucide lucide-arrow-left");
   expect(svg.props.stroke).toBe(tokens.colorAccent);
   expect(within(back).getByText("Назад")).toBeTruthy();
 });
 
-test("APR-04: the back target itself is at least 48×48dp without hitSlop", () => {
-  renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
+test("APR-04: the back target itself is at least 48×48dp without hitSlop", async () => {
+  await renderRouter({ index: () => <BackButton label="Назад" testID="btn-test-back" /> }, { initialUrl: "/" });
   const back = screen.getByTestId("btn-test-back");
   expect(back.props.style.minHeight).toBeGreaterThanOrEqual(48);
   expect(back.props.style.minWidth).toBeGreaterThanOrEqual(48);
   expect(back.props.hitSlop).toEqual({ bottom: 8, left: 8, right: 8, top: 8 });
 });
 
-test("a screen-provided onPress wins over the default router.back", () => {
+test("a screen-provided onPress wins over the default router.back", async () => {
   const onPress = jest.fn();
-  renderRouter(
+  await renderRouter(
     { index: () => <BackButton label="Назад" onPress={onPress} testID="btn-test-back" /> },
     { initialUrl: "/" },
   );
-  fireEvent.press(screen.getByTestId("btn-test-back"));
+  await fireEvent.press(screen.getByTestId("btn-test-back"));
   expect(onPress).toHaveBeenCalledTimes(1);
 });

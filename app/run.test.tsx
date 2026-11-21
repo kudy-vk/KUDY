@@ -27,8 +27,9 @@ import { CATALOG_FIXTURES, flatStyle, layoutWith, makeRunSession, serve, sha256 
 import type { GuideHintValues } from "../services/config";
 import hintValuesJson from "../contracts/hints/guide-hints.values.v1.json";
 import { tokens } from "../components/design-tokens";
-import { PointStatusSign } from "../components/point-status-sign";
 import * as Reanimated from "react-native-reanimated";
+import { queryAllByType, queryByType } from "../test/render-helpers";
+
 
 // G06.10.f (issue #406): the reduce-motion seam — the controllable stub of
 // the jest stand-in (test/reanimated-mock.js), read live by the component.
@@ -58,7 +59,7 @@ async function soundStop2(args: { locationPort: FakeLocationOsPort; advance: (ms
   const starts = args.locationPort.commands.filter((command) => command.startsWith("start "));
   const subscription = Number(starts[starts.length - 1].slice("start ".length));
   for (const offset of [0, 1_000, 2_000]) {
-    act(() => {
+    await act(() => {
       args.locationPort.emitFix(subscription, { lat: 54.3535, lng: 18.651, accuracy: 5, at: 10_000 + offset });
     });
     args.advance(10_000 + offset);
@@ -73,7 +74,7 @@ async function mountedRunSoundingStop2(
   world: Pick<ReturnType<typeof makeRunSession>, "session" | "locationPort" | "advance">,
 ): Promise<ReturnType<typeof createServices>> {
   const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session: world.session } });
-  renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+  await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
   await screen.findByTestId("run-map");
   await soundStop2({ locationPort: world.locationPort, advance: world.advance });
   return services;
@@ -84,7 +85,7 @@ async function mountedRunSoundingStop2(
 async function mountedRunBe(): Promise<ReturnType<typeof makeRunSession>> {
   const env = makeRunSession();
   const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session: env.session } });
-  renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+  await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
   await screen.findByTestId("run-map");
   return env;
 }
@@ -265,7 +266,7 @@ describe("run map surface", () => {
   test("#862: a direct Run deep link cannot start a walk or arm GPS", async () => {
     const env = runSessionTracked();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles('be')), run: { session: env.session } });
-    renderRouter({ _layout: layoutWith(services), "run/[id]": Run }, { initialUrl: "/run/route-map?confirmedSwitch=1" });
+    await renderRouter({ _layout: layoutWith(services), "run/[id]": Run }, { initialUrl: "/run/route-map?confirmedSwitch=1" });
     await screen.findByTestId('run-unavailable-reason');
     expect(screen.queryByTestId('btn-run-pause')).toBeNull();
     expect(env.starts()).toBe(0);
@@ -299,14 +300,17 @@ describe("run map surface", () => {
   test("AC1: the map renders the engine's marker states live", async () => {
     const { session, locationPort, audioPort, advance } = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
 
     // The surface resolves the pinned package and starts the walk.
     await screen.findByTestId("run-map");
     expect(screen.getByTestId("run-marker-stop-1")).toBeTruthy();
     expect(textOf("run-status-stop-1")).toBe("Мытня — чакае");
     expect(textOf("run-status-stop-3")).toBe("Вежа — зачынена");
-    expect(screen.UNSAFE_getAllByType(PointStatusSign).find((sign) => sign.props.testID === "run-marker-sign-stop-1")?.props.status).toBe("pending");
+    // RNTL 14 host-only tree: the sign's testID is its own host View, so the
+    // status reads off the dot's token color (the per-status palette is
+    // pinned in components/point-status-sign.test.tsx).
+    expect(flatStyle(screen.getByTestId("run-marker-sign-stop-1")).backgroundColor).toBe(tokens.colorMarkerPending);
     // The POI point is its own kind, not a stop marker. UX 05 (
     // the label goes through the run strings' kind dictionary —
     // «sight» renders its Belarusian word, a kind without an entry renders
@@ -323,7 +327,7 @@ describe("run map surface", () => {
     await soundStop2({ locationPort, advance });
     // …and the focus loss keeps the launch but the marker follows the
     // audible state (ADR G01.02 §3.4): available, never played.
-    act(() => {
+    await act(() => {
       audioPort.focusLoss();
     });
     await waitFor(() => expect(textOf("run-status-stop-2")).toBe("Порт — даступна"));
@@ -332,12 +336,12 @@ describe("run map surface", () => {
   test("Run hides the schematic note when native tiles load and restores it on failure", async () => {
     const { session } = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     const map = await screen.findByTestId("run-native-map");
     expect(screen.getByText("Карта загружаецца або недаступная — паказана схема кропак маршруту")).toBeTruthy();
-    act(() => fireEvent(map, "onDidFinishLoadingMap"));
+    await fireEvent(map, "onDidFinishLoadingMap");
     expect(screen.queryByText("Карта загружаецца або недаступная — паказана схема кропак маршруту")).toBeNull();
-    act(() => fireEvent(map, "onDidFailLoadingMap"));
+    await fireEvent(map, "onDidFailLoadingMap");
     expect(screen.getByText("Карта загружаецца або недаступная — паказана схема кропак маршруту")).toBeTruthy();
     expect(screen.getByTestId("run-map-retry")).toBeTruthy();
   });
@@ -365,20 +369,20 @@ describe("run map surface", () => {
         foregroundCarry: () => [],
       },
     });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     expect(screen.getByTestId("guide-hint-card")).toBeTruthy();
 
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(screen.queryByTestId("guide-hint-card")).toBeNull();
 
-    fireEvent.press(screen.getByTestId("btn-panel-read"));
+    await fireEvent.press(screen.getByTestId("btn-panel-read"));
     expect(screen.getByTestId("run-panel-full")).toBeTruthy();
     expect(screen.queryByTestId("guide-hint-card")).toBeNull();
 
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
     expect(screen.getByTestId("run-panel-bar")).toBeTruthy();
     expect(screen.getByTestId("guide-hint-card")).toBeTruthy();
   });
@@ -415,24 +419,24 @@ describe("run map surface", () => {
       },
     });
     expect(services.hints).toBeDefined();
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     await act(async () => {});
     const commands = env.locationPort.commands.filter((value) => value.startsWith("start "));
     expect(commands).not.toHaveLength(0);
     const sub = Number(commands[commands.length - 1].slice("start ".length));
-    const emitFix = (ms: number) => {
+    const emitFix = async (ms: number) => {
       nowMs = ms;
       env.advance(ms);
-      act(() => {
+      await act(() => {
         env.locationPort.emitFix(sub, { lat: 54.402, lng: 18.6, accuracy: 10, at: ms });
       });
     };
 
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
-    emitFix(0);
-    emitFix(21_000);
+    await emitFix(0);
+    await emitFix(21_000);
     expect(services.hints?.store.getState()).toMatchObject({ kind: "hidden", reason: "quiet" });
     expect(shown).toHaveLength(0);
     expect(events).toHaveLength(0);
@@ -440,8 +444,8 @@ describe("run map surface", () => {
 
     // The same hint may show only after the panel closes and a fresh fix
     // confirms the person is still in range: it was not spent while hidden.
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
-    emitFix(22_000);
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await emitFix(22_000);
     await waitFor(() => expect(screen.getByTestId("guide-hint-card")).toBeTruthy());
     expect(shown).toEqual(["guide-route-a1"]);
     expect(events.map((event) => event.type)).toEqual(["guide_nearby_shown"]);
@@ -453,16 +457,18 @@ describe("run map surface", () => {
 
     // G06.03: the tap lands the panel on Half with the tapped card —
     // still no audio, no session change (the AC3 duty of both tasks).
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(screen.getByTestId("run-preview")).toBeTruthy();
-    expect(screen.UNSAFE_getAllByType(PointStatusSign).find((sign) => sign.props.testID === "run-preview-sign")?.props.status).toBe("pending");
+    // The preview sign is its own host View — the pending status is the dot's
+    // token color (see components/point-status-sign.test.tsx).
+    expect(flatStyle(screen.getByTestId("run-preview-sign")).backgroundColor).toBe(tokens.colorMarkerPending);
     expect(screen.getByTestId("run-preview").children.length).toBeGreaterThan(0);
     expect(screen.getByText("Мытня")).toBeTruthy();
     expect(audioPort.commands).toEqual([]);
     expect(textOf("run-status-stop-1")).toBe("Мытня — чакае");
 
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
     expect(screen.queryByTestId("run-preview")).toBeNull();
     expect(screen.queryByTestId("run-panel-half")).toBeNull();
     expect(audioPort.commands).toEqual([]);
@@ -474,7 +480,7 @@ describe("run map surface", () => {
   // not in the free package at all, so there is nothing to leak).
   test("G08.05 AC5: the locked card keeps the honest available-after-purchase state", async () => {
     await mountedRunBe();
-    fireEvent.press(screen.getByTestId("run-marker-stop-3"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-3"));
     expect(screen.getByTestId("run-preview")).toBeTruthy();
     expect(screen.getByTestId("run-locked-hint")).toBeTruthy();
     expect(screen.getByText("Даступна пасля куплі")).toBeTruthy();
@@ -490,7 +496,7 @@ describe("run map surface", () => {
     const world = makeRunSession();
     await mountedRunSoundingStop2(world);
     expect(screen.queryAllByTestId("upgrade-offer")).toEqual([]);
-    fireEvent.press(screen.getByTestId("run-marker-stop-3"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-3"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(screen.queryAllByTestId("upgrade-offer")).toEqual([]);
   });
@@ -498,7 +504,7 @@ describe("run map surface", () => {
   test("AC5: the words follow the walk's pinned locale, with screen-reader labels", async () => {
     const { session } = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("en")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     expect(textOf("run-status-stop-1")).toBe("Customs — pending");
     expect(textOf("run-status-stop-3")).toBe("Tower — locked");
@@ -513,10 +519,10 @@ describe("run map surface", () => {
   test("ui_switch_keeps_content_pin: a UI switch mid-walk keeps the pinned session words", async () => {
     const { session } = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("en")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     expect(textOf("run-status-stop-1")).toBe("Customs — pending");
-    act(() => services.uiLocale.set("uk"));
+    await act(() => services.uiLocale.set("uk"));
     expect(textOf("run-status-stop-1")).toBe("Customs — pending");
     expect(textOf("run-status-stop-3")).toBe("Tower — locked");
     // The back label is chrome, but the walk's own locale wins while a walk
@@ -527,7 +533,7 @@ describe("run map surface", () => {
 
   test("AC4: without the run ports the surface is honestly unavailable", async () => {
     const services = createServices({});
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     expect(await screen.findByText("Сесія недаступная")).toBeTruthy();
     expect(screen.queryByTestId("run-map")).toBeNull();
   });
@@ -540,7 +546,7 @@ describe("run map surface", () => {
     const pending = new Promise<Readiness>(() => {});
     const { session } = makeRunSession({ readiness: { evaluate: () => pending } });
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     // The loading branch itself, not the unavailable one: the honest
     // «Загрузка…» wording is on the screen while readiness stays pending.
     expect(await screen.findByText("Загрузка…")).toBeTruthy();
@@ -554,7 +560,7 @@ describe("run map surface", () => {
   test("G06.03 AC1: Back and the card's ✕ dismiss the panel identically", async () => {
     const { session, audioPort } = await mountedRunBe();
 
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the sheet's bottom padding keeps its content above
     // the home-indicator area — the pinned bottom inset (34) on the base
@@ -564,7 +570,7 @@ describe("run map surface", () => {
     // (within().getByText() reaches only <Text> hosts, a reverted bare string
     // fails here).
     expect(within(screen.getByTestId("btn-run-back")).getByText("Назад")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-run-back"));
+    await fireEvent.press(screen.getByTestId("btn-run-back"));
     expect(screen.queryByTestId("run-panel-half")).toBeNull();
     expect(screen.getByTestId("run-panel-bar")).toBeTruthy();
     // The bar rides the same bottom inset (AC4).
@@ -574,9 +580,9 @@ describe("run map surface", () => {
     expect(textOf("run-status-stop-1")).toBe("Мытня — чакае");
 
     // The ✕ walks the same ladder one card later — identical outcome.
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
     expect(screen.queryByTestId("run-panel-half")).toBeNull();
     expect(screen.getByTestId("run-panel-bar")).toBeTruthy();
     expect(audioPort.commands).toEqual([]);
@@ -591,19 +597,19 @@ describe("run map surface", () => {
 
     // The card opens stop-1 while stop-2 sounds: the row bridges them, and
     // the expanded card shows stop-1's own transcript — never stop-2's.
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(screen.getByTestId("run-nowplaying-row")).toBeTruthy();
     expect(screen.getByText("Зараз грае: Порт")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-panel-read"));
+    await fireEvent.press(screen.getByTestId("btn-panel-read"));
     expect(screen.getByTestId("run-panel-full")).toBeTruthy();
     expect(screen.getByText("Транскрыпт мытні")).toBeTruthy();
     expect(screen.queryByText("Транскрыпт порта")).toBeNull();
 
     // Back at Peek the bar belongs to the sounding audio: stop-2's name and
     // its honest fill (1500/6000), not the inspected card's data.
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
     expect(screen.getByTestId("run-panel-bar")).toBeTruthy();
     expect(screen.getByText("Зараз грае: Порт")).toBeTruthy();
     const fillStyle = screen.getByTestId("run-bar-progress-fill").props.style;
@@ -619,14 +625,14 @@ describe("run map surface", () => {
     const world = runSessionTracked();
     const services = await mountedRunSoundingStop2(world);
     const { starts, locationPort, advance } = world;
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
 
     // The person leaves Run and comes back — the composition root reuses the
     // surface (G06.04 NAV7 cache), the walk continues: no second Start, the
     // spent trigger stays spent (check 17's durable half of this panel
     // criterion), and the panel is where it was left — Half, the card open.
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     expect(starts()).toBe(1);
     // The live in-memory walk, not a row restore: the story is still sounding
@@ -639,14 +645,14 @@ describe("run map surface", () => {
     const world = makeRunSession();
     const services = await mountedRunSoundingStop2(world);
     const { audioPort } = world;
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
 
     // Leave and return through «Прагулка»'s target: the same surface — the
     // panel is Half again, and the sounding story was never stopped (NAV7:
     // navigating out of Run does not touch the audio).
     const stopsBefore = audioPort.commands.filter((command) => command === "stop").length;
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(audioPort.commands.filter((command) => command === "stop")).toHaveLength(stopsBefore);
@@ -655,28 +661,28 @@ describe("run map surface", () => {
   test("G06.04: the session menu pauses the walk and finishes it after one story (11 §4.2/§4.3)", async () => {
     const { session, locationPort, audioPort, advance } = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
 
     // The whole-walk pause is its own action, not the audio's: the banner
     // appears, the pause action gives way to the banner's Resume, and the
     // finish stays reachable from Paused.
-    fireEvent.press(screen.getByTestId("btn-run-pause"));
+    await fireEvent.press(screen.getByTestId("btn-run-pause"));
     await waitFor(() => expect(screen.getByTestId("run-paused")).toBeTruthy());
     expect(screen.queryByTestId("btn-run-pause")).toBeNull();
     expect(screen.getByTestId("btn-run-end")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-run-resume"));
+    await fireEvent.press(screen.getByTestId("btn-run-resume"));
     await waitFor(() => expect(screen.queryByTestId("run-paused")).toBeNull());
 
     // One story heard (stop-2's automatic launch), then the finish — legal
     // after one story, no route completion required (11 §4.3). UX 06 (канон §5 — Дыялог і стужкі): the destructive finish asks first, the confirmation ends it.
     await soundStop2({ locationPort, advance });
-    act(() => {
+    await act(() => {
       audioPort.finish(1);
     });
     await waitFor(() => expect(textOf("run-status-stop-2")).toBe("Порт — праслухана"));
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     expect(await screen.findByTestId("run-ended")).toBeTruthy();
     // The finished walk has no session actions left — Finished is not a
     // live walk anymore (11 §3.3).
@@ -731,7 +737,7 @@ describe("run map surface", () => {
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
     // The preview's completed §4.1 switch handover is trusted composition
     // state, not a forgeable confirmedSwitch URL parameter (#862).
-    renderRouter(withRunRoutes(services, { confirmedSwitch: true }), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services, { confirmedSwitch: true }), { initialUrl: "/run/route-map" });
     // The surface starts through startSwitch: without the trusted switch
     // handover the other live row would refuse the new walk.
     await screen.findByTestId("run-map");
@@ -741,7 +747,7 @@ describe("run map surface", () => {
   test("G06.04 NAV8: without the flag the same surface refuses — the quiet switch is forbidden", async () => {
     const { session } = switchWorld();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     expect(await screen.findByText("Сесія недаступная")).toBeTruthy();
     expect(screen.getByTestId("run-unavailable-reason").props.children).toBe("Ужо ёсць жывая прагулка.");
   });
@@ -755,31 +761,31 @@ describe("run map surface", () => {
     const { session } = await mountedRunBe();
 
     // The press opens the confirmation modal, the walk stays live.
-    fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
     expect(screen.getByTestId("end-confirm-dialog")).toBeTruthy();
-    expect(screen.UNSAFE_queryAllByType(Modal)).toHaveLength(1);
+    expect(queryAllByType(screen, "Modal")).toHaveLength(1);
     expect(screen.queryByTestId("run-ended")).toBeNull();
     expect(screen.getByTestId("run-session-actions")).toBeTruthy();
 
     // The decline closes the dialog and changes nothing.
-    fireEvent.press(screen.getByTestId("btn-end-confirm-cancel"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-cancel"));
     expect(screen.queryByTestId("end-confirm-dialog")).toBeNull();
     expect(screen.queryByTestId("run-ended")).toBeNull();
     expect(screen.getByTestId("run-session-actions")).toBeTruthy();
 
     // The system Back runs the same decline path through the shell's
     // onRequestClose — the session is still unchanged.
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    act(() => {
-      screen.UNSAFE_queryByType(Modal)?.props.onRequestClose();
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await act(() => {
+      queryByType(screen, "Modal")?.props.onRequestClose();
     });
     expect(screen.queryByTestId("end-confirm-dialog")).toBeNull();
     expect(screen.queryByTestId("run-ended")).toBeNull();
 
     // The confirmation finishes the walk as before — the ended screen, no
     // session actions left.
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     expect(await screen.findByTestId("run-ended")).toBeTruthy();
     expect(screen.queryByTestId("run-session-actions")).toBeNull();
   });
@@ -794,14 +800,14 @@ describe("run map surface", () => {
     // in between commands nothing (the AC3 duty).
     const barControl = screen.getByTestId("btn-bar-playpause");
     expect(flatStyle(barControl).minHeight).toBeGreaterThanOrEqual(48);
-    fireEvent.press(barControl);
+    await fireEvent.press(barControl);
     await waitFor(() => expect(screen.queryByText("Паўза")).toBeNull());
     expect(screen.getByText("Граць")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(audioPort.commands.filter((command) => command === "pause" || command === "resume")).toEqual(["pause"]);
-    fireEvent.press(screen.getByTestId("btn-panel-close"));
-    fireEvent.press(screen.getByTestId("btn-bar-playpause"));
+    await fireEvent.press(screen.getByTestId("btn-panel-close"));
+    await fireEvent.press(screen.getByTestId("btn-bar-playpause"));
     await waitFor(() => expect(screen.queryByText("Граць")).toBeNull());
     expect(audioPort.commands.filter((command) => command === "pause" || command === "resume")).toEqual([
       "pause",
@@ -842,10 +848,10 @@ describe("run map surface", () => {
     };
     const { session } = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(files), run: { session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
-    fireEvent.press(screen.getByTestId("btn-panel-read"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("btn-panel-read"));
     expect(screen.getByTestId("run-panel-full")).toBeTruthy();
     expect(screen.getByTestId("scroll-run-panel")).toBeTruthy();
     expect(screen.getByText(longTranscript)).toBeTruthy();
@@ -946,16 +952,16 @@ describe("G06.05 accessibility and honest failures", () => {
   test("G23.04-P2: an unheard additional story opens after its primary story was heard", async () => {
     const env = restoredWorld(["base", "extended"], "ready");
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session: env.session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
-    fireEvent.press(screen.getByTestId("btn-card-play"));
-    act(() => env.audioPort.finish(1));
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("btn-card-play"));
+    await act(() => env.audioPort.finish(1));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     await screen.findByTestId("run-ended");
     expect(screen.queryByTestId("run-missed-story-story-1")).toBeNull();
-    fireEvent.press(screen.getByTestId("run-missed-story-story-1x"));
+    await fireEvent.press(screen.getByTestId("run-missed-story-story-1x"));
     await screen.findByTestId("run-panel-full");
     expect(screen.getByTestId("btn-story-extended").props.accessibilityState).toEqual({ selected: true });
     expect(screen.getByText("Транскрыпт дадатковай гісторыі")).toBeTruthy();
@@ -964,7 +970,7 @@ describe("G06.05 accessibility and honest failures", () => {
   test("AC4: a denied GPS renders the contract banner; manual play still launches the audio", async () => {
     const env = makeRunSession({ permission: "denied" });
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session: env.session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     // The named line of 11 §7 — the wording is the contract's own, the hint
     // names the manual path (the manual mode is a full path, not an
     // emergency).
@@ -973,10 +979,10 @@ describe("G06.05 accessibility and honest failures", () => {
     expect(screen.getByText("Кожная гісторыя запускаецца рукамі з карткі кропкі")).toBeTruthy();
     // The manual exit end-to-end: the card's play button launches the story
     // through the engine's UserSelectedStory path — no GPS involved.
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     await screen.findByTestId("run-panel-half");
     expect(screen.getByTestId("btn-card-play").props.accessibilityRole).toBe("button");
-    fireEvent.press(screen.getByTestId("btn-card-play"));
+    await fireEvent.press(screen.getByTestId("btn-card-play"));
     await waitFor(() =>
       expect(env.audioPort.commands.some((command) => command.startsWith("play "))).toBe(true),
     );
@@ -985,7 +991,7 @@ describe("G06.05 accessibility and honest failures", () => {
   test("G23.05: a live location revocation redraws Run without another run-state event", async () => {
     const env = await mountedRunBe();
     expect(screen.queryByTestId("run-gps-denied")).toBeNull();
-    act(() => env.locationPort.reportPermission("denied"));
+    await act(() => env.locationPort.reportPermission("denied"));
     await screen.findByTestId("run-gps-denied");
     expect(screen.getByText("Кожная гісторыя запускаецца рукамі з карткі кропкі")).toBeTruthy();
   });
@@ -997,7 +1003,7 @@ describe("G06.05 accessibility and honest failures", () => {
     // surface announces it instead of silently reverting the marker.
     const playCommand = world.audioPort.commands.find((command) => command.startsWith("play "));
     const key = Number(playCommand!.slice("play ".length).split(":")[0]);
-    act(() => {
+    await act(() => {
       world.audioPort.fail(key, "decode-failed");
     });
     await screen.findByTestId("run-autoplay-suspended");
@@ -1005,14 +1011,14 @@ describe("G06.05 accessibility and honest failures", () => {
     expect(screen.getByText("Кожная гісторыя запускаецца рукамі з карткі кропкі")).toBeTruthy();
     // The label set stays complete: the same surface still reads in EN (AC1).
     expect(screen.getByTestId("btn-run-end").props.accessibilityRole).toBe("button");
-    fireEvent.press(screen.getByTestId("btn-run-continue-guide"));
+    await fireEvent.press(screen.getByTestId("btn-run-continue-guide"));
     await waitFor(() => expect(screen.queryByTestId("run-autoplay-suspended")).toBeNull());
   });
 
   test("AC4: the restored walk announces itself and names the lost tier", async () => {
     const env = restoredWorld(["base" as Tier, "extended" as Tier], "incomplete");
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session: env.session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-restored");
     expect(screen.getByText("Прагулка працягнута са захаванай сесіі")).toBeTruthy();
     // The §3.7 report: the extended layer did not verify — the note says so.
@@ -1022,21 +1028,21 @@ describe("G06.05 accessibility and honest failures", () => {
   test("AC3/AC4: the card switches story layers, shows each transcript and plays the extended story", async () => {
     const env = restoredWorld(["base" as Tier, "extended" as Tier], "ready");
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session: env.session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     await screen.findByTestId("run-panel-half");
-    fireEvent.press(screen.getByTestId("btn-panel-read"));
+    await fireEvent.press(screen.getByTestId("btn-panel-read"));
     await screen.findByTestId("run-panel-full");
     // The base story's transcript first; the switch names both layers.
     expect(screen.getByText("Транскрыпт мытні")).toBeTruthy();
     expect(screen.getByTestId("btn-story-base").props.accessibilityState).toEqual({ selected: true });
     expect(screen.getByTestId("btn-story-extended").props.accessibilityState).toEqual({ selected: false });
-    fireEvent.press(screen.getByTestId("btn-story-extended"));
+    await fireEvent.press(screen.getByTestId("btn-story-extended"));
     await waitFor(() => expect(screen.getByText("Транскрыпт дадатковай гісторыі")).toBeTruthy());
     expect(screen.getByTestId("btn-story-extended").props.accessibilityState).toEqual({ selected: true });
     // The extended story is hand-playable too — its tier is in the pin.
-    fireEvent.press(screen.getByTestId("btn-card-play"));
+    await fireEvent.press(screen.getByTestId("btn-card-play"));
     await waitFor(() =>
       expect(env.audioPort.commands.some((command) => command.startsWith("play "))).toBe(true),
     );
@@ -1075,7 +1081,7 @@ async function landProgress(
   barLabel: string,
 ): Promise<void> {
   audioPort.snapshotValue = { state: "playing", positionMs, durationMs: 6000 };
-  fireEvent.press(screen.getByTestId("btn-bar-playpause"));
+  await fireEvent.press(screen.getByTestId("btn-bar-playpause"));
   await waitFor(() => expect(within(screen.getByTestId("btn-bar-playpause")).getByText(barLabel)).toBeTruthy());
 }
 
@@ -1140,7 +1146,7 @@ describe("Run unavailable words follow the UI-locale choice", () => {
   test("without the run service the uk choice words the unavailable title", async () => {
     const services = createServices({});
     services.uiLocale.set("uk");
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     expect(await screen.findByText("Сесія недоступна")).toBeTruthy();
     // The be fallback's wording is gone (criterion 1); the reason line never
     // renders without a surface (surface === null here).
@@ -1152,7 +1158,7 @@ describe("Run unavailable words follow the UI-locale choice", () => {
   test("an unavailable session words the title and the reason with the uk choice", async () => {
     const services = unavailableServices();
     services.uiLocale.set("uk");
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     expect(await screen.findByText("Сесія недоступна")).toBeTruthy();
     expect(screen.getByTestId("run-unavailable-reason").props.children).toBe("Гід не завантажений.");
     expect(screen.queryByText("Сесія недаступная")).toBeNull();
@@ -1161,9 +1167,9 @@ describe("Run unavailable words follow the UI-locale choice", () => {
 
   test("switching the locale on the open unavailable screen rewords it in place", async () => {
     const services = unavailableServices();
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     expect(await screen.findByText("Сесія недаступная")).toBeTruthy();
-    act(() => {
+    await act(() => {
       services.uiLocale.set("en");
     });
     // The switch re-renders the words in place, no restart (criterion 2) —
@@ -1180,16 +1186,16 @@ describe("Run unavailable words follow the UI-locale choice", () => {
     const { session } = makeRunSession({ readiness: { evaluate: () => pending } });
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("be")), run: { session } });
     services.uiLocale.set("uk");
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     expect(await screen.findByText("Завантаження…")).toBeTruthy();
     expect(screen.queryByText("Загрузка…")).toBeNull();
   });
 
   test("a ready en session keeps its words when the UI switches to uk", async () => {
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("en")), run: { session: makeRunSession().session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
-    act(() => {
+    await act(() => {
       services.uiLocale.set("uk");
     });
     // The session's pinned locale wins over the UI choice (criterion 3):
@@ -1227,15 +1233,15 @@ describe("G16.03: the End invitation (issue #74)", () => {
       run: { session: world.session },
       ...feedbackPorts(),
     });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
     await soundStop2({ locationPort: world.locationPort, advance: world.advance });
-    act(() => {
+    await act(() => {
       world.audioPort.finish(1);
     });
     await waitFor(() => expect(screen.getByTestId("btn-run-end")).toBeTruthy());
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     expect(await screen.findByTestId("run-ended")).toBeTruthy();
     expect(await screen.findByTestId("run-feedback-invite")).toBeTruthy();
     return world;
@@ -1246,7 +1252,7 @@ describe("G16.03: the End invitation (issue #74)", () => {
     // The invitation names the walk's own pinned identity and renders as a
     // plain card — the map and Back stay reachable (non-modal).
     expect(screen.getByTestId("run-feedback-invite")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-run-invite-dismiss"));
+    await fireEvent.press(screen.getByTestId("btn-run-invite-dismiss"));
     await waitFor(() => expect(screen.queryByTestId("run-feedback-invite")).toBeNull());
     // Skipping a rating never blocks anything: the ended surface stays.
     expect(screen.getByTestId("run-ended")).toBeTruthy();
@@ -1254,7 +1260,7 @@ describe("G16.03: the End invitation (issue #74)", () => {
 
   test("the rate action opens the form bound to the ended session's pinned identity", async () => {
     await endedWithInvitation();
-    fireEvent.press(screen.getByTestId("btn-run-invite-rate"));
+    await fireEvent.press(screen.getByTestId("btn-run-invite-rate"));
     // The form route opens with the walk's pinned version/locale (1/be) —
     // the session facts, never a catalog read (acceptance 5).
     expect(await screen.findByTestId("screen-Feedback")).toBeTruthy();
@@ -1270,10 +1276,10 @@ describe("G16.03: the End invitation (issue #74)", () => {
       bundlesStore: memoryBundles(layerFiles("be")),
       run: { session: world.session },
     });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map" });
     await screen.findByTestId("run-map");
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     expect(await screen.findByTestId("run-ended")).toBeTruthy();
     expect(screen.queryByTestId("run-feedback-invite")).toBeNull();
   });
@@ -1312,16 +1318,16 @@ describe("G23.04-P2: missed stories after End", () => {
   test("heard and locked stories are absent; opening a row keeps audio and GPS ended", async () => {
     const world = await mountedRunBe();
     await soundStop2(world);
-    act(() => world.audioPort.finish(1));
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await act(() => world.audioPort.finish(1));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     await screen.findByTestId("run-missed-stories");
     expect(screen.getByText("Яшчэ можна адкрыць")).toBeTruthy();
     expect(screen.queryByTestId("run-missed-story-story-2")).toBeNull();
     expect(screen.queryByTestId("run-missed-story-story-3")).toBeNull();
     const audio = [...world.audioPort.commands];
     const location = [...world.locationPort.commands];
-    fireEvent.press(screen.getByTestId("run-missed-story-story-1"));
+    await fireEvent.press(screen.getByTestId("run-missed-story-story-1"));
     await screen.findByTestId("run-panel-full");
     expect(screen.getByText("Транскрыпт мытні")).toBeTruthy();
     expect(screen.getByTestId("run-ended")).toBeTruthy();
@@ -1333,13 +1339,13 @@ describe("G23.04-P2: missed stories after End", () => {
 
   test("all accessible stories heard leaves no list and keeps Back", async () => {
     const world = await mountedRunBe();
-    fireEvent.press(screen.getByTestId("run-marker-stop-1"));
-    fireEvent.press(screen.getByTestId("btn-card-play"));
-    act(() => world.audioPort.finish(1));
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await fireEvent.press(screen.getByTestId("btn-card-play"));
+    await act(() => world.audioPort.finish(1));
     await soundStop2(world);
-    act(() => world.audioPort.finish(2));
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await act(() => world.audioPort.finish(2));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     await screen.findByTestId("run-ended");
     expect(screen.queryByTestId("run-missed-stories")).toBeNull();
     expect(screen.getByTestId("btn-run-back")).toBeTruthy();
@@ -1348,10 +1354,10 @@ describe("G23.04-P2: missed stories after End", () => {
   test("the heading follows the pinned English locale", async () => {
     const world = makeRunSession();
     const services = createServices({ bundlesStore: memoryBundles(layerFiles("en")), run: { session: world.session } });
-    renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map?locale=en" });
+    await renderRouter(withRunRoutes(services), { initialUrl: "/run/route-map?locale=en" });
     await screen.findByTestId("run-map");
-    fireEvent.press(screen.getByTestId("btn-run-end"));
-    fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
+    await fireEvent.press(screen.getByTestId("btn-run-end"));
+    await fireEvent.press(screen.getByTestId("btn-end-confirm-accept"));
     await screen.findByTestId("run-missed-stories");
     expect(screen.getByText("Still available to open")).toBeTruthy();
   });

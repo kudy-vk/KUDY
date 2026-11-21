@@ -22,6 +22,8 @@ import type { ActivationResult, LayerKey } from "../services/download/types";
 import { fixtureText, flatStyle, layoutWith, serve, sha256, CATALOG_FIXTURES, CATALOG_POINTER } from "../test/render-helpers";
 import type { CommerceEventRecord, CommercePort } from "../controllers/commerce/commerceController";
 import type { PurchaseOutcome } from "../services/entitlement/types";
+import { getByType, queryAllByType, queryByType } from "../test/render-helpers";
+
 
 const STOP_PLACE_CATALOG_TEXT = fixtureText("catalog-discovery-stop-places.json");
 const STOP_PLACE_INDEX_TEXT = fixtureText("index-stop-places.json");
@@ -49,7 +51,7 @@ const withPreviewRoutes = (services: ReturnType<typeof createServices>) => ({
 // truth and the recording download channel, mounted at the b1 preview.
 async function openB1ButtonPreview() {
   serve(CATALOG_FIXTURES);
-  renderRouter(
+  await renderRouter(
     withPreviewRoutes(
       createServices({
         catalogOrigin: "https://catalog.test",
@@ -142,7 +144,7 @@ afterEach(() => {
 describe("guide preview surface (G06.01.b)", () => {
   test("the paid preview shows the canon facts, free_stop_count and the disabled paid start (AC1, AC2, NAV6)", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-a1?from=rubric" },
     );
@@ -167,16 +169,16 @@ describe("guide preview surface (G06.01.b)", () => {
     // Each row is one accessibility element announcing the fact once.
     const durationRow = screen.getByTestId("preview-duration");
     expect(durationRow.props.accessibilityLabel).toBe("Час: ад 45 да 75 хв");
-    expect(within(durationRow).UNSAFE_getByType(Svg).props.className).toBe("lucide lucide-clock");
+    expect(getByType(durationRow, "RNSVGSvgView").props.className).toBe("lucide lucide-clock");
     const countsRow = screen.getByTestId("preview-counts");
     expect(countsRow.props.accessibilityLabel).toBe("Кропкі: 2");
-    expect(within(countsRow).UNSAFE_getByType(Svg).props.className).toBe("lucide lucide-map-pin");
+    expect(getByType(countsRow, "RNSVGSvgView").props.className).toBe("lucide lucide-map-pin");
     expect(screen.getByText("Памер: 50 МБ")).toBeTruthy();
     expect(screen.getByText("Кропак бясплатна: 1")).toBeTruthy();
     // The paid start is disabled with its reason; pressing it starts no run
     // and triggers no purchase — nothing navigates, no dialog appears.
     expect(screen.getByText("Патрэбна пакупка.")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-start"));
+    await fireEvent.press(screen.getByTestId("btn-start"));
     expect(screen.queryByTestId("confirm-dialog")).toBeNull();
     expect(screen.getByTestId("screen-Route preview")).toBeTruthy();
   });
@@ -199,14 +201,14 @@ describe("guide preview surface (G06.01.b)", () => {
     catalog.discovery_index.bytes = new TextEncoder().encode(indexText).length;
     serve({ ...CATALOG_FIXTURES, "catalog.json": JSON.stringify(catalog), [CATALOG_POINTER]: indexText });
     const services = createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 });
-    renderRouter(withPreviewRoutes(services), { initialUrl: "/route/guide-route-a1?from=rubric" });
+    await renderRouter(withPreviewRoutes(services), { initialUrl: "/route/guide-route-a1?from=rubric" });
     expect(await screen.findByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
-    act(() => services.uiLocale.set("uk"));
+    await act(() => services.uiLocale.set("uk"));
     expect(screen.getByTestId("preview-text-unavailable")).toBeTruthy();
     // The uk catalogue is complete — the unavailable word renders in uk.
     expect(screen.getByText("Цього гіда немає обраною мовою інтерфейсу.")).toBeTruthy();
     expect(screen.queryByText("Гісторыі сукнараў: ад мытні да порта")).toBeNull();
-    act(() => services.uiLocale.set("be"));
+    await act(() => services.uiLocale.set("be"));
     expect(await screen.findByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
     expect(screen.queryByTestId("preview-text-unavailable")).toBeNull();
   });
@@ -214,24 +216,27 @@ describe("guide preview surface (G06.01.b)", () => {
   test("the preview shows the discovery theme label in the selected locale", async () => {
     serve(CATALOG_FIXTURES);
     const services = createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 });
-    renderRouter(withPreviewRoutes(services), { initialUrl: "/route/guide-route-a1" });
+    await renderRouter(withPreviewRoutes(services), { initialUrl: "/route/guide-route-a1" });
     const theme = await screen.findByTestId("preview-theme");
-    expect(within(theme).getByText("Гісторыя")).toBeTruthy();
+    // RNTL 14 host-only tree: the testID lands on the host Text itself and
+    // within() searches only descendants — the theme label is the host's own
+    // text content (the joined theme labels).
+    expect(theme.props.children).toBe("Гісторыя");
     expect(screen.getByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
   });
 
   test("the preview projects its theme when opened in another content locale", async () => {
     serve(CATALOG_FIXTURES);
     const services = createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 });
-    act(() => services.uiLocale.set("uk"));
-    renderRouter(withPreviewRoutes(services), { initialUrl: "/route/guide-route-a1" });
+    await act(() => services.uiLocale.set("uk"));
+    await renderRouter(withPreviewRoutes(services), { initialUrl: "/route/guide-route-a1" });
     expect(await screen.findByText("Історія")).toBeTruthy();
     expect(screen.getByText("Історії сукнарів: від митниці до порту")).toBeTruthy();
   });
 
   test("a route without a known theme has no theme row and keeps the preview usable", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-b1" },
     );
@@ -242,7 +247,7 @@ describe("guide preview surface (G06.01.b)", () => {
 
   test("open and locked stops are distinguishable; the locked row shows name, place, announce and lock only (NAV5)", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-b1?from=city" },
     );
@@ -262,7 +267,7 @@ describe("guide preview surface (G06.01.b)", () => {
     expect(screen.queryByText("🔒")).toBeNull();
     const lockedBadge = screen.getByTestId("stop-locked-stop-b1-2");
     expect(lockedBadge.props.accessibilityLabel).toBe("Зачынена");
-    expect(within(lockedBadge).UNSAFE_getByType(Svg).props.className).toBe("lucide lucide-lock");
+    expect(getByType(lockedBadge, "RNSVGSvgView").props.className).toBe("lucide lucide-lock");
   });
 
   test("the stop rows show the place's human title from the catalog, never the raw place id (UX 05, AC1)", async () => {
@@ -270,7 +275,7 @@ describe("guide preview surface (G06.01.b)", () => {
     // stops: the open row shows name + place title, the locked row shows the
     // full NAV5 set — name, place, announce and lock — with human words.
     serve(STOP_PLACE_PUBLISHED);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-b1?from=city" },
     );
@@ -283,7 +288,7 @@ describe("guide preview surface (G06.01.b)", () => {
 
   test("without the disk-truth port the button fails closed with its named reason (11 §7)", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-b1" },
     );
@@ -295,7 +300,7 @@ describe("guide preview surface (G06.01.b)", () => {
     serve(CATALOG_FIXTURES);
     const bundles = memoryBundles();
     const download = recordingDownload();
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(
         createServices({
           catalogOrigin: "https://catalog.test",
@@ -314,7 +319,7 @@ describe("guide preview surface (G06.01.b)", () => {
     );
     expect(await screen.findByTestId("btn-download")).toBeTruthy();
     expect(screen.getByText("Загрузіць")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-download"));
+    await fireEvent.press(screen.getByTestId("btn-download"));
     expect(await screen.findByTestId("btn-start")).toBeTruthy();
     expect(screen.getByText("Пачаць")).toBeTruthy();
     expect(download.keys).toEqual(["guide-route-b1"]);
@@ -327,7 +332,7 @@ describe("guide preview surface (G06.01.b)", () => {
     const bundles = memoryBundles();
     bundles.setDownloaded(true);
     const session = liveSessionOf("r-other");
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(
         createServices({
           catalogOrigin: "https://catalog.test",
@@ -339,14 +344,14 @@ describe("guide preview surface (G06.01.b)", () => {
       ),
       { initialUrl: "/route/guide-route-b1" },
     );
-    fireEvent.press(await screen.findByTestId("btn-start"));
+    await fireEvent.press(await screen.findByTestId("btn-start"));
     await screen.findByTestId("confirm-dialog");
   }
 
   test("Start of another guide with a live session opens the §4.1 dialog; «Скасаваць» returns unchanged (NAV8)", async () => {
     await mountedConfirmDialog();
     expect(screen.getByText("Завяршыць «Каралеўская» і пачаць «guide-route-b1»?")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-confirm-cancel"));
+    await fireEvent.press(screen.getByTestId("btn-confirm-cancel"));
     expect(screen.queryByTestId("confirm-dialog")).toBeNull();
     expect(screen.getByTestId("screen-Route preview")).toBeTruthy();
   });
@@ -357,9 +362,9 @@ describe("guide preview surface (G06.01.b)", () => {
   // dialog goes, the preview stays, no walk starts and nothing navigates.
   test("UX 06 AC1: the §4.1 dialog is a native Modal; the system Back closes it in place", async () => {
     await mountedConfirmDialog();
-    expect(screen.UNSAFE_queryAllByType(Modal)).toHaveLength(1);
-    act(() => {
-      screen.UNSAFE_queryByType(Modal)?.props.onRequestClose();
+    expect(queryAllByType(screen, "Modal")).toHaveLength(1);
+    await act(() => {
+      queryByType(screen, "Modal")?.props.onRequestClose();
     });
     expect(screen.queryByTestId("confirm-dialog")).toBeNull();
     expect(screen.getByTestId("screen-Route preview")).toBeTruthy();
@@ -380,13 +385,13 @@ describe("guide preview surface (G06.01.b)", () => {
 
   test("Back from the preview returns to the city card it was opened from (NAV9)", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/explore" },
     );
-    fireEvent.press(await screen.findByTestId("guide-card-guide-route-b1"));
+    await fireEvent.press(await screen.findByTestId("guide-card-guide-route-b1"));
     expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-preview-back"));
+    await fireEvent.press(screen.getByTestId("btn-preview-back"));
     expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
   });
 
@@ -396,7 +401,7 @@ describe("guide preview surface (G06.01.b)", () => {
   // strings inside a <Text> host. Removing the wrapper fails this.
   test("the back label sits in a Text host, not bare in the Pressable (issue #343)", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-a1?from=rubric" },
     );
@@ -406,7 +411,7 @@ describe("guide preview surface (G06.01.b)", () => {
 
   test("a route the catalog does not name renders the honest unavailable state", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/no-such-route" },
     );
@@ -444,7 +449,7 @@ describe("guide preview surface (G06.01.b)", () => {
     });
     const bundles = memoryBundles();
     bundles.setDownloaded(true);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(
         createServices({
           catalogOrigin: "https://catalog.test",
@@ -470,7 +475,7 @@ describe("guide preview surface (G06.01.b)", () => {
 describe("guide preview loading indicator (UX 07)", () => {
   test("the loading state shows the ActivityIndicator next to the text", async () => {
     jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-a1?from=rubric" },
     );
@@ -493,8 +498,10 @@ describe("G06.05 preview a11y and failure exits", () => {
 
   test("AC4: insufficient space is a named failure with the retry and the storage exit", async () => {
     serve(CATALOG_FIXTURES);
-    renderInsufficientSpacePreview();
-    fireEvent.press(await screen.findByTestId("btn-download"));
+    // RNTL 14: renderRouter is async — the unawaited render left the screen
+    // binding unsettled and the ghost container polluted the following tests.
+    await renderInsufficientSpacePreview();
+    await fireEvent.press(await screen.findByTestId("btn-download"));
     await screen.findByTestId("download-error-banner");
     expect(screen.getByText("Збой загрузкі.")).toBeTruthy();
     expect(screen.getByText("не хапае месца: патрэбна яшчэ 30 МБ")).toBeTruthy();
@@ -505,13 +512,13 @@ describe("G06.05 preview a11y and failure exits", () => {
     expect(screen.getByTestId("btn-download-storage").props.accessibilityLabel).toBe(
       "Вызваліць месца ў KUDY",
     );
-    fireEvent.press(screen.getByTestId("btn-download-storage"));
+    await fireEvent.press(screen.getByTestId("btn-download-storage"));
     expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
   });
 
   test("AC4: the failed catalog load gets its named retry — one press re-runs the refresh", async () => {
     serve({});
-    renderRouter(withPreviewRoutes(createServices({
+    await renderRouter(withPreviewRoutes(createServices({
       catalogOrigin: "https://catalog.test",
       catalogSha256: sha256,
     })), { initialUrl: "/explore" });
@@ -519,12 +526,12 @@ describe("G06.05 preview a11y and failure exits", () => {
     // The load recovers without a remount: the second mock answers, the
     // retry re-runs the controller's refresh and the cards render.
     serve(CATALOG_FIXTURES);
-    fireEvent.press(screen.getByTestId("catalog-retry"));
+    await fireEvent.press(screen.getByTestId("catalog-retry"));
     expect(await screen.findByTestId("guide-card-guide-route-a1")).toBeTruthy();
   });
 
   test("AC1: the live walk's button is a named button (Прагулка)", async () => {
-    renderRouter(withPreviewRoutes(createServices({
+    await renderRouter(withPreviewRoutes(createServices({
       runSession: { liveSession: () => ({ routeId: "route-map", title: "Каралеўская" }) },
     })), { initialUrl: "/explore" });
     const button = await screen.findByTestId("btn-walk-mode");
@@ -567,7 +574,7 @@ describe("G08.05 quiet commerce offer", () => {
     initialUrl = "/route/guide-route-a1",
   ): Promise<ReturnType<typeof commerceRig>> {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(
         createServices({
           catalogOrigin: "https://catalog.test",
@@ -583,8 +590,8 @@ describe("G08.05 quiet commerce offer", () => {
 
   // The render fact (AC3): RN dispatches onLayout after the actual layout —
   // the test drives the same callback through the host props.
-  const fireLayout = (testID: string) => {
-    act(() => {
+  const fireLayout = async (testID: string) => {
+    await act(() => {
       screen.getByTestId(testID).props.onLayout?.({
         nativeEvent: { layout: { x: 0, y: 0, width: 100, height: 100 } },
       });
@@ -598,8 +605,8 @@ describe("G08.05 quiet commerce offer", () => {
     expect(screen.getByText("Не цяпер")).toBeTruthy();
     // The mount alone records nothing — the layout fact has not arrived.
     expect(rig.events).toHaveLength(0);
-    fireLayout("upgrade-offer");
-    fireLayout("upgrade-offer");
+    await fireLayout("upgrade-offer");
+    await fireLayout("upgrade-offer");
     const shown = rig.events.filter((event) => event.type === "extension_offer_shown");
     expect(shown).toHaveLength(1);
     expect(shown[0].route_id).toBe("guide-route-a1");
@@ -610,8 +617,8 @@ describe("G08.05 quiet commerce offer", () => {
   test("the decline is respected: the card is gone and buys nothing (AC4)", async () => {
     const rig = await openCommercePreview(commerceRig());
     await screen.findByTestId("upgrade-offer");
-    fireLayout("upgrade-offer");
-    fireEvent.press(screen.getByTestId("btn-upgrade-dismiss"));
+    await fireLayout("upgrade-offer");
+    await fireEvent.press(screen.getByTestId("btn-upgrade-dismiss"));
     expect(screen.queryByTestId("upgrade-offer")).toBeNull();
     // The re-sync the screen runs per surface change brings nothing back;
     // the store was never called.
@@ -622,19 +629,19 @@ describe("G08.05 quiet commerce offer", () => {
 
   test("repeated errors keep both exits; Continue free returns to the working offer (AC2, C28)", async () => {
     const rig = await openCommercePreview(commerceRig());
-    fireEvent.press(await screen.findByTestId("btn-upgrade-buy"));
+    await fireEvent.press(await screen.findByTestId("btn-upgrade-buy"));
     expect(await screen.findByTestId("purchase-error-dialog")).toBeTruthy();
     expect(screen.getByText("Пакупка не скончылася")).toBeTruthy();
     // Both exits of C28 — and they return with the second error too.
     expect(screen.getByTestId("btn-purchase-retry")).toBeTruthy();
     expect(screen.getByTestId("btn-purchase-continue-free")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-purchase-retry"));
+    await fireEvent.press(screen.getByTestId("btn-purchase-retry"));
     await screen.findByTestId("purchase-error-dialog");
     expect(screen.getByTestId("btn-purchase-retry")).toBeTruthy();
     expect(screen.getByTestId("btn-purchase-continue-free")).toBeTruthy();
     // Continue free: the dialog closes, the app stays on the preview with
     // the quiet offer, no point and no state lost.
-    fireEvent.press(screen.getByTestId("btn-purchase-continue-free"));
+    await fireEvent.press(screen.getByTestId("btn-purchase-continue-free"));
     expect(screen.queryByTestId("purchase-error-dialog")).toBeNull();
     expect(screen.getByTestId("upgrade-offer")).toBeTruthy();
     expect(rig.purchases).toHaveLength(2);
@@ -645,7 +652,7 @@ describe("G08.05 quiet commerce offer", () => {
 
   test("the finished purchase shows the §8 words and the offer never returns", async () => {
     const rig = await openCommercePreview(commerceRig({ kind: "transaction-finished", productId: "route_a1_prod" }));
-    fireEvent.press(await screen.findByTestId("btn-upgrade-buy"));
+    await fireEvent.press(await screen.findByTestId("btn-upgrade-buy"));
     expect(await screen.findByTestId("preview-purchased-pending")).toBeTruthy();
     expect(screen.getByText("Куплена · трэба загрузіць")).toBeTruthy();
     expect(screen.queryByTestId("upgrade-offer")).toBeNull();
@@ -660,7 +667,7 @@ describe("G08.05 quiet commerce offer", () => {
 
   test("without the commerce port the paid preview renders no offer (fail closed)", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(
         createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 }),
       ),
@@ -677,7 +684,7 @@ describe("guide preview font layer (G06.10.b)", () => {
     // not-yet-loaded faces — the readable render is the system-ui fallback
     // (AC4), the family values are the mirror's, never hardcoded strings.
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-a1?from=rubric" },
     );
@@ -702,7 +709,7 @@ describe("guide preview font layer (G06.10.b)", () => {
     );
   });
 
-  test("the dragon-voice token resolves to the Caveat family (AC3)", () => {
+  test("the dragon-voice token resolves to the Caveat family (AC3)", async () => {
     // The face is loaded by the root (components/fonts.ts); its first
     // interface surface is the dragon hint card (G07.04) — not this task.
     expect(tokens.fontFamilyDragon.startsWith("Caveat")).toBe(true);
@@ -732,7 +739,7 @@ describe("guide preview clay buttons (G06.10.d)", () => {
   // the fill and the label-color queries (implementation-rules 1).
   test("the disabled primary renders the ghost pair, no shelf, never dips, and the reason stays next to the button", async () => {
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       withPreviewRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/route/guide-route-a1?from=rubric" },
     );
@@ -751,15 +758,15 @@ describe("guide preview clay buttons (G06.10.d)", () => {
     const label = within(button).getByText("Пачаць");
     expect(flatStyle(label).color).toBe(tokens.colorDisabledInk);
     // A disabled press fires no dip: the style holds its resting shape.
-    fireEvent.press(button);
+    await fireEvent.press(button);
     expect(flatStyle(screen.getByTestId("btn-start")).transform).toBeUndefined();
     expect(screen.getByText("Патрэбна пакупка.")).toBeTruthy();
   });
 
   test("the secondary actions render the line shade from the token mirror", async () => {
     serve(CATALOG_FIXTURES);
-    renderInsufficientSpacePreview();
-    fireEvent.press(await screen.findByTestId("btn-download"));
+    await renderInsufficientSpacePreview();
+    await fireEvent.press(await screen.findByTestId("btn-download"));
     await screen.findByTestId("download-error-banner");
     const retry = flatStyle(screen.getByTestId("btn-download-retry"));
     expect(retry.borderBottomWidth).toBe(4);
@@ -770,7 +777,7 @@ describe("guide preview clay buttons (G06.10.d)", () => {
   });
 
   test("the live walk's primary carries the accent shelf", async () => {
-    renderRouter(withPreviewRoutes(createServices({
+    await renderRouter(withPreviewRoutes(createServices({
       runSession: { liveSession: () => ({ routeId: "route-map", title: "Каралеўская" }) },
     })), { initialUrl: "/explore" });
     const button = await screen.findByTestId("btn-walk-mode");

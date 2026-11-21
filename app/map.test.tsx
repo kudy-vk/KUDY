@@ -20,6 +20,8 @@ import { createServices } from "../controllers/createServices";
 import { fixtureText, layoutWith, makeRunSession, serve, sha256 } from "../test/render-helpers";
 import type { FakeAudioPlayerPort } from "../services/audio/fake-port";
 import type { FakeLocationOsPort } from "../services/location/fake-port";
+import { getByType } from "../test/render-helpers";
+
 
 beforeEach(() => { AppState.currentState = "active"; });
 
@@ -46,9 +48,9 @@ const stopsOf = (port: FakeLocationOsPort): string[] =>
 // releases its own subscription on unmount — a sibling copy is a jscpd clone.
 async function expectReArmAfterWalkEnds(
   env: ReturnType<typeof makeRunSession>,
-  rendered: { unmount(): void },
+  rendered: { unmount(): Promise<void> },
 ): Promise<void> {
-  act(() => {
+  await act(() => {
     env.location.setMode("idle");
   });
   await waitFor(() => expect(screen.getByTestId("nearby-mode").props.children).toBe("Паблізу"), {
@@ -57,7 +59,7 @@ async function expectReArmAfterWalkEnds(
   expect(env.location.currentMode()).toBe("city-surface");
   expect(startsOf(env.locationPort)).toEqual(["start 1", "start 2"]);
 
-  rendered.unmount();
+  await rendered.unmount();
   expect(env.location.currentMode()).toBe("idle");
 }
 
@@ -70,7 +72,7 @@ async function expectReArmAfterWalkEnds(
 async function openNearby(
   env?: ReturnType<typeof makeRunSession>,
   withRunSession = false,
-): Promise<{ rendered: { unmount(): void }; services: ReturnType<typeof createServices> }> {
+): Promise<{ rendered: { unmount(): Promise<void> }; services: ReturnType<typeof createServices> }> {
   const services = createServices({
     catalogOrigin: "https://catalog.test",
     catalogSha256: sha256,
@@ -78,7 +80,7 @@ async function openNearby(
     ...(env && withRunSession ? { run: { session: env.session } } : {}),
   });
   serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-  const rendered = renderRouter(withMapRoutes(services), { initialUrl: "/map" });
+  const rendered = await renderRouter(withMapRoutes(services), { initialUrl: "/map" });
   // G21.17: the be UI shows only the be-text offers — a1-place is the
   // stable visible card to wait for.
   await screen.findByTestId("nearby-card-offer-a1-place");
@@ -94,14 +96,17 @@ describe("Nearby surface (G07.01)", () => {
     const previous = process.env.EXPO_PUBLIC_DEMO_MODE;
     try {
       process.env.EXPO_PUBLIC_DEMO_MODE = "1";
-      const demo = renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
+      const demo = await renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
       expect(await screen.findByTestId("nearby-demo-map")).toBeTruthy();
-      demo.unmount();
+      // RNTL 14: unmount is async and act-wrapped — an unawaited unmount leaves
+      // overlapping act state that breaks every later render in the file.
+      await demo.unmount();
 
       process.env.EXPO_PUBLIC_DEMO_MODE = "0";
-      renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
+      await renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
       expect(await screen.findByTestId("screen-Map")).toBeTruthy();
       expect(screen.queryByTestId("nearby-demo-map")).toBeNull();
+      await screen.unmount();
     } finally {
       if (previous === undefined) delete process.env.EXPO_PUBLIC_DEMO_MODE;
       else process.env.EXPO_PUBLIC_DEMO_MODE = previous;
@@ -115,10 +120,10 @@ describe("Nearby surface (G07.01)", () => {
     const { services } = await openNearby();
     // The uk UI shows only the offer with published uk text; switching back
     // restores the be list in place.
-    act(() => services.uiLocale.set("uk"));
+    await act(() => services.uiLocale.set("uk"));
     const ids = screen.getAllByTestId(/^nearby-card-/).map((card) => card.props.testID);
     expect(ids).toEqual(["nearby-card-offer-b1-guide"]);
-    act(() => services.uiLocale.set("be"));
+    await act(() => services.uiLocale.set("be"));
     expect(screen.getByTestId("nearby-card-offer-a1-place")).toBeTruthy();
   });
 
@@ -136,8 +141,8 @@ describe("Nearby surface (G07.01)", () => {
     catalog.discovery_index.bytes = new TextEncoder().encode(indexText).length;
     serve({ "catalog.json": JSON.stringify(catalog), [POINTER_PATH]: indexText });
     const services = createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 });
-    act(() => services.uiLocale.set("uk"));
-    renderRouter(withMapRoutes(services), { initialUrl: "/map" });
+    await act(() => services.uiLocale.set("uk"));
+    await renderRouter(withMapRoutes(services), { initialUrl: "/map" });
     await screen.findByTestId("nearby-mode");
     // The uk catalogue is complete — the explanation renders in uk.
     expect(within(screen.getByTestId("nearby-message")).getByText("Гідів з текстом цією мовою ще немає.")).toBeTruthy();
@@ -208,7 +213,7 @@ describe("Nearby surface (G07.01)", () => {
     // Radius entry: a fix lands near the city's places. The Nearby surface
     // owns no trigger machinery — the port's window stays empty and no audio
     // event exists.
-    act(() => {
+    await act(() => {
       env.locationPort.emitFix(1, { lat: 54.35, lng: 18.65, accuracy: 5, at: 0 });
     });
     expect(env.locationPort.regions.length).toBe(0);
@@ -216,7 +221,7 @@ describe("Nearby surface (G07.01)", () => {
 
     // A guide card leads to the guide preview — the explicit chain of
     // Journey 3 — and still starts nothing.
-    fireEvent.press(screen.getByTestId("nearby-card-offer-b1-guide"));
+    await fireEvent.press(screen.getByTestId("nearby-card-offer-b1-guide"));
     expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
     expect(env.audioPort.commands).toEqual([]);
   });
@@ -237,7 +242,7 @@ describe("Nearby surface (G07.01)", () => {
     // The Journey-3 chain: the place card opens the place detail — the tap
     // itself still starts no audio (R04; the teaser sounds only through the
     // detail's explicit Play).
-    fireEvent.press(place);
+    await fireEvent.press(place);
     expect(await screen.findByTestId("screen-Place detail")).toBeTruthy();
     // The place detail's facts come from the same validated projection; the
     // honest empty-teasers state without a bundles store.
@@ -252,7 +257,7 @@ describe("Nearby surface (G07.01)", () => {
     // Exactly one subscription start — no second owner (criterion 4).
     expect(startsOf(env.locationPort)).toEqual(["start 1"]);
 
-    rendered.unmount();
+    await rendered.unmount();
     expect(stopsOf(env.locationPort)).toEqual(["stop 1"]);
     expect(env.location.currentMode()).toBe("idle");
     expect(env.locationPort.activeSubscriptions()).toBe(0);
@@ -262,7 +267,7 @@ describe("Nearby surface (G07.01)", () => {
     // The catalog serves fine but its index file does not — the previous
     // valid truth is «прапаноў няма», never substitute content (21 §3.3).
     serve({ "catalog.json": CATALOG_TEXT });
-    renderRouter(withMapRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })), {
+    await renderRouter(withMapRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })), {
       initialUrl: "/map",
     });
     expect(await screen.findByTestId("nearby-degraded")).toBeTruthy();
@@ -273,7 +278,7 @@ describe("Nearby surface (G07.01)", () => {
 
   test("a catalog without the discovery pointer renders the honest empty state", async () => {
     serve({ "catalog.json": JSON.stringify({ catalog_schema_version: 1, routes: [] }) });
-    renderRouter(withMapRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })), {
+    await renderRouter(withMapRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })), {
       initialUrl: "/map",
     });
     await screen.findByTestId("nearby-mode");
@@ -304,7 +309,7 @@ describe("Nearby surface (G07.01)", () => {
     // A walk starts while the surface stays mounted (the stack keeps it): the
     // walk's Start carries the subscription over — no second start — and the
     // surface honestly shows the held state.
-    act(() => {
+    await act(() => {
       env.location.setMode("active-guide");
     });
     await waitFor(() => expect(screen.getByTestId("nearby-mode").props.children).toBe("Агляд"), {
@@ -330,7 +335,7 @@ describe("Nearby surface (G07.01)", () => {
     );
 
     // Closing the surface leaves the walk's subscription alone.
-    rendered.unmount();
+    await rendered.unmount();
     expect(stopsOf(env.locationPort)).toEqual([]);
     expect(env.location.currentMode()).toBe("active-guide");
     expect(env.locationPort.activeSubscriptions()).toBe(1);
@@ -356,7 +361,7 @@ describe("Nearby surface (G07.01)", () => {
 describe("Nearby loading indicator (UX 07)", () => {
   test("the loading state shows the ActivityIndicator next to the text", async () => {
     jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
-    renderRouter(
+    await renderRouter(
       withMapRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/map" },
     );
@@ -378,12 +383,12 @@ describe("Nearby type markers (UX 09)", () => {
       "nearby-type-guide",
     );
     expect(guideMarker.props.accessibilityLabel).toBe("Гід");
-    expect(within(guideMarker).UNSAFE_getByType(Svg).props.className).toBe("lucide lucide-route");
+    expect(getByType(guideMarker, "RNSVGSvgView").props.className).toBe("lucide lucide-route");
     const placeMarker = within(screen.getByTestId("nearby-card-offer-a1-place")).getByTestId(
       "nearby-type-place",
     );
     expect(placeMarker.props.accessibilityLabel).toBe("Месца");
-    expect(within(placeMarker).UNSAFE_getByType(Svg).props.className).toBe("lucide lucide-map-pin");
+    expect(getByType(placeMarker, "RNSVGSvgView").props.className).toBe("lucide lucide-map-pin");
   });
 });
 
@@ -393,7 +398,7 @@ describe("Nearby type markers (UX 09)", () => {
 // the grain turns this red.
 describe("Map paper grain (G06.10.e)", () => {
   test("the map surface never mounts the grain layer", async () => {
-    renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
+    await renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
     expect(await screen.findByTestId("screen-Map")).toBeTruthy();
     // Neither the a11y tree (default queries) nor the render tree carries
     // the layer on the map.
@@ -412,7 +417,7 @@ describe("Nearby UI-locale words", () => {
   test("without the service the chosen locale drives the title, the map note, the unavailable word and the back label", async () => {
     const services = createServices({});
     services.uiLocale.set("uk");
-    renderRouter(withMapRoutes(services), { initialUrl: "/map" });
+    await renderRouter(withMapRoutes(services), { initialUrl: "/map" });
     expect(await screen.findByTestId("screen-Map")).toBeTruthy();
     expect(screen.getByText("Поруч")).toBeTruthy();
     expect(screen.getByText("Карта міста з’явиться після рішення про тайли")).toBeTruthy();
@@ -429,7 +434,7 @@ describe("Nearby UI-locale words", () => {
     const { rendered, services } = await openNearby(env);
     expect(screen.getByText("Побач")).toBeTruthy();
     expect(startsOf(env.locationPort)).toEqual(["start 1"]);
-    act(() => {
+    await act(() => {
       services.uiLocale.set("en");
     });
     expect(screen.getByText("Nearby")).toBeTruthy();
@@ -442,7 +447,7 @@ describe("Nearby UI-locale words", () => {
     // The switch re-rendered the words in place — the arming discipline
     // keeps the one subscription, the close releases what the surface armed.
     expect(startsOf(env.locationPort)).toEqual(["start 1"]);
-    rendered.unmount();
+    await rendered.unmount();
     expect(stopsOf(env.locationPort)).toEqual(["stop 1"]);
   });
 
@@ -452,7 +457,7 @@ describe("Nearby UI-locale words", () => {
     expect(within(card).getByText("Двор сукнараў")).toBeTruthy();
     expect(within(card).getByText("Тэкст: be, en; аўдыё: —\n~20—30 хв")).toBeTruthy();
     expect(within(card).getByText("Бясплатна")).toBeTruthy();
-    act(() => {
+    await act(() => {
       services.uiLocale.set("uk");
     });
     // G21.17: the uk UI shows only the offers with published uk text — the
@@ -464,7 +469,7 @@ describe("Nearby UI-locale words", () => {
     expect(within(ukCard).getByText("Платно")).toBeTruthy();
     // ...and the authored content keeps its language.
     expect(within(ukCard).getByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
-    rendered.unmount();
+    await rendered.unmount();
   });
 });
 
@@ -476,10 +481,9 @@ describe("Nearby app lifecycle (G20.08)", () => {
       return { remove: () => { listeners.delete(listener); } };
     });
     return {
-      listeners,
-      change(state: AppStateStatus) {
+      listeners,      async change(state: AppStateStatus) {
         AppState.currentState = state;
-        act(() => { for (const listener of listeners) listener(state); });
+        await act(() => { for (const listener of listeners) listener(state); });
       },
     };
   }
@@ -489,16 +493,16 @@ describe("Nearby app lifecycle (G20.08)", () => {
     const env = makeRunSession();
     const { rendered } = await openNearby(env);
     expect(env.locationPort.activeSubscriptions()).toBe(1);
-    lifecycle.change("background");
+    await lifecycle.change("background");
     expect(env.locationPort.activeSubscriptions()).toBe(0);
     expect(env.location.currentMode()).toBe("idle");
-    act(() => { jest.advanceTimersByTime(1500); });
+    await act(() => { jest.advanceTimersByTime(1500); });
     expect(env.locationPort.activeSubscriptions()).toBe(0);
-    lifecycle.change("active");
-    lifecycle.change("active");
+    await lifecycle.change("active");
+    await lifecycle.change("active");
     expect(env.locationPort.activeSubscriptions()).toBe(1);
     expect(startsOf(env.locationPort)).toEqual(["start 1", "start 2"]);
-    rendered.unmount();
+    await rendered.unmount();
     expect(env.locationPort.activeSubscriptions()).toBe(0);
     expect(lifecycle.listeners.size).toBe(0);
   });
@@ -507,12 +511,12 @@ describe("Nearby app lifecycle (G20.08)", () => {
     const lifecycle = appStates();
     const env = makeRunSession();
     const { rendered } = await openNearby(env);
-    act(() => { env.location.setMode("active-guide"); });
-    lifecycle.change("background");
-    lifecycle.change("active");
+    await act(() => { env.location.setMode("active-guide"); });
+    await lifecycle.change("background");
+    await lifecycle.change("active");
     expect(env.location.currentMode()).toBe("active-guide");
     expect(env.locationPort.activeSubscriptions()).toBe(1);
-    rendered.unmount();
+    await rendered.unmount();
     expect(env.locationPort.activeSubscriptions()).toBe(1);
     expect(stopsOf(env.locationPort)).toEqual([]);
     expect(lifecycle.listeners.size).toBe(0);
@@ -524,8 +528,8 @@ describe("Nearby app lifecycle (G20.08)", () => {
     const env = makeRunSession();
     const { rendered } = await openNearby(env);
     const lateCallbacks = [...lifecycle.listeners];
-    rendered.unmount();
-    act(() => { for (const callback of lateCallbacks) callback("active"); });
+    await rendered.unmount();
+    await act(() => { for (const callback of lateCallbacks) callback("active"); });
     expect(env.locationPort.activeSubscriptions()).toBe(0);
     expect(env.location.currentMode()).toBe("idle");
   });
@@ -536,8 +540,8 @@ describe("Nearby app lifecycle (G20.08)", () => {
     const env = makeRunSession();
     const { rendered } = await openNearby(env);
     expect(env.locationPort.activeSubscriptions()).toBe(0);
-    lifecycle.change("active");
+    await lifecycle.change("active");
     expect(env.locationPort.activeSubscriptions()).toBe(1);
-    rendered.unmount();
+    await rendered.unmount();
   });
 });

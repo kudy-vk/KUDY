@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
   },
-  svg: StyleSheet.absoluteFillObject,
+  svg: StyleSheet.absoluteFill,
   glyph: {
     alignItems: "center",
     flex: 1,

@@ -29,7 +29,7 @@ npm ci
 | `npm run typecheck` | `tsc --noEmit` без вываду, exit 0 |
 | `npm test` | **зялёны прагон**: суіты `node --test` + кампанентныя тэсты маршрутаў `app/` праз jest-expo; поўны лік тестаў дае сама каманда — ён рухавы, звярай са свежым проганам, а не з гэтай табліцы |
 | `node docs/run-model/check-regressions.mjs` | **усе зарэгістрыраваныя мутацыі адхілены. Repository model unchanged.** (лік расце разам з мутацыямі — гл. вывод каманды) |
-| `npx expo install --check` | **Dependencies are up to date** (піны адпавядаюць чаканым дыяпазонам SDK 54) |
+| `npx expo install --check` | **Dependencies are up to date** (піны адпавядаюць чаканым дыяпазонам SDK 58 — #339) |
 | `npx expo-doctor` | **No issues detected!** — усе праверкі пройдуць; іх лік расце з SDK |
 | `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .` | **Found 0 clones** (0.00%) |
 

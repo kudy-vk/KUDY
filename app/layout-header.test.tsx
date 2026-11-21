@@ -17,7 +17,7 @@ jest.mock("expo-router", () => ({
 // this file's own Stack capture is the assertion target.
 import RootLayout from "./_layout";
 
-test("the production layout mounts the Stack with the native header off (AC1)", () => {
-  render(<RootLayout />);
+test("the production layout mounts the Stack with the native header off (AC1)", async () => {
+  await render(<RootLayout />);
   expect(stackProps.screenOptions?.headerShown).toBe(false);
 });

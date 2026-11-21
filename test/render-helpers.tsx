@@ -5,9 +5,10 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { jest } from "@jest/globals";
+import { expect, jest } from "@jest/globals";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import type { TestInstance } from "test-renderer";
 
 import { defaultEngineConfig } from "../core/engine/reducer";
 import { ServicesContext } from "../app/_layout";
@@ -173,4 +174,60 @@ export function makeRunSession(options?: {
     grantedTiers: () => granted,
   };
   return { session, locationPort, audioPort, location, advance: (ms: number) => (now = ms) };
+}
+
+// RNTL 14 removed the UNSAFE_* instance queries — the shared replacements
+// run the same contracts (getBy throws on !=1, query returns null/[],
+// getByProps matches a props subset) over a search root: the render
+// result's root TestInstance or any subtree instance (the `within(...)`
+// receiver). One copy — sibling variants are jscpd clones
+// (implementation-rules 3, 8).
+type Screenish = { root: TestInstance | null };
+type SearchRoot = TestInstance | Screenish;
+
+function searchRootOf(screen: SearchRoot): TestInstance | null {
+  return "queryAll" in screen ? screen : screen.root;
+}
+
+function allByType(screen: SearchRoot, type: unknown): TestInstance[] {
+  const root = searchRootOf(screen);
+  return root ? root.queryAll((instance) => instance.type === type, { includeSelf: true }) : [];
+}
+
+// The a11y-invisible contract of a decorative layer: RNTL 14's shared
+// config lifts the hidden-element default (test/rntl-configure.js), so the
+// "never in the accessibility tree" pin reads the element's own a11y-hidden
+// props instead of the old hidden-by-default negative query. One copy —
+// sibling blocks are jscpd clones (implementation-rules 3, 8).
+export function expectA11yHidden(element: { props: { accessible?: boolean; accessibilityElementsHidden?: boolean; importantForAccessibility?: string } }): void {
+  expect(element.props.importantForAccessibility).toBe("no-hide-descendants");
+  expect(element.props.accessibilityElementsHidden).toBe(true);
+  expect(element.props.accessible).toBe(false);
+}
+
+export function getByType(screen: SearchRoot, type: unknown): TestInstance {
+  const hits = allByType(screen, type);
+  if (hits.length !== 1) throw new Error(`getByType: expected exactly one instance, found ${hits.length}`);
+  return hits[0];
+}
+
+export function getAllByType(screen: SearchRoot, type: unknown): TestInstance[] {
+  return allByType(screen, type);
+}
+
+export function queryAllByType(screen: SearchRoot, type: unknown): TestInstance[] {
+  return allByType(screen, type);
+}
+
+export function queryByType(screen: SearchRoot, type: unknown): TestInstance | null {
+  return allByType(screen, type)[0] ?? null;
+}
+
+export function getByProps(screen: SearchRoot, props: Record<string, unknown>): TestInstance {
+  const entries = Object.entries(props);
+  const root = searchRootOf(screen);
+  const hits = root ? root.queryAll((instance) =>
+    entries.every(([key, value]) => instance.props[key] === value), { includeSelf: true }) : [];
+  if (hits.length !== 1) throw new Error(`getByProps: expected exactly one instance, found ${hits.length}`);
+  return hits[0];
 }

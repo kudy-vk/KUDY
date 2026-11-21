@@ -37,7 +37,9 @@ export function createExpoDownloadStore(fs: DownloadFileSystem, root: Directory)
     async writeFile(rel: string, bytes: Uint8Array): Promise<void> {
       const segments = segmentsOf(rel);
       if (segments === null) throw unsafe();
-      new File(root, ...segments).write(bytes);
+      // The 58 write resolves a promise — the rename tail must see the
+      // finished .part file (voka 352, key: unawaited-async-native-ops).
+      await new File(root, ...segments).write(bytes);
     },
     async rename(fromRel: string, toRel: string): Promise<void> {
       const from = segmentsOf(fromRel);
@@ -46,12 +48,27 @@ export function createExpoDownloadStore(fs: DownloadFileSystem, root: Directory)
       // The rename tail moves both files (staged .part entries) and whole
       // layer directories (the staging tree's commit) — the source kind
       // decides which class moves it.
+      // expo-file-system 58 changed the move semantics the store relies on
+      // (#339): the destination's parent must already exist ("the destination
+      // path does not exist" — the 54 build created intermediates), and a
+      // move onto an existing target needs MoveOptions.overwrite ("a file
+      // with the same name already exists" — the 54 build replaced it; the
+      // node adapter's plain fsRename replace is the contract). The normal
+      // activation path already empties the final layer through its deletion
+      // gate — overwrite covers the File→File re-commit path (a re-download
+      // over a live layer); a Directory→Directory move onto an existing
+      // folder nests instead of replacing (native getMoveOrCopyPath), which
+      // the activation deletion gate keeps unreachable. The 58 move is a
+      // suspend fun on Android — the returned promise must be awaited or the
+      // activation tail races the native queue (voka 352,
+      // key: unawaited-async-native-ops).
+      await new Directory(root, ...to.slice(0, -1)).create({ idempotent: true, intermediates: true });
       const file = new File(root, ...from);
       if (file.exists) {
-        file.move(new File(root, ...to));
+        await file.move(new File(root, ...to), { overwrite: true });
         return;
       }
-      new Directory(root, ...from).move(new Directory(root, ...to));
+      await new Directory(root, ...from).move(new Directory(root, ...to), { overwrite: true });
     },
     async remove(rel: string): Promise<void> {
       const segments = segmentsOf(rel);

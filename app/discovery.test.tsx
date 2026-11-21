@@ -52,8 +52,8 @@ const withDiscoveryRoutes = (layout: ReturnType<typeof layoutWith>) => ({
   "place/[id]": PlaceDetail,
 });
 
-function renderDiscovery(initialUrl: string) {
-  const analytics = analyticsPort();
+async function renderDiscovery(initialUrl: string) {
+  const analytics = await analyticsPort();
   // The mock installs before the services construct: the controllers boot at
   // construction (09 §4), so the first fetch must already be served.
   serve({ "catalog.json": CATALOG_TEXT, [CATALOG_POINTER]: INDEX_TEXT });
@@ -63,7 +63,7 @@ function renderDiscovery(initialUrl: string) {
     discoverySnapshot: memorySnapshot(),
     discoveryAnalytics: analytics,
   });
-  renderRouter(withDiscoveryRoutes(layoutWith(services)), { initialUrl });
+  await renderRouter(withDiscoveryRoutes(layoutWith(services)), { initialUrl });
   return analytics;
 }
 
@@ -73,7 +73,7 @@ afterEach(() => {
 
 describe("Discovery result surface", () => {
   test("exact results render alone, paid badge only, no fabricated price (D02/D06)", async () => {
-    const analytics = renderDiscovery("/discovery");
+    const analytics = await renderDiscovery("/discovery");
     expect(await screen.findByTestId("offer-card-offer-b1-guide")).toBeTruthy();
     expect(screen.getByTestId("offer-card-offer-a1-place")).toBeTruthy();
     // The en-only place cannot answer a be query — it never renders (20 §3).
@@ -93,7 +93,7 @@ describe("Discovery result surface", () => {
   });
 
   test("APR-04: filter selections and result links announce their role, name and state", async () => {
-    renderDiscovery("/discovery");
+    await renderDiscovery("/discovery");
     const offer = await screen.findByTestId("offer-card-offer-b1-guide");
     expect(offer.props.accessibilityRole).toBe("link");
     expect(offer.props.accessibilityLabel).toEqual(expect.any(String));
@@ -102,15 +102,15 @@ describe("Discovery result surface", () => {
     expect(time.props.accessibilityRole).toBe("button");
     expect(time.props.accessibilityLabel).toEqual(expect.any(String));
     expect(time.props.accessibilityState).toEqual({ selected: false });
-    fireEvent.press(time);
+    await fireEvent.press(time);
     expect(screen.getByTestId("time-60").props.accessibilityState).toEqual({ selected: true });
   });
 
   test("a narrow query shows the honest empty message with labeled alternatives (D04)", async () => {
-    renderDiscovery("/discovery");
+    await renderDiscovery("/discovery");
     await screen.findByTestId("offer-card-offer-b1-guide");
-    fireEvent.press(screen.getByTestId("time-60"));
-    fireEvent.press(screen.getByTestId("theme-theme-sea"));
+    await fireEvent.press(screen.getByTestId("time-60"));
+    await fireEvent.press(screen.getByTestId("theme-theme-sea"));
     expect(await screen.findByTestId("discovery-empty")).toBeTruthy();
     const alternatives = screen.getByTestId("discovery-alternatives");
     expect(alternatives).toBeTruthy();
@@ -121,24 +121,24 @@ describe("Discovery result surface", () => {
   });
 
   test("the Explore entry opens discovery and Back returns to the city (NAV9)", async () => {
-    renderDiscovery("/explore");
+    await renderDiscovery("/explore");
     expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("link-discovery"));
+    await fireEvent.press(screen.getByTestId("link-discovery"));
     expect(await screen.findByTestId("screen-Discovery")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-discovery-back"));
+    await fireEvent.press(screen.getByTestId("btn-discovery-back"));
     expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
   });
 
   test("a place result card opens the place surface (21 §3.1, NAV9)", async () => {
-    renderDiscovery("/discovery");
-    fireEvent.press(await screen.findByTestId("offer-card-offer-a1-place"));
+    await renderDiscovery("/discovery");
+    await fireEvent.press(await screen.findByTestId("offer-card-offer-a1-place"));
     expect(await screen.findByTestId("screen-Place detail")).toBeTruthy();
   });
 });
 
 describe("Collection card (падборка)", () => {
   test("members render with the mixed badge and the overlap note; no audio (NAV11/D07)", async () => {
-    renderDiscovery("/collection/collection-f1");
+    await renderDiscovery("/collection/collection-f1");
     expect(await screen.findByTestId("screen-Collection")).toBeTruthy();
     expect(screen.getByTestId("collection-overlap-note")).toBeTruthy();
     // The guide member is the same card that opens the same preview (D02).
@@ -155,13 +155,13 @@ describe("Collection card (падборка)", () => {
 
 describe("Font roles (issue #435)", () => {
   test("the rubric title renders the UI family — the display serif is for guide and story names only (canon §3)", async () => {
-    renderDiscovery("/discovery");
+    await renderDiscovery("/discovery");
     const title = await screen.findByText("Чым заняцца");
     expect(flatStyle(title).fontFamily).toBe(tokens.fontFamilyUi);
   });
 
   test("the collection title renders the UI family too (canon §3: a collection is not a guide or a story name)", async () => {
-    renderDiscovery("/collection/collection-f1");
+    await renderDiscovery("/collection/collection-f1");
     expect(await screen.findByTestId("screen-Collection")).toBeTruthy();
     // The guide member card may carry the same title string — every match
     // on this surface stays on the UI family; the display serif for the

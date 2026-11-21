@@ -49,7 +49,12 @@ for (const permission of [
 test('Android generation removes the unused recording service', () => {
   const services = manifest.application[0].service ?? [];
   const recording = services.find((entry) => entry.$['android:name'] === 'expo.modules.audio.service.AudioRecordingService');
-  assert.equal(recording?.$['tools:node'], 'remove');
+  // SDK 58 (#339): expo-audio 58 stopped emitting the unused recording
+  // service at all — the leak the tools:node="remove" fix plugged upstream.
+  // The contract holds by absence now; a re-added entry must still be removed.
+  if (recording) {
+    assert.equal(recording.$['tools:node'], 'remove');
+  }
   assert.ok(!services.some((entry) =>
     entry.$['android:name'] === 'expo.modules.audio.service.AudioControlsService' && entry.$['tools:node'] === 'remove'));
 });

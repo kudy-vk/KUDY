@@ -28,18 +28,18 @@ jest.mock("../contracts/ui-locales", () => {
 const opened = OPEN_UI_LOCALES as unknown as string[];
 
 describe("G21.46 (G21.42-chinese-language.md — G21.46): the Chinese catalogue renders at the picker", () => {
-  test("the native name of the opened code is the registry self-name, not a translation", () => {
+  test("the native name of the opened code is the registry self-name, not a translation", async () => {
     expect(opened).toContain("zh");
     expect(uiLocaleNativeName("zh")).toBe("\u7B80\u4F53\u4E2D\u6587");
   });
 
   test("picking the opened zh chip re-renders the honest-unavailable line in Chinese", async () => {
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
     const chip = screen.getByTestId("btn-ui-locale-zh");
     expect(screen.getByText("\u7B80\u4F53\u4E2D\u6587")).toBeTruthy();
-    fireEvent.press(chip);
+    await fireEvent.press(chip);
     expect(services.uiLocale.current()).toBe("zh");
     expect(await screen.findByText(uiStrings("zh").historyUnavailable)).toBeTruthy();
     expect(uiStrings("zh").historyUnavailable).toBe("\u5386\u53F2\u8BB0\u5F55\u4E0D\u53EF\u7528\u3002");
