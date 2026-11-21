@@ -271,7 +271,7 @@ describe("Nearby surface (G07.01)", () => {
       initialUrl: "/map",
     });
     expect(await screen.findByTestId("nearby-degraded")).toBeTruthy();
-    expect(screen.getByText("Індэкс прапаноў часова недаступны")).toBeTruthy();
+    expect(screen.getByText("Спіс месцаў часова недаступны")).toBeTruthy();
     expect(within(screen.getByTestId("nearby-message")).getByText("Прапановы пакуль не апублікаваны")).toBeTruthy();
     expect(screen.queryByTestId(/^nearby-card-/)).toBeNull();
   });

@@ -27,7 +27,7 @@ export default async function Stop({ params }: { params: Promise<{ locale: strin
   const { locale, route_id, stop_id } = await params;
   const ui = toUiLocale(locale);
   const strings = getUiStrings(ui);
-  if (!routeTextLocales(getContentRoot(), route_id).includes(ui)) {
+  if (!(routeTextLocales(getContentRoot(), route_id) as readonly string[]).includes(ui)) {
     return <TextUnavailablePage locale={ui} currentPath={`/guides/${route_id}/stops/${stop_id}`} strings={strings} />;
   }
   return (

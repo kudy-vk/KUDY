@@ -85,7 +85,7 @@ function guideOffer(index: DiscoveryIndex, routeId: string, version: string): Di
 }
 
 function pickText(text: LocalizedText | undefined, locale: UiLocale, dataPath: string): string {
-  const value = text?.[locale];
+  const value = (text as Partial<Record<UiLocale, string>> | undefined)?.[locale];
   if (!value) throw new SiteDataError('unknown-locale', dataPath);
   return value;
 }
@@ -105,7 +105,7 @@ export interface LanguageFact {
 function languageFacts(offer: DiscoveryOffer): LanguageFact[] {
   return advertisedTextLocales(offer.availability.text_locales).map((locale) => ({
     locale,
-    audio: offer.availability.audio_locales.includes(locale),
+    audio: (offer.availability.audio_locales as readonly string[]).includes(locale),
   }));
 }
 
@@ -147,7 +147,7 @@ function orderedOffers(index: DiscoveryIndex, routes: CatalogRouteEntry[]): { en
 // the build loudly (SiteDataError from pickText) — declared-but-corrupt stays
 // a distinct failure, not an empty page.
 function textAvailable(offer: DiscoveryOffer, locale: UiLocale): boolean {
-  return offer.availability.text_locales.includes(locale);
+  return (offer.availability.text_locales as readonly string[]).includes(locale);
 }
 
 export function readSiteCatalogPage(root: string, locale: UiLocale): CatalogPageData {
@@ -264,7 +264,7 @@ export function routeTextLocales(root: string, routeId: string): Locale[] {
 // becomes a sitemap path or an hreflang entry, and the prerendered route
 // family never gains it. One intersection point for every advertised surface.
 export function advertisedTextLocales(locales: readonly Locale[]): UiLocale[] {
-  return locales.filter((locale): locale is UiLocale => (uiLocales as readonly string[]).includes(locale));
+  return locales.filter((locale): locale is Locale & UiLocale => (uiLocales as readonly string[]).includes(locale));
 }
 
 export function readSiteGuidePage(root: string, locale: UiLocale, routeId: string): GuidePageData {

@@ -29,8 +29,13 @@ const TIME_CAP_WORDS = {
   cs: { 60: 'Do hodiny', 120: 'Do dvou hodin', 240: 'Půl dne' },
   sv: { 60: 'Upp till en timme', 120: 'Upp till två timmar', 240: 'Halva dagen' },
   zh: { 60: '\u6700\u591A\u4E00\u5C0F\u65F6', 120: '\u6700\u591A\u4E24\u5C0F\u65F6', 240: '\u534A\u5929' },
+  nb: { 60: 'Inntil én time', 120: 'Inntil to timer', 240: 'Halv dag' },
+  pl: { 60: 'Do 1 godz.', 120: 'Do 2 godz.', 240: 'Do 4 godz.' },
+  da: { 60: 'Op til 1 time', 120: 'Op til 2 timer', 240: 'Op til 4 timer' },
+  nl: { 60: 'Tot 1 uur', 120: 'Tot 2 uur', 240: 'Tot 4 uur' },
+  pt: { 60: 'Até 1 h', 120: 'Até 2 h', 240: 'Até 4 h' },
 };
-const TIME_CAP_BASE = { be: (v) => `Да ${v} хв`, en: (v) => `Up to ${v} min`, uk: (v) => `До ${v} хв`, de: (v) => `Bis zu ${v} Min.`, es: (v) => `Hasta ${v} min`, fr: (v) => `Jusqu'à ${v} min`, cs: (v) => `Do ${v} min`, sv: (v) => `Upp till ${v} min`, zh: (v) => `\u6700\u591A${v}\u5206\u949F` };
+const TIME_CAP_BASE = { be: (v) => `Да ${v} хв`, en: (v) => `Up to ${v} min`, uk: (v) => `До ${v} хв`, de: (v) => `Bis zu ${v} Min.`, es: (v) => `Hasta ${v} min`, fr: (v) => `Jusqu'à ${v} min`, cs: (v) => `Do ${v} min`, sv: (v) => `Upp till ${v} min`, zh: (v) => `\u6700\u591A${v}\u5206\u949F`, nb: (v) => `Inntil ${v} min`, pl: (v) => `Do ${v} min`, da: (v) => `Op til ${v} min`, nl: (v) => `Tot ${v} min`, pt: (v) => `Até ${v} min` };
 
 const SINGLE_NUMBER_IDS = ['stopsCount', 'freeStopsCount', 'heardCount', 'stopNumber', 'sizeMb', 'durationMinutes'];
 

@@ -403,7 +403,7 @@
     },
     {
       "id": "native.chrome.heardCount",
-      "source": "праслышана: ${count}",
+      "source": "праслухана: ${count}",
       "context": "Лічба праслуханых гісторый у радку гісторыі",
       "format": "template",
       "parameters": [
@@ -415,7 +415,7 @@
       "migratedFrom": [
         "components/ui-strings.ts#heardCount"
       ],
-      "sourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a"
+      "sourceHash": "ff2d4afc02449f0b6bb9f286a746af513120cc97cdb3c085975b1e8308f40c39"
     },
     {
       "id": "native.chrome.historyUnavailable",
@@ -502,7 +502,7 @@
     },
     {
       "id": "native.chrome.liveRowLine",
-      "source": "${state} — з ${day} — праслышана: ${heard}",
+      "source": "${state} — з ${day} — праслухана: ${heard}",
       "context": "Цэлы радок жывой прагулкі ў гісторыі: адзін сказ на мову, без цвёрдага прыназоўніка",
       "format": "template",
       "parameters": [
@@ -522,7 +522,7 @@
       "migratedFrom": [
         "components/ui-strings.ts#liveRowLine"
       ],
-      "sourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081"
+      "sourceHash": "c267994c436404f64e9c367301b8f823a90290e91c6178ef73e68ecb8cc8972f"
     },
     {
       "id": "native.chrome.loading",
@@ -584,14 +584,14 @@
     },
     {
       "id": "native.chrome.noPastWalks",
-      "source": "Папярэдніх праходаў няма",
+      "source": "Папярэдніх прагулак няма",
       "context": "Радок адсутнасці папярэдніх праходаў",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#noPastWalks"
       ],
-      "sourceHash": "0bfbeda8ef7061ce1ba34816528ba7e430b242d9b3f048e4865475cdf7ba8ebf"
+      "sourceHash": "7559f72c69896c0301dd5a53168470345b21e1bf4b748ab570c3b3ba07598e80"
     },
     {
       "id": "native.chrome.notFoundHint",
@@ -628,7 +628,7 @@
     },
     {
       "id": "native.chrome.pastRowLine",
-      "source": "${startedDay} — ${finishedDay} — праслышана: ${heard}",
+      "source": "${startedDay} — ${finishedDay} — праслухана: ${heard}",
       "context": "Цэлы радок завершанай прагулкі: дзень пачатку, дзень канца (ці злучок), праслышана",
       "format": "template",
       "parameters": [
@@ -649,29 +649,29 @@
       "migratedFrom": [
         "components/ui-strings.ts#pastRowLine"
       ],
-      "sourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa"
+      "sourceHash": "6c2876489cb36d1351d5b778ea56a05ba5e0e5e9864722c7ff70e373ff9ae792"
     },
     {
       "id": "native.chrome.pastWalks",
-      "source": "Папярэднія праходы",
+      "source": "Гісторыя прагулак",
       "context": "Загаловак секцыі папярэдніх праходаў",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#pastWalks"
       ],
-      "sourceHash": "639c686aee401287c7c2224cfce2606da6a128852a23771f4fab41e4275081d8"
+      "sourceHash": "7c6f8c5a533c4063b62ad380e8f6f6ef7cbfcbec926f70dd3afb8ffcf7c24fa5"
     },
     {
       "id": "native.chrome.previewUnavailable",
-      "source": "Прэв'ю часова недаступны",
+      "source": "Апісанне часова недаступнае",
       "context": "Радок стану: прэв'ю часова недаступнае",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#previewUnavailable"
       ],
-      "sourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808"
+      "sourceHash": "2785ba6555e638479293b96bcc23cdb4171980c5e67cf1fd88100483467c5b99"
     },
     {
       "id": "native.chrome.previewTextUnavailable",
@@ -977,14 +977,14 @@
     },
     {
       "id": "native.chrome.validCache",
-      "source": "Папярэдні валідны кэш",
+      "source": "Захаваная версія",
       "context": "Радок стану: паказ папярэдняга валіднага кэша",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#validCache"
       ],
-      "sourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0"
+      "sourceHash": "291634ca13514b047f70caaf3a45f1681e9dc0b143a56053000b375a63d5a51d"
     },
     {
       "id": "native.chrome.walk",
@@ -1143,14 +1143,14 @@
     },
     {
       "id": "native.nearby.indexDegraded",
-      "source": "Індэкс прапаноў часова недаступны",
+      "source": "Спіс месцаў часова недаступны",
       "context": "Радок дэградацыі: індэкс прапаноў часова недаступны",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/nearby/nearbySurfaceController.ts#indexDegraded"
       ],
-      "sourceHash": "c36e91739b7d13aaae6a9e2a1bb1892c27935ef285c05dfc35384667a87945bf"
+      "sourceHash": "58eb75feb03c06d456566eaa57275656f329303625349f7db6703e99eecaa8cb"
     },
     {
       "id": "native.nearby.loading",
@@ -1435,25 +1435,25 @@
     },
     {
       "id": "native.place.guideLink",
-      "source": "Прэв'ю гіда",
+      "source": "Да гіда",
       "context": "Ссылка на прэв'ю гіда з карткі месца",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/place/placeDetailController.ts#guideLink"
       ],
-      "sourceHash": "6689ad59dbaf7e5400f58ed1c55c89ef10dfca451dc4c1d9e4d9d257200211d5"
+      "sourceHash": "6c9954c45d3ffa6530fde90ddea68fda1977b2eeab3135161dc01424889a23e8"
     },
     {
       "id": "native.place.guideLinkHint",
-      "source": "Адкрывае прэв'ю гіда, не запуск прагулкі.",
+      "source": "Адкрывае старонку гіда, не запускае прагулку.",
       "context": "Падказка ссылки: адкрывае прэв'ю, не запуск прагулкі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/place/placeDetailController.ts#guideLinkHint"
       ],
-      "sourceHash": "2d8e625a33b415b8a144097cf43e9b9b7566c68f36fc80fdf472b01d4ca79714"
+      "sourceHash": "ad354158be88471453906c9ab3a942fe9b270455828f1ba663dc4128efb1ec3d"
     },
     {
       "id": "native.place.loading",
@@ -1479,14 +1479,14 @@
     },
     {
       "id": "native.place.noFacts",
-      "source": "Месца пакуль не апублікавана ў каталога",
+      "source": "Месца пакуль не апублікавана ў каталогу",
       "context": "Радок стану: месца пакуль не апублікавана ў каталога",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/place/placeDetailController.ts#noFacts"
       ],
-      "sourceHash": "6a837f315b4fc07df8e72f31ac5802801e3e69123b032eb3ddbe6990ef5ec9be"
+      "sourceHash": "382b28f3ffebbd1b00f8b6430012a33190779c561cdc93215d07d9f44505cf92"
     },
     {
       "id": "native.place.nowPlaying",
@@ -2165,25 +2165,25 @@
     },
     {
       "id": "native.run.reasonText.run#recovery-failed",
-      "source": "Збой чытання жывой сесіі.",
+      "source": "Не ўдалося аднавіць прагулку.",
       "context": "Адмова прагулкі: збой чытання жывой сесіі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#reasonText.run#recovery-failed"
       ],
-      "sourceHash": "dc38ee4a64a7e63371d24d15a8811bec2db3a5cc769f78da944fe0c00d11f75b"
+      "sourceHash": "976c79936ade97120cd07ca6d1368ab629d5c26f8724a81a48e69f90ac154597"
     },
     {
       "id": "native.run.reasonText.run#unsafe-route-id",
-      "source": "Няверны ідэнтыфікатар маршруту.",
+      "source": "Маршрут не знойдзены.",
       "context": "Адмова прагулкі: няверны ідэнтыфікатар маршруту",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#reasonText.run#unsafe-route-id"
       ],
-      "sourceHash": "d340822c39b89b886e5951a52bc64b20fca3d6f84871c9e1e5a862235c7b033c"
+      "sourceHash": "cb4751678b50fa4cf132b49084aeb97a084c62bbf798fe3729df5d3aec2ca002"
     },
     {
       "id": "native.run.reasonText.switch-no-live-session",
@@ -2220,14 +2220,14 @@
     },
     {
       "id": "native.run.recenter",
-      "source": "Да майго месцазнаходжання",
+      "source": "Дзе я",
       "context": "Даступная назва кнопкі вяртання камеры карты да бягучай пазіцыі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#recenter"
       ],
-      "sourceHash": "7c9707a52b4598b4df1427e7609582b876d93d53e78eefc086b2ea6e9d0574cc"
+      "sourceHash": "b5b84def8abe1037ea29aa054670088681f5afd07ac471dee632012442c222f5"
     },
     {
       "id": "native.run.resume",
@@ -2330,14 +2330,14 @@
     },
     {
       "id": "native.run.tierUnavailable",
-      "source": "Дадатковы ярус недаступны ў адноўленай сесіі",
+      "source": "Дадатковыя гісторыі недаступныя ў працягнутай прагулцы",
       "context": "Заўвага: дадатковы ярус недаступны ў адноўленай сесіі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#tierUnavailable"
       ],
-      "sourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c"
+      "sourceHash": "8c9dc1e82b4546650353fea0765261436353977d6d3ac51ffd7753bacd918a0a"
     },
     {
       "id": "native.run.transcript",
@@ -2891,11 +2891,11 @@
     },
     {
       "id": "web.ui.textUnavailableBody",
-      "source": "Гэты гід не мае тэксту на выбранай мове інтэрфейсу. Яго мовы тэксту паказаныя ў спісе моваў у каталоге.",
+      "source": "Гэты гід не мае тэксту на выбранай мове інтэрфейсу. Яго мовы тэксту паказаныя ў спісе моваў у каталогу.",
       "context": "Тэкст старонкі недаступнасці: без падмены змесціва, адсылае да факт-радка моваў гіда (G21.22)",
       "format": "plain",
       "parameters": [],
-      "sourceHash": "07a46c3e0babecfe136297ae2458d4fd0a86e5b2425cead4f1372ac6edb59953",
+      "sourceHash": "063349384a5e26e4663a357f1e865d1e06f4ae40d3ed1ce067827dbe546945f7",
       "migratedFrom": [
         "web/lib/i18n/be.ts#textUnavailableBody"
       ]
@@ -2924,14 +2924,14 @@
     },
     {
       "id": "native.feedback.formTitleGuide",
-      "source": "Як табе гайд?",
+      "source": "Як табе гід?",
       "context": "Пытанне формы водгуку гіда (20 §7)",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/useFeedbackController.ts#formTitleGuide"
       ],
-      "sourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca"
+      "sourceHash": "37bf40d90ae7ffcfa8db4f8d2578b3a5b5a816192e0807ab5a80f93a45924ada"
     },
     {
       "id": "native.feedback.formTitlePlace",
@@ -3136,25 +3136,25 @@
     },
     {
       "id": "native.feedback.inviteTitle",
-      "source": "Як табе гайд? Можна ацаніць — гэта неабавязкова.",
+      "source": "Як табе гід? Можна ацаніць — гэта неабавязкова.",
       "context": "Ціхае запрашэнне пасля End: не мадальнае, адзін раз за сесію",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/useFeedbackController.ts#inviteTitle"
       ],
-      "sourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192"
+      "sourceHash": "cdd3f9953e3d90e1cf30284efbbf338b45130cfdd749be59ac09467e880dc99e"
     },
     {
       "id": "native.feedback.inviteRate",
-      "source": "Ацаніць гайд",
+      "source": "Ацаніць гід",
       "context": "Дзеянне запрашэння адкрывае форму",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/useFeedbackController.ts#inviteRate"
       ],
-      "sourceHash": "bff14adc9bcb8d672c62ee6ff83e10e26542a927104e7a053ac287c5bda11c3f"
+      "sourceHash": "4e5c57ebf0f7bca4881296e7227e000c4035735dd0573b5444dac71598203f37"
     },
     {
       "id": "native.feedback.inviteDismiss",
@@ -3515,36 +3515,36 @@
     },
     {
       "id": "native.aboutCity.tab.transport",
-      "source": "Транспарт і білеты",
+      "source": "Транспарт",
       "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#tab.transport"
       ],
-      "sourceHash": "623d23746d422df0872c9031667062f4474f29e0290655ab47e9a403cc8e0378"
+      "sourceHash": "4923c44c4b711de07381d032958e4fa2058e1cd9675accbcd2f649dd780fbbce"
     },
     {
       "id": "native.aboutCity.tab.city",
-      "source": "Дзе што ў горадзе",
+      "source": "Раёны і карта",
       "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#tab.city"
       ],
-      "sourceHash": "38dde98a5b0db874b8e1a8072115f29aa8e134fca7429a6b7f22837e30debe24"
+      "sourceHash": "f7326b23edb8f688dd8acc20a13473bec8a572122b08834f35c74e40b505842e"
     },
     {
       "id": "native.aboutCity.tab.food",
-      "source": "Ежа і аплата",
+      "source": "Ежа і грошы",
       "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#tab.food"
       ],
-      "sourceHash": "fe28625e62075bfbff1038013f622cb199462c1dd47bc308925364f3e9e9ff96"
+      "sourceHash": "b933ddbadc01214fc6a877df8e3cbb7bc7f34e5c653dc1e26472699c9b2bb8e5"
     },
     {
       "id": "native.aboutCity.head.airport",

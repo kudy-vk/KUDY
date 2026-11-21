@@ -57,7 +57,7 @@ function toMetadata(meta: CardMeta): Metadata {
 
 export function guidePageMetadata(root: string, locale: UiLocale, routeId: string): Metadata {
   const textLocales = routeTextLocales(root, routeId);
-  if (!textLocales.includes(locale)) return unavailablePageMetadata(locale);
+  if (!(textLocales as readonly string[]).includes(locale)) return unavailablePageMetadata(locale);
   return {
     ...toMetadata(guideCardMeta(readSiteGuidePage(root, locale, routeId))),
     alternates: pageAlternates(locale, `/guides/${routeId}`, advertisedTextLocales(textLocales)),
@@ -66,7 +66,7 @@ export function guidePageMetadata(root: string, locale: UiLocale, routeId: strin
 
 export function stopPageMetadata(root: string, locale: UiLocale, routeId: string, stopId: string): Metadata {
   const textLocales = routeTextLocales(root, routeId);
-  if (!textLocales.includes(locale)) return unavailablePageMetadata(locale);
+  if (!(textLocales as readonly string[]).includes(locale)) return unavailablePageMetadata(locale);
   return {
     ...toMetadata(stopCardMeta(readSiteStopPage(root, locale, routeId, stopId))),
     alternates: pageAlternates(locale, `/guides/${routeId}/stops/${stopId}`, advertisedTextLocales(textLocales)),

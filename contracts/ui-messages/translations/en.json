@@ -18,7 +18,7 @@
     },
     {
       "id": "native.chrome.aboutCity",
-      "value": "About the city",
+      "value": "City guide",
       "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
       "review": {
         "outcome": "approved",
@@ -289,9 +289,10 @@
     {
       "id": "native.chrome.heardCount",
       "value": "heard: ${count}",
-      "reviewedSourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a",
+      "reviewedSourceHash": "ff2d4afc02449f0b6bb9f286a746af513120cc97cdb3c085975b1e8308f40c39",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад захаваны пасля паўторнай праверкі."
       }
     },
     {
@@ -353,9 +354,10 @@
     {
       "id": "native.chrome.liveRowLine",
       "value": "${state} — from ${day} — heard: ${heard}",
-      "reviewedSourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081",
+      "reviewedSourceHash": "c267994c436404f64e9c367301b8f823a90290e91c6178ef73e68ecb8cc8972f",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад і параметры правераныя."
       }
     },
     {
@@ -401,9 +403,10 @@
     {
       "id": "native.chrome.noPastWalks",
       "value": "No previous walks",
-      "reviewedSourceHash": "0bfbeda8ef7061ce1ba34816528ba7e430b242d9b3f048e4865475cdf7ba8ebf",
+      "reviewedSourceHash": "7559f72c69896c0301dd5a53168470345b21e1bf4b748ab570c3b3ba07598e80",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Узгоднена са зменай тэрміна «прагулкі» ў крыніцы; сэнс і тон захаваныя."
       }
     },
     {
@@ -433,25 +436,28 @@
     {
       "id": "native.chrome.pastRowLine",
       "value": "${startedDay} — ${finishedDay} — heard: ${heard}",
-      "reviewedSourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa",
+      "reviewedSourceHash": "6c2876489cb36d1351d5b778ea56a05ba5e0e5e9864722c7ff70e373ff9ae792",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад і параметры правераныя."
       }
     },
     {
       "id": "native.chrome.pastWalks",
-      "value": "Previous walks",
-      "reviewedSourceHash": "639c686aee401287c7c2224cfce2606da6a128852a23771f4fab41e4275081d8",
+      "value": "Walk history",
+      "reviewedSourceHash": "7c6f8c5a533c4063b62ad380e8f6f6ef7cbfcbec926f70dd3afb8ffcf7c24fa5",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Абноўлена паводле канону гісторыі прагулак (замест літаральнага «папярэднія праходы»)."
       }
     },
     {
       "id": "native.chrome.previewUnavailable",
-      "value": "Preview temporarily unavailable",
-      "reviewedSourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808",
+      "value": "Description temporarily unavailable",
+      "reviewedSourceHash": "2785ba6555e638479293b96bcc23cdb4171980c5e67cf1fd88100483467c5b99",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Прыбрана тэхнічная калька «прэв'ю» на карысць натуральнага апісання гіда."
       }
     },
     {
@@ -645,10 +651,11 @@
     },
     {
       "id": "native.chrome.validCache",
-      "value": "Previous valid cache",
-      "reviewedSourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0",
+      "value": "Saved version",
+      "reviewedSourceHash": "291634ca13514b047f70caaf3a45f1681e9dc0b143a56053000b375a63d5a51d",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Прыбраны інжынерны жаргон «валідны кэш» на карысць зразумелай турысту «захаванай версіі»."
       }
     },
     {
@@ -759,10 +766,11 @@
     },
     {
       "id": "native.nearby.indexDegraded",
-      "value": "The offers index is temporarily unavailable",
-      "reviewedSourceHash": "c36e91739b7d13aaae6a9e2a1bb1892c27935ef285c05dfc35384667a87945bf",
+      "value": "Places list temporarily unavailable",
+      "reviewedSourceHash": "58eb75feb03c06d456566eaa57275656f329303625349f7db6703e99eecaa8cb",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Прыбраны тэхнічны тэрмін «індэкс прапаноў» на карысць жывога «спіса месцаў»."
       }
     },
     {
@@ -967,18 +975,20 @@
     },
     {
       "id": "native.place.guideLink",
-      "value": "Guide preview",
-      "reviewedSourceHash": "6689ad59dbaf7e5400f58ed1c55c89ef10dfca451dc4c1d9e4d9d257200211d5",
+      "value": "View guide",
+      "reviewedSourceHash": "6c9954c45d3ffa6530fde90ddea68fda1977b2eeab3135161dc01424889a23e8",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Скарочаная і натуральная кнопка пераходу да старонкі гіда для вузкіх экранаў."
       }
     },
     {
       "id": "native.place.guideLinkHint",
-      "value": "Opens the guide's preview, never a walk start.",
-      "reviewedSourceHash": "2d8e625a33b415b8a144097cf43e9b9b7566c68f36fc80fdf472b01d4ca79714",
+      "value": "Opens the guide page, never starts a walk.",
+      "reviewedSourceHash": "ad354158be88471453906c9ab3a942fe9b270455828f1ba663dc4128efb1ec3d",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Абноўлена падказка кнопкі пераходу да старонкі гіда без слова «прэв'ю»."
       }
     },
     {
@@ -1000,9 +1010,10 @@
     {
       "id": "native.place.noFacts",
       "value": "The place is not published in the catalog yet",
-      "reviewedSourceHash": "6a837f315b4fc07df8e72f31ac5802801e3e69123b032eb3ddbe6990ef5ec9be",
+      "reviewedSourceHash": "382b28f3ffebbd1b00f8b6430012a33190779c561cdc93215d07d9f44505cf92",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Граматычная праўка склону ў крыніцы (у каталогу); пераклад правераны."
       }
     },
     {
@@ -1493,18 +1504,20 @@
     },
     {
       "id": "native.run.reasonText.run#recovery-failed",
-      "value": "Live session read failed.",
-      "reviewedSourceHash": "dc38ee4a64a7e63371d24d15a8811bec2db3a5cc769f78da944fe0c00d11f75b",
+      "value": "Could not restore the walk.",
+      "reviewedSourceHash": "976c79936ade97120cd07ca6d1368ab629d5c26f8724a81a48e69f90ac154597",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Чалавечае паведамленне пра памылку аднаўлення прагулкі без тэхнічнага жаргону."
       }
     },
     {
       "id": "native.run.reasonText.run#unsafe-route-id",
-      "value": "Invalid route id.",
-      "reviewedSourceHash": "d340822c39b89b886e5951a52bc64b20fca3d6f84871c9e1e5a862235c7b033c",
+      "value": "Route not found.",
+      "reviewedSourceHash": "cb4751678b50fa4cf132b49084aeb97a084c62bbf798fe3729df5d3aec2ca002",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Чалавечае паведамленне «Маршрут не знойдзены» замест тэхнічнага «ідэнтыфікатар маршруту»."
       }
     },
     {
@@ -1534,11 +1547,11 @@
     },
     {
       "id": "native.run.recenter",
-      "value": "Center on my location",
-      "reviewedSourceHash": "7c9707a52b4598b4df1427e7609582b876d93d53e78eefc086b2ea6e9d0574cc",
+      "value": "My location",
+      "reviewedSourceHash": "b5b84def8abe1037ea29aa054670088681f5afd07ac471dee632012442c222f5",
       "review": {
         "outcome": "approved",
-        "note": "New accessibility label for the map recenter button; checked against the Belarusian source in this change."
+        "note": "Скарочаны подпіс кнопкі геалакацыі, каб пазбегнуць абрэзкі на вузкіх экранах."
       }
     },
     {
@@ -1616,10 +1629,11 @@
     },
     {
       "id": "native.run.tierUnavailable",
-      "value": "Extended tier unavailable in the restored session",
-      "reviewedSourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c",
+      "value": "Extended stories unavailable in this resumed walk",
+      "reviewedSourceHash": "8c9dc1e82b4546650353fea0765261436353977d6d3ac51ffd7753bacd918a0a",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Прыбраны тэхнічны тэрмін «ярус» на карысць «дадатковых гісторый»."
       }
     },
     {
@@ -2032,10 +2046,10 @@
     {
       "id": "web.ui.textUnavailableBody",
       "value": "This guide has no text in the selected interface language. Its text languages are listed in the language list in the catalog.",
-      "reviewedSourceHash": "07a46c3e0babecfe136297ae2458d4fd0a86e5b2425cead4f1372ac6edb59953",
+      "reviewedSourceHash": "063349384a5e26e4663a357f1e865d1e06f4ae40d3ed1ce067827dbe546945f7",
       "review": {
         "outcome": "approved",
-        "note": "аўтарскі пераклад у задачы G21.22 (#554) з беларускага арыгіналу source.json; сэнс і рэгістр сям'і (du/tú/tu/ty) правераныя; тэрмін guide — па вэб-наборы гэтай мовы"
+        "note": "Граматычная праўка меснага склону ў крыніцы (у каталогу); пераклад правераны."
       }
     },
     {
@@ -2057,9 +2071,10 @@
     {
       "id": "native.feedback.formTitleGuide",
       "value": "How was the guide?",
-      "reviewedSourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca",
+      "reviewedSourceHash": "37bf40d90ae7ffcfa8db4f8d2578b3a5b5a816192e0807ab5a80f93a45924ada",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
@@ -2201,17 +2216,19 @@
     {
       "id": "native.feedback.inviteTitle",
       "value": "How was the guide? You can rate it — it is optional.",
-      "reviewedSourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192",
+      "reviewedSourceHash": "cdd3f9953e3d90e1cf30284efbbf338b45130cfdd749be59ac09467e880dc99e",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
       "id": "native.feedback.inviteRate",
       "value": "Rate the guide",
-      "reviewedSourceHash": "bff14adc9bcb8d672c62ee6ff83e10e26542a927104e7a053ac287c5bda11c3f",
+      "reviewedSourceHash": "4e5c57ebf0f7bca4881296e7227e000c4035735dd0573b5444dac71598203f37",
       "review": {
-        "outcome": "approved"
+        "outcome": "approved",
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
@@ -2479,29 +2496,29 @@
     },
     {
       "id": "native.aboutCity.tab.transport",
-      "value": "Transport and tickets",
-      "reviewedSourceHash": "623d23746d422df0872c9031667062f4474f29e0290655ab47e9a403cc8e0378",
+      "value": "Transport",
+      "reviewedSourceHash": "4923c44c4b711de07381d032958e4fa2058e1cd9675accbcd2f649dd780fbbce",
       "review": {
         "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+        "note": "Скарочаная назва ўкладкі кола даведніка для вузкіх экранаў і буйнога шрыфту."
       }
     },
     {
       "id": "native.aboutCity.tab.city",
-      "value": "What’s where",
-      "reviewedSourceHash": "38dde98a5b0db874b8e1a8072115f29aa8e134fca7429a6b7f22837e30debe24",
+      "value": "City map",
+      "reviewedSourceHash": "f7326b23edb8f688dd8acc20a13473bec8a572122b08834f35c74e40b505842e",
       "review": {
         "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+        "note": "Больш ёмістая назва ўкладкі карты і раёнаў горада на коле даведніка."
       }
     },
     {
       "id": "native.aboutCity.tab.food",
-      "value": "Food and payment",
-      "reviewedSourceHash": "fe28625e62075bfbff1038013f622cb199462c1dd47bc308925364f3e9e9ff96",
+      "value": "Food & pay",
+      "reviewedSourceHash": "b933ddbadc01214fc6a877df8e3cbb7bc7f34e5c653dc1e26472699c9b2bb8e5",
       "review": {
         "outcome": "approved",
-        "note": "Тэкст перанесены даслоўна з узгодненага ўладальнікам макета «Пра горад» (рашэнні L1 і M9, #202, узгоднена 2026-11-12); набор слоў — about-words-en.mjs макета."
+        "note": "Скарочаная назва ўкладкі ежы і аплаты на коле даведніка."
       }
     },
     {

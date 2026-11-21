@@ -30,7 +30,7 @@ export function guideHintStrings(locale: string): GuideHintStrings {
   // fallback (uk-release-scope §6.4) until its words are authored (G21.19),
   // de renders its own catalogue (G21.10 — 2026-10-03-single-source-translations.md); es too (G21.11,
   // same record); fr too (G21.12, same record).
-  return locale === "zh" ? GUIDE_HINT_STRINGS.zh : locale === "sv" ? GUIDE_HINT_STRINGS.sv : locale === "cs" ? GUIDE_HINT_STRINGS.cs : locale === "es" ? GUIDE_HINT_STRINGS.es : locale === "fr" ? GUIDE_HINT_STRINGS.fr : locale === "en" ? GUIDE_HINT_STRINGS.en : locale === "de" ? GUIDE_HINT_STRINGS.de : GUIDE_HINT_STRINGS.be;
+  return locale === "pt" ? GUIDE_HINT_STRINGS.pt : locale === "nl" ? GUIDE_HINT_STRINGS.nl : locale === "da" ? GUIDE_HINT_STRINGS.da : locale === "pl" ? GUIDE_HINT_STRINGS.pl : locale === "nb" ? GUIDE_HINT_STRINGS.nb : locale === "zh" ? GUIDE_HINT_STRINGS.zh : locale === "sv" ? GUIDE_HINT_STRINGS.sv : locale === "cs" ? GUIDE_HINT_STRINGS.cs : locale === "es" ? GUIDE_HINT_STRINGS.es : locale === "fr" ? GUIDE_HINT_STRINGS.fr : locale === "en" ? GUIDE_HINT_STRINGS.en : locale === "de" ? GUIDE_HINT_STRINGS.de : GUIDE_HINT_STRINGS.be;
 }
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({

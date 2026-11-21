@@ -512,10 +512,10 @@ test('BE/EN: the surface locale is the walk pin, the words follow it', async () 
   assert.equal(runMapStrings('en').status.played, 'played');
   // The allowlist-fallback probe moved de→es→fr→cs→sv as G21.10,
   // G21.11, G21.12 and G21.13 (2026-10-03-single-source-translations.md) landed their catalogues — and
-  // G21.14 lands sv, the last planned code. All eight requested codes
-  // are complete, so the probe rides an unregistered code (pl); sv asserts
-  // its own word beside it.
-  assert.equal(runMapStrings('pl').status.played, 'праслухана');
+  // G21.14 lands sv and #376 lands pl. The probe rides an unregistered code
+  // (eo), while pl and sv assert their own words beside it.
+  assert.equal(runMapStrings('eo').status.played, 'праслухана');
+  assert.equal(runMapStrings('pl').status.played, 'wysłuchany');
   assert.equal(runMapStrings('cs').status.played, 'vyslechnuté');
   assert.equal(runMapStrings('sv').status.played, 'lyssnat');
   assert.equal(runMapStrings('en').reasonText['package-incomplete'], 'Guide incomplete.');

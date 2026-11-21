@@ -357,10 +357,10 @@
     {
       "id": "native.chrome.heardCount",
       "value": "\u5DF2\u6536\u542C\uFF1A${count}",
-      "reviewedSourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a",
+      "reviewedSourceHash": "ff2d4afc02449f0b6bb9f286a746af513120cc97cdb3c085975b1e8308f40c39",
       "review": {
         "outcome": "approved",
-        "note": "лічба праслуханых гісторый; дзеяслоў-вынік \u5DF2\u542C без змены роду · Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C → \u5DF2\u6536\u542C: адзін сэнс «праслухана» мае адно слова ва ўсім наборы (як native.run.status.played)"
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад захаваны пасля паўторнай праверкі."
       }
     },
     {
@@ -402,10 +402,10 @@
     {
       "id": "native.chrome.liveRowLine",
       "value": "${state} — \u4ECE${day}\u8D77 — \u5DF2\u6536\u542C\uFF1A${heard}",
-      "reviewedSourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081",
+      "reviewedSourceHash": "c267994c436404f64e9c367301b8f823a90290e91c6178ef73e68ecb8cc8972f",
       "review": {
         "outcome": "approved",
-        "note": "цэлы радок жывой прагулкі; працяжнікі і адсутнасць прыназоўніка захаваныя · Незалежнае рэв'ю (2026-10-17): вернутая прыназоўнікавая сувязь \u4ECE…\u8D77 паводле be «з ${day}» / en «from» (без яе дзень чытаўся як асобная пазнака); \u5DF2\u542C → \u5DF2\u6536\u542C — адно слова на адзін сэнс ва ўсім наборы"
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад і параметры правераныя."
       }
     },
     {
@@ -456,10 +456,10 @@
     {
       "id": "native.chrome.noPastWalks",
       "value": "\u6CA1\u6709\u5386\u53F2\u6563\u6B65",
-      "reviewedSourceHash": "0bfbeda8ef7061ce1ba34816528ba7e430b242d9b3f048e4865475cdf7ba8ebf",
+      "reviewedSourceHash": "7559f72c69896c0301dd5a53168470345b21e1bf4b748ab570c3b3ba07598e80",
       "review": {
         "outcome": "approved",
-        "note": "радок адсутнасці папярэдніх праходаў"
+        "note": "Узгоднена са зменай тэрміна «прагулкі» ў крыніцы; сэнс і тон захаваныя."
       }
     },
     {
@@ -492,28 +492,28 @@
     {
       "id": "native.chrome.pastRowLine",
       "value": "${startedDay} — ${finishedDay} — \u5DF2\u6536\u542C\uFF1A${heard}",
-      "reviewedSourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa",
+      "reviewedSourceHash": "6c2876489cb36d1351d5b778ea56a05ba5e0e5e9864722c7ff70e373ff9ae792",
       "review": {
         "outcome": "approved",
-        "note": "цэлы радок завершанай прагулкі; запасное значэнне для ${finishedDay} прыходзіць з кананічнага параметра · Незалежнае рэв'ю (2026-10-17): \u5DF2\u542C → \u5DF2\u6536\u542C для адзінства з native.run.status.played і native.chrome.heardCount"
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад і параметры правераныя."
       }
     },
     {
       "id": "native.chrome.pastWalks",
       "value": "\u5386\u53F2\u6563\u6B65",
-      "reviewedSourceHash": "639c686aee401287c7c2224cfce2606da6a128852a23771f4fab41e4275081d8",
+      "reviewedSourceHash": "7c6f8c5a533c4063b62ad380e8f6f6ef7cbfcbec926f70dd3afb8ffcf7c24fa5",
       "review": {
         "outcome": "approved",
-        "note": "загаловак секцыі папярэдніх праходаў; пара да \u5F53\u524D\u6563\u6B65"
+        "note": "Абноўлена паводле канону гісторыі прагулак (замест літаральнага «папярэднія праходы»)."
       }
     },
     {
       "id": "native.chrome.previewUnavailable",
-      "value": "\u9884\u89C8\u6682\u65F6\u4E0D\u53EF\u7528",
-      "reviewedSourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808",
+      "value": "\u4ECB\u7ECD\u6682\u65F6\u4E0D\u53EF\u7528",
+      "reviewedSourceHash": "2785ba6555e638479293b96bcc23cdb4171980c5e67cf1fd88100483467c5b99",
       "review": {
         "outcome": "approved",
-        "note": "радок стану; прэв'ю → \u9884\u89C8"
+        "note": "Прыбрана тэхнічная калька «прэв'ю» на карысць натуральнага апісання гіда."
       }
     },
     {
@@ -744,11 +744,11 @@
     },
     {
       "id": "native.chrome.validCache",
-      "value": "\u4E0A\u6B21\u6709\u6548\u7F13\u5B58",
-      "reviewedSourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0",
+      "value": "\u5DF2\u4FDD\u5B58\u7684\u7248\u672C",
+      "reviewedSourceHash": "291634ca13514b047f70caaf3a45f1681e9dc0b143a56053000b375a63d5a51d",
       "review": {
         "outcome": "approved",
-        "note": "радок стану: паказ папярэдняга валіднага кэша · Незалежнае рэв'ю (2026-10-17): \u4E0A\u4E00\u4E2A → \u4E0A\u6B21: гаворка пра кэш папярэдняга паспяховага чытання, а не пра адзін з некалькіх кэшаў"
+        "note": "Прыбраны інжынерны жаргон «валідны кэш» на карысць зразумелай турысту «захаванай версіі»."
       }
     },
     {
@@ -891,11 +891,11 @@
     },
     {
       "id": "native.nearby.indexDegraded",
-      "value": "\u63A8\u8350\u7D22\u5F15\u6682\u65F6\u4E0D\u53EF\u7528",
-      "reviewedSourceHash": "c36e91739b7d13aaae6a9e2a1bb1892c27935ef285c05dfc35384667a87945bf",
+      "value": "\u5730\u70B9\u5217\u8868\u6682\u65F6\u4E0D\u53EF\u7528",
+      "reviewedSourceHash": "58eb75feb03c06d456566eaa57275656f329303625349f7db6703e99eecaa8cb",
       "review": {
         "outcome": "approved",
-        "note": "радок дэградацыі; тэрмін недаступнасці па батарэі unavailable"
+        "note": "Прыбраны тэхнічны тэрмін «індэкс прапаноў» на карысць жывога «спіса месцаў»."
       }
     },
     {
@@ -1132,20 +1132,20 @@
     },
     {
       "id": "native.place.guideLink",
-      "value": "\u5BFC\u89C8\u9884\u89C8",
-      "reviewedSourceHash": "6689ad59dbaf7e5400f58ed1c55c89ef10dfca451dc4c1d9e4d9d257200211d5",
+      "value": "\u67E5\u770B\u5BFC\u89C8",
+      "reviewedSourceHash": "6c9954c45d3ffa6530fde90ddea68fda1977b2eeab3135161dc01424889a23e8",
       "review": {
         "outcome": "approved",
-        "note": "ссылка на прэв'ю гіда з карткі месца"
+        "note": "Скарочаная і натуральная кнопка пераходу да старонкі гіда для вузкіх экранаў."
       }
     },
     {
       "id": "native.place.guideLinkHint",
-      "value": "\u6253\u5F00\u5BFC\u89C8\u9884\u89C8\uFF0C\u800C\u4E0D\u662F\u5F00\u59CB\u6563\u6B65\u3002",
-      "reviewedSourceHash": "2d8e625a33b415b8a144097cf43e9b9b7566c68f36fc80fdf472b01d4ca79714",
+      "value": "\u6253\u5F00\u5BFC\u89C8\u9875\u9762\uFF0C\u800C\u4E0D\u662F\u5F00\u59CB\u6563\u6B65\u3002",
+      "reviewedSourceHash": "ad354158be88471453906c9ab3a942fe9b270455828f1ba663dc4128efb1ec3d",
       "review": {
         "outcome": "approved",
-        "note": "падказка ссылки: адкрывае прэв'ю, не запуск прагулкі"
+        "note": "Абноўлена падказка кнопкі пераходу да старонкі гіда без слова «прэв'ю»."
       }
     },
     {
@@ -1169,10 +1169,10 @@
     {
       "id": "native.place.noFacts",
       "value": "\u8BE5\u5730\u70B9\u5C1A\u672A\u5728\u76EE\u5F55\u4E2D\u53D1\u5E03",
-      "reviewedSourceHash": "6a837f315b4fc07df8e72f31ac5802801e3e69123b032eb3ddbe6990ef5ec9be",
+      "reviewedSourceHash": "382b28f3ffebbd1b00f8b6430012a33190779c561cdc93215d07d9f44505cf92",
       "review": {
         "outcome": "approved",
-        "note": "радок стану: месца пакуль не апублікавана ў каталога"
+        "note": "Граматычная праўка склону ў крыніцы (у каталогу); пераклад правераны."
       }
     },
     {
@@ -1754,20 +1754,20 @@
     },
     {
       "id": "native.run.reasonText.run#recovery-failed",
-      "value": "\u8BFB\u53D6\u8FDB\u884C\u4E2D\u7684\u4F1A\u8BDD\u5931\u8D25\u3002",
-      "reviewedSourceHash": "dc38ee4a64a7e63371d24d15a8811bec2db3a5cc769f78da944fe0c00d11f75b",
+      "value": "\u65E0\u6CD5\u7EE7\u7EED\u6563\u6B65\u3002",
+      "reviewedSourceHash": "976c79936ade97120cd07ca6d1368ab629d5c26f8724a81a48e69f90ac154597",
       "review": {
         "outcome": "approved",
-        "note": "адмова прагулкі: збой чытання жывой сесіі"
+        "note": "Чалавечае паведамленне пра памылку аднаўлення прагулкі без тэхнічнага жаргону."
       }
     },
     {
       "id": "native.run.reasonText.run#unsafe-route-id",
-      "value": "\u8DEF\u7EBF\u6807\u8BC6\u7B26\u65E0\u6548\u3002",
-      "reviewedSourceHash": "d340822c39b89b886e5951a52bc64b20fca3d6f84871c9e1e5a862235c7b033c",
+      "value": "\u672A\u627E\u5230\u8DEF\u7EBF\u3002",
+      "reviewedSourceHash": "cb4751678b50fa4cf132b49084aeb97a084c62bbf798fe3729df5d3aec2ca002",
       "review": {
         "outcome": "approved",
-        "note": "адмова прагулкі: няверны ідэнтыфікатар маршруту"
+        "note": "Чалавечае паведамленне «Маршрут не знойдзены» замест тэхнічнага «ідэнтыфікатар маршруту»."
       }
     },
     {
@@ -1806,11 +1806,11 @@
     },
     {
       "id": "native.run.recenter",
-      "value": "\u56DE\u5230\u6211\u7684\u4F4D\u7F6E",
-      "reviewedSourceHash": "7c9707a52b4598b4df1427e7609582b876d93d53e78eefc086b2ea6e9d0574cc",
+      "value": "\u6211\u7684\u4F4D\u7F6E",
+      "reviewedSourceHash": "b5b84def8abe1037ea29aa054670088681f5afd07ac471dee632012442c222f5",
       "review": {
         "outcome": "approved",
-        "note": "даступная назва кнопкі вяртання камеры да бягучай пазіцыі"
+        "note": "Скарочаны подпіс кнопкі геалакацыі, каб пазбегнуць абрэзкі на вузкіх экранах."
       }
     },
     {
@@ -1896,11 +1896,11 @@
     },
     {
       "id": "native.run.tierUnavailable",
-      "value": "\u9644\u52A0\u5C42\u7EA7\u5728\u6062\u590D\u7684\u4F1A\u8BDD\u4E2D\u4E0D\u53EF\u7528",
-      "reviewedSourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c",
+      "value": "\u9644\u52A0\u6545\u4E8B\u5728\u7EE7\u7EED\u7684\u6563\u6B65\u4E2D\u4E0D\u53EF\u7528",
+      "reviewedSourceHash": "8c9dc1e82b4546650353fea0765261436353977d6d3ac51ffd7753bacd918a0a",
       "review": {
         "outcome": "approved",
-        "note": "заўвага: дадатковы ярус недаступны ў адноўленай сесіі; ярус → \u5C42\u7EA7"
+        "note": "Прыбраны тэхнічны тэрмін «ярус» на карысць «дадатковых гісторый»."
       }
     },
     {
@@ -2370,10 +2370,10 @@
     {
       "id": "web.ui.textUnavailableBody",
       "value": "\u8FD9\u4E2A\u5BFC\u89C8\u6CA1\u6709\u6240\u9009\u754C\u9762\u8BED\u8A00\u7684\u6587\u672C\u3002\u5B83\u7684\u6587\u672C\u8BED\u8A00\u663E\u793A\u5728\u76EE\u5F55\u7684\u8BED\u8A00\u5217\u8868\u4E2D\u3002",
-      "reviewedSourceHash": "07a46c3e0babecfe136297ae2458d4fd0a86e5b2425cead4f1372ac6edb59953",
+      "reviewedSourceHash": "063349384a5e26e4663a357f1e865d1e06f4ae40d3ed1ce067827dbe546945f7",
       "review": {
         "outcome": "approved",
-        "note": "тэкст старонкі недаступнасці; адсылае да факт-радка моваў"
+        "note": "Граматычная праўка меснага склону ў крыніцы (у каталогу); пераклад правераны."
       }
     },
     {
@@ -2397,10 +2397,10 @@
     {
       "id": "native.feedback.formTitleGuide",
       "value": "\u8FD9\u4E2A\u5BFC\u89C8\u600E\u4E48\u6837\uFF1F",
-      "reviewedSourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca",
+      "reviewedSourceHash": "37bf40d90ae7ffcfa8db4f8d2578b3a5b5a816192e0807ab5a80f93a45924ada",
       "review": {
         "outcome": "approved",
-        "note": "загаловак формы ацэнкі гіда; размоўнае пытанне да «ты», як у крыніцы"
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
@@ -2559,19 +2559,19 @@
     {
       "id": "native.feedback.inviteTitle",
       "value": "\u8FD9\u4E2A\u5BFC\u89C8\u600E\u4E48\u6837\uFF1F\u53EF\u4EE5\u8BC4\u4EF7——\u5B8C\u5168\u81EA\u613F\u3002",
-      "reviewedSourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192",
+      "reviewedSourceHash": "cdd3f9953e3d90e1cf30284efbbf338b45130cfdd749be59ac09467e880dc99e",
       "review": {
         "outcome": "approved",
-        "note": "запрашэнне да ацэнкі; неабавязковасць падкрэсленая"
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
       "id": "native.feedback.inviteRate",
       "value": "\u8BC4\u4EF7\u5BFC\u89C8",
-      "reviewedSourceHash": "bff14adc9bcb8d672c62ee6ff83e10e26542a927104e7a053ac287c5bda11c3f",
+      "reviewedSourceHash": "4e5c57ebf0f7bca4881296e7227e000c4035735dd0573b5444dac71598203f37",
       "review": {
         "outcome": "approved",
-        "note": "кнопка запрашэння: ацаніць гайд"
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {

@@ -38,6 +38,11 @@ export const LOCALES = {
   fr: 'Français',
   cs: 'Čeština',
   sv: 'Svenska',
+  nb: 'Norsk bokmål',
+  pl: 'Polski',
+  da: 'Dansk',
+  nl: 'Nederlands',
+  pt: 'Português',
 };
 
 // ---------- icons ----------

@@ -67,11 +67,12 @@ describe("uiStrings (G06.05 AC1)", () => {
     // its own German catalogue too, so the probe moved to the still-planned
     // «es» — and de now asserts its own honest German words. G21.11 (
     // 2026-10-03-single-source-translations.md — G21.11), G21.12 (same record), G21.13 (same record) and G21.14
-    // (same record) landed es, fr, cs and sv in turn, so the probe finally runs out
-    // of planned codes: all eight requested languages are complete, and the
-    // fallback probe rides an unregistered code («pl»). The discriminator is
+    // (same record) landed es, fr, cs and sv in turn, and #376 landed pl:
+    // the fallback probe rides an unregistered code («eo»), while «pl» asserts
+    // its own Polish word. The discriminator is
     // a word the languages do not share («Назад» is the same word in be and uk).
-    expect(uiStrings("pl").loading).toBe(uiStrings("be").loading);
+    expect(uiStrings("eo").loading).toBe(uiStrings("be").loading);
+    expect(uiStrings("pl").loading).toBe("Ładowanie…");
     expect(uiStrings("en").loading).not.toBe(uiStrings("be").loading);
     expect(uiStrings("uk").loading).not.toBe(uiStrings("be").loading);
     expect(uiStrings("de").loading).toBe("Wird geladen…");

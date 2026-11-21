@@ -185,8 +185,8 @@ describe("Place detail surface (G07.02)", () => {
   test("the guide link opens the guide's PREVIEW, never Start (criterion 2)", async () => {
     await openPlace();
     const link = screen.getByTestId("place-moment-guide-m-a1");
-    expect(link.props.accessibilityLabel).toBe("Прэв'ю гіда");
-    expect(link.props.accessibilityHint).toBe("Адкрывае прэв'ю гіда, не запуск прагулкі.");
+    expect(link.props.accessibilityLabel).toBe("Да гіда");
+    expect(link.props.accessibilityHint).toBe("Адкрывае старонку гіда, не запускае прагулку.");
     // The moment's own package route — the preview screen's gating owns the
     // locked protection (criterion 3).
     expect(link.props.href).toBe("/route/route-a1");

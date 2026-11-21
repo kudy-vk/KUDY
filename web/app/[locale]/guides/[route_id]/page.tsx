@@ -22,7 +22,7 @@ export default async function Guide({ params }: { params: Promise<{ locale: stri
   const { locale, route_id } = await params;
   const ui = toUiLocale(locale);
   const strings = getUiStrings(ui);
-  if (!routeTextLocales(getContentRoot(), route_id).includes(ui)) {
+  if (!(routeTextLocales(getContentRoot(), route_id) as readonly string[]).includes(ui)) {
     return <TextUnavailablePage locale={ui} currentPath={`/guides/${route_id}`} strings={strings} />;
   }
   return <GuidePage locale={ui} data={readSiteGuidePage(getContentRoot(), ui, route_id)} strings={strings} />;
