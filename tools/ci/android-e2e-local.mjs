@@ -110,9 +110,51 @@ export function findJdk17(javaDir, { exists = fs.existsSync, list = (dir) => fs.
   return entries.length > 0 ? path.join(javaDir, entries[0]) : null;
 }
 
+// ninja < 1.11 has no long-path manifest: the SDK 58 codegen object paths on
+// Windows exceed 260 chars and ninja fails to stat them ("Filename longer
+// than 260 characters", issue #326). Windows-only by nature. Silent by
+// design when the SDK has no cmake dir and when no ninja version is
+// readable — the build step's own error names those — and when a mixed
+// cmake install has any ninja satisfying the minimum (the guard cannot know
+// which cmake version the project pins).
+const NINJA_LONG_PATH_MIN = [1, 11];
+
+const ninjaRank = ([major, minor, patch = 0]) => major * 10000 + minor * 100 + patch;
+
+export function parseNinjaVersion(stdout) {
+  const match = String(stdout).match(/^(\d+)\.(\d+)(?:\.(\d+))?/m);
+  return match === null ? null : [Number(match[1]), Number(match[2]), Number(match[3] ?? 0)];
+}
+
+export function runNinjaVersion(ninjaPath) {
+  const probe = spawnSync(ninjaPath, ['--version'], { encoding: 'utf8', timeout: 15000 });
+  return probe.status === 0 ? parseNinjaVersion(probe.stdout) : null;
+}
+
+export function sdkNinjaLongPathReason(sdk, { list = (dir) => fs.readdirSync(dir), exists = fs.existsSync, runVersion = runNinjaVersion, windows = isWindows } = {}) {
+  if (!windows) return null;
+  let cmakeEntries;
+  try {
+    cmakeEntries = list(path.join(sdk, 'cmake'));
+  } catch {
+    return null;
+  }
+  const ninjas = (Array.isArray(cmakeEntries) ? cmakeEntries : [])
+    .map((cmakeVersion) => path.join(sdk, 'cmake', String(cmakeVersion), 'bin', exe('ninja')))
+    .filter((ninjaPath) => exists(ninjaPath));
+  if (ninjas.length === 0) return null;
+  const found = ninjas
+    .map((ninjaPath) => ({ ninjaPath, version: runVersion(ninjaPath) }))
+    .filter(({ version }) => version !== null);
+  if (found.length === 0 || found.some(({ version }) => ninjaRank(version) >= ninjaRank(NINJA_LONG_PATH_MIN))) return null;
+  return 'SDK ninja cannot stat the >260-char SDK 58 codegen object paths on Windows '
+    + `(found ${found.map(({ ninjaPath, version }) => `${ninjaPath}: ${version.join('.')}`).join(', ')}); `
+    + 'replace every SDK cmake/<v>/bin/ninja.exe with ninja >= 1.11 (docs/development_setup.md)';
+}
+
 // Every missing piece is one NOT-VERIFIED reason; the list is complete so the
 // operator fixes all of them in one pass.
-export function notVerifiedReasons(layout, { exists = fs.existsSync } = {}) {
+export function notVerifiedReasons(layout, { exists = fs.existsSync, ninja } = {}) {
   const reasons = [];
   const need = (dir, label) => {
     if (!exists(dir)) reasons.push(`missing ${label}: ${dir}`);
@@ -130,6 +172,8 @@ export function notVerifiedReasons(layout, { exists = fs.existsSync } = {}) {
   need(path.join(layout.avdHome, `${AVD_NAME}.ini`), `AVD ${AVD_NAME}`);
   need(path.join(layout.checkout, '.git'), `build checkout (clone kudy-vk/KUDY into ${layout.checkout})`);
   if (!exists(layout.buildRoot)) reasons.push(`missing build root: ${layout.buildRoot} (create the directory)`);
+  const ninjaReason = sdkNinjaLongPathReason(layout.sdk, { exists, ...(ninja ?? {}) });
+  if (ninjaReason !== null) reasons.push(ninjaReason);
   return reasons;
 }
 

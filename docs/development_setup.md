@@ -368,6 +368,12 @@ checkout-а ў build-checkout, зборка debug APK праз
    --package "system-images;android-35;google_apis;x86_64"` пры
    `ANDROID_AVD_HOME=D:\KUDY-Android\avd`.
 4. Клон: `gh repo clone kudy-vk/KUDY D:\KUDY-Android\checkout`.
+5. ninja ≥ 1.11 у `sdk\cmake\<версія>\bin\ninja.exe`: зборка SDK 58 (RN 0.88)
+   стварае аб'ектныя шляхі codegen даўжынёй за 260 знакаў, а ninja 1.10.2 з
+   Android SDK не мае маніфеста доўгіх шляхоў і падае з «Filename longer than
+   260 characters» (#326). 2026-11-21 у cmake 3.22.1 заменена на ninja 1.12.1
+   (стары захаваны побач як `ninja.exe.1.10.2.bak`); ранер правярае версію і
+   дае NOT-VERIFIED, пакуль усе ninja SDK старэйшыя за 1.11.
 
 Як працуе:
 
