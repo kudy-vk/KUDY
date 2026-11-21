@@ -19,15 +19,19 @@ import { useEffect, useState } from "react";
 import { FlatList, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import PauseIcon from "lucide-react-native/icons/pause";
+import PlayIcon from "lucide-react-native/icons/play";
+
 import { runMapView, runMapReason, runMapStrings } from "../../controllers/run/runMap";
 import { useRunState, useRunSurface } from "../../controllers/run/runSurfaceController";
 import { feedbackStrings, useFeedbackState } from "../../controllers/useFeedbackController";
 import { BackButton } from "../../components/back-button";
+import { CanonIcon } from "../../components/canon-icon";
 import { uiStrings } from "../../components/ui-strings";
 import { GuideHintMount } from "../../components/GuideHintCard";
 import { PressableSurface } from "../../components/pressable-surface";
 import { darkTokens, tokens, type ThemeTokens } from "../../components/design-tokens";
-import { useThemeStyles } from "../../components/theme";
+import { useThemeStyles, useThemeTokens } from "../../components/theme";
 import { LoadingIndicator } from "../../components/loading-indicator";
 import {
   ModalDialog,
@@ -42,6 +46,11 @@ import { useServices, useUiLocale } from "../_layout";
 import { ScreenSurface } from "../../components/screen-surface";
 
 const OSM_ATTRIBUTION_URL = "https://www.openstreetmap.org/copyright";
+
+// UI-REVIEW-01 (issue #387, owner variant A of #98, 2026-11-21): the sound
+// buttons show the approved outline Lucide signs at the board's 24×24 inside
+// the ≥48×48 dp targets.
+const PLAY_PAUSE_ICON_SIZE = 24;
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: {
@@ -270,18 +279,18 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     flexDirection: "row",
     gap: palette.spaceS,
   },
+  // UI-REVIEW-01 (owner variant A): the icon-only sound sign keeps the same
+  // framed pill, centered, with a 48×48 dp minimum target.
   barControl: {
-    minHeight: 48,
+    alignItems: "center",
     justifyContent: "center",
+    minHeight: 48,
+    minWidth: 48,
     borderColor: palette.colorLine,
     borderRadius: palette.radiusBase,
     borderWidth: 1,
     paddingHorizontal: palette.spaceM,
     paddingVertical: palette.spaceS,
-  },
-  barControlLabel: {
-    color: palette.colorAccent,
-    fontSize: palette.fontBaseSize,
   },
   progressGap: {
     // G06.10.f (issue #406): the strip's canon visuals (6px accent on line,
@@ -329,6 +338,16 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   readLabel: {
     color: palette.colorAccent,
     fontSize: palette.fontBaseSize,
+  },
+  // UI-REVIEW-01 (owner variant A): the card's manual play repeats the same
+  // framed action icon-only — the word stays in the screen-reader label, and
+  // the 48×48 dp target holds (PressableSurface keeps its own floor too).
+  iconOnlyAction: {
+    alignSelf: "flex-start",
+    justifyContent: "center",
+    minHeight: 48,
+    minWidth: 48,
+    paddingHorizontal: palette.spaceM,
   },
   // The finish confirmation's words (UX 06 — канон §5, Дыялог і стужкі) — the shell carries
   // the card and the two action styles.
@@ -388,6 +407,7 @@ const darkStyles = createStyles(darkTokens);
 
 export default function Run() {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   const { id, confirmedSwitch, audio } = useLocalSearchParams<{
     id: string;
     confirmedSwitch?: string;
@@ -831,6 +851,9 @@ export default function Run() {
               // launch (G07) resumes through its own path, never through
               // this button — the controller's guide-token rebuild must not
               // become a silent no-op behind a visible control.
+              // UI-REVIEW-01 (issue #387, owner variant A): the sign is the
+              // outline Lucide play/pause without the visible word (canon §9
+              // label contract); the press still only drives the sound.
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={playingGuide.paused ? strings.playAudio : strings.pauseAudio}
@@ -838,9 +861,13 @@ export default function Run() {
                 style={styles.barControl}
                 testID="btn-bar-playpause"
               >
-                <ScaledText style={styles.barControlLabel}>
-                  {playingGuide.paused ? strings.playAudio : strings.pauseAudio}
-                </ScaledText>
+                <CanonIcon
+                  glyph={playingGuide.paused ? PlayIcon : PauseIcon}
+                  color={palette.colorAccent}
+                  label={playingGuide.paused ? strings.playAudio : strings.pauseAudio}
+                  size={PLAY_PAUSE_ICON_SIZE}
+                  testID={playingGuide.paused ? "run-bar-play-icon" : "run-bar-pause-icon"}
+                />
               </Pressable>
             ) : null}
           </View>
@@ -916,10 +943,20 @@ export default function Run() {
                     accessibilityLabel={strings.playAudio}
                     accessibilityHint={strings.playStoryHint}
                     onPress={() => activeStoryId !== undefined && run.selectStory(inspectedMarker.stopId, activeStoryId)}
-                    style={styles.readButton}
+                    style={[styles.readButton, styles.iconOnlyAction]}
                     testID="btn-card-play"
                   >
-                    <ScaledText style={styles.readLabel}>{strings.playAudio}</ScaledText>
+                    {/* UI-REVIEW-01 (issue #387, owner variant A): the manual
+                        play repeats the approved outline Play sign without
+                        the visible word; the launch path and its conditions
+                        stay. */}
+                    <CanonIcon
+                      glyph={PlayIcon}
+                      color={palette.colorAccent}
+                      label={strings.playAudio}
+                      size={PLAY_PAUSE_ICON_SIZE}
+                      testID="run-card-play-icon"
+                    />
                   </PressableSurface>
                 ) : null}
                 {run.panel === "full" && hasExtended ? (

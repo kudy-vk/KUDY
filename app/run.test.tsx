@@ -797,22 +797,57 @@ describe("run map surface", () => {
 
     // The bar's control is the launch's: Паўза stops the sound, Граць
     // resumes it through the controller's rebuilt token — and a card tap
-    // in between commands nothing (the AC3 duty).
+    // in between commands nothing (the AC3 duty). UI-REVIEW-01 (issue
+    // #387, owner variant A): the state reads from the outline signs and
+    // the screen-reader label — the button carries no visible word.
     const barControl = screen.getByTestId("btn-bar-playpause");
     expect(flatStyle(barControl).minHeight).toBeGreaterThanOrEqual(48);
+    expect(screen.getByTestId("run-bar-pause-icon")).toBeTruthy();
+    expect(within(barControl).queryByText("Паўза")).toBeNull();
     await fireEvent.press(barControl);
-    await waitFor(() => expect(screen.queryByText("Паўза")).toBeNull());
-    expect(screen.getByText("Граць")).toBeTruthy();
+    await waitFor(() => expect(screen.queryByTestId("run-bar-pause-icon")).toBeNull());
+    expect(screen.getByTestId("run-bar-play-icon")).toBeTruthy();
+    expect(screen.getByTestId("btn-bar-playpause").props.accessibilityLabel).toBe("Граць");
     await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
     expect(screen.getByTestId("run-panel-half")).toBeTruthy();
     expect(audioPort.commands.filter((command) => command === "pause" || command === "resume")).toEqual(["pause"]);
     await fireEvent.press(screen.getByTestId("btn-panel-close"));
     await fireEvent.press(screen.getByTestId("btn-bar-playpause"));
-    await waitFor(() => expect(screen.queryByText("Граць")).toBeNull());
+    await waitFor(() => expect(screen.queryByTestId("run-bar-play-icon")).toBeNull());
+    expect(screen.getByTestId("run-bar-pause-icon")).toBeTruthy();
+    expect(screen.getByTestId("btn-bar-playpause").props.accessibilityLabel).toBe("Паўза");
     expect(audioPort.commands.filter((command) => command === "pause" || command === "resume")).toEqual([
       "pause",
       "resume",
     ]);
+  });
+
+  // UI-REVIEW-01 (issue #387, owner variant A of #98): the sound buttons
+  // carry the outline signs only — the word lives in the screen-reader
+  // label, never in pixels. A visible caption returning to either button
+  // turns this red (implementation-rules 1).
+  test("UI-REVIEW-01: the sound buttons are icon-only — no visible word, 48dp targets", async () => {
+    const { locationPort, advance } = await mountedRunBe();
+
+    await soundStop2({ locationPort, advance });
+
+    // The bar's sign: icon-only while playing; the 48×48 dp target holds.
+    const barControl = screen.getByTestId("btn-bar-playpause");
+    expect(within(barControl).queryByText("Паўза")).toBeNull();
+    expect(within(barControl).queryByText("Граць")).toBeNull();
+    expect(screen.getByTestId("run-bar-pause-icon")).toBeTruthy();
+    expect(barControl.props.accessibilityLabel).toBe("Паўза");
+    expect(flatStyle(barControl).minWidth).toBeGreaterThanOrEqual(48);
+
+    // The card's manual play: the same approved Play sign without the word.
+    await fireEvent.press(screen.getByTestId("run-marker-stop-1"));
+    await screen.findByTestId("run-panel-half");
+    const cardPlay = screen.getByTestId("btn-card-play");
+    expect(within(cardPlay).queryByText("Граць")).toBeNull();
+    expect(screen.getByTestId("run-card-play-icon")).toBeTruthy();
+    expect(cardPlay.props.accessibilityLabel).toBe("Граць");
+    expect(flatStyle(cardPlay).minHeight).toBeGreaterThanOrEqual(48);
+    expect(flatStyle(cardPlay).minWidth).toBeGreaterThanOrEqual(48);
   });
 
   // UX 01: the Full panel's content scrolls — a long transcript
@@ -1073,8 +1108,9 @@ describe("Run paper grain (G06.10.e)", () => {
 
 // One progress change, landed on the mounted bar: the fake port's snapshot
 // is rewritten to the honest offset (stop-2's 6s source) and a bar press
-// re-renders the strip — the press flips the play/pause label, which is the
-// wait the re-render is anchored to.
+// re-renders the strip — the press flips the sound state, which is the
+// wait the re-render is anchored to. UI-REVIEW-01 (#387): the state reads
+// from the screen-reader label — the button carries no visible word.
 async function landProgress(
   audioPort: ReturnType<typeof makeRunSession>["audioPort"],
   positionMs: number,
@@ -1082,7 +1118,9 @@ async function landProgress(
 ): Promise<void> {
   audioPort.snapshotValue = { state: "playing", positionMs, durationMs: 6000 };
   await fireEvent.press(screen.getByTestId("btn-bar-playpause"));
-  await waitFor(() => expect(within(screen.getByTestId("btn-bar-playpause")).getByText(barLabel)).toBeTruthy());
+  await waitFor(() =>
+    expect(screen.getByTestId("btn-bar-playpause").props.accessibilityLabel).toBe(barLabel),
+  );
 }
 
 describe("G06.10.f live walk progress (issue #406)", () => {
