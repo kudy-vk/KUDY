@@ -2,14 +2,14 @@
   "name": "kudy-web",
   "version": "0.1.0",
   "private": true,
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "scripts": {
     "prebuild": "node --experimental-strip-types scripts/build-content.ts && node --experimental-strip-types scripts/build-qr.ts",
     "build": "next build && node --experimental-strip-types scripts/scan-rendered.ts"
   },
   "dependencies": {
-    "maplibre-gl": "^5.24.0",
+    "maplibre-gl": "^6.19.0",
     "next": "^15.5.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"

@@ -24,8 +24,8 @@ describe("issue #718: the dev-only minimal reproduction surface", () => {
     g.__DEV__ = true;
   });
 
-  test("under __DEV__ it renders the rows the device run reads", () => {
-    render(<HanProbeMinimal />);
+  test("under __DEV__ it renders the rows the device run reads", async () => {
+    await render(<HanProbeMinimal />);
     for (const id of [
       "han-minimal/raw-ui",
       "han-minimal/raw-default-font",
@@ -35,16 +35,16 @@ describe("issue #718: the dev-only minimal reproduction surface", () => {
     }
   });
 
-  test("the escape-encoded fixture decodes to the G21.40 fixture value", () => {
-    render(<HanProbeMinimal />);
+  test("the escape-encoded fixture decodes to the G21.40 fixture value", async () => {
+    await render(<HanProbeMinimal />);
     expect(within(screen.getByTestId("han-minimal/raw-ui")).getByText(CARD_HANS)).toBeTruthy();
     expect(within(screen.getByTestId("han-minimal/raw-default-font")).getByText(CARD_HANS)).toBeTruthy();
     expect(within(screen.getByTestId("han-minimal/size-control")).getByText(CARD_HANS)).toBeTruthy();
   });
 
-  test("outside __DEV__ the surface renders nothing", () => {
+  test("outside __DEV__ the surface renders nothing", async () => {
     g.__DEV__ = false;
-    render(<HanProbeMinimal />);
+    await render(<HanProbeMinimal />);
     expect(screen.queryByTestId("han-minimal/raw-ui")).toBeNull();
   });
 });

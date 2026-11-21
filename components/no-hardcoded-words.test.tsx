@@ -1,4 +1,4 @@
-// G14.04.d (issue #305, AC2) — no screen or component renders a word from
+// G14.04.d (16_delivery_backlog.md — G14.04.d, AC2) — no screen or component renders a word from
 // its own source: every visible line rides the string catalogs (be/en/uk —
 // 09 §8: «ніводнага зашытага радка нідзе»; the uk-release-scope §3.1 third
 // file keeps the rule over the new vocabulary). The guard scans the

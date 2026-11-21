@@ -1,0 +1,9 @@
+{
+  "baseline": "6e2c93d5bc97dfbdd4ce6c807cb2401fa3588481",
+  "originalHead": "ab2dd62c6989b42b2b421a9b0a7b6677bb311c11",
+  "buildExit": 0,
+  "apkSha256": "f582c473d7593ad04d1ae61a5a6ee64582c79d07c36090d80c7ffefc45f4c476",
+  "bootCompleted": "",
+  "bootReason": "kernel_panic,ext4-fs_(device_dm-46):_panic_forced_abugr_error",
+  "smoke": "NOT-VERIFIED: Android OS has not completed boot; baseline suite cannot reach the app"
+}

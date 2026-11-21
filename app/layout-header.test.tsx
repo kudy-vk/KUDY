@@ -1,4 +1,4 @@
-// UX 02 (issue #348) — the guard over the production layout itself: the
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the guard over the production layout itself: the
 // Stack mounts with the native header off. Reverting app/_layout.tsx to a
 // bare <Stack /> turns this red (implementation-rules 1 — the check fails
 // when the fix is reverted).
@@ -17,7 +17,7 @@ jest.mock("expo-router", () => ({
 // this file's own Stack capture is the assertion target.
 import RootLayout from "./_layout";
 
-test("the production layout mounts the Stack with the native header off (AC1)", () => {
-  render(<RootLayout />);
+test("the production layout mounts the Stack with the native header off (AC1)", async () => {
+  await render(<RootLayout />);
   expect(stackProps.screenOptions?.headerShown).toBe(false);
 });

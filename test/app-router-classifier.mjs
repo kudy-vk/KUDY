@@ -1,4 +1,4 @@
-// Shared app/ router-purity classifier (issue #339): one implementation used
+// Shared app/ router-purity classifier: one implementation used
 // by the guard suite (test/app-router-purity.test.mjs) and the demo driver
 // (test/demo-g339-cold-start.mjs) so the two cannot drift apart. Classes a
 // file of app/ as: special (router files `+*`/`_layout`), suite (colocated

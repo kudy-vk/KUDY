@@ -16,8 +16,13 @@ import { PaperSurface } from "./paper-surface";
 // consumes the mirror paints the overridden opacity.
 jest.mock("./design-tokens", () => {
   const actual = jest.requireActual("./design-tokens") as { tokens: Record<string, unknown> };
-  return { tokens: { ...actual.tokens, texturePaperGrainOpacity: 0.5 } };
+  return { ...actual, tokens: { ...actual.tokens, texturePaperGrainOpacity: 0.5 } };
 });
+
+let mockScheme = "light";
+jest.mock("react-native/Libraries/Utilities/useColorScheme", () => ({
+  __esModule: true, default: () => mockScheme,
+}));
 
 // Issue #431: the tiling window is synthetic and differs from the jest
 // default on purpose — the size assertions read this value, so only a
@@ -26,8 +31,8 @@ jest.mock("./design-tokens", () => {
 const syntheticWindow: ScaledSize = { width: 411, height: 875, scale: 3, fontScale: 1 };
 jest.spyOn(Dimensions, "get").mockReturnValue(syntheticWindow);
 
-function renderSurface() {
-  return render(
+async function renderSurface() {
+  return await render(
     <PaperSurface testID="surface">
       <Text style={{ fontSize: 16 }}>Зярно паперы</Text>
     </PaperSurface>,
@@ -43,16 +48,28 @@ function mergedStyle(node: HostNode): Record<string, unknown> {
   ) as Record<string, unknown>;
 }
 
-// The layer is hidden from the accessibility tree, so the default RNTL
-// queries (which walk the a11y tree) never see it — the render-tree view
-// needs includeHiddenElements (that split is the a11y test itself).
+// RNTL 14 keeps the mounted-but-hidden layer queryable (the global config
+// sets defaultIncludeHiddenElements), so the grain is reached with the
+// explicit includeHiddenElements view; the a11y-invisibility itself is
+// pinned by the marker assertions in its own test.
 function grainLayer() {
   return screen.getByTestId("paper-grain", { includeHiddenElements: true }) as unknown as HostNode;
 }
 
 describe("PaperSurface (G06.10.e)", () => {
-  test("the grain layer renders under the content at the mirror opacity", () => {
-    renderSurface();
+  test("M3 grain uses four percent muted tint above the gradient", async () => {
+    mockScheme = "dark";
+    try {
+      await renderSurface();
+      expect(mergedStyle(grainLayer())).toMatchObject({ opacity: 0.04, tintColor: "#d6c5b0" });
+      expect(screen.getByTestId("screen-gradient", { includeHiddenElements: true })).toBeTruthy();
+    } finally {
+      mockScheme = "light";
+    }
+  });
+
+  test("the grain layer renders under the content at the mirror opacity", async () => {
+    await renderSurface();
     const grain = grainLayer();
     expect(grain?.props?.source).toBeDefined();
     expect((grain?.props as { resizeMode?: string })?.resizeMode).toBe("repeat");
@@ -64,8 +81,8 @@ describe("PaperSurface (G06.10.e)", () => {
     expect(tree.children?.[1]?.props?.testID).toBeUndefined();
   });
 
-  test("children render above the grain and carry none of it", () => {
-    renderSurface();
+  test("children render above the grain and carry none of it", async () => {
+    await renderSurface();
     expect(screen.getByText("Зярно паперы")).toBeTruthy();
     const tree = screen.toJSON() as { props?: { testID?: string }; children?: HostNode[] };
     expect(tree.props?.testID).toBe("surface");
@@ -77,11 +94,13 @@ describe("PaperSurface (G06.10.e)", () => {
     );
   });
 
-  test("the layer is invisible to the accessibility tree", () => {
-    renderSurface();
-    // The default queries walk the a11y tree: the decorative layer is not
-    // there — the screen-reader tree of the surface is its content only.
-    expect(screen.queryByTestId("paper-grain")).toBeNull();
+  test("the layer is invisible to the accessibility tree", async () => {
+    await renderSurface();
+    // RNTL 14 keeps the decorative layer mounted and the global query config
+    // sees hidden elements by default (test/rntl-configure.js), so the old
+    // "default query finds nothing" proxy no longer holds. The screen
+    // reader's road is pinned directly by the a11y-hidden markers the host
+    // carries — the screen-reader tree of the surface is its content only.
     const grain = grainLayer();
     expect(grain?.props).toMatchObject({
       accessible: false,
@@ -90,13 +109,13 @@ describe("PaperSurface (G06.10.e)", () => {
     });
   });
 
-  // Issue #431: with absoluteFillObject Android's repeat paints through a
+  // Issue #431: with an absolute fill layer Android's repeat paints through a
   // view-sized postprocessor that races the first layout and collapses to
   // one raw corner tile. The JS-side cause the suite can pin is the
   // explicit window size: reverting the layer to a measured fill drops
   // width/height from the style and turns this red.
-  test("the grain layer is sized from the window, not measured (#431)", () => {
-    renderSurface();
+  test("the grain layer is sized from the window, not measured (#431)", async () => {
+    await renderSurface();
     const style = mergedStyle(grainLayer());
     expect(style.position).toBe("absolute");
     expect(style.width).toBe(411);

@@ -14,6 +14,17 @@
       "sourceHash": "ddd8d54d445057e907cd788a7e2a70b26423e2dbe88a1f3dbfd8f884ca624750"
     },
     {
+      "id": "native.chrome.aboutCity",
+      "source": "Пра горад",
+      "context": "Пункт галоўнага меню «Пра горад» (рэзервовы фрагмент reserve-1): адкрывае практычны даведнік па Гданьску (issue #200; папярэднім словам пункта была «Хутка»)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#aboutCity"
+      ],
+      "sourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca"
+    },
+    {
       "id": "native.chrome.access.free",
       "source": "Бясплатна",
       "context": "Пазнака доступу: бясплатна",
@@ -392,7 +403,7 @@
     },
     {
       "id": "native.chrome.heardCount",
-      "source": "праслышана: ${count}",
+      "source": "праслухана: ${count}",
       "context": "Лічба праслуханых гісторый у радку гісторыі",
       "format": "template",
       "parameters": [
@@ -404,7 +415,7 @@
       "migratedFrom": [
         "components/ui-strings.ts#heardCount"
       ],
-      "sourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a"
+      "sourceHash": "ff2d4afc02449f0b6bb9f286a746af513120cc97cdb3c085975b1e8308f40c39"
     },
     {
       "id": "native.chrome.historyUnavailable",
@@ -491,7 +502,7 @@
     },
     {
       "id": "native.chrome.liveRowLine",
-      "source": "${state} — з ${day} — праслышана: ${heard}",
+      "source": "${state} — з ${day} — праслухана: ${heard}",
       "context": "Цэлы радок жывой прагулкі ў гісторыі: адзін сказ на мову, без цвёрдага прыназоўніка",
       "format": "template",
       "parameters": [
@@ -511,7 +522,7 @@
       "migratedFrom": [
         "components/ui-strings.ts#liveRowLine"
       ],
-      "sourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081"
+      "sourceHash": "c267994c436404f64e9c367301b8f823a90290e91c6178ef73e68ecb8cc8972f"
     },
     {
       "id": "native.chrome.loading",
@@ -573,14 +584,14 @@
     },
     {
       "id": "native.chrome.noPastWalks",
-      "source": "Папярэдніх праходаў няма",
+      "source": "Папярэдніх прагулак няма",
       "context": "Радок адсутнасці папярэдніх праходаў",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#noPastWalks"
       ],
-      "sourceHash": "0bfbeda8ef7061ce1ba34816528ba7e430b242d9b3f048e4865475cdf7ba8ebf"
+      "sourceHash": "7559f72c69896c0301dd5a53168470345b21e1bf4b748ab570c3b3ba07598e80"
     },
     {
       "id": "native.chrome.notFoundHint",
@@ -617,7 +628,7 @@
     },
     {
       "id": "native.chrome.pastRowLine",
-      "source": "${startedDay} — ${finishedDay} — праслышана: ${heard}",
+      "source": "${startedDay} — ${finishedDay} — праслухана: ${heard}",
       "context": "Цэлы радок завершанай прагулкі: дзень пачатку, дзень канца (ці злучок), праслышана",
       "format": "template",
       "parameters": [
@@ -638,29 +649,29 @@
       "migratedFrom": [
         "components/ui-strings.ts#pastRowLine"
       ],
-      "sourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa"
+      "sourceHash": "6c2876489cb36d1351d5b778ea56a05ba5e0e5e9864722c7ff70e373ff9ae792"
     },
     {
       "id": "native.chrome.pastWalks",
-      "source": "Папярэднія праходы",
+      "source": "Гісторыя прагулак",
       "context": "Загаловак секцыі папярэдніх праходаў",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#pastWalks"
       ],
-      "sourceHash": "639c686aee401287c7c2224cfce2606da6a128852a23771f4fab41e4275081d8"
+      "sourceHash": "7c6f8c5a533c4063b62ad380e8f6f6ef7cbfcbec926f70dd3afb8ffcf7c24fa5"
     },
     {
       "id": "native.chrome.previewUnavailable",
-      "source": "Прэв'ю часова недаступны",
+      "source": "Апісанне часова недаступнае",
       "context": "Радок стану: прэв'ю часова недаступнае",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#previewUnavailable"
       ],
-      "sourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808"
+      "sourceHash": "2785ba6555e638479293b96bcc23cdb4171980c5e67cf1fd88100483467c5b99"
     },
     {
       "id": "native.chrome.previewTextUnavailable",
@@ -966,14 +977,14 @@
     },
     {
       "id": "native.chrome.validCache",
-      "source": "Папярэдні валідны кэш",
+      "source": "Захаваная версія",
       "context": "Радок стану: паказ папярэдняга валіднага кэша",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/ui-strings.ts#validCache"
       ],
-      "sourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0"
+      "sourceHash": "291634ca13514b047f70caaf3a45f1681e9dc0b143a56053000b375a63d5a51d"
     },
     {
       "id": "native.chrome.walk",
@@ -996,6 +1007,28 @@
         "components/ui-strings.ts#whatToDo"
       ],
       "sourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179"
+    },
+    {
+      "id": "native.chrome.cityName",
+      "source": "Гданьск",
+      "context": "Назва горада ў шапцы галоўнага экрана справа (рашэнні M2 і M11; issue #216)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#cityName"
+      ],
+      "sourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2"
+    },
+    {
+      "id": "native.chrome.whereToToday",
+      "source": "Куды сёння?",
+      "context": "Загаловак галоўнага экрана над часткамі карты (рашэнні M2 і M11; issue #216)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#whereToToday"
+      ],
+      "sourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956"
     },
     {
       "id": "native.guideHint.dismiss",
@@ -1110,14 +1143,14 @@
     },
     {
       "id": "native.nearby.indexDegraded",
-      "source": "Індэкс прапаноў часова недаступны",
+      "source": "Спіс месцаў часова недаступны",
       "context": "Радок дэградацыі: індэкс прапаноў часова недаступны",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/nearby/nearbySurfaceController.ts#indexDegraded"
       ],
-      "sourceHash": "c36e91739b7d13aaae6a9e2a1bb1892c27935ef285c05dfc35384667a87945bf"
+      "sourceHash": "58eb75feb03c06d456566eaa57275656f329303625349f7db6703e99eecaa8cb"
     },
     {
       "id": "native.nearby.loading",
@@ -1402,25 +1435,25 @@
     },
     {
       "id": "native.place.guideLink",
-      "source": "Прэв'ю гіда",
+      "source": "Да гіда",
       "context": "Ссылка на прэв'ю гіда з карткі месца",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/place/placeDetailController.ts#guideLink"
       ],
-      "sourceHash": "6689ad59dbaf7e5400f58ed1c55c89ef10dfca451dc4c1d9e4d9d257200211d5"
+      "sourceHash": "6c9954c45d3ffa6530fde90ddea68fda1977b2eeab3135161dc01424889a23e8"
     },
     {
       "id": "native.place.guideLinkHint",
-      "source": "Адкрывае прэв'ю гіда, не запуск прагулкі.",
+      "source": "Адкрывае старонку гіда, не запускае прагулку.",
       "context": "Падказка ссылки: адкрывае прэв'ю, не запуск прагулкі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/place/placeDetailController.ts#guideLinkHint"
       ],
-      "sourceHash": "2d8e625a33b415b8a144097cf43e9b9b7566c68f36fc80fdf472b01d4ca79714"
+      "sourceHash": "ad354158be88471453906c9ab3a942fe9b270455828f1ba663dc4128efb1ec3d"
     },
     {
       "id": "native.place.loading",
@@ -1446,14 +1479,14 @@
     },
     {
       "id": "native.place.noFacts",
-      "source": "Месца пакуль не апублікавана ў каталога",
+      "source": "Месца пакуль не апублікавана ў каталогу",
       "context": "Радок стану: месца пакуль не апублікавана ў каталога",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/place/placeDetailController.ts#noFacts"
       ],
-      "sourceHash": "6a837f315b4fc07df8e72f31ac5802801e3e69123b032eb3ddbe6990ef5ec9be"
+      "sourceHash": "382b28f3ffebbd1b00f8b6430012a33190779c561cdc93215d07d9f44505cf92"
     },
     {
       "id": "native.place.nowPlaying",
@@ -2132,25 +2165,25 @@
     },
     {
       "id": "native.run.reasonText.run#recovery-failed",
-      "source": "Збой чытання жывой сесіі.",
+      "source": "Не ўдалося аднавіць прагулку.",
       "context": "Адмова прагулкі: збой чытання жывой сесіі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#reasonText.run#recovery-failed"
       ],
-      "sourceHash": "dc38ee4a64a7e63371d24d15a8811bec2db3a5cc769f78da944fe0c00d11f75b"
+      "sourceHash": "976c79936ade97120cd07ca6d1368ab629d5c26f8724a81a48e69f90ac154597"
     },
     {
       "id": "native.run.reasonText.run#unsafe-route-id",
-      "source": "Няверны ідэнтыфікатар маршруту.",
+      "source": "Маршрут не знойдзены.",
       "context": "Адмова прагулкі: няверны ідэнтыфікатар маршруту",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#reasonText.run#unsafe-route-id"
       ],
-      "sourceHash": "d340822c39b89b886e5951a52bc64b20fca3d6f84871c9e1e5a862235c7b033c"
+      "sourceHash": "cb4751678b50fa4cf132b49084aeb97a084c62bbf798fe3729df5d3aec2ca002"
     },
     {
       "id": "native.run.reasonText.switch-no-live-session",
@@ -2187,14 +2220,14 @@
     },
     {
       "id": "native.run.recenter",
-      "source": "Да майго месцазнаходжання",
+      "source": "Дзе я",
       "context": "Даступная назва кнопкі вяртання камеры карты да бягучай пазіцыі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#recenter"
       ],
-      "sourceHash": "7c9707a52b4598b4df1427e7609582b876d93d53e78eefc086b2ea6e9d0574cc"
+      "sourceHash": "b5b84def8abe1037ea29aa054670088681f5afd07ac471dee632012442c222f5"
     },
     {
       "id": "native.run.resume",
@@ -2297,14 +2330,14 @@
     },
     {
       "id": "native.run.tierUnavailable",
-      "source": "Дадатковы ярус недаступны ў адноўленай сесіі",
+      "source": "Дадатковыя гісторыі недаступныя ў працягнутай прагулцы",
       "context": "Заўвага: дадатковы ярус недаступны ў адноўленай сесіі",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/run/runMap.ts#tierUnavailable"
       ],
-      "sourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c"
+      "sourceHash": "8c9dc1e82b4546650353fea0765261436353977d6d3ac51ffd7753bacd918a0a"
     },
     {
       "id": "native.run.transcript",
@@ -2858,11 +2891,11 @@
     },
     {
       "id": "web.ui.textUnavailableBody",
-      "source": "Гэты гід не мае тэксту на выбранай мове інтэрфейсу. Яго мовы тэксту паказаныя ў спісе моваў у каталоге.",
+      "source": "Гэты гід не мае тэксту на выбранай мове інтэрфейсу. Яго мовы тэксту паказаныя ў спісе моваў у каталогу.",
       "context": "Тэкст старонкі недаступнасці: без падмены змесціва, адсылае да факт-радка моваў гіда (G21.22)",
       "format": "plain",
       "parameters": [],
-      "sourceHash": "07a46c3e0babecfe136297ae2458d4fd0a86e5b2425cead4f1372ac6edb59953",
+      "sourceHash": "063349384a5e26e4663a357f1e865d1e06f4ae40d3ed1ce067827dbe546945f7",
       "migratedFrom": [
         "web/lib/i18n/be.ts#textUnavailableBody"
       ]
@@ -2891,14 +2924,14 @@
     },
     {
       "id": "native.feedback.formTitleGuide",
-      "source": "Як табе гайд?",
+      "source": "Як табе гід?",
       "context": "Пытанне формы водгуку гіда (20 §7)",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/useFeedbackController.ts#formTitleGuide"
       ],
-      "sourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca"
+      "sourceHash": "37bf40d90ae7ffcfa8db4f8d2578b3a5b5a816192e0807ab5a80f93a45924ada"
     },
     {
       "id": "native.feedback.formTitlePlace",
@@ -3103,25 +3136,25 @@
     },
     {
       "id": "native.feedback.inviteTitle",
-      "source": "Як табе гайд? Можна ацаніць — гэта неабавязкова.",
+      "source": "Як табе гід? Можна ацаніць — гэта неабавязкова.",
       "context": "Ціхае запрашэнне пасля End: не мадальнае, адзін раз за сесію",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/useFeedbackController.ts#inviteTitle"
       ],
-      "sourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192"
+      "sourceHash": "cdd3f9953e3d90e1cf30284efbbf338b45130cfdd749be59ac09467e880dc99e"
     },
     {
       "id": "native.feedback.inviteRate",
-      "source": "Ацаніць гайд",
+      "source": "Ацаніць гід",
       "context": "Дзеянне запрашэння адкрывае форму",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "controllers/useFeedbackController.ts#inviteRate"
       ],
-      "sourceHash": "bff14adc9bcb8d672c62ee6ff83e10e26542a927104e7a053ac287c5bda11c3f"
+      "sourceHash": "4e5c57ebf0f7bca4881296e7227e000c4035735dd0573b5444dac71598203f37"
     },
     {
       "id": "native.feedback.inviteDismiss",
@@ -3457,6 +3490,1941 @@
       "migratedFrom": [
         "web/lib/i18n/be.ts#usageRulesReuse"
       ]
+    },
+    {
+      "id": "native.aboutCity.wheel.label",
+      "source": "Раздзелы даведніка",
+      "context": "Назва кола раздзелаў для экраннага чытальніка (критэрый 4 задачы #252)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#wheel.label"
+      ],
+      "sourceHash": "b8729156471cb81584cf6d295747cb306076e3483ba44ac2f2b49162bc83d8ec"
+    },
+    {
+      "id": "native.aboutCity.tab.airport",
+      "source": "Аэрапорт",
+      "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tab.airport"
+      ],
+      "sourceHash": "da949fde636618b259827445f8e5ba7cb4e4a824748cbb40abf8c9847b7ec7ec"
+    },
+    {
+      "id": "native.aboutCity.tab.transport",
+      "source": "Транспарт",
+      "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tab.transport"
+      ],
+      "sourceHash": "4923c44c4b711de07381d032958e4fa2058e1cd9675accbcd2f649dd780fbbce"
+    },
+    {
+      "id": "native.aboutCity.tab.city",
+      "source": "Раёны і карта",
+      "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tab.city"
+      ],
+      "sourceHash": "f7326b23edb8f688dd8acc20a13473bec8a572122b08834f35c74e40b505842e"
+    },
+    {
+      "id": "native.aboutCity.tab.food",
+      "source": "Ежа і грошы",
+      "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tab.food"
+      ],
+      "sourceHash": "b933ddbadc01214fc6a877df8e3cbb7bc7f34e5c653dc1e26472699c9b2bb8e5"
+    },
+    {
+      "id": "native.aboutCity.head.airport",
+      "source": "З аэрапорта і назад",
+      "context": "Загаловак адкрытага раздзела пад колам",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#head.airport"
+      ],
+      "sourceHash": "456ad27870b31e81ce7a84897a438370a4f0fd0b88bf1a0eb93310801fab6fbc"
+    },
+    {
+      "id": "native.aboutCity.head.transport",
+      "source": "Як ездзіць па горадзе",
+      "context": "Загаловак адкрытага раздзела пад колам",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#head.transport"
+      ],
+      "sourceHash": "a7c978153ac687d4f2071c0c073c7f22d70a04d9ec08bb7f566d86a1f1d89207"
+    },
+    {
+      "id": "native.aboutCity.head.city",
+      "source": "Дзе што ў горадзе",
+      "context": "Загаловак адкрытага раздзела пад колам",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#head.city"
+      ],
+      "sourceHash": "c0a21a8ee9abde5173c0b4f4889f4ccca2100560ab39ca10ac2e4cad1803d6e1"
+    },
+    {
+      "id": "native.aboutCity.head.food",
+      "source": "Ежа і аплата",
+      "context": "Загаловак адкрытага раздзела пад колам",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#head.food"
+      ],
+      "sourceHash": "50ac656520b81dd37c5a908c4cd2a25ec8fbd99ca2afdba460839543dfc96516"
+    },
+    {
+      "id": "native.aboutCity.sources.title",
+      "source": "Афіцыйныя спасылкі",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#sources.title"
+      ],
+      "sourceHash": "dd504d36958462488f93482663a6d92d205c9c88cb2570e778569836b063bdc6"
+    },
+    {
+      "id": "native.aboutCity.link.failed",
+      "source": "Не ўдалося адкрыць старонку. Яе адрас: ${url}",
+      "context": "Паведамленне, калі прылада не змагла адкрыць афіцыйную старонку; адрас застаецца на экране (критэрый 7)",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "url",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#link.failed"
+      ],
+      "sourceHash": "3e371b48d0d46b195827ac17608f2b45620f545072799375b4a43d491c7f808c"
+    },
+    {
+      "id": "native.aboutCity.u.aboutMin",
+      "source": "каля ${n} хв",
+      "context": "Службовы шаблон кароткага факта: час, частата, цана",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#u.aboutMin"
+      ],
+      "sourceHash": "3d9d6c3319bf2e7517ab520f26c70b71dc7520dc806110261702aa2820f13769"
+    },
+    {
+      "id": "native.aboutCity.u.everyWeekdays",
+      "source": "у будні кожныя ${n} хв",
+      "context": "Службовы шаблон кароткага факта: час, частата, цана",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#u.everyWeekdays"
+      ],
+      "sourceHash": "cea437b7d77a31c8cb2b21ebf8eb967846691df251f8809420ed9fbf28c8e8e4"
+    },
+    {
+      "id": "native.aboutCity.u.hourly",
+      "source": "штогадзіну",
+      "context": "Службовы шаблон кароткага факта: час, частата, цана",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#u.hourly"
+      ],
+      "sourceHash": "8820418dd562c56e39cb75e1a68f22695b8b1925c787441c9d134843d7cb00eb"
+    },
+    {
+      "id": "native.aboutCity.u.aboutHourly",
+      "source": "прыблізна штогадзіну",
+      "context": "Службовы шаблон кароткага факта: час, частата, цана",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#u.aboutHourly"
+      ],
+      "sourceHash": "a7f0f61e870a2ce673608d279b4b4261430c69688e5a9f86746d990305c9b3dc"
+    },
+    {
+      "id": "native.aboutCity.sr.bus",
+      "source": "Аўтобус",
+      "context": "Назва віду рэйса для экраннага чытальніка перад нумарам лініі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#sr.bus"
+      ],
+      "sourceHash": "4070bbadf9c6bf2d9cca95aeafa3e616a0ff2f84a9970190e772a95b9fbb522c"
+    },
+    {
+      "id": "native.aboutCity.sr.night",
+      "source": "Начны аўтобус",
+      "context": "Назва віду рэйса для экраннага чытальніка перад нумарам лініі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#sr.night"
+      ],
+      "sourceHash": "acde85b43f6ab72632cbe7afbde67ac53959f74a4f500fa45b66e2d32446dcbf"
+    },
+    {
+      "id": "native.aboutCity.sr.train",
+      "source": "Цягнік",
+      "context": "Назва віду рэйса для экраннага чытальніка перад нумарам лініі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#sr.train"
+      ],
+      "sourceHash": "9d0dbce0fc4c3d799725dabaaff13b773acd56466b5ec5bf38f1d7a92259a5e3"
+    },
+    {
+      "id": "native.aboutCity.air.dirLabel",
+      "source": "Кірунак",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.dirLabel"
+      ],
+      "sourceHash": "ec26420ca91c9f417edbf95df52a6ce9c684f9c50ef771dfd8114aeb42354412"
+    },
+    {
+      "id": "native.aboutCity.air.dirFrom",
+      "source": "З аэрапорта",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.dirFrom"
+      ],
+      "sourceHash": "ba4cfde4c4d6fb1b33dfe72e5f9926be402d0e54b111d371fa6006cdab23720b"
+    },
+    {
+      "id": "native.aboutCity.air.dirTo",
+      "source": "У аэрапорт",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.dirTo"
+      ],
+      "sourceHash": "93f7c06ef23da314ed088aa0a97cdc0d69bd1fd5dd6e85e85b49408dedf411c9"
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.title",
+      "source": "Выйдзі з тэрмінала",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.from.s1.title"
+      ],
+      "sourceHash": "3358cfc979f0becbafa6f0c56d55e37b9693f83633d969b95728eda4df7fca8e"
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.text",
+      "source": "Аўтобусныя прыпынкі — насупраць тэрмінала, каля паркінгу P1. Да станцыі цягніка Gdańsk Port Lotniczy вядзе крыты пераход.",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.from.s1.text"
+      ],
+      "sourceHash": "9ad9c58c3f62510d168a0993946d07479c2dc395b572ea8c7937b0a810600601"
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.stop01",
+      "source": "Port Lotniczy 01 — у цэнтр",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.from.s1.stop01"
+      ],
+      "sourceHash": "061fdaa9ac4c9b9c951b0bcbcc5937b7d58e2d5122947439c8e2fcd26fcc0f19"
+    },
+    {
+      "id": "native.aboutCity.air.from.s1.stop02",
+      "source": "Port Lotniczy 02 — у Wrzeszcz",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.from.s1.stop02"
+      ],
+      "sourceHash": "d07b08234d5b16a8f2f9f644490d0df8952a273c5fe1f17140a1eae06ca3e3a8"
+    },
+    {
+      "id": "native.aboutCity.air.to.s1.title",
+      "source": "Дабярыся да прыпынку",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.to.s1.title"
+      ],
+      "sourceHash": "a628da3a26e0a9c5c617f891b710b4715696f11b543f55c56392e2a0aa1441f6"
+    },
+    {
+      "id": "native.aboutCity.air.to.s1.text",
+      "source": "Аўтобус 210 адпраўляецца з цэнтра з прыпынку Dworzec Główny 10 на вуліцы Podwale Grodzkie; аўтобус 110 — з Gdańsk Wrzeszcz.",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.to.s1.text"
+      ],
+      "sourceHash": "540ad81eff5d454ead761b5a9894c29ea64ad46c78decbda681d46be9b5b91f7"
+    },
+    {
+      "id": "native.aboutCity.air.s2.title",
+      "source": "Выберы рэйс",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.s2.title"
+      ],
+      "sourceHash": "3f3bf1a5c18d7a57e88a9566faaffaf136a0d58fa9c69ea6c36c7cda0dd14b2b"
+    },
+    {
+      "id": "native.aboutCity.air.s3.title",
+      "source": "Вазьмі білет",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.s3.title"
+      ],
+      "sourceHash": "d4c2c6eee48057f9d70434acf25c66c28580687f9922c0f7023503c1bf437345"
+    },
+    {
+      "id": "native.aboutCity.ride.210.from",
+      "source": "У цэнтр горада",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.210.from"
+      ],
+      "sourceHash": "37ed30c972ff7c8921c286e4b062db04991d3fc9aa5fb107b641d4f62d37294e"
+    },
+    {
+      "id": "native.aboutCity.ride.210.to",
+      "source": "З цэнтра горада",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.210.to"
+      ],
+      "sourceHash": "57d31a42885b8ff124e54cdf67edf1edfa007e31a757f52ff46ecafe6bcc4e83"
+    },
+    {
+      "id": "native.aboutCity.ride.110.from",
+      "source": "У Gdańsk Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.110.from"
+      ],
+      "sourceHash": "96928c3a75f740fb3ab48ddebe6168a5a2ad46fe8d0087de962c3ac3248af3a1"
+    },
+    {
+      "id": "native.aboutCity.ride.110.to",
+      "source": "З Gdańsk Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.110.to"
+      ],
+      "sourceHash": "2c0d5a757ca1722161ce4327c3fe0088021bda8ce1e358805752f5d899c2b6f8"
+    },
+    {
+      "id": "native.aboutCity.ride.n3.from",
+      "source": "Уначы: цэнтр і Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.n3.from"
+      ],
+      "sourceHash": "2e5949f976f502fe4a3cf4fc8ee3815a01f33e7eceeb31d6c194c36d30dc9416"
+    },
+    {
+      "id": "native.aboutCity.ride.n3.to",
+      "source": "Уначы: з цэнтра і Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.n3.to"
+      ],
+      "sourceHash": "dafc0c94583222c04a8dae4d046f3029247ccc0011333ad4e2df993bb7b2034c"
+    },
+    {
+      "id": "native.aboutCity.ride.train.from",
+      "source": "Цягнік да Gdańsk Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.train.from"
+      ],
+      "sourceHash": "cc8861f1d3475f477b939643bcf275f0bca842f0b581d1336b86ca9ed44a128b"
+    },
+    {
+      "id": "native.aboutCity.ride.train.to",
+      "source": "Цягнік з Gdańsk Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.train.to"
+      ],
+      "sourceHash": "9be672c474bb6d071fd2cc97d1815901d986ecd1d63cc7074afb73eb7b024754"
+    },
+    {
+      "id": "native.aboutCity.row.stop",
+      "source": "Прыпынак",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.stop"
+      ],
+      "sourceHash": "e80d2182705857059dc858ba656e3aa9e16e0d7604421123625ea5be85729702"
+    },
+    {
+      "id": "native.aboutCity.row.firstLast",
+      "source": "Першы і апошні",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.firstLast"
+      ],
+      "sourceHash": "71230bf9cbd7cd450602590de6044286d36769fc3700b7c580b8e1709e318d5e"
+    },
+    {
+      "id": "native.aboutCity.row.sunday",
+      "source": "У нядзелю",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.sunday"
+      ],
+      "sourceHash": "2691cd195577a706dd261e92f6cc3dd7198e645a76a1e39300e5a24136dc60a1"
+    },
+    {
+      "id": "native.aboutCity.row.centreStops",
+      "source": "Прыпынкі ў цэнтры",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.centreStops"
+      ],
+      "sourceHash": "6111fb9f076d97e76887df036bd37246dd81a5817ef9eb0ccbdc02816fa8ddb5"
+    },
+    {
+      "id": "native.aboutCity.row.also",
+      "source": "Яшчэ",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.also"
+      ],
+      "sourceHash": "1c8452ac490b11b4b37823cad64e02d00dbf413659bf8b5d858b54774313d285"
+    },
+    {
+      "id": "native.aboutCity.row.route",
+      "source": "Маршрут",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.route"
+      ],
+      "sourceHash": "c8b462504d5197ac27ada96b9d8dfcd2970688347f05565c74f380d8443494fd"
+    },
+    {
+      "id": "native.aboutCity.row.toCentre",
+      "source": "У цэнтр",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.toCentre"
+      ],
+      "sourceHash": "a0505955bf685d80ca38199d25f51119731cc8e0a4ba34f878bf9624b98e7847"
+    },
+    {
+      "id": "native.aboutCity.row.toWrzeszcz",
+      "source": "У Wrzeszcz",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.toWrzeszcz"
+      ],
+      "sourceHash": "065cde5013867110774e7d5da0590a0b471edde9501d509d7e2bed33ebf09169"
+    },
+    {
+      "id": "native.aboutCity.row.operator",
+      "source": "Перавозчык",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#row.operator"
+      ],
+      "sourceHash": "397d7fbe5fc3ae96a471334fe0d13ca4fd95913e00a1868c637101049e0e9afc"
+    },
+    {
+      "id": "native.aboutCity.ride.110.also",
+      "source": "Аўтобус 120 ходзіць паміж аэрапортам і Łostowice Świętokrzyska.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.110.also"
+      ],
+      "sourceHash": "f56e63f650b50de04f25fbb0e9f4688088c373cce9f2220187e8698e0a78b016"
+    },
+    {
+      "id": "native.aboutCity.ride.n3.when",
+      "source": "штоночы, 23:00 – 04:00",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.n3.when"
+      ],
+      "sourceHash": "e129fdf31bdc8783dfb364ddfe5b77ad41f2bf8e3146d4e12ad083fb18b73b63"
+    },
+    {
+      "id": "native.aboutCity.ride.n3.toCentre",
+      "source": "З Port Lotniczy 01 у 23:15, 00:06, 01:15 і далей; каля 50 хв.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.n3.toCentre"
+      ],
+      "sourceHash": "4536b989ae24c22417ecc2bd8a40b37ee8edc9170646b68dd326f85bd69d30cb"
+    },
+    {
+      "id": "native.aboutCity.ride.n3.toWrzeszcz",
+      "source": "З Port Lotniczy 02; каля 20 хв.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.n3.toWrzeszcz"
+      ],
+      "sourceHash": "5d9209725227333840d73e74d74ddc961dc7291b22e56af2b1e34ee6a13dc04b"
+    },
+    {
+      "id": "native.aboutCity.ride.n3.route",
+      "source": "Dworzec Główny ⇄ аэрапорт ⇄ Gdańsk Wrzeszcz. Да Сопата і Гдыні не ідзе.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.n3.route"
+      ],
+      "sourceHash": "e7c2ba1173e00f60135a880f883c4f8158c70a604650001e48ec651806e6b689"
+    },
+    {
+      "id": "native.aboutCity.ride.train.change",
+      "source": "Прамыя цягнікі да Gdańsk Główny ёсць, але часцей патрэбная перасадка ў Gdańsk Wrzeszcz: з перона 3 на SKM у бок цэнтра.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.train.change"
+      ],
+      "sourceHash": "eb7d9c105c72087226866f393aecb271290cfc7410ab0bc79bf33b57005f9f40"
+    },
+    {
+      "id": "native.aboutCity.ride.train.line",
+      "source": "Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa. Прамыя цягнікі паміж Gdańsk Główny і аэрапортам ёсць, але часцей патрэбная перасадка ў Gdańsk Wrzeszcz.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.train.line"
+      ],
+      "sourceHash": "8bee6c8f4ecd4ef2a24e57029f04bb3cae39ce59fc713d590536f3a48a066872"
+    },
+    {
+      "id": "native.aboutCity.ride.train.operator",
+      "source": "POLREGIO. SKM да станцыі аэрапорта не ходзіць.",
+      "context": "Карткі рэйсаў аэрапорта: назва, факт і радкі дэталяў",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#ride.train.operator"
+      ],
+      "sourceHash": "bbcbdcca5ef40ea963d9c7d7c5977c394ef424587ffd961e1fa1a0f2874de4ef"
+    },
+    {
+      "id": "native.aboutCity.air.ticket.bus.title",
+      "source": "Аўтобус: білет ZTM",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.ticket.bus.title"
+      ],
+      "sourceHash": "a62aabfad851d46e9abdf42d276c2df6c1ba447fd9f10b4de563ed3f06ffe01f"
+    },
+    {
+      "id": "native.aboutCity.air.ticket.bus.where",
+      "source": "Купі ў праграме Jakdojade або FALA ці аплаці карткай у прыладзе FALA ў салоне.",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.ticket.bus.where"
+      ],
+      "sourceHash": "b8f3889572e4a68acf420164cfe8f37715b1da553aec121853d1f2284c653af2"
+    },
+    {
+      "id": "native.aboutCity.air.ticket.train.title",
+      "source": "Цягнік: асобны чыгуначны білет",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.ticket.train.title"
+      ],
+      "sourceHash": "c6f82060dc27eb9672232795843df848b25baf2a94f96538c0237ac678414d49"
+    },
+    {
+      "id": "native.aboutCity.air.ticket.train.where",
+      "source": "Гарадскі білет ZTM у цягніку не дзейнічае. Чыгуначны білет купі ў аўтамаце на пероне або ў праграме Polregio, Jakdojade ці FALA.",
+      "context": "Раздзел «Аэрапорт»: кірунак, крокі, білеты, заўвага пра часовы расклад",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.ticket.train.where"
+      ],
+      "sourceHash": "f2d485b4b07d00b0d2c4f1db94153c8a34f995ad1ea04b3aca7ddf1ca9d5c7ef"
+    },
+    {
+      "id": "native.aboutCity.tr.modes",
+      "source": "Чым ехаць",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.modes"
+      ],
+      "sourceHash": "30578e894c6ac40ee071de765e5c35633f17c04feca126be6ad8a2cdfdf72fe4"
+    },
+    {
+      "id": "native.aboutCity.tr.ztm.title",
+      "source": "Аўтобусы і трамваі",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.ztm.title"
+      ],
+      "sourceHash": "b850100a827c6f0bdf9f21b8983c1fa27a6a2828a0c6fe3d39769723288dfec4"
+    },
+    {
+      "id": "native.aboutCity.tr.ztm.meta",
+      "source": "ZTM · па Гданьску",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.ztm.meta"
+      ],
+      "sourceHash": "fb484fddcbeb36cf29de322f8396422b440c807267e3e175965f2c50698ef6a2"
+    },
+    {
+      "id": "native.aboutCity.tr.ztm.text",
+      "source": "Галоўны транспарт горада і суседніх гмін. Сопат і Гдыня маюць свае сеткі ZKM. Агульны тарыф на ўсю агламерацыю вядзе саюз MZKZG: яго білеты дзейнічаюць і ў Гданьску, і ў суседніх гарадах.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.ztm.text"
+      ],
+      "sourceHash": "5242908c75ca09a31fa3f772654b1e64fc2705161882dc4bb21dff10e34e6d68"
+    },
+    {
+      "id": "native.aboutCity.tr.skm.title",
+      "source": "Цягнік SKM",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.skm.title"
+      ],
+      "sourceHash": "60421a8c9e985c58b7cb36ec801cd701645b71545efdf36dfad540e4180a72b1"
+    },
+    {
+      "id": "native.aboutCity.tr.skm.meta",
+      "source": "У Сопат і Гдыню",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.skm.meta"
+      ],
+      "sourceHash": "b2a541c0c88bc07ae3502a072a15f9aa6847adf04968a3196930230893bd1031"
+    },
+    {
+      "id": "native.aboutCity.tr.skm.text",
+      "source": "Галоўная лінія Гдыня – Сопат – Гданьск. У будні цягнікі ходзяць прыблізна кожныя 10–15 хвілін; дакладны час — у раскладзе.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.skm.text"
+      ],
+      "sourceHash": "6d6df35de1bcf5068fd9def3a2327d23c5d2d0ff3dab726ebe42f391f011ddd8"
+    },
+    {
+      "id": "native.aboutCity.tr.skm.warn",
+      "source": "Разавыя білеты ZTM у цягніках не дзейнічаюць. Патрэбны білет MZKZG «з цягнікамі» або білет SKM.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.skm.warn"
+      ],
+      "sourceHash": "f528883f7506e0d1214313bf366180b91d5bad7e2ed6a9b13281296f13d9f474"
+    },
+    {
+      "id": "native.aboutCity.tr.rail.title",
+      "source": "Цягнікі POLREGIO",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.rail.title"
+      ],
+      "sourceHash": "c78968073de1d3de1b7674ecd7d79879d674d667a8e00cf3236b3920a066968b"
+    },
+    {
+      "id": "native.aboutCity.tr.rail.meta",
+      "source": "Аэрапорт, Мальбарк і далей",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.rail.meta"
+      ],
+      "sourceHash": "e0bada036a28a50f40072412a465d787e96f88219b407c5aa80640d4b61b5e6d"
+    },
+    {
+      "id": "native.aboutCity.tr.rail.text",
+      "source": "POLREGIO абслугоўвае лінію PKM да аэрапорта (Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa) і рэгіянальныя цягнікі ў Мальбарк, Слупск і Картузы. Расклад і білеты — polregio.pl.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.rail.text"
+      ],
+      "sourceHash": "39049551136d4801d1d1fe4f37cde0c4c7c3012d55a03d8afd0f5e6f74bd71b7"
+    },
+    {
+      "id": "native.aboutCity.tr.buyLabel",
+      "source": "Дзе купіць",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту, зоны, актывацыя, дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buyLabel"
+      ],
+      "sourceHash": "e873ccfa67461ab038a72a14d55316f64c7bcacbf2cabc3e7319f521d1798bc3"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.jakdojade.title",
+      "source": "Jakdojade",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.jakdojade.title"
+      ],
+      "sourceHash": "ddfb36d364f082dc85edd1eb18d60f02c81d98bd5065fc2231e0924e083a72d7"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.jakdojade.text",
+      "source": "Планавальнік паездак і білеты Трайместа.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.jakdojade.text"
+      ],
+      "sourceHash": "490993a793bdb6a272cb957156eb61dd32d1897c46ac6d30a748f1fdcca89b0a"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.fala.title",
+      "source": "FALA",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.fala.title"
+      ],
+      "sourceHash": "fb0067ea51de6471c7e56eef0f6b0a804ad7370b09215e19825b9697b622eefc"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.fala.text",
+      "source": "Білеты Гданьска, метраполіі і цягнікоў у адной сістэме.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.fala.text"
+      ],
+      "sourceHash": "0ce5ee9a04b90d5462d259414d1c459bb9c49555b8c12b9682f78612dac3aff0"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.kompas.title",
+      "source": "SKM KomPas",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.kompas.title"
+      ],
+      "sourceHash": "492ae045661bc3a62884203121089947dc984386fcf629d90297a2788d2dcb8b"
+    },
+    {
+      "id": "native.aboutCity.tr.buy.kompas.text",
+      "source": "Аплікацыя SKM: расклад цягнікоў офлайн да трох тыдняў.",
+      "context": "Раздзел «Транспарт і білеты»: віды транспарту і дзе купіць",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.buy.kompas.text"
+      ],
+      "sourceHash": "3460839d74f91e834be66b233edc1634a380fcc93c1538182375f420a2fa592c"
+    },
+    {
+      "id": "native.aboutCity.city.caption",
+      "source": "Ілюстраваная карта: станцыі і зоны стаяць на сваіх месцах, але малюнак прыблізны. Не для навігацыі.",
+      "context": "Подпіса пад картай Труймяста ў раздзеле «Гданьск з аднаго погляду»: малюнак прыблізны, не для навігацыі (#303; карта замяняе схему)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.caption"
+      ],
+      "sourceHash": "7fb89e2848f5e12b7ed1728b7e6f58e080913bc7979f426eac6cb134a7ff25ce"
+    },
+    {
+      "id": "native.aboutCity.city.get",
+      "source": "Як дабрацца",
+      "context": "Раздзел «Дзе што ў горадзе»: схема арыенціраў і подпісы да яе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.get"
+      ],
+      "sourceHash": "c5056de76c38eb10d262b6964f982b29c71eefbd47cdd91b8f74f625bd1c65fc"
+    },
+    {
+      "id": "native.aboutCity.city.summer",
+      "source": "Улетку пляжныя рэйсы ходзяць часцей.",
+      "context": "Раздзел «Дзе што ў горадзе»: схема арыенціраў і подпісы да яе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#city.summer"
+      ],
+      "sourceHash": "c749d8aab008345438f7c714847ce4c1e598855da3b9307b54a07a3b41ff1b8c"
+    },
+    {
+      "id": "native.aboutCity.place.glowne",
+      "source": "Турыстычнае сэрца Гданьска на рацэ Motława: вуліцы Długa і Długi Targ, фантан Нептуна, Ратуша, касцёл Святой Марыі і Żuraw.",
+      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.glowne"
+      ],
+      "sourceHash": "7064dc82bb7586955456a24274c56716a04d0fc309a67ed8daf8c203fd615546"
+    },
+    {
+      "id": "native.aboutCity.place.oliwa",
+      "source": "Катэдра цыстэрцыянцаў са знакамітым арганам (канцэрты; міжнародны фестываль арганнай музыкі ў ліпені і жніўні), парк Адама Міцкевіча і найбольшы ў Польшчы па плошчы заапарк.",
+      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.oliwa"
+      ],
+      "sourceHash": "d2dfc4d0d8f004e6d3cca655e7ddc2e3ce0c66f938174b9ce6de05218602e566"
+    },
+    {
+      "id": "native.aboutCity.place.brzezno",
+      "source": "Самы папулярны гарадскі пляж.",
+      "context": "Апісанне месца, якое выбралі на схеме, і яго заўвага",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.brzezno"
+      ],
+      "sourceHash": "44515b05c4e0ef9ca822b9d30facda6eb89c8b6dae590e855792b723e54bb650"
+    },
+    {
+      "id": "native.aboutCity.get.glowne",
+      "source": "каля 10 хв пешкі ад Gdańsk Główny",
+      "context": "Радок «як дабрацца» для месца на схеме",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.glowne"
+      ],
+      "sourceHash": "b6327426539bb1ed8c71455512045800091ef527cb12abab586d154a694f8d09"
+    },
+    {
+      "id": "native.aboutCity.get.wrzeszcz",
+      "source": "SKM або цягнік да Gdańsk Wrzeszcz",
+      "context": "Радок «як дабрацца» для месца на схеме",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.wrzeszcz"
+      ],
+      "sourceHash": "f9ff89df17ffc235cdd8943cf24aafcfd151bbbb0812e814549b1148f806215d"
+    },
+    {
+      "id": "native.aboutCity.get.oliwa.tram",
+      "source": "трамвай 5, таксама 6",
+      "context": "Радок «як дабрацца» для месца на схеме",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.oliwa.tram"
+      ],
+      "sourceHash": "93641e0529f4d78a06a8079a04ccd6da18a398b17ea7682e3e23162ef6dc5194"
+    },
+    {
+      "id": "native.aboutCity.get.oliwa.skm",
+      "source": "SKM да Gdańsk Oliwa",
+      "context": "Радок «як дабрацца» для месца на схеме",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.oliwa.skm"
+      ],
+      "sourceHash": "96beb8caf755b38abc0eed8d5143aa8d8820507ba8c0f50df8eab990499456cf"
+    },
+    {
+      "id": "native.aboutCity.get.brzezno",
+      "source": "трамвай 3 да Brzeźno Dom Zdrojowy",
+      "context": "Радок «як дабрацца» для месца на схеме",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.brzezno"
+      ],
+      "sourceHash": "c9a695dc70cb0eb8ef970418e08af3380a74af4d1fd71e9e4704c03d7ad48a0c"
+    },
+    {
+      "id": "native.aboutCity.food.deliveryLabel",
+      "source": "Дастаўка ежы",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.deliveryLabel"
+      ],
+      "sourceHash": "c2ff6282af8382bdd1c191102d6419ef57e9b40311d3844900779fbdac48e753"
+    },
+    {
+      "id": "native.aboutCity.food.delivery.lead",
+      "source": "Усе пяць сэрвісаў працуюць па ўсім Гданьску. Выберы спосаб аплаты, каб убачыць, хто яго прымае.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.delivery.lead"
+      ],
+      "sourceHash": "751ff7200ff71d07f6d2b7a922609a999b2b3cdd899c560ed9dab6ef2b5bf416"
+    },
+    {
+      "id": "native.aboutCity.food.pay",
+      "source": "Спосаб аплаты",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.pay"
+      ],
+      "sourceHash": "35e7f4328f6eafc9079a72a1c47b0d0064b6fc001b561098e0fc105e3e744bd1"
+    },
+    {
+      "id": "native.aboutCity.pay.any",
+      "source": "Любы",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.any"
+      ],
+      "sourceHash": "16af34904af9324cd39ca5e9c481935ad791871febb482675d2aba58e6828fee"
+    },
+    {
+      "id": "native.aboutCity.pay.card",
+      "source": "Картка",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.card"
+      ],
+      "sourceHash": "324479fa00cf5a61ff9b1da32819b297bbc9342ee1e711232eb6bb390364b196"
+    },
+    {
+      "id": "native.aboutCity.pay.blik",
+      "source": "BLIK",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.blik"
+      ],
+      "sourceHash": "76e9451ffe33cacb19f4553c502ce1edd62b84a947135ad97e8f73621d53a736"
+    },
+    {
+      "id": "native.aboutCity.pay.cash",
+      "source": "Гатоўка",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.cash"
+      ],
+      "sourceHash": "7887e899ee4118bda2494cc4f57047e21b37a8780512ac17e244f5876e3c2f8e"
+    },
+    {
+      "id": "native.aboutCity.pay.apple",
+      "source": "Apple Pay",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.apple"
+      ],
+      "sourceHash": "8d0b52f2570013f301549a9d08607cd523dde81c9274cdd176ce5bde2984cc17"
+    },
+    {
+      "id": "native.aboutCity.pay.google",
+      "source": "Google Pay",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.google"
+      ],
+      "sourceHash": "6123d2cd62b89d86303936ed67114235cef2be5b0278bf85426960c405372ed2"
+    },
+    {
+      "id": "native.aboutCity.pay.paypal",
+      "source": "PayPal",
+      "context": "Чып спосабу аплаты ў фільтры дастаўкі",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#pay.paypal"
+      ],
+      "sourceHash": "900ec4275e1271970e8409422861db0dc925bf0414f9c8b0dfc6aaa91890e569"
+    },
+    {
+      "id": "native.aboutCity.food.unconfirmed",
+      "source": "афіцыйна не пацверджана",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.unconfirmed"
+      ],
+      "sourceHash": "309d81de03f8fedb64adf7d989f39b738f558a02e53bba4010e5872eb5c664c2"
+    },
+    {
+      "id": "native.aboutCity.food.bolt.note",
+      "source": "гатоўка пры атрыманні",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.bolt.note"
+      ],
+      "sourceHash": "d7707498537a6c6890a6e097bd9d002dfc12f7271a4e3f5d5bd0e95358a7b966"
+    },
+    {
+      "id": "native.aboutCity.food.note",
+      "source": "Калі спосабу ў сэрвіса няма, гэта значыць, што афіцыйныя старонкі яго не пацвярджаюць, а не што ён забаронены.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.note"
+      ],
+      "sourceHash": "1fc49a25bdc35958abaa8bf2da8e49516364d5c15bd97cb67cee8bf5915a37f1"
+    },
+    {
+      "id": "native.aboutCity.food.city",
+      "source": "Аплата ў горадзе",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.city"
+      ],
+      "sourceHash": "f4d01953b776912eb62da8700fb173c663143311131e60cf54724f5482b9b6a9"
+    },
+    {
+      "id": "native.aboutCity.food.cards.title",
+      "source": "Карткі і гатоўка",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.cards.title"
+      ],
+      "sourceHash": "d302d2ec7926f9107ea2b862716569b6c8bbcf7f8544598a4b55add04250fd20"
+    },
+    {
+      "id": "native.aboutCity.food.cards.meta",
+      "source": "Visa, Mastercard, злотыя",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.cards.meta"
+      ],
+      "sourceHash": "157516f61144bd61c2ec90da37ea3a1f1c4368ab75102994a69f75b2345da7a7"
+    },
+    {
+      "id": "native.aboutCity.food.cards.text",
+      "source": "Бескантактавыя Visa і Mastercard — асноўны спосаб аплаты ў дастаўцы і ў крамах. Гатоўку ў злотых прымаюць толькі там, дзе гэта яўна пазначана. Афіцыйнага абяцання, што карткі ці гатоўку прымаюць паўсюль, няма: дзейныя спосабы пазначаныя на тэрмінале і на касе.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.cards.text"
+      ],
+      "sourceHash": "4bb7216621277290afca546cbe6fd15831f752d763092968b1a778cbfdf85c6f"
+    },
+    {
+      "id": "native.aboutCity.food.blik.title",
+      "source": "BLIK",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.title"
+      ],
+      "sourceHash": "0508aa1cf69030ada8c9e7ce88223d4dabf29c2d9de0d77965c2055f914236d2"
+    },
+    {
+      "id": "native.aboutCity.food.blik.meta",
+      "source": "Польскі мабільны плацёж",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.meta"
+      ],
+      "sourceHash": "694728fef3cddf7b76a8a76cff514139ae4d7ab1a14de270d6cd495ab1855e77"
+    },
+    {
+      "id": "native.aboutCity.food.blik.need",
+      "source": "Патрэбны рахунак у польскім банку-ўдзельніку і мабільная праграма банка.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.need"
+      ],
+      "sourceHash": "3363b17ae73030fe5fc8faddc2051cc99858ceb021c98390b5e605f01425969d"
+    },
+    {
+      "id": "native.aboutCity.food.blik.online.title",
+      "source": "У інтэрнэце",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.online.title"
+      ],
+      "sourceHash": "6e8aba0162c0eafed5692e356f7f6977ae2f22d6d5aa70710b6662b84cb7ca7d"
+    },
+    {
+      "id": "native.aboutCity.food.blik.online.text",
+      "source": "Увядзі аднаразовы шасцізначны код з праграмы і пацвердзі.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.online.text"
+      ],
+      "sourceHash": "9e6089db4bbea8d855fbe46e8919af6519eab0cce103bb1bea849fbe220b9038"
+    },
+    {
+      "id": "native.aboutCity.food.blik.till.title",
+      "source": "На касе",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.till.title"
+      ],
+      "sourceHash": "c8d6598f415c64ae94cbef0a1902270ca413fba868faf2f9e1a4da33538cbe51"
+    },
+    {
+      "id": "native.aboutCity.food.blik.till.text",
+      "source": "Плаці бескантактава з праграмы або ўвядзі той самы код на тэрмінале.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.till.text"
+      ],
+      "sourceHash": "726b45c044926007b7b2268fac1dfc80fcd2669fe63e38f2b723f0da51a123d7"
+    },
+    {
+      "id": "native.aboutCity.food.blik.more",
+      "source": "BLIK таксама пераводзіць грошы па нумары тэлефона і здымае гатоўку ў банкамаце без карткі.",
+      "context": "Раздзел «Ежа і аплата»: дастаўка, фільтр спосабаў аплаты, аплата ў горадзе",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.blik.more"
+      ],
+      "sourceHash": "90721d4d3566d45cc6d0c19a511cec8b1c68db6ab2741ad3e346523468b4cc1b"
+    },
+    {
+      "id": "native.aboutCity.card.title",
+      "source": "Gdańska Karta Turysty",
+      "context": "Раздзел «Картка і музеі»: пакеты, тэрмін, дадатак транспарту, бясплатныя дні",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#card.title"
+      ],
+      "sourceHash": "b2c4fa48c2cbee335a1251c3dee0eea3a7a96956aeeb5e21e77dbe969148108f"
+    },
+    {
+      "id": "native.aboutCity.card.lead",
+      "source": "Турыстычная картка Гданьска дапамагае наведваць музеі і іншыя цікавыя месцы паводле выбранага пакета. Транспартны білет можна набыць дадаткова — ён не ўваходзіць у асноўны пакет. Актуальныя магчымасці і ўмовы правер на афіцыйным сайце.",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#card.lead"
+      ],
+      "sourceHash": "8dc710fb4b5ee27098def447d67b11de94ae189c7028e79620fef6a99a8a0885"
+    },
+    {
+      "id": "native.aboutCity.links.airportBuses",
+      "source": "Аўтобусы ў аэрапорт і назад — airport.gdansk.pl",
+      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.airportBuses"
+      ],
+      "sourceHash": "331a6185ad8170919405627b22e1923e6477e2c70213cf00a5ecabc5d1907f4a"
+    },
+    {
+      "id": "native.aboutCity.links.airportTrains",
+      "source": "Цягнікі ў аэрапорт і назад — airport.gdansk.pl",
+      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.airportTrains"
+      ],
+      "sourceHash": "f5ece53b31f83af1f8e1a68a07f18460587d7ec2f93de2a7f07ab07c4018cd39"
+    },
+    {
+      "id": "native.aboutCity.links.ztmSchedule",
+      "source": "Расклады ZTM Гданьска",
+      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.ztmSchedule"
+      ],
+      "sourceHash": "ddeab1782dac1ac1ff50001d16e49b9ab734f880a0c51aee148263ae4d78eaeb"
+    },
+    {
+      "id": "native.aboutCity.links.skmSearch",
+      "source": "Пошук рэйсаў SKM",
+      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.skmSearch"
+      ],
+      "sourceHash": "77a54c1011e4d174a448201692c2fd362a381bfbe730e8175730b1e583c38776"
+    },
+    {
+      "id": "native.aboutCity.links.kartaTurysty",
+      "source": "Karta Turysty — афіцыйныя пакеты і ўмовы",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.kartaTurysty"
+      ],
+      "sourceHash": "ba55d8c691dbeaf1160ba790414beae8fda83817593203db9df38a81e5f7b5b6"
+    },
+    {
+      "id": "native.aboutCity.links.pysznePayment",
+      "source": "Аплата ў Pyszne.pl",
+      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.pysznePayment"
+      ],
+      "sourceHash": "c8274603eb4f4a256c705a6735f2dae3afa311a96d18fc81043a4c9548a04761"
+    },
+    {
+      "id": "native.aboutCity.links.blikHow",
+      "source": "Як карыстацца BLIK — blik.com",
+      "context": "Назва радка афіцыйнай старонкі ў спісе крыніц раздзела",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#links.blikHow"
+      ],
+      "sourceHash": "22756a7fb58d4dafbeff6953f1f370fd31f304b69591d68ed5e416edfa255468"
+    },
+    {
+      "id": "native.aboutCity.map.label",
+      "source": "Карта Труймяста",
+      "context": "Раздзел «Гданьск з аднаго погляду»: назва карты Труймяста для экраннага чытальніка (#303; рашэнні M12–M13, макет #248)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.label"
+      ],
+      "sourceHash": "7548aa85035242327b14b6ccbd9335e4bd08e0d0e8b7169a03f05f36d27ce2b7"
+    },
+    {
+      "id": "native.aboutCity.map.role",
+      "source": "карта",
+      "context": "Раздзел «Гданьск з аднаго погляду»: роля карты для экраннага чытальніка (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.role"
+      ],
+      "sourceHash": "2dd9359a1a5aa8fe9f3092f4071746126c779709b9942659bfdea080d2fa91df"
+    },
+    {
+      "id": "native.aboutCity.map.zoomIn",
+      "source": "Наблізіць",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка набліжэння карты (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.zoomIn"
+      ],
+      "sourceHash": "13e767472d50f2ce0e4e48c067ae3755d77a179ab59b74c62ab554bedefe8bb7"
+    },
+    {
+      "id": "native.aboutCity.map.zoomOut",
+      "source": "Аддаліць",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка аддалення карты (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.zoomOut"
+      ],
+      "sourceHash": "a02601b9e2f703cbf7e08a3f2564033bba1d22ae5869cba524f901f6cb635bac"
+    },
+    {
+      "id": "native.aboutCity.map.fit",
+      "source": "Паказаць усю карту",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка «паказаць усю карту» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.fit"
+      ],
+      "sourceHash": "05baf05871f14bbab8c4bc58fb8cc729b4cfa157e393fb8328b1c57e5741f73c"
+    },
+    {
+      "id": "native.aboutCity.map.google",
+      "source": "Адкрыць у Google Maps",
+      "context": "Раздзел «Гданьск з аднаго погляду»: маленькая кнопка каля кнопак маштабу, што адкрывае Google Maps на выбраным месцы (рашэнне M13)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.google"
+      ],
+      "sourceHash": "bc447522e8a61d485377ad2b7eef3079addd38ebb2cc56ed657f3f46bdf79334"
+    },
+    {
+      "id": "native.aboutCity.map.layers",
+      "source": "Што паказвае карта",
+      "context": "Раздзел «Гданьск з аднаго погляду»: назва групы перамыкачаў слаёў карты (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.layers"
+      ],
+      "sourceHash": "2d7d744aca8b61b8c7578dd5dd4d9382ea29063b2c6611fe137d38b0c3d2a16b"
+    },
+    {
+      "id": "native.aboutCity.map.hint",
+      "source": "Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: падказка ў картцы пад картай, пакуль нічога не выбрана (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.hint"
+      ],
+      "sourceHash": "81879a433119e0e02483ce4b110aa0e4eaeb7265836af488b287bf3106f84e54"
+    },
+    {
+      "id": "native.aboutCity.map.list",
+      "source": "Зоны, станцыі і аэрапорт спісам",
+      "context": "Раздзел «Гданьск з аднаго погляду»: загаловак згорткі са спісам зон, станцый і аэрапорта (#303, #312)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.list"
+      ],
+      "sourceHash": "b84616b19d7fcd0602dfd767c9ec4e91940ae423a4fa268dfff46ec033c37787"
+    },
+    {
+      "id": "native.aboutCity.map.listMeta",
+      "source": "${visit} для наведвання, ${stay} каб спыніцца",
+      "context": "Раздзел «Гданьск з аднаго погляду»: радок-падпіс спісу зон — колькасць зон для наведвання і для спынку",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "visit",
+          "type": "number"
+        },
+        {
+          "name": "stay",
+          "type": "number"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#map.listMeta"
+      ],
+      "sourceHash": "e30a4d09ee9bcf890bf81900c2232313e166dfa404322726504aae431e24c0b3"
+    },
+    {
+      "id": "native.aboutCity.layer.visit",
+      "source": "Месцы для наведвання",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю і пазнака віду зоны «месцы для наведвання» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.visit"
+      ],
+      "sourceHash": "9df71812ca10e0b3b5e449f1e5626af1145fd0ffa53a1336f4ba274611020e9c"
+    },
+    {
+      "id": "native.aboutCity.layer.stay",
+      "source": "Зручна спыніцца",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю і пазнака віду зоны «зручна спыніцца» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.stay"
+      ],
+      "sourceHash": "59484ad07f43c4c169c2b0782755c1cab85ebb1d3b62d3daeba201b04da793a1"
+    },
+    {
+      "id": "native.aboutCity.layer.rail",
+      "source": "Цягнікі SKM і PKM",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю цягнікоў SKM і PKM (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.rail"
+      ],
+      "sourceHash": "c84b0cdf3a3f8013573dc76b28dc9c56737bf18944cfddf703507ae409b5158f"
+    },
+    {
+      "id": "native.aboutCity.layer.plan",
+      "source": "Будучая лінія",
+      "context": "Раздзел «Гданьск з аднаго погляду»: перамыкач слаю і пазнака будучай лініі PKM Południe (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#layer.plan"
+      ],
+      "sourceHash": "a80f4a10c67ae5adfcc60b0bf966859262bf74d8d3bd5b84f64c60ec84b86428"
+    },
+    {
+      "id": "native.aboutCity.zone.stop",
+      "source": "${name}: ${km} км па прамой",
+      "context": "Раздзел «Гданьск з аднаго погляду»: радок «як дабрацца» ў картцы зоны — бліжэйшая станцыя і адлегласць па прамой",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "km",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.stop"
+      ],
+      "sourceHash": "aa750e2cd87f92e95683ed5db2b83d91744a168403e9564215a125911f251b8e"
+    },
+    {
+      "id": "native.aboutCity.zone.stare",
+      "source": "Спакайней, чым на Długi Targ: касцёл Святой Кацярыны, Вялікі млын і Ратуша Старога Горада, а побач — Gdańsk Główny.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.stare"
+      ],
+      "sourceHash": "10b1d2d5827dd4f8c80cc479210df113b508fa632b74b266369ff6931c871ed7"
+    },
+    {
+      "id": "native.aboutCity.zone.przedmiescie",
+      "source": "Нацыянальны музей са «Страшным судом» Мемлінга і ціхія вуліцы на поўдзень ад Główne Miasto.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.przedmiescie"
+      ],
+      "sourceHash": "65d37043945c38337d2fa3988a1257796a44a7fa3a1c456b103746e2604da373"
+    },
+    {
+      "id": "native.aboutCity.zone.dolne",
+      "source": "Былы рабочы квартал за Motława: адноўленыя камяніцы, цэнтр сучаснага мастацтва Łaźnia і старыя ўмацаванні ля вады. Варта, калі ёсць лішняя гадзіна.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.dolne"
+      ],
+      "sourceHash": "6c477bd5e02d266341be9461f368c1328b2d8a5d3c04fdd9453893ae94b5edbb"
+    },
+    {
+      "id": "native.aboutCity.zone.westerplatte",
+      "source": "Тут 1 верасня 1939 года пачалася Другая сусветная вайна: вартоўня, руіны казармаў і помнік абаронцам. Далекавата ад цэнтра.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.westerplatte"
+      ],
+      "sourceHash": "72896197401e4ad6f6194f6953a4be52db8f903048bbd07fcc5e0f6f3bdb83a2"
+    },
+    {
+      "id": "native.aboutCity.zone.politechnika",
+      "source": "Гістарычны гмах Політэхнікі 1904 года і зялёны кампус паміж Wrzeszcz і цэнтрам.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.politechnika"
+      ],
+      "sourceHash": "4fb766765a9a3681f230b11e55b1111f2340eaeb64fe76f0256ecf3fdb642494"
+    },
+    {
+      "id": "native.aboutCity.zone.centrum",
+      "source": "Усё пешшу: славутасці, кавярні, вакзал і SKM. Даражэй, і ўвечары бывае шумна.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.centrum"
+      ],
+      "sourceHash": "c29d9fc784ec1db094d65a6fee6636899dafda5b1bc7f7855e14c17911af007c"
+    },
+    {
+      "id": "native.aboutCity.zone.nowe-ogrody",
+      "source": "Новыя дамы ў 10–15 хвілінах пешшу ад Główne Miasto і вакзала; цішэй, чым у самым цэнтры.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.nowe-ogrody"
+      ],
+      "sourceHash": "2d761c3fc185201c71bd84d4c2b66c21ce1083f0aa50b8ebcc23ba2a756962e6"
+    },
+    {
+      "id": "native.aboutCity.zone.dlugie-ogrody",
+      "source": "Праз Motława ад Główne Miasto: да славутасцяў пешшу, а ўвечары цішэй.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.dlugie-ogrody"
+      ],
+      "sourceHash": "20bdf260c07f8821eeb2b63181e227bd66a12be045ad71938aba96a1753b5780"
+    },
+    {
+      "id": "native.aboutCity.zone.kartuska",
+      "source": "Уздоўж вуліцы Kartuska ходзяць трамваі: да Główne Miasto некалькі прыпынкаў, жыллё звычайна танней, чым у цэнтры.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.kartuska"
+      ],
+      "sourceHash": "ae9e4ec49a8a5da4ba662d9d1b3eb2f6e6185f30c52ae48b2570a0ce936cea49"
+    },
+    {
+      "id": "native.aboutCity.zone.siedlce",
+      "source": "Жылы раён побач з цэнтрам: трамвай на Kartuska або 20–25 хвілін пешшу.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.siedlce"
+      ],
+      "sourceHash": "6de49aca7b556e046711144e8cdb55dd139a91784c573cabb6effe6d590abcc1"
+    },
+    {
+      "id": "native.aboutCity.zone.powstancow",
+      "source": "Спакойныя жылыя вуліцы на схіле над Kartuska: да трамвая ў цэнтр — некалькі хвілін.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.powstancow"
+      ],
+      "sourceHash": "1eb36f74321109ba37abc5e822e00d75efb80a922039b9c8c16eb47961d1a5c0"
+    },
+    {
+      "id": "native.aboutCity.zone.chelm",
+      "source": "Жылы раён на ўзгорку з трамваямі ў цэнтр; побач пройдзе будучая лінія PKM Południe.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.chelm"
+      ],
+      "sourceHash": "36cd81e6b8adc71d91dcb441b2d4d56866c12cf5decd8ff6d386f09335205de1"
+    },
+    {
+      "id": "native.aboutCity.zone.orunia-gorna",
+      "source": "Новыя кварталы ля будучых прыпынкаў PKM Południe. Калі лінію адкрыюць (мэта — 2030 год), да цэнтра будзе некалькі хвілін цягніком.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.orunia-gorna"
+      ],
+      "sourceHash": "6016f9727a9f87cec363cc8bb9e1e391b5f1f946736b35a493e0ac8c785bdf28"
+    },
+    {
+      "id": "native.aboutCity.zone.wrzeszcz",
+      "source": "Крамы, кавярні і Galeria Bałtycka, а SKM побач: некалькі хвілін да Gdańsk Główny і каля чвэрці гадзіны да Sopot.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.wrzeszcz"
+      ],
+      "sourceHash": "44e90ea7a80a70c9dec4bd8c4b5c88eacfa98c3ba22c0bd3412582d6824c5f6e"
+    },
+    {
+      "id": "native.aboutCity.zone.przymorze",
+      "source": "Кварталы каля SKM і трамвая: да мора можна дайсці пешшу, да Sopot і цэнтра — цягніком.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.przymorze"
+      ],
+      "sourceHash": "4b544430bf25aca766c4a448401840397361df3d78842c1817652cc66bf158ae"
+    },
+    {
+      "id": "native.aboutCity.zone.sopot-west",
+      "source": "Па другі бок чыгункі ад Monciak: цішэй і звычайна танней, а да мора 10–15 хвілін пешшу.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.sopot-west"
+      ],
+      "sourceHash": "77be839400384df5789ca3ead975a1ebc019b91227f8e3e699ba72eccea417db"
+    },
+    {
+      "id": "native.aboutCity.zone.wzgorze",
+      "source": "Спакойны раён на ўзгорку каля станцыі SKM: да цэнтра Gdyni адзін прыпынак, да Sopot — некалькі.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: чаму зона добрая — апісанне выбранай зоны на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#zone.wzgorze"
+      ],
+      "sourceHash": "5e71ec80add51b1b41cfe99d3c83551d6852d32c52ce72faf0dc0557322a3c06"
+    },
+    {
+      "id": "native.aboutCity.stop.tag",
+      "source": "Станцыя",
+      "context": "Раздзел «Гданьск з аднаго погляду»: пазнака станцыі на карце (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.tag"
+      ],
+      "sourceHash": "6e426a046da321ca4a623ad95e2dd8b1b101c5a1ad4952d96de58144e148b397"
+    },
+    {
+      "id": "native.aboutCity.stop.planned",
+      "source": "Плануецца",
+      "context": "Раздзел «Гданьск з аднаго погляду»: пазнака запланаванага прыпынку на карце (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.planned"
+      ],
+      "sourceHash": "1e974e4e23a5f6ff6c10bb5c5c655430e5da6eeba9267b5aa2e46118e878499e"
+    },
+    {
+      "id": "native.aboutCity.stop.skm",
+      "source": "Цягнікі SKM злучаюць Гданьск, Сопат і Гдыню.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка станцыі — што ходзіць па SKM (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.skm"
+      ],
+      "sourceHash": "42b1e520eccfd9983c3d3aa314ce55d0b053761e1b69b58b6675ec75047b5ce1"
+    },
+    {
+      "id": "native.aboutCity.stop.pkm",
+      "source": "Цягнікі PKM ідуць ад Gdańsk Wrzeszcz праз аэрапорт.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка станцыі — што ходзіць па PKM (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.pkm"
+      ],
+      "sourceHash": "70278a39c9aba411705789385ca81129964ef57f84b57f36ac4e986294b469f0"
+    },
+    {
+      "id": "native.aboutCity.stop.change",
+      "source": "Тут перасадка паміж SKM і цягнікамі да аэрапорта.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка станцыі з перасадкай (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.change"
+      ],
+      "sourceHash": "e376327cd62cc8c4d1c480fbfbe9f70595114acf298fabcfa040eda50b229d89"
+    },
+    {
+      "id": "native.aboutCity.stop.plan",
+      "source": "PKM Południe — запланаваная лінія: цягнікі тут яшчэ не ходзяць, мэта — 2030 год. Месца прыпынку на карце прыблізнае.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: заўвага пра запланаваную лінію PKM Południe ў картке прыпынку (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.plan"
+      ],
+      "sourceHash": "bd7e814c42c82bbbb38dfa8feea2762d17f317344b09ebff3a560c40bd64f2f0"
+    },
+    {
+      "id": "native.aboutCity.stop.planFrom",
+      "source": "Адсюль пачнецца запланаваная лінія PKM Południe; мэта — 2030 год.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: заўвага пра станцыі, ад якіх пачнецца запланаваная лінія (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#stop.planFrom"
+      ],
+      "sourceHash": "9db4fccbfa40fc996cb9ab2df935380dd57228dfc1b8c0ed618c490513ba9cf9"
+    },
+    {
+      "id": "native.aboutCity.air.map",
+      "source": "Цягнік PKM да Gdańsk Wrzeszcz, далей SKM да цэнтра; у горад ходзяць і аўтобусы.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: картка аэрапорта на карце — як дабрацца ў горад (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.map"
+      ],
+      "sourceHash": "12847ee5a6125104262f79da833ddc2bd2ab23725d92754fea6680af6a36ad90"
+    },
+    {
+      "id": "native.aboutCity.air.mapGo",
+      "source": "Як дабрацца ў горад",
+      "context": "Раздзел «Гданьск з аднаго погляду»: кнопка карткі аэрапорта, што вяртае да раздзела «Аэрапорт» (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#air.mapGo"
+      ],
+      "sourceHash": "9b71751cd7cb4d6c801f4a55ee093df08ec73fc4a17ef1126ba030ccc14a7bdc"
+    },
+    {
+      "id": "native.aboutCity.place.sopot",
+      "source": "Курортны цэнтр: вуліца Monte Cassino (Monciak) вядзе да мора і мола.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: апісанне зоны, якую выбралі на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.sopot"
+      ],
+      "sourceHash": "aea83a49e748ece35fa08f4b1e0254cc765523d3601c818b912abfb9914fdf6b"
+    },
+    {
+      "id": "native.aboutCity.place.gdynia",
+      "source": "Ад вакзала па 10 Lutego і Świętojańska — да Сквера Касцюшкі, Паўднёвага мола і караблёў-музеяў.",
+      "context": "Раздзел «Гданьск з аднаго погляду»: апісанне зоны, якую выбралі на карце Труймяста (#303; тэксты зон зводзяцца з карткамі раёнаў #300)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#place.gdynia"
+      ],
+      "sourceHash": "18a6da06bfe8c7262b4abb6a39ea92a530b97eee5b557677042b9a81a7fdfa33"
+    },
+    {
+      "id": "native.aboutCity.get.westerplatte",
+      "source": "аўтобус ад Gdańsk Główny або летам катэр з цэнтра",
+      "context": "Раздзел «Гданьск з аднаго погляду»: радок «як дабрацца» для зоны на карце Труймяста (#303)",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#get.westerplatte"
+      ],
+      "sourceHash": "215083f980e204e33b90f4b5a9154c718617edc0011285987f45803ad89c64c0"
+    },
+    {
+      "id": "native.aboutCity.tr.residents",
+      "source": "Для жыхароў Гданьска",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#tr.residents"
+      ],
+      "sourceHash": "5a786b7676c0f201d018d172bc7b0f463ed1118bdd4e9bd5415b00590aff4829"
+    },
+    {
+      "id": "native.aboutCity.resident.title",
+      "source": "Jestem z Gdańska",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#resident.title"
+      ],
+      "sourceHash": "2ce51f65e06e3b01446e8c9941e15c8a001f534f4a3e369c7dfe779f653ad86e"
+    },
+    {
+      "id": "native.aboutCity.resident.lead",
+      "source": "Картка жыхара: гарадскія прапановы і транспартныя магчымасці. Білеты, льготы і ўмовы правер на афіцыйным сайце.",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#resident.lead"
+      ],
+      "sourceHash": "107829bb5c6600bb013174e5e68e96dd200878c18b0e88893d7c50ad6f2f8caf"
+    },
+    {
+      "id": "native.aboutCity.resident.openOfficial",
+      "source": "Адкрыць афіцыйны сайт: ${name}",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#resident.openOfficial"
+      ],
+      "sourceHash": "97ea2b5e472d9c9e067d8160d6f0c27dce0ed1f44f7eb86a981eb080773a174e"
+    },
+    {
+      "id": "native.aboutCity.card.brandAlt",
+      "source": "Лагатып Gdańska Karta Turysty",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#card.brandAlt"
+      ],
+      "sourceHash": "257aa51e0105ae67ef8dc5dc8df44af17029f5076f41ce1e2ed255adff45b266"
+    },
+    {
+      "id": "native.aboutCity.card.brandMark",
+      "source": "KT",
+      "context": "Запасны знак турыстычнай карткі з прынятага макета #257, M14; перанос #334",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#card.brandMark"
+      ],
+      "sourceHash": "a18fb24bf836f1ca21f5a5cb12de4d296e35843be5598a0b722e40087e0b032e"
+    },
+    {
+      "id": "native.aboutCity.card.openOfficial",
+      "source": "Адкрыць афіцыйны сайт: ${name}",
+      "context": "Макет «Пра горад» #257, M14; перанос #334",
+      "format": "template",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#card.openOfficial"
+      ],
+      "sourceHash": "6212ff916e5e16c29938d03c624124cd89258b1fa64b5e0737a0dba238984fd7"
     }
   ]
 }

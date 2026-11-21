@@ -44,7 +44,10 @@ export function CityMap({ markers, label, errorText }: {
     };
     void (async () => {
       try {
-        const maplibregl = (await import('maplibre-gl')).default;
+        // MapLibre 6 dropped the default export; the namespace's named `Map`
+        // constructor is the supported surface (both the ESM dist and the
+        // browser harness module graph expose it).
+        const maplibregl = await import('maplibre-gl');
         if (disposed || !containerRef.current) return;
         map = new maplibregl.Map({
           container: containerRef.current,

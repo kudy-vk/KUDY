@@ -1,17 +1,22 @@
 // G20.31 (#793) — the device adapter's exists() classification and the
 // reactivation of a damaged layer over a filesystem stand-in with the
-// installed Expo 19.0.24 semantics (File.exists is isFile; Directory.move
-// into an existing directory nests inside it). Criteria:
+// installed Expo 58 semantics (File.exists is isFile; Directory.move
+// into an existing directory nests inside it; write/move are async native
+// promises and a move needs the destination's parent — issue #354). Criteria:
 // 1. exists answers for existing files and directories, false for absent and
 //    unsafe paths, with the same containment boundary;
 // 2. a complete first activation followed by corruption and reactivation
 //    restores the bytes at the original final path, creates no nested layer
 //    and returns complete only for a valid final layer (the repeat takes the
-//    zero-fetch level-2 fast path);
+//    zero-fetch level-2 fast path) — with the async stand-in this also fails
+//    when the adapter skips the await on the native write/move promises;
 // 3. the stand-in preserves those native semantics — reverting the fixture
 //    to Node rename semantics or the adapter to file-only exists fails this
 //    suite (implementation-rules 1);
-// 4. the suite rides the existing services/**/*.test.ts npm-test glob; no
+// 4. the rename tail replaces an existing target (MoveOptions.overwrite) and
+//    ensures the destination's parent — reverting either fix fails here
+//    (issue #354, implementation-rules 1);
+// 5. the suite rides the existing services/**/*.test.ts npm-test glob; no
 //    shared E2E runner changes.
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -72,7 +77,7 @@ test('criterion 1: exists answers for files and directories, false for absent an
   assert.equal(await store.exists('..%2fescape'), false);
 });
 
-test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, Directory.move nests', () => {
+test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, Directory.move nests', async () => {
   const fs = makeFakeFs();
   const { File, Directory } = makeFakeFsModule(fs);
   fs.files.set('/root/a/x/stops.json', utf8('x-bytes'));
@@ -85,24 +90,86 @@ test('criterion 3: the stand-in keeps Expo semantics — File.exists is isFile, 
 
   // A move into an existing destination directory nests inside it (unix
   // `mv a b` → `b/a`), never a replace-style rename of Node.
-  new Directory('/root/a/x').move(new Directory('/root/b'));
+  await new Directory('/root/a/x').move(new Directory('/root/b'));
   assert.equal(new File('/root/a/x/stops.json').exists, false);
   assert.deepEqual([...fs.files.get('/root/b/x/stops.json')!], [...utf8('x-bytes')]);
   assert.equal(new Directory('/root/b/x').exists, true);
 
   // An absent destination is the whole rename the activation tail relies on.
-  new Directory('/root/b/x').move(new Directory('/root/b/y'));
+  await new Directory('/root/b/x').move(new Directory('/root/b/y'));
   assert.deepEqual([...fs.files.get('/root/b/y/stops.json')!], [...utf8('x-bytes')]);
   assert.equal(new Directory('/root/b/x').exists, false);
 
   // Neither does it merge into an existing nested target: the native move
-  // runs without REPLACE_EXISTING and refuses (`c/y` already there).
+  // runs without REPLACE_EXISTING and refuses (`c/y` already there). The 58
+  // move is async — a refusal is a rejected promise, not a sync throw.
   fs.dirs.add('/root/c');
   fs.dirs.add('/root/c/y');
   fs.files.set('/root/c/y/stale.json', utf8('stale'));
-  assert.throws(() => new Directory('/root/b/y').move(new Directory('/root/c')), /exists/);
+  await assert.rejects(() => new Directory('/root/b/y').move(new Directory('/root/c')), /exists/);
   assert.deepEqual([...fs.files.get('/root/b/y/stops.json')!], [...utf8('x-bytes')], 'a refused move leaves the source in place');
   assert.deepEqual([...fs.files.get('/root/c/y/stale.json')!], [...utf8('stale')], 'the existing target keeps its bytes');
+
+  // Issue #355: overwrite does not turn Directory→Directory into a whole
+  // replace — the source still nests at dest/<name>, and overwrite clears
+  // only that nested child, children included. The old partial whole-replace
+  // would also have passed the dirs.has check and the keep.json check — it
+  // orphaned the nested child's dir entry together with its files; device
+  // semantics pin the rest (CopyMoveStrategy.kt:68-77 builds the nested path
+  // before the overwrite check).
+  fs.dirs.add('/root/dst');
+  fs.files.set('/root/dst/keep.json', utf8('keep'));
+  fs.dirs.add('/root/dst/y');
+  fs.files.set('/root/dst/y/stale.json', utf8('stale'));
+  await new Directory('/root/b/y').move(new Directory('/root/dst'), { overwrite: true });
+  assert.deepEqual([...fs.files.get('/root/dst/y/stops.json')!], [...utf8('x-bytes')], 'the source nested under the destination');
+  assert.equal(fs.files.has('/root/dst/y/stale.json'), false, 'overwrite cleared the nested child');
+  assert.equal(fs.dirs.has('/root/dst/y'), true);
+  assert.deepEqual([...fs.files.get('/root/dst/keep.json')!], [...utf8('keep')], 'the destination survives the overwrite — no whole replace');
+
+  // A directory moved onto its own parent with overwrite would wipe the
+  // source tree in the deletion loops — the native errors there; the
+  // stand-in rejects instead of silently losing the tree (issue #355).
+  fs.dirs.add('/root/self');
+  fs.dirs.add('/root/self/inner');
+  fs.files.set('/root/self/inner/data.json', utf8('data'));
+  await assert.rejects(() => new Directory('/root/self/inner').move(new Directory('/root/self'), { overwrite: true }), /self-move/);
+  assert.deepEqual([...fs.files.get('/root/self/inner/data.json')!], [...utf8('data')], 'the refused self-move leaves the source intact');
+});
+
+test('criterion 4: the rename tail replaces an existing target and ensures the destination parent (issue #354)', async () => {
+  const fs = makeFakeFs();
+  const { File, Directory } = makeFakeFsModule(fs);
+  const store = createExpoDownloadStore(
+    { File: File as never, Directory: Directory as never, freeBytes: () => null },
+    new Directory('/root') as never,
+  );
+  fs.dirs.add('/root/dst');
+  fs.files.set('/root/dst/layer', utf8('old-bytes'));
+  fs.dirs.add('/root/src');
+  fs.files.set('/root/src/layer', utf8('new-bytes'));
+
+  // A rename onto an existing file replaces it — the node adapter's fsRename
+  // replace is the contract; reverting MoveOptions.overwrite fails here (the
+  // stand-in's overwrite branch is exercised by the store path, not only by
+  // direct fixture calls).
+  await store.rename('src/layer', 'dst/layer');
+  assert.deepEqual([...fs.files.get('/root/dst/layer')!], [...utf8('new-bytes')], 'overwrite replaced the existing target');
+  assert.equal(fs.files.has('/root/src/layer'), false, 'the source moved away');
+
+  // A rename into an absent destination parent works because the store
+  // ensures the parent itself (the 58 build refuses: DestinationDoesNotExist
+  // Exception) — reverting the parent-ensure fails here.
+  await store.rename('dst/layer', 'missing/deep/layer');
+  assert.deepEqual([...fs.files.get('/root/missing/deep/layer')!], [...utf8('new-bytes')], 'the store created the absent parent');
+  assert.equal(fs.files.has('/root/dst/layer'), false);
+
+  // The stand-in itself keeps the native rule the store must answer: a move
+  // into an absent parent rejects even when the caller skips the ensure.
+  await assert.rejects(
+    () => new File('/root/missing/deep/layer').move(new File('/root/no-parent/layer')),
+    /destination-does-not-exist/,
+  );
 });
 
 test('criterion 2: reactivating a corrupted layer replaces it at the final path, never nests', async () => {

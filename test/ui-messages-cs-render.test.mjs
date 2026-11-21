@@ -1,4 +1,4 @@
-// G21.13 (issue #547) — the Czech catalogue's locale-specific rendering
+// G21.13 (2026-10-03-single-source-translations.md — G21.13) — the Czech catalogue's locale-specific rendering
 // suite. The shipped-locale gate (tools/i18n/check-messages.mjs) proves the
 // cs set's completeness, review evidence and output freshness; this suite
 // proves the Czech words actually render through the production selectors:

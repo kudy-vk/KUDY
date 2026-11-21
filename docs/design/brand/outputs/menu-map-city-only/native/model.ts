@@ -53,6 +53,13 @@ export class CityPuzzle {
     if (!Number.isFinite(width) || width <= 0) throw new RangeError('CityMapMenu width must be positive and finite');
     return width / 1600;
   }
+  // Дапушчальнае зрушэнне групы (MAP-07): у сцэне, без выхаду за ніжні і верхні
+  // краі; паварот не існуе — арыентацыя фрагмента нязменная.
+  private clampGroup(group: Group) {
+    const members = [...group.members].map(id => this.pieces.get(id)!);
+    group.dx = Math.max(-Math.min(...members.map(p=>p.x))-55,Math.min(1390-Math.max(...members.map(p=>p.x+p.width)),group.dx));
+    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min((this.layout?.height??1800)-430-Math.max(...members.map(p=>p.y+p.height)),group.dy));
+  }
   resize(width: number) { this.cancel(); this.scale = this.validScale(width); }
   position(id: PieceId): Point {
     const piece = this.pieces.get(id)!;
@@ -96,14 +103,16 @@ export class CityPuzzle {
     const group = active.group!;
     const dx = point.x-active.last.x, dy = point.y-active.last.y;
     if (dx === 0 && dy === 0) return none;
-    const members = [...group.members].map(id => this.pieces.get(id)!);
-    group.dx = Math.max(-Math.min(...members.map(p=>p.x))-55,Math.min(1390-Math.max(...members.map(p=>p.x+p.width)),group.dx+dx));
-    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min((this.layout?.height??1800)-430-Math.max(...members.map(p=>p.y+p.height)),group.dy+dy));
+    group.dx += dx; group.dy += dy;
+    this.clampGroup(group);
     active.last = point;
     const joints = nativeLayout.joints.filter(joint=>this.pieces.has(joint.a)&&this.pieces.has(joint.b));
     const target = findMagnet(group,this.pieces,joints,nativeLayout.gesture.snapDistanceDp/this.scale);
     if (!target) return none;
     joinGroups(group,target.other,this.pieces,this.groups);
+    // Складзеная група шырэйшая за кожную з частак — той самы дапушчальны
+    // зрух трэба пацвердзіць нанова (AC #81), інакш краі вылезаюць за сцэну.
+    this.clampGroup(group);
     this.active = null;
     const complete = group.members.size === this.pieces.size;
     if (complete) { this.motion = { at: now, group, from: {x:group.dx,y:group.dy} }; this.phase = 'assembling'; }

@@ -23,7 +23,7 @@ test('guard: the app/ component suite is wired into npm test (implementation-rul
   assert.match(
     jestConfig,
     /components\/\*\*\/\*\.test\.tsx/,
-    'jest config must match components/**/*.test.tsx (issue #339: the guide-card suite lives there — reverting the glob would silently drop it from npm test)'
+    'jest config must match components/**/*.test.tsx (the guide-card suite lives in the components zone — reverting the glob would silently drop it from npm test)'
   );
 });
 
@@ -76,5 +76,31 @@ test('guard: the reanimated base is mocked with the reduce-motion seam (G06.10.f
     standIn,
     /useReducedMotion/,
     'the official mock omits useReducedMotion — the motion tests need the controllable stub'
+  );
+});
+
+// #337: decode-uri-component 0.5.1 (the security-fix override) ships ESM-only;
+// jest-expo's preset ignore list does not transform it and the app suites that
+// reach query-string die on the ESM parse error. Dropping the entry from the
+// config's transformIgnorePatterns must turn this guard red
+// (implementation-rules 1: the wiring itself is guarded).
+test('guard: decode-uri-component stays inside the jest transform allowlist (#337)', () => {
+  assert.match(
+    jestConfig,
+    /transformIgnorePatterns:/,
+    'jest config must pin transformIgnorePatterns explicitly'
+  );
+  assert.match(
+    jestConfig,
+    /native-base\|decode-uri-component(?:\|standard-navigation)?\)\)/,
+    'transformIgnorePatterns must keep decode-uri-component in the babel transform allowlist — the ESM-only advisory fix otherwise fails 25 suites at load'
+  );
+  // #339: standard-navigation (an expo-router 58 dependency) is ESM-only the
+  // same way and joined the same negation group — the whole SDK 58 suite set
+  // fails at load without it.
+  assert.match(
+    jestConfig,
+    /decode-uri-component\|standard-navigation\)\)/,
+    'transformIgnorePatterns must keep standard-navigation in the babel transform allowlist — the expo-router 58 ESM dependency otherwise fails the render suites at load'
   );
 });

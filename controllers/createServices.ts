@@ -150,7 +150,7 @@ export interface ServicePorts {
   // G07.02 — the clock the FocusRegain threshold reads (§3.7); the root
   // defaults to the wall clock when absent.
   readonly now?: () => number;
-  // G08.05 (issue #292) — the commerce seam (G08.04 Рашэнне 1: the chain's
+  // G08.05 (16_delivery_backlog.md — G08.05) — the commerce seam (G08.04 Рашэнне 1: the chain's
   // consumer). The root resolves it from the store session (the G08.03
   // service) and the purchase-chain state when those adapters exist;
   // absent, the preview renders no offer — fail closed, the idiom of every
@@ -167,12 +167,12 @@ export interface ServicePorts {
   // service is not constructed and the surfaces render their named state.
   readonly discoverySnapshot?: DiscoverySnapshotStore;
   readonly discoveryAnalytics?: DiscoveryAnalyticsPort;
-  // G14.04.d (issue #305) — the optional durable seam of the UI-locale
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the optional durable seam of the UI-locale
   // switch: reads the stored choice at composition, writes every switch.
   // Absent (the device db adapter is TR-10) the choice lives for the
   // session; the `settings` row joins with the adapter (the consent idiom).
   readonly uiLocalePersistence?: UiLocalePersistence;
-  // G07.05 (issue #284) — the R07 hint seams: the durable guide_hint_state/
+  // G07.05 (15_guide_decisions.md — R07) — the R07 hint seams: the durable guide_hint_state/
   // guide_hint_last store over services/db (zone B), the public points
   // projection and the accepted values document (ADR G07.04 §3). The app
   // foreground fact and the local hint-event recorder are optional sub-seams;
@@ -201,11 +201,11 @@ export interface ServicePorts {
 
 export interface Services {
   readonly dispose: () => void;
-  // G06.05 (issue #280): the display locale the string catalogs render in —
-  // G14.04.d (issue #305) reads it through the ui-locale store below: the
+  // G06.05 (16_delivery_backlog.md — G06.05): the display locale the string catalogs render in —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) reads it through the ui-locale store below: the
   // value the switch holds, changing without a services rebuild.
   readonly locale: string;
-  // G14.04.d (issue #305) — the UI-locale switch (the L02 selection): the
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the UI-locale switch (the L02 selection): the
   // My KUDY row writes be/en/uk through it, the screens subscribe.
   readonly uiLocale: UiLocaleSwitch;
   readonly contentRepo:
@@ -305,7 +305,7 @@ export interface Services {
         readonly controller: ControllerStore<DiscoveryControllerState>;
       }
     | undefined;
-  // G07.05 (issue #284) — the ONE R07 hint controller (19 §2.2): the quiet
+  // G07.05 (15_guide_decisions.md — R07) — the ONE R07 hint controller (19 §2.2): the quiet
   // guide-nearby card over the accepted ADR G07.04 contract, the owner of
   // the guide_hint_state/guide_hint_last records. Exists only when the
   // location, audio and catalog services AND the guideHints seams are all
@@ -355,7 +355,7 @@ export function createServices(ports: ServicePorts): Services {
   // content wave lands — G14.04.c/f). One preference value for the catalog
   // service, the preview controller and the moment facts reader.
   const localePreference: readonly string[] = ['be', 'en'];
-  // G14.04.d (issue #305) — the UI-locale switch (the L02 selection G06.05
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the UI-locale switch (the L02 selection G06.05
   // deferred here): the chrome words' display locale, switchable in My KUDY
   // without a restart. The persistence port is optional — absent (the app
   // build today, the device db adapter is TR-10) the choice lives for the
@@ -477,7 +477,7 @@ export function createServices(ports: ServicePorts): Services {
     }
     return liveRunWrapper.source;
   };
-  // G07.05 (issue #284) — the ONE R07 hint controller (19 §2.2), over the
+  // G07.05 (15_guide_decisions.md — R07) — the ONE R07 hint controller (19 §2.2), over the
   // accepted ADR G07.04 contract. It reads the fixes through the location
   // service's read-only tap and the live run state through the resolver; the
   // durable limits, the public points and the values document arrive with
@@ -665,7 +665,7 @@ export function createServices(ports: ServicePorts): Services {
     get locale() {
       return uiLocale.current();
     },
-    // G14.04.d (issue #305) — the switch itself: the My KUDY row writes it,
+    // G14.04.d (16_delivery_backlog.md — G14.04.d) — the switch itself: the My KUDY row writes it,
     // the screens subscribe through useUiLocale.
     uiLocale,
     contentRepo: packageStore && {

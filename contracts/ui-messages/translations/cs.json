@@ -4,7 +4,7 @@
   "provenance": {
     "kind": "authored",
     "reviewer": "агент-рэцэнзент, сесія G21.13",
-    "evidence": "аўтарскі чэшскі пераклад у задачы G21.13 (#547): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr (G21.10–G21.12); рэгістр — тыканне (ty), адпавядае неафіцыйнаму тону арыгіналу і сям'і de du / fr tu / es tú; кнопкі ў інфінітыве (стандарт чэшскага UI); тэрміны Průvodce/Zastavení (дзеянне — асобнае Zastavit)/Procházka/stáhnout (адзін корань)/nedostupný/nákup/pokračuje z uložené relace занкерваныя на глоссарый G21.19 са слядамі G21.27; пытанне візіту месца — інклюзіўнае «Byl(a) jsi tady?»; сэмантычны рэвью — асобны праход усіх 280 запісаў (адмаўленні, адмена пакупкі, выдаленне/аднаўленне, род і рэгістр) Дадатак G21.22 (#554): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
+    "evidence": "аўтарскі чэшскі пераклад у задачы G21.13 (картка 547 архіўнага рэпе): зроблены з беларускага арыгіналу source.json з апорай на зацверджаныя en/uk наборы і прэцэдэнты de/es/fr (G21.10–G21.12); рэгістр — тыканне (ty), адпавядае неафіцыйнаму тону арыгіналу і сям'і de du / fr tu / es tú; кнопкі ў інфінітыве (стандарт чэшскага UI); тэрміны Průvodce/Zastavení (дзеянне — асобнае Zastavit)/Procházka/stáhnout (адзін корань)/nedostupný/nákup/pokračuje z uložené relace занкерваныя на глоссарый G21.19 са слядамі G21.27; пытанне візіту месца — інклюзіўнае «Byl(a) jsi tady?»; сэмантычны рэвью — асобны праход усіх 280 запісаў (адмаўленні, адмена пакупкі, выдаленне/аднаўленне, род і рэгістр) Дадатак G21.22 (картка 554 архіўнага рэпе): тры запісы web.ui.catalogEmpty/textUnavailableTitle/textUnavailableBody — люстра native-запісу і аўтарскія пераклады з адзнакай сесіі G21.22 у review.note кожнага запісу."
   },
   "records": [
     {
@@ -14,6 +14,15 @@
       "review": {
         "outcome": "approved",
         "note": "Даслоўна пераўжытае зацверджанае «хутка» з web.ui.storeComingSoon; новых перакладаў няма."
+      }
+    },
+    {
+      "id": "native.chrome.aboutCity",
+      "value": "Praktické",
+      "reviewedSourceHash": "2611cbb4654aedb6bba490f96cc03300a6cb1627192d55e78ca84c6962c696ca",
+      "review": {
+        "outcome": "approved",
+        "note": "Пераклад сесіі #200 (GLM-5.3, ZCode): падобнае найменне ў чэшскіх даведніках («O městě»)."
       }
     },
     {
@@ -243,11 +252,11 @@
     },
     {
       "id": "native.chrome.discoveryTitle",
-      "value": "Co dělat",
+      "value": "Kam vyrazit",
       "reviewedSourceHash": "73a869d121cfe785ef9b06081df8484b6a878a6bb51140ad668c80a4357bd816",
       "review": {
         "outcome": "approved",
-        "note": "загаловак экрана падбора, як be «Чым заняцца»"
+        "note": "Ідыяматычная лакалізацыя загалоўка экрана падбора (transcreation)."
       }
     },
     {
@@ -307,10 +316,10 @@
     {
       "id": "native.chrome.heardCount",
       "value": "vyslechnuto: ${count}",
-      "reviewedSourceHash": "974ee6f7afa147c26e872b3306efc390dbf3446e84d770041ded77527ab0342a",
+      "reviewedSourceHash": "ff2d4afc02449f0b6bb9f286a746af513120cc97cdb3c085975b1e8308f40c39",
       "review": {
         "outcome": "approved",
-        "note": "безасабова-нэўтральны зварот, як be «праслышана»; правільны для любой лічбы"
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад захаваны пасля паўторнай праверкі."
       }
     },
     {
@@ -352,10 +361,10 @@
     {
       "id": "native.chrome.liveRowLine",
       "value": "${state} — od ${day} — vyslechnuto: ${heard}",
-      "reviewedSourceHash": "22477d4a8f0fcab537019080057be843ff31fc7ea592e85d5fb8fe5700fe6081",
+      "reviewedSourceHash": "c267994c436404f64e9c367301b8f823a90290e91c6178ef73e68ecb8cc8972f",
       "review": {
         "outcome": "approved",
-        "note": "адзін сказ на мову без цвёрдага прыназоўніка; «od» + дзень, як be «з»"
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад і параметры правераныя."
       }
     },
     {
@@ -406,10 +415,10 @@
     {
       "id": "native.chrome.noPastWalks",
       "value": "Žádné předchozí procházky",
-      "reviewedSourceHash": "0bfbeda8ef7061ce1ba34816528ba7e430b242d9b3f048e4865475cdf7ba8ebf",
+      "reviewedSourceHash": "7559f72c69896c0301dd5a53168470345b21e1bf4b748ab570c3b3ba07598e80",
       "review": {
         "outcome": "approved",
-        "note": "множны лік папярэдніх праходаў"
+        "note": "Узгоднена са зменай тэрміна «прагулкі» ў крыніцы; сэнс і тон захаваныя."
       }
     },
     {
@@ -442,28 +451,28 @@
     {
       "id": "native.chrome.pastRowLine",
       "value": "${startedDay} — ${finishedDay} — vyslechnuto: ${heard}",
-      "reviewedSourceHash": "3b31a3236db946ff49cd0ec5a56bb0e89a5804eda909cd8793de141584cb70aa",
+      "reviewedSourceHash": "6c2876489cb36d1351d5b778ea56a05ba5e0e5e9864722c7ff70e373ff9ae792",
       "review": {
         "outcome": "approved",
-        "note": "трымае пабудову be-радка з злучкамі"
+        "note": "Арфаграфічная праўка ў крыніцы (праслухана); пераклад і параметры правераныя."
       }
     },
     {
       "id": "native.chrome.pastWalks",
-      "value": "Předchozí procházky",
-      "reviewedSourceHash": "639c686aee401287c7c2224cfce2606da6a128852a23771f4fab41e4275081d8",
+      "value": "Historie procházek",
+      "reviewedSourceHash": "7c6f8c5a533c4063b62ad380e8f6f6ef7cbfcbec926f70dd3afb8ffcf7c24fa5",
       "review": {
         "outcome": "approved",
-        "note": "загаловак секцыі папярэдніх праходаў"
+        "note": "Абноўлена паводле канону гісторыі прагулак (замест літаральнага «папярэднія праходы»)."
       }
     },
     {
       "id": "native.chrome.previewUnavailable",
-      "value": "Náhled je dočasně nedostupný",
-      "reviewedSourceHash": "29f58b35ed2a5502011a9f0b5ad3a15c8eb857bc954349a865e0053875ed8808",
+      "value": "Popis je dočasně nedostupný",
+      "reviewedSourceHash": "2785ba6555e638479293b96bcc23cdb4171980c5e67cf1fd88100483467c5b99",
       "review": {
         "outcome": "approved",
-        "note": "прэв'ю → náhled; недаступнасць па глоссарыю"
+        "note": "Прыбрана тэхнічная калька «прэв'ю» на карысць натуральнага апісання гіда."
       }
     },
     {
@@ -680,11 +689,11 @@
     },
     {
       "id": "native.chrome.validCache",
-      "value": "Předchozí platná mezipaměť",
-      "reviewedSourceHash": "d69e1aa70b6573e5e7a801e70fcc8ead0ae58ffd214d39a82227fc88b78f86d0",
+      "value": "Uložená verze",
+      "reviewedSourceHash": "291634ca13514b047f70caaf3a45f1681e9dc0b143a56053000b375a63d5a51d",
       "review": {
         "outcome": "approved",
-        "note": "кэш → mezipaměť (стандартная чэшская назва); радок стану"
+        "note": "Прыбраны інжынерны жаргон «валідны кэш» на карысць зразумелай турысту «захаванай версіі»."
       }
     },
     {
@@ -698,11 +707,29 @@
     },
     {
       "id": "native.chrome.whatToDo",
-      "value": "Co dělat →",
+      "value": "Kam vyrazit →",
       "reviewedSourceHash": "ca14a57064eb242bdc4b06cd3228d38e64e9866fc1e79e9128614b5565e7b179",
       "review": {
         "outcome": "approved",
-        "note": "ссылка на паверхню падбора; пара да discoveryTitle"
+        "note": "Ідыяматычная лакалізацыя пункта меню падбора (transcreation замест даслоўнай калькі)."
+      }
+    },
+    {
+      "id": "native.chrome.cityName",
+      "value": "Gdaňsk",
+      "reviewedSourceHash": "ce7129c0525045c6fd45d0c97d4e2222f4eb6650e9e48f1c5c6febccbf0c4dc2",
+      "review": {
+        "outcome": "approved",
+        "note": "З масіва CITY макету menu.html; макет прыняты ўладальнікам цалкам 2026-11-12 (M11, issue #216)"
+      }
+    },
+    {
+      "id": "native.chrome.whereToToday",
+      "value": "Kam dnes?",
+      "reviewedSourceHash": "e4e711b6ef824dd65b2e824aaa4dbf6183308cfa48e16c3bca05de451c8ee956",
+      "review": {
+        "outcome": "approved",
+        "note": "З масіва HEADING макету menu.html; макет прыняты ўладальнікам цалкам 2026-11-12 (M11, issue #216)"
       }
     },
     {
@@ -788,11 +815,11 @@
     },
     {
       "id": "native.nearby.indexDegraded",
-      "value": "Rejstřík nabídek je dočasně nedostupný",
-      "reviewedSourceHash": "c36e91739b7d13aaae6a9e2a1bb1892c27935ef285c05dfc35384667a87945bf",
+      "value": "Seznam míst je dočasně nedostupný",
+      "reviewedSourceHash": "58eb75feb03c06d456566eaa57275656f329303625349f7db6703e99eecaa8cb",
       "review": {
         "outcome": "approved",
-        "note": "індэкс → rejstřík; дэградацыя"
+        "note": "Прыбраны тэхнічны тэрмін «індэкс прапаноў» на карысць жывога «спіса месцаў»."
       }
     },
     {
@@ -1022,20 +1049,20 @@
     },
     {
       "id": "native.place.guideLink",
-      "value": "Náhled průvodce",
-      "reviewedSourceHash": "6689ad59dbaf7e5400f58ed1c55c89ef10dfca451dc4c1d9e4d9d257200211d5",
+      "value": "K průvodci",
+      "reviewedSourceHash": "6c9954c45d3ffa6530fde90ddea68fda1977b2eeab3135161dc01424889a23e8",
       "review": {
         "outcome": "approved",
-        "note": "ссылка на прэв'ю з карткі месца"
+        "note": "Скарочаная і натуральная кнопка пераходу да старонкі гіда для вузкіх экранаў."
       }
     },
     {
       "id": "native.place.guideLinkHint",
-      "value": "Otevírá náhled průvodce, nespouští procházku.",
-      "reviewedSourceHash": "2d8e625a33b415b8a144097cf43e9b9b7566c68f36fc80fdf472b01d4ca79714",
+      "value": "Otevírá stránku průvodce, nespouští procházku.",
+      "reviewedSourceHash": "ad354158be88471453906c9ab3a942fe9b270455828f1ba663dc4128efb1ec3d",
       "review": {
         "outcome": "approved",
-        "note": "размежаванне: прэв'ю адкрываецца, прагулка не запускаецца"
+        "note": "Абноўлена падказка кнопкі пераходу да старонкі гіда без слова «прэв'ю»."
       }
     },
     {
@@ -1059,10 +1086,10 @@
     {
       "id": "native.place.noFacts",
       "value": "Místo zatím není zveřejněné v katalogu",
-      "reviewedSourceHash": "6a837f315b4fc07df8e72f31ac5802801e3e69123b032eb3ddbe6990ef5ec9be",
+      "reviewedSourceHash": "382b28f3ffebbd1b00f8b6430012a33190779c561cdc93215d07d9f44505cf92",
       "review": {
         "outcome": "approved",
-        "note": "факт адсутнасці ў каталогу"
+        "note": "Граматычная праўка склону ў крыніцы (у каталогу); пераклад правераны."
       }
     },
     {
@@ -1612,20 +1639,20 @@
     },
     {
       "id": "native.run.reasonText.run#recovery-failed",
-      "value": "Čtení aktivní relace se nezdařilo.",
-      "reviewedSourceHash": "dc38ee4a64a7e63371d24d15a8811bec2db3a5cc769f78da944fe0c00d11f75b",
+      "value": "Procházku se nepodařilo obnovit.",
+      "reviewedSourceHash": "976c79936ade97120cd07ca6d1368ab629d5c26f8724a81a48e69f90ac154597",
       "review": {
         "outcome": "approved",
-        "note": "адмова: збой чытання жывой сесіі; сесія → relace"
+        "note": "Чалавечае паведамленне пра памылку аднаўлення прагулкі без тэхнічнага жаргону."
       }
     },
     {
       "id": "native.run.reasonText.run#unsafe-route-id",
-      "value": "Neplatný identifikátor trasy.",
-      "reviewedSourceHash": "d340822c39b89b886e5951a52bc64b20fca3d6f84871c9e1e5a862235c7b033c",
+      "value": "Trasa nebyla nalezena.",
+      "reviewedSourceHash": "cb4751678b50fa4cf132b49084aeb97a084c62bbf798fe3729df5d3aec2ca002",
       "review": {
         "outcome": "approved",
-        "note": "адмова: няверны ідэнтыфікатар маршруту"
+        "note": "Чалавечае паведамленне «Маршрут не знойдзены» замест тэхнічнага «ідэнтыфікатар маршруту»."
       }
     },
     {
@@ -1657,11 +1684,11 @@
     },
     {
       "id": "native.run.recenter",
-      "value": "Na mou polohu",
-      "reviewedSourceHash": "7c9707a52b4598b4df1427e7609582b876d93d53e78eefc086b2ea6e9d0574cc",
+      "value": "Moje poloha",
+      "reviewedSourceHash": "b5b84def8abe1037ea29aa054670088681f5afd07ac471dee632012442c222f5",
       "review": {
         "outcome": "approved",
-        "note": "New accessibility label for the map recenter button; checked against the Belarusian source in this change."
+        "note": "Скарочаны подпіс кнопкі геалакацыі, каб пазбегнуць абрэзкі на вузкіх экранах."
       }
     },
     {
@@ -1747,11 +1774,11 @@
     },
     {
       "id": "native.run.tierUnavailable",
-      "value": "Rozšířená úroveň není v pokračované relaci dostupná",
-      "reviewedSourceHash": "96e6c8ab2f1326360751f35cbe3a8f97c05b372dbe078097523afeb01a06201c",
+      "value": "Rozšířené příběhy nejsou v obnovené procházce dostupné",
+      "reviewedSourceHash": "8c9dc1e82b4546650353fea0765261436353977d6d3ac51ffd7753bacd918a0a",
       "review": {
         "outcome": "approved",
-        "note": "дадатковы ярус; сесія адноўленая → pokračovaná relace без рэстаўрацыйнай метафары"
+        "note": "Прыбраны тэхнічны тэрмін «ярус» на карысць «дадатковых гісторый»."
       }
     },
     {
@@ -2207,10 +2234,10 @@
     {
       "id": "web.ui.textUnavailableBody",
       "value": "Tento průvodce nemá text ve zvoleném jazyce rozhraní. Jeho jazyky textu jsou uvedeny v seznamu jazyků v katalogu.",
-      "reviewedSourceHash": "07a46c3e0babecfe136297ae2458d4fd0a86e5b2425cead4f1372ac6edb59953",
+      "reviewedSourceHash": "063349384a5e26e4663a357f1e865d1e06f4ae40d3ed1ce067827dbe546945f7",
       "review": {
         "outcome": "approved",
-        "note": "аўтарскі пераклад у задачы G21.22 (#554) з беларускага арыгіналу source.json; сэнс і рэгістр сям'і (du/tú/tu/ty) правераныя; тэрмін guide — па вэб-наборы гэтай мовы"
+        "note": "Граматычная праўка меснага склону ў крыніцы (у каталогу); пераклад правераны."
       }
     },
     {
@@ -2234,10 +2261,10 @@
     {
       "id": "native.feedback.formTitleGuide",
       "value": "Jak se ti líbí průvodce?",
-      "reviewedSourceHash": "2faf43c1b42bc5021922c44730c5c9bec3c25f40dcca3ff3e7123112831c8dca",
+      "reviewedSourceHash": "37bf40d90ae7ffcfa8db4f8d2578b3a5b5a816192e0807ab5a80f93a45924ada",
       "review": {
         "outcome": "approved",
-        "note": "тыканне па рэгістры сям'і; пытанне формы водгуку гіда"
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
@@ -2396,19 +2423,19 @@
     {
       "id": "native.feedback.inviteTitle",
       "value": "Jak se ti líbí průvodce? Můžeš ho ohodnotit — je to dobrovolné.",
-      "reviewedSourceHash": "c7bee40548b81ff38a6a66ec43b05e53fbddef58c6708cda09261e14969ac192",
+      "reviewedSourceHash": "cdd3f9953e3d90e1cf30284efbbf338b45130cfdd749be59ac09467e880dc99e",
       "review": {
         "outcome": "approved",
-        "note": "ціхае запрашэнне; тыканне; неабавязковасць запісана даслоўна"
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {
       "id": "native.feedback.inviteRate",
       "value": "Ohodnotit průvodce",
-      "reviewedSourceHash": "bff14adc9bcb8d672c62ee6ff83e10e26542a927104e7a053ac287c5bda11c3f",
+      "reviewedSourceHash": "4e5c57ebf0f7bca4881296e7227e000c4035735dd0573b5444dac71598203f37",
       "review": {
         "outcome": "approved",
-        "note": "дзеянне адкрывае форму; карань ohodnotit — адзіны тэрмін ацэнкі"
+        "note": "Тэрмін «гід» узгоднены ў крыніцы замест «гайд»; пераклад правераны."
       }
     },
     {

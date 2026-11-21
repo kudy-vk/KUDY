@@ -1,4 +1,4 @@
-// UX 02 (issue #348) — the safe-area frame guard: with the native header
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the safe-area frame guard: with the native header
 // off, every screen's content starts below the status bar and the notch —
 // the top inset is the screen's own padding (AC4). The hook is pinned to a
 // known fake inset; each screen's root must add it on top of the base
@@ -33,7 +33,7 @@ test.each([
   ["my", "/my", "screen-KUDY"],
   ["not-found", "/definitely/missing", "screen-Not found"],
 ])("the %s screen starts its content below the pinned top inset (AC4)", async (_name, url, screenId) => {
-  renderRouter(frameRoutes(), { initialUrl: url });
+  await renderRouter(frameRoutes(), { initialUrl: url });
   expect(flatStyle(await screen.findByTestId(screenId)).paddingTop).toBe(66);
 });
 
@@ -54,7 +54,7 @@ test.each([
     scale: 2,
     fontScale: 1,
   });
-  renderRouter(frameRoutes(), { initialUrl: url });
+  await renderRouter(frameRoutes(), { initialUrl: url });
   const frame = await screen.findByTestId(screenId);
   expect(flatStyle(frame).paddingBottom).toBe(bottom);
 });

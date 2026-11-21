@@ -1,8 +1,8 @@
-// G21.50 (issue #711) — the release flag input under a SET environment. This
+// G21.50 (G21.42-chinese-language.md — G21.50) — the release flag input under a SET environment. This
 // file runs in its own runner process: the variable is set before the first
 // import, so the module facts evaluate under a set flag exactly as a build
 // would inline it. The flag names only unregistered codes here (no gated
-// code exists in the real registry until #669/#670), so the facts must
+// code exists in the real registry until G21.45/G21.46), so the facts must
 // answer with the frozen eight — the same answer the absent-flag case gives.
 process.env.EXPO_PUBLIC_OPEN_UI_LOCALES = 'bogus, ,ru';
 

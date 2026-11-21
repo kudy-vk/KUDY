@@ -3,10 +3,10 @@
 //
 // Source of truth: contracts/ui-messages/source.json (the be base text) and
 // contracts/ui-messages/translations/<locale>.json (the reviewed translations).
-// G21.25 (issue #558): the catalogues are generated projections — edit the
+// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the commerce offer card's words (11 §8; G08.05 #292)
+// the commerce offer card's words (11 §8; G08.05 — 16_delivery_backlog.md)
 
 
 export const OFFER_STRINGS_DATA = {
@@ -108,5 +108,60 @@ export const OFFER_STRINGS_DATA = {
     "offerTitle": "\u5BFC\u89C8\u7684\u5168\u90E8\u6545\u4E8B",
     "purchasedPending": "\u5DF2\u8D2D\u4E70 · \u9700\u8981\u4E0B\u8F7D",
     "tryAgain": "\u91CD\u8BD5",
+  },
+  "nb": {
+    "buy": "Kjøp",
+    "continueFree": "Fortsett gratis",
+    "dismiss": "Ikke nå",
+    "errorBody": "Du kan prøve igjen eller fortsette gratis.",
+    "errorTitle": "Kjøpet ble ikke fullført",
+    "offerBody": "Ett kjøp låser opp guidens historier.",
+    "offerTitle": "Alle guidens historier",
+    "purchasedPending": "Kjøpt · venter på nedlasting",
+    "tryAgain": "Prøv igjen",
+  },
+  "pl": {
+    "buy": "Kup",
+    "continueFree": "Kontynuuj za darmo",
+    "dismiss": "Nie teraz",
+    "errorBody": "Możesz spróbować ponownie lub kontynuować wersję darmową.",
+    "errorTitle": "Zakup nie został ukończony",
+    "offerBody": "Jeden zakup odblokowuje wszystkie opowieści tego przewodnika.",
+    "offerTitle": "Wszystkie opowieści przewodnika",
+    "purchasedPending": "Kupiono · wymagane pobranie",
+    "tryAgain": "Spróbuj ponownie",
+  },
+  "da": {
+    "buy": "Køb",
+    "continueFree": "Fortsæt gratis",
+    "dismiss": "Ikke nu",
+    "errorBody": "Du kan prøve igen eller fortsætte gratis.",
+    "errorTitle": "Købet blev ikke gennemført",
+    "offerBody": "Ét køb låser alle guidens historier op.",
+    "offerTitle": "Alle guidens historier",
+    "purchasedPending": "Købt · hentning kræves",
+    "tryAgain": "Prøv igen",
+  },
+  "nl": {
+    "buy": "Kopen",
+    "continueFree": "Gratis doorgaan",
+    "dismiss": "Niet nu",
+    "errorBody": "Je kunt het opnieuw proberen of gratis doorgaan.",
+    "errorTitle": "De aankoop is niet voltooid",
+    "offerBody": "Één aankoop ontgrendelt alle verhalen van deze gids.",
+    "offerTitle": "Alle verhalen van de gids",
+    "purchasedPending": "Gekocht · download vereist",
+    "tryAgain": "Opnieuw proberen",
+  },
+  "pt": {
+    "buy": "Comprar",
+    "continueFree": "Continuar grátis",
+    "dismiss": "Agora não",
+    "errorBody": "Pode tentar novamente ou continuar gratuitamente.",
+    "errorTitle": "A compra não foi concluída",
+    "offerBody": "Uma única compra desbloqueia todas as histórias deste guia.",
+    "offerTitle": "Todas as histórias do guia",
+    "purchasedPending": "Comprado · transferência necessária",
+    "tryAgain": "Tentar novamente",
   },
 };

@@ -1,4 +1,4 @@
-// G21.46 (issue #670) — the Simplified Chinese catalogue's locale-specific
+// G21.46 (G21.42-chinese-language.md — G21.46) — the Simplified Chinese catalogue's locale-specific
 // rendering suite. The shipped-locale gate (tools/i18n/check-messages.mjs)
 // proves the zh set's completeness, review evidence and output freshness;
 // this suite proves the Chinese words actually render through the production

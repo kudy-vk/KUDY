@@ -38,6 +38,7 @@ import { useScreenStyles } from "../../components/screen-styles";
 import { darkTokens, tokens, type ThemeTokens } from "../../components/design-tokens";
 import { useThemeStyles } from "../../components/theme";
 import { useVisibleMomentPlayback, type VisibleMoment } from "../../components/use-visible-moment-playback";
+import { ScreenSurface } from "../../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   // G06.10.b: the interface text renders the UI family (canon §3, Golos
@@ -218,7 +219,7 @@ export default function PlaceDetail() {
   const screenStyles = useScreenStyles();
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const params = useLocalSearchParams<{ id: string }>();
@@ -239,16 +240,16 @@ export default function PlaceDetail() {
   const momentState = useStoreState(momentPlay?.store);
   const playFailure = momentState !== null && momentState.kind === "failed" ? momentState : null;
   const playback = useVisibleMomentPlayback(momentPlay, pathname, placeId);
-  // G06.05 (issue #280, AC1): the display locale, not a hard-code.
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the display locale, not a hard-code.
   const strings = placeDetailStrings(locale);
-  // G06.10 (issue #432): the back word is the shared chrome catalog's — the
+  // G06.10 (results G25.04.md — іконкавы слой): the back word is the shared chrome catalog's — the
   // place dictionary holds no copy of it (one back image, one dictionary).
   const back = uiStrings(locale).back;
   // G16.03 (issue #74): the place rating words — the action, the visit
   // confirmation and its accept.
   const feedbackWords = feedbackStrings(locale);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   // G16.03 (issue #74): the self-reported visit confirmation — the dialog is
   // a surface-side gate (the finish confirmation's pattern); the confirm
@@ -267,11 +268,11 @@ export default function PlaceDetail() {
     facts.content_version !== null &&
     facts.content_locale !== null;
   return (
-    <View style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Place detail">
-      {/* UX 02 (issue #348): the back sits in the frame above the scroll —
+    <ScreenSurface style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Place detail">
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the back sits in the frame above the scroll —
           reachable while the moment cards are scrolled (AC2). */}
       <BackButton label={back} testID="btn-place-back" />
-      {/* UX 01 (issue #347): the detail scrolls — the last moment card is
+      {/* UX 01: the detail scrolls — the last moment card is
           reachable beyond the fold. */}
       <ScrollView testID="scroll-place">
         <ScaledText style={screenStyles.title}>{title}</ScaledText>
@@ -369,6 +370,6 @@ export default function PlaceDetail() {
           </>
         )}
       </ScrollView>
-    </View>
+    </ScreenSurface>
   );
 }

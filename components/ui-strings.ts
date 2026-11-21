@@ -1,5 +1,5 @@
-// G06.05 (issue #280) — the shared UI words of the G06 surfaces, BE/EN per
-// the row's first criterion. G14.04.d (issue #305) adds the third catalog:
+// G06.05 (16_delivery_backlog.md — G06.05) — the shared UI words of the G06 surfaces, BE/EN per
+// the row's first criterion. G14.04.d (16_delivery_backlog.md — G14.04.d) adds the third catalog:
 // uk rides the same mechanism beside be/en (uk-release-scope §3.1 — "тая ж
 // сістэма, новы набор"), with the catalog keys kept equivalent by the
 // parity guard. The catalogs here are presentation-only chrome
@@ -12,7 +12,7 @@
 // falls back to Belarusian, the app's first preference (the runMapStrings
 // idiom). G21.09 (issue #542, criterion 2) — the UiStrings/AccessKind shapes
 // moved to the shared pure contract zone (contracts/ui-message-types.ts) and
-// re-exported here. G21.25 (issue #558) — the words themselves are the
+// re-exported here. G21.25 (2026-10-03-single-source-translations.md — G21.25) — the words themselves are the
 // generated projection in ui-strings.generated.ts (the canonical records +
 // the reviewed translations): this adapter keeps the selector and the type
 // re-exports only; the base text never lives in a hand-maintained file.
@@ -23,5 +23,5 @@ import { UI_STRINGS } from "./ui-strings.generated.ts";
 export type { AccessKind, UiStrings } from "../contracts/ui-message-types.ts";
 
 export function uiStrings(locale: string): UiStrings {
-  return locale === "zh" ? UI_STRINGS.zh : locale === "sv" ? UI_STRINGS.sv : locale === "cs" ? UI_STRINGS.cs : locale === "es" ? UI_STRINGS.es : locale === "fr" ? UI_STRINGS.fr : locale === "de" ? UI_STRINGS.de : locale === "en" ? UI_STRINGS.en : locale === "uk" ? UI_STRINGS.uk : UI_STRINGS.be;
+  return locale === "pt" ? UI_STRINGS.pt : locale === "nl" ? UI_STRINGS.nl : locale === "da" ? UI_STRINGS.da : locale === "pl" ? UI_STRINGS.pl : locale === "nb" ? UI_STRINGS.nb : locale === "zh" ? UI_STRINGS.zh : locale === "sv" ? UI_STRINGS.sv : locale === "cs" ? UI_STRINGS.cs : locale === "es" ? UI_STRINGS.es : locale === "fr" ? UI_STRINGS.fr : locale === "de" ? UI_STRINGS.de : locale === "en" ? UI_STRINGS.en : locale === "uk" ? UI_STRINGS.uk : UI_STRINGS.be;
 }

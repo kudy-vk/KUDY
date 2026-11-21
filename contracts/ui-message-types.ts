@@ -16,8 +16,8 @@
 
 import type { CompleteUiLocaleCode } from "./ui-locales.ts";
 
-// G06.05 (issue #280) — the shared UI words of the G06 surfaces, BE/EN per
-// the row's first criterion. G14.04.d (issue #305) adds the third catalog:
+// G06.05 (16_delivery_backlog.md — G06.05) — the shared UI words of the G06 surfaces, BE/EN per
+// the row's first criterion. G14.04.d (16_delivery_backlog.md — G14.04.d) adds the third catalog:
 // uk rides the same mechanism beside be/en (uk-release-scope §3.1 — "тая ж
 // сістэма, новы набор"), with the catalog keys kept equivalent by the
 // parity guard. The catalogs here are presentation-only chrome
@@ -43,9 +43,17 @@ export interface UiStrings {
   readonly nearby: string;
   readonly guidesLink: string;
   readonly comingSoon: string;
+  // The map menu's «Пра горад» entry (issue #200): the reserve-1 fragment
+  // opens the static Gdańsk practical guide — it takes the slot that
+  // previously rendered the comingSoon word.
+  readonly aboutCity: string;
   // The KUDY surface's Explore entry (issue #426): the owner's 2026-10-01
   // decision — the history surface is named «KUDY», not «My KUDY».
   readonly kudyLink: string;
+  // The main screen header words (issue #216, decisions M2/M11): the city
+  // name on the right and the heading above the map pieces.
+  readonly cityName: string;
+  readonly whereToToday: string;
   readonly demoVersion: string;
   readonly demoNoticeDetail: string;
   readonly demoNearbyMapAccessibility: string;
@@ -82,7 +90,7 @@ export interface UiStrings {
   readonly sizeMb: (mb: number) => string;
   readonly freeStopsCount: (count: number) => string;
   readonly stopNumber: (position: number) => string;
-  // The metadata-row icon words (G06.10.c, issue #403): the standalone
+  // The metadata-row icon words (G06.10.c — docs/agent-tasks/app/G06.10.md): the standalone
   // screen-reader label the icon contract requires — the fact line next to
   // the icon carries the value.
   readonly durationLabel: string;
@@ -112,7 +120,7 @@ export interface UiStrings {
   readonly seasonName: Record<string, string>;
   readonly reasonText: Record<string, string>;
   readonly differenceText: Record<string, string>;
-  // G14.04.d (issue #305) — the My KUDY language row (uk-release-scope §4:
+  // G14.04.d (16_delivery_backlog.md — G14.04.d) — the My KUDY language row (uk-release-scope §4:
   // «Мова прапануецца ў My KUDY»): the row's label and the options' self
   // names, which are the same native words in every catalog — a language is
   // never named through a translation.
@@ -122,7 +130,7 @@ export interface UiStrings {
   readonly languageSelfNames: Record<CompleteUiLocaleCode, string>;
 }
 
-// G06.05 (issue #280, AC4/AC5) — the place detail words. The named moment
+// G06.05 (16_delivery_backlog.md — G06.05, AC4/AC5) — the place detail words. The named moment
 // refusals and the play failure's words — a refusal states the reason and the
 // way out, a raw diagnostic code never shows alone. An unknown reason renders
 // as-is (the placeRefusalText idiom).
@@ -145,7 +153,7 @@ export interface PlaceDetailStrings {
   durationUnit: string;
   textLabel: string;
   audioLabel: string;
-  // G06.05 (issue #280, AC4/AC5): the named moment refusals and the play
+  // G06.05 (16_delivery_backlog.md — G06.05, AC4/AC5): the named moment refusals and the play
   // failure's words — a refusal states the reason and the way out, a raw
   // diagnostic code never shows alone. An unknown reason renders as-is.
   readonly refusalText: Record<
@@ -198,7 +206,7 @@ export interface OfferStrings {
 }
 
 // UX 09 (issue #434) — the nearby-guide hint card (GuideHintCard.tsx). The
-// card's four words: since G21.25 (issue #558) they are generated from the
+// card's four words: since G21.25 (2026-10-03-single-source-translations.md — G21.25) they are generated from the
 // canonical records plus the reviewed translations, and uk still renders
 // through the be fallback because the uk words of this domain are not
 // authored yet (uk-release-scope §6.4; the same be fallback the shipped
@@ -208,6 +216,301 @@ export interface GuideHintStrings {
   readonly paid: string;
   readonly openHint: string;
   readonly dismiss: string;
+}
+
+// Issue #200/#252 — the words of the «Пра горад» guide (opened from the map
+// menu's reserve-1 fragment). The verified fact lines embed their own
+// check-date claims — the sources table beside the guide
+// (docs/content/about-city-sources.md) records the official source and check
+// date per changeable fact.
+// Issue #252 — the «Пра горад» wheel screen's words, the generated
+// catalogue's shape (components/about-city-strings.generated.ts, be + en
+// per decision L1): the ids of the owner-approved mockup word sets
+// (docs/design/production/about-words-*.mjs) with the id-only renames the
+// nesting rule forced (a key may not be a prefix of another key). The link
+// row labels — one label per official page the guide sends the reader to;
+// the URLs themselves live beside the screen (about-city-content).
+export interface AboutCityStrings {
+  readonly wheel: {
+    readonly label: string;
+  };
+  readonly tab: {
+    readonly airport: string;
+    readonly transport: string;
+    readonly city: string;
+    readonly food: string;
+  };
+  readonly head: {
+    readonly airport: string;
+    readonly transport: string;
+    readonly city: string;
+    readonly food: string;
+  };
+  readonly sources: {
+    readonly title: string;
+  };
+  // The device could not open the page: its address stays on the screen.
+  readonly link: {
+    readonly failed: (url: string) => string;
+  };
+  readonly u: {
+    readonly aboutMin: (n: number) => string;
+    readonly everyWeekdays: (n: number) => string;
+    readonly hourly: string;
+    readonly aboutHourly: string;
+  };
+  readonly sr: {
+    readonly bus: string;
+    readonly night: string;
+    readonly train: string;
+  };
+  readonly air: {
+    readonly dirLabel: string;
+    readonly dirFrom: string;
+    readonly dirTo: string;
+    readonly from: {
+      readonly s1: {
+        readonly title: string;
+        readonly text: string;
+        readonly stop01: string;
+        readonly stop02: string;
+      };
+    };
+    readonly to: {
+      readonly s1: {
+        readonly title: string;
+        readonly text: string;
+      };
+    };
+    readonly s2: {
+      readonly title: string;
+    };
+    readonly s3: {
+      readonly title: string;
+    };
+    readonly ticket: {
+      readonly bus: {
+        readonly title: string;
+        readonly where: string;
+      };
+      readonly train: {
+        readonly title: string;
+        readonly where: string;
+      };
+    };
+    // The map's airport card: how the airport ties to the city and the way
+    // back to the airport section (#303, the mockup's air.map / air.map.go).
+    readonly map: string;
+    readonly mapGo: string;
+  };
+  readonly ride: {
+    readonly "110": {
+      readonly from: string;
+      readonly to: string;
+      readonly also: string;
+    };
+    readonly "210": {
+      readonly from: string;
+      readonly to: string;
+    };
+    readonly n3: {
+      readonly from: string;
+      readonly to: string;
+      readonly when: string;
+      readonly toCentre: string;
+      readonly toWrzeszcz: string;
+      readonly route: string;
+    };
+    readonly train: {
+      readonly from: string;
+      readonly to: string;
+      readonly change: string;
+      readonly line: string;
+      readonly operator: string;
+    };
+  };
+  readonly row: {
+    readonly stop: string;
+    readonly firstLast: string;
+    readonly sunday: string;
+    readonly centreStops: string;
+    readonly also: string;
+    readonly route: string;
+    readonly toCentre: string;
+    readonly toWrzeszcz: string;
+    readonly operator: string;
+  };
+  readonly tr: {
+    readonly modes: string;
+    readonly residents: string;
+    readonly ztm: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly skm: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+      readonly warn: string;
+    };
+    readonly rail: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly buyLabel: string;
+    readonly buy: {
+      readonly jakdojade: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly fala: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly kompas: {
+        readonly title: string;
+        readonly text: string;
+      };
+    };
+  };
+  readonly city: {
+    readonly caption: string;
+    readonly get: string;
+    readonly summer: string;
+  };
+  // The illustrated Tricity map of the city section (#303, decisions
+  // M12–M13): the map's words, the layer switches, the zone descriptions
+  // (the mockup's about-words sets), the station words and the airport
+  // card. The nesting-rule renames of the mockup's flat ids: map.list.meta
+  // → map.listMeta, stop.plan.from → stop.planFrom, air.map.go → air.mapGo.
+  readonly map: {
+    readonly label: string;
+    readonly role: string;
+    readonly zoomIn: string;
+    readonly zoomOut: string;
+    readonly fit: string;
+    readonly google: string;
+    readonly layers: string;
+    readonly hint: string;
+    readonly list: string;
+    readonly listMeta: (visit: number, stay: number) => string;
+  };
+  readonly layer: {
+    readonly visit: string;
+    readonly stay: string;
+    readonly rail: string;
+    readonly plan: string;
+  };
+  readonly zone: {
+    readonly stop: (name: string, km: string) => string;
+    readonly stare: string;
+    readonly przedmiescie: string;
+    readonly dolne: string;
+    readonly westerplatte: string;
+    readonly politechnika: string;
+    readonly centrum: string;
+    readonly "nowe-ogrody": string;
+    readonly "dlugie-ogrody": string;
+    readonly kartuska: string;
+    readonly siedlce: string;
+    readonly powstancow: string;
+    readonly chelm: string;
+    readonly "orunia-gorna": string;
+    readonly wrzeszcz: string;
+    readonly przymorze: string;
+    readonly "sopot-west": string;
+    readonly wzgorze: string;
+  };
+  readonly stop: {
+    readonly tag: string;
+    readonly planned: string;
+    readonly skm: string;
+    readonly pkm: string;
+    readonly change: string;
+    readonly plan: string;
+    readonly planFrom: string;
+  };
+  readonly place: {
+    readonly glowne: string;
+    readonly oliwa: string;
+    readonly brzezno: string;
+    readonly sopot: string;
+    readonly gdynia: string;
+  };
+  readonly get: {
+    readonly glowne: string;
+    readonly wrzeszcz: string;
+    readonly oliwa: {
+      readonly tram: string;
+      readonly skm: string;
+    };
+    readonly brzezno: string;
+    readonly westerplatte: string;
+  };
+  readonly food: {
+    readonly deliveryLabel: string;
+    readonly delivery: {
+      readonly lead: string;
+    };
+    readonly pay: string;
+    readonly unconfirmed: string;
+    readonly bolt: {
+      readonly note: string;
+    };
+    readonly note: string;
+    readonly city: string;
+    readonly cards: {
+      readonly title: string;
+      readonly meta: string;
+      readonly text: string;
+    };
+    readonly blik: {
+      readonly title: string;
+      readonly meta: string;
+      readonly need: string;
+      readonly online: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly till: {
+        readonly title: string;
+        readonly text: string;
+      };
+      readonly more: string;
+    };
+  };
+  readonly pay: {
+    readonly any: string;
+    readonly card: string;
+    readonly blik: string;
+    readonly cash: string;
+    readonly apple: string;
+    readonly google: string;
+    readonly paypal: string;
+  };
+  readonly card: {
+    readonly title: string;
+    readonly lead: string;
+    readonly brandAlt: string;
+    readonly brandMark: string;
+    readonly openOfficial: (name: string) => string;
+  };
+  readonly resident: {
+    readonly title: string;
+    readonly lead: string;
+    readonly openOfficial: (name: string) => string;
+  };
+  readonly links: {
+    readonly airportBuses: string;
+    readonly airportTrains: string;
+    readonly ztmSchedule: string;
+    readonly skmSearch: string;
+    readonly kartaTurysty: string;
+    readonly pysznePayment: string;
+    readonly blikHow: string;
+  };
 }
 
 // G16.03 (issue #74) — the voluntary private rating words (20 §7, 21 §5/§6):

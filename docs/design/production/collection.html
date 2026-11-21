@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — картка падборкі</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* A long title in a wide language takes a second line instead of being cut. */
+  .topbar .title { white-space: normal; line-height: 1.2; overflow-wrap: anywhere; }
+
+  .page { display: grid; align-content: start; gap: 12px; padding: 4px 16px 24px; }
+  .page > * { min-width: 0; }
+  .page > p { margin: 0; }
+  .name { margin: 0; font-size: calc(24px * var(--fs)); font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  .meta .tag { margin-left: auto; }
+  .why { color: var(--muted); font-size: calc(14px * var(--fs)); }
+  .remark { display: flex; gap: 6px; color: var(--muted); font-size: calc(13px * var(--fs)); }
+  .remark .icon { margin-top: 1px; }
+  /* The overlap note is the author's heads-up, so it reads in full ink. */
+  .remark.overlap { color: var(--ink); font-size: calc(14px * var(--fs)); }
+  .members { display: grid; gap: 12px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .members > li { min-width: 0; }
+
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Картка падборкі</h1>
+  <p class="lead">Фінальны макет. Падборка — рэдакцыйная група спасылак: апісанне і карткі яе членаў. Яна не пачынае прагулку, не з'яўляецца пакупкай і не мае гуку. Перамыкачы над тэлефонам да экрана не належаць.</p>
+</main>
+<script type="module" src="collection.mjs"></script>
+</body>
+</html>

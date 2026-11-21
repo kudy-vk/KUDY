@@ -15,6 +15,8 @@ import RoutePreview from "./route/[id]";
 import { tokens } from "../components/design-tokens";
 import { createServices } from "../controllers/createServices";
 import { CATALOG_FIXTURES, layoutWith, serve, sha256 } from "../test/render-helpers";
+import { getByProps } from "../test/render-helpers";
+
 
 // The smallest published catalog the two city surfaces render honestly
 // (both fixture guides carry the display-locale text, so both stay visible).
@@ -41,8 +43,27 @@ function flatContent(style: unknown): Record<string, unknown> {
 
 // Both list kinds carry their content width as one testID'd prop — the FlatList
 // of the city surfaces and My KUDY, the ScrollView of the preview.
+// RNTL 14 exposes the host-only tree: the FlatList composite is not an
+// instance, so the numColumns/columnWrapperStyle contracts read through the
+// documented unstable-fiber bridge from the ScrollView host that carries the
+// list's testID (app/catalog-list.test.tsx owns the reference pattern).
+function flatListProps(id: string): { numColumns?: number; columnWrapperStyle?: unknown } {
+  const host = screen.getByTestId(id) as unknown as {
+    unstable_fiber: { memoizedProps?: Record<string, unknown>; return?: unknown } | null;
+  };
+  let fiber: { memoizedProps?: Record<string, unknown>; return?: unknown } | null | undefined = host.unstable_fiber;
+  while (fiber) {
+    const props = fiber.memoizedProps as { testID?: string; numColumns?: number; columnWrapperStyle?: unknown } | null;
+    if (props && props.testID === id && props.numColumns !== undefined) {
+      return { numColumns: props.numColumns, columnWrapperStyle: props.columnWrapperStyle };
+    }
+    fiber = fiber.return as typeof fiber;
+  }
+  throw new Error(`missing ${id}`);
+}
+
 function expectCap(testID: string): void {
-  const element = screen.UNSAFE_getByProps({ testID });
+  const element = getByProps(screen, { testID });
   expect(flatContent(element.props.contentContainerStyle)).toMatchObject({
     maxWidth: tokens.contentMaxWidth,
     alignSelf: "center",
@@ -54,7 +75,7 @@ function expectCap(testID: string): void {
 // — neither the card nor the link between them declares one. Issue #970 pins
 // the exception geometry the canon documents: 48.5% of the capped inner width.
 function columnWidthFromCard(): unknown {
-  let node = screen.UNSAFE_getByProps({ testID: "guide-card-guide-001" }).parent;
+  let node = getByProps(screen, { testID: "guide-card-guide-001" }).parent;
   while (node) {
     const flat = flatContent(node.props?.style);
     if (flat.width !== undefined) return flat.width;
@@ -75,7 +96,7 @@ async function openCitySurface(path: "/explore" | "/city/gdansk/guides"): Promis
     catalogSha256: sha256,
   });
   await services.catalog?.controller.getState().refresh();
-  renderRouter(
+  await renderRouter(
     {
       _layout: layoutWith(services),
       "(tabs)/explore": Explore,
@@ -102,7 +123,7 @@ describe("APR-10.b (issue #959): the canon content width on wide windows", () =>
 
   test.each([800, 1280])("the My KUDY settings content caps at %i dp", async (width) => {
     atWidth(width);
-    renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
     await screen.findByTestId("my-ui-locale");
     expectCap("scroll-my");
   });
@@ -118,22 +139,22 @@ describe("APR-10.b (issue #959): the canon content width on wide windows", () =>
   ] as const)("$surface keeps the two-column card grid the #970 exception documents", async ({ surface, testID }) => {
     atWidth(800);
     await openCitySurface(surface);
-    const narrow = screen.UNSAFE_getByProps({ testID });
-    expect(narrow.props.numColumns).toBe(1);
-    expect(narrow.props.columnWrapperStyle).toBeUndefined();
+    const narrow = flatListProps(testID);
+    expect(narrow.numColumns).toBe(1);
+    expect(narrow.columnWrapperStyle).toBeUndefined();
 
     atWidth(1280);
     await openCitySurface(surface);
-    const wide = screen.UNSAFE_getByProps({ testID });
-    expect(wide.props.numColumns).toBe(2);
-    expect(wide.props.columnWrapperStyle).toBeTruthy();
+    const wide = flatListProps(testID);
+    expect(wide.numColumns).toBe(2);
+    expect(wide.columnWrapperStyle).toBeTruthy();
     expect(columnWidthFromCard()).toBe("48.5%");
   });
 
   test.each([800, 1280])("the guide preview content caps at %i dp", async (width) => {
     atWidth(width);
     serve(CATALOG_FIXTURES);
-    renderRouter(
+    await renderRouter(
       {
         _layout: layoutWith(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
         "route/[id]": RoutePreview,

@@ -1,4 +1,4 @@
-// UX 02 (issue #348) — the shared screen-frame styles of the detail
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the shared screen-frame styles of the detail
 // surfaces (route preview, place detail): the paper container and the
 // section title. One copy — sibling StyleSheets are jscpd clones
 // (implementation-rules 3).
@@ -34,15 +34,28 @@ export const screenStyles = StyleSheet.create({
     // name falls back to the system font, weight and size hold.
     fontFamily: tokens.fontFamilyDisplay,
   },
+  // M11 (issue #216): «Куды сёння?» of the main screen — the second Alegreya
+  // role the canon allows (visual-language §3 as amended by M11). The regular
+  // face renders the mockup's weight-400 display line at its own 32 size.
+  menuDisplayTitle: {
+    color: tokens.colorInk,
+    fontFamily: tokens.fontFamilyDisplayRegular,
+    fontSize: tokens.fontMenuTitleSize,
+    fontWeight: tokens.fontWeightRegular,
+    lineHeight: tokens.fontMenuTitleSize * 1.2,
+    marginHorizontal: tokens.spaceL,
+    marginTop: tokens.spaceS,
+  },
 });
 
-// #436 — preserve the existing light screenStyles export and its typography
+// docs/design/dark-theme.md — preserve the existing light screenStyles export and its typography
 // contract; detail screens select a dark equivalent at render time.
 const { displayTitle } = screenStyles;
 const darkScreenStyles = StyleSheet.create({
   screen: { ...screenStyles.screen, backgroundColor: darkTokens.colorPaper },
   title: { ...screenStyles.title, color: darkTokens.colorInk },
   displayTitle: { ...displayTitle, color: darkTokens.colorInk },
+  menuDisplayTitle: { ...screenStyles.menuDisplayTitle, color: darkTokens.colorInk },
 });
 
 export function useScreenStyles() {

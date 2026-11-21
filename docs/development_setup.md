@@ -29,7 +29,7 @@ npm ci
 | `npm run typecheck` | `tsc --noEmit` без вываду, exit 0 |
 | `npm test` | **зялёны прагон**: суіты `node --test` + кампанентныя тэсты маршрутаў `app/` праз jest-expo; поўны лік тестаў дае сама каманда — ён рухавы, звярай са свежым проганам, а не з гэтай табліцы |
 | `node docs/run-model/check-regressions.mjs` | **усе зарэгістрыраваныя мутацыі адхілены. Repository model unchanged.** (лік расце разам з мутацыямі — гл. вывод каманды) |
-| `npx expo install --check` | **Dependencies are up to date** (піны адпавядаюць чаканым дыяпазонам SDK 54) |
+| `npx expo install --check` | **Dependencies are up to date** (піны адпавядаюць чаканым дыяпазонам SDK 58 — #339) |
 | `npx expo-doctor` | **No issues detected!** — усе праверкі пройдуць; іх лік расце з SDK |
 | `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .` | **Found 0 clones** (0.00%) |
 
@@ -43,7 +43,7 @@ npx expo start
 
 Metro bundler; прэв'ю ў Expo Go або эмулятары. **Абмежаванне:** Expo Go не з'яўляецца доказам стэку — background location, background audio і натыўны рэндэр карты патрабуюць development build (ADR §2). Дадатак мантуецца праз Expo Router (`app/`): маршруты `19` §2.5 — заглушки з імем экрана і яго params, рэальнага прадуктовага UI яшчэ няма (G06.06–G06.08); выклікаў SDK у ім няма.
 
-Абнаўленне 2026-09-27 (issue #338, першы паспяховы device-run): у гэтым стэку Expo Go недаступны — натыўныя карта, аўдыё і крамы патрабуюць development build. Працоўны спосаб: development build (`by.kudy.app`) на эмулятары/прыладзе + `npm start` (`expo start --dev-client`) — дадатак грузіць бандл з запушчанага Metro праз Dev Launcher. Зборку бандла трымаюць два файлы ў кораню рэпазітара: `metro.config.js` — blockList выключае `*.test.*` і службовыя тэчкі `.mimosa`/`.zcode`/`.scratch` (require.context expo-router цягне jest-сюты з `app/` у бандл), а `resolveRequest` перанакіроўвае `node:*` на стаб; і `metro-node-stub.js` — проксі, каторы кідае іменаваную памылку толькі пры выкліку builtin-а (сам імпарт праходзіць: прадуктовы ланцуг з `app/` node-free пасля пераносу safe-path ідыёму ў `services/safe-path.ts`). Wiring абодвух элементаў ахаваны committed тэстам `tools/metro-config/metro-config.test.mjs` — падае пры выдаленні любога з іх. Хрушкасць вотчара: на ФС не-ext4 metro-file-map FallbackWatcher падае з `ENOENT`, калі паралельная сесія выдаляе `.mimosa/hook-state/sess_*.lock` падчас яго прагулкі — дастаткова перазапусціць Metro.
+Абнаўленне 2026-09-27 (першы паспяховы device-run): у гэтым стэку Expo Go недаступны — натыўныя карта, аўдыё і крамы патрабуюць development build. Працоўны спосаб: development build (`by.kudy.app`) на эмулятары/прыладзе + `npm start` (`expo start --dev-client`) — дадатак грузіць бандл з запушчанага Metro праз Dev Launcher. Зборку бандла трымаюць два файлы ў кораню рэпазітара: `metro.config.js` — blockList выключае `*.test.*` і службовыя тэчкі `.mimosa`/`.zcode`/`.scratch` (require.context expo-router цягне jest-сюты з `app/` у бандл), а `resolveRequest` перанакіроўвае `node:*` на стаб; і `metro-node-stub.js` — проксі, каторы кідае іменаваную памылку толькі пры выкліку builtin-а (сам імпарт праходзіць: прадуктовы ланцуг з `app/` node-free пасля пераносу safe-path ідыёму ў `services/safe-path.ts`). Wiring абодвух элементаў ахаваны committed тэстам `tools/metro-config/metro-config.test.mjs` — падае пры выдаленні любога з іх. Хрушкасць вотчара: на ФС не-ext4 metro-file-map FallbackWatcher падае з `ENOENT`, калі паралельная сесія выдаляе `.mimosa/hook-state/sess_*.lock` падчас яго прагулкі — дастаткова перазапусціць Metro.
 
 ## E2E-каталог: сінтэтычны origin (`npm run e2e:origin`)
 
@@ -368,6 +368,12 @@ checkout-а ў build-checkout, зборка debug APK праз
    --package "system-images;android-35;google_apis;x86_64"` пры
    `ANDROID_AVD_HOME=D:\KUDY-Android\avd`.
 4. Клон: `gh repo clone kudy-vk/KUDY D:\KUDY-Android\checkout`.
+5. ninja ≥ 1.11 у `sdk\cmake\<версія>\bin\ninja.exe`: зборка SDK 58 (RN 0.88)
+   стварае аб'ектныя шляхі codegen даўжынёй за 260 знакаў, а ninja 1.10.2 з
+   Android SDK не мае маніфеста доўгіх шляхоў і падае з «Filename longer than
+   260 characters» (#326). 2026-11-21 у cmake 3.22.1 заменена на ninja 1.12.1
+   (стары захаваны побач як `ninja.exe.1.10.2.bak`); ранер правярае версію і
+   дае NOT-VERIFIED, пакуль усе ninja SDK старэйшыя за 1.11.
 
 Як працуе:
 

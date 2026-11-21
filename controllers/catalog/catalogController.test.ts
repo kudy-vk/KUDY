@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the catalog controller state machine: boot load,
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the catalog controller state machine: boot load,
 // the 09 §4 revalidation rule (failure keeps the cached surface), the
 // superseded-refresh guard and the honest error path.
 import assert from 'node:assert/strict';

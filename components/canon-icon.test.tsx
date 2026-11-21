@@ -1,4 +1,4 @@
-// G06.10.c (issue #403) — the icon layer's own contract, each check a
+// G06.10.c (docs/agent-tasks/app/G06.10.md — G06.10.c) — the icon layer's own contract, each check a
 // fail-on-revert guard (implementation-rules 1): color and size resolve from
 // the canon tokens at render time (overriding a token changes the output — a
 // literal in the component would freeze it), the screen-reader label is
@@ -17,6 +17,8 @@ import MapPin from "lucide-react-native/icons/map-pin";
 import { CanonIcon } from "./canon-icon";
 import { tokens } from "./design-tokens";
 import { uiStrings } from "./ui-strings";
+import { getByType } from "../test/render-helpers";
+
 
 // The canon `tokens` object is readonly by type; the override experiment
 // mutates it at runtime and restores it — the same values the guard suite
@@ -30,53 +32,64 @@ afterEach(() => {
   mutableTokens.fontBaseSize = canonSize;
 });
 
-function svgOf(wrapper: ReturnType<typeof render>) {
-  return wrapper.UNSAFE_getByType(Svg);
+function svgOf(wrapper: Awaited<ReturnType<typeof render>>) {
+  return getByType(wrapper, "RNSVGSvgView");
 }
 
 describe("CanonIcon (G06.10.c)", () => {
-  test("color and size resolve from the canon tokens — overriding a token changes the output", () => {
-    const canon = render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-tokens" />);
+  test("color and size resolve from the canon tokens — overriding a token changes the output", async () => {
+    const canon = await render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-tokens" />);
     expect(svgOf(canon).props.stroke).toBe(canonColor);
     expect(svgOf(canon).props.width).toBe(canonSize);
     expect(svgOf(canon).props.height).toBe(canonSize);
 
     mutableTokens.colorInk = "#0a0b0c";
     mutableTokens.fontBaseSize = 21;
-    const overridden = render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-tokens" />);
+    const overridden = await render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-tokens" />);
     expect(svgOf(overridden).props.stroke).toBe("#0a0b0c");
     expect(svgOf(overridden).props.width).toBe(21);
   });
 
-  test("explicit color and size props override the token defaults (pressable composition)", () => {
-    const tree = render(<CanonIcon glyph={MapPin} label="Кропкі" color="#1d6b4f" size={24} />);
+  test("explicit color and size props override the token defaults (pressable composition)", async () => {
+    const tree = await render(<CanonIcon glyph={MapPin} label="Кропкі" color="#1d6b4f" size={24} />);
     expect(svgOf(tree).props.stroke).toBe("#1d6b4f");
     expect(svgOf(tree).props.width).toBe(24);
   });
 
-  test("the label is visible to accessibility tooling; an empty label is a contract breach", () => {
-    const tree = render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-labelled" />);
+  test("a caller that omits fill keeps the lucide outline default on the Svg root", async () => {
+    // The fill passthrough must not leak `undefined` into the lucide props:
+    // an explicit undefined key drops the fill:"none" child default and
+    // react-native-svg paints unset fills black on device (voka finding
+    // undefined-fill-black-fill, PR #203) — the ?? "none" at the Glyph call
+    // is the contract; reverting it turns this check red.
+    const tree = await render(<CanonIcon glyph={MapPin} label="Кропкі" />);
+    expect(svgOf(tree).props.fill).toBe("none");
+  });
+
+  test("the label is visible to accessibility tooling; an empty label is a contract breach", async () => {
+    const tree = await render(<CanonIcon glyph={MapPin} label="Кропкі" testID="icon-labelled" />);
     expect(tree.getByTestId("icon-labelled").props.accessible).toBe(true);
     expect(tree.getByTestId("icon-labelled").props.accessibilityLabel).toBe("Кропкі");
 
-    expect(() => render(<CanonIcon glyph={MapPin} label="" />)).toThrow(
+    // RNTL 14 renders async - the contract breach rejects the render promise.
+    await expect(render(<CanonIcon glyph={MapPin} label="" />)).rejects.toThrow(
       "CanonIcon: the screen-reader label is required",
     );
-    expect(() => render(<CanonIcon glyph={MapPin} label="   " />)).toThrow(
+    await expect(render(<CanonIcon glyph={MapPin} label="   " />)).rejects.toThrow(
       "CanonIcon: the screen-reader label is required",
     );
   });
 
-  test("the label contract carries the EN catalog words (AC4, EN)", () => {
+  test("the label contract carries the EN catalog words (AC4, EN)", async () => {
     // The display locale is 'be' until L02 lands; the EN word rides the same
     // required-label contract — the glyph does not care which catalog spoke.
     const label = uiStrings("en").stopsCount(2);
-    const tree = render(<CanonIcon glyph={MapPin} label={label} testID="icon-en" />);
+    const tree = await render(<CanonIcon glyph={MapPin} label={label} testID="icon-en" />);
     expect(tree.getByTestId("icon-en").props.accessibilityLabel).toBe("Stops: 2");
   });
 
-  test("the wrapper never steals a press: pointerEvents none, style passthrough", () => {
-    const tree = render(
+  test("the wrapper never steals a press: pointerEvents none, style passthrough", async () => {
+    const tree = await render(
       <CanonIcon glyph={MapPin} label="Кропкі" testID="icon-compose" style={{ marginTop: 2 }} />,
     );
     const wrapper = tree.getByTestId("icon-compose");
@@ -84,10 +97,10 @@ describe("CanonIcon (G06.10.c)", () => {
     expect(wrapper.props.style).toEqual({ marginTop: 2 });
   });
 
-  test("the glyph is the passed Lucide component, rendered deep (no barrel)", () => {
+  test("the glyph is the passed Lucide component, rendered deep (no barrel)", async () => {
     // map-pin's class name rides the lucide Svg; a swapped glyph or a barrel
     // resolving to the wrong module changes it.
-    const tree = render(<CanonIcon glyph={MapPin} label="Кропкі" />);
+    const tree = await render(<CanonIcon glyph={MapPin} label="Кропкі" />);
     expect(svgOf(tree).props.className).toBe("lucide lucide-map-pin");
   });
 });
@@ -107,7 +120,7 @@ function* sourceFiles(root: string): Generator<string> {
   }
 }
 
-test("no barrel import of the icon package anywhere in app/ and components/", () => {
+test("no barrel import of the icon package anywhere in app/ and components/", async () => {
   const offenders: string[] = [];
   for (const root of SOURCE_ROOTS) {
     for (const path of sourceFiles(root)) {

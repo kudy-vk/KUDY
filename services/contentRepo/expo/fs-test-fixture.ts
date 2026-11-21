@@ -45,16 +45,52 @@ class FakeFile extends Entry {
     if (bytes === undefined) throw new Error(`noent ${this.path}`);
     return bytes;
   }
-  write(content: Uint8Array, _options?: { encoding?: string }): void {
-    this.fs.files.set(this.path, content);
-    this.ancestors().forEach((dir) => this.fs.dirs.add(dir));
+  write(content: Uint8Array, _options?: { encoding?: string }): Promise<void> {
+    // The 58 native write resolves a promise the adapter must await: the
+    // mutation lands on a later macrotask, so a skipped `await` lets the next
+    // store step read a stale tree instead of silently passing (issue #354,
+    // implementation-rules 1 — the revert fails the activation suite).
+    return new Promise((resolve) => {
+      setImmediate(() => {
+        this.fs.files.set(this.path, content);
+        this.ancestors().forEach((dir) => this.fs.dirs.add(dir));
+        resolve();
+      });
+    });
   }
   delete(): void {
     this.fs.files.delete(this.path);
   }
-  move(destination: FakeFile | FakeDirectory): void {
+  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): Promise<void> {
+    // The 58 native move is a suspend fun on Android — a promise the adapter
+    // must await (issue #354): the same macrotask-deferred mutation as write.
+    return new Promise((resolve, reject) => {
+      setImmediate(() => {
+        try {
+          this.moveNow(destination, options);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+  private moveNow(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
     const bytes = this.fs.files.get(this.path);
     if (bytes === undefined) throw new Error(`noent ${this.path}`);
+    // The native Android move requires the destination's parent to exist
+    // (CopyMoveStrategy.kt:72-74 — DestinationDoesNotExistException): the
+    // store ensures it before the move, a direct move into an absent parent
+    // rejects (issue #354).
+    const parent = destination.path.slice(0, destination.path.lastIndexOf('/')) || '/';
+    if (parent !== '/' && !this.fs.dirs.has(parent)) throw new Error(`destination-does-not-exist ${parent}`);
+    // expo-file-system 58 MoveOptions (#339): without overwrite an existing
+    // target rejects; the adapter always passes overwrite (the DownloadStore
+    // contract is the node adapter's fsRename replace).
+    if (this.fs.files.has(destination.path) || this.fs.dirs.has(destination.path)) {
+      if (options?.overwrite !== true) throw new Error(`exists ${destination.path}`);
+      this.fs.dirs.delete(destination.path);
+    }
     this.fs.files.delete(this.path);
     this.fs.files.set(destination.path, bytes);
   }
@@ -93,19 +129,61 @@ class FakeDirectory extends Entry {
     }
   }
   // Expo move semantics (FileSystemPath.getMoveOrCopyPath, expo-file-system
-  // 19.0.24 Android): a directory moved to an existing destination directory
-  // lands inside it — `mv a b` → `b/a`; only an absent destination is the
-  // whole rename. A Node-rename stand-in (always replace) would mask the
+  // 58.0.14 Android, #339): a directory moved to an existing destination
+  // directory lands inside it — `mv a b` → `b/a` — and the 58 native keeps
+  // that nesting for Directory→Directory regardless of overwrite
+  // (CopyMoveStrategy.kt:68-77 — prepareAsDestination builds
+  // File(file, fileName) before the overwrite check; iOS
+  // FileSystemPath.swift:57-60+86-88): overwrite clears only the nested
+  // child, children included. Only an absent destination is the whole
+  // rename. A Node-rename stand-in (always replace) would mask the
   // caller-missed-directory class of defect (G20.31 / #793).
-  move(destination: FakeFile | FakeDirectory): void {
+  move(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): Promise<void> {
+    // The 58 native move is a suspend fun on Android — a promise the adapter
+    // must await (issue #354): the same macrotask-deferred mutation as write.
+    return new Promise((resolve, reject) => {
+      setImmediate(() => {
+        try {
+          this.moveNow(destination, options);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+  private moveNow(destination: FakeFile | FakeDirectory, options?: { overwrite?: boolean }): void {
     if (!this.fs.dirs.has(this.path)) throw new Error(`noent ${this.path}`);
+    // The native Android move requires the destination's parent to exist
+    // (CopyMoveStrategy.kt:72-74 — DestinationDoesNotExistException): the
+    // store ensures it before the move, a direct move into an absent parent
+    // rejects (issue #354).
+    const parent = destination.path.slice(0, destination.path.lastIndexOf('/')) || '/';
+    if (parent !== '/' && !this.fs.dirs.has(parent)) throw new Error(`destination-does-not-exist ${parent}`);
+    const overwrite = options?.overwrite === true;
+    // Issue #355: the nesting holds with overwrite too — the source lands at
+    // dest/<name>, and overwrite clears only that nested child (children
+    // included, deleteRecursively), never the whole destination.
     const target = this.fs.dirs.has(destination.path)
       ? `${destination.path}/${this.name}`
       : destination.path;
+    // Moving a directory onto its own parent resolves target to the source
+    // path itself; the native strategy errors there (deleteRecursively/
+    // removeItem would delete the source) and the deletion loops below would
+    // wipe the source tree before the re-key — reject instead (issue #355).
+    if (target === this.path) throw new Error(`self-move ${this.path}`);
     // The native `moveTo` runs without REPLACE_EXISTING (FileSystemPath.kt:158):
     // an existing target — the nested `b/a` included — throws instead of
     // merging its old bytes under the moved tree.
-    if (this.fs.dirs.has(target) || this.fs.files.has(target)) throw new Error(`exists ${target}`);
+    if (this.fs.dirs.has(target) || this.fs.files.has(target)) {
+      if (!overwrite) throw new Error(`exists ${target}`);
+      for (const key of [...this.fs.files.keys()]) {
+        if (key === target || key.startsWith(`${target}/`)) this.fs.files.delete(key);
+      }
+      for (const dir of [...this.fs.dirs]) {
+        if (dir === target || dir.startsWith(`${target}/`)) this.fs.dirs.delete(dir);
+      }
+    }
     for (const key of [...this.fs.files.keys()]) {
       if (key.startsWith(`${this.path}/`)) {
         this.fs.files.set(`${target}${key.slice(this.path.length)}`, this.fs.files.get(key)!);

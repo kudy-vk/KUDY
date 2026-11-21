@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the catalog service tests. The committed
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the catalog service tests. The committed
 // discovery-contract fixtures are the published data (rule 15: the tests run
 // the production load path — loader port in, integrity pin, projection out).
 // The envelope parity block pins the device-side envelope reading to the
@@ -441,7 +441,7 @@ describe('loadPreview — the guide preview assembly (G06.01.b)', () => {
     assert.equal(locked?.tier, 'extended');
   });
 
-  it('joins the stop rows with the index place titles; unknown and untitled places hide the line (UX 05, issue #351)', async () => {
+  it('joins the stop rows with the index place titles; unknown and untitled places hide the line (UX 05)', async () => {
     // The dedup of 21 §4 rule 6 applies inside the title map too: of two
     // offers pinned to one place, the sorted-first title wins.
     const index = {

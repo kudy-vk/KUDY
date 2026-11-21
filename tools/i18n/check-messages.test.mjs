@@ -1,4 +1,4 @@
-// G21.26 (issue #559) — the shipped-locale gate's behavioral suites. The five
+// G21.26 (2026-10-03-single-source-translations.md — G21.26) — the shipped-locale gate's behavioral suites. The five
 // named deliverables of the issue run here: missing_locale_key,
 // stale_source_hash, unreviewed_hash_bump, valid_same_commit_update and
 // standard_runner_enforces_messages; the remaining suites cover the real-tree

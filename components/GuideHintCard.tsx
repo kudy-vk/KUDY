@@ -1,4 +1,4 @@
-// G07.05 (issue #284) — the quiet guide-hint card of the open app (R07 in
+// G07.05 (15_guide_decisions.md — R07) — the quiet guide-hint card of the open app (R07 in
 // docs/15: «Побач ёсць гід…» without a session, the small quiet card during
 // one; «Яна не запускае аўдыё, не пачынае сесію, не купляе кантэнт»). The
 // rows are the public preview facts the hint controller projected — a tap
@@ -7,12 +7,12 @@
 // апісання не дае доступу»). The visual language is the quiet-offer card's
 // (G08.05): radius 10, the line border, the token rhythm, one quiet decline.
 // Lives in components/, not app/: expo-router treats every app/ file as a
-// route (issue #339).
+// route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { useSyncExternalStore } from "react";
 import { StyleSheet, View } from "react-native";
 
 // G21.09 (issue #542): the hint card's message shapes live in the shared
-// pure contract zone. G21.25 (issue #558): the words are the generated
+// pure contract zone. G21.25 (2026-10-03-single-source-translations.md — G21.25): the words are the generated
 // projection of the canonical records plus the reviewed translations —
 // the base text never lives in this component.
 import type { GuideHintStrings } from "../contracts/ui-message-types";
@@ -26,11 +26,11 @@ import type { NearbyHintBinding, NearbyHintState } from "../controllers/useNearb
 
 export function guideHintStrings(locale: string): GuideHintStrings {
   // The words are the generated projection of the canonical records plus the
-  // reviewed translations (G21.25, issue #558); uk keeps the documented be
+  // reviewed translations (G21.25 — 2026-10-03-single-source-translations.md); uk keeps the documented be
   // fallback (uk-release-scope §6.4) until its words are authored (G21.19),
-  // de renders its own catalogue (G21.10, issue #544); es too (G21.11, issue
-  // #545); fr too (G21.12, issue #546).
-  return locale === "zh" ? GUIDE_HINT_STRINGS.zh : locale === "sv" ? GUIDE_HINT_STRINGS.sv : locale === "cs" ? GUIDE_HINT_STRINGS.cs : locale === "es" ? GUIDE_HINT_STRINGS.es : locale === "fr" ? GUIDE_HINT_STRINGS.fr : locale === "en" ? GUIDE_HINT_STRINGS.en : locale === "de" ? GUIDE_HINT_STRINGS.de : GUIDE_HINT_STRINGS.be;
+  // de renders its own catalogue (G21.10 — 2026-10-03-single-source-translations.md); es too (G21.11,
+  // same record); fr too (G21.12, same record).
+  return locale === "pt" ? GUIDE_HINT_STRINGS.pt : locale === "nl" ? GUIDE_HINT_STRINGS.nl : locale === "da" ? GUIDE_HINT_STRINGS.da : locale === "pl" ? GUIDE_HINT_STRINGS.pl : locale === "nb" ? GUIDE_HINT_STRINGS.nb : locale === "zh" ? GUIDE_HINT_STRINGS.zh : locale === "sv" ? GUIDE_HINT_STRINGS.sv : locale === "cs" ? GUIDE_HINT_STRINGS.cs : locale === "es" ? GUIDE_HINT_STRINGS.es : locale === "fr" ? GUIDE_HINT_STRINGS.fr : locale === "en" ? GUIDE_HINT_STRINGS.en : locale === "de" ? GUIDE_HINT_STRINGS.de : GUIDE_HINT_STRINGS.be;
 }
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({

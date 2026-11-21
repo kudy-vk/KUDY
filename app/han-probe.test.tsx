@@ -26,8 +26,8 @@ describe("G21.47 (issue #671): the dev-only Han probe surface", () => {
     g.__DEV__ = true;
   });
 
-  test("under __DEV__ it renders the rows the device run reads", () => {
-    render(<HanProbe />);
+  test("under __DEV__ it renders the rows the device run reads", async () => {
+    await render(<HanProbe />);
     for (const id of [
       "han-probe/title",
       "han-probe/card-hans",
@@ -48,14 +48,14 @@ describe("G21.47 (issue #671): the dev-only Han probe surface", () => {
     }
   });
 
-  test("the escape-encoded fixtures decode to the G21.40 fixture values", () => {
-    render(<HanProbe />);
+  test("the escape-encoded fixtures decode to the G21.40 fixture values", async () => {
+    await render(<HanProbe />);
     expect(within(screen.getByTestId("han-probe/card-hans")).getByText(CARD_HANS)).toBeTruthy();
     expect(within(screen.getByTestId("han-probe/s2-shared")).getByText(S2_SHARED)).toBeTruthy();
   });
 
-  test("the scroll content carries the pinned insets: top 50+16, bottom 34+16 (UX 02)", () => {
-    render(<HanProbe />);
+  test("the scroll content carries the pinned insets: top 50+16, bottom 34+16 (UX 02)", async () => {
+    await render(<HanProbe />);
     // The insets ride contentContainerStyle (the scrollable content), not
     // the frame style — a frame padding never joins the scroll extent, so
     // the last rows stay unreachable behind the gesture bar.
@@ -64,9 +64,9 @@ describe("G21.47 (issue #671): the dev-only Han probe surface", () => {
     expect(container.paddingBottom).toBe(50);
   });
 
-  test("outside __DEV__ the surface renders nothing", () => {
+  test("outside __DEV__ the surface renders nothing", async () => {
     g.__DEV__ = false;
-    render(<HanProbe />);
+    await render(<HanProbe />);
     expect(screen.queryByTestId("han-probe/title")).toBeNull();
   });
 });

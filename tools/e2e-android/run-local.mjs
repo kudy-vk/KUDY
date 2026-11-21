@@ -25,8 +25,11 @@
 //
 // Exit codes: 0 passed (or scope run=false), 1 suite failure, 2 usage,
 // 3 NOT-VERIFIED (a named reason stopped the suites; never a pass), 4 the
-// host is locked by another run. The Windows host path is issue #124; here
-// the runner reports NOT-VERIFIED instead of half-running.
+// host is locked by another run. Since the #132 consolidation the shared
+// entry (tools/ci/android-e2e-local.mjs) runs #124's Windows path on win32
+// and dispatches here only on non-Windows hosts; the win32 guard below is a
+// defensive backstop for a direct invocation that still answers
+// NOT-VERIFIED instead of half-running.
 import fs from 'node:fs';
 import net from 'node:net';
 import os from 'node:os';

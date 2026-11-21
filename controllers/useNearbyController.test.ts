@@ -1,4 +1,4 @@
-// G07.05 (issue #284) — the R07 hint controller suite over the real stack:
+// G07.05 (15_guide_decisions.md — R07) — the R07 hint controller suite over the real stack:
 // the real LocationService (the fake OS port idiom), the real AudioService
 // (the fake player port), the real services/db over node:sqlite and the
 // canonical values document the contract ships — the accepted numbers drive

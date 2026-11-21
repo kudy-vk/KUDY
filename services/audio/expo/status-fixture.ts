@@ -6,10 +6,11 @@
 import type { AudioStatus } from 'expo-audio';
 
 // A fully loaded, ready, not-yet-playing status; tests override the fields
-// that change. Field list mirrors expo-audio 1.1.1 AudioStatus verbatim.
+// that change. Field list mirrors expo-audio 58.0.12 AudioStatus verbatim
+// (the 58 type made `id` the string resource identifier — #339).
 export function status(overrides: Partial<AudioStatus> = {}): AudioStatus {
   return {
-    id: 1,
+    id: "1",
     currentTime: 0,
     playbackState: 'ready',
     timeControlStatus: 'paused',
@@ -20,6 +21,9 @@ export function status(overrides: Partial<AudioStatus> = {}): AudioStatus {
     loop: false,
     didJustFinish: false,
     isBuffering: false,
+    isLive: false,
+    currentOffsetFromLive: null,
+    error: null,
     isLoaded: true,
     playbackRate: 1,
     shouldCorrectPitch: true,

@@ -88,6 +88,7 @@
 | Клас фактаў | Файл-уласнік |
 |---|---|
 | Схемы экранаў і пераходаў (дызайн G06.06) | [design/screens-and-transitions.md](design/screens-and-transitions.md) |
+| Каталог дызайну: экраны, макеты, статусы, разыходжанні | [design/catalog.md](design/catalog.md) |
 | Асяроддзе, устаноўка, каманды праверак | [development_setup.md](development_setup.md) |
 | Правілы працы агентаў: рэалізацыя, рэв'ю, доказ, issue-пратакол | [agent-rules/](agent-rules/) |
 | Брыфы і хвалі задач; вынікі выканання (`agent-tasks`) | [agent-tasks/](agent-tasks/README.md), вынікі — `agent-tasks/results/<ID>.md` |

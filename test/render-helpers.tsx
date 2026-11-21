@@ -5,13 +5,15 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { jest } from "@jest/globals";
+import { expect, jest } from "@jest/globals";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import type { TestInstance } from "test-renderer";
 
 import { defaultEngineConfig } from "../core/engine/reducer";
 import { ServicesContext } from "../app/_layout";
 import Explore from "../app/(tabs)/explore";
+import AboutCity from "../app/city/[id]/about";
 import Collection from "../app/collection/[id]";
 import Discovery from "../app/discovery";
 import Feedback from "../app/feedback";
@@ -62,14 +64,14 @@ export function serve(paths: Record<string, string>) {
 
 export function layoutWith(services: Services) {
   // The test layout mirrors app/_layout.tsx: the provider around the Stack
-  // navigator with the native header off (UX 02, issue #348 — expo-router
+  // navigator with the native header off (UX 02 — screens-and-transitions.md, Агульныя правілы пераходаў; expo-router
   // reads the routes from context, children are not rendered explicitly),
-  // and the root status bar pinned to dark content (issue #428) — copied
+  // and the root status bar pinned to dark content (docs/design/dark-theme.md — Статус-бар) — copied
   // verbatim from there, the guard for the real file is app/status-bar.test.tsx.
   return function TestLayout() {
     return (
       <ServicesContext.Provider value={services}>
-        {/* Issue #428: one dark-content config at the navigation root. */}
+        {/* docs/design/dark-theme.md — Статус-бар: one dark-content config at the navigation root. */}
         <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false }} />
       </ServicesContext.Provider>
@@ -79,7 +81,7 @@ export function layoutWith(services: Services) {
 
 // The flattened style of a rendered element: the screens merge their frame
 // styles into arrays (inset + base spacing), the guards read the effective
-// value (UX 02, issue #348). Deep-flat: surfaces hand the shared pressable
+// value (UX 02 — screens-and-transitions.md, Агульныя правілы пераходаў). Deep-flat: surfaces hand the shared pressable
 // composed arrays and the wrapper appends its own layers (G06.10.d), so one
 // level is not always enough — React Native paints the fully merged picture.
 export function flatStyle(element: { props: { style?: unknown } }): Record<string, unknown> {
@@ -89,7 +91,7 @@ export function flatStyle(element: { props: { style?: unknown } }): Record<strin
   return Object.assign({}, ...style) as Record<string, unknown>;
 }
 
-// UX 02 (issue #348) — the full route tree for the navigation-frame guards
+// UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў) — the full route tree for the navigation-frame guards
 // (back navigation, safe-area): the real screen components under the
 // mirrored layout, the honest no-ports services. One copy for the frame
 // suites — sibling route maps are jscpd clones (implementation-rules 3).
@@ -98,6 +100,7 @@ export function frameRoutes() {
     "_layout": layoutWith(createServices({})),
     "(tabs)/explore": Explore,
     "(tabs)/my": My,
+    "city/[id]/about": AboutCity,
     "city/[id]/guides": Guides,
     "collection/[id]": Collection,
     "discovery": Discovery,
@@ -171,4 +174,60 @@ export function makeRunSession(options?: {
     grantedTiers: () => granted,
   };
   return { session, locationPort, audioPort, location, advance: (ms: number) => (now = ms) };
+}
+
+// RNTL 14 removed the UNSAFE_* instance queries — the shared replacements
+// run the same contracts (getBy throws on !=1, query returns null/[],
+// getByProps matches a props subset) over a search root: the render
+// result's root TestInstance or any subtree instance (the `within(...)`
+// receiver). One copy — sibling variants are jscpd clones
+// (implementation-rules 3, 8).
+type Screenish = { root: TestInstance | null };
+type SearchRoot = TestInstance | Screenish;
+
+function searchRootOf(screen: SearchRoot): TestInstance | null {
+  return "queryAll" in screen ? screen : screen.root;
+}
+
+function allByType(screen: SearchRoot, type: unknown): TestInstance[] {
+  const root = searchRootOf(screen);
+  return root ? root.queryAll((instance) => instance.type === type, { includeSelf: true }) : [];
+}
+
+// The a11y-invisible contract of a decorative layer: RNTL 14's shared
+// config lifts the hidden-element default (test/rntl-configure.js), so the
+// "never in the accessibility tree" pin reads the element's own a11y-hidden
+// props instead of the old hidden-by-default negative query. One copy —
+// sibling blocks are jscpd clones (implementation-rules 3, 8).
+export function expectA11yHidden(element: { props: { accessible?: boolean; accessibilityElementsHidden?: boolean; importantForAccessibility?: string } }): void {
+  expect(element.props.importantForAccessibility).toBe("no-hide-descendants");
+  expect(element.props.accessibilityElementsHidden).toBe(true);
+  expect(element.props.accessible).toBe(false);
+}
+
+export function getByType(screen: SearchRoot, type: unknown): TestInstance {
+  const hits = allByType(screen, type);
+  if (hits.length !== 1) throw new Error(`getByType: expected exactly one instance, found ${hits.length}`);
+  return hits[0];
+}
+
+export function getAllByType(screen: SearchRoot, type: unknown): TestInstance[] {
+  return allByType(screen, type);
+}
+
+export function queryAllByType(screen: SearchRoot, type: unknown): TestInstance[] {
+  return allByType(screen, type);
+}
+
+export function queryByType(screen: SearchRoot, type: unknown): TestInstance | null {
+  return allByType(screen, type)[0] ?? null;
+}
+
+export function getByProps(screen: SearchRoot, props: Record<string, unknown>): TestInstance {
+  const entries = Object.entries(props);
+  const root = searchRootOf(screen);
+  const hits = root ? root.queryAll((instance) =>
+    entries.every(([key, value]) => instance.props[key] === value), { includeSelf: true }) : [];
+  if (hits.length !== 1) throw new Error(`getByProps: expected exactly one instance, found ${hits.length}`);
+  return hits[0];
 }

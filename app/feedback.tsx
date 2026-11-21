@@ -13,6 +13,8 @@ import { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import StarIcon from "lucide-react-native/icons/star";
+
 import {
   feedbackDeliveryWord,
   feedbackErrorWord,
@@ -22,12 +24,14 @@ import {
 } from "../controllers/useFeedbackController";
 import { useServices, useUiLocale } from "./_layout";
 import { BackButton } from "../components/back-button";
+import { CanonIcon } from "../components/canon-icon";
 import { darkTokens, tokens, type ThemeTokens } from "../components/design-tokens";
-import { useThemeStyles } from "../components/theme";
+import { useThemeStyles, useThemeTokens } from "../components/theme";
 import { PressableSurface } from "../components/pressable-surface";
 import { ScaledText } from "../components/scaled-text";
 import { useScreenStyles } from "../components/screen-styles";
 import { uiStrings } from "../components/ui-strings";
+import { ScreenSurface } from "../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   hint: {
@@ -67,6 +71,16 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     flexWrap: "wrap",
     gap: palette.spaceS,
     marginBottom: palette.spaceM,
+  },
+  starRow: {
+    flexDirection: "row",
+    marginBottom: palette.spaceM,
+  },
+  starTarget: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 48,
+    height: 48,
   },
   chip: {
     borderColor: palette.colorLine,
@@ -129,6 +143,7 @@ const darkStyles = createStyles(darkTokens);
 export default function FeedbackForm() {
   const screenStyles = useScreenStyles();
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   const params = useLocalSearchParams<{
     kind?: string;
     id?: string;
@@ -136,7 +151,7 @@ export default function FeedbackForm() {
     locale?: string;
   }>();
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place. The rated target's content locale is
   // a different fact (the facts line) and never follows this switch.
   const uiLocale = useUiLocale();
@@ -170,7 +185,7 @@ export default function FeedbackForm() {
   const insets = useSafeAreaInsets();
   const open = feedback !== null && target !== null && form.kind === "open" ? form : null;
   return (
-    <View style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Feedback">
+    <ScreenSurface style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Feedback">
       <BackButton label={chrome.back} testID="btn-feedback-back" />
       {feedback === null ? (
         <ScaledText style={styles.hint} testID="feedback-unavailable">
@@ -201,9 +216,15 @@ export default function FeedbackForm() {
             </ScaledText>
           ) : null}
           <ScaledText style={styles.hint}>{strings.scaleHint}</ScaledText>
-          <View style={styles.chipRow}>
+          {/* The owner verdict B (2026-11-02): the rating is five stars with
+              no visible digits — the digit rides the localized accessible
+              name (starLabel) and the unchanged score payload. The fill
+              paints the 1…N range (shape, not color alone); 24 is the Lucide
+              base glyph size — the 16px body default reads as text. */}
+          <View style={styles.starRow}>
             {[1, 2, 3, 4, 5].map((value) => {
               const selected = open.score === value;
+              const filled = open.score !== null && value <= open.score;
               return (
                 <PressableSurface
                   key={value}
@@ -212,12 +233,17 @@ export default function FeedbackForm() {
                   accessibilityState={{ selected, disabled: open.busy }}
                   disabled={open.busy}
                   onPress={() => feedback?.getState().setScore(value)}
-                  style={[styles.chip, selected ? styles.chipSelected : null]}
+                  style={styles.starTarget}
                   testID={`feedback-star-${value}`}
                 >
-                  <ScaledText style={[styles.chipLabel, selected ? styles.chipLabelSelected : null]}>
-                    {strings.starLabel(value)}
-                  </ScaledText>
+                  <CanonIcon
+                    glyph={StarIcon}
+                    label={strings.starLabel(value)}
+                    size={24}
+                    color={filled ? palette.colorAccent : palette.colorMuted}
+                    fill={filled ? palette.colorAccent : "none"}
+                    testID={`feedback-star-icon-${value}`}
+                  />
                 </PressableSurface>
               );
             })}
@@ -299,6 +325,6 @@ export default function FeedbackForm() {
           ) : null}
         </ScrollView>
       )}
-    </View>
+    </ScreenSurface>
   );
 }

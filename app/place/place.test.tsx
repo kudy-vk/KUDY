@@ -136,7 +136,7 @@ function placeServices(
 async function openPlace(): Promise<{ audioPort: FakeAudioPlayerPort }> {
   const audioPort = new FakeAudioPlayerPort();
   serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-  renderRouter(withPlaceRoutes(placeServices(audioPort).services), { initialUrl: "/place/place-a1" });
+  await renderRouter(withPlaceRoutes(placeServices(audioPort).services), { initialUrl: "/place/place-a1" });
   await screen.findByTestId("place-moment-m-a1");
   return { audioPort };
 }
@@ -163,20 +163,20 @@ describe("Place detail surface (G07.02)", () => {
     const { audioPort } = await openPlace();
     // The physical fact the player reports once the source is active.
     audioPort.snapshotValue = { state: "playing", positionMs: 0, durationMs: 60000 };
-    fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
+    await fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
     await waitFor(() => expect(screen.getByTestId("place-moment-live-m-a1").props.children).toBe("Зараз грае"));
     expect(audioPort.commands).toEqual([`play 1:${MOMENT_PATH}`]);
 
     // The same tap now stops by command (never finished — the toggle reads
     // the live fact, the ownership decisions stay in the controller).
-    fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
+    await fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
     await waitFor(() => expect(screen.queryByTestId("place-moment-live-m-a1")).toBeNull());
     expect(audioPort.commands).toEqual([`play 1:${MOMENT_PATH}`, "stop"]);
   }, 30000);
 
   test("the card shows a physical playback start that arrives after the Play render", async () => {
     const { audioPort } = await openPlace();
-    fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
+    await fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
     expect(screen.queryByTestId("place-moment-live-m-a1")).toBeNull();
     audioPort.snapshotValue = { state: "playing", positionMs: 0, durationMs: 60000 };
     await waitFor(() => expect(screen.getByTestId("place-moment-live-m-a1")).toBeTruthy());
@@ -185,12 +185,12 @@ describe("Place detail surface (G07.02)", () => {
   test("the guide link opens the guide's PREVIEW, never Start (criterion 2)", async () => {
     await openPlace();
     const link = screen.getByTestId("place-moment-guide-m-a1");
-    expect(link.props.accessibilityLabel).toBe("Прэв'ю гіда");
-    expect(link.props.accessibilityHint).toBe("Адкрывае прэв'ю гіда, не запуск прагулкі.");
+    expect(link.props.accessibilityLabel).toBe("Да гіда");
+    expect(link.props.accessibilityHint).toBe("Адкрывае старонку гіда, не запускае прагулку.");
     // The moment's own package route — the preview screen's gating owns the
     // locked protection (criterion 3).
     expect(link.props.href).toBe("/route/route-a1");
-    fireEvent.press(link);
+    await fireEvent.press(link);
     expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
   });
 
@@ -199,47 +199,51 @@ describe("Place detail surface (G07.02)", () => {
     // below and exercise retained-screen behavior in a mounted hook separately.
     const { services } = placeServices(new FakeAudioPlayerPort());
     serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-    renderRouter(withPlaceRoutes(services), { initialUrl: "/map" });
-    fireEvent.press(await screen.findByTestId("nearby-card-offer-a1-place"));
+    await renderRouter(withPlaceRoutes(services), { initialUrl: "/map" });
+    await fireEvent.press(await screen.findByTestId("nearby-card-offer-a1-place"));
     await screen.findByTestId("place-moment-m-a1");
-    fireEvent.press(screen.getByTestId("place-moment-guide-m-a1"));
+    await fireEvent.press(screen.getByTestId("place-moment-guide-m-a1"));
     await screen.findByTestId("screen-Route preview");
     const startPolling = jest.spyOn(global, "setInterval");
     const stopPolling = jest.spyOn(global, "clearInterval");
-    fireEvent.press(screen.getByTestId("btn-preview-back"));
+    await fireEvent.press(screen.getByTestId("btn-preview-back"));
     await screen.findByTestId("place-moment-m-a1");
     await waitFor(() => expect(startPolling.mock.calls.some((call) => call[1] === 250)).toBe(true));
     const pollIndex = startPolling.mock.calls.findIndex((call) => call[1] === 250);
-    const timer = startPolling.mock.results[pollIndex].value;
-    fireEvent.press(screen.getByTestId("place-moment-guide-m-a1"));
+    // the jest types disagree across the 58 toolchain about mock.results value —
+    // the timer handle is opaque to the assertion that follows.
+    const timer = startPolling.mock.results[pollIndex].value as unknown as string;
+    await fireEvent.press(screen.getByTestId("place-moment-guide-m-a1"));
     await screen.findByTestId("screen-Route preview");
     await waitFor(() => expect(stopPolling).toHaveBeenCalledWith(timer));
   });
 
-  test("a retained Place stops physical playback reads on route change and resumes on return", () => {
+  test("a retained Place stops physical playback reads on route change and resumes on return", async () => {
     jest.useFakeTimers();
     const { services } = placeServices(new FakeAudioPlayerPort());
     const momentPlay = services.moment ?? null;
     expect(momentPlay).not.toBeNull();
     const playbackRead = jest.spyOn(momentPlay!, "playback");
-    const { rerender, unmount } = renderHook<ReturnType<typeof useVisibleMomentPlayback>, { pathname: string }>(
+    const { rerender, unmount } = await renderHook<ReturnType<typeof useVisibleMomentPlayback>, { pathname: string }>(
       ({ pathname }) => useVisibleMomentPlayback(momentPlay, pathname, "place-a1"),
       { initialProps: { pathname: "/place/place-a1" } },
     );
     expect(playbackRead).toHaveBeenCalledTimes(1);
-    act(() => jest.advanceTimersByTime(500));
+    await act(() => jest.advanceTimersByTime(500));
     expect(playbackRead).toHaveBeenCalledTimes(3);
 
-    rerender({ pathname: "/route/route-a1" });
-    act(() => jest.advanceTimersByTime(750));
+    // RNTL 14: rerender and unmount are async and act-wrapped — an unawaited
+    // call leaves overlapping act state that breaks the rest of the file.
+    await rerender({ pathname: "/route/route-a1" });
+    await act(() => jest.advanceTimersByTime(750));
     expect(playbackRead).toHaveBeenCalledTimes(3);
 
-    rerender({ pathname: "/place/place-a1" });
+    await rerender({ pathname: "/place/place-a1" });
     expect(playbackRead).toHaveBeenCalledTimes(4);
-    act(() => jest.advanceTimersByTime(250));
+    await act(() => jest.advanceTimersByTime(250));
     expect(playbackRead).toHaveBeenCalledTimes(5);
-    unmount();
-    act(() => jest.advanceTimersByTime(500));
+    await unmount();
+    await act(() => jest.advanceTimersByTime(500));
     expect(playbackRead).toHaveBeenCalledTimes(5);
   });
 
@@ -251,7 +255,7 @@ describe("Place detail surface (G07.02)", () => {
     void audio.play({ token: { kind: "guide", ref: "walk-1", seq: 1 }, path: "be/base/audio/a.m4a" });
     audioPort.snapshotValue = { state: "playing", positionMs: 0, durationMs: 9000 };
     serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-    renderRouter(withPlaceRoutes(services), { initialUrl: "/place/place-a1" });
+    await renderRouter(withPlaceRoutes(services), { initialUrl: "/place/place-a1" });
     await screen.findByTestId("place-moment-m-a1");
 
     // The play tap refuses through the controller's decision — the screen
@@ -260,7 +264,7 @@ describe("Place detail surface (G07.02)", () => {
     // wired, finds no live walk to route into and declines — the named
     // session-refused (the unroutable case stays the controller-level one
     // without any session entry).
-    fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
+    await fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
     await waitFor(() =>
       expect(screen.getByTestId("place-moment-refusal-m-a1").props.children).toBe(
         "Тэйзер зараз не запускаецца — паспрабуйце яшчэ раз.",
@@ -282,30 +286,30 @@ describe("Place detail surface (G07.02)", () => {
       audio: new AudioService({ createPort: () => audioPort }),
     });
     serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-    renderRouter(withPlaceRoutes(services), { initialUrl: "/map" });
-    fireEvent.press(await screen.findByTestId("nearby-card-offer-a1-place"));
+    await renderRouter(withPlaceRoutes(services), { initialUrl: "/map" });
+    await fireEvent.press(await screen.findByTestId("nearby-card-offer-a1-place"));
     await screen.findByTestId("screen-Place detail");
 
     // The teaser launches and sounds; the port records the single play.
     audioPort.snapshotValue = { state: "playing", positionMs: 0, durationMs: 60000 };
-    fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
+    await fireEvent.press(screen.getByTestId("place-moment-play-m-a1"));
     await waitFor(() => expect(screen.getByTestId("place-moment-live-m-a1")).toBeTruthy());
 
     // Back to Побач: the audio port records no stop across the navigation —
     // the app-level controller owns the launch, the surface does not.
-    fireEvent.press(screen.getByTestId("btn-place-back"));
+    await fireEvent.press(screen.getByTestId("btn-place-back"));
     expect(await screen.findByTestId("screen-Map")).toBeTruthy();
     expect(audioPort.commands).toEqual([`play 1:${MOMENT_PATH}`]);
   });
 
-  // UX 01 (issue #347): the moment list scrolls — the fifth teaser renders
+  // UX 01: the moment list scrolls — the fifth teaser renders
   // inside the detail's ScrollView instead of being cut by the fold.
   // Removing the ScrollView drops the scroll testID and fails this
   // (implementation-rules 1).
   test("the moment list scrolls: five teaser cards render inside the ScrollView (UX 01)", async () => {
     const { services } = placeServices(new FakeAudioPlayerPort(), 5);
     serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-    renderRouter(withPlaceRoutes(services), { initialUrl: "/place/place-a1" });
+    await renderRouter(withPlaceRoutes(services), { initialUrl: "/place/place-a1" });
     expect(await screen.findByTestId("scroll-place")).toBeTruthy();
     for (let n = 1; n <= 5; n += 1) {
       expect(screen.getByTestId(`place-moment-m-a${n}`)).toBeTruthy();
@@ -314,14 +318,14 @@ describe("Place detail surface (G07.02)", () => {
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving catalog fetch holds the detail in
 // loading. Reverting the LoadingIndicator wiring in app/place/[id].tsx turns
 // this red (implementation-rules 1).
 describe("Place detail loading indicator (UX 07)", () => {
   test("the loading state shows the ActivityIndicator next to the text", async () => {
     jest.spyOn(global, "fetch").mockImplementation(() => new Promise(() => {}));
-    renderRouter(
+    await renderRouter(
       withPlaceRoutes(createServices({ catalogOrigin: "https://catalog.test", catalogSha256: sha256 })),
       { initialUrl: "/place/place-a1" },
     );
@@ -360,16 +364,16 @@ describe("G16.03: the place rating action (issue #74)", () => {
     const { driver, sync } = feedbackPorts();
     const audioPort = new FakeAudioPlayerPort();
     serve({ "catalog.json": CATALOG_TEXT, [POINTER_PATH]: INDEX_TEXT });
-    renderRouter(withPlaceRoutes(placeServices(audioPort, 1, { driver, sync }).services), {
+    await renderRouter(withPlaceRoutes(placeServices(audioPort, 1, { driver, sync }).services), {
       initialUrl: "/place/place-a1",
     });
     await screen.findByTestId("place-moment-m-a1");
     const words = feedbackStrings("be");
-    fireEvent.press(screen.getByTestId("btn-place-rate"));
+    await fireEvent.press(screen.getByTestId("btn-place-rate"));
     // The self-reported visit confirmation (20 §7): the dialog names the
     // self-report, the accept opens the form.
     expect(screen.getByTestId("place-visit-dialog")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-place-visit-accept"));
+    await fireEvent.press(screen.getByTestId("btn-place-visit-accept"));
     expect(await screen.findByTestId("screen-Feedback")).toBeTruthy();
     expect(screen.getByTestId("feedback-title").props.children).toBe(words.formTitlePlace);
     expect(screen.getByTestId("feedback-target-line").props.children).toBe(words.targetLine("be", "1"));

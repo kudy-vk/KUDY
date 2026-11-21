@@ -258,7 +258,7 @@ describe("G15.04 discovery integration acceptance", () => {
     assert.equal(state.surface.result.exact.length, 4, "discovery needs no analytics consent");
   });
 
-  // G21.50 (issue #711, criterion 5): the query's content locale never
+  // G21.50 (G21.42-chinese-language.md — G21.50, criterion 5): the query's content locale never
   // leaves the open set. The real registry has no gated code yet, so the
   // unregistered `zz` rides the same open-set guard a registered-but-closed
   // code takes; the resolver tests (test/ui-locale-registry.test.mjs) carry

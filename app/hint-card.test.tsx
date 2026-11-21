@@ -1,7 +1,7 @@
-// G07.05 (issue #284) — the hint card render suite over the real composition
+// G07.05 (15_guide_decisions.md — R07) — the hint card render suite over the real composition
 // root (rule 15): the published catalog fixtures, the ONE LocationService the
 // app owns, the accepted values document and the one hint controller. The
-// guards are the issue's proof: the card renders from a ready hint state only
+// guards are the R07 record's proof: the card renders from a ready hint state only
 // (the quiet/background decisions hide it — the controller suite proves the
 // decisions, this suite proves the screen obeys them), a tap opens the guide
 // preview the usual way and starts no audio (R07), and the dismissal clears
@@ -72,14 +72,14 @@ async function openMapWithHints(foreground: { current: boolean }, events: GuideH
       telemetry: { record: (event) => events.push(event) },
     },
   });
-  renderRouter(withHintRoutes(services), { initialUrl: "/map" });
+  await renderRouter(withHintRoutes(services), { initialUrl: "/map" });
   await screen.findByTestId("nearby-card-offer-a1-place");
   // The open surface armed the one subscription (G07.01's guard); the hint
   // controller rides exactly that subscription.
   await waitFor(() => expect(env.locationPort.commands.filter((c) => c.startsWith("start"))).toHaveLength(1));
-  const emitFix = (ms: number) => {
+  const emitFix = async (ms: number) => {
     nowMs = ms;
-    act(() => {
+    await act(() => {
       env.locationPort.emitFix(1, { lat: BASE.lat + 0.002, lng: BASE.lng, accuracy: 10, at: ms });
     });
   };
@@ -98,11 +98,11 @@ describe("Guide hint card (G07.05)", () => {
     const events: GuideHintEventRecord[] = [];
     const { emitFix, setNow } = await openMapWithHints(foreground, events);
     // The dwell: the first qualifying fix anchors, the card stays hidden.
-    emitFix(0);
+    await emitFix(0);
     expect(screen.queryByTestId("guide-hint-card")).toBeNull();
     // Twenty-one seconds of continuous presence in the zone: the card shows.
     setNow(21_000);
-    emitFix(21_000);
+    await emitFix(21_000);
     const card = await screen.findByTestId("guide-hint-card");
     // Canon: docs/design/visual-language.md §5, color.hint.bg/border.
     expect(StyleSheet.flatten(card.props.style)).toMatchObject({
@@ -119,10 +119,10 @@ describe("Guide hint card (G07.05)", () => {
     // so the return to the foreground re-decides to «limited», never to a
     // second presentation.
     foreground.current = false;
-    emitFix(22_000);
+    await emitFix(22_000);
     expect(screen.queryByTestId("guide-hint-card")).toBeNull();
     foreground.current = true;
-    emitFix(23_000);
+    await emitFix(23_000);
     await act(async () => {});
     expect(screen.queryByTestId("guide-hint-card")).toBeNull();
   });
@@ -131,11 +131,11 @@ describe("Guide hint card (G07.05)", () => {
     const foreground = { current: true };
     const events: GuideHintEventRecord[] = [];
     const { env, emitFix, setNow } = await openMapWithHints(foreground, events);
-    emitFix(0);
+    await emitFix(0);
     setNow(21_000);
-    emitFix(21_000);
+    await emitFix(21_000);
     expect(await screen.findByTestId("guide-hint-card")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("guide-hint-row-guide-route-a1"));
+    await fireEvent.press(screen.getByTestId("guide-hint-row-guide-route-a1"));
     expect(await screen.findByTestId("screen-Route preview")).toBeTruthy();
     expect(events.map((event) => event.type)).toEqual(["guide_nearby_shown", "guide_nearby_opened"]);
     // R07: the hint is never an audio owner — the player received nothing.
@@ -146,12 +146,12 @@ describe("Guide hint card (G07.05)", () => {
     const foreground = { current: true };
     const events: GuideHintEventRecord[] = [];
     const { emitFix, setNow } = await openMapWithHints(foreground, events);
-    emitFix(0);
+    await emitFix(0);
     setNow(21_000);
-    emitFix(21_000);
+    await emitFix(21_000);
     expect(await screen.findByTestId("guide-hint-card")).toBeTruthy();
     const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    fireEvent.press(screen.getByTestId("btn-hint-dismiss"));
+    await fireEvent.press(screen.getByTestId("btn-hint-dismiss"));
     await act(async () => {});
     const crash = errorSpy.mock.calls.map((call) => String(call[0])).join("\n");
     errorSpy.mockRestore();

@@ -262,7 +262,7 @@
     {
       "task": "G21.27",
       "issue": 566,
-      "url": "#566",
+      "url": "docs/specifications/technical-completion/2026-10-03-single-source-translations.md",
       "kind": "reuse",
       "blocked_by": [
         556,
@@ -272,7 +272,7 @@
     {
       "task": "G21.19",
       "issue": 543,
-      "url": "#543",
+      "url": "docs/specifications/technical-completion/2026-10-03-single-source-translations.md",
       "kind": "reuse",
       "blocked_by": [
         533,

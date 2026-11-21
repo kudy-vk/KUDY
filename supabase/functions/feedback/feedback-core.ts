@@ -64,11 +64,12 @@ export const DISCLOSURE_VERSIONS: readonly string[] = ['feedback-disclosure-1'];
 // route_id+version, place carries place_id+content_version. The registry
 // key columns (target_kind, target_id, target_version, locale) are the
 // single mapping point: id = route_id | place_id, version = version |
-// content_version. The schema's locale enum {be,en,uk} is the REGISTRY
-// contract (registry-import validates it against the schema file); request
-// validation stays structural — a well-formed but unregistered locale
-// (e.g. the fixture's reserved `pl`) reaches the registry check and fails
-// closed as unknown_target, exactly the fixture's cas-unpublished-locale.
+// content_version. The schema's locale enum is the REGISTRY contract
+// (registry-import.ts REGISTRY_LOCALES validates it against the schema file);
+// request validation stays structural — a well-formed but unregistered locale
+// (the fixture's `ua` in unknown_targets) reaches the registry check and fails
+// closed as unknown_target; the fixture's `pl` (cas-unpublished-locale) walks
+// the same path for a registered locale that is simply not published (#347).
 
 export interface FeedbackTargetKey {
   kind: 'guide' | 'place';

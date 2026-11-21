@@ -12,6 +12,19 @@ When you claim, execute, block or hand back a task tracked as a GitHub issue in 
 
 Search before adding helpers. On a jscpd fail, refactor or reuse; do not paste a second variant.
 
+## Mandatory design catalog workflow (owner decision 2026-11-18)
+
+All design work, including experimental mockups, icon candidates, visual tests and interactive variants, MUST be created and reviewed through the **single canonical HTML catalog** at `docs/design/catalog.html`, whose sole inventory is `docs/design/catalog.md`. Never create a parallel `catalog-<issue>.html` or `catalog-<issue>.md`, a standalone mockup gallery, or an unregistered visual preview as the review entry point.
+
+Before editing or generating any design asset:
+1. Verify the canonical catalog files and the target approved production mockup against the current GitHub `main` branch. Record the source revision. If `main` cannot be verified, stop new visual generation and report the blocker; do not assume a local branch is current.
+2. Start from the approved `main` production HTML mockup and its shared `kit.css`, `kit.mjs`, visual canon and existing interactions. Do not invent a new phone frame, carousel, navigation, layout or style system. When a change is not approved, keep the approved baseline intact and expose the candidate as a clearly marked variant **within that mockup** (or a necessary main-derived screen variant).
+3. Register every production, draft and test variant in `docs/design/catalog.md` **before** offering a preview. Open and review it through `docs/design/catalog.html`. The canonical catalog renderer must not be copied or forked. Generate icon/SVG candidates only as assets used by the registered screen mockup, never as detached image sheets or independent generated galleries.
+4. Preserve the exact existing sections, states, routes and approved decisions unless the owner expressly approves a change. Mark proposals as proposals; inclusion in the catalog is not approval.
+5. Verify that the catalog resolves every new preview and that the original `main` mockup is still accessible. Document any unavailable browser/device proof as NOT-VERIFIED.
+
+This rule applies to all future design tasks, not just issue #257.
+
 Local pre-push on the Linux host: `npm run ci:local` (the fast CI checks in workflow order, including `arch:check` and the jscpd gate `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`), then `npm run e2e:android:local` when `tools/ci/android-e2e-scope.mjs` says run=true (docs/agent-rules/android-e2e-local.md).
 
 Before every push to a pull-request branch, read and follow `docs/agent-rules/android-e2e-local.md`. CI runs only the fast checks; when the change touches project code, the Android E2E suites run on a local emulator, and documentation-only or design-mockup changes skip them.

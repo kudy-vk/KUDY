@@ -1,4 +1,4 @@
-// G08.05 (issue #292) — the quiet commerce controller behind the guide
+// G08.05 (16_delivery_backlog.md — G08.05) — the quiet commerce controller behind the guide
 // preview: the upgrade offer's visibility, the purchase attempt's error
 // exits and the local telemetry facts. One instance per opened route (the
 // preview controller idiom; the composition root hands the factory when the
@@ -336,5 +336,5 @@ export type { OfferStrings } from '../../contracts/ui-message-types.ts';
 const OFFER_STRINGS = OFFER_STRINGS_DATA;
 
 export function offerStrings(locale: string): OfferStrings {
-  return locale === 'zh' ? OFFER_STRINGS.zh : locale === 'sv' ? OFFER_STRINGS.sv : locale === 'cs' ? OFFER_STRINGS.cs : locale === 'es' ? OFFER_STRINGS.es : locale === 'fr' ? OFFER_STRINGS.fr : locale === 'de' ? OFFER_STRINGS.de : locale === 'en' ? OFFER_STRINGS.en : locale === 'uk' ? OFFER_STRINGS.uk : OFFER_STRINGS.be;
+  return locale === 'pt' ? OFFER_STRINGS.pt : locale === 'nl' ? OFFER_STRINGS.nl : locale === 'da' ? OFFER_STRINGS.da : locale === 'pl' ? OFFER_STRINGS.pl : locale === 'nb' ? OFFER_STRINGS.nb : locale === 'zh' ? OFFER_STRINGS.zh : locale === 'sv' ? OFFER_STRINGS.sv : locale === 'cs' ? OFFER_STRINGS.cs : locale === 'es' ? OFFER_STRINGS.es : locale === 'fr' ? OFFER_STRINGS.fr : locale === 'de' ? OFFER_STRINGS.de : locale === 'en' ? OFFER_STRINGS.en : locale === 'uk' ? OFFER_STRINGS.uk : OFFER_STRINGS.be;
 }

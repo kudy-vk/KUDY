@@ -1,4 +1,4 @@
-// G06.01.a (issue #313) — the Explore city surface: the city name and the
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the Explore city surface: the city name and the
 // canonical chain's first rendering of the published guides (one card per
 // guide, D02; the same card the rubric shows). State rendering lives in
 // CatalogStateView; the surface decides nothing about what exists.
@@ -48,7 +48,7 @@ const lightStyles = createStyles(tokens);
 const darkStyles = createStyles(darkTokens);
 
 // One middle-slot entry (G07.01's «Побач», G15.03's «Чым заняцца»): the
-// tappable marker and the role of UX 03 (issue #349) — hitSlop lifts the
+// tappable marker and the role of UX 03 (канон §5 — Кнопкі і чыпы) — hitSlop lifts the
 // target to ≥44dp; the href and the word stay the surface's own.
 function SurfaceLink({ href, label, testID }: { href: string; label: string; testID: string }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
@@ -64,15 +64,15 @@ function SurfaceLink({ href, label, testID }: { href: string; label: string; tes
 export default function Explore() {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const controller = useCatalogController(services.catalog?.controller);
-  // UX 02 (issue #348): with the native header off the screen starts below
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): with the native header off the screen starts below
   // the status bar and the notch — the top safe-area inset is the screen's
   // own (AC4).
   const insets = useSafeAreaInsets();
-  // G06.05 (issue #280, AC1): the shared words in the display locale; the
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the shared words in the display locale; the
   // failed catalog load gets its named retry (AC4).
   const strings = uiStrings(locale);
   return (

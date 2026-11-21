@@ -33,6 +33,7 @@ import { useScreenStyles } from "../components/screen-styles";
 import { uiStrings } from "../components/ui-strings";
 import { darkTokens, tokens, type ThemeTokens } from "../components/design-tokens";
 import { useThemeStyles } from "../components/theme";
+import { ScreenSurface } from "../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   chip: {
@@ -255,14 +256,14 @@ function DiscoveryBody({
 export default function Discovery() {
   const screenStyles = useScreenStyles();
   const services = useServices();
-  // G14.04.d (issue #305): the words read the switchable display locale —
+  // G14.04.d (16_delivery_backlog.md — G14.04.d): the words read the switchable display locale —
   // a switch re-renders them in place, no restart.
   const locale = useUiLocale();
   const state = useStoreState(services.discovery?.controller);
-  // G06.05 (issue #280, AC1): the shared words in the display locale.
+  // G06.05 (16_delivery_backlog.md — G06.05, AC1): the shared words in the display locale.
   const strings = uiStrings(locale);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   // A remount is a new foreground presentation of the surface (21 §7) — the
   // controller restarts its per-presentation shown dedupe with it. The
@@ -287,9 +288,9 @@ export default function Discovery() {
   return (
     // The detail surfaces' frame (screen-styles, UX 02) — the paper wrapper
     // stays Explore's and My KUDY's (the allowed-places contract).
-    <View style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Discovery">
+    <ScreenSurface style={[screenStyles.screen, { paddingTop: insets.top + tokens.spaceL, paddingBottom: insets.bottom + tokens.spaceL }]} testID="screen-Discovery">
       {/* UX 02: the back sits in the frame above the scroll — reachable while
-          the offer cards are scrolled (AC2). UX 01 (issue #347): the result
+          the offer cards are scrolled (AC2). UX 01: the result
           scrolls — the last card is reachable beyond the fold. */}
       <BackButton label={strings.backToCity} testID="btn-discovery-back" />
       <ScrollView testID="scroll-discovery">
@@ -300,6 +301,6 @@ export default function Discovery() {
           <DiscoveryBody state={state} strings={strings} locale={locale} />
         )}
       </ScrollView>
-    </View>
+    </ScreenSurface>
   );
 }

@@ -1,4 +1,4 @@
-// #436: render the production screens under a dark system scheme. These
+// docs/design/dark-theme.md: render the production screens under a dark system scheme. These
 // assertions fail if a surface reverts to light-only card or frame styles.
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { renderRouter, screen, within } from "expo-router/testing-library";
@@ -8,10 +8,13 @@ import MapPinIcon from "lucide-react-native/icons/map-pin";
 
 import Collection from "./collection/[id]";
 import Discovery from "./discovery";
+import Menu from "./menu";
 import { CanonIcon } from "../components/canon-icon";
 import { darkTokens } from "../components/design-tokens";
 import { createServices } from "../controllers/createServices";
 import { CATALOG_FIXTURES, CATALOG_POINTER, flatStyle, frameRoutes, layoutWith, serve, sha256 } from "../test/render-helpers";
+import { getByType } from "../test/render-helpers";
+
 
 // React Native re-exports this hook from its Utilities module. Mocking that
 // module exercises the real theme hook and the actual rendered screen styles.
@@ -24,7 +27,21 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-function openDiscovery(url: string) {
+test.each([
+  ["/menu", "screen-Menu"],
+  ["/explore", "screen-Explore"], ["/my", "screen-KUDY"],
+  ["/city/gdansk/guides", "screen-Guides"], ["/route/r1", "screen-Route preview"],
+  ["/place/p1", "screen-Place detail"], ["/collection/c1", "screen-Collection"],
+  ["/discovery", "screen-Discovery"], ["/feedback", "screen-Feedback"],
+  ["/run/r1", "screen-Run"], ["/map", "screen-Map"],
+  ["/missing", "screen-Not found"],
+])("M3 gradient reaches the actual %s screen", async (url, testID) => {
+  await renderRouter({ ...frameRoutes(), menu: Menu }, { initialUrl: url });
+  const root = await screen.findByTestId(testID);
+  expect(within(root).getByTestId("screen-gradient", { includeHiddenElements: true })).toBeTruthy();
+});
+
+async function openDiscovery(url: string) {
   serve({ "catalog.json": CATALOG_FIXTURES["catalog.json"], [CATALOG_POINTER]: CATALOG_FIXTURES[CATALOG_POINTER] });
   let cached: Uint8Array | null = null;
   const services = createServices({
@@ -36,7 +53,7 @@ function openDiscovery(url: string) {
     },
     discoveryAnalytics: { offerShown: () => {}, offerOpened: () => {} },
   });
-  renderRouter({
+  await renderRouter({
     _layout: layoutWith(services),
     discovery: Discovery,
     "collection/[id]": Collection,
@@ -47,11 +64,11 @@ test("Nearby chrome and Back icon use dark tokens while the map preview remains 
   const previous = process.env.EXPO_PUBLIC_DEMO_MODE;
   process.env.EXPO_PUBLIC_DEMO_MODE = "1";
   try {
-    renderRouter(frameRoutes(), { initialUrl: "/map" });
+    await renderRouter(frameRoutes(), { initialUrl: "/map" });
     const root = await screen.findByTestId("screen-Map");
     expect(flatStyle(root).backgroundColor).toBe(darkTokens.colorPaper);
     const back = screen.getByTestId("btn-map-back");
-    expect(within(back).UNSAFE_getByType(Svg).props.stroke).toBe(darkTokens.colorAccent);
+    expect(getByType(back, "RNSVGSvgView").props.stroke).toBe(darkTokens.colorAccent);
     const map = screen.getByTestId("nearby-demo-map");
     expect(flatStyle(map).backgroundColor).toBe("#eaf1eb");
   } finally {
@@ -61,7 +78,7 @@ test("Nearby chrome and Back icon use dark tokens while the map preview remains 
 });
 
 test("Discovery offer card background and title contrast follow dark tokens", async () => {
-  openDiscovery("/discovery");
+  await openDiscovery("/discovery");
   const card = await screen.findByTestId("offer-card-offer-b1-guide");
   expect(flatStyle(card).backgroundColor).toBe(darkTokens.colorCard);
   const title = within(card).getAllByText(/.+/)[0];
@@ -69,14 +86,14 @@ test("Discovery offer card background and title contrast follow dark tokens", as
 });
 
 test("Collection place member card uses dark background and text", async () => {
-  openDiscovery("/collection/collection-f1");
+  await openDiscovery("/collection/collection-f1");
   const card = await screen.findByTestId("collection-member-offer-a1-place");
   expect(flatStyle(card).backgroundColor).toBe(darkTokens.colorCard);
   const title = within(card).getAllByText(/.+/)[0];
   expect(flatStyle(title).color).toBe(darkTokens.colorMuted);
 });
 
-test("CanonIcon default glyph color resolves from the dark palette", () => {
-  const icon = render(<CanonIcon glyph={MapPinIcon} label="Кропка" />);
-  expect(icon.UNSAFE_getByType(Svg).props.stroke).toBe(darkTokens.colorInk);
+test("CanonIcon default glyph color resolves from the dark palette", async () => {
+  const icon = await render(<CanonIcon glyph={MapPinIcon} label="Кропка" />);
+  expect(getByType(icon, "RNSVGSvgView").props.stroke).toBe(darkTokens.colorInk);
 });

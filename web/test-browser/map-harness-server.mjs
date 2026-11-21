@@ -1,10 +1,10 @@
 // Fixture server for the map browser proofs (G21.03): serves the real web
 // components, compiled in memory from TypeScript with the typescript package
 // the web workspace already ships (no bundler dependency), plus tiny vendor
-// shims that let the compiled modules load React's CJS production builds and
-// MapLibre's UMD build directly in the browser. The provider style request
-// never reaches the network in the success scenario — the test fulfils it
-// from the deterministic local style below.
+// shims that let the compiled modules load React's CJS production builds, and
+// MapLibre's ESM dist directly through the import map. The provider style
+// request never reaches the network in the success scenario — the test
+// fulfils it from the deterministic local style below.
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -151,14 +151,6 @@ export const hydrateRoot = client.hydrateRoot;
 export const flushSync = client.flushSync;
 export default client;
 `,
-  // city-map.tsx dynamic-imports 'maplibre-gl'; the UMD build is already on
-  // the page as window.maplibregl (loaded before the module graph). The
-  // stylesheet the component imports is applied by the harness <link> below
-  // (same pinned file from web/node_modules), so the import itself resolves
-  // to an inert module.
-  '/vendor/maplibre-gl.mjs': `
-export default window.maplibregl;
-`,
   '/vendor/css-shim.mjs': `
 export default {};
 `,
@@ -220,7 +212,6 @@ function harnessHtml() {
 <meta charset="utf-8">
 <title>KUDY map harness</title>
 <link rel="stylesheet" href="/vendor/maplibre-gl.css">
-<script src="/vendor/maplibre-gl.js"></script>
 <script>
   window.process = { env: { NODE_ENV: 'production' } };
   window.__pageErrors = [];
@@ -262,9 +253,14 @@ export async function startMapHarnessServer() {
           serve(VENDOR_SHIMS[pathname], JS_CONTENT_TYPE);
         } else if (pathname.startsWith('/vendor/cjs/')) {
           serve(readVendorCjs(path.basename(pathname)), JS_CONTENT_TYPE);
-        } else if (pathname === '/vendor/maplibre-gl.js') {
+        } else if (pathname === '/vendor/maplibre-gl.mjs') {
+          // city-map.tsx dynamic-imports 'maplibre-gl' through the import
+          // map; the ESM dist (the only build shape MapLibre 6 ships) is
+          // served here. The stylesheet the component imports is applied by
+          // the harness <link> below (same pinned file from web/node_modules),
+          // so the CSS specifier keeps resolving to the inert shim.
           serve(
-            fs.readFileSync(path.join(WEB_ROOT, 'node_modules', 'maplibre-gl', 'dist', 'maplibre-gl.js'), 'utf8'),
+            fs.readFileSync(path.join(WEB_ROOT, 'node_modules', 'maplibre-gl', 'dist', 'maplibre-gl.mjs'), 'utf8'),
             JS_CONTENT_TYPE,
           );
         } else if (pathname === '/vendor/maplibre-gl.css') {

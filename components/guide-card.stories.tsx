@@ -24,8 +24,10 @@ export type GuideCardStory = {
 // One synthetic card per story: the access changes, the publication facts
 // stay fixed and honest (localesKnown: true is the offer-backed shape, the
 // synthetic offer id renders nowhere). estimatedDuration stays null —
-// nothing synthetic is invented for a fact the card shows.
-function syntheticCard(
+// nothing synthetic is invented for a fact the card shows. Exported for the
+// photo state's stories file (guide-card-photo.stories.tsx, #215) — the one
+// synthetic-fixture builder, never a second copy.
+export function syntheticCard(
   access: CatalogGuideCard["access"],
   title: string,
 ): CatalogGuideCard {

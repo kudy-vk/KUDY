@@ -1,4 +1,4 @@
-// G14.04.d (issue #305) — the UI-locale switch (the L02 selection G06.05
+// G14.04.d (16_delivery_backlog.md — G14.04.d) — the UI-locale switch (the L02 selection G06.05
 // deferred here; uk-release-scope §4: «Мова прапануецца ў My KUDY і
 // запамінаецца»). One small observable store owns the current display
 // locale: the My KUDY row writes it, the screens read it per render through
@@ -18,7 +18,7 @@
 // one locale registry — the complete catalogues (all eight since G21.14); a
 // planned code is not switchable. The unknown-input semantics below are
 // unchanged.
-// G21.50 (issue #711): switchable means OPEN, not merely complete — the
+// G21.50 (G21.42-chinese-language.md — G21.50): switchable means OPEN, not merely complete — the
 // open set rides the release flag (the openLocales injection is the tests'
 // seam; production derives it from the registry module's OPEN_UI_LOCALES).
 import { COMPLETE_UI_LOCALES, OPEN_UI_LOCALES, type CompleteUiLocaleCode } from '../contracts/ui-locales.ts';
@@ -56,7 +56,7 @@ export function createUiLocaleStore(
 ): UiLocaleSwitch {
   const open = openLocales ?? OPEN_UI_LOCALES;
   const stored = persistence?.read() ?? null;
-  // G21.50 (issue #711, criterion 3): a stored code that is registered but
+  // G21.50 (G21.42-chinese-language.md — G21.50, criterion 3): a stored code that is registered but
   // closed is not the session locale — the session falls back to be, the row
   // is not overwritten and nothing throws; a later read may restore the code
   // once the flag opens it.

@@ -10,8 +10,8 @@ import { after, describe, it } from 'node:test';
 
 import { acquireLock } from '../android-build/checkout-lock.mjs';
 import {
-  EXIT, buildLayout, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine, notVerifiedReasons,
-  probePort, resolveLayout, scopeOutcome, summaryLine,
+  EXIT, buildLayout, buildStepVerdict, driveOf, findJdk17, lockVerdict, markerAllowsSkip, notVerifiedLine,
+  notVerifiedReasons, parseNinjaVersion, probePort, resolveLayout, sdkNinjaLongPathReason, scopeOutcome, summaryLine,
 } from './android-e2e-local.mjs';
 
 const tmpRoots = [];
@@ -120,8 +120,67 @@ describe('android-e2e-local NOT-VERIFIED reasons', () => {
     assert.deepEqual(reasons, []);
   });
 
+  it('includes the SDK ninja long-path reason (#326; revert: drop the notVerifiedReasons call → this test fails)', () => {
+    const root = makeTmpRoot();
+    const bin = path.join(root, 'sdk', 'cmake', '3.22.1', 'bin');
+    fs.mkdirSync(bin, { recursive: true });
+    fs.writeFileSync(path.join(bin, 'ninja.exe'), '');
+    fs.writeFileSync(path.join(bin, 'ninja'), '');
+    const reasons = notVerifiedReasons(buildFullLayout(root), { ninja: { windows: true, runVersion: () => [1, 10, 2] } });
+    assert.ok(reasons.some((reason) => reason.includes('ninja >= 1.11')), reasons.join('; '));
+  });
+
   it('formats the NOT-VERIFIED line with the reason in parentheses', () => {
     assert.equal(notVerifiedLine('missing SDK platform-tools/adb'), 'Android E2E: NOT-VERIFIED (missing SDK platform-tools/adb)');
+  });
+});
+
+describe('android-e2e-local SDK ninja long-path guard (#326)', () => {
+  const makeSdkWithNinja = (root, cmakeVersions) => {
+    for (const version of cmakeVersions) {
+      const bin = path.join(root, 'sdk', 'cmake', version, 'bin');
+      fs.mkdirSync(bin, { recursive: true });
+      // Both launcher names, like the adb/sdkmanager fixtures: the host checks
+      // ninja.exe, CI checks ninja.
+      fs.writeFileSync(path.join(bin, 'ninja.exe'), '');
+      fs.writeFileSync(path.join(bin, 'ninja'), '');
+    }
+    return path.join(root, 'sdk');
+  };
+
+  it('names an SDK ninja older than 1.11 (revert: the swap in docs/development_setup.md is undone → reason is gone, the build fails cryptically)', () => {
+    const root = makeTmpRoot();
+    const sdk = makeSdkWithNinja(root, ['3.22.1']);
+    const reason = sdkNinjaLongPathReason(sdk, { windows: true, runVersion: () => [1, 10, 2] });
+    assert.match(reason, /ninja >= 1\.11/);
+    assert.match(reason, /1\.10\.2/);
+  });
+
+  it('passes with ninja >= 1.11, with no cmake dir, and never fires on POSIX', () => {
+    const root = makeTmpRoot();
+    assert.equal(sdkNinjaLongPathReason(path.join(root, 'sdk'), { windows: true }), null);
+    const sdk = makeSdkWithNinja(root, ['3.22.1']);
+    assert.equal(sdkNinjaLongPathReason(sdk, { windows: true, runVersion: () => [1, 12, 1] }), null);
+    assert.equal(sdkNinjaLongPathReason(sdk, { windows: false, runVersion: () => [1, 10, 2] }), null);
+  });
+
+  it('stays silent while any SDK ninja satisfies the minimum (mixed cmake installs)', () => {
+    const root = makeTmpRoot();
+    const sdk = makeSdkWithNinja(root, ['3.22.1', '3.31.1']);
+    const versions = (ninjaPath) => (ninjaPath.includes('3.22.1') ? [1, 10, 2] : [1, 12, 1]);
+    assert.equal(sdkNinjaLongPathReason(sdk, { windows: true, runVersion: versions }), null);
+  });
+
+  it('stays silent when every ninja probe is unreadable (corrupt input; revert: dropping the null filter fakes a reason)', () => {
+    const root = makeTmpRoot();
+    const sdk = makeSdkWithNinja(root, ['3.22.1']);
+    assert.equal(sdkNinjaLongPathReason(sdk, { windows: true, runVersion: () => null }), null);
+  });
+
+  it('parses one- and two-component ninja versions', () => {
+    assert.deepEqual(parseNinjaVersion('1.12.1\n'), [1, 12, 1]);
+    assert.deepEqual(parseNinjaVersion('1.11'), [1, 11, 0]);
+    assert.equal(parseNinjaVersion('unknown'), null);
   });
 });
 
@@ -188,6 +247,23 @@ describe('android-e2e-local summary contract', () => {
     assert.notEqual(EXIT.notVerified, EXIT.ok);
     assert.notEqual(EXIT.lockStale, EXIT.ok);
     assert.notEqual(EXIT.notVerified, EXIT.fail);
+  });
+});
+
+describe('android-e2e-local build step verdict', () => {
+  it('exit 87 from android-build is NOT-VERIFIED with a reason, never failed (build) (revert: 87 → failed → test fails, #211)', () => {
+    const verdict = buildStepVerdict(87, false);
+    assert.equal(verdict.kind, 'not-verified');
+    assert.match(verdict.reason, /wrapper did not start/);
+  });
+
+  it('a real build failure and a missing APK still fail the run', () => {
+    assert.equal(buildStepVerdict(1, false).kind, 'failed');
+    assert.equal(buildStepVerdict(0, false).kind, 'failed', 'exit 0 without the APK is a failure, not a pass');
+  });
+
+  it('exit 0 with the APK present passes', () => {
+    assert.equal(buildStepVerdict(0, true).kind, 'ok');
   });
 });
 

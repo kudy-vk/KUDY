@@ -1,4 +1,4 @@
-// G08.05 (issue #292) — the demo script behind the G08.05 Showboat
+// G08.05 (16_delivery_backlog.md — G08.05) — the demo script behind the G08.05 Showboat
 // demo: the quiet commerce controller over fake ports
 // with deterministic mints and clock (implementation-rules 11 — the captured
 // output carries no timings and no random identifiers). Not a test: it

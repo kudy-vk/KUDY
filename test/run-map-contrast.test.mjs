@@ -1,4 +1,4 @@
-// UX 04 (issue #350) guard: the Run map's marker-status configuration is
+// UX 04 (канон §9 — Чытэльнасць на вуліцы) guard: the Run map's marker-status configuration is
 // contrast-safe — the five ADR G01.01 §4.5 states each carry a canon
 // color.marker.* fill with ≥3:1 against the canon map background (WCAG
 // 1.4.11 non-text), the map background itself is the canon color.map, and
@@ -22,6 +22,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const tokensPath = join(root, 'components/design-tokens.ts');
 const screenPath = join(root, 'app/run/[id].tsx');
 const stripPath = join(root, 'components/walk-progress.tsx');
+const sign = readFileSync(join(root, 'components/point-status-sign.tsx'), 'utf8');
 
 // The anchored entries of components/design-tokens.ts: TS key → canon token
 // name → hex, the same anchoring the design-tokens guard pins.
@@ -60,8 +61,8 @@ test('the Run map background is the canon color.map, not card white', () => {
 });
 
 test('every marker status carries its canon color.marker.* fill', () => {
-  const block = screen.match(/const STATUS_COLOR[^{]*\{([^}]*)\}/);
-  assert.ok(block, 'app/run/[id].tsx must keep the STATUS_COLOR configuration');
+  const block = sign.match(/const STATUS_COLOR[^{]*\{([^}]*)\}/);
+  assert.ok(block, 'the shared point sign must keep the STATUS_COLOR configuration');
   const entries = new Map(
     [...block[1].matchAll(/(\w+):\s*tokens\.(\w+)/g)].map((m) => [m[1], m[2]]),
   );
@@ -80,7 +81,7 @@ test('every marker status carries its canon color.marker.* fill', () => {
 
 test('every marker fill keeps ≥3:1 against the canon map background (WCAG 1.4.11)', () => {
   const mapHex = canon.tokens['color.map'].value;
-  const block = screen.match(/const STATUS_COLOR[^{]*\{([^}]*)\}/);
+  const block = sign.match(/const STATUS_COLOR[^{]*\{([^}]*)\}/);
   for (const [status, tsKey] of [...block[1].matchAll(/(\w+):\s*tokens\.(\w+)/g)].map((m) => [m[1], m[2]])) {
     const hex = surfaceTokens.get(tsKey).hex;
     const ratio = contrast(hex, mapHex);
@@ -90,7 +91,7 @@ test('every marker fill keeps ≥3:1 against the canon map background (WCAG 1.4.
 });
 
 test('the peek bar progress strip stays identifiable in light and dark chrome (≥3:1 edge)', () => {
-  // G06.10.f / #436: inspect the single production style owner, and
+  // G06.10.f / docs/design/dark-theme.md: inspect the single production style owner, and
   // resolve both palettes instead of assuming static light tokens.
   const track = styleBlock(strip, 'components/walk-progress.tsx', 'track');
   const edge = tokenOf(track, 'borderColor');

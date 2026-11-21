@@ -1,13 +1,13 @@
-// G06.01.a (issue #313) — the responsive boundary of the scheme
+// G06.01.a (screens-and-transitions.md — Explore/Guides) — the responsive boundary of the scheme
 // (screens-and-transitions.md, Explore row): one column below 821 px, two
 // columns at 821 px and above. Colocated with the module it tests in
-// components/ (issue #339 — moved out of app/ with guide-card.tsx).
+// components/ (docs/architecture/19_class_and_module_map.md — moved out of app/ with guide-card.tsx).
 import { describe, expect, test } from "@jest/globals";
 
 import { isWide } from "./guide-card";
 
 describe("responsive split (one column < 821 px, two ≥ 821 px)", () => {
-  test("820 px stays one column, 821 px is the two-column edge", () => {
+  test("820 px stays one column, 821 px is the two-column edge", async () => {
     expect(isWide(820)).toBe(false);
     expect(isWide(821)).toBe(true);
   });
@@ -40,7 +40,7 @@ const card = (routeId: string, textLocales: readonly string[]): CatalogGuideCard
 const ready = (guides: readonly CatalogGuideCard[]) => ({ kind: "ready" as const, guides, degraded: null });
 
 describe("selected_text_locale_filter", () => {
-  test("the be/en-only list is visible to be and en, hidden to the six other UI locales", () => {
+  test("the be/en-only list is visible to be and en, hidden to the six other UI locales", async () => {
     const guides = [card("g1", ["be", "en"])];
     for (const locale of ["be", "en", "uk", "de", "es", "fr", "cs", "sv"] as const) {
       const visible = visibleGuides(guides, locale);
@@ -48,7 +48,7 @@ describe("selected_text_locale_filter", () => {
     }
   });
 
-  test("an offer shows only in the locales its published text covers", () => {
+  test("an offer shows only in the locales its published text covers", async () => {
     const guides = [card("fr-only", ["fr"]), card("multi", ["be", "en", "uk", "de", "es", "fr", "cs", "sv"])];
     expect(visibleGuides(guides, "fr").map((c) => c.routeId)).toEqual(["fr-only", "multi"]);
     expect(visibleGuides(guides, "be").map((c) => c.routeId)).toEqual(["multi"]);
@@ -56,25 +56,65 @@ describe("selected_text_locale_filter", () => {
 });
 
 describe("empty_locale_catalogue", () => {
-  // The be-fallback probe rotated de→fr→es→cs→sv as G21.10 #544, G21.12
-  // #546, G21.11 #545 and G21.13 #547 landed their catalogues — each landing
-  // retires its code. G21.14 (issue #548) lands sv, the last planned code:
-  // all eight requested languages are complete, so the probe rides an
-  // unregistered code (pl) and sv asserts its own words beside it.
-  test("guides exist in other languages — the filtered-empty state explains the language", () => {
-    render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="pl" />);
+  // The be-fallback probe rotated de→fr→es→cs→sv as G21.10, G21.12
+  // (2026-10-03-single-source-translations.md — G21.12), G21.11 and G21.13 landed their catalogues — each landing
+  // retires its code. G21.14 (2026-10-03-single-source-translations.md — G21.14) lands sv, and #376 lands pl:
+  // the fallback probe rides an unregistered code (eo), while sv and pl assert
+  // their own words beside it.
+  test("guides exist in other languages — the filtered-empty state explains the language", async () => {
+    await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="eo" />);
     expect(screen.getByTestId("city-message").props.children).toBe(uiStrings("be").textLocaleEmpty);
   });
 
-  test("nothing is published at all — NAV3's honest empty stays", () => {
-    render(<CatalogStateView state={ready([])} variant="rubric" locale="pl" />);
+  test("nothing is published at all — NAV3's honest empty stays", async () => {
+    await render(<CatalogStateView state={ready([])} variant="rubric" locale="eo" />);
     expect(screen.getByTestId("city-message").props.children).toBe(uiStrings("be").notPublished);
   });
 
-  test("G21.14 (issue #548): sv renders its own filtered-empty and not-published words", () => {
-    render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="sv" />);
+  test("G21.14 (2026-10-03-single-source-translations.md — G21.14): sv and pl render their own filtered-empty and not-published words", async () => {
+    await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="sv" />);
     expect(screen.getByTestId("city-message").props.children).toBe("Det finns ännu inga guider med text på det här språket.");
-    render(<CatalogStateView state={ready([])} variant="rubric" locale="sv" />);
+    await render(<CatalogStateView state={ready([])} variant="rubric" locale="sv" />);
     expect(screen.getByTestId("city-message").props.children).toBe("ej publicerad");
+    await render(<CatalogStateView state={ready([card("g1", ["be", "en"])])} variant="rubric" locale="pl" />);
+    expect(screen.getByTestId("city-message").props.children).toBe("Brak przewodników z tekstem w tym języku.");
+    await render(<CatalogStateView state={ready([])} variant="rubric" locale="pl" />);
+    expect(screen.getByTestId("city-message").props.children).toBe("nieopublikowane");
+  });
+});
+
+// #215 — the one photo place (the kit offer anatomy): with a photo the card
+// frames a 64×64 slot left of the title; without one the card keeps today's
+// stacked look — the live screens pass no photo until their migration tasks
+// (#216–#227). GuideCard opens the preview through expo-router's Link, so
+// the render rides the router testing library.
+import { View } from "react-native";
+import { renderRouter } from "expo-router/testing-library";
+import { within } from "@testing-library/react-native";
+
+import { tokens } from "./design-tokens";
+import { GuideCard } from "./guide-card";
+
+describe("guide card photo place (#215)", () => {
+  test("with a photo — the framed 64×64 place renders beside the title", async () => {
+    await renderRouter(
+      {
+        index: () => (
+          <GuideCard
+            card={card("g-photo", ["be"])}
+            photo={<View testID="synthetic-photo" style={{ backgroundColor: "#d8d2c6", flex: 1 }} />}
+          />
+        ),
+      },
+      { initialUrl: "/" },
+    );
+    const place = screen.getByTestId("guide-card-photo");
+    expect(place.props.style).toMatchObject({ width: 64, height: 64, borderColor: tokens.colorLine });
+    expect(within(place).getByTestId("synthetic-photo")).toBeTruthy();
+  });
+
+  test("without a photo — no place renders, the card keeps its stacked look", async () => {
+    await renderRouter({ index: () => <GuideCard card={card("g-plain", ["be"])} /> }, { initialUrl: "/" });
+    expect(screen.queryByTestId("guide-card-photo")).toBeNull();
   });
 });

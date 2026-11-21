@@ -13,6 +13,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -530,7 +531,7 @@ test('G14.04.b: a claimed audio locale without its audio files is audio-locale-w
   assert.deepEqual(result.errors.filter((e) => e.rule !== 'audio-locale-without-files'), [], JSON.stringify(result.errors));
 });
 
-// G21.16 (issue #550): in the expanded domain text and audio availability
+// G21.16 (2026-10-03-single-source-translations.md — G21.16): in the expanded domain text and audio availability
 // stay independent — shipped fr text passes audio-free, and a claimed fr
 // audio locale without published audio files fails on its named rule.
 function addFrTextLayer(d) {
@@ -567,6 +568,57 @@ test('G21.16: fr text with shipped files passes audio-free; claimed fr audio wit
     { severity: 'error', rule: 'audio-locale-without-files', path: 'discovery.json#offers[0].availability.audio_locales#fr' },
   ], JSON.stringify(unbackedAudio.errors));
   assert.deepEqual(unbackedAudio.errors.filter((e) => e.rule !== 'audio-locale-without-files'), [], JSON.stringify(unbackedAudio.errors));
+});
+
+// AF6 (Selfer эпік #262, issue #347): the pl audio wave — a shipped pl layer
+// with its media record passes end to end, and the validator's declared
+// media.schema.json locale mirror knows pl: a pl file matched to a
+// foreign-locale record is media-locale-mismatch.
+function addPlAudioLayer(d) {
+  fs.cpSync(path.join(d, 'be', 'base'), path.join(d, 'pl', 'base'), { recursive: true });
+  const [audio] = fs.readdirSync(path.join(d, 'pl', 'base', 'audio')).filter((name) => name.endsWith('.m4a'));
+  fs.appendFileSync(path.join(d, 'pl', 'base', 'audio', audio), Buffer.from([0])); // distinct bytes: the copy must not share be's sha
+  const voices = readJson(d, 'voices.json');
+  voices.push({ id: 'voice-pl-1', locale: 'pl', narrator_credit: 'Polski głos demo', character: 'Smok' });
+  writeJson(d, 'voices.json', voices);
+  const stops = readJson(d, 'pl/base/stops.json');
+  for (const story of stops) {
+    story.voice_id = 'voice-pl-1';
+    story.text = 'Tekst demonstracyjny polskiej fali audio.';
+    story.transcript = 'Transkrypcja demonstracyjna polskiej fali audio.';
+  }
+  writeJson(d, 'pl/base/stops.json', stops);
+  const buf = fs.readFileSync(path.join(d, 'pl', 'base', 'audio', audio));
+  const media = readJson(d, 'media.json');
+  media.push({
+    media_id: 'media-story-1-base-pl',
+    sha256: createHash('sha256').update(buf).digest('hex'),
+    bytes: buf.length,
+    mime: 'audio/mp4',
+    locale: 'pl',
+    license: 'CC0 1.0, сінтэтычны тан аўтара KUDY',
+    credit: 'Сінтэтычны дэма-тан, афлайн-генерацыя ffmpeg, 2026',
+  });
+  writeJson(d, 'media.json', media);
+}
+
+test('AF6 #347: a shipped pl audio layer passes with its media record; a pl file under a foreign record fails', () => {
+  const okResult = validatePackage(copiedTree((d) => {
+    addPlAudioLayer(d);
+    const index = readJson(d, 'discovery.json');
+    index.offers[0].availability = { text_locales: ['be', 'en', 'uk', 'pl'], audio_locales: ['be', 'en', 'pl'] };
+    writeJson(d, 'discovery.json', index);
+  }));
+  assert.deepEqual(okResult, { ok: true, errors: [], warnings: [] }, JSON.stringify(okResult.errors));
+
+  const mismatch = validatePackage(copiedTree((d) => {
+    addPlAudioLayer(d);
+    const media = readJson(d, 'media.json');
+    media[media.length - 1].locale = 'en';
+    writeJson(d, 'media.json', media);
+  }));
+  assert.ok(!mismatch.ok);
+  assert.ok(rules(mismatch, 'media-locale-mismatch').length > 0, JSON.stringify(mismatch.errors));
 });
 
 test('G14.04.b: a corrupt availability shape yields a type diagnostic, not a crash', () => {

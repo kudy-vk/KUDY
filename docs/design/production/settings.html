@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — налады</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  /* Content column inside the scrolling area. */
+  .pad { display: flex; flex-direction: column; padding: 0 16px 24px; }
+  .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+  .sec { margin: 20px 0 8px; font-size: calc(13px * var(--fs)); font-weight: 600; color: var(--muted); }
+  .gap { margin-top: 16px; }
+  /* A long screen name wraps at a large text size instead of being cut. */
+  .topbar .title { padding-block: 8px; line-height: 1.2; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+
+  /* A block of the hierarchy: one bordered card, rows divided by a line. */
+  .group { padding: 0; overflow: hidden; }
+  .group > * + * { border-top: 1px solid var(--line); }
+  .srow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 10px 12px;
+    border: 0;
+    background: none;
+    text-align: left;
+  }
+  button.srow { cursor: pointer; }
+  button.srow:active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .srow > .icon { color: var(--muted); }
+  .srow > .icon:last-child { color: var(--accent); }
+  .srow .grow > span { display: block; }
+  /* A row with a wide control on the right: at a large text size the control
+     moves under the text instead of squeezing the name into broken words. */
+  .srow.wide { flex-wrap: wrap; }
+  .srow.wide > .grow { flex-basis: calc(130px * var(--fs)); }
+  .srow.wide > :last-child { margin-left: auto; }
+  .srow.warn, .srow.warn > .icon:first-child { color: var(--warn); }
+
+  /* A block that is not open yet: readable ink and border, no opacity, reason in the row. */
+  .srow.off { border: 1px solid var(--disabled-line); border-radius: 10px; color: var(--disabled-ink); }
+  .srow.off > .icon { color: var(--disabled-ink); }
+  .srow.off .t-secondary { color: var(--disabled-ink); }
+  .srow .tag { flex: none; }
+
+  /* Interface languages: self-names, the chosen one pressed. */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .group > .chips { padding: 12px; }
+
+  /* Theme: a segmented control inside a bordered card (decisions DT-3, DT-5). */
+  .theme { display: grid; gap: 8px; }
+  .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 10px; }
+  .seg button {
+    /* All three in one line, or — when the card is too narrow for the text size — all three stacked. */
+    flex: 1 1 calc((240px * var(--fs) - 100%) * 999);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-height: 48px;
+    padding: 6px 4px;
+    border: 0;
+    border-radius: 7px;
+    background: none;
+    color: var(--ink);
+    font-size: calc(13px * var(--fs));
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+  }
+  .seg button[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .theme p { margin: 0; }
+
+  /* Switch: the whole row is the control; the track only shows its state. */
+  .track { flex: none; position: relative; width: 48px; height: 28px; border: 2px solid var(--muted); border-radius: 99px; }
+  .track::after { content: ""; position: absolute; top: 4px; left: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); }
+  [aria-checked="true"] > .track { border-color: var(--accent); background: var(--accent); }
+  [aria-checked="true"] > .track::after { left: 24px; background: var(--accent-ink); }
+
+  /* «Гіды для мяне»: a pressed chip is a hidden group. */
+  .hide-status { margin: 16px 0 0; font-weight: 600; }
+  .pad > .btn { align-self: flex-start; margin-top: 12px; }
+  .keep { margin: 16px 0 0; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Налады</h1>
+  <p class="lead">Фінальны макет экрана налад: шэсць блокаў прынятай іерархіі і асобны экран «Гіды для мяне». Мова, тэма, перамыкачы і тэгі пераключаюцца проста ў тэлефоне; радок пад перамыкачамі кажа, што зрабіў бы націск.</p>
+</main>
+<script type="module" src="settings.mjs"></script>
+</body>
+</html>

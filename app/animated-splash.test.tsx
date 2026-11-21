@@ -12,9 +12,11 @@ import Menu from "./menu";
 import Index from "./index";
 import { createServices } from "../controllers/createServices";
 import { flatStyle, layoutWith } from "../test/render-helpers";
+import { getAllByType } from "../test/render-helpers";
 
-function renderColdStart() {
-  renderRouter(
+
+async function renderColdStart() {
+  await renderRouter(
     {
       _layout: layoutWith(createServices({})),
       index: Index,
@@ -23,9 +25,8 @@ function renderColdStart() {
     { initialUrl: "/" },
   );
 }
-
-function advance(ms: number) {
-  act(() => jest.advanceTimersByTime(ms));
+async function advance(ms: number) {
+  await act(() => jest.advanceTimersByTime(ms));
 }
 
 function svgProp(id: string, name: "matrix" | "opacity" | "d") {
@@ -44,47 +45,47 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-test("cold start shows a vector dragon with arriving paws, then opens the map menu after the scene", () => {
+test("cold start shows a vector dragon with arriving paws, then opens the map menu after the scene", async () => {
   jest.useFakeTimers();
-  renderColdStart();
+  await renderColdStart();
 
   expect(screen.getByTestId("splash-scene")).toBeTruthy();
   expect(screen.queryByTestId("screen-Menu")).toBeNull();
-  expect(screen.getByTestId("splash-head").findAllByType(Path).length).toBeGreaterThan(0);
-  expect(screen.getByTestId("splash-paw-left").findAllByType(Path).length).toBeGreaterThan(0);
-  expect(screen.getByTestId("splash-paw-right").findAllByType(Path).length).toBeGreaterThan(0);
+  expect(getAllByType(screen.getByTestId("splash-head"), "RNSVGPath").length).toBeGreaterThan(0);
+  expect(getAllByType(screen.getByTestId("splash-paw-left"), "RNSVGPath").length).toBeGreaterThan(0);
+  expect(getAllByType(screen.getByTestId("splash-paw-right"), "RNSVGPath").length).toBeGreaterThan(0);
   expect(brandVisible()).toBe(false);
 
   const firstLeftPaw = svgProp("splash-paw-left", "matrix");
   const firstRightPaw = svgProp("splash-paw-right", "matrix");
-  advance(1_200);
+  await advance(1_200);
   expect(svgProp("splash-paw-left", "matrix")).not.toEqual(firstLeftPaw);
   expect(svgProp("splash-paw-right", "matrix")).not.toEqual(firstRightPaw);
   expect(screen.queryByTestId("screen-Menu")).toBeNull();
 
-  advance(5_900);
+  await advance(5_900);
   expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
 
-test("the side move happens during the blink; the mouth moves before KUDY appears", () => {
+test("the side move happens during the blink; the mouth moves before KUDY appears", async () => {
   jest.useFakeTimers();
-  renderColdStart();
+  await renderColdStart();
 
-  advance(3_300);
+  await advance(3_300);
   const headBefore = svgProp("splash-head", "matrix");
   const eyesBefore = svgProp("splash-eyes", "opacity");
-  advance(350);
+  await advance(350);
   expect(svgProp("splash-head", "matrix")).not.toEqual(headBefore);
   expect(svgProp("splash-eyes", "opacity")).not.toEqual(eyesBefore);
   expect(brandVisible()).toBe(false);
 
-  advance(250);
+  await advance(250);
   const mouthBefore = svgProp("splash-mouth", "d");
-  advance(550);
+  await advance(550);
   expect(svgProp("splash-mouth", "d")).not.toEqual(mouthBefore);
-  advance(750);
+  await advance(750);
   expect(brandVisible()).toBe(false);
-  advance(900);
+  await advance(900);
   expect(screen.getByText("KUDY")).toBeTruthy();
   expect(brandVisible()).toBe(true);
   expect(screen.queryByTestId("screen-Menu")).toBeNull();
@@ -96,18 +97,18 @@ test("the side move happens during the blink; the mouth moves before KUDY appear
 // the Y fell onto a second line the view clipped. The full-width centered
 // line cannot re-wrap; reverting the brand style to content sizing must
 // fail here.
-test("the KUDY word is a full-width centered line, not a content-sized box", () => {
+test("the KUDY word is a full-width centered line, not a content-sized box", async () => {
   jest.useFakeTimers();
-  renderColdStart();
+  await renderColdStart();
 
-  advance(6_000);
+  await advance(6_000);
   const style = flatStyle(screen.getByTestId("splash-brand"));
   expect(style.width).toBe("100%");
   expect(style.textAlign).toBe("center");
 });
 
 // #871: the clock skips still holds instead of repainting the SVG tree.
-test("the splash clock skips inactive windows but reaches each motion endpoint", () => {
+test("the splash clock skips inactive windows but reaches each motion endpoint", async () => {
   expect(nextSplashSampleMs(0)).toBe(420);
   expect(nextSplashSampleMs(420)).toBe(452);
   expect(nextSplashSampleMs(1_070)).toBe(1_500);
@@ -118,27 +119,27 @@ test("the splash clock skips inactive windows but reaches each motion endpoint",
   expect(nextSplashSampleMs(6_000)).toBeNull();
 });
 
-test("cold start does not run any periodic whole-scene renderer", () => {
+test("cold start does not run any periodic whole-scene renderer", async () => {
   jest.useFakeTimers();
   const intervals = jest.spyOn(global, "setInterval");
-  renderColdStart();
+  await renderColdStart();
   expect(intervals).not.toHaveBeenCalled();
 });
 
-test("head descends during its own phase, before the blink or side move", () => {
+test("head descends during its own phase, before the blink or side move", async () => {
   jest.useFakeTimers();
-  renderColdStart();
-  advance(1_500);
+  await renderColdStart();
+  await advance(1_500);
   const headAtStart = svgProp("splash-head", "matrix");
-  advance(600);
+  await advance(600);
   const headDuringDrop = svgProp("splash-head", "matrix");
   expect(headDuringDrop).not.toEqual(headAtStart);
-  advance(900);
+  await advance(900);
   expect(svgProp("splash-head", "matrix")).not.toEqual(headDuringDrop);
   expect(screen.queryByTestId("screen-Menu")).toBeNull();
 });
 
-test("phase clock emits fewer scene updates than a fixed 32 ms interval", () => {
+test("phase clock emits fewer scene updates than a fixed 32 ms interval", async () => {
   let elapsed = 0;
   let samples = 0;
   for (;;) {

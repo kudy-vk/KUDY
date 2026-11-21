@@ -1,0 +1,562 @@
+// GENERATED FILE — do not edit. Regenerate with:
+//   node --experimental-strip-types tools/i18n/generate-messages.mjs
+//
+// Source of truth: contracts/ui-messages/source.json (the be base text) and
+// contracts/ui-messages/translations/<locale>.json (the reviewed translations).
+// G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
+// source/translation data, never this file; the generator's --check mode
+// fails on any hand edit.
+// the «Пра горад» guide (issue #200; the #252 wheel screen); base language English per decision L1 (docs/design/brand/decisions.md) — a locale without its own words shows the English text (the be-only fallback of #200 is retired)
+
+import type { AboutCityStrings } from "../contracts/ui-message-types.ts";
+
+export const ABOUT_CITY_STRINGS: Record<"be" | "en", AboutCityStrings> = {
+  "be": {
+    "wheel": {
+      "label": "Раздзелы даведніка",
+    },
+    "tab": {
+      "airport": "Аэрапорт",
+      "transport": "Транспарт",
+      "city": "Раёны і карта",
+      "food": "Ежа і грошы",
+    },
+    "head": {
+      "airport": "З аэрапорта і назад",
+      "transport": "Як ездзіць па горадзе",
+      "city": "Дзе што ў горадзе",
+      "food": "Ежа і аплата",
+    },
+    "sources": {
+      "title": "Афіцыйныя спасылкі",
+    },
+    "link": {
+      "failed": (url: string) => `Не ўдалося адкрыць старонку. Яе адрас: ${url}`,
+    },
+    "u": {
+      "aboutMin": (n: number) => `каля ${n} хв`,
+      "everyWeekdays": (n: number) => `у будні кожныя ${n} хв`,
+      "hourly": "штогадзіну",
+      "aboutHourly": "прыблізна штогадзіну",
+    },
+    "sr": {
+      "bus": "Аўтобус",
+      "night": "Начны аўтобус",
+      "train": "Цягнік",
+    },
+    "air": {
+      "dirLabel": "Кірунак",
+      "dirFrom": "З аэрапорта",
+      "dirTo": "У аэрапорт",
+      "from": {
+        "s1": {
+          "title": "Выйдзі з тэрмінала",
+          "text": "Аўтобусныя прыпынкі — насупраць тэрмінала, каля паркінгу P1. Да станцыі цягніка Gdańsk Port Lotniczy вядзе крыты пераход.",
+          "stop01": "Port Lotniczy 01 — у цэнтр",
+          "stop02": "Port Lotniczy 02 — у Wrzeszcz",
+        },
+      },
+      "to": {
+        "s1": {
+          "title": "Дабярыся да прыпынку",
+          "text": "Аўтобус 210 адпраўляецца з цэнтра з прыпынку Dworzec Główny 10 на вуліцы Podwale Grodzkie; аўтобус 110 — з Gdańsk Wrzeszcz.",
+        },
+      },
+      "s2": {
+        "title": "Выберы рэйс",
+      },
+      "s3": {
+        "title": "Вазьмі білет",
+      },
+      "ticket": {
+        "bus": {
+          "title": "Аўтобус: білет ZTM",
+          "where": "Купі ў праграме Jakdojade або FALA ці аплаці карткай у прыладзе FALA ў салоне.",
+        },
+        "train": {
+          "title": "Цягнік: асобны чыгуначны білет",
+          "where": "Гарадскі білет ZTM у цягніку не дзейнічае. Чыгуначны білет купі ў аўтамаце на пероне або ў праграме Polregio, Jakdojade ці FALA.",
+        },
+      },
+      "map": "Цягнік PKM да Gdańsk Wrzeszcz, далей SKM да цэнтра; у горад ходзяць і аўтобусы.",
+      "mapGo": "Як дабрацца ў горад",
+    },
+    "ride": {
+      "110": {
+        "from": "У Gdańsk Wrzeszcz",
+        "to": "З Gdańsk Wrzeszcz",
+        "also": "Аўтобус 120 ходзіць паміж аэрапортам і Łostowice Świętokrzyska.",
+      },
+      "210": {
+        "from": "У цэнтр горада",
+        "to": "З цэнтра горада",
+      },
+      "n3": {
+        "from": "Уначы: цэнтр і Wrzeszcz",
+        "to": "Уначы: з цэнтра і Wrzeszcz",
+        "when": "штоночы, 23:00 – 04:00",
+        "toCentre": "З Port Lotniczy 01 у 23:15, 00:06, 01:15 і далей; каля 50 хв.",
+        "toWrzeszcz": "З Port Lotniczy 02; каля 20 хв.",
+        "route": "Dworzec Główny ⇄ аэрапорт ⇄ Gdańsk Wrzeszcz. Да Сопата і Гдыні не ідзе.",
+      },
+      "train": {
+        "from": "Цягнік да Gdańsk Wrzeszcz",
+        "to": "Цягнік з Gdańsk Wrzeszcz",
+        "change": "Прамыя цягнікі да Gdańsk Główny ёсць, але часцей патрэбная перасадка ў Gdańsk Wrzeszcz: з перона 3 на SKM у бок цэнтра.",
+        "line": "Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa. Прамыя цягнікі паміж Gdańsk Główny і аэрапортам ёсць, але часцей патрэбная перасадка ў Gdańsk Wrzeszcz.",
+        "operator": "POLREGIO. SKM да станцыі аэрапорта не ходзіць.",
+      },
+    },
+    "row": {
+      "stop": "Прыпынак",
+      "firstLast": "Першы і апошні",
+      "sunday": "У нядзелю",
+      "centreStops": "Прыпынкі ў цэнтры",
+      "also": "Яшчэ",
+      "route": "Маршрут",
+      "toCentre": "У цэнтр",
+      "toWrzeszcz": "У Wrzeszcz",
+      "operator": "Перавозчык",
+    },
+    "tr": {
+      "modes": "Чым ехаць",
+      "ztm": {
+        "title": "Аўтобусы і трамваі",
+        "meta": "ZTM · па Гданьску",
+        "text": "Галоўны транспарт горада і суседніх гмін. Сопат і Гдыня маюць свае сеткі ZKM. Агульны тарыф на ўсю агламерацыю вядзе саюз MZKZG: яго білеты дзейнічаюць і ў Гданьску, і ў суседніх гарадах.",
+      },
+      "skm": {
+        "title": "Цягнік SKM",
+        "meta": "У Сопат і Гдыню",
+        "text": "Галоўная лінія Гдыня – Сопат – Гданьск. У будні цягнікі ходзяць прыблізна кожныя 10–15 хвілін; дакладны час — у раскладзе.",
+        "warn": "Разавыя білеты ZTM у цягніках не дзейнічаюць. Патрэбны білет MZKZG «з цягнікамі» або білет SKM.",
+      },
+      "rail": {
+        "title": "Цягнікі POLREGIO",
+        "meta": "Аэрапорт, Мальбарк і далей",
+        "text": "POLREGIO абслугоўвае лінію PKM да аэрапорта (Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa) і рэгіянальныя цягнікі ў Мальбарк, Слупск і Картузы. Расклад і білеты — polregio.pl.",
+      },
+      "buyLabel": "Дзе купіць",
+      "buy": {
+        "jakdojade": {
+          "title": "Jakdojade",
+          "text": "Планавальнік паездак і білеты Трайместа.",
+        },
+        "fala": {
+          "title": "FALA",
+          "text": "Білеты Гданьска, метраполіі і цягнікоў у адной сістэме.",
+        },
+        "kompas": {
+          "title": "SKM KomPas",
+          "text": "Аплікацыя SKM: расклад цягнікоў офлайн да трох тыдняў.",
+        },
+      },
+      "residents": "Для жыхароў Гданьска",
+    },
+    "city": {
+      "caption": "Ілюстраваная карта: станцыі і зоны стаяць на сваіх месцах, але малюнак прыблізны. Не для навігацыі.",
+      "get": "Як дабрацца",
+      "summer": "Улетку пляжныя рэйсы ходзяць часцей.",
+    },
+    "place": {
+      "glowne": "Турыстычнае сэрца Гданьска на рацэ Motława: вуліцы Długa і Długi Targ, фантан Нептуна, Ратуша, касцёл Святой Марыі і Żuraw.",
+      "oliwa": "Катэдра цыстэрцыянцаў са знакамітым арганам (канцэрты; міжнародны фестываль арганнай музыкі ў ліпені і жніўні), парк Адама Міцкевіча і найбольшы ў Польшчы па плошчы заапарк.",
+      "brzezno": "Самы папулярны гарадскі пляж.",
+      "sopot": "Курортны цэнтр: вуліца Monte Cassino (Monciak) вядзе да мора і мола.",
+      "gdynia": "Ад вакзала па 10 Lutego і Świętojańska — да Сквера Касцюшкі, Паўднёвага мола і караблёў-музеяў.",
+    },
+    "get": {
+      "glowne": "каля 10 хв пешкі ад Gdańsk Główny",
+      "wrzeszcz": "SKM або цягнік да Gdańsk Wrzeszcz",
+      "oliwa": {
+        "tram": "трамвай 5, таксама 6",
+        "skm": "SKM да Gdańsk Oliwa",
+      },
+      "brzezno": "трамвай 3 да Brzeźno Dom Zdrojowy",
+      "westerplatte": "аўтобус ад Gdańsk Główny або летам катэр з цэнтра",
+    },
+    "food": {
+      "deliveryLabel": "Дастаўка ежы",
+      "delivery": {
+        "lead": "Усе пяць сэрвісаў працуюць па ўсім Гданьску. Выберы спосаб аплаты, каб убачыць, хто яго прымае.",
+      },
+      "pay": "Спосаб аплаты",
+      "unconfirmed": "афіцыйна не пацверджана",
+      "bolt": {
+        "note": "гатоўка пры атрыманні",
+      },
+      "note": "Калі спосабу ў сэрвіса няма, гэта значыць, што афіцыйныя старонкі яго не пацвярджаюць, а не што ён забаронены.",
+      "city": "Аплата ў горадзе",
+      "cards": {
+        "title": "Карткі і гатоўка",
+        "meta": "Visa, Mastercard, злотыя",
+        "text": "Бескантактавыя Visa і Mastercard — асноўны спосаб аплаты ў дастаўцы і ў крамах. Гатоўку ў злотых прымаюць толькі там, дзе гэта яўна пазначана. Афіцыйнага абяцання, што карткі ці гатоўку прымаюць паўсюль, няма: дзейныя спосабы пазначаныя на тэрмінале і на касе.",
+      },
+      "blik": {
+        "title": "BLIK",
+        "meta": "Польскі мабільны плацёж",
+        "need": "Патрэбны рахунак у польскім банку-ўдзельніку і мабільная праграма банка.",
+        "online": {
+          "title": "У інтэрнэце",
+          "text": "Увядзі аднаразовы шасцізначны код з праграмы і пацвердзі.",
+        },
+        "till": {
+          "title": "На касе",
+          "text": "Плаці бескантактава з праграмы або ўвядзі той самы код на тэрмінале.",
+        },
+        "more": "BLIK таксама пераводзіць грошы па нумары тэлефона і здымае гатоўку ў банкамаце без карткі.",
+      },
+    },
+    "pay": {
+      "any": "Любы",
+      "card": "Картка",
+      "blik": "BLIK",
+      "cash": "Гатоўка",
+      "apple": "Apple Pay",
+      "google": "Google Pay",
+      "paypal": "PayPal",
+    },
+    "card": {
+      "title": "Gdańska Karta Turysty",
+      "lead": "Турыстычная картка Гданьска дапамагае наведваць музеі і іншыя цікавыя месцы паводле выбранага пакета. Транспартны білет можна набыць дадаткова — ён не ўваходзіць у асноўны пакет. Актуальныя магчымасці і ўмовы правер на афіцыйным сайце.",
+      "brandAlt": "Лагатып Gdańska Karta Turysty",
+      "brandMark": "KT",
+      "openOfficial": (name: string) => `Адкрыць афіцыйны сайт: ${name}`,
+    },
+    "links": {
+      "airportBuses": "Аўтобусы ў аэрапорт і назад — airport.gdansk.pl",
+      "airportTrains": "Цягнікі ў аэрапорт і назад — airport.gdansk.pl",
+      "ztmSchedule": "Расклады ZTM Гданьска",
+      "skmSearch": "Пошук рэйсаў SKM",
+      "kartaTurysty": "Karta Turysty — афіцыйныя пакеты і ўмовы",
+      "pysznePayment": "Аплата ў Pyszne.pl",
+      "blikHow": "Як карыстацца BLIK — blik.com",
+    },
+    "map": {
+      "label": "Карта Труймяста",
+      "role": "карта",
+      "zoomIn": "Наблізіць",
+      "zoomOut": "Аддаліць",
+      "fit": "Паказаць усю карту",
+      "google": "Адкрыць у Google Maps",
+      "layers": "Што паказвае карта",
+      "hint": "Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.",
+      "list": "Зоны, станцыі і аэрапорт спісам",
+      "listMeta": (visit: number, stay: number) => `${visit} для наведвання, ${stay} каб спыніцца`,
+    },
+    "layer": {
+      "visit": "Месцы для наведвання",
+      "stay": "Зручна спыніцца",
+      "rail": "Цягнікі SKM і PKM",
+      "plan": "Будучая лінія",
+    },
+    "zone": {
+      "stop": (name: string, km: string) => `${name}: ${km} км па прамой`,
+      "stare": "Спакайней, чым на Długi Targ: касцёл Святой Кацярыны, Вялікі млын і Ратуша Старога Горада, а побач — Gdańsk Główny.",
+      "przedmiescie": "Нацыянальны музей са «Страшным судом» Мемлінга і ціхія вуліцы на поўдзень ад Główne Miasto.",
+      "dolne": "Былы рабочы квартал за Motława: адноўленыя камяніцы, цэнтр сучаснага мастацтва Łaźnia і старыя ўмацаванні ля вады. Варта, калі ёсць лішняя гадзіна.",
+      "westerplatte": "Тут 1 верасня 1939 года пачалася Другая сусветная вайна: вартоўня, руіны казармаў і помнік абаронцам. Далекавата ад цэнтра.",
+      "politechnika": "Гістарычны гмах Політэхнікі 1904 года і зялёны кампус паміж Wrzeszcz і цэнтрам.",
+      "centrum": "Усё пешшу: славутасці, кавярні, вакзал і SKM. Даражэй, і ўвечары бывае шумна.",
+      "nowe-ogrody": "Новыя дамы ў 10–15 хвілінах пешшу ад Główne Miasto і вакзала; цішэй, чым у самым цэнтры.",
+      "dlugie-ogrody": "Праз Motława ад Główne Miasto: да славутасцяў пешшу, а ўвечары цішэй.",
+      "kartuska": "Уздоўж вуліцы Kartuska ходзяць трамваі: да Główne Miasto некалькі прыпынкаў, жыллё звычайна танней, чым у цэнтры.",
+      "siedlce": "Жылы раён побач з цэнтрам: трамвай на Kartuska або 20–25 хвілін пешшу.",
+      "powstancow": "Спакойныя жылыя вуліцы на схіле над Kartuska: да трамвая ў цэнтр — некалькі хвілін.",
+      "chelm": "Жылы раён на ўзгорку з трамваямі ў цэнтр; побач пройдзе будучая лінія PKM Południe.",
+      "orunia-gorna": "Новыя кварталы ля будучых прыпынкаў PKM Południe. Калі лінію адкрыюць (мэта — 2030 год), да цэнтра будзе некалькі хвілін цягніком.",
+      "wrzeszcz": "Крамы, кавярні і Galeria Bałtycka, а SKM побач: некалькі хвілін да Gdańsk Główny і каля чвэрці гадзіны да Sopot.",
+      "przymorze": "Кварталы каля SKM і трамвая: да мора можна дайсці пешшу, да Sopot і цэнтра — цягніком.",
+      "sopot-west": "Па другі бок чыгункі ад Monciak: цішэй і звычайна танней, а да мора 10–15 хвілін пешшу.",
+      "wzgorze": "Спакойны раён на ўзгорку каля станцыі SKM: да цэнтра Gdyni адзін прыпынак, да Sopot — некалькі.",
+    },
+    "stop": {
+      "tag": "Станцыя",
+      "planned": "Плануецца",
+      "skm": "Цягнікі SKM злучаюць Гданьск, Сопат і Гдыню.",
+      "pkm": "Цягнікі PKM ідуць ад Gdańsk Wrzeszcz праз аэрапорт.",
+      "change": "Тут перасадка паміж SKM і цягнікамі да аэрапорта.",
+      "plan": "PKM Południe — запланаваная лінія: цягнікі тут яшчэ не ходзяць, мэта — 2030 год. Месца прыпынку на карце прыблізнае.",
+      "planFrom": "Адсюль пачнецца запланаваная лінія PKM Południe; мэта — 2030 год.",
+    },
+    "resident": {
+      "title": "Jestem z Gdańska",
+      "lead": "Картка жыхара: гарадскія прапановы і транспартныя магчымасці. Білеты, льготы і ўмовы правер на афіцыйным сайце.",
+      "openOfficial": (name: string) => `Адкрыць афіцыйны сайт: ${name}`,
+    },
+  },
+  "en": {
+    "wheel": {
+      "label": "Guide sections",
+    },
+    "tab": {
+      "airport": "Airport",
+      "transport": "Transport",
+      "city": "City map",
+      "food": "Food & pay",
+    },
+    "head": {
+      "airport": "To and from the airport",
+      "transport": "Getting around",
+      "city": "What’s where in the city",
+      "food": "Food and payment",
+    },
+    "sources": {
+      "title": "Official links",
+    },
+    "link": {
+      "failed": (url: string) => `Could not open the page. Its address: ${url}`,
+    },
+    "u": {
+      "aboutMin": (n: number) => `about ${n} min`,
+      "everyWeekdays": (n: number) => `every ${n} min on weekdays`,
+      "hourly": "hourly",
+      "aboutHourly": "about hourly",
+    },
+    "sr": {
+      "bus": "Bus",
+      "night": "Night bus",
+      "train": "Train",
+    },
+    "air": {
+      "dirLabel": "Direction",
+      "dirFrom": "From the airport",
+      "dirTo": "To the airport",
+      "from": {
+        "s1": {
+          "title": "Leave the terminal",
+          "text": "Bus stops are across from the terminal, next to car park P1. A covered walkway leads to the train station Gdańsk Port Lotniczy.",
+          "stop01": "Port Lotniczy 01 — to the centre",
+          "stop02": "Port Lotniczy 02 — to Wrzeszcz",
+        },
+      },
+      "to": {
+        "s1": {
+          "title": "Get to your stop",
+          "text": "Bus 210 leaves the centre from the stop Dworzec Główny 10 on Podwale Grodzkie street; bus 110 leaves from Gdańsk Wrzeszcz.",
+        },
+      },
+      "s2": {
+        "title": "Pick your ride",
+      },
+      "s3": {
+        "title": "Get a ticket",
+      },
+      "ticket": {
+        "bus": {
+          "title": "Bus: a ZTM ticket",
+          "where": "Buy it in the Jakdojade or FALA app, or pay by card at the FALA device on board.",
+        },
+        "train": {
+          "title": "Train: a separate rail ticket",
+          "where": "The city ZTM ticket is not valid on the train. Buy a rail ticket at the platform machine or in the Polregio, Jakdojade or FALA app.",
+        },
+      },
+      "map": "PKM train to Gdańsk Wrzeszcz, then SKM to the centre; buses run into the city too.",
+      "mapGo": "How to get to the city",
+    },
+    "ride": {
+      "110": {
+        "from": "To Gdańsk Wrzeszcz",
+        "to": "From Gdańsk Wrzeszcz",
+        "also": "Bus 120 runs between the airport and Łostowice Świętokrzyska.",
+      },
+      "210": {
+        "from": "To the city centre",
+        "to": "From the city centre",
+      },
+      "n3": {
+        "from": "At night: centre and Wrzeszcz",
+        "to": "At night: from the centre and Wrzeszcz",
+        "when": "every night, 23:00 – 04:00",
+        "toCentre": "From Port Lotniczy 01 at 23:15, 00:06, 01:15 and on; about 50 min.",
+        "toWrzeszcz": "From Port Lotniczy 02; about 20 min.",
+        "route": "Dworzec Główny ⇄ airport ⇄ Gdańsk Wrzeszcz. It does not go to Sopot or Gdynia.",
+      },
+      "train": {
+        "from": "Train to Gdańsk Wrzeszcz",
+        "to": "Train from Gdańsk Wrzeszcz",
+        "change": "Direct trains to Gdańsk Główny exist, but more often you change at Gdańsk Wrzeszcz: from platform 3 take the SKM towards the centre.",
+        "line": "Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa. Direct trains between Gdańsk Główny and the airport exist, but more often you change at Gdańsk Wrzeszcz.",
+        "operator": "POLREGIO. The SKM does not serve the airport station.",
+      },
+    },
+    "row": {
+      "stop": "Stop",
+      "firstLast": "First and last",
+      "sunday": "On Sundays",
+      "centreStops": "Stops in the centre",
+      "also": "Also",
+      "route": "Route",
+      "toCentre": "To the centre",
+      "toWrzeszcz": "To Wrzeszcz",
+      "operator": "Operator",
+    },
+    "tr": {
+      "modes": "What to ride",
+      "ztm": {
+        "title": "Buses and trams",
+        "meta": "ZTM · around Gdańsk",
+        "text": "The city’s main transport, also serving neighbouring communes. Sopot and Gdynia run their own ZKM networks. One shared fare for the whole area is kept by the MZKZG union: its tickets are valid in Gdańsk and in the neighbouring towns.",
+      },
+      "skm": {
+        "title": "SKM train",
+        "meta": "To Sopot and Gdynia",
+        "text": "The main line Gdynia – Sopot – Gdańsk. On weekdays trains run roughly every 10–15 minutes; exact times are in the timetable.",
+        "warn": "ZTM single tickets are not valid on trains. Take an MZKZG ticket “with trains” or an SKM ticket.",
+      },
+      "rail": {
+        "title": "POLREGIO trains",
+        "meta": "Airport, Malbork and beyond",
+        "text": "POLREGIO runs the PKM line to the airport (Gdańsk Wrzeszcz – Gdańsk Port Lotniczy – Osowa) and regional trains to Malbork, Słupsk and Kartuzy. Timetable and tickets: polregio.pl.",
+      },
+      "buyLabel": "Where to buy",
+      "buy": {
+        "jakdojade": {
+          "title": "Jakdojade",
+          "text": "Trip planner and tickets: the Tricity and beyond.",
+        },
+        "fala": {
+          "title": "FALA",
+          "text": "Gdańsk, metropolitan and rail tickets in one system.",
+        },
+        "kompas": {
+          "title": "SKM KomPas",
+          "text": "The SKM app: the train timetable offline for three weeks.",
+        },
+      },
+      "residents": "For Gdańsk residents",
+    },
+    "city": {
+      "caption": "An illustrated map: stations and zones stand where they are, but the drawing is approximate. Not for navigation.",
+      "get": "How to get there",
+      "summer": "In summer, beach services run more often.",
+    },
+    "place": {
+      "glowne": "The tourist heart of Gdańsk on the Motława river: Długa and Długi Targ streets, the Neptune Fountain, the Town Hall, St Mary’s Church and the Crane.",
+      "oliwa": "The Cistercian cathedral with its famous organ (concerts; an international organ festival in July and August), Adam Mickiewicz Park and the largest zoo in Poland by area.",
+      "brzezno": "The most popular city beach.",
+      "sopot": "The resort centre: Monte Cassino street (Monciak) leads down to the sea and the pier.",
+      "gdynia": "From the station along 10 Lutego and Świętojańska to Kościuszko Square, the South Pier and the museum ships.",
+    },
+    "get": {
+      "glowne": "about 10 min on foot from Gdańsk Główny",
+      "wrzeszcz": "SKM or train to Gdańsk Wrzeszcz",
+      "oliwa": {
+        "tram": "tram 5, also 6",
+        "skm": "SKM to Gdańsk Oliwa",
+      },
+      "brzezno": "tram 3 to Brzeźno Dom Zdrojowy",
+      "westerplatte": "bus from Gdańsk Główny or, in summer, a boat from the centre",
+    },
+    "food": {
+      "deliveryLabel": "Food delivery",
+      "delivery": {
+        "lead": "All five services deliver across Gdańsk. Pick a way to pay to see who takes it.",
+      },
+      "pay": "Way to pay",
+      "unconfirmed": "not confirmed officially",
+      "bolt": {
+        "note": "cash on delivery",
+      },
+      "note": "A method missing from a service means its official pages do not confirm it — not that it is refused.",
+      "city": "Paying around town",
+      "cards": {
+        "title": "Cards and cash",
+        "meta": "Visa, Mastercard, złoty",
+        "text": "Contactless Visa and Mastercard are the main way to pay for delivery and in shops. Cash in złoty is accepted only where it is clearly marked. There is no official promise that cards or cash work everywhere: the accepted methods are shown at the terminal and at the till.",
+      },
+      "blik": {
+        "title": "BLIK",
+        "meta": "Polish mobile payment",
+        "need": "You need an account at a participating Polish bank and the bank’s mobile app.",
+        "online": {
+          "title": "Online",
+          "text": "Enter the one-time six-digit code from the app and confirm.",
+        },
+        "till": {
+          "title": "At the till",
+          "text": "Pay contactless from the app, or type the same code on the terminal.",
+        },
+        "more": "BLIK also sends money to a phone number and withdraws cash at an ATM without a card.",
+      },
+    },
+    "pay": {
+      "any": "Any",
+      "card": "Card",
+      "blik": "BLIK",
+      "cash": "Cash",
+      "apple": "Apple Pay",
+      "google": "Google Pay",
+      "paypal": "PayPal",
+    },
+    "card": {
+      "title": "Gdańska Karta Turysty",
+      "lead": "Gdańsk’s tourist card gives access to museums and other attractions included in the chosen package. A transport ticket can be purchased separately and is not part of the main package. Check current options and terms on the official website.",
+      "brandAlt": "Gdańska Karta Turysty logo",
+      "brandMark": "KT",
+      "openOfficial": (name: string) => `Open official website: ${name}`,
+    },
+    "links": {
+      "airportBuses": "Buses to and from the airport — airport.gdansk.pl",
+      "airportTrains": "Trains to and from the airport — airport.gdansk.pl",
+      "ztmSchedule": "ZTM Gdańsk timetables",
+      "skmSearch": "SKM connection search",
+      "kartaTurysty": "Karta Turysty — official packages and terms",
+      "pysznePayment": "Payment in Pyszne.pl",
+      "blikHow": "How to use BLIK — blik.com",
+    },
+    "map": {
+      "label": "Map of the Tricity",
+      "role": "map",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "fit": "Show the whole map",
+      "google": "Open in Google Maps",
+      "layers": "What the map shows",
+      "hint": "Tap a coloured zone, a station or the airport sign to see what it is.",
+      "list": "Zones, stations and the airport as a list",
+      "listMeta": (visit: number, stay: number) => `${visit} to visit, ${stay} to stay`,
+    },
+    "layer": {
+      "visit": "Places to visit",
+      "stay": "Good base to stay",
+      "rail": "SKM and PKM trains",
+      "plan": "Planned line",
+    },
+    "zone": {
+      "stop": (name: string, km: string) => `${name}: ${km} km in a straight line`,
+      "stare": "Calmer than Długi Targ: St Catherine’s Church, the Great Mill and the Old Town Hall, with Gdańsk Główny next door.",
+      "przedmiescie": "The National Museum with Memling’s Last Judgment and quiet streets south of Główne Miasto.",
+      "dolne": "A former working-class quarter across the Motława: restored houses, the Łaźnia contemporary art centre and old fortifications by the water. Worth it if you have an hour to spare.",
+      "westerplatte": "Where the Second World War began on 1 September 1939: a guardhouse, the ruined barracks and the defenders’ monument. A fair way from the centre.",
+      "politechnika": "The historic main building of the University of Technology (1904) and its green campus between Wrzeszcz and the centre.",
+      "centrum": "Everything on foot: sights, cafés, the station and SKM. Pricier, and it can be loud in the evening.",
+      "nowe-ogrody": "New buildings 10–15 minutes on foot from Główne Miasto and the station; quieter than the very centre.",
+      "dlugie-ogrody": "Across the Motława from Główne Miasto: the sights are a walk away, and evenings are quieter.",
+      "kartuska": "Trams run along Kartuska street: Główne Miasto is a few stops away, and rooms are usually cheaper than in the centre.",
+      "siedlce": "A residential district next to the centre: the tram on Kartuska, or 20–25 minutes into town on foot.",
+      "powstancow": "Quiet residential streets on the slope above Kartuska: a few minutes to the tram into town.",
+      "chelm": "A residential district on the hill with trams into town; the planned PKM Południe line will pass close by.",
+      "orunia-gorna": "New neighbourhoods by the future PKM Południe stops. Once the line opens (target 2030), the centre will be a few minutes away by train.",
+      "wrzeszcz": "Shops, cafés and Galeria Bałtycka, with SKM close by: a few minutes to Gdańsk Główny and about a quarter of an hour to Sopot.",
+      "przymorze": "Blocks near SKM and the tram: the sea is a walk away, Sopot and the centre a train ride.",
+      "sopot-west": "On the other side of the railway from Monciak: quieter and usually cheaper, with the sea 10–15 minutes on foot.",
+      "wzgorze": "A calm hillside area by the SKM station: one stop to central Gdynia, a few to Sopot.",
+    },
+    "stop": {
+      "tag": "Station",
+      "planned": "Planned",
+      "skm": "SKM trains link Gdańsk, Sopot and Gdynia.",
+      "pkm": "PKM trains run from Gdańsk Wrzeszcz via the airport.",
+      "change": "Change here between SKM and the airport trains.",
+      "plan": "PKM Południe is a planned line: no trains run here yet, the target is 2030. The stop’s place on the map is approximate.",
+      "planFrom": "The planned PKM Południe line will start here; the target is 2030.",
+    },
+    "resident": {
+      "title": "Jestem z Gdańska",
+      "lead": "The resident card offers city benefits and transport-related services. Check current tickets, eligibility and terms on the official website.",
+      "openOfficial": (name: string) => `Open official website: ${name}`,
+    },
+  },
+};

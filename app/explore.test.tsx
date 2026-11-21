@@ -10,18 +10,18 @@ import Explore from "./(tabs)/explore";
 import { createServices } from "../controllers/createServices";
 import { tokens } from "../components/design-tokens";
 import { flatStyle, layoutWith } from "../test/render-helpers";
+import { expectA11yHidden } from "../test/render-helpers";
 
 describe("Explore paper grain (G06.10.e)", () => {
   test("the calm surface renders the grain layer over the unchanged paper", async () => {
-    renderRouter(
+    await renderRouter(
       { _layout: layoutWith(createServices({})), "(tabs)/explore": Explore },
       { initialUrl: "/explore" },
     );
     expect(await screen.findByTestId("screen-Explore")).toBeTruthy();
-    // The grain is in the render tree but never in the a11y tree — the
-    // default query (which walks the accessibility tree) misses it.
-    expect(screen.queryByTestId("paper-grain")).toBeNull();
-    expect(screen.getByTestId("paper-grain", { includeHiddenElements: true })).toBeTruthy();
+    // The grain is in the render tree but never in the a11y tree — the shared
+    // helper pins the a11y-hidden props (test/render-helpers.tsx).
+    expectA11yHidden(screen.getByTestId("paper-grain", { includeHiddenElements: true }));
     expect(flatStyle(screen.getByTestId("screen-Explore")).backgroundColor).toBe(tokens.colorPaper);
     expect(screen.getByText("KUDY")).toBeTruthy();
     // The content above the grain: the nearby link is reachable.
@@ -33,7 +33,7 @@ describe("Explore paper grain (G06.10.e)", () => {
     const previous = process.env.EXPO_PUBLIC_DEMO_MODE;
     process.env.EXPO_PUBLIC_DEMO_MODE = "1";
     try {
-      renderRouter(
+      await renderRouter(
         { _layout: layoutWith(createServices({})), "(tabs)/explore": Explore },
         { initialUrl: "/explore" },
       );
@@ -50,7 +50,7 @@ describe("Explore paper grain (G06.10.e)", () => {
     const previous = process.env.EXPO_PUBLIC_DEMO_MODE;
     process.env.EXPO_PUBLIC_DEMO_MODE = "0";
     try {
-      renderRouter(
+      await renderRouter(
         { _layout: layoutWith(createServices({})), "(tabs)/explore": Explore },
         { initialUrl: "/explore" },
       );
@@ -68,7 +68,7 @@ describe("Explore paper grain (G06.10.e)", () => {
     try {
       const services = createServices({});
       services.uiLocale.set("uk");
-      renderRouter(
+      await renderRouter(
         { _layout: layoutWith(services), "(tabs)/explore": Explore },
         { initialUrl: "/explore" },
       );

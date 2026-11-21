@@ -19,6 +19,7 @@ import { placeDetailStrings } from '../controllers/place/placeDetailController.t
 import { nearbyStrings } from '../controllers/nearby/nearbySurfaceController.ts';
 import { offerStrings } from '../controllers/commerce/commerceController.ts';
 import { feedbackStrings } from '../controllers/useFeedbackController.ts';
+import { ABOUT_CITY_STRINGS } from '../components/about-city-strings.generated.ts';
 
 const CATALOGS = {
   'native.chrome': () => uiStrings('be'),
@@ -28,6 +29,9 @@ const CATALOGS = {
   'native.nearby': () => nearbyStrings('be'),
   'native.offer': () => offerStrings('be'),
   'native.feedback': () => feedbackStrings('be'),
+  // Issue #200/#252: the aboutCity guide's words live in the generated
+  // be+en projection; the be catalogue mirrors the canonical be records.
+  'native.aboutCity': () => ABOUT_CITY_STRINGS.be,
 };
 
 function leaf(obj, path) {

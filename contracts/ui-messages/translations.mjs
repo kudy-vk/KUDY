@@ -1,4 +1,4 @@
-// G21.25 (issue #558, criterion 1) — the per-locale translation-set contract
+// G21.25 (2026-10-03-single-source-translations.md — G21.25, criterion 1) — the per-locale translation-set contract
 // (contracts/ui-messages/translations/<locale>.json) and its checker. One
 // record per translated canonical message: the locale's message value/forms,
 // the reviewedSourceHash pinning exactly the reviewed source-record version,
@@ -100,7 +100,7 @@ export function checkUiMessageTranslations(doc, sourceDoc, allowedLocales) {
           }
         }
       }
-      // G21.27 (issue #566) — terminology provenance: the trace a translator
+      // G21.27 (2026-10-03-single-source-translations.md — G21.27) — terminology provenance: the trace a translator
       // records when uncertain; the per-kind completeness rule is shared with
       // the glossary checker (terminologyTraceErrors below).
       errors.push(...terminologyTraceErrors(record.terminology, `${path}.terminology`));

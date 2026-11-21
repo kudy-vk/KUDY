@@ -4,5 +4,7 @@
     "strict": true,
     "allowImportingTsExtensions": true
   },
-  "exclude": ["web", "services", "core", "supabase", "node_modules", "babel.config.js", "metro.config.js", "jest.config.js", "android", "ios"]
+  "exclude": ["web", "services", "core", "supabase", "node_modules", "babel.config.js", "metro.config.js", "jest.config.js",
+    "test/worklets-jest-stub.js",
+    "test/jest-resolver.js", "android", "ios"]
 }

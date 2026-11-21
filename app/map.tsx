@@ -32,6 +32,7 @@ import { ScaledText } from "../components/scaled-text";
 import { uiStrings } from "../components/ui-strings";
 import { darkTokens, tokens, type ThemeTokens } from "../components/design-tokens";
 import { useThemeStyles } from "../components/theme";
+import { ScreenSurface } from "../components/screen-surface";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: { backgroundColor: palette.colorPaper },
@@ -262,7 +263,7 @@ export default function Map() {
   // location guard (the composition root owns both — 19 §4.2).
   const binding = useMemo(() => services.nearby?.create(), [services.nearby]);
   const { surface, locationView } = useNearbySurface(binding);
-  // Issue #523: the chrome words read the UI-locale switch (the #305 store,
+  // The chrome words read the UI-locale switch (the G14.04.d store,
   // the same useUiLocale subscription the catalog row and My KUDY hold) — the
   // binding's locale is the content-display preference (be first), so without
   // the catalog service the chrome stuck to Belarusian. The switch re-renders
@@ -284,11 +285,11 @@ export default function Map() {
     locationView,
   );
   const note = locationNote(locationView, strings);
-  // UX 02 (issue #348): the top inset clears the status bar and notch with
-  // the native header off (AC4). APR-05 (#810): the bottom inset clears the navigation bar.
+  // UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the top inset clears the status bar and notch with
+  // the native header off (AC4). APR-05 (android-play-readiness/README.md — APR-05): the bottom inset clears the navigation bar.
   const insets = useSafeAreaInsets();
   return (
-    <View
+    <ScreenSurface
       style={[styles.screen, {
         flex: 1,
         padding: tokens.spaceL,
@@ -297,16 +298,16 @@ export default function Map() {
       }]}
       testID="screen-Map"
     >
-      {/* UX 02 (issue #348): the Nearby surface gains its one back element —
+      {/* UX 02 (screens-and-transitions.md — Агульныя правілы пераходаў): the Nearby surface gains its one back element —
           it never had one (AC2); the label is hosted by the shared
-          component's <Text> (the #344 class guard). */}
+          component's <Text> (the bare-string Pressable class guard). */}
       <BackButton label={uiStrings(uiLocale).back} testID="btn-map-back" />
       <GuideHintMount
         binding={services.hints}
         locale={uiLocale}
         onOpen={(routeId) => router.push(`/route/${routeId}`)}
       />
-      {/* UX 01 (issue #347): the offer list scrolls — the last card is
+      {/* UX 01: the offer list scrolls — the last card is
           reachable beyond the fold, never cut by the screen edge. */}
       <ScrollView testID="scroll-nearby">
         <ScaledText style={styles.title}>{strings.title}</ScaledText>
@@ -352,6 +353,6 @@ export default function Map() {
           </>
         )}
       </ScrollView>
-    </View>
+    </ScreenSurface>
   );
 }

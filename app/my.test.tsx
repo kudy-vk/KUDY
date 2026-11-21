@@ -1,11 +1,11 @@
-// UX 01 (issue #347) — the KUDY surface render suite (the display name since
+// UX 01 — the KUDY surface render suite (the display name since
 // issue #426): a finished-run
 // history of ten sessions renders inside the surface's FlatList — the
 // list is reachable by scroll, never cut by the fold. The rows come from a
 // fake session-history port: the screen renders what the durable zone keeps
 // and invents nothing (the G06.04 controller suite covers the states; this
 // suite covers only the scroll surface, implementation-rules 1 — removing
-// the FlatList drops the testID and fails). G22.06 (issue #611): the port
+// the FlatList drops the testID and fails). G22.06 (2026-10-04-bounded-work.md — G22.06): the port
 // serves pages, and the list windows the loaded rows instead of mounting the
 // whole page at once.
 import { describe, expect, test } from "@jest/globals";
@@ -35,6 +35,7 @@ import { uiStrings } from "../components/ui-strings";
 import { COMPLETE_UI_LOCALES, OPEN_UI_LOCALES } from "../contracts/ui-locales";
 import { CATALOG_FIXTURES, flatStyle, layoutWith, serve, sha256 } from "../test/render-helpers";
 import type { SessionHistoryCursor, SessionHistoryPage, SessionHistorySummary } from "../services/db/types";
+import { expectA11yHidden } from "../test/render-helpers";
 
 const finishedSummary = (n: number): SessionHistorySummary => ({
   sessionId: `walk-render-${n}`,
@@ -57,7 +58,7 @@ describe("KUDY surface (UX 01)", () => {
   test("the finished history scrolls: ten sessions render inside the ScrollView", async () => {
     const rows = Array.from({ length: 10 }, (_, i) => finishedSummary(i + 1));
     const services = createServices({ sessionHistory: historyPort(rows) });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("scroll-my")).toBeTruthy();
     for (const row of rows) {
       expect(screen.getByTestId(`my-session-${row.sessionId}`)).toBeTruthy();
@@ -76,27 +77,27 @@ describe("KUDY surface (UX 01)", () => {
       { ...finishedSummary(3), locale: "unknown-code" },
     ];
     const services = createServices({ sessionHistory: historyPort(rows) });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect((await screen.findByTestId("my-session-locale-walk-render-1")).props.children).toBe("Українська");
     expect(screen.getByTestId("my-session-locale-walk-render-2").props.children).toBe("English");
     expect(screen.getByTestId("my-session-locale-walk-render-3").props.children).toBe("unknown-code");
   });
 
   test("the surface's title renders «KUDY» in the display locale", async () => {
-    renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
     expect(screen.getByText("KUDY")).toBeTruthy();
   });
 });
 
-// G22.06 (issue #611): the paged history surface — the FlatList windows the
+// G22.06 (2026-10-04-bounded-work.md — G22.06): the paged history surface — the FlatList windows the
 // loaded page (the visible rows mount, never the whole page at once) and the
 // load-more walks the store's cursor through the real screen path.
 describe("KUDY paged history (G22.06)", () => {
   test("history_list_renders_visible_rows: a full page of 50 windows its rows", async () => {
     const rows = Array.from({ length: 50 }, (_, i) => finishedSummary(i + 1));
     const services = createServices({ sessionHistory: historyPort(rows) });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-history-section")).toBeTruthy();
     expect(screen.getByTestId("my-session-walk-render-1")).toBeTruthy();
     // the window: a full page mounts some rows, never all 50 at once —
@@ -124,7 +125,7 @@ describe("KUDY paged history (G22.06)", () => {
         },
       },
     });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     await screen.findByTestId("my-history-section");
     // A real scroll arms RN's internal metrics before it calls the list's
     // onEndReached; the jest surface gets no layout events, so the test
@@ -132,7 +133,7 @@ describe("KUDY paged history (G22.06)", () => {
     // onEndReached → store.loadMore → port path is what is under test here,
     // not RN's own metric arming (the controller suite covers the cursor
     // semantics behind it).
-    fireEvent(screen.getByTestId("scroll-my"), "onEndReached", { distanceFromEnd: 0 });
+    await fireEvent(screen.getByTestId("scroll-my"), "onEndReached", { distanceFromEnd: 0 });
     // the appended page went through the real screen → store → FlatList path
     await waitFor(() => {
       const state = services.history?.controller.getState();
@@ -143,7 +144,7 @@ describe("KUDY paged history (G22.06)", () => {
   });
 });
 
-// UX 05 (issue #351): the rows show the catalog's guide title when the
+// UX 05: the rows show the catalog's guide title when the
 // catalog names the route; a route it does not name keeps the raw id — the
 // durable zone's own fact. Removing the lookup (or the fallback) fails one
 // of the two assertions.
@@ -159,26 +160,26 @@ describe("KUDY guide titles (UX 05)", () => {
       catalogSha256: sha256,
       sessionHistory: historyPort(rows),
     });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByText("Гісторыі сукнараў: ад мытні да порта")).toBeTruthy();
     expect(screen.getByText("route-offline")).toBeTruthy();
   });
 });
 
-// UX 07 (issue #353): the loading state shows the shared spinner next to the
+// UX 07 (screens-and-transitions.md — Кантроль покрыцця станаў): the loading state shows the shared spinner next to the
 // «Загрузка…» text — a never-resolving history read holds the surface in
 // loading. Reverting the LoadingIndicator wiring in app/(tabs)/my.tsx turns
 // this red (implementation-rules 1).
 describe("KUDY loading indicator (UX 07)", () => {
   test("the loading state shows the ActivityIndicator next to the text", async () => {
     const services = createServices({ sessionHistory: { listPage: () => new Promise(() => {}) } });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("loading-indicator")).toBeTruthy();
     expect(screen.getByText("Загрузка…")).toBeTruthy();
   });
 });
 
-// G06.05 (issue #280, AC4): a failed history read is not a dead end — the
+// G06.05 (16_delivery_backlog.md — G06.05, AC4): a failed history read is not a dead end — the
 // named retry re-runs the controller's refresh, and a recovered read renders
 // the rows (implementation-rules 1: removing the retry turns this red).
 test("G06.05: the unavailable history offers the named retry and recovers", async () => {
@@ -192,9 +193,9 @@ test("G06.05: the unavailable history offers the named retry and recovers", asyn
     return { live: null, rows, nextCursor: null };
   };
   const services = createServices({ sessionHistory: { listPage } });
-  renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+  await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
   expect(await screen.findByTestId("my-unavailable")).toBeTruthy();
-  fireEvent.press(screen.getByTestId("btn-my-retry"));
+  await fireEvent.press(screen.getByTestId("btn-my-retry"));
   await waitFor(() => expect(screen.getByTestId("my-session-walk-render-1")).toBeTruthy());
   expect(calls).toBe(3);
 });
@@ -204,19 +205,18 @@ test("G06.05: the unavailable history offers the named retry and recovers", asyn
 // Removing the wrapper from the screen turns this red (implementation-rules 1).
 describe("KUDY paper grain (G06.10.e)", () => {
   test("the surface renders the grain layer over the unchanged paper", async () => {
-    renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
-    // The grain is in the render tree but never in the a11y tree — the
-    // default query (which walks the accessibility tree) misses it.
-    expect(screen.queryByTestId("paper-grain")).toBeNull();
-    expect(screen.getByTestId("paper-grain", { includeHiddenElements: true })).toBeTruthy();
+    // The grain is in the render tree but never in the a11y tree — the shared
+    // helper pins the a11y-hidden props (test/render-helpers.tsx).
+    expectA11yHidden(screen.getByTestId("paper-grain", { includeHiddenElements: true }));
     expect(flatStyle(screen.getByTestId("screen-KUDY")).backgroundColor).toBe(tokens.colorPaper);
     // The content above the grain: the history list is mounted.
     expect(screen.getByTestId("scroll-my")).toBeTruthy();
   });
 });
 
-// G14.04.d (issue #305, AC3): the language row — the UI-locale switch the
+// G14.04.d (16_delivery_backlog.md — G14.04.d, AC3): the language row — the UI-locale switch the
 // surface offers (uk-release-scope §4). Pressing uk re-renders the chrome
 // words in place: the same mounted surface keeps its history read count (a
 // restart would re-run the boot read), the section header changes from the
@@ -229,10 +229,10 @@ describe("KUDY language row (G14.04.d)", () => {
     const services = createServices({
       sessionHistory: { listPage: async () => { reads += 1; return { live: null, rows: [], nextCursor: null }; } },
     });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByText("Бягучая прагулка")).toBeTruthy();
     const readsAtStart = reads;
-    fireEvent.press(screen.getByTestId("btn-ui-locale-uk"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-uk"));
     expect(await screen.findByText("Поточна прогулянка")).toBeTruthy();
     expect(screen.queryByText("Бягучая прагулка")).toBeNull();
     // No restart: the switch fired no second boot of the surface's reads.
@@ -245,17 +245,17 @@ describe("KUDY language row (G14.04.d)", () => {
   });
 
   test("the row offers the eight self-named locales and marks the current one", async () => {
-    renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(createServices({})), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
     expect(screen.getByText("Беларуская")).toBeTruthy();
     expect(screen.getByText("English")).toBeTruthy();
     expect(screen.getByText("Українська")).toBeTruthy();
-    // G21.10 (issue #544): the de catalogue landed, the picker derives the
+    // G21.10 (2026-10-03-single-source-translations.md — G21.10): the de catalogue landed, the picker derives the
     // fourth chip from the registry's complete set.
     expect(screen.getByText("Deutsch")).toBeTruthy();
-    // G21.11 (issue #545): the es catalogue lands, the picker derives the
-    // fifth chip the same way; G21.12 (issue #546) adds the sixth, Français;
-    // G21.13 (issue #547) adds the seventh, Čeština; G21.14 (issue #548)
+    // G21.11 (2026-10-03-single-source-translations.md — G21.11): the es catalogue lands, the picker derives the
+    // fifth chip the same way; G21.12 (2026-10-03-single-source-translations.md — G21.12) adds the sixth, Français;
+    // G21.13 (2026-10-03-single-source-translations.md — G21.13) adds the seventh, Čeština; G21.14 (2026-10-03-single-source-translations.md — G21.14)
     // completes the set with the eighth, Svenska.
     expect(screen.getByText("Español")).toBeTruthy();
     expect(screen.getByText("Français")).toBeTruthy();
@@ -267,66 +267,66 @@ describe("KUDY language row (G14.04.d)", () => {
     // the honest-unavailable line renders with no history port behind the
     // surface, so it is the always-present chrome word.
     expect(screen.getByText("Гісторыя недаступная.")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-en"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-en"));
     expect(await screen.findByText("History unavailable.")).toBeTruthy();
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
   });
 
-  test("G21.10 (issue #544): picking de re-renders the honest-unavailable line in German", async () => {
+  test("G21.10 (2026-10-03-single-source-translations.md — G21.10): picking de re-renders the honest-unavailable line in German", async () => {
     // No history port behind the surface: the always-present chrome word
     // carries the language probe (the three-locale test's idiom), German
     // here. The no-restart property is proven by the uk sibling above —
     // the same switch mechanism, one proof is enough.
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-de"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-de"));
     expect(await screen.findByText("Verlauf nicht verfügbar.")).toBeTruthy();
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
     expect(services.uiLocale.current()).toBe("de");
     expect(screen.getByTestId("btn-ui-locale-de").props.accessibilityState).toEqual({ selected: true });
   });
 
-  test("G21.11 (issue #545): the es switch round-trips through the same store", async () => {
+  test("G21.11 (2026-10-03-single-source-translations.md — G21.11): the es switch round-trips through the same store", async () => {
     // The Spanish merge point's own proof, asserted from the store outward:
     // pick es, the current() moves, the Spanish chrome word renders, and the
     // selector marks the es chip. The no-restart property needs no second
     // proof — the uk and de siblings above exercise the same mechanism.
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-es"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-es"));
     expect(services.uiLocale.current()).toBe("es");
     expect(await screen.findByText("El historial no está disponible.")).toBeTruthy();
     expect(screen.getByTestId("btn-ui-locale-es").props.accessibilityState).toEqual({ selected: true });
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
   });
 
-  test("G21.12 (issue #546): picking fr re-renders the honest-unavailable line in French", async () => {
+  test("G21.12 (2026-10-03-single-source-translations.md — G21.12): picking fr re-renders the honest-unavailable line in French", async () => {
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-fr"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-fr"));
     expect(services.uiLocale.current()).toBe("fr");
     expect(screen.getByTestId("btn-ui-locale-fr").props.accessibilityState).toEqual({ selected: true });
   });
 
-  test("G21.13 (issue #547): picking cs re-renders the honest-unavailable line in Czech", async () => {
+  test("G21.13 (2026-10-03-single-source-translations.md — G21.13): picking cs re-renders the honest-unavailable line in Czech", async () => {
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-cs"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-cs"));
     expect(services.uiLocale.current()).toBe("cs");
     expect(await screen.findByText("Historie není dostupná.")).toBeTruthy();
     expect(screen.getByTestId("btn-ui-locale-cs").props.accessibilityState).toEqual({ selected: true });
     expect(screen.queryByText("Гісторыя недаступная.")).toBeNull();
   });
 
-  test("G21.14 (issue #548): picking sv completes the row — the honest-unavailable line renders in Swedish", async () => {
+  test("G21.14 (2026-10-03-single-source-translations.md — G21.14): picking sv completes the row — the honest-unavailable line renders in Swedish", async () => {
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-ui-locale-sv"));
+    await fireEvent.press(screen.getByTestId("btn-ui-locale-sv"));
     expect(services.uiLocale.current()).toBe("sv");
     expect(await screen.findByText("Historiken är inte tillgänglig.")).toBeTruthy();
     expect(screen.getByTestId("btn-ui-locale-sv").props.accessibilityState).toEqual({ selected: true });
@@ -338,25 +338,25 @@ describe("KUDY language row (G14.04.d)", () => {
   // picks), the honest-unavailable word re-renders through the production
   // strings getter, and each chip carries the selected state. The row's wrap
   // layout keeps every chip reachable at phone width and the scaled font; the
-  // scaled words ride ScaledText's canon cap (its own suite). G21.46 (#670):
+  // scaled words ride ScaledText's canon cap (its own suite). G21.46 (G21.42-chinese-language.md — G21.46):
   // the row advertises the OPEN subset — zh is complete but closed, so the
   // walk stays at the eight open codes (its own suite carries the zh pick).
   test("G21.15 (issue #549): the picker walks every advertised catalogue on one mounted surface", async () => {
     const services = createServices({});
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ui-locale")).toBeTruthy();
     expect(screen.getByTestId("my-ui-locale-row").props.style).toEqual(
       expect.objectContaining({ flexWrap: "wrap" }),
     );
     for (const code of OPEN_UI_LOCALES) {
-      fireEvent.press(screen.getByTestId(`btn-ui-locale-${code}`));
+      await fireEvent.press(screen.getByTestId(`btn-ui-locale-${code}`));
       expect(services.uiLocale.current()).toBe(code);
       expect(await screen.findByText(uiStrings(code).historyUnavailable)).toBeTruthy();
       expect(screen.getByTestId(`btn-ui-locale-${code}`).props.accessibilityState).toEqual({
         selected: true,
       });
     }
-    // G21.46 (#670): zh is registered complete and still closed — the row
+    // G21.46 (G21.42-chinese-language.md — G21.46): zh is registered complete and still closed — the row
     // offers the open eight, and the ninth waits for the release flag.
     expect([...COMPLETE_UI_LOCALES]).toContain("zh");
     expect(screen.queryByTestId("btn-ui-locale-zh")).toBeNull();
@@ -391,15 +391,15 @@ describe("KUDY own ratings (G16.03)", () => {
       sessionHistory: historyPort([]),
       feedback: { driver, sync },
     });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My, feedback: FeedbackForm }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My, feedback: FeedbackForm }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ratings-section")).toBeTruthy();
     expect(screen.getByTestId("my-rating-0")).toBeTruthy();
     expect(screen.getByTestId("my-rating-state-0").props.children).toBe(feedbackStrings("be").stateSent);
     // The row's facts line keeps the bound identity in the canon order — the
-    // content locale, then the pinned version (issue #598).
+    // content locale, then the pinned version.
     const be = feedbackStrings("be");
     expect(screen.getByText(`${be.ratingOf(4)} · ${be.targetLine("be", "1")}`)).toBeTruthy();
-    fireEvent.press(screen.getByTestId("btn-rating-edit-0"));
+    await fireEvent.press(screen.getByTestId("btn-rating-edit-0"));
     expect(await screen.findByTestId("screen-Feedback")).toBeTruthy();
     // The form opened bound to the row's target: the acknowledged star comes
     // back preselected (the person's own choice, not a default).
@@ -419,7 +419,7 @@ describe("KUDY own ratings (G16.03)", () => {
       sessionHistory: historyPort([]),
       feedback: { driver, sync },
     });
-    renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
+    await renderRouter({ _layout: layoutWith(services), "(tabs)/my": My }, { initialUrl: "/my" });
     expect(await screen.findByTestId("my-ratings-empty")).toBeTruthy();
   });
 });
