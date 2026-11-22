@@ -34,8 +34,11 @@ const TIME_CAP_WORDS = {
   da: { 60: 'Op til 1 time', 120: 'Op til 2 timer', 240: 'Op til 4 timer' },
   nl: { 60: 'Tot 1 uur', 120: 'Tot 2 uur', 240: 'Tot 4 uur' },
   pt: { 60: 'Até 1 h', 120: 'Até 2 h', 240: 'Até 4 h' },
+  it: { 60: "Fino a un'ora", 120: 'Fino a due ore', 240: 'Mezza giornata' },
+  fi: { 60: 'Enintään tunti', 120: 'Enintään kaksi tuntia', 240: 'Puoli päivää' },
+  lt: { 60: 'Iki valandos', 120: 'Iki dviejų valandų', 240: 'Pusė dienos' },
 };
-const TIME_CAP_BASE = { be: (v) => `Да ${v} хв`, en: (v) => `Up to ${v} min`, uk: (v) => `До ${v} хв`, de: (v) => `Bis zu ${v} Min.`, es: (v) => `Hasta ${v} min`, fr: (v) => `Jusqu'à ${v} min`, cs: (v) => `Do ${v} min`, sv: (v) => `Upp till ${v} min`, zh: (v) => `\u6700\u591A${v}\u5206\u949F`, nb: (v) => `Inntil ${v} min`, pl: (v) => `Do ${v} min`, da: (v) => `Op til ${v} min`, nl: (v) => `Tot ${v} min`, pt: (v) => `Até ${v} min` };
+const TIME_CAP_BASE = { be: (v) => `Да ${v} хв`, en: (v) => `Up to ${v} min`, uk: (v) => `До ${v} хв`, de: (v) => `Bis zu ${v} Min.`, es: (v) => `Hasta ${v} min`, fr: (v) => `Jusqu'à ${v} min`, cs: (v) => `Do ${v} min`, sv: (v) => `Upp till ${v} min`, zh: (v) => `\u6700\u591A${v}\u5206\u949F`, nb: (v) => `Inntil ${v} min`, pl: (v) => `Do ${v} min`, da: (v) => `Op til ${v} min`, nl: (v) => `Tot ${v} min`, pt: (v) => `Até ${v} min`, it: (v) => `Fino a ${v} min`, fi: (v) => `Enintään ${v} min`, lt: (v) => `Iki ${v} min` };
 
 const SINGLE_NUMBER_IDS = ['stopsCount', 'freeStopsCount', 'heardCount', 'stopNumber', 'sizeMb', 'durationMinutes'];
 

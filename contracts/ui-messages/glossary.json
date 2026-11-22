@@ -158,6 +158,39 @@
             "reason": "pt трымае Guia (Guias →, Guia, Abrir a descrição do guia) — стандартны партугальскі тэрмін аўдыёгіда",
             "date": "2026-11-21"
           }
+        },
+        "it": {
+          "term": "guida",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "guida",
+            "locator": "translations/it.json#native.nearby.guideLabel",
+            "reason": "it трымае guida (Guide →, Guida, Apri la descrizione della guida) — стандартны італьянскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "opas",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "opas",
+            "locator": "translations/fi.json#native.nearby.guideLabel",
+            "reason": "fi трымае opas (Oppaat →, Opas, Avaa oppaan kuvaus) — уласнае фінскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "gidas",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "gidas",
+            "locator": "translations/lt.json#native.nearby.guideLabel",
+            "reason": "lt трымае gidas (Gidai →, Gidas, Atidaryti gido aprašymą) — уласнае літоўскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -313,6 +346,39 @@
             "reason": "pt трымае paragem / paragens (Paragens: 5, Paragem 3, Paragem seguinte) — натуральны партугальскі тэрмін кропкі маршруту",
             "date": "2026-11-21"
           }
+        },
+        "it": {
+          "term": "tappa",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "tappa",
+            "locator": "translations/it.json#native.chrome.stopsCount",
+            "reason": "it трымае tappa (Tappe: N, Tappa N, Tappa successiva) — звыклае слова кропкі маршруту; дзеянне спыніць тэйзер — Ferma (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "kohde",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kohde",
+            "locator": "translations/fi.json#native.chrome.stopsCount",
+            "reason": "fi трымае kohde (Kohteet: N, Kohde N, Seuraava kohde) — звыклае слова кропкі маршруту; дзеянне спыніць тэйзер — Pysäytä (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "sustojimas",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "sustojimas",
+            "locator": "translations/lt.json#native.chrome.stopsCount",
+            "reason": "lt трымае sustojimas (Sustojimai: N, Sustojimas N, Kitas sustojimas) — словаформа кропкі маршруту; дзеянне спыніць тэйзер — Stabdyti (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -466,6 +532,39 @@
             "locator": "translations/pt.json#native.chrome.currentWalk",
             "reason": "walk → passeio паўсюль у pt-наборы (Passeio, Passeio atual, Histórico de passeios, Terminar passeio)",
             "date": "2026-11-21"
+          }
+        },
+        "it": {
+          "term": "passeggiata",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "passeggiata",
+            "locator": "translations/it.json#native.chrome.currentWalk",
+            "reason": "walk → passeggiata ўсюды ў it-наборы (Passeggiata, Passeggiata in corso, Storia delle passeggiate)",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "kävely",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kävely",
+            "locator": "translations/fi.json#native.chrome.currentWalk",
+            "reason": "walk → kävely ўсюды ў fi-наборы (Kävely, Käynnissä oleva kävely, Kävelyhistoria)",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "pasivaikščiojimas",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pasivaikščiojimas",
+            "locator": "translations/lt.json#native.chrome.currentWalk",
+            "reason": "walk → pasivaikščiojimas ўсюды ў lt-наборы (Pasivaikščiojimas, Dabartinis pasivaikščiojimas, Pasivaikščiojimų istorija)",
+            "date": "2026-11-22"
           }
         }
       }
@@ -621,6 +720,39 @@
             "reason": "адзін корань transferir/transferência (Transferir, A transferência falhou, não transferido) — стандартны партугальскі UI-тэрмін",
             "date": "2026-11-21"
           }
+        },
+        "it": {
+          "term": "scaricare",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "scaricare",
+            "locator": "translations/it.json#native.preview.label.download",
+            "reason": "адзін корань scaricare/scaricamento (Scarica, Download non riuscito, La guida non è scaricata.) — звыклы італьянскі корань спампоўкі",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "ladata",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ladata",
+            "locator": "translations/fi.json#native.preview.label.download",
+            "reason": "адзін корань ladata/lataus (Lataa, Lataus epäonnistui., Opasta ei ole ladattu.) — звыклы фінскі корань спампоўкі",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "atsisiųsti",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "atsisiųsti",
+            "locator": "translations/lt.json#native.preview.label.download",
+            "reason": "адзін корань atsisiųsti/atsiuntimas (Atsisiųsti, Atsiuntimas nepavyko., Gidas neatsisiųstas.) — звыклы літоўскі корань спампоўкі",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -773,6 +905,39 @@
             "locator": "translations/pt.json#native.chrome.catalogUnavailable",
             "reason": "indisponível / temporariamente indisponível ў радках стану (Catálogo indisponível, …) — стандартны партугальскі UI-зварот",
             "date": "2026-11-21"
+          }
+        },
+        "it": {
+          "term": "non disponibile",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "non disponibile",
+            "locator": "translations/it.json#native.chrome.catalogUnavailable",
+            "reason": "non disponibile / temporaneamente non disponibile ў радках стану (Catalogo non disponibile, Catalogo temporaneamente non disponibile)",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "ei saatavilla",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ei saatavilla",
+            "locator": "translations/fi.json#native.chrome.catalogUnavailable",
+            "reason": "ei saatavilla / ei ole saatavilla ў радках стану (Luettelo ei ole saatavilla, Luettelo ei ole tilapäisesti saatavilla)",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "neprieinama",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "neprieinama",
+            "locator": "translations/lt.json#native.chrome.catalogUnavailable",
+            "reason": "neprieinama / laikinai neprieinama ў радках стану (Katalogas neprieinamas, Katalogas laikinai neprieinamas)",
+            "date": "2026-11-22"
           }
         }
       }
@@ -928,6 +1093,39 @@
             "reason": "purchase → compra / comprar (Comprar, Compra necessária, Comprado · transferência necessária, Disponível após a compra)",
             "date": "2026-11-21"
           }
+        },
+        "it": {
+          "term": "acquisto",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "acquisto",
+            "locator": "translations/it.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → acquisto / acquistare (Acquista, È necessario l'acquisto., Acquistato · serve il download, Disponibile dopo l'acquisto)",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "osto",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "osto",
+            "locator": "translations/fi.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → osto / osta (Osta, Osto vaaditaan., Ostettu · lataus tarvitaan, Saatavilla oston jälkeen)",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "pirkimas",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pirkimas",
+            "locator": "translations/lt.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → pirkimas / pirkti (Pirkti, Reikalingas pirkimas., Nupirkta · reikia atsisiųsti, Prieinama po pirkimo)",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1079,6 +1277,39 @@
             "locator": "translations/pt.json#native.run.restoredTitle",
             "reason": "канон без рэстаўрацыйнай метафары (Passeio retomado a partir da sessão guardada), тая самая пабудова be/en/uk/de/es/fr/cs/sv/nb",
             "date": "2026-11-21"
+          }
+        },
+        "it": {
+          "term": "ripresa dalla sessione salvata",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ripresa dalla sessione salvata",
+            "locator": "translations/it.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Passeggiata ripresa dalla sessione salvata), тая самая пабудова be/en/uk/de/es/fr/cs/sv/nb/pl/da/nl/pt",
+            "date": "2026-11-22"
+          }
+        },
+        "fi": {
+          "term": "jatkuu tallennetusta istunnosta",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "jatkuu tallennetusta istunnosta",
+            "locator": "translations/fi.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Kävely jatkuu tallennetusta istunnosta), тая самая пабудова be/en/uk/de/es/fr/cs/sv/nb/pl/da/nl/pt",
+            "date": "2026-11-22"
+          }
+        },
+        "lt": {
+          "term": "pratęstas iš išsaugotos sesijos",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pratęstas iš išsaugotos sesijos",
+            "locator": "translations/lt.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Pasivaikščiojimas pratęstas iš išsaugotos sesijos), тая самая пабудова be/en/uk/de/es/fr/cs/sv/nb/pl/da/nl/pt",
+            "date": "2026-11-22"
           }
         }
       }
