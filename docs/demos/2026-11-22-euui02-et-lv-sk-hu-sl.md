@@ -32,7 +32,7 @@ node --no-warnings --experimental-strip-types --test tools/i18n/privacy-disclosu
 ```
 
 ```output
-ℹ tests 280
-ℹ pass 280
+ℹ tests 368
+ℹ pass 368
 ℹ fail 0
 ```
