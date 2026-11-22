@@ -67,6 +67,25 @@ test('recordOpsError is best-effort: a failing insert, a non-Error throw or a th
   );
 });
 
+test('recordOpsError is bounded: a late-resolving insert answers false at the bound', async () => {
+  const started = Date.now();
+  // a late RESOLVE (50 ms) against a 10 ms bound: the bounded path answers
+  // false at the bound; a reverted (unbounded) attempt would wait for the
+  // late resolve and answer true — the assert below then fails, which keeps
+  // the fail-on-revert guard on the bound itself
+  const lateWinner = new Promise<unknown>((resolve) => {
+    setTimeout(() => resolve('late winner of an unbounded attempt'), 50);
+  });
+  const landed = await recordOpsError(
+    () => ({ unsafe: () => lateWinner }),
+    { endpoint: 'grant', errorCode: 'internal_fault', note: 'grant' },
+    10,
+  );
+  const elapsed = Date.now() - started;
+  assert.equal(landed, false, 'a tag attempt past the bound is dropped, best-effort');
+  assert.ok(elapsed < 1000, `the bound keeps the catch path fast (took ${elapsed} ms)`);
+});
+
 // --- wiring guard: the five catch paths record the tag ---
 
 // Each file's catch path must call recordOpsError exactly this many times,
