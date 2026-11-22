@@ -640,4 +640,58 @@ export const PREVIEW_STRINGS_DATA = {
     "storageExit": "KUDY'de yer aç",
     "storageFullDetail": (mb: number) => `yer yok: ${mb} MB daha gerekiyor`,
   },
+  "ru": {
+    "detail": (detail: { readonly kind: string; readonly count?: number }) => detail.kind === "damaged" ? `пакет повреждён: нужна повторная загрузка` : detail.kind === "missing-files" ? `не хватает файлов: ${detail.count}` : detail.kind === "stale" ? `доступно обновление` : `пакет неполный`,
+    "downloadFailed": "Скачивание не удалось.",
+    "label": {
+      "download": "Скачать",
+      "start": "Начать",
+    },
+    "reason": {
+      "preview#download-unavailable": "Скачивание недоступно в этой сборке.",
+      "preview#not-published": "Гид не опубликован.",
+      "preview#purchase-required": "Требуется покупка.",
+      "preview#storage-unknown": "Хранилище недоступно.",
+      "preview#verify-unavailable": "Проверка недоступна.",
+    },
+    "retry": "Повторить",
+    "storageExit": "Освободить место в KUDY",
+    "storageFullDetail": (mb: number) => `не хватает места: нужно ещё ${mb} МБ`,
+  },
+  "lb": {
+    "detail": (detail: { readonly kind: string; readonly count?: number }) => detail.kind === "damaged" ? `Paket ass beschiedegt: eroflueden emol nees` : detail.kind === "missing-files" ? `Fichiere feelen: ${detail.count}` : detail.kind === "stale" ? `Update ass disponibel` : `Paket ass onkomplett`,
+    "downloadFailed": "Erofluede huet net funktionéiert.",
+    "label": {
+      "download": "Eroflueden",
+      "start": "Starten",
+    },
+    "reason": {
+      "preview#download-unavailable": "Erofluede ass an dësem Build net disponibel.",
+      "preview#not-published": "Guide ass net publizéiert.",
+      "preview#purchase-required": "Kauf néideg.",
+      "preview#storage-unknown": "Späicher net disponibel.",
+      "preview#verify-unavailable": "Kontroll net disponibel.",
+    },
+    "retry": "Nach emol probéieren",
+    "storageExit": "Plaz am KUDY fräimaachen",
+    "storageFullDetail": (mb: number) => `Plaz feelt: nach ${mb} MB néideg`,
+  },
+  "cnr": {
+    "detail": (detail: { readonly kind: string; readonly count?: number }) => detail.kind === "damaged" ? `пакет је оштећен: преузми поново` : detail.kind === "missing-files" ? `недостају фајлови: ${detail.count}` : detail.kind === "stale" ? `ажурирање је доступно` : `пакет је непотпун`,
+    "downloadFailed": "Преузимање није успјело.",
+    "label": {
+      "download": "Преузми",
+      "start": "Почни",
+    },
+    "reason": {
+      "preview#download-unavailable": "Преузимање није доступно у овој верзији.",
+      "preview#not-published": "Водич није објављен.",
+      "preview#purchase-required": "Потребна је куповина.",
+      "preview#storage-unknown": "Складиште није доступно.",
+      "preview#verify-unavailable": "Провера није доступна.",
+    },
+    "retry": "Пробај поново",
+    "storageExit": "Ослободи простор у KUDY",
+    "storageFullDetail": (mb: number) => `нема довољно простора: треба још ${mb} MB`,
+  },
 };

@@ -4,7 +4,7 @@
 // would inline it. The flag names only unregistered codes here (no gated
 // code exists in the real registry until G21.45/G21.46), so the facts must
 // answer with the frozen eight — the same answer the absent-flag case gives.
-process.env.EXPO_PUBLIC_OPEN_UI_LOCALES = 'bogus, ,ru';
+process.env.EXPO_PUBLIC_OPEN_UI_LOCALES = 'bogus, ,aa';
 
 import test from 'node:test';
 import assert from 'node:assert/strict';

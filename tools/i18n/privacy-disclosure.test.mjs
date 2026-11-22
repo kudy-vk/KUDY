@@ -81,6 +81,9 @@ const RETENTION_PROBES = {
   mt: { aggregate: 'numri miġma', retention: '14 xahar' },
   ca: { aggregate: 'xifres agregades', retention: '14 mesos' },
   tr: { aggregate: 'toplu sayılar', retention: '14 ay' },
+  ru: { aggregate: 'агрегированные числа', retention: '14 месяцев' },
+  lb: { aggregate: 'aggregéiert Zuelen', retention: '14 Mount' },
+  cnr: { aggregate: 'агрегирани бројеви', retention: '14 мјесеци' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -278,6 +281,21 @@ const APPDATA_PROBES = {
     ipHash: 'tek yönlü karma',
     ratings: 'seçilen nedenler',
     accessKey: 'erişim anahtarı olarak',
+  },
+  ru: {
+    ipHash: 'однонаправленный хеш IP-адреса',
+    ratings: 'выбранные причины',
+    accessKey: 'как ключ доступа',
+  },
+  lb: {
+    ipHash: 'Hash vun der IP-Adress',
+    ratings: 'gewielte Grënn',
+    accessKey: 'Zougangsschlëssel',
+  },
+  cnr: {
+    ipHash: 'једносмјерни hash IP адресе',
+    ratings: 'изабрани разлози',
+    accessKey: 'као кључ за приступ',
   },
 };
 

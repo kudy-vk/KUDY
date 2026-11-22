@@ -70,26 +70,29 @@ const GA = { code: 'ga', nativeName: 'Gaeilge' };
 const MT = { code: 'mt', nativeName: 'Malti' };
 const CA = { code: 'ca', nativeName: 'Català' };
 const TR = { code: 'tr', nativeName: 'Türkçe' };
-const THIRTY_FIVE_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT, ET, LV, SK, HU, SL, HR, RO, BG, EL, SR, BS, MK, SQ, IS, GA, MT, CA, TR];
+const RU = { code: 'ru', nativeName: 'Русский' };
+const LB = { code: 'lb', nativeName: 'Lëtzebuergesch' };
+const CNR = { code: 'cnr', nativeName: 'Црногорски' };
+const THIRTY_EIGHT_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT, ET, LV, SK, HU, SL, HR, RO, BG, EL, SR, BS, MK, SQ, IS, GA, MT, CA, TR, RU, LB, CNR];
 const FROZEN_OPEN = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv'];
 
-test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca and tr, with native names, once (criterion 1)', () => {
-  assert.deepEqual([...UI_LOCALES], THIRTY_FIVE_ENTRIES);
-  for (const { code, nativeName } of THIRTY_FIVE_ENTRIES) {
+test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb and cnr, with native names, once (criterion 1)', () => {
+  assert.deepEqual([...UI_LOCALES], THIRTY_EIGHT_ENTRIES);
+  for (const { code, nativeName } of THIRTY_EIGHT_ENTRIES) {
     assert.equal(uiLocaleNativeName(code), nativeName);
   }
-  assert.throws(() => uiLocaleNativeName('ru'), /ui-locale-unregistered/);
+  assert.throws(() => uiLocaleNativeName('gr'), /ui-locale-unregistered/);
 });
 
-test('the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl/hr/ro/bg/el/sr/bs/mk/sq/is/ga/mt/ca/tr — all thirty-five registered UI codes (criterion 4)', () => {
-  assert.deepEqual([...COMPLETE_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq', 'is', 'ga', 'mt', 'ca', 'tr']);
-  for (const { code } of THIRTY_FIVE_ENTRIES) {
+test('the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl/hr/ro/bg/el/sr/bs/mk/sq/is/ga/mt/ca/tr/ru/lb/cnr — all thirty-eight registered UI codes (criterion 4)', () => {
+  assert.deepEqual([...COMPLETE_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq', 'is', 'ga', 'mt', 'ca', 'tr', 'ru', 'lb', 'cnr']);
+  for (const { code } of THIRTY_EIGHT_ENTRIES) {
     assert.equal(isUiLocaleCode(code), true, `${code} is registered`);
   }
   for (const code of COMPLETE_UI_LOCALES) {
     assert.equal(isCompleteUiLocale(code), true, `${code} is complete`);
   }
-  for (const code of ['ru']) {
+  for (const code of ['gr']) {
     assert.equal(isCompleteUiLocale(code), false, `${code} is not even registered`);
   }
 });
@@ -125,7 +128,7 @@ test('the store derives its vocabulary from the registry and keeps unknown-input
   // the commit it lands (es, G21.11 — 2026-10-03-single-source-translations.md; fr, G21.12 — same record; cs,
   // G21.13 — same record; sv, G21.14 — same record — the eight requested codes are
   // all complete now): the positive siblings of the refusals.
-  for (const unregistered of ['ru']) {
+  for (const unregistered of ['gr']) {
     assert.throws(() => store.set(unregistered), UiLocaleError);
     assert.equal(store.current(), 'en');
   }
@@ -161,7 +164,7 @@ test('the store derives its vocabulary from the registry and keeps unknown-input
 const TEN = [...COMPLETE_UI_LOCALES, 'zz'];
 
 test('the release resolver keeps the frozen eight open when the flag is absent, empty or corrupt (criterion 1)', () => {
-  for (const flag of [undefined, null, '', '   ', ',', ' , , ', 'bogus', 'ru', 'bogus, ,ru']) {
+  for (const flag of [undefined, null, '', '   ', ',', ' , , ', 'bogus', 'gr', 'bogus, ,gr']) {
     assert.deepEqual(
       [...releaseOpenUiLocales(flag, TEN)],
       FROZEN_OPEN,
@@ -178,14 +181,14 @@ test('the release resolver keeps the frozen eight open when the flag is absent, 
 test('the release resolver opens a registered complete code only when the flag names it, additively (criterion 1)', () => {
   // The real gated codes: naming the gated codes opens them alongside the frozen eight.
   assert.deepEqual([...releaseOpenUiLocales('zh')], [...FROZEN_OPEN, 'zh']);
-  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl,hr,ro,bg,el,sr,bs,mk,sq,is,ga,mt,ca,tr')], COMPLETE_UI_LOCALES);
-  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl , hr , ro , bg , el , sr , bs , mk , sq , is , ga , mt , ca , tr ,bogus,ru\t')], COMPLETE_UI_LOCALES);
+  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl,hr,ro,bg,el,sr,bs,mk,sq,is,ga,mt,ca,tr,ru,lb,cnr')], COMPLETE_UI_LOCALES);
+  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl , hr , ro , bg , el , sr , bs , mk , sq , is , ga , mt , ca , tr , ru , lb , cnr ,bogus,gr\t')], COMPLETE_UI_LOCALES);
   // A synthetic extra code keeps the generic additive proof independent of
   // which codes exist today: naming zz opens exactly zz (gated codes stay closed).
   assert.deepEqual([...releaseOpenUiLocales('zz', TEN)], [...FROZEN_OPEN, 'zz']);
-  assert.deepEqual([...releaseOpenUiLocales('  zz ,bogus,ru\t', TEN)], [...FROZEN_OPEN, 'zz']);
+  assert.deepEqual([...releaseOpenUiLocales('  zz ,bogus,gr\t', TEN)], [...FROZEN_OPEN, 'zz']);
   // Additive only: naming an already-open code neither duplicates it nor
   // removes any of the frozen eight (hiding sv is out of scope, G21.50).
   assert.deepEqual([...releaseOpenUiLocales('be, en', TEN)], FROZEN_OPEN);
-  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, zz', TEN)], TEN);
+  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb, cnr, zz', TEN)], TEN);
 });

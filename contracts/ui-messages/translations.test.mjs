@@ -83,6 +83,17 @@ test('locale_denied: an unregistered locale code is rejected', () => {
   assert.deepEqual(rulesOf(doc), ['locale_denied']);
 });
 
+test('the locale pattern takes two- and three-letter codes (cnr joins with EU-UI-05), four letters fail', () => {
+  const three = setWith([validRecord()], { locale: 'cnr' });
+  assert.deepEqual(checkUiMessageTranslations(three, sourceDoc, ['cnr']).errors, [], 'cnr passes the locale pattern');
+  const four = setWith([validRecord()], { locale: 'abcd' });
+  assert.deepEqual(
+    checkUiMessageTranslations(four, sourceDoc, ['abcd']).errors.map((error) => error.rule),
+    ['field_pattern'],
+    'four-letter codes stay rejected',
+  );
+});
+
 test('source_locale_denied: the be source locale owns no translation set', () => {
   const doc = setWith([validRecord()], { locale: 'be' });
   const verdict = checkUiMessageTranslations(doc, sourceDoc, ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']);
