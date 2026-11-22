@@ -17,10 +17,20 @@ import { feedbackMigrationSql } from '../feedback/test-support.ts';
 
 export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 export const OPS_MIGRATION_PATH = path.join(repoRoot, 'supabase', 'migrations', '20261122000000_ops_error_events.sql');
+export const OPS_INDEXES_MIGRATION_PATH = path.join(
+  repoRoot,
+  'supabase',
+  'migrations',
+  '20261122170000_ops_read_indexes.sql',
+);
 export const OPS_RETENTION_PATH = path.join(repoRoot, 'supabase', 'queries', 'ops-error-retention.sql');
 
 export function opsMigrationSql(): string {
   return readFileSync(OPS_MIGRATION_PATH, 'utf8');
+}
+
+export function opsIndexesMigrationSql(): string {
+  return readFileSync(OPS_INDEXES_MIGRATION_PATH, 'utf8');
 }
 
 export function opsRetentionSql(): string {
