@@ -10,7 +10,7 @@
 
 import type { GuideHintStrings } from "../contracts/ui-message-types.ts";
 
-export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq", GuideHintStrings> = {
+export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq", GuideHintStrings> = {
   "be": {
     "dismiss": "Схаваць",
     "heading": "Побач ёсць гід…",

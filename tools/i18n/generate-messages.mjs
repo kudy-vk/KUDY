@@ -84,7 +84,7 @@ export const DOMAINS = [
         file: 'components/guide-hint-strings.generated.ts',
         exportName: 'GUIDE_HINT_STRINGS',
         locales: ['be', 'en', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
-        annotation: 'Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq", GuideHintStrings>',
+        annotation: 'Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq", GuideHintStrings>',
         imports: ['import type { GuideHintStrings } from "../contracts/ui-message-types.ts";'],
       },
     ],
