@@ -35,6 +35,11 @@ import { sr } from './sr.ts';
 import { bs } from './bs.ts';
 import { mk } from './mk.ts';
 import { sq } from './sq.ts';
+import { is } from './is.ts';
+import { ga } from './ga.ts';
+import { mt } from './mt.ts';
+import { ca } from './ca.ts';
+import { tr } from './tr.ts';
 import {
   isUiLocaleCode,
   RELEASE_FLAG_ENV,
@@ -60,7 +65,7 @@ export { uiLocaleNativeName };
 // prefix — the one list the QR builder, the language switch and the route
 // tree derive from. zh joins the catalogue set with G21.46 (G21.42-chinese-language.md) and still
 // stays out of the route set until the release flag opens it (G21.50).
-export type UiLocale = 'be' | 'en' | 'uk' | 'de' | 'es' | 'fr' | 'cs' | 'sv' | 'zh' | 'nb' | 'pl' | 'da' | 'nl' | 'pt' | 'it' | 'fi' | 'lt' | 'et' | 'lv' | 'sk' | 'hu' | 'sl' | 'hr' | 'ro' | 'bg' | 'el' | 'sr' | 'bs' | 'mk' | 'sq';
+export type UiLocale = 'be' | 'en' | 'uk' | 'de' | 'es' | 'fr' | 'cs' | 'sv' | 'zh' | 'nb' | 'pl' | 'da' | 'nl' | 'pt' | 'it' | 'fi' | 'lt' | 'et' | 'lv' | 'sk' | 'hu' | 'sl' | 'hr' | 'ro' | 'bg' | 'el' | 'sr' | 'bs' | 'mk' | 'sq' | 'is' | 'ga' | 'mt' | 'ca' | 'tr';
 
 // G21.50 (G21.42-chinese-language.md — G21.50): the route set is the OPEN subset — the resolver turns
 // the release flag input into the advertised list, so a registered-but-closed
@@ -159,7 +164,7 @@ export interface UiStrings {
   textUnavailableBody: string;
 }
 
-const STRINGS: Record<UiLocale, UiStrings> = { be, en, uk, de, es, fr, cs, sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq };
+const STRINGS: Record<UiLocale, UiStrings> = { be, en, uk, de, es, fr, cs, sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr };
 
 export function getUiStrings(locale: UiLocale): UiStrings {
   return STRINGS[locale];

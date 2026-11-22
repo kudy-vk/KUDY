@@ -76,6 +76,11 @@ const RETENTION_PROBES = {
   bs: { aggregate: 'agregirani brojevi', retention: '14 mjeseci' },
   mk: { aggregate: 'агрегирани бројки', retention: '14 месеци' },
   sq: { aggregate: 'numra të agreguar', retention: '14 muaj' },
+  is: { aggregate: 'samanteiknaðar tölur', retention: '14 mánuði' },
+  ga: { aggregate: 'uimhreacha comhiomlánta', retention: '14 mí' },
+  mt: { aggregate: 'numri miġma', retention: '14 xahar' },
+  ca: { aggregate: 'xifres agregades', retention: '14 mesos' },
+  tr: { aggregate: 'toplu sayılar', retention: '14 ay' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -248,6 +253,31 @@ const APPDATA_PROBES = {
     ipHash: 'hash njëdrejtimsh të adresës IP',
     ratings: 'arsyet e zgjedhura',
     accessKey: 'si çelës qasjeje',
+  },
+  is: {
+    ipHash: 'einþáttarhash á IP-vistfangi',
+    ratings: 'valdar ástæður',
+    accessKey: 'sem aðgangslykil',
+  },
+  ga: {
+    ipHash: 'hais aonbhealaigh ar an seoladh IP',
+    ratings: 'na cúiseanna roghnaithe',
+    accessKey: 'mar eochair rochtana',
+  },
+  mt: {
+    ipHash: "hash unidirezzjonali ta' l-indirizz IP",
+    ratings: 'raġuni magħżula',
+    accessKey: "ta' aċċess",
+  },
+  ca: {
+    ipHash: "hash unidireccional de l'adreça IP",
+    ratings: 'els motius seleccionats',
+    accessKey: "com a clau d'accés",
+  },
+  tr: {
+    ipHash: 'tek yönlü karma',
+    ratings: 'seçilen nedenler',
+    accessKey: 'erişim anahtarı olarak',
   },
 };
 
