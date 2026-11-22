@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { start, step, status, missed } from './run-model.mjs';
+// The approved Back/Resume mockup shares the walk-session state contract.
+import '../design/brand/outputs/UI-REVIEW-02/board.regression.mjs';
 
 const stops = ['a', 'b', 'c'];
 const now = 100_000;

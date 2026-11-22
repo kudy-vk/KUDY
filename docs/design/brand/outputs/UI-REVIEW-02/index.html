@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="be">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KUDY — UI-REVIEW-02 · Back і вяртанне да прагулкі</title>
+  <link rel="stylesheet" href="../../../production/kit.css">
+  <style>
+    .review-notice { padding: 12px 16px; background: #fff7ec; border: 1px solid #ecd9b0; border-radius: 12px; margin: 16px 0; }
+    .review-notice p { margin: 0; }
+    .review-notice p + p { margin-top: 6px; }
+    .variant-guide { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    .variant-guide th, .variant-guide td { padding: 9px 12px; border: 1px solid #d8d2c6; text-align: left; vertical-align: top; }
+    .variant-guide th { background: #efe7da; }
+    .proposal-header { min-height: 56px; padding: 4px; display: flex; gap: 4px; align-items: center; border-bottom: 1px solid var(--line); }
+    .proposal-header .title { margin: 0; padding: 0 4px; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: calc(18px * var(--fs)); font-weight: 600; }
+    .proposal-header .control { flex: 0 0 48px; width: 48px; height: 48px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--accent); padding: 0; cursor: pointer; }
+    .proposal-header .control .circle { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; }
+    .proposal-header .control:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+    .proposal-header .control:not(:disabled):active { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .proposal-header .control.filled .circle { background: var(--accent); color: var(--accent-ink); }
+    .proposal-header .control.outline .circle { border: 2px solid var(--line); }
+    .proposal-header .control.tinted .circle { background: color-mix(in srgb, var(--accent) 14%, var(--paper)); }
+    .proposal-header .control.squared .circle { border-radius: 12px; }
+    .proposal-header .control.more .circle { border: 1px solid var(--line); }
+    .proposal-header.variant-b .title { text-align: center; }
+    .proposal-header.variant-c { gap: 0; padding-inline: 0; }
+    .proposal-header.variant-c .title { padding-inline: 8px; }
+    .screen-example { padding: 18px 20px; display: grid; gap: 16px; }
+    .screen-example .eyebrow { color: var(--muted); font-size: calc(12px * var(--fs)); }
+    .screen-example .line { height: 12px; border-radius: 8px; background: var(--line); opacity: .65; }
+    .screen-example .line.short { width: 70%; }
+    .screen-example .card { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 16px; display: grid; gap: 12px; }
+    .state-pill { display: inline-flex; width: fit-content; border: 1px solid var(--line); border-radius: 20px; padding: 4px 9px; font-size: calc(12px * var(--fs)); color: var(--muted); }
+    .screen-note { margin: 12px 0 0; font-size: 14px; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <h1>UI-REVIEW-02 · Два элементы шапкі</h1>
+    <p class="lead">Прыняты выгляд A: Back злева і вяртанне да актыўнай прагулкі справа. Гэта асобны макет, не production-рэалізацыя.</p>
+    <div class="review-notice">
+      <p><strong>Уладальнік выбраў A · 22.11.2026.</strong> B і C засталіся на дошцы для параўнання, не для production.</p>
+      <p>Пераключай памер экрана (320/360/390/430 dp), мову, буйны тэкст, стан Run і варыянт. Два тэмы паказваюцца адначасова.</p>
+    </div>
+    <table class="variant-guide">
+      <thead><tr><th>Варыянт</th><th>Back</th><th>Вяртанне да Run</th><th>Кампраміс</th></tr></thead>
+      <tbody>
+        <tr><td>A · Класічны</td><td>Простая стрэлка</td><td>Заліты круг са слядамі</td><td>Найлепшая адметнасць дзеянняў, але акцэнтная кнопка моцна вылучаецца.</td></tr>
+        <tr><td>B · Сіметрычны</td><td>Стрэлка ў абводцы</td><td>Сляды ў абводцы</td><td>Спакойны выгляд, але абодва дзеянні атрымліваюць аднолькавую вагу.</td></tr>
+        <tr><td>C · Куты</td><td>Стрэлка ў тонкай падкладцы</td><td>Знак навігацыі ў скругленым квадраце</td><td>Лёгка адрозніць зрокава; навігацыйны знак можа памылкова намякаць на GPS.</td></tr>
+      </tbody>
+    </table>
+    <div id="owner-question" class="review-notice">
+      <p><strong>Зацверджаны выгляд A:</strong> простая стрэлка Back і заліты круг са слядамі для вяртання да прагулкі. Адкрытае пытанне: дзе размяшчаць дадатковыя дзеянні на вузкім экране з буйным тэкстам.</p>
+      <p>Усе кнопкі маюць 48×48 dp, назву для экраннага чытальніка і бачны фокус. Пры адсутнай або завершанай прагулцы shortcut знікае; на Run яго няма нават пры актыўнай сесіі.</p>
+    </div>
+  </main>
+  <script type="module" src="./board.mjs"></script>
+</body>
+</html>
