@@ -389,6 +389,39 @@
             "reason": "tr трымае rehber (Rehberler →, Rehber, Rehber açıklamasını aç) — стандартны турэцкі тэрмін аўдыёгіда",
             "date": "2026-11-22"
           }
+        },
+        "ru": {
+          "term": "гид",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "гид",
+            "locator": "translations/ru.json#native.nearby.guideLabel",
+            "reason": "ru трымае гид (Гиды →, Гид, Открыть описание гида) — звыклае расійскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "Guide",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "Guide",
+            "locator": "translations/lb.json#native.nearby.guideLabel",
+            "reason": "lb трымае запазычаны Guide (Guiden →, Guide, Beschreibung vum Guide opmaachen) — як de, кароткі і звыклы люксембургскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "водич",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "водич",
+            "locator": "translations/cnr.json#native.nearby.guideLabel",
+            "reason": "cnr трымае водич (Водичи →, Водич, Отвори опис водича) — стандартнае чарнагорскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -773,6 +806,39 @@
             "term": "durak",
             "locator": "translations/tr.json#native.chrome.stopsCount",
             "reason": "імянік — durak (Duraklar: N, Durak N, Sonraki durak) — звыклы турэцкі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Durdur (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "ru": {
+          "term": "точка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "точка",
+            "locator": "translations/ru.json#native.chrome.stopsCount",
+            "reason": "імянік — точка (Точки: N, Точка N, Следующая точка) — звыклае расійскае слова кропкі маршруту; дзеянне спыніць тэйзер — Остановить (native.place.stopLabel), uk-прэцэдэнт немешвання сэнсаў",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "Arrêt",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "Arrêt",
+            "locator": "translations/lb.json#native.chrome.stopsCount",
+            "reason": "імянік — Arrêt (Arrêten: N, Arrêt N, Nächst Arrêt) — звыклы люксембургскі тэрмін кропкі маршруту (франц. запазычанне); дзеянне спыніць тэйзер — Stoppen (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "тачка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "тачка",
+            "locator": "translations/cnr.json#native.chrome.stopsCount",
+            "reason": "імянік — тачка (Тачке: N, Тачка N, Сљедећа тачка) — звыклае чарнагорскае слова кропкі маршруту; дзеянне спыніць тэйзер — Заустави (native.place.stopLabel)",
             "date": "2026-11-22"
           }
         }
@@ -1160,6 +1226,39 @@
             "reason": "walk → yürüyüş паўсюль у tr-наборы (Yürüyüş, Mevcut yürüyüş, Yürüyüş geçmişi, Yürüyüşü bitir) — прыродны турэцкі актыўны праход па горадзе",
             "date": "2026-11-22"
           }
+        },
+        "ru": {
+          "term": "прогулка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "прогулка",
+            "locator": "translations/ru.json#native.chrome.currentWalk",
+            "reason": "walk → прогулка паўсюль у ru-наборы (Прогулка, Текущая прогулка, История прогулок, Завершить прогулку) — прыродны расійскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "Spazéiergank",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "Spazéiergank",
+            "locator": "translations/lb.json#native.chrome.currentWalk",
+            "reason": "walk → Spazéiergank паўсюль у lb-наборы (Spazéiergank, Aktueller Spazéiergank, Geschicht vun de Spazéiergäng, Spazéiergank ofschléissen) — прыродны люксембургскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "шетња",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "шетња",
+            "locator": "translations/cnr.json#native.chrome.currentWalk",
+            "reason": "walk → шетња паўсюль у cnr-наборы (Шетња, Тренутна шетња, Историја шетњи, Заврши шетњу) — прыродны чарнагорскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1545,6 +1644,39 @@
             "reason": "адзін корань indir/indirme (İndir, İndirme başarısız oldu., Rehber indirilmedi.) — стандартны турэцкі UI-тэрмін",
             "date": "2026-11-22"
           }
+        },
+        "ru": {
+          "term": "скачать",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "скачать",
+            "locator": "translations/ru.json#native.preview.label.download",
+            "reason": "адзін корань скачать/скачивание/скачан (Скачать, Скачивание не удалось., Гид не скачан.) — en/uk-прэцэдэнт аднакарэннага тэрміна",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "eroflueden",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "eroflueden",
+            "locator": "translations/lb.json#native.preview.label.download",
+            "reason": "адзін корань eroflueden/erofgeluede (Eroflueden, Erofluede huet net funktionéiert., Guide ass net erofgeluede.) — стандартны люксембургскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "преузми",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "преузми",
+            "locator": "translations/cnr.json#native.preview.label.download",
+            "reason": "адзін корань преузми/преузимање (Преузми, Преузимање није успјело., Водич није преузет.) — стандартны чарнагорскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1927,6 +2059,39 @@
             "term": "kullanılamıyor",
             "locator": "translations/tr.json#native.chrome.catalogUnavailable",
             "reason": "kullanılamıyor / şu anda kullanılamıyor у радках стану (Katalog kullanılamıyor, Katalog şu anda kullanılamıyor) — стандартны турэцкі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "ru": {
+          "term": "недоступен",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "недоступен",
+            "locator": "translations/ru.json#native.chrome.catalogUnavailable",
+            "reason": "недоступен / временно недоступен у радках стану (Каталог недоступен, Каталог временно недоступен) — стандартны расійскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "net disponibel",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "net disponibel",
+            "locator": "translations/lb.json#native.chrome.catalogUnavailable",
+            "reason": "net disponibel / elo net disponibel у радках стану (Katalog net disponibel, Katalog ass elo net disponibel) — стандартны люксембургскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "није доступан",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "није доступан",
+            "locator": "translations/cnr.json#native.chrome.catalogUnavailable",
+            "reason": "није доступан / привремено није доступан у радках стану (Каталог није доступан, Каталог привремено није доступан) — стандартны чарнагорскі UI-зварот",
             "date": "2026-11-22"
           }
         }
@@ -2314,6 +2479,39 @@
             "reason": "purchase → satın alma / satın al (Satın Al, Satın alma gerekiyor., Satın alındı · indirme gerekiyor, Satın alma sonrasında kullanılabilir) — адзін корань ва ўсіх радках",
             "date": "2026-11-22"
           }
+        },
+        "ru": {
+          "term": "покупка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "покупка",
+            "locator": "translations/ru.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → покупка / купить (Купить, Требуется покупка., Куплено · нужно скачать, Доступно после покупки) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "Kauf",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "Kauf",
+            "locator": "translations/lb.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → Kauf / kafen (Kafen, Kauf néideg., Gekaf · Erofluede néideg, Disponibel nom Kauf) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "куповина",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "куповина",
+            "locator": "translations/cnr.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → куповина / купити (Купи, Потребна је куповина., Купљено · потребно преузимање, Доступно након куповине) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -2695,6 +2893,39 @@
             "term": "kayıtlı oturumdan sürüyor",
             "locator": "translations/tr.json#native.run.restoredTitle",
             "reason": "канон без рэстаўрацыйнай метафары (Yürüyüş kayıtlı oturumdan sürüyor), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "ru": {
+          "term": "продолжается из сохранённой сессии",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "продолжается из сохранённой сессии",
+            "locator": "translations/ru.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Прогулка продолжается из сохранённой сессии), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "lb": {
+          "term": "setzt vun der gespäicherter Sessioun fort",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "setzt vun der gespäicherter Sessioun fort",
+            "locator": "translations/lb.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Spazéiergank setzt vun der gespäicherter Sessioun fort), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "cnr": {
+          "term": "наставља са сачуване сјесије",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "наставља са сачуване сјесије",
+            "locator": "translations/cnr.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Шетња наставља са сачуване сјесије), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
             "date": "2026-11-22"
           }
         }

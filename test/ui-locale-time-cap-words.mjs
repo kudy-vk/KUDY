@@ -38,6 +38,9 @@ export const TIME_CAP_WORDS = {
   mt: { 60: 'Sakemm siegħa', 120: 'Sakemm sagħtejn', 240: 'Nofs jum' },
   ca: { 60: 'Fins a una hora', 120: 'Fins a dues hores', 240: 'Mig dia' },
   tr: { 60: 'En fazla bir saat', 120: 'En fazla iki saat', 240: 'Yarım gün' },
+  ru: { 60: 'До часа', 120: 'До двух часов', 240: 'На полдня' },
+  lb: { 60: 'Bis zu enger Stonn', 120: 'Bis zu zwou Stonnen', 240: 'Hallefdag' },
+  cnr: { 60: 'До једног сата', 120: 'До два сата', 240: 'Пола дана' },
 };
 
 // The wave's slice of the table: timeCapForms = timeCapWordsFor('hr', 'ro', ...).

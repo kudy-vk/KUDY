@@ -23,7 +23,7 @@
   },
   "properties": {
     "translation_schema_version": { "const": 1 },
-    "locale": { "type": "string", "pattern": "^[a-z]{2}$" },
+    "locale": { "type": "string", "pattern": "^[a-z]{2,3}$" },
     "provenance": {
       "type": "object",
       "additionalProperties": false,
