@@ -39,11 +39,14 @@ Production-код і агульны `topbar()` не змяняліся; па г�
 ## Праверка і недаступныя доказы
 
 - PASS: `node --check docs/design/brand/outputs/UI-REVIEW-02/board.mjs`.
-- PASS: `node --test tools/design/ui-review-02.test.mjs` — 6 тэстаў на выбраны A, правілы бачнасці shortcut і 13 моў, уключаючы pl/de/es. Гэта выпраўляе знаходкі [Voka ў PR #392](https://github.com/kudy-vk/KUDY/pull/392#issuecomment-7071592552) з папярэдняга head `8d0ef107`. Уласныя подпісы дэма — лакалізаваныя fixtures; назвы Back/Walk/Resume па-ранейшаму ідуць з `contracts/ui-messages`.
+- PASS: `node --test docs/design/brand/outputs/UI-REVIEW-02/board.test.mjs` — 6 тэстаў на выбраны A, правілы бачнасці shortcut і 13 моў, уключаючы pl/de/es. Гэта выпраўляе знаходкі [Voka ў PR #392](https://github.com/kudy-vk/KUDY/pull/392#issuecomment-7071592552) з папярэдняга head `8d0ef107`. Уласныя подпісы дэма — лакалізаваныя fixtures; назвы Back/Walk/Resume па-ранейшаму ідуць з `contracts/ui-messages`.
 - NOT-VERIFIED: рэндэр на прыладзе, TalkBack/VoiceOver, сапраўдныя 44 dp, маштаб і перакрыцце на экранах. Спроба запусціць Chromium у лакальным MCP-пясочніку скончылася `SIGTRAP` без здымка; наяўнасць CSS правіл не замяняе візуальнай праверкі.
-- PASS: `node --test tools/design/gen-paper-grain.test.mjs tools/design/image-check.test.mjs tools/design/ui-review-02.test.mjs tools/docs-ledger/counts-guard.test.mjs` — 32 тэсты прайшлі.
+- PASS: `node --test tools/design/gen-paper-grain.test.mjs tools/design/image-check.test.mjs docs/design/brand/outputs/UI-REVIEW-02/board.test.mjs tools/docs-ledger/counts-guard.test.mjs` — 32 тэсты прайшлі.
 - BLOCKED (не пройдзена): `npm run typecheck` — TS6053: у ізаляваным worktree адсутнічае `spikes/G00.03-sandbox-grant/server/device-auth.mjs`, які патрабуе бягучая канфігурацыя. Гэты PR не змяняе `spikes` або TypeScript-канфігурацыю; прычыну адсутнасці файла трэба высветліць на асноўнай машыне.
 - NOT-VERIFIED: `npm run ci:local` у MCP-пясочніцы спыніўся праз 55 секунд на этапе `npm ci`; Git-каманда ўнутры CI таксама не змагла прачытаць службовы `.git` гэтага worktree.
-- NOT-VERIFIED: `npm run e2e:android:local` завяршыўся кодам 3: `Android E2E: NOT-VERIFIED (git rev-parse HEAD failed ())`. У CI-класіфікатары `tools/design/ui-review-02.test.mjs` азначае `docs-only=false`, таму E2E трэба паўтарыць на лакальным хосце з доступам да Git і эмулятара; вынік нельга лічыць пропускам тэстаў.
+- NOT-VERIFIED: `npm run e2e:android:local` завяршыўся кодам 3: `Android E2E: NOT-VERIFIED (git rev-parse HEAD failed ())`. На момант гэтага прагона файл `tools/design/ui-review-02.test.mjs` быў па-за allowlist і азначаў `docs-only=false`; таму ранер патрабавала паўтарыць E2E на лакальным хосце. Глядзі пазнейшае ўдакладненне ніжэй.
 - Сістэмны Back у праграме не змяняўся; production-інтэграцыя яшчэ не праводзілася.
 
+## Удакладненне праверак 2026-11-22
+
+Пачатковы Android E2E з `run=true` быў выкліканы тым, што дызайнерскі рэгрэсійны тэст знаходзіўся ў `tools/design/`, па-за docs-only allowlist. Тэст перанесены ў `docs/design/brand/outputs/UI-REVIEW-02/board.test.mjs` побач з дызайн-дошкай без змены сцвярджэнняў тэста. Усе шляхі PR цяпер пад `docs/` і не змяняюць код мабільнага дадатку. Для поўнага спісу гэтых файлаў `docsOnlyChange(...)` вяртае `true`, `androidE2eNeeded(...)` — `false`; перад merge трэба пацвердзіць гэта на фактычным Git diff. Вынік лакальнага Android E2E з папярэдняга каміта застаецца ў гісторыі як NOT-VERIFIED, але не павінен блакаваць чыста дызайнерскі PR. Вынікі CI на новым SHA і паўторныя Voka/Judge трэба праверыць асобна.

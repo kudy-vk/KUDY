@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { LOCALES } from '../../docs/design/production/kit.mjs';
-import { visibleShortcut, proposal, copyByLocale, viewProps } from '../../docs/design/brand/outputs/UI-REVIEW-02/board.mjs';
+import { LOCALES } from '../../../production/kit.mjs';
+import { visibleShortcut, proposal, copyByLocale, viewProps } from './board.mjs';
 
 const labels = {
   'native.chrome.back': 'Back',
