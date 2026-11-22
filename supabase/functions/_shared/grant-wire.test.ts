@@ -25,6 +25,7 @@ import {
   GRANT_RETRY_AFTER_SECONDS,
 } from './grant-core.ts';
 import { serveGrantRequest, type GrantRuntimeConfig, type GrantSqlClient } from './grant-wire.ts';
+import { OPS_ERROR_INSERT_SQL } from './ops-error-core.ts';
 import { captureConsoleError } from './wire-test-support.ts';
 
 const DEVICE_ID = '11111111-1111-4111-8111-111111111111';
@@ -243,4 +244,41 @@ test('a foreign-environment cache row falls through to the provider — no cross
   assert.equal(response.status, 503, 'an entitled answer without environment attribution fails closed');
   assert.equal(await readError(response), 'entitlement_unavailable');
   assert.equal(counts.sign, 0);
+});
+
+// T-K1 (issue #411) — the fault boundary records the ops tag best-effort:
+// the insert is attempted through the same injected database factory the
+// handler used, a failing tag write swallows its fault, and the client's
+// closed 503 never depends on the tag landing.
+test('ops_error_tag: the fault boundary attempts the tag insert with the fixed literals and keeps the closed 503', async (t) => {
+  const base = fakeGrantSql();
+  let tag: { sql: string; params: unknown[] } | null = null;
+  const db: GrantSqlClient = {
+    async unsafe(sql: string, params: (string | number | boolean | null)[]) {
+      if (sql === OPS_ERROR_INSERT_SQL) {
+        tag = { sql, params: [...params] };
+        return [];
+      }
+      return base.unsafe(sql, params);
+    },
+  };
+  installTransport(t, {
+    fail: new Error('fetch failed for https://storage.test/storage/v1/object/files/manifest.json: ECONNREFUSED'),
+  });
+  const captured = await captureConsoleError(() =>
+    serveGrantRequest(grantRequest(REQUEST_BODY), () => db, () => ({ ...CONFIG })));
+  assert.equal(captured.result.status, 503, 'the boundary still answers the documented retry path');
+  assert.equal(await readError(captured.result), 'entitlement_unavailable');
+  assert.ok(tag, 'the catch path attempted the ops tag insert');
+  assert.equal(tag!.sql, OPS_ERROR_INSERT_SQL);
+  assert.deepEqual(tag!.params, ['grant', 'internal_fault', 'grant'], 'endpoint, error_code, note — fixed literals only');
+});
+
+test('ops_error_tag: a failing tag write cannot break the fault boundary', async (t) => {
+  installTransport(t, { fail: new Error('fetch failed for https://storage.test: ECONNREFUSED') });
+  // fakeGrantSql rejects the unknown tag statement — recordOpsError swallows
+  // it, and the boundary answers as if no tag were configured.
+  const response = await serveGrantRequest(grantRequest(REQUEST_BODY), () => fakeGrantSql(), () => ({ ...CONFIG }));
+  assert.equal(response.status, 503, 'the tag fault is swallowed by the best-effort contract');
+  assert.equal(await readError(response), 'entitlement_unavailable');
 });

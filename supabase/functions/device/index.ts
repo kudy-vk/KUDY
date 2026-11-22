@@ -18,6 +18,7 @@
 // Non-device requests and missing env never reach the database.
 import { deviceErrorResponse, handleDeviceRequest } from '../_shared/device-wire.ts';
 import { logServerDiagnostic } from '../_shared/server-diagnostics.ts';
+import { recordOpsError } from '../_shared/ops-error-core.ts';
 import { database } from '../_shared/postgres-connection.ts';
 
 Deno.serve(async (req) => {
@@ -26,9 +27,11 @@ Deno.serve(async (req) => {
   } catch (error) {
     if (error instanceof Error && error.message.startsWith('DATABASE_URL')) {
       logServerDiagnostic('device_registration', 'configuration_missing');
+      await recordOpsError(() => database(), { endpoint: 'device', errorCode: 'configuration_missing', note: 'device_registration' });
       return deviceErrorResponse(500, 'server_configuration_error');
     }
     logServerDiagnostic('device_registration', 'unexpected_failure');
+    await recordOpsError(() => database(), { endpoint: 'device', errorCode: 'unexpected_failure', note: 'device_registration' });
     return deviceErrorResponse(500, 'server_error');
   }
 });

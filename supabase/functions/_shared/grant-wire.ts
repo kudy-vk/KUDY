@@ -26,6 +26,7 @@ import {
   type GrantPortDeps,
   type GrantSqlRunner,
 } from './grant-core.ts';
+import { recordOpsError } from './ops-error-core.ts';
 
 export interface GrantRequestLike {
   method: string;
@@ -313,6 +314,9 @@ export async function serveGrantRequest(
         ? error.message.replace(/(?:https?|postgres(?:ql)?):\/\/\S+/g, '<redacted-url>')
         : 'unknown',
     );
+    // Best-effort ops tag (issue #411): a failing tag write resolves to
+    // false here — the client's closed 503 below never depends on it.
+    await recordOpsError(() => database(), { endpoint: 'grant', errorCode: 'internal_fault', note: 'grant' });
     return errors(503, 'entitlement_unavailable', { 'retry-after': String(GRANT_RETRY_AFTER_SECONDS) });
   }
 }
