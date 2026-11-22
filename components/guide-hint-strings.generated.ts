@@ -6,11 +6,11 @@
 // G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too
+// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377)
 
 import type { GuideHintStrings } from "../contracts/ui-message-types.ts";
 
-export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt", GuideHintStrings> = {
+export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt", GuideHintStrings> = {
   "be": {
     "dismiss": "Схаваць",
     "heading": "Побач ёсць гід…",
@@ -88,5 +88,23 @@ export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" 
     "heading": "Há um guia por perto…",
     "openHint": "Abrir a descrição do guia",
     "paid": "pago",
+  },
+  "it": {
+    "dismiss": "Nascondi",
+    "heading": "Nelle vicinanze c'è una guida…",
+    "openHint": "Apri la descrizione della guida",
+    "paid": "a pagamento",
+  },
+  "fi": {
+    "dismiss": "Piilota",
+    "heading": "Lähellä on opas…",
+    "openHint": "Avaa oppaan kuvaus",
+    "paid": "maksullinen",
+  },
+  "lt": {
+    "dismiss": "Slėpti",
+    "heading": "Netoliese yra gidas…",
+    "openHint": "Atidaryti gido aprašymą",
+    "paid": "mokamas",
   },
 };

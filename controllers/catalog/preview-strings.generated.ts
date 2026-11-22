@@ -262,4 +262,58 @@ export const PREVIEW_STRINGS_DATA = {
     "storageExit": "Libertar espaço no KUDY",
     "storageFullDetail": (mb: number) => `espaço insuficiente: faltam ${mb} MB`,
   },
+  "it": {
+    "detail": (detail: { readonly kind: string; readonly count?: number }) => detail.kind === "damaged" ? `pacchetto danneggiato: scaricare di nuovo` : detail.kind === "missing-files" ? `file mancanti: ${detail.count}` : detail.kind === "stale" ? `aggiornamento disponibile` : `pacchetto incompleto`,
+    "downloadFailed": "Download non riuscito.",
+    "label": {
+      "download": "Scarica",
+      "start": "Inizia",
+    },
+    "reason": {
+      "preview#download-unavailable": "Download non disponibile in questa build.",
+      "preview#not-published": "Guida non pubblicata.",
+      "preview#purchase-required": "È necessario l'acquisto.",
+      "preview#storage-unknown": "Archiviazione non disponibile.",
+      "preview#verify-unavailable": "Verifica non disponibile.",
+    },
+    "retry": "Riprova",
+    "storageExit": "Libera spazio in KUDY",
+    "storageFullDetail": (mb: number) => `spazio insufficiente: servono altri ${mb} MB`,
+  },
+  "fi": {
+    "detail": (detail: { readonly kind: string; readonly count?: number }) => detail.kind === "damaged" ? `paketti vioittunut: lataa uudelleen` : detail.kind === "missing-files" ? `tiedostoja puuttuu: ${detail.count}` : detail.kind === "stale" ? `päivitys saatavilla` : `paketti vajaa`,
+    "downloadFailed": "Lataus epäonnistui.",
+    "label": {
+      "download": "Lataa",
+      "start": "Aloita",
+    },
+    "reason": {
+      "preview#download-unavailable": "Lataus ei ole saatavilla tässä versiossa.",
+      "preview#not-published": "Opasta ei ole julkaistu.",
+      "preview#purchase-required": "Osto vaaditaan.",
+      "preview#storage-unknown": "Tallennustila ei ole käytettävissä.",
+      "preview#verify-unavailable": "Tarkistus ei ole käytettävissä.",
+    },
+    "retry": "Yritä uudelleen",
+    "storageExit": "Vapauta tilaa KUDY:ssa",
+    "storageFullDetail": (mb: number) => `tilaa ei riitä: tarvitaan ${mb} Mt lisää`,
+  },
+  "lt": {
+    "detail": (detail: { readonly kind: string; readonly count?: number }) => detail.kind === "damaged" ? `paketas pažeistas: atsisiųskite dar kartą` : detail.kind === "missing-files" ? `trūksta failų: ${detail.count}` : detail.kind === "stale" ? `atnaujinimas pasiekiamas` : `paketas nepilnas`,
+    "downloadFailed": "Atsiuntimas nepavyko.",
+    "label": {
+      "download": "Atsisiųsti",
+      "start": "Pradėti",
+    },
+    "reason": {
+      "preview#download-unavailable": "Atsisiuntimas neprieinamas šioje versijoje.",
+      "preview#not-published": "Gidas nepaskelbtas.",
+      "preview#purchase-required": "Reikalingas pirkimas.",
+      "preview#storage-unknown": "Saugykla neprieinama.",
+      "preview#verify-unavailable": "Patikra neprieinama.",
+    },
+    "retry": "Bandyti dar kartą",
+    "storageExit": "Atlaisvinkite vietos KUDY",
+    "storageFullDetail": (mb: number) => `neužtenka vietos: reikia dar ${mb} MB`,
+  },
 };

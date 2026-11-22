@@ -10,7 +10,7 @@ node --no-warnings --experimental-strip-types tools/i18n/generate-messages.mjs -
 ```
 
 ```output
-generated messages: 23 files fresh
+generated messages: 26 files fresh
 check-messages: shipped locales complete, reviewed and fresh
 ```
 
@@ -19,8 +19,8 @@ node --no-warnings --experimental-strip-types --test --test-reporter=tap test/ui
 ```
 
 ```output
-ok 1 - the registry defines the eight requested UI codes plus zh, nb, pl, da, nl and pt, with native names, once (criterion 1)
-ok 2 - the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt — all fourteen registered UI codes (criterion 4)
+ok 1 - the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi and lt, with native names, once (criterion 1)
+ok 2 - the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt — all seventeen registered UI codes (criterion 4)
 ok 3 - every complete locale renders every registered native message family (criterion 5)
 ok 4 - the store derives its vocabulary from the registry and keeps unknown-input semantics (criterion 4)
 ok 5 - the release resolver keeps the frozen eight open when the flag is absent, empty or corrupt (criterion 1)

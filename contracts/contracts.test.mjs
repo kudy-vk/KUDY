@@ -570,8 +570,8 @@ test('G21.45+#347: the 9→10 move is the only count-limit change; the residual 
   const registry = fs.readFileSync(path.join(REPO, 'contracts/ui-locales.ts'), 'utf8');
   assert.ok(
     registry.includes(
-      'COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "nb", "pl", "da", "nl", "pt"]',
+      'COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "nb", "pl", "da", "nl", "pt", "it", "fi", "lt"]',
     ),
-    'contracts/ui-locales.ts COMPLETE_UI_LOCALES must carry the complete UI locales including nb/pl/da/nl/pt',
+    'contracts/ui-locales.ts COMPLETE_UI_LOCALES must carry the complete UI locales including nb/pl/da/nl/pt and it/fi/lt',
   );
 });

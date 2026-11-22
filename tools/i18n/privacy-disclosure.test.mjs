@@ -60,6 +60,9 @@ const RETENTION_PROBES = {
   da: { aggregate: 'aggregerede tal', retention: '14 måneder' },
   nl: { aggregate: 'geaggregeerde aantallen', retention: '14 maanden' },
   pt: { aggregate: 'contagens agregadas', retention: '14 meses' },
+  it: { aggregate: 'numeri aggregati', retention: '14 mesi' },
+  fi: { aggregate: 'agregoidut luvut', retention: '14 kuukautta' },
+  lt: { aggregate: 'agreguoti skaičiai', retention: '14 mėnesių' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -152,6 +155,21 @@ const APPDATA_PROBES = {
     ipHash: 'hash unidirecional do endereço IP',
     ratings: 'motivos selecionados',
     accessKey: 'como chave de acesso',
+  },
+  it: {
+    ipHash: "hash unidirezionale dell'indirizzo IP",
+    ratings: 'motivi selezionati',
+    accessKey: 'come chiave di accesso',
+  },
+  fi: {
+    ipHash: 'yksisuuntaisen IP-osoitteen hajautuksen',
+    ratings: 'valitut syyt',
+    accessKey: 'pääsyavaimena',
+  },
+  lt: {
+    ipHash: 'vienkryptis IP adreso maišos kodas',
+    ratings: 'pasirinktos priežastys',
+    accessKey: 'kaip prieigos raktas',
   },
 };
 
