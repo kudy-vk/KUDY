@@ -37,7 +37,7 @@ test('G14.04.d: an unknown value is a named error and moves nothing', () => {
   const store = createUiLocaleStore({ read: () => null, write: (locale) => written.push(locale) });
   const events: string[] = [];
   store.subscribe(() => events.push(store.current()));
-  assert.throws(() => store.set('ru'), (error: unknown) => error instanceof UiLocaleError);
+  assert.throws(() => store.set('aa'), (error: unknown) => error instanceof UiLocaleError);
   assert.equal(store.current(), 'be');
   assert.deepEqual(written, []);
   assert.deepEqual(events, []);
