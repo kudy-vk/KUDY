@@ -234,5 +234,5 @@ export function runMapReason(reason: string, strings: RunMapStrings): string {
 const STRINGS = RUN_MAP_STRINGS_DATA;
 
 export function runMapStrings(locale: string): RunMapStrings {
-  return locale === 'it' ? STRINGS.it : locale === 'fi' ? STRINGS.fi : locale === 'lt' ? STRINGS.lt : locale === 'pt' ? STRINGS.pt : locale === 'nl' ? STRINGS.nl : locale === 'da' ? STRINGS.da : locale === 'pl' ? STRINGS.pl : locale === 'nb' ? STRINGS.nb : locale === 'zh' ? STRINGS.zh : locale === 'sv' ? STRINGS.sv : locale === 'cs' ? STRINGS.cs : locale === 'es' ? STRINGS.es : locale === 'fr' ? STRINGS.fr : locale === 'de' ? STRINGS.de : locale === 'en' ? STRINGS.en : locale === 'uk' ? STRINGS.uk : STRINGS.be;
+  return locale === 'et' ? STRINGS.et : locale === 'lv' ? STRINGS.lv : locale === 'sk' ? STRINGS.sk : locale === 'hu' ? STRINGS.hu : locale === 'sl' ? STRINGS.sl : locale === 'it' ? STRINGS.it : locale === 'fi' ? STRINGS.fi : locale === 'lt' ? STRINGS.lt : locale === 'pt' ? STRINGS.pt : locale === 'nl' ? STRINGS.nl : locale === 'da' ? STRINGS.da : locale === 'pl' ? STRINGS.pl : locale === 'nb' ? STRINGS.nb : locale === 'zh' ? STRINGS.zh : locale === 'sv' ? STRINGS.sv : locale === 'cs' ? STRINGS.cs : locale === 'es' ? STRINGS.es : locale === 'fr' ? STRINGS.fr : locale === 'de' ? STRINGS.de : locale === 'en' ? STRINGS.en : locale === 'uk' ? STRINGS.uk : STRINGS.be;
 }
