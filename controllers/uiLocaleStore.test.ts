@@ -136,7 +136,7 @@ test('G21.50: setting a registered-but-closed code is ui-locale-closed and moves
 test('G21.50: an unregistered code keeps ui-locale-unknown under the open set', () => {
   const store = createUiLocaleStore(undefined, ['be']);
   assert.throws(
-    () => store.set('ru'),
+    () => store.set('aa'),
     (error: unknown) => error instanceof UiLocaleError && error.rule === 'ui-locale-unknown',
   );
 });
