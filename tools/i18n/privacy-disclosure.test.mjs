@@ -63,6 +63,11 @@ const RETENTION_PROBES = {
   it: { aggregate: 'numeri aggregati', retention: '14 mesi' },
   fi: { aggregate: 'agregoidut luvut', retention: '14 kuukautta' },
   lt: { aggregate: 'agreguoti skaičiai', retention: '14 mėnesių' },
+  et: { aggregate: 'agregeeritud numbrid', retention: '14 kuud' },
+  lv: { aggregate: 'agregēti skaitļi', retention: '14 mēnešus' },
+  sk: { aggregate: 'agregované čísla', retention: '14 mesiacov' },
+  hu: { aggregate: 'aggregált számok', retention: '14 hónapig' },
+  sl: { aggregate: 'združene številke', retention: '14 mesecev' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -170,6 +175,31 @@ const APPDATA_PROBES = {
     ipHash: 'vienkryptis IP adreso maišos kodas',
     ratings: 'pasirinktos priežastys',
     accessKey: 'kaip prieigos raktas',
+  },
+  et: {
+    ipHash: 'IP-aadressi ühesuunalist räsi',
+    ratings: 'valitud põhjused',
+    accessKey: 'pöördumisvõtmena',
+  },
+  lv: {
+    ipHash: 'vienpusējs IP adreses haškods',
+    ratings: 'izvēlētie iemesli',
+    accessKey: 'kā piekļuves atslēga',
+  },
+  sk: {
+    ipHash: 'jednosmerný hash IP adresy',
+    ratings: 'vybrané dôvody',
+    accessKey: 'ako prístupový kľúč',
+  },
+  hu: {
+    ipHash: 'IP-cím egyirányú kivonatát',
+    ratings: 'kiválasztott okok',
+    accessKey: 'hozzáférési kulcsként',
+  },
+  sl: {
+    ipHash: 'enesmerno zgostitev IP-naslova',
+    ratings: 'izbrane razloge',
+    accessKey: 'kot dostopni ključ',
   },
 };
 

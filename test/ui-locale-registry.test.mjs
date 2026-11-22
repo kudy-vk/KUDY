@@ -52,20 +52,25 @@ const PT = { code: 'pt', nativeName: 'Português' };
 const IT = { code: 'it', nativeName: 'Italiano' };
 const FI = { code: 'fi', nativeName: 'Suomi' };
 const LT = { code: 'lt', nativeName: 'Lietuvių' };
-const SEVENTEEN_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT];
+const ET = { code: 'et', nativeName: 'Eesti' };
+const LV = { code: 'lv', nativeName: 'Latviešu' };
+const SK = { code: 'sk', nativeName: 'Slovenčina' };
+const HU = { code: 'hu', nativeName: 'Magyar' };
+const SL = { code: 'sl', nativeName: 'Slovenščina' };
+const TWENTY_TWO_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT, ET, LV, SK, HU, SL];
 const FROZEN_OPEN = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv'];
 
-test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi and lt, with native names, once (criterion 1)', () => {
-  assert.deepEqual([...UI_LOCALES], SEVENTEEN_ENTRIES);
-  for (const { code, nativeName } of SEVENTEEN_ENTRIES) {
+test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu and sl, with native names, once (criterion 1)', () => {
+  assert.deepEqual([...UI_LOCALES], TWENTY_TWO_ENTRIES);
+  for (const { code, nativeName } of TWENTY_TWO_ENTRIES) {
     assert.equal(uiLocaleNativeName(code), nativeName);
   }
   assert.throws(() => uiLocaleNativeName('ru'), /ui-locale-unregistered/);
 });
 
-test('the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt — all seventeen registered UI codes (criterion 4)', () => {
-  assert.deepEqual([...COMPLETE_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt']);
-  for (const { code } of SEVENTEEN_ENTRIES) {
+test('the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl — all twenty-two registered UI codes (criterion 4)', () => {
+  assert.deepEqual([...COMPLETE_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl']);
+  for (const { code } of TWENTY_TWO_ENTRIES) {
     assert.equal(isUiLocaleCode(code), true, `${code} is registered`);
   }
   for (const code of COMPLETE_UI_LOCALES) {
@@ -158,10 +163,10 @@ test('the release resolver keeps the frozen eight open when the flag is absent, 
 });
 
 test('the release resolver opens a registered complete code only when the flag names it, additively (criterion 1)', () => {
-  // The real gated codes: naming zh/nb/pl/da/nl/pt/it/fi/lt opens them alongside the frozen eight.
+  // The real gated codes: naming zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl opens them alongside the frozen eight.
   assert.deepEqual([...releaseOpenUiLocales('zh')], [...FROZEN_OPEN, 'zh']);
-  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt')], COMPLETE_UI_LOCALES);
-  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt ,bogus,ru\t')], COMPLETE_UI_LOCALES);
+  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl')], COMPLETE_UI_LOCALES);
+  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl ,bogus,ru\t')], COMPLETE_UI_LOCALES);
   // A synthetic extra code keeps the generic additive proof independent of
   // which codes exist today: naming zz opens exactly zz (gated codes stay closed).
   assert.deepEqual([...releaseOpenUiLocales('zz', TEN)], [...FROZEN_OPEN, 'zz']);
@@ -169,5 +174,5 @@ test('the release resolver opens a registered complete code only when the flag n
   // Additive only: naming an already-open code neither duplicates it nor
   // removes any of the frozen eight (hiding sv is out of scope, G21.50).
   assert.deepEqual([...releaseOpenUiLocales('be, en', TEN)], FROZEN_OPEN);
-  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, zz', TEN)], TEN);
+  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, zz', TEN)], TEN);
 });

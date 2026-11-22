@@ -191,6 +191,61 @@
             "reason": "lt трымае gidas (Gidai →, Gidas, Atidaryti gido aprašymą) — уласнае літоўскае слова аўдыёгіда",
             "date": "2026-11-22"
           }
+        },
+        "et": {
+          "term": "giid",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "giid",
+            "locator": "translations/et.json#native.nearby.guideLabel",
+            "reason": "et трымае ўласнае giid (Giidid →, Giid, Ava giidi kirjeldus) — стандартны эстонскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "gids",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "gids",
+            "locator": "translations/lv.json#native.nearby.guideLabel",
+            "reason": "lv трымае gids (Gidi →, Gids, Atvērt gida aprakstu) — стандартны латвійскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "sprievodca",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "sprievodca",
+            "locator": "translations/sk.json#native.nearby.guideLabel",
+            "reason": "sk трымае ўласнае sprievodca (Sprievodcovia →, Sprievodca, Otvoriť popis sprievodcu) — прыроднае славацкае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "kalauz",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kalauz",
+            "locator": "translations/hu.json#native.nearby.guideLabel",
+            "reason": "hu трымае ўласнае kalauz (Kalauzok →, Kalauz, A kalauz leírásának megnyitása) — прыроднае венгерскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "vodnik",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "vodnik",
+            "locator": "translations/sl.json#native.nearby.guideLabel",
+            "reason": "sl трымае ўласнае vodnik (Vodniki →, Vodnik, Odpri opis vodnika) — прыроднае славенскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -377,6 +432,61 @@
             "term": "sustojimas",
             "locator": "translations/lt.json#native.chrome.stopsCount",
             "reason": "lt трымае sustojimas (Sustojimai: N, Sustojimas N, Kitas sustojimas) — словаформа кропкі маршруту; дзеянне спыніць тэйзер — Stabdyti (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "et": {
+          "term": "peatus",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "peatus",
+            "locator": "translations/et.json#native.chrome.stopsCount",
+            "reason": "імянік — peatus (Peatused: N, Peatus N, Järgmine peatus) — стандартны эстонскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Peata (native.place.stopLabel), uk/de-прэцэдэнт немешвання сэнсаў",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "pietura",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pietura",
+            "locator": "translations/lv.json#native.chrome.stopsCount",
+            "reason": "імянік — pietura (Pieturas: N, Pietura N, Nākamā pietura) — натуральны латвійскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Apturēt (native.place.stopLabel), uk/de-прэцэдэнт немешвання сэнсаў",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "zastavenie",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "zastavenie",
+            "locator": "translations/sk.json#native.chrome.stopsCount",
+            "reason": "імянік — zastavenie (Zastavenia: N, Zastavenie N, Ďalšie zastavenie) — звыклы славацкі тэрмін кропкі маршруту, як cs Zastavení; дзеянне спыніць тэйзер — Zastaviť (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "megálló",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "megálló",
+            "locator": "translations/hu.json#native.chrome.stopsCount",
+            "reason": "імянік — megálló (Megállók: N, Megálló N, Következő megálló) — звыклы венгерскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Leállítás (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "točka",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "točka",
+            "locator": "translations/sl.json#native.chrome.stopsCount",
+            "reason": "імянік — točka (Točke: N, Točka N, Naslednja točka) — звыклае славенскае слова кропкі маршруту; дзеянне спыніць тэйзер — Ustavi (native.place.stopLabel)",
             "date": "2026-11-22"
           }
         }
@@ -566,6 +676,61 @@
             "reason": "walk → pasivaikščiojimas ўсюды ў lt-наборы (Pasivaikščiojimas, Dabartinis pasivaikščiojimas, Pasivaikščiojimų istorija)",
             "date": "2026-11-22"
           }
+        },
+        "et": {
+          "term": "jalutuskäik",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "jalutuskäik",
+            "locator": "translations/et.json#native.chrome.currentWalk",
+            "reason": "jalutuskäik як адзіны тэрмін праходу (Käimasolev jalutuskäik, Jalutuskäikude ajalugu, Lõpeta jalutuskäik) — прыродны эстонскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "pastaiga",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pastaiga",
+            "locator": "translations/lv.json#native.chrome.currentWalk",
+            "reason": "walk → pastaiga паўсюль у lv-наборы (Pastaiga, Pašreizējā pastaiga, Pastaigu vēsture, Pabeigt pastaigu) — натуральны латвійскі тэрмін прагулкі па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "prechádzka",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "prechádzka",
+            "locator": "translations/sk.json#native.chrome.currentWalk",
+            "reason": "walk → prechádzka паўсюль у sk-наборы (Prechádzka, Aktuálna prechádzka, História prechádzok, Ukončiť prechádzku) — прыродны славацкі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "séta",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "séta",
+            "locator": "translations/hu.json#native.chrome.currentWalk",
+            "reason": "walk → séta паўсюль у hu-наборы (Séta, Aktuális séta, Sétatörténet, Séta befejezése) — прыродны венгерскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "sprehod",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "sprehod",
+            "locator": "translations/sl.json#native.chrome.currentWalk",
+            "reason": "walk → sprehod паўсюль у sl-наборы (Sprehod, Trenutni sprehod, Zgodovina sprehodov, Zaključi sprehod) — прыродны славенскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -753,6 +918,61 @@
             "reason": "адзін корань atsisiųsti/atsiuntimas (Atsisiųsti, Atsiuntimas nepavyko., Gidas neatsisiųstas.) — звыклы літоўскі корань спампоўкі",
             "date": "2026-11-22"
           }
+        },
+        "et": {
+          "term": "alla laadima",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "alla laadima",
+            "locator": "translations/et.json#native.preview.label.download",
+            "reason": "адзін корань alla laadimine (Laadi alla, Allalaadimine ebaõnnestus., Giid pole alla laaditud.) — en/uk-прэцэдэнт аднакарэннага тэрміна",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "lejupielādēt",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "lejupielādēt",
+            "locator": "translations/lv.json#native.preview.label.download",
+            "reason": "адзін корань lejupielādēt/lejupielāde (Lejupielādēt, Lejupielāde neizdevās., Gids nav lejupielādēts.) — стандартны латвійскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "stiahnuť",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "stiahnuť",
+            "locator": "translations/sk.json#native.preview.label.download",
+            "reason": "адзін корань stiahnuť/sťahovanie (Stiahnuť, Sťahovanie zlyhalo., Sprievodca nie je stiahnutý.) — стандартны славацкі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "letöltés",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "letöltés",
+            "locator": "translations/hu.json#native.preview.label.download",
+            "reason": "адзін корань letöltés/letöltve (Letöltés, A letöltés nem sikerült., A kalauz nincs letöltve.) — стандартны венгерскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "prenesti",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "prenesti",
+            "locator": "translations/sl.json#native.preview.label.download",
+            "reason": "адзін корань prenesti/prenos (Prenesi, Prenos ni uspel., Vodnik ni prenesen.) — стандартны славенскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -937,6 +1157,61 @@
             "term": "neprieinama",
             "locator": "translations/lt.json#native.chrome.catalogUnavailable",
             "reason": "neprieinama / laikinai neprieinama ў радках стану (Katalogas neprieinamas, Katalogas laikinai neprieinamas)",
+            "date": "2026-11-22"
+          }
+        },
+        "et": {
+          "term": "pole saadaval",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pole saadaval",
+            "locator": "translations/et.json#native.chrome.catalogUnavailable",
+            "reason": "pole saadaval / hetkel pole saadaval у радках стану (Kataloog pole saadaval, Kataloog pole hetkel saadaval) — стандартны эстонскі UI-зварот недаступнасці",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "nav pieejams",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nav pieejams",
+            "locator": "translations/lv.json#native.chrome.catalogUnavailable",
+            "reason": "nav pieejams / īslaicīgi nav pieejams у радках стану (Katalogs nav pieejams, Katalogs īslaicīgi nav pieejams) — стандартны латвійскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "nie je dostupný",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nie je dostupný",
+            "locator": "translations/sk.json#native.chrome.catalogUnavailable",
+            "reason": "nie je dostupný / dočasne nedostupný у радках стану (Katalóg nie je dostupný, Katalóg je dočasne nedostupný) — стандартны славацкі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "nem elérhető",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nem elérhető",
+            "locator": "translations/hu.json#native.chrome.catalogUnavailable",
+            "reason": "nem elérhető / átmenetileg nem elérhető у радках стану (A katalógus nem elérhető, A katalógus átmenetileg nem elérhető) — стандартны венгерскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "ni na voljo",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ni na voljo",
+            "locator": "translations/sl.json#native.chrome.catalogUnavailable",
+            "reason": "ni na voljo / trenutno ni na voljo у радках стану (Katalog ni na voljo, Katalog trenutno ni na voljo) — стандартны славенскі UI-зварот",
             "date": "2026-11-22"
           }
         }
@@ -1126,6 +1401,61 @@
             "reason": "purchase → pirkimas / pirkti (Pirkti, Reikalingas pirkimas., Nupirkta · reikia atsisiųsti, Prieinama po pirkimo)",
             "date": "2026-11-22"
           }
+        },
+        "et": {
+          "term": "ost",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ost",
+            "locator": "translations/et.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → ost / osta (Osta, Vajalik on ost., Ostetud · tuleb alla laadida, Saadaval pärast ostu) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "pirkums",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pirkums",
+            "locator": "translations/lv.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → pirkums / pirkt (Pirkt, Nepieciešams pirkums., Nopirkts · nepieciešama lejupielāde, Pieejams pēc pirkuma) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "nákup",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nákup",
+            "locator": "translations/sk.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → nákup / kúpiť (Kúpiť, Vyžaduje sa nákup., Zakúpené · treba stiahnuť, Dostupné po nákupe) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "vásárlás",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "vásárlás",
+            "locator": "translations/hu.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → vásárlás / megvásárolva (Vásárlás, Vásárlás szükséges., Megvásárolva · letöltés szükséges, Vásárlás után érhető el) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "nakup",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nakup",
+            "locator": "translations/sl.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → nakup / kupi (Kupi, Zahtevan je nakup., Nakupljeno · čakanje na prenos, Na voljo po nakupu) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1309,6 +1639,61 @@
             "term": "pratęstas iš išsaugotos sesijos",
             "locator": "translations/lt.json#native.run.restoredTitle",
             "reason": "канон без рэстаўрацыйнай метафары (Pasivaikščiojimas pratęstas iš išsaugotos sesijos), тая самая пабудова be/en/uk/de/es/fr/cs/sv/nb/pl/da/nl/pt",
+            "date": "2026-11-22"
+          }
+        },
+        "et": {
+          "term": "jätkub salvestatud seansist",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "jätkub salvestatud seansist",
+            "locator": "translations/et.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Jalutuskäik jätkub salvestatud seansist), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "lv": {
+          "term": "turpinās no saglabātās sesijas",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "turpinās no saglabātās sesijas",
+            "locator": "translations/lv.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Pastaiga turpinās no saglabātās sesijas), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "sk": {
+          "term": "pokračuje z uloženej relácie",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "pokračuje z uloženej relácie",
+            "locator": "translations/sk.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Prechádzka pokračuje z uloženej relácie), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "hu": {
+          "term": "folytatódik a mentett munkamenetből",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "folytatódik a mentett munkamenetből",
+            "locator": "translations/hu.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (A séta folytatódik a mentett munkamenetből), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "sl": {
+          "term": "se nadaljuje iz shranjene seje",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "se nadaljuje iz shranjene seje",
+            "locator": "translations/sl.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Sprehod se nadaljuje iz shranjene seje), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
             "date": "2026-11-22"
           }
         }
