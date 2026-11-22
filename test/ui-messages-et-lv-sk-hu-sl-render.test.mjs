@@ -3,6 +3,7 @@
 // shared ui-locale-render-suite.mjs; this file carries the wave's authored
 // words (test/ui-locale-render-suite.mjs — one suite, not per-wave copies).
 import { registerLocaleRenderSuite } from './ui-locale-render-suite.mjs';
+import { timeCapWordsFor } from './ui-locale-time-cap-words.mjs';
 import { et as webEt } from '../web/lib/i18n/et.ts';
 import { lv as webLv } from '../web/lib/i18n/lv.ts';
 import { sk as webSk } from '../web/lib/i18n/sk.ts';
@@ -93,12 +94,6 @@ registerLocaleRenderSuite({
       webPrivacyTitle: 'Zasebnost',
     },
   },
-  timeCapForms: {
-    et: { 60: 'Kuni tund', 120: 'Kuni kaks tundi', 240: 'Pool päeva' },
-    lv: { 60: 'Līdz stundai', 120: 'Līdz divām stundām', 240: 'Uz pusi dienas' },
-    sk: { 60: 'Do hodiny', 120: 'Do dvoch hodín', 240: 'Na pol dňa' },
-    hu: { 60: 'Legfeljebb egy óra', 120: 'Legfeljebb két óra', 240: 'Fél nap' },
-    sl: { 60: 'Do ene ure', 120: 'Do dveh ur', 240: 'Na pol dneva' },
-  },
+  timeCapForms: timeCapWordsFor('et', 'lv', 'sk', 'hu', 'sl'),
   webData: { et: webEt, lv: webLv, sk: webSk, hu: webHu, sl: webSl },
 });

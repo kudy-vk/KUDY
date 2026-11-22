@@ -68,6 +68,14 @@ const RETENTION_PROBES = {
   sk: { aggregate: 'agregované čísla', retention: '14 mesiacov' },
   hu: { aggregate: 'aggregált számok', retention: '14 hónapig' },
   sl: { aggregate: 'združene številke', retention: '14 mesecev' },
+  hr: { aggregate: 'agregirani brojevi', retention: '14 mjeseci' },
+  ro: { aggregate: 'numere agregate', retention: '14 luni' },
+  bg: { aggregate: 'агрегирани числа', retention: '14 месеца' },
+  el: { aggregate: 'συγκεντρωτικοί αριθμοί', retention: '14 μήνες' },
+  sr: { aggregate: 'агрегирани бројеви', retention: '14 месеци' },
+  bs: { aggregate: 'agregirani brojevi', retention: '14 mjeseci' },
+  mk: { aggregate: 'агрегирани бројки', retention: '14 месеци' },
+  sq: { aggregate: 'numra të agreguar', retention: '14 muaj' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -200,6 +208,46 @@ const APPDATA_PROBES = {
     ipHash: 'enesmerno zgostitev IP-naslova',
     ratings: 'izbrane razloge',
     accessKey: 'kot dostopni ključ',
+  },
+  hr: {
+    ipHash: 'jednosmjerni hash IP adrese',
+    ratings: 'odabrani razlozi',
+    accessKey: 'kao ključ za pristup',
+  },
+  ro: {
+    ipHash: 'hash unidirecțional al adresei IP',
+    ratings: 'motivele selectate',
+    accessKey: 'ca cheie de acces',
+  },
+  bg: {
+    ipHash: 'еднопосочен hash на IP адреса',
+    ratings: 'избраните причини',
+    accessKey: 'като ключ за достъп',
+  },
+  el: {
+    ipHash: 'μονόδρομο hash της διεύθυνσης IP',
+    ratings: 'επιλεγμένοι λόγοι',
+    accessKey: 'ως κλειδί πρόσβασης',
+  },
+  sr: {
+    ipHash: 'једносмерни hash IP адресе',
+    ratings: 'изабрани разлози',
+    accessKey: 'као кључ за приступ',
+  },
+  bs: {
+    ipHash: 'jednosmjerni hash IP adrese',
+    ratings: 'odabrani razlozi',
+    accessKey: 'kao ključ za pristup',
+  },
+  mk: {
+    ipHash: 'еднонасочно хеширање на IP адресата',
+    ratings: 'избраните причини',
+    accessKey: 'како клуч за пристап',
+  },
+  sq: {
+    ipHash: 'hash njëdrejtimsh të adresës IP',
+    ratings: 'arsyet e zgjedhura',
+    accessKey: 'si çelës qasjeje',
   },
 };
 

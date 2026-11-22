@@ -63,7 +63,7 @@ export const DOMAINS = [
       {
         file: 'components/ui-strings.generated.ts',
         exportName: 'UI_STRINGS',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
         annotation: 'Record<CompleteUiLocaleCode, UiStrings>',
         imports: [
           'import { completeUiLocaleSelfNames, type CompleteUiLocaleCode } from "../contracts/ui-locales.ts";',
@@ -78,13 +78,13 @@ export const DOMAINS = [
   },
   {
     domain: 'native.guideHint',
-    note: 'the nearby guide-hint card\'s words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377), et/lv/sk/hu/sl too (EU-UI-02, issue #378)',
+    note: 'the nearby guide-hint card\'s words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377), et/lv/sk/hu/sl too (EU-UI-02, issue #378), hr/ro/bg/el/sr/bs/mk/sq too (EU-UI-03, issue #379)',
     outputs: [
       {
         file: 'components/guide-hint-strings.generated.ts',
         exportName: 'GUIDE_HINT_STRINGS',
-        locales: ['be', 'en', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
-        annotation: 'Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl", GuideHintStrings>',
+        locales: ['be', 'en', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
+        annotation: 'Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq", GuideHintStrings>',
         imports: ['import type { GuideHintStrings } from "../contracts/ui-message-types.ts";'],
       },
     ],
@@ -113,7 +113,7 @@ export const DOMAINS = [
       {
         file: 'controllers/catalog/preview-strings.generated.ts',
         exportName: 'PREVIEW_STRINGS_DATA',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
         signature: {
           // The detail function receives the controller's PreviewDetail state
           // object (kind + the missing-files count), not the raw parameters;
@@ -134,7 +134,7 @@ export const DOMAINS = [
       {
         file: 'controllers/run/runMap-strings.generated.ts',
         exportName: 'RUN_MAP_STRINGS_DATA',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
       },
     ],
   },
@@ -145,7 +145,7 @@ export const DOMAINS = [
       {
         file: 'controllers/place/placeDetail-strings.generated.ts',
         exportName: 'PLACE_DETAIL_STRINGS_DATA',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
       },
     ],
   },
@@ -156,7 +156,7 @@ export const DOMAINS = [
       {
         file: 'controllers/nearby/nearbySurface-strings.generated.ts',
         exportName: 'NEARBY_STRINGS_DATA',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
       },
     ],
   },
@@ -167,7 +167,7 @@ export const DOMAINS = [
       {
         file: 'controllers/commerce/commerce-strings.generated.ts',
         exportName: 'OFFER_STRINGS_DATA',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
       },
     ],
   },
@@ -178,7 +178,7 @@ export const DOMAINS = [
       {
         file: 'controllers/feedback-strings.generated.ts',
         exportName: 'FEEDBACK_STRINGS_DATA',
-        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl'],
+        locales: ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq'],
       },
     ],
   },
@@ -208,6 +208,14 @@ export const DOMAINS = [
       { file: 'web/lib/i18n/sk.ts', exportName: 'sk', locales: ['sk'] },
       { file: 'web/lib/i18n/hu.ts', exportName: 'hu', locales: ['hu'] },
       { file: 'web/lib/i18n/sl.ts', exportName: 'sl', locales: ['sl'] },
+      { file: 'web/lib/i18n/hr.ts', exportName: 'hr', locales: ['hr'] },
+      { file: 'web/lib/i18n/ro.ts', exportName: 'ro', locales: ['ro'] },
+      { file: 'web/lib/i18n/bg.ts', exportName: 'bg', locales: ['bg'] },
+      { file: 'web/lib/i18n/el.ts', exportName: 'el', locales: ['el'] },
+      { file: 'web/lib/i18n/sr.ts', exportName: 'sr', locales: ['sr'] },
+      { file: 'web/lib/i18n/bs.ts', exportName: 'bs', locales: ['bs'] },
+      { file: 'web/lib/i18n/mk.ts', exportName: 'mk', locales: ['mk'] },
+      { file: 'web/lib/i18n/sq.ts', exportName: 'sq', locales: ['sq'] },
     ],
   },
 ];
