@@ -289,7 +289,7 @@ export interface PreviewStrings {
 const PREVIEW_STRINGS = PREVIEW_STRINGS_DATA;
 
 export function previewStrings(locale: string): PreviewStrings {
-  return locale === 'it' ? PREVIEW_STRINGS.it : locale === 'fi' ? PREVIEW_STRINGS.fi : locale === 'lt' ? PREVIEW_STRINGS.lt : locale === 'it' ? PREVIEW_STRINGS.it : locale === 'fi' ? PREVIEW_STRINGS.fi : locale === 'lt' ? PREVIEW_STRINGS.lt : locale === 'pt' ? PREVIEW_STRINGS.pt : locale === 'nl' ? PREVIEW_STRINGS.nl : locale === 'da' ? PREVIEW_STRINGS.da : locale === 'pl' ? PREVIEW_STRINGS.pl : locale === 'nb' ? PREVIEW_STRINGS.nb : locale === 'zh' ? PREVIEW_STRINGS.zh : locale === 'sv' ? PREVIEW_STRINGS.sv : locale === 'cs' ? PREVIEW_STRINGS.cs : locale === 'es' ? PREVIEW_STRINGS.es : locale === 'fr' ? PREVIEW_STRINGS.fr : locale === 'de' ? PREVIEW_STRINGS.de : locale === 'en' ? PREVIEW_STRINGS.en : locale === 'uk' ? PREVIEW_STRINGS.uk : PREVIEW_STRINGS.be;
+  return locale === 'it' ? PREVIEW_STRINGS.it : locale === 'fi' ? PREVIEW_STRINGS.fi : locale === 'lt' ? PREVIEW_STRINGS.lt : locale === 'pt' ? PREVIEW_STRINGS.pt : locale === 'nl' ? PREVIEW_STRINGS.nl : locale === 'da' ? PREVIEW_STRINGS.da : locale === 'pl' ? PREVIEW_STRINGS.pl : locale === 'nb' ? PREVIEW_STRINGS.nb : locale === 'zh' ? PREVIEW_STRINGS.zh : locale === 'sv' ? PREVIEW_STRINGS.sv : locale === 'cs' ? PREVIEW_STRINGS.cs : locale === 'es' ? PREVIEW_STRINGS.es : locale === 'fr' ? PREVIEW_STRINGS.fr : locale === 'de' ? PREVIEW_STRINGS.de : locale === 'en' ? PREVIEW_STRINGS.en : locale === 'uk' ? PREVIEW_STRINGS.uk : PREVIEW_STRINGS.be;
 }
 
 // The refusal's rendered word: the known map, else the raw reason itself

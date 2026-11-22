@@ -203,9 +203,6 @@ export const DOMAINS = [
       { file: 'web/lib/i18n/it.ts', exportName: 'it', locales: ['it'] },
       { file: 'web/lib/i18n/fi.ts', exportName: 'fi', locales: ['fi'] },
       { file: 'web/lib/i18n/lt.ts', exportName: 'lt', locales: ['lt'] },
-      { file: 'web/lib/i18n/it.ts', exportName: 'it', locales: ['it'] },
-      { file: 'web/lib/i18n/fi.ts', exportName: 'fi', locales: ['fi'] },
-      { file: 'web/lib/i18n/lt.ts', exportName: 'lt', locales: ['lt'] },
     ],
   },
 ];
