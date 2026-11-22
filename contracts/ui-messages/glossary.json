@@ -422,6 +422,61 @@
             "reason": "cnr трымае водич (Водичи →, Водич, Отвори опис водича) — стандартнае чарнагорскае слова аўдыёгіда",
             "date": "2026-11-22"
           }
+        },
+        "nn": {
+          "term": "guide",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "guide",
+            "locator": "translations/nn.json#native.nearby.guideLabel",
+            "reason": "nn трымае guide (Guidar →, Guide, Opna skildringa av guiden) — кароткі і звыклы нюнорскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "guida",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "guida",
+            "locator": "translations/rm.json#native.nearby.guideLabel",
+            "reason": "rm трымае guida (Guidas →, Guida, Avrir la descripziun dalla guida) — звыклы ретароманскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "გიდი",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "გიდი",
+            "locator": "translations/ka.json#native.nearby.guideLabel",
+            "reason": "ka трымае გიდი (გიდები →, გიდი, გიდის აღწერის გახსნა) — звыклае грузінскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "ուղեցույց",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ուղեցույց",
+            "locator": "translations/hy.json#native.nearby.guideLabel",
+            "reason": "hy трымае ուղեցույց (Ուղեցույցներ →, Ուղեցույց, Բացել ուղեցույցի նկարագրությունը) — уласнае армянскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "bələdçi",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "bələdçi",
+            "locator": "translations/az.json#native.nearby.guideLabel",
+            "reason": "az трымае bələdçi (Bələdçilər →, Bələdçi, Bələdçinin təsvirini aç) — уласнае азербайджанскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -839,6 +894,61 @@
             "term": "тачка",
             "locator": "translations/cnr.json#native.chrome.stopsCount",
             "reason": "імянік — тачка (Тачке: N, Тачка N, Сљедећа тачка) — звыклае чарнагорскае слова кропкі маршруту; дзеянне спыніць тэйзер — Заустави (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "nn": {
+          "term": "stopp",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "stopp",
+            "locator": "translations/nn.json#native.chrome.stopsCount",
+            "reason": "імянік — stopp (Stopp: N, Stopp N, Neste stopp) — словаформа нязменная ў лічбах, як nb/da/sv; дзеянне спыніць тэйзер — Stopp (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "punct",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "punct",
+            "locator": "translations/rm.json#native.chrome.stopsCount",
+            "reason": "імянік — punct (Puncts: N, Punct N, Proxim punct) — прыродны ретароманскі тэрмін кропкі маршруту (адпавядае be кропка); дзеянне спыніць тэйзер — Fermar (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "გაჩერება",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "გაჩერება",
+            "locator": "translations/ka.json#native.chrome.stopsCount",
+            "reason": "імянік — გაჩერება (გაჩერებები: N, გაჩერება N, შემდეგი გაჩერება) — звыклае грузінскае слова кропкі маршруту; дзеянне спыніць тэйзер — შეწყვეტა (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "կանգառ",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "կանգառ",
+            "locator": "translations/hy.json#native.chrome.stopsCount",
+            "reason": "імянік — կանգառ (Կանգառներ՝ N, Կանգառ N, Հաջորդ կանգառ) — звыклае армянскае слова кропкі маршруту; дзеянне спыніць тэйзер — Կանգնեցնել (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "dayanacaq",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "dayanacaq",
+            "locator": "translations/az.json#native.chrome.stopsCount",
+            "reason": "імянік — dayanacaq (Dayanacaqlar: N, Dayanacaq N, Növbəti dayanacaq) — звыклае азербайджанскае слова кропкі маршруту; дзеянне спыніць тэйзер — Dayandır (native.place.stopLabel)",
             "date": "2026-11-22"
           }
         }
@@ -1259,6 +1369,61 @@
             "reason": "walk → шетња паўсюль у cnr-наборы (Шетња, Тренутна шетња, Историја шетњи, Заврши шетњу) — прыродны чарнагорскі актыўны праход па горадзе",
             "date": "2026-11-22"
           }
+        },
+        "nn": {
+          "term": "tur",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "tur",
+            "locator": "translations/nn.json#native.chrome.currentWalk",
+            "reason": "walk → tur паўсюль у nn-наборы (Tur, Gjeldande tur, Turhistorikk, Avslutt turen) — натуральны нюнорскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "spassegiada",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "spassegiada",
+            "locator": "translations/rm.json#native.chrome.currentWalk",
+            "reason": "walk → spassegiada паўсюль у rm-наборы (Spasségiada, La spassegiada actuala, Istorgia da las spassegiadas, Terminar la spassegiada) — прыродная ретароманская актыўная спружына па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "გასეირნება",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "გასეირნება",
+            "locator": "translations/ka.json#native.chrome.currentWalk",
+            "reason": "walk → გასეირნება паўсюль у ka-наборы (გასეირნება, მიმდინარე გასეირნება, გასეირნებების ისტორია, გასეირნების დასრულება) — прыродны грузінскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "զբոսանք",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "զբոսանք",
+            "locator": "translations/hy.json#native.chrome.currentWalk",
+            "reason": "walk → զբոսանք паўсюль у hy-наборы (Զբոսանք, Ընթացիկ զբոսանք, Զբոսանքների պատմություն, Ավարտել զբոսանքը) — прыродны армянскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "gəzinti",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "gəzinti",
+            "locator": "translations/az.json#native.chrome.currentWalk",
+            "reason": "walk → gəzinti паўсюль у az-наборы (Gəzinti, Cari gəzinti, Gəzintilər tarixçəsi, Gəzintini bitir) — прыродны азербайджанскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1677,6 +1842,61 @@
             "reason": "адзін корань преузми/преузимање (Преузми, Преузимање није успјело., Водич није преузет.) — стандартны чарнагорскі UI-тэрмін",
             "date": "2026-11-22"
           }
+        },
+        "nn": {
+          "term": "lasta ned",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "lasta ned",
+            "locator": "translations/nn.json#native.preview.label.download",
+            "reason": "адзін корань lasta ned/nedlasting/lasta ned (Last ned, Nedlastinga mislykkast., Guiden er ikkje lasta ned.) — en/nb-прэцэдэнт аднакарэннага тэрміна",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "chargiar giu",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "chargiar giu",
+            "locator": "translations/rm.json#native.preview.label.download",
+            "reason": "адзін корань chargiar giu/chargiada giu (Chargiar giu, Il chargiar giu n'è betg reussì., La guida n'è betg chargiada giu.) — стандартны ретароманскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "ჩამოტვირთვა",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ჩამოტვირთვა",
+            "locator": "translations/ka.json#native.preview.label.download",
+            "reason": "адзін корань ჩამოტვირთვა/ჩამოტვირთული (ჩამოტვირთვა, ჩამოტვირთვა ვერ შესრულდა., გიდი არ არის ჩამოტვირთული.) — стандартны грузінскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "ներբեռնել",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ներբեռնել",
+            "locator": "translations/hy.json#native.preview.label.download",
+            "reason": "адзін корань ներբեռնել/ներբեռնված (Ներբեռնել, Ներբեռնումը ձախողվեց., Ուղեցույցը ներբեռնված չէ.) — стандартны армянскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "yüklə",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "yüklə",
+            "locator": "translations/az.json#native.preview.label.download",
+            "reason": "адзін корань yüklə/yükləmə/yüklənməyib (Yüklə, Yükləmə uğursuz oldu., Bələdçi yüklənməyib.) — стандартны азербайджанскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -2092,6 +2312,61 @@
             "term": "није доступан",
             "locator": "translations/cnr.json#native.chrome.catalogUnavailable",
             "reason": "није доступан / привремено није доступан у радках стану (Каталог није доступан, Каталог привремено није доступан) — стандартны чарнагорскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "nn": {
+          "term": "ikkje tilgjengeleg",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ikkje tilgjengeleg",
+            "locator": "translations/nn.json#native.chrome.catalogUnavailable",
+            "reason": "ikkje tilgjengeleg / mellombels utilgjengeleg у радках стану (Katalogen er ikkje tilgjengeleg, Katalogen er mellombels utilgjengeleg) — стандартны нюнорскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "betg disponibel",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "betg disponibel",
+            "locator": "translations/rm.json#native.chrome.catalogUnavailable",
+            "reason": "betg disponibel / actualmain betg disponibel у радках стану (Il catalog è betg disponibel, Il catalog è actualmain betg disponibel) — стандартны ретароманскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "მიუწვდომელია",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "მიუწვდომელია",
+            "locator": "translations/ka.json#native.chrome.catalogUnavailable",
+            "reason": "მიუწვდომელია / დროებით მიუწვდომელია у радках стану (კატალოგი მიუწვდომელია, კატალოგი დროებით მიუწვდომელია) — стандартны грузінскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "հասանելի չէ",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "հասանելի չէ",
+            "locator": "translations/hy.json#native.chrome.catalogUnavailable",
+            "reason": "հասանելի չէ / ժամանակավորապես հասանելի չէ у радках стану (Կատալոգը հասանելի չէ, Կատալոգը ժամանակավորապես հասանելի չէ) — стандартны армянскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "əlçatmazdır",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "əlçatmazdır",
+            "locator": "translations/az.json#native.chrome.catalogUnavailable",
+            "reason": "əlçatmazdır / müvəqqəti əlçatmazdır у радках стану (Kataloq əlçatmazdır, Kataloq müvəqqəti əlçatmazdır) — стандартны азербайджанскі UI-зварот",
             "date": "2026-11-22"
           }
         }
@@ -2512,6 +2787,61 @@
             "reason": "purchase → куповина / купити (Купи, Потребна је куповина., Купљено · потребно преузимање, Доступно након куповине) — адзін корань ва ўсіх радках",
             "date": "2026-11-22"
           }
+        },
+        "nn": {
+          "term": "kjøp",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kjøp",
+            "locator": "translations/nn.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → kjøp / kjøpe (Kjøp, Kjøp krevst., Kjøpt · nedlasting krevst, Tilgjengeleg etter kjøp) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "cumpra",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "cumpra",
+            "locator": "translations/rm.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → cumpra / cumprar (Cumprar, Ina cumpra è necessaria., Cumprà · chargiar giu necessari, Disponibel suenter la cumpra) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "შეძენა",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "შეძენა",
+            "locator": "translations/ka.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → შეძენა / შეიძინოს (შეძენა, საჭიროა შეძენა., შეძენილია · საჭიროა ჩამოტვირთვა, ხელმისაწვდომია შეძენის შემდეგ) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "գնում",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "գնում",
+            "locator": "translations/hy.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → գնում / գնել (Գնել, Անհրաժեշտ է գնում., Գնված է · անհրաժեշտ է ներբեռնել, Հասանելի է գնումից հետո) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "alış",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "alış",
+            "locator": "translations/az.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → alış / almaq (Al, Alış tələb olunur., Alınıb · yükləmə tələb olunur, Alışdan sonra əlçatandır) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -2926,6 +3256,61 @@
             "term": "наставља са сачуване сјесије",
             "locator": "translations/cnr.json#native.run.restoredTitle",
             "reason": "канон без рэстаўрацыйнай метафары (Шетња наставља са сачуване сјесије), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "nn": {
+          "term": "held fram frå ei lagra økt",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "held fram frå ei lagra økt",
+            "locator": "translations/nn.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Turen held fram frå ei lagra økt), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "rm": {
+          "term": "continuescha davart la sessiun arcunada",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "continuescha davart la sessiun arcunada",
+            "locator": "translations/rm.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (La spassegiada continuescha davart la sessiun arcunada), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "ka": {
+          "term": "გრძელდება შენახული სესიიდან",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "გრძელდება შენახული სესიიდან",
+            "locator": "translations/ka.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (გასეირნება გრძელდება შენახული სესიიდან), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "hy": {
+          "term": "շարունակվում է պահպանված նիստից",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "շարունակվում է պահպանված նիստից",
+            "locator": "translations/hy.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Զբոսանքը շարունակվում է պահպանված նիստից), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "az": {
+          "term": "saxlanmış sessiyadan davam edir",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "saxlanmış sessiyadan davam edir",
+            "locator": "translations/az.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Gəzinti saxlanmış sessiyadan davam edir), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
             "date": "2026-11-22"
           }
         }

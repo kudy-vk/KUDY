@@ -41,6 +41,11 @@ export const TIME_CAP_WORDS = {
   ru: { 60: 'До часа', 120: 'До двух часов', 240: 'На полдня' },
   lb: { 60: 'Bis zu enger Stonn', 120: 'Bis zu zwou Stonnen', 240: 'Hallefdag' },
   cnr: { 60: 'До једног сата', 120: 'До два сата', 240: 'Пола дана' },
+  nn: { 60: 'Opp til éi time', 120: 'Opp til to timar', 240: 'Halv dag' },
+  rm: { 60: 'Fin ad ina ura', 120: 'Fin a duas uras', 240: 'Mez di' },
+  ka: { 60: 'ერთ საათამდე', 120: 'ორ საათამდე', 240: 'ნახევარი დღე' },
+  hy: { 60: 'Մինչև մեկ ժամ', 120: 'Մինչև երկու ժամ', 240: 'Կես օր' },
+  az: { 60: 'Ən çox bir saat', 120: 'Ən çox iki saat', 240: 'Yarım gün' },
 };
 
 // The wave's slice of the table: timeCapForms = timeCapWordsFor('hr', 'ro', ...).
