@@ -6,11 +6,11 @@
 // G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377), et/lv/sk/hu/sl too (EU-UI-02, issue #378), hr/ro/bg/el/sr/bs/mk/sq too (EU-UI-03, issue #379)
+// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377), et/lv/sk/hu/sl too (EU-UI-02, issue #378), hr/ro/bg/el/sr/bs/mk/sq too (EU-UI-03, issue #379), is/ga/mt/ca/tr too (EU-UI-04, issue #380)
 
 import type { GuideHintStrings } from "../contracts/ui-message-types.ts";
 
-export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq", GuideHintStrings> = {
+export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq" | "is" | "ga" | "mt" | "ca" | "tr", GuideHintStrings> = {
   "be": {
     "dismiss": "Схаваць",
     "heading": "Побач ёсць гід…",
@@ -184,5 +184,35 @@ export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" 
     "heading": "Afi është një guidë…",
     "openHint": "Hap përshkrimin e guidës",
     "paid": "me pagesë",
+  },
+  "is": {
+    "dismiss": "Fela",
+    "heading": "Nálægt er leiðsögn…",
+    "openHint": "Opna lýsingu á leiðsögn",
+    "paid": "gjaldskyldur",
+  },
+  "ga": {
+    "dismiss": "Folaigh",
+    "heading": "Tá treoir in aice…",
+    "openHint": "Oscail cur síos ar an treoir",
+    "paid": "íoctha",
+  },
+  "mt": {
+    "dismiss": "Aħbi",
+    "heading": "Fil-qrib hemm gwida…",
+    "openHint": "Iftaħ id-deskrizzjoni tal-gwida",
+    "paid": "mħallas",
+  },
+  "ca": {
+    "dismiss": "Amaga",
+    "heading": "A prop hi ha una guia…",
+    "openHint": "Obre la descripció de la guia",
+    "paid": "de pagament",
+  },
+  "tr": {
+    "dismiss": "Gizle",
+    "heading": "Yakında bir rehber var…",
+    "openHint": "Rehber açıklamasını aç",
+    "paid": "ücretli",
   },
 };

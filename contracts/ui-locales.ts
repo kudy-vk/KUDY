@@ -21,11 +21,11 @@
 // repository bytes stay CJK-free (G21.40 pattern, criterion 7); the runtime
 // value carries the real glyphs.
 
-export type UiLocaleCode = "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq";
+export type UiLocaleCode = "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq" | "is" | "ga" | "mt" | "ca" | "tr";
 
 // The codes whose catalogues are complete today (criterion 4): the subset of
 // UiLocaleCode the adapters may advertise.
-export type CompleteUiLocaleCode = Extract<UiLocaleCode, "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq">;
+export type CompleteUiLocaleCode = Extract<UiLocaleCode, "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq" | "is" | "ga" | "mt" | "ca" | "tr">;
 
 export interface UiLocaleEntry {
   readonly code: UiLocaleCode;
@@ -33,7 +33,7 @@ export interface UiLocaleEntry {
 }
 
 // Issue #542 criterion 1: the eight requested UI codes and native names,
-// defined once — zh joins as the ninth code with the G21.46 catalogue; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) follow the same record.
+// defined once — zh joins as the ninth code with the G21.46 catalogue; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) and is/ga/mt/ca/tr (EU-UI-04, issue #380) follow the same record.
 export const UI_LOCALES: readonly UiLocaleEntry[] = [
   { code: "be", nativeName: "Беларуская" },
   { code: "en", nativeName: "English" },
@@ -65,6 +65,11 @@ export const UI_LOCALES: readonly UiLocaleEntry[] = [
   { code: "bs", nativeName: "Bosanski" },
   { code: "mk", nativeName: "Македонски" },
   { code: "sq", nativeName: "Shqip" },
+  { code: "is", nativeName: "Íslenska" },
+  { code: "ga", nativeName: "Gaeilge" },
+  { code: "mt", nativeName: "Malti" },
+  { code: "ca", nativeName: "Català" },
+  { code: "tr", nativeName: "Türkçe" },
 ];
 
 // The registered complete catalogues (criterion 4): what the selector and
@@ -73,8 +78,8 @@ export const UI_LOCALES: readonly UiLocaleEntry[] = [
 // (de joined with the G21.10 catalogue, 2026-10-03-single-source-translations.md; es joins with the
 // G21.11 catalogue, same record; fr with the G21.12 catalogue, same record;
 // cs with the G21.13 catalogue, same record; sv with the G21.14 catalogue,
-// same record; zh with the G21.46 catalogue, G21.42-chinese-language.md; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) follow the same record).
-export const COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "nb", "pl", "da", "nl", "pt", "it", "fi", "lt", "et", "lv", "sk", "hu", "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq"];
+// same record; zh with the G21.46 catalogue, G21.42-chinese-language.md; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) and is/ga/mt/ca/tr (EU-UI-04, issue #380) follow the same record).
+export const COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "nb", "pl", "da", "nl", "pt", "it", "fi", "lt", "et", "lv", "sk", "hu", "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq", "is", "ga", "mt", "ca", "tr"];
 
 export function isUiLocaleCode(value: string): value is UiLocaleCode {
   return UI_LOCALES.some((entry) => entry.code === value);

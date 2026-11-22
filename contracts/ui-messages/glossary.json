@@ -334,6 +334,61 @@
             "reason": "sq трымае guidë (Guida →, Guidë, Hap përshkrimin e guidës) — звыклы ў турызме албанскі тэрмін аўдыёгіда",
             "date": "2026-11-22"
           }
+        },
+        "is": {
+          "term": "leiðsögn",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "leiðsögn",
+            "locator": "translations/is.json#native.nearby.guideLabel",
+            "reason": "is трымае leiðsögn (Leiðsagnir →, Leiðsögn, Opna lýsingu á leiðsögn) — прыроднае ісландскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "treoir",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "treoir",
+            "locator": "translations/ga.json#native.nearby.guideLabel",
+            "reason": "ga трымае treoir (Treoracha →, Treoir, Oscail cur síos ar an treoir) — прыроднае ірландскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "gwida",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "gwida",
+            "locator": "translations/mt.json#native.nearby.guideLabel",
+            "reason": "mt трымае gwida (Gwidi →, Gwida, Iftaħ id-deskrizzjoni tal-gwida) — стандартны мальтыйскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "guia",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "guia",
+            "locator": "translations/ca.json#native.nearby.guideLabel",
+            "reason": "ca трымае guia (Guies →, Guia, Obre la descripció de la guia) — стандартны каталонскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "rehber",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "rehber",
+            "locator": "translations/tr.json#native.nearby.guideLabel",
+            "reason": "tr трымае rehber (Rehberler →, Rehber, Rehber açıklamasını aç) — стандартны турэцкі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -663,6 +718,61 @@
             "term": "ndalesa",
             "locator": "translations/sq.json#native.chrome.stopsCount",
             "reason": "імянік — ndalesa (Ndalesat: N, Ndalesa N, Ndalesa tjetër) — звыклы албанскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Ndalo (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "is": {
+          "term": "stöð",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "stöð",
+            "locator": "translations/is.json#native.chrome.stopsCount",
+            "reason": "імянік — stöð (Stöðvar: N, Stöð N, Næsta stöð) — звыклы ісландскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Stöðva (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "stad",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "stad",
+            "locator": "translations/ga.json#native.chrome.stopsCount",
+            "reason": "імянік — stad (Stadanna: N, Stad N, An chéad stad eile) — звыклы ірландскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Stad (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "waqfa",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "waqfa",
+            "locator": "translations/mt.json#native.chrome.stopsCount",
+            "reason": "імянік — waqfa (Waqfiet: N, Waqfa N, Waqfa li jmiss) — звыклы мальтыйскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Waqqaf (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "aturada",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "aturada",
+            "locator": "translations/ca.json#native.chrome.stopsCount",
+            "reason": "імянік — aturada (Aturades: N, Aturada N, Aturada següent) — звыклы каталонскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Atura (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "durak",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "durak",
+            "locator": "translations/tr.json#native.chrome.stopsCount",
+            "reason": "імянік — durak (Duraklar: N, Durak N, Sonraki durak) — звыклы турэцкі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Durdur (native.place.stopLabel)",
             "date": "2026-11-22"
           }
         }
@@ -995,6 +1105,61 @@
             "reason": "walk → shëtitje паўсюль у sq-наборы (Shëtitje, Shëtitja aktuale, Historiku i shëtitjeve, Përfundo shëtitjen) — прыродны албанскі актыўны праход па горадзе",
             "date": "2026-11-22"
           }
+        },
+        "is": {
+          "term": "göngutúr",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "göngutúr",
+            "locator": "translations/is.json#native.chrome.currentWalk",
+            "reason": "walk → göngutúr паўсюль у is-наборы (Göngutúr, Núverandi göngutúr, Saga göngutúra, Ljúka göngutúr) — прыродны ісландскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "siúlóid",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "siúlóid",
+            "locator": "translations/ga.json#native.chrome.currentWalk",
+            "reason": "walk → siúlóid паўсюль у ga-наборы (Siúlóid, An siúlóid reatha, Stair na siúlóide, Críochnaigh an siúlóid) — прыродны ірландскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "mixja",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "mixja",
+            "locator": "translations/mt.json#native.chrome.currentWalk",
+            "reason": "walk → mixja паўсюль у mt-наборы (Mixja, Il-mixja attwali, L-istorja tal-mixjiet, Temm il-mixja) — прыродны мальтыйскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "passeig",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "passeig",
+            "locator": "translations/ca.json#native.chrome.currentWalk",
+            "reason": "walk → passeig паўсюль у ca-наборы (Passeig, Passeig actual, Historial de passejos, Finalitza el passeig) — прыродны каталонскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "yürüyüş",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "yürüyüş",
+            "locator": "translations/tr.json#native.chrome.currentWalk",
+            "reason": "walk → yürüyüş паўсюль у tr-наборы (Yürüyüş, Mevcut yürüyüş, Yürüyüş geçmişi, Yürüyüşü bitir) — прыродны турэцкі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1325,6 +1490,61 @@
             "reason": "адзін корань shkarko/shkarkim (Shkarko, Shkarkimi dështoi., Guida nuk është shkarkuar.) — стандартны албанскі UI-тэрмін",
             "date": "2026-11-22"
           }
+        },
+        "is": {
+          "term": "sækja",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "sækja",
+            "locator": "translations/is.json#native.preview.label.download",
+            "reason": "адзін корань sækja/sótt (Sækja, Niðurhal mistókst., Leiðsögn er ekki sótt.) — en/da-прэцэдэнт аднакарэннага тэрміна",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "íoslódáil",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "íoslódáil",
+            "locator": "translations/ga.json#native.preview.label.download",
+            "reason": "адзін корань íoslódáil/íoslódáladh (Íoslódáil, Theip ar an íoslódáil., Níor íoslódáladh an treoir.) — стандартны ірландскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "niżżel",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "niżżel",
+            "locator": "translations/mt.json#native.preview.label.download",
+            "reason": "адзін корань niżżel/tniżżel (Niżżel, It-tniżżel falla., Il-gwida mhix niżżlet.) — стандартны мальтыйскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "descarregar",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "descarregar",
+            "locator": "translations/ca.json#native.preview.label.download",
+            "reason": "адзін корань descarregar/descàrrega (Descarrega, La descàrrega ha fallat., La guia no està descarregada.) — стандартны каталонскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "indir",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "indir",
+            "locator": "translations/tr.json#native.preview.label.download",
+            "reason": "адзін корань indir/indirme (İndir, İndirme başarısız oldu., Rehber indirilmedi.) — стандартны турэцкі UI-тэрмін",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1652,6 +1872,61 @@
             "term": "nuk është i disponueshëm",
             "locator": "translations/sq.json#native.chrome.catalogUnavailable",
             "reason": "nuk është i disponueshëm / për momentin i disponueshëm у радках стану (Katalogu nuk është i disponueshëm, Katalogu nuk është për momentin i disponueshëm) — стандартны албанскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "is": {
+          "term": "ekki tiltækt",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ekki tiltækt",
+            "locator": "translations/is.json#native.chrome.catalogUnavailable",
+            "reason": "ekki tiltækt / ekki tiltæk í augnablikinu у радках стану (Efnisskrá er ekki tiltæk, Efnisskrá er ekki tiltæk í augnablikinu) — стандартны ісландскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "níl ar fáil",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "níl ar fáil",
+            "locator": "translations/ga.json#native.chrome.catalogUnavailable",
+            "reason": "níl ar fáil / ar fáil faoi láthair у радках стану (Níl an chatalóg ar fáil, Níl an chatalóg ar fáil faoi láthair) — стандартны ірландскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "mhux disponibbli",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "mhux disponibbli",
+            "locator": "translations/mt.json#native.chrome.catalogUnavailable",
+            "reason": "mhux disponibbli / mhux disponibbli għalissa у радках стану (Il-katalgu mhux disponibbli, Il-katalgu mhux disponibbli għalissa) — стандартны мальтыйскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "no disponible",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "no disponible",
+            "locator": "translations/ca.json#native.chrome.catalogUnavailable",
+            "reason": "no disponible / no està disponible temporalment у радках стану (El catàleg no està disponible, El catàleg no està disponible temporalment) — стандартны каталонскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "kullanılamıyor",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kullanılamıyor",
+            "locator": "translations/tr.json#native.chrome.catalogUnavailable",
+            "reason": "kullanılamıyor / şu anda kullanılamıyor у радках стану (Katalog kullanılamıyor, Katalog şu anda kullanılamıyor) — стандартны турэцкі UI-зварот",
             "date": "2026-11-22"
           }
         }
@@ -1984,6 +2259,61 @@
             "reason": "purchase → blerje / blej (Blej, Kërkohet blerje., Blerë · kërkohet shkarkimi, I disponueshëm pas blerjes) — адзін корань ва ўсіх радках",
             "date": "2026-11-22"
           }
+        },
+        "is": {
+          "term": "kaup",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kaup",
+            "locator": "translations/is.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → kaup / kaupa (Kaupa, Kaup er nauðsynlegt., Keypt · niðurhal vantar, Aðgengilegt eftir kaup) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "ceannach",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ceannach",
+            "locator": "translations/ga.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → ceannach / ceannaigh (Ceannaigh, Ceannach de dhíth., Ceannaithe · íoslódáil de dhíth, Ar fáil tar éis ceannach) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "xiri",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "xiri",
+            "locator": "translations/mt.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → xiri / ixtri (Ixtri, Jeħtieġ xiri., Mixtri · jeħtieġ tniżżel, Disponibbli wara xiri) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "compra",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "compra",
+            "locator": "translations/ca.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → compra / comprar (Compra, Es requereix una compra., Comprat · cal descarregar, Disponible després de la compra) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "satın alma",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "satın alma",
+            "locator": "translations/tr.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → satın alma / satın al (Satın Al, Satın alma gerekiyor., Satın alındı · indirme gerekiyor, Satın alma sonrasında kullanılabilir) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -2310,6 +2640,61 @@
             "term": "vazhdon nga sesioni i ruajtur",
             "locator": "translations/sq.json#native.run.restoredTitle",
             "reason": "канон без рэстаўрацыйнай метафары (Shëtitja vazhdon nga sesioni i ruajtur), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "is": {
+          "term": "heldur áfram frá vistuðu seti",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "heldur áfram frá vistuðu seti",
+            "locator": "translations/is.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Göngutúr heldur áfram frá vistuðu seti), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "ga": {
+          "term": "leanann ón seisiún sábháilte",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "leanann ón seisiún sábháilte",
+            "locator": "translations/ga.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Leanann an siúlóid ón seisiún sábháilte), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "mt": {
+          "term": "tkompli mis-sessjoni salvata",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "tkompli mis-sessjoni salvata",
+            "locator": "translations/mt.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Il-mixja tkompli mis-sessjoni salvata), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "ca": {
+          "term": "continua des de la sessió desada",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "continua des de la sessió desada",
+            "locator": "translations/ca.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (El passeig continua des de la sessió desada), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "tr": {
+          "term": "kayıtlı oturumdan sürüyor",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kayıtlı oturumdan sürüyor",
+            "locator": "translations/tr.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Yürüyüş kayıtlı oturumdan sürüyor), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
             "date": "2026-11-22"
           }
         }

@@ -65,20 +65,25 @@ const SR = { code: 'sr', nativeName: 'Српски' };
 const BS = { code: 'bs', nativeName: 'Bosanski' };
 const MK = { code: 'mk', nativeName: 'Македонски' };
 const SQ = { code: 'sq', nativeName: 'Shqip' };
-const THIRTY_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT, ET, LV, SK, HU, SL, HR, RO, BG, EL, SR, BS, MK, SQ];
+const IS = { code: 'is', nativeName: 'Íslenska' };
+const GA = { code: 'ga', nativeName: 'Gaeilge' };
+const MT = { code: 'mt', nativeName: 'Malti' };
+const CA = { code: 'ca', nativeName: 'Català' };
+const TR = { code: 'tr', nativeName: 'Türkçe' };
+const THIRTY_FIVE_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT, ET, LV, SK, HU, SL, HR, RO, BG, EL, SR, BS, MK, SQ, IS, GA, MT, CA, TR];
 const FROZEN_OPEN = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv'];
 
-test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk and sq, with native names, once (criterion 1)', () => {
-  assert.deepEqual([...UI_LOCALES], THIRTY_ENTRIES);
-  for (const { code, nativeName } of THIRTY_ENTRIES) {
+test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca and tr, with native names, once (criterion 1)', () => {
+  assert.deepEqual([...UI_LOCALES], THIRTY_FIVE_ENTRIES);
+  for (const { code, nativeName } of THIRTY_FIVE_ENTRIES) {
     assert.equal(uiLocaleNativeName(code), nativeName);
   }
   assert.throws(() => uiLocaleNativeName('ru'), /ui-locale-unregistered/);
 });
 
-test('the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl/hr/ro/bg/el/sr/bs/mk/sq — all thirty registered UI codes (criterion 4)', () => {
-  assert.deepEqual([...COMPLETE_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq']);
-  for (const { code } of THIRTY_ENTRIES) {
+test('the complete set is be/en/uk/de/es/fr/cs/sv/zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl/hr/ro/bg/el/sr/bs/mk/sq/is/ga/mt/ca/tr — all thirty-five registered UI codes (criterion 4)', () => {
+  assert.deepEqual([...COMPLETE_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'zh', 'nb', 'pl', 'da', 'nl', 'pt', 'it', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq', 'is', 'ga', 'mt', 'ca', 'tr']);
+  for (const { code } of THIRTY_FIVE_ENTRIES) {
     assert.equal(isUiLocaleCode(code), true, `${code} is registered`);
   }
   for (const code of COMPLETE_UI_LOCALES) {
@@ -171,10 +176,10 @@ test('the release resolver keeps the frozen eight open when the flag is absent, 
 });
 
 test('the release resolver opens a registered complete code only when the flag names it, additively (criterion 1)', () => {
-  // The real gated codes: naming zh/nb/pl/da/nl/pt/it/fi/lt/et/lv/sk/hu/sl/hr/ro/bg/el/sr/bs/mk/sq opens them alongside the frozen eight.
+  // The real gated codes: naming the gated codes opens them alongside the frozen eight.
   assert.deepEqual([...releaseOpenUiLocales('zh')], [...FROZEN_OPEN, 'zh']);
-  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl,hr,ro,bg,el,sr,bs,mk,sq')], COMPLETE_UI_LOCALES);
-  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl , hr , ro , bg , el , sr , bs , mk , sq ,bogus,ru\t')], COMPLETE_UI_LOCALES);
+  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl,hr,ro,bg,el,sr,bs,mk,sq,is,ga,mt,ca,tr')], COMPLETE_UI_LOCALES);
+  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl , hr , ro , bg , el , sr , bs , mk , sq , is , ga , mt , ca , tr ,bogus,ru\t')], COMPLETE_UI_LOCALES);
   // A synthetic extra code keeps the generic additive proof independent of
   // which codes exist today: naming zz opens exactly zz (gated codes stay closed).
   assert.deepEqual([...releaseOpenUiLocales('zz', TEN)], [...FROZEN_OPEN, 'zz']);
@@ -182,5 +187,5 @@ test('the release resolver opens a registered complete code only when the flag n
   // Additive only: naming an already-open code neither duplicates it nor
   // removes any of the frozen eight (hiding sv is out of scope, G21.50).
   assert.deepEqual([...releaseOpenUiLocales('be, en', TEN)], FROZEN_OPEN);
-  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, zz', TEN)], TEN);
+  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, zz', TEN)], TEN);
 });
