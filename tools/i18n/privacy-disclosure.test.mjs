@@ -84,6 +84,11 @@ const RETENTION_PROBES = {
   ru: { aggregate: 'агрегированные числа', retention: '14 месяцев' },
   lb: { aggregate: 'aggregéiert Zuelen', retention: '14 Mount' },
   cnr: { aggregate: 'агрегирани бројеви', retention: '14 мјесеци' },
+  nn: { aggregate: 'samantelte tal', retention: '14 månader' },
+  rm: { aggregate: 'numers agregads', retention: '14 mais' },
+  ka: { aggregate: 'აგრეგირებული რიცხვები', retention: '14 თვე' },
+  hy: { aggregate: 'ագրեգացված թվեր', retention: '14 ամիս' },
+  az: { aggregate: 'aqreqatlı rəqəmlər', retention: '14 ay' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -296,6 +301,31 @@ const APPDATA_PROBES = {
     ipHash: 'једносмјерни hash IP адресе',
     ratings: 'изабрани разлози',
     accessKey: 'као кључ за приступ',
+  },
+  nn: {
+    ipHash: 'einsretta hash av IP-adressa',
+    ratings: 'valde årsaker',
+    accessKey: 'som tilgangsnøkkel',
+  },
+  rm: {
+    ipHash: "hash en ina direcziun da l'adressa IP",
+    ratings: 'las raschuns tschernidas',
+    accessKey: "clav d'access",
+  },
+  ka: {
+    ipHash: 'ერთმხრივ ჰეშს',
+    ratings: 'არჩეული მიზეზები',
+    accessKey: 'წვდომის გასაღებად',
+  },
+  hy: {
+    ipHash: 'IP հասցեի միակողմանի հեշ',
+    ratings: 'ընտրված պատճառներ',
+    accessKey: 'որպես մուտքի բանալի',
+  },
+  az: {
+    ipHash: 'tək istiqamətli heşi',
+    ratings: 'seçilmiş səbəblər',
+    accessKey: 'giriş açarı kimi',
   },
 };
 

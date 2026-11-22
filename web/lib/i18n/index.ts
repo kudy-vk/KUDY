@@ -43,6 +43,11 @@ import { tr } from './tr.ts';
 import { ru } from './ru.ts';
 import { lb } from './lb.ts';
 import { cnr } from './cnr.ts';
+import { nn } from './nn.ts';
+import { rm } from './rm.ts';
+import { ka } from './ka.ts';
+import { hy } from './hy.ts';
+import { az } from './az.ts';
 import {
   isUiLocaleCode,
   RELEASE_FLAG_ENV,
@@ -68,7 +73,7 @@ export { uiLocaleNativeName };
 // prefix — the one list the QR builder, the language switch and the route
 // tree derive from. zh joins the catalogue set with G21.46 (G21.42-chinese-language.md) and still
 // stays out of the route set until the release flag opens it (G21.50).
-export type UiLocale = 'be' | 'en' | 'uk' | 'de' | 'es' | 'fr' | 'cs' | 'sv' | 'zh' | 'nb' | 'pl' | 'da' | 'nl' | 'pt' | 'it' | 'fi' | 'lt' | 'et' | 'lv' | 'sk' | 'hu' | 'sl' | 'hr' | 'ro' | 'bg' | 'el' | 'sr' | 'bs' | 'mk' | 'sq' | 'is' | 'ga' | 'mt' | 'ca' | 'tr' | 'ru' | 'lb' | 'cnr';
+export type UiLocale = 'be' | 'en' | 'uk' | 'de' | 'es' | 'fr' | 'cs' | 'sv' | 'zh' | 'nb' | 'pl' | 'da' | 'nl' | 'pt' | 'it' | 'fi' | 'lt' | 'et' | 'lv' | 'sk' | 'hu' | 'sl' | 'hr' | 'ro' | 'bg' | 'el' | 'sr' | 'bs' | 'mk' | 'sq' | 'is' | 'ga' | 'mt' | 'ca' | 'tr' | 'ru' | 'lb' | 'cnr' | 'nn' | 'rm' | 'ka' | 'hy' | 'az';
 
 // G21.50 (G21.42-chinese-language.md — G21.50): the route set is the OPEN subset — the resolver turns
 // the release flag input into the advertised list, so a registered-but-closed
@@ -167,7 +172,7 @@ export interface UiStrings {
   textUnavailableBody: string;
 }
 
-const STRINGS: Record<UiLocale, UiStrings> = { be, en, uk, de, es, fr, cs, sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb, cnr };
+const STRINGS: Record<UiLocale, UiStrings> = { be, en, uk, de, es, fr, cs, sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb, cnr, nn, rm, ka, hy, az };
 
 export function getUiStrings(locale: UiLocale): UiStrings {
   return STRINGS[locale];
