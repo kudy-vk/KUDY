@@ -12,7 +12,7 @@
 
 ## Лакальнае параўнанне
 
-Працоўны макет: [`local-design/UI-REVIEW-02/index.html`](../../design/brand/outputs/UI-REVIEW-02/index.html) і [інструкцыі](../../design/brand/outputs/UI-REVIEW-02/README.md).
+Працоўны макет: [`docs/design/brand/outputs/UI-REVIEW-02/index.html`](../../design/brand/outputs/UI-REVIEW-02/index.html) і [інструкцыі](../../design/brand/outputs/UI-REVIEW-02/README.md).
 
 | Варыянт | Back | Return to Run | Перавагі і абмежаванні |
 |---|---|---|---|
@@ -39,6 +39,11 @@ Production-код і агульны `topbar()` не змяняліся; па г�
 ## Праверка і недаступныя доказы
 
 - PASS: `node --check docs/design/brand/outputs/UI-REVIEW-02/board.mjs`.
+- PASS: `node --test tools/design/ui-review-02.test.mjs` — 6 тэстаў на выбраны A, правілы бачнасці shortcut і 13 моў, уключаючы pl/de/es. Гэта выпраўляе знаходкі [Voka ў PR #392](https://github.com/kudy-vk/KUDY/pull/392#issuecomment-7071592552) з папярэдняга head `8d0ef107`. Уласныя подпісы дэма — лакалізаваныя fixtures; назвы Back/Walk/Resume па-ранейшаму ідуць з `contracts/ui-messages`.
 - NOT-VERIFIED: рэндэр на прыладзе, TalkBack/VoiceOver, сапраўдныя 44 dp, маштаб і перакрыцце на экранах. Спроба запусціць Chromium у лакальным MCP-пясочніку скончылася `SIGTRAP` без здымка; наяўнасць CSS правіл не замяняе візуальнай праверкі.
+- PASS: `node --test tools/design/gen-paper-grain.test.mjs tools/design/image-check.test.mjs tools/design/ui-review-02.test.mjs tools/docs-ledger/counts-guard.test.mjs` — 32 тэсты прайшлі.
+- BLOCKED (не пройдзена): `npm run typecheck` — TS6053: у ізаляваным worktree адсутнічае `spikes/G00.03-sandbox-grant/server/device-auth.mjs`, які патрабуе бягучая канфігурацыя. Гэты PR не змяняе `spikes` або TypeScript-канфігурацыю; прычыну адсутнасці файла трэба высветліць на асноўнай машыне.
+- NOT-VERIFIED: `npm run ci:local` у MCP-пясочніцы спыніўся праз 55 секунд на этапе `npm ci`; Git-каманда ўнутры CI таксама не змагла прачытаць службовы `.git` гэтага worktree.
+- NOT-VERIFIED: `npm run e2e:android:local` завяршыўся кодам 3: `Android E2E: NOT-VERIFIED (git rev-parse HEAD failed ())`. У CI-класіфікатары `tools/design/ui-review-02.test.mjs` азначае `docs-only=false`, таму E2E трэба паўтарыць на лакальным хосце з доступам да Git і эмулятара; вынік нельга лічыць пропускам тэстаў.
 - Сістэмны Back у праграме не змяняўся; production-інтэграцыя яшчэ не праводзілася.
 

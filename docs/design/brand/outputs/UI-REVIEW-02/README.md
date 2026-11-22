@@ -2,7 +2,7 @@
 
 Параўнанне для [#99](https://github.com/kudy-vk/KUDY/issues/99). Уладальнік выбраў **A** 2026-11-22; запіс у [UI99-1](../../decisions.md#ui99-1). B і C захаваныя толькі для параўнання. Гэта асобная дызайн-дошка, не production-кампанент.
 
-Адкрыць праз існы сервер з кораня гэтага клона: `python3 docs/design/production/tools/serve.py`, затым `http://127.0.0.1:4400/docs/design/brand/outputs/UI-REVIEW-02/index.html`. Макет выкарыстоўвае `docs/design/production/kit.css`, іконкі `kit-icons.mjs` і радкі `contracts/ui-messages`.
+Адкрыць праз існы сервер з кораня гэтага клона: `python3 docs/design/production/tools/serve.py`, затым `http://127.0.0.1:4400/docs/design/brand/outputs/UI-REVIEW-02/index.html`. Макет выкарыстоўвае `docs/design/production/kit.css`, іконкі `kit-icons.mjs` і радкі `contracts/ui-messages` для Back/Walk/Resume. Усе астатнія подпісы ўнутры тэлефона — часовыя лакалізаваныя дэманстрацыйныя радкі для кожнай з 13 моў пераключальніка; яны не ствараюць новых паведамленняў у кантракце.
 
 ## Што ёсць у кодзе цяпер
 
@@ -28,6 +28,7 @@
 
 ## Праверкі і межы
 
+- `node --test tools/design/ui-review-02.test.mjs` — правярае прыняты A, усе камбінацыі станаў active/paused/none × Run/іншы экран, тэксты для ўсіх даступных моў і адпаведнасць Back/Walk/Resume слоўніку праграмы.
 - `node --check docs/design/brand/outputs/UI-REVIEW-02/board.mjs` — сінтаксіс.
 - Device screenshot, даступнасць экранным чытальнікам, сапраўдныя 44 dp, адсутнасць перакрыцця пры маштабе, сістэмны Back у Android/iOS: **NOT-VERIFIED**, макет не з'яўляецца такой праверкай.
 - У гэтым наборы файлаў няма змен у `app/`, `components/` або production-макетах; асобны запіс пра прыняты A дададзены ў `docs/design/brand/decisions.md`.
