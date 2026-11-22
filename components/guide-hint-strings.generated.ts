@@ -6,11 +6,11 @@
 // G21.25 (single-source-translations.md): the catalogues are generated projections — edit the
 // source/translation data, never this file; the generator's --check mode
 // fails on any hand edit.
-// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377), et/lv/sk/hu/sl too (EU-UI-02, issue #378)
+// the nearby guide-hint card's words (G07.05 — 15_guide_decisions.md (R07)); uk keeps the documented be fallback (uk-release-scope §6.4) until its words are authored, de renders its own catalogue (G21.10 — single-source-translations.md), es too (G21.11 — same record), fr too (G21.12 — same record), cs too (G21.13 — same record), sv too (G21.14 — same record), zh too (G21.46 — G21.42-chinese-language.md), nb/pl/da/nl/pt too, it/fi/lt too (EU-UI-01, issue #377), et/lv/sk/hu/sl too (EU-UI-02, issue #378), hr/ro/bg/el/sr/bs/mk/sq too (EU-UI-03, issue #379)
 
 import type { GuideHintStrings } from "../contracts/ui-message-types.ts";
 
-export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl", GuideHintStrings> = {
+export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq", GuideHintStrings> = {
   "be": {
     "dismiss": "Схаваць",
     "heading": "Побач ёсць гід…",
@@ -136,5 +136,53 @@ export const GUIDE_HINT_STRINGS: Record<"be" | "en" | "de" | "es" | "fr" | "cs" 
     "heading": "V bližini je vodnik…",
     "openHint": "Odpri opis vodnika",
     "paid": "plačljivo",
+  },
+  "hr": {
+    "dismiss": "Sakrij",
+    "heading": "U blizini je vodič…",
+    "openHint": "Otvori opis vodiča",
+    "paid": "plaćeno",
+  },
+  "ro": {
+    "dismiss": "Ascunde",
+    "heading": "În apropiere este un ghid…",
+    "openHint": "Deschide descrierea ghidului",
+    "paid": "cu plată",
+  },
+  "bg": {
+    "dismiss": "Скрий",
+    "heading": "Близо има гид…",
+    "openHint": "Отвори описанието на гида",
+    "paid": "платен",
+  },
+  "el": {
+    "dismiss": "Απόκρυψη",
+    "heading": "Κοντά υπάρχει οδηγός…",
+    "openHint": "Άνοιγμα περιγραφής του οδηγού",
+    "paid": "επί πληρωμή",
+  },
+  "sr": {
+    "dismiss": "Сакриј",
+    "heading": "У близини је водич…",
+    "openHint": "Отвори опис водича",
+    "paid": "плаћено",
+  },
+  "bs": {
+    "dismiss": "Sakrij",
+    "heading": "U blizini je vodič…",
+    "openHint": "Otvori opis vodiča",
+    "paid": "plaćeno",
+  },
+  "mk": {
+    "dismiss": "Сокриј",
+    "heading": "Во близина има водич…",
+    "openHint": "Отвори го описот на водичот",
+    "paid": "платено",
+  },
+  "sq": {
+    "dismiss": "Fshih",
+    "heading": "Afi është një guidë…",
+    "openHint": "Hap përshkrimin e guidës",
+    "paid": "me pagesë",
   },
 };

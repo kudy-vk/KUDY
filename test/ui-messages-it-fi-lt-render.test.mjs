@@ -3,6 +3,7 @@
 // ui-locale-render-suite.mjs; this file carries the wave's authored words
 // (test/ui-locale-render-suite.mjs — one suite, not per-wave copies).
 import { registerLocaleRenderSuite } from './ui-locale-render-suite.mjs';
+import { timeCapWordsFor } from './ui-locale-time-cap-words.mjs';
 import { it as webIt } from '../web/lib/i18n/it.ts';
 import { fi as webFi } from '../web/lib/i18n/fi.ts';
 import { lt as webLt } from '../web/lib/i18n/lt.ts';
@@ -59,10 +60,6 @@ registerLocaleRenderSuite({
       webPrivacyTitle: 'Privatumas',
     },
   },
-  timeCapForms: {
-    it: { 60: "Fino a un'ora", 120: 'Fino a due ore', 240: 'Mezza giornata' },
-    fi: { 60: 'Enintään tunti', 120: 'Enintään kaksi tuntia', 240: 'Puoli päivää' },
-    lt: { 60: 'Iki valandos', 120: 'Iki dviejų valandų', 240: 'Pusė dienos' },
-  },
+  timeCapForms: timeCapWordsFor('it', 'fi', 'lt'),
   webData: { it: webIt, fi: webFi, lt: webLt },
 });

@@ -246,6 +246,94 @@
             "reason": "sl трымае ўласнае vodnik (Vodniki →, Vodnik, Odpri opis vodnika) — прыроднае славенскае слова аўдыёгіда",
             "date": "2026-11-22"
           }
+        },
+        "hr": {
+          "term": "vodič",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "vodič",
+            "locator": "translations/hr.json#native.nearby.guideLabel",
+            "reason": "hr трымае ўласнае vodič (Vodiči →, Vodič, Otvori opis vodiča) — стандартнае харвацкае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "ghid",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ghid",
+            "locator": "translations/ro.json#native.nearby.guideLabel",
+            "reason": "ro трымае ghid (Ghiduri →, Ghid, Deschide descrierea ghidului) — стандартнае румынскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "гид",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "гид",
+            "locator": "translations/bg.json#native.nearby.guideLabel",
+            "reason": "bg трымае гид (Гидове →, Гид, Отвори описанието на гида) — звыклае балгарскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "οδηγός",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "οδηγός",
+            "locator": "translations/el.json#native.nearby.guideLabel",
+            "reason": "el трымае οδηγός (Οδηγοί →, Οδηγός, Άνοιγμα περιγραφής του οδηγού) — звыклае грэчаскае слова аўдыёгіда (ηχητικός οδηγός)",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "водич",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "водич",
+            "locator": "translations/sr.json#native.nearby.guideLabel",
+            "reason": "sr трымае водич (Водичи →, Водич, Отвори опис водича) — стандартнае сербскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "vodič",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "vodič",
+            "locator": "translations/bs.json#native.nearby.guideLabel",
+            "reason": "bs трымае vodič (Vodiči →, Vodič, Otvori opis vodiča) — стандартнае баснійскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "водич",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "водич",
+            "locator": "translations/mk.json#native.nearby.guideLabel",
+            "reason": "mk трымае водич (Водичи →, Водич, Отвори го описот на водичот) — звыклае македонскае слова аўдыёгіда",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "guidë",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "guidë",
+            "locator": "translations/sq.json#native.nearby.guideLabel",
+            "reason": "sq трымае guidë (Guida →, Guidë, Hap përshkrimin e guidës) — звыклы ў турызме албанскі тэрмін аўдыёгіда",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -487,6 +575,94 @@
             "term": "točka",
             "locator": "translations/sl.json#native.chrome.stopsCount",
             "reason": "імянік — točka (Točke: N, Točka N, Naslednja točka) — звыклае славенскае слова кропкі маршруту; дзеянне спыніць тэйзер — Ustavi (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "hr": {
+          "term": "točka",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "točka",
+            "locator": "translations/hr.json#native.chrome.stopsCount",
+            "reason": "імянік — točka (Točke: N, Točka N, Sljedeća točka) — звыклае харвацкае слова кропкі маршруту; дзеянне спыніць тэйзер — Zaustavi (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "oprire",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "oprire",
+            "locator": "translations/ro.json#native.chrome.stopsCount",
+            "reason": "імянік — oprire (Opriri: N, Oprirea N, Următoarea oprire) — звыклы румынскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Oprește (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "точка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "точка",
+            "locator": "translations/bg.json#native.chrome.stopsCount",
+            "reason": "імянік — точка (Точки: N, Точка N, Следваща точка) — звыклае балгарскае слова кропкі маршруту; дзеянне спыніць тэйзер — Спри (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "στάση",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "στάση",
+            "locator": "translations/el.json#native.chrome.stopsCount",
+            "reason": "імянік — στάση (Στάσεις: N, Στάση N, Επόμενη στάση) — звыклы грэчаскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Διακοπή (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "тачка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "тачка",
+            "locator": "translations/sr.json#native.chrome.stopsCount",
+            "reason": "імянік — тачка (Тачке: N, Тачка N, Следећа тачка) — звыклае сербскае слова кропкі маршруту; дзеянне спыніць тэйзер — Заустави (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "tačka",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "tačka",
+            "locator": "translations/bs.json#native.chrome.stopsCount",
+            "reason": "імянік — tačka (Tačke: N, Tačka N, Sljedeća tačka) — звыклае баснійскае слова кропкі маршруту; дзеянне спыніць тэйзер — Zaustavi (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "точка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "точка",
+            "locator": "translations/mk.json#native.chrome.stopsCount",
+            "reason": "імянік — точка (Точки: N, Точка N, Следна точка) — звыклае македонскае слова кропкі маршруту; дзеянне спыніць тэйзер — Запри (native.place.stopLabel)",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "ndalesa",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "ndalesa",
+            "locator": "translations/sq.json#native.chrome.stopsCount",
+            "reason": "імянік — ndalesa (Ndalesat: N, Ndalesa N, Ndalesa tjetër) — звыклы албанскі тэрмін кропкі маршруту; дзеянне спыніць тэйзер — Ndalo (native.place.stopLabel)",
             "date": "2026-11-22"
           }
         }
@@ -731,6 +907,94 @@
             "reason": "walk → sprehod паўсюль у sl-наборы (Sprehod, Trenutni sprehod, Zgodovina sprehodov, Zaključi sprehod) — прыродны славенскі актыўны праход па горадзе",
             "date": "2026-11-22"
           }
+        },
+        "hr": {
+          "term": "šetnja",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "šetnja",
+            "locator": "translations/hr.json#native.chrome.currentWalk",
+            "reason": "walk → šetnja паўсюль у hr-наборы (Šetnja, Trenutna šetnja, Povijest šetnji, Završi šetnju) — прыродны харвацкі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "plimbare",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "plimbare",
+            "locator": "translations/ro.json#native.chrome.currentWalk",
+            "reason": "walk → plimbare паўсюль у ro-наборы (Plimbare, Plimbarea curentă, Istoricul plimbărilor, Termină plimbarea) — прыродны румынскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "разходка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "разходка",
+            "locator": "translations/bg.json#native.chrome.currentWalk",
+            "reason": "walk → разходка паўсюль у bg-наборы (Разходка, Текуща разходка, История на разходките, Завърши разходката) — прыродны балгарскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "βόλτα",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "βόλτα",
+            "locator": "translations/el.json#native.chrome.currentWalk",
+            "reason": "walk → βόλτα паўсюль у el-наборы (Βόλτα, Τρέχουσα βόλτα, Ιστορικό βόλτων, Ολοκλήρωση της βόλτας) — прыродны грэчаскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "шетња",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "шетња",
+            "locator": "translations/sr.json#native.chrome.currentWalk",
+            "reason": "walk → шетња паўсюль у sr-наборы (Шетња, Тренутна шетња, Историја шетњи, Заврши шетњу) — прыродны сербскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "šetnja",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "šetnja",
+            "locator": "translations/bs.json#native.chrome.currentWalk",
+            "reason": "walk → šetnja паўсюль у bs-наборы (Šetnja, Trenutna šetnja, Historija šetnji, Završi šetnju) — прыродны баснійскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "прошетка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "прошетка",
+            "locator": "translations/mk.json#native.chrome.currentWalk",
+            "reason": "walk → прошетка паўсюль у mk-наборы (Прошетка, Тековна прошетка, Историја на прошетките, Заврши ја прошетката) — прыродны македонскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "shëtitje",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "shëtitje",
+            "locator": "translations/sq.json#native.chrome.currentWalk",
+            "reason": "walk → shëtitje паўсюль у sq-наборы (Shëtitje, Shëtitja aktuale, Historiku i shëtitjeve, Përfundo shëtitjen) — прыродны албанскі актыўны праход па горадзе",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -973,6 +1237,94 @@
             "reason": "адзін корань prenesti/prenos (Prenesi, Prenos ni uspel., Vodnik ni prenesen.) — стандартны славенскі UI-тэрмін",
             "date": "2026-11-22"
           }
+        },
+        "hr": {
+          "term": "preuzeti",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "preuzeti",
+            "locator": "translations/hr.json#native.preview.label.download",
+            "reason": "адзін корань preuzeti/preuzimanje (Preuzmi, Preuzimanje nije uspjelo., Vodič nije preuzet.) — стандартны харвацкі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "descărca",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "descărca",
+            "locator": "translations/ro.json#native.preview.label.download",
+            "reason": "адзін корань descărca/descărcare (Descarcă, Descărcarea a eșuat., Ghidul nu este descărcat.) — стандартны румынскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "изтегли",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "изтегли",
+            "locator": "translations/bg.json#native.preview.label.download",
+            "reason": "адзін корань изтегли/изтегляне (Изтегли, Изтеглянето не успя., Гидът не е изтеглен.) — стандартны балгарскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "λήψη",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "λήψη",
+            "locator": "translations/el.json#native.preview.label.download",
+            "reason": "адзін корань λήψη (Λήψη, Η λήψη απέτυχε., Ο οδηγός δεν έχει ληφθεί.) — стандартны грэчаскі UI-тэрмін спампоўкі",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "преузети",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "преузети",
+            "locator": "translations/sr.json#native.preview.label.download",
+            "reason": "адзін корань преузети/преузимање (Преузми, Преузимање није успело., Водич није преузет.) — стандартны сербскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "preuzeti",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "preuzeti",
+            "locator": "translations/bs.json#native.preview.label.download",
+            "reason": "адзін корань preuzeti/preuzimanje (Preuzmi, Preuzimanje nije uspjelo., Vodič nije preuzet.) — стандартны баснійскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "преземи",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "преземи",
+            "locator": "translations/mk.json#native.preview.label.download",
+            "reason": "адзін корань преземи/преземање (Преземи, Преземањето не успеа., Водичот не е преземен.) — стандартны македонскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "shkarko",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "shkarko",
+            "locator": "translations/sq.json#native.preview.label.download",
+            "reason": "адзін корань shkarko/shkarkim (Shkarko, Shkarkimi dështoi., Guida nuk është shkarkuar.) — стандартны албанскі UI-тэрмін",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1212,6 +1564,94 @@
             "term": "ni na voljo",
             "locator": "translations/sl.json#native.chrome.catalogUnavailable",
             "reason": "ni na voljo / trenutno ni na voljo у радках стану (Katalog ni na voljo, Katalog trenutno ni na voljo) — стандартны славенскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "hr": {
+          "term": "nije dostupno",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nije dostupno",
+            "locator": "translations/hr.json#native.chrome.catalogUnavailable",
+            "reason": "nije dostupno / privremeno nije dostupan у радках стану (Katalog nije dostupan, Katalog privremeno nije dostupan) — стандартны харвацкі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "indisponibil",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "indisponibil",
+            "locator": "translations/ro.json#native.chrome.catalogUnavailable",
+            "reason": "indisponibil / temporar indisponibil у радках стану (Catalogul este indisponibil, Catalogul este temporar indisponibil) — стандартны румынскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "недостъпен",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "недостъпен",
+            "locator": "translations/bg.json#native.chrome.catalogUnavailable",
+            "reason": "недостъпен / временно недостъпен у радках стану (Каталогът е недостъпен, Каталогът временно е недостъпен) — стандартны балгарскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "δεν είναι διαθέσιμος",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "δεν είναι διαθέσιμος",
+            "locator": "translations/el.json#native.chrome.catalogUnavailable",
+            "reason": "δεν είναι διαθέσιμος / δεν είναι προς το παρόν διαθέσιμος у радках стану (Ο κατάλογος δεν είναι διαθέσιμος, Ο κατάλογος δεν είναι προς το παρόν διαθέσιμος) — стандартны грэчаскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "није доступан",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "није доступан",
+            "locator": "translations/sr.json#native.chrome.catalogUnavailable",
+            "reason": "није доступан / привремено није доступан у радках стану (Каталог није доступан, Каталог привремено није доступан) — стандартны сербскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "nije dostupan",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nije dostupan",
+            "locator": "translations/bs.json#native.chrome.catalogUnavailable",
+            "reason": "nije dostupan / privremeno nije dostupan у радках стану (Katalog nije dostupan, Katalog privremeno nije dostupan) — стандартны баснійскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "не е достапен",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "не е достапен",
+            "locator": "translations/mk.json#native.chrome.catalogUnavailable",
+            "reason": "не е достапен / привремено не е достапен у радках стану (Каталогот не е достапен, Каталогот привремено не е достапен) — стандартны македонскі UI-зварот",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "nuk është i disponueshëm",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nuk është i disponueshëm",
+            "locator": "translations/sq.json#native.chrome.catalogUnavailable",
+            "reason": "nuk është i disponueshëm / për momentin i disponueshëm у радках стану (Katalogu nuk është i disponueshëm, Katalogu nuk është për momentin i disponueshëm) — стандартны албанскі UI-зварот",
             "date": "2026-11-22"
           }
         }
@@ -1456,6 +1896,94 @@
             "reason": "purchase → nakup / kupi (Kupi, Zahtevan je nakup., Nakupljeno · čakanje na prenos, Na voljo po nakupu) — адзін корань ва ўсіх радках",
             "date": "2026-11-22"
           }
+        },
+        "hr": {
+          "term": "kupnja",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kupnja",
+            "locator": "translations/hr.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → kupnja / kupiti (Kupi, Potrebna je kupnja., Kupljeno · potrebno preuzimanje, Dostupno nakon kupnje) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "achiziție",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "achiziție",
+            "locator": "translations/ro.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → achiziție / cumpără (Cumpără, Este necesară achiziția., Achiziționat · este necesară descărcarea, Disponibil după achiziție) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "покупка",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "покупка",
+            "locator": "translations/bg.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → покупка / купи (Купи, Необходима е покупка., Купено · необходимо изтегляне, Налично след покупка) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "αγορά",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "αγορά",
+            "locator": "translations/el.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → αγορά / αγοράζω (Αγορά, Απαιτείται αγορά., Αγοράστηκε · απαιτείται λήψη, Διαθέσιμο μετά την αγορά) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "куповина",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "куповина",
+            "locator": "translations/sr.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → куповина / купити (Купи, Потребна је куповина., Купљено · потребно преузимање, Доступно након куповине) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "kupovina",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "kupovina",
+            "locator": "translations/bs.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → kupovina / kupiti (Kupi, Potrebna je kupovina., Kupljeno · potrebno preuzimanje, Dostupno nakon kupovine) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "купување",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "купување",
+            "locator": "translations/mk.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → купување / купи (Купи, Потребно е купување., Купено · потребно преземање, Достапно по купувањето) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "blerje",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "blerje",
+            "locator": "translations/sq.json#native.preview.reason.preview#purchase-required",
+            "reason": "purchase → blerje / blej (Blej, Kërkohet blerje., Blerë · kërkohet shkarkimi, I disponueshëm pas blerjes) — адзін корань ва ўсіх радках",
+            "date": "2026-11-22"
+          }
         }
       }
     },
@@ -1694,6 +2222,94 @@
             "term": "se nadaljuje iz shranjene seje",
             "locator": "translations/sl.json#native.run.restoredTitle",
             "reason": "канон без рэстаўрацыйнай метафары (Sprehod se nadaljuje iz shranjene seje), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "hr": {
+          "term": "nastavlja sa spremljene sesije",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nastavlja sa spremljene sesije",
+            "locator": "translations/hr.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Šetnja nastavlja sa spremljene sesije), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "ro": {
+          "term": "se continuă din sesiunea salvată",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "se continuă din sesiunea salvată",
+            "locator": "translations/ro.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Plimbarea se continuă din sesiunea salvată), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "bg": {
+          "term": "продължава от запазената сесия",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "продължава от запазената сесия",
+            "locator": "translations/bg.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Разходката продължава от запазената сесия), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "el": {
+          "term": "συνεχίζεται από την αποθηκευμένη συνεδρία",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "συνεχίζεται από την αποθηκευμένη συνεδρία",
+            "locator": "translations/el.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Η βόλτα συνεχίζεται από την αποθηκευμένη συνεδρία), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "sr": {
+          "term": "наставља са сачуване сесије",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "наставља са сачуване сесије",
+            "locator": "translations/sr.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Шетња наставља са сачуване сесије), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "bs": {
+          "term": "nastavlja sa sačuvane sesije",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "nastavlja sa sačuvane sesije",
+            "locator": "translations/bs.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Šetnja nastavlja sa sačuvane sesije), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "mk": {
+          "term": "продолжува од зачуваната сесија",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "продолжува од зачуваната сесија",
+            "locator": "translations/mk.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Прошетката продолжува од зачуваната сесија), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
+            "date": "2026-11-22"
+          }
+        },
+        "sq": {
+          "term": "vazhdon nga sesioni i ruajtur",
+          "provenance": {
+            "status": "resolved",
+            "kind": "reviewed-terminology",
+            "term": "vazhdon nga sesioni i ruajtur",
+            "locator": "translations/sq.json#native.run.restoredTitle",
+            "reason": "канон без рэстаўрацыйнай метафары (Shëtitja vazhdon nga sesioni i ruajtur), тая самая пабудова be/en/uk/de/es/fr/cs/sv",
             "date": "2026-11-22"
           }
         }
