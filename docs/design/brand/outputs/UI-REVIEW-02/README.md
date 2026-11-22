@@ -28,7 +28,8 @@
 
 ## Праверкі і межы
 
-- `node --test docs/design/brand/outputs/UI-REVIEW-02/board.test.mjs` — правярае прыняты A, усе камбінацыі станаў active/paused/none × Run/іншы экран, тэксты для ўсіх даступных моў і адпаведнасць Back/Walk/Resume слоўніку праграмы.
+- `node --test docs/design/brand/outputs/UI-REVIEW-02/board.regression.mjs` — правярае прыняты A, усе камбінацыі станаў active/paused/none × Run/іншы экран, тэксты для ўсіх даступных моў і адпаведнасць Back/Walk/Resume слоўніку праграмы.
+- `npm test` запускае рэгрэсію праз `docs/run-model/run-model.test.mjs`, які імпартуе `board.regression.mjs`; таму тэсты падключаныя да стандартнага ранера без зменаў `package.json` і Android scope.
 - `node --check docs/design/brand/outputs/UI-REVIEW-02/board.mjs` — сінтаксіс.
 - Device screenshot, даступнасць экранным чытальнікам, сапраўдныя 44 dp, адсутнасць перакрыцця пры маштабе, сістэмны Back у Android/iOS: **NOT-VERIFIED**, макет не з'яўляецца такой праверкай.
 - У гэтым наборы файлаў няма змен у `app/`, `components/` або production-макетах; асобны запіс пра прыняты A дададзены ў `docs/design/brand/decisions.md`.
