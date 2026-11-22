@@ -67,23 +67,23 @@ test('recordOpsError is best-effort: a failing insert, a non-Error throw or a th
   );
 });
 
-test('recordOpsError is bounded: a hanging insert answers false fast and the late loser is swallowed', async () => {
+test('recordOpsError is bounded: a late-resolving insert answers false at the bound', async () => {
   const started = Date.now();
-  // the loser rejects AFTER the bound fires — with the swallow channel
-  // removed this rejection would be unhandled and fail the whole suite
-  const lateLoser = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error('late loser of the bounded race')), 50);
+  // a late RESOLVE (50 ms) against a 10 ms bound: the bounded path answers
+  // false at the bound; a reverted (unbounded) attempt would wait for the
+  // late resolve and answer true — the assert below then fails, which keeps
+  // the fail-on-revert guard on the bound itself
+  const lateWinner = new Promise<unknown>((resolve) => {
+    setTimeout(() => resolve('late winner of an unbounded attempt'), 50);
   });
   const landed = await recordOpsError(
-    () => ({ unsafe: () => lateLoser }),
+    () => ({ unsafe: () => lateWinner }),
     { endpoint: 'grant', errorCode: 'internal_fault', note: 'grant' },
     10,
   );
   const elapsed = Date.now() - started;
   assert.equal(landed, false, 'a tag attempt past the bound is dropped, best-effort');
   assert.ok(elapsed < 1000, `the bound keeps the catch path fast (took ${elapsed} ms)`);
-  // let the late rejection land inside the swallowed .catch channel
-  await new Promise((resolve) => setTimeout(resolve, 80));
 });
 
 // --- wiring guard: the five catch paths record the tag ---

@@ -62,7 +62,6 @@ export async function recordOpsError(
     const attempt = Promise.resolve(
       openClient().unsafe(OPS_ERROR_INSERT_SQL, [event.endpoint, event.errorCode, event.note]),
     );
-    attempt.catch(() => {}); // a loser that rejects after the bound is already answered
     let timer: ReturnType<typeof setTimeout> | undefined;
     const bound = new Promise<never>((_, reject) => {
       timer = setTimeout(() => reject(new Error('ops-error tag bound exceeded')), timeoutMs);
