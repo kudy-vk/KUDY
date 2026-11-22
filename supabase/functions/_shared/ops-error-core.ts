@@ -35,19 +35,44 @@ export interface OpsErrorEvent {
 }
 
 /**
+ * The tag attempt is bounded: the pinned postgres.js client leaves
+ * connect_timeout at its 30 s default, and the catch path awaits this tag
+ * before answering the client — an unbounded attempt would stretch a
+ * fast-fail 503 to twice the timeout when storage is down. Past the bound
+ * the tag is dropped (best-effort by definition); the late insert result,
+ * success or failure, is swallowed either way.
+ */
+export const OPS_ERROR_TAG_TIMEOUT_MS = 1500;
+
+/**
  * One best-effort insert: opens the client inside the try (a missing
  * DATABASE_URL fails the same way as a failed insert), swallows every fault
- * and answers whether the tag landed. The caller's response is never thrown
- * into — a storage outage on the tag path cannot turn a handled failure
- * into an unhandled one (spec review focus 5).
+ * and answers whether the tag landed inside the bound. The caller's response
+ * is never thrown into — a storage outage on the tag path cannot turn a
+ * handled failure into an unhandled one or slow it past the bound (spec
+ * review focus 5). `timeoutMs` exists for the committed test's fast bound;
+ * the catch-path wiring uses the default.
  */
 export async function recordOpsError(
   openClient: () => OpsErrorClient,
   event: OpsErrorEvent,
+  timeoutMs: number = OPS_ERROR_TAG_TIMEOUT_MS,
 ): Promise<boolean> {
   try {
-    await openClient().unsafe(OPS_ERROR_INSERT_SQL, [event.endpoint, event.errorCode, event.note]);
-    return true;
+    const attempt = Promise.resolve(
+      openClient().unsafe(OPS_ERROR_INSERT_SQL, [event.endpoint, event.errorCode, event.note]),
+    );
+    attempt.catch(() => {}); // a loser that rejects after the bound is already answered
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const bound = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error('ops-error tag bound exceeded')), timeoutMs);
+    });
+    try {
+      await Promise.race([attempt, bound]);
+      return true;
+    } finally {
+      clearTimeout(timer);
+    }
   } catch {
     return false;
   }

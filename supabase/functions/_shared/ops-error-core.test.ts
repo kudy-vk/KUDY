@@ -67,6 +67,23 @@ test('recordOpsError is best-effort: a failing insert, a non-Error throw or a th
   );
 });
 
+test('recordOpsError is bounded: a hanging insert answers false fast and the late loser is swallowed', async () => {
+  const started = Date.now();
+  const hanging = new Promise<never>(() => {});
+  const landed = await recordOpsError(
+    () => ({ unsafe: () => hanging }),
+    { endpoint: 'grant', errorCode: 'internal_fault', note: 'grant' },
+    10,
+  );
+  const elapsed = Date.now() - started;
+  assert.equal(landed, false, 'a tag attempt past the bound is dropped, best-effort');
+  assert.ok(elapsed < 1000, `the bound keeps the catch path fast (took ${elapsed} ms)`);
+  // the loser of the race rejects late; an unhandled rejection here would
+  // surface as a node warning and would crash a Deno isolate — this await
+  // lets that rejection land inside the swallowed .catch channel
+  await new Promise((resolve) => setTimeout(resolve, 50));
+});
+
 // --- wiring guard: the five catch paths record the tag ---
 
 // Each file's catch path must call recordOpsError exactly this many times,
