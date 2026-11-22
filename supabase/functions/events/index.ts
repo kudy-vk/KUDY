@@ -18,6 +18,7 @@ import {
   handleEventsWireRequest,
   serializeEvents500,
 } from '../_shared/events-wire.ts';
+import { recordOpsError } from '../_shared/ops-error-core.ts';
 import { logServerDiagnostic } from '../_shared/server-diagnostics.ts';
 import type { EventSqlRunner, EventTableSpec } from '../_shared/events-core.ts';
 
@@ -46,9 +47,11 @@ Deno.serve(async (req) => {
   } catch (error) {
     if (error instanceof Error && error.message.startsWith('DATABASE_URL')) {
       logServerDiagnostic('events_intake', 'configuration_missing');
+      await recordOpsError(() => database(), { endpoint: 'events', errorCode: 'configuration_missing', note: 'events_intake' });
       return serializeEvents500('server_configuration_error');
     }
     logServerDiagnostic('events_intake', 'unexpected_failure');
+    await recordOpsError(() => database(), { endpoint: 'events', errorCode: 'unexpected_failure', note: 'events_intake' });
     return serializeEvents500('server_error');
   }
 });

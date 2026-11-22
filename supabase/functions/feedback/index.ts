@@ -12,6 +12,7 @@
 // Non-feedback paths and missing env never reach the database.
 import { feedbackErrorResponse, handleFeedbackEdgeRequest } from './feedback-wire.ts';
 import { logServerDiagnostic } from '../_shared/server-diagnostics.ts';
+import { recordOpsError } from '../_shared/ops-error-core.ts';
 import { database } from '../_shared/postgres-connection.ts';
 
 Deno.serve(async (req) => {
@@ -20,9 +21,11 @@ Deno.serve(async (req) => {
   } catch (error) {
     if (error instanceof Error && error.message.startsWith('DATABASE_URL')) {
       logServerDiagnostic('feedback', 'configuration_missing');
+      await recordOpsError(() => database(), { endpoint: 'feedback', errorCode: 'configuration_missing', note: 'feedback' });
       return feedbackErrorResponse(503, 'feedback_unavailable');
     }
     logServerDiagnostic('feedback', 'unexpected_failure');
+    await recordOpsError(() => database(), { endpoint: 'feedback', errorCode: 'unexpected_failure', note: 'feedback' });
     return feedbackErrorResponse(503, 'feedback_unavailable');
   }
 });

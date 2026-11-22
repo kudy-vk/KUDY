@@ -29,6 +29,7 @@ import {
   type WebhookPortDeps,
   type WebhookSqlRunner,
 } from '../_shared/rc-webhook-core.ts';
+import { recordOpsError } from '../_shared/ops-error-core.ts';
 import { database } from '../_shared/postgres-connection.ts';
 
 interface ResolvedConfig {
@@ -115,6 +116,7 @@ Deno.serve(async (req) => {
         ? error.message.replace(/(?:https?|postgres(?:ql)?):\/\/\S+/g, '<redacted-url>')
         : 'unknown',
     );
+    await recordOpsError(() => database(), { endpoint: 'rc-webhook', errorCode: 'internal_fault', note: 'rc-webhook' });
     return new Response(null, { status: 503 });
   }
 });
