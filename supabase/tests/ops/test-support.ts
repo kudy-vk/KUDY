@@ -23,6 +23,22 @@ export function opsMigrationSql(): string {
   return readFileSync(OPS_MIGRATION_PATH, 'utf8');
 }
 
+// The T3 follow-up index (Selfer #478 [per-cycle-scan-no-index]): the relay
+// window reads and the retention sweep all filter on created_at — the suites
+// replay this file verbatim too, so a dropped statement, a SQL typo or an
+// index-name drift fails the committed tests (fail-on-revert) instead of
+// passing CI until the manual live application.
+export const OPS_INDEX_MIGRATION_PATH = path.join(
+  repoRoot,
+  'supabase',
+  'migrations',
+  '20261123000000_ops_error_events_created_at_idx.sql',
+);
+
+export function opsIndexMigrationSql(): string {
+  return readFileSync(OPS_INDEX_MIGRATION_PATH, 'utf8');
+}
+
 export function opsRetentionSql(): string {
   return readFileSync(OPS_RETENTION_PATH, 'utf8');
 }
