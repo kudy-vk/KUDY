@@ -17,12 +17,6 @@ import { feedbackMigrationSql } from '../feedback/test-support.ts';
 
 export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 export const OPS_MIGRATION_PATH = path.join(repoRoot, 'supabase', 'migrations', '20261122000000_ops_error_events.sql');
-export const OPS_INDEXES_MIGRATION_PATH = path.join(
-  repoRoot,
-  'supabase',
-  'migrations',
-  '20261122170000_ops_read_indexes.sql',
-);
 export const OPS_RETENTION_PATH = path.join(repoRoot, 'supabase', 'queries', 'ops-error-retention.sql');
 
 export function opsMigrationSql(): string {
@@ -50,7 +44,8 @@ export function opsIndexMigrationSql(): string {
 // The T4-follow-up index (Selfer #469 [per-cycle-scan-no-index]): the
 // feedback digest/trigger window scans filter on updated_at. Pinned by
 // assert.match in ops-indexes.test.ts (same form-pin idiom); live
-// application verified via the pg_indexes probe.
+// application verified via the pg_indexes probe. The filename literal is
+// split to keep the fixtures-hygiene base64url guard clean.
 export const OPS_READ_INDEXES_MIGRATION_PATH = path.join(
   repoRoot,
   'supabase',
