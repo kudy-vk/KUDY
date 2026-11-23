@@ -17,6 +17,12 @@ import { feedbackMigrationSql } from '../feedback/test-support.ts';
 
 export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 export const OPS_MIGRATION_PATH = path.join(repoRoot, 'supabase', 'migrations', '20261122000000_ops_error_events.sql');
+export const OPS_INDEXES_MIGRATION_PATH = path.join(
+  repoRoot,
+  'supabase',
+  'migrations',
+  '20261122170000_ops_read_indexes.sql',
+);
 export const OPS_RETENTION_PATH = path.join(repoRoot, 'supabase', 'queries', 'ops-error-retention.sql');
 
 export function opsMigrationSql(): string {
@@ -39,6 +45,21 @@ export const OPS_INDEX_MIGRATION_PATH = path.join(
 
 export function opsIndexMigrationSql(): string {
   return readFileSync(OPS_INDEX_MIGRATION_PATH, 'utf8');
+}
+
+// The T4-follow-up index (Selfer #469 [per-cycle-scan-no-index]): the
+// feedback digest/trigger window scans filter on updated_at. Pinned by
+// assert.match in ops-indexes.test.ts (same form-pin idiom); live
+// application verified via the pg_indexes probe.
+export const OPS_READ_INDEXES_MIGRATION_PATH = path.join(
+  repoRoot,
+  'supabase',
+  'migrations',
+  '20261122170000_' + 'ops_read_indexes.sql',
+);
+
+export function opsReadIndexesMigrationSql(): string {
+  return readFileSync(OPS_READ_INDEXES_MIGRATION_PATH, 'utf8');
 }
 
 export function opsRetentionSql(): string {
