@@ -1,38 +1,41 @@
-// Selfer #469/#478 — форма-guard файлу міграцыі індэксаў чытання рэлея:
-// абодва CREATE INDEX прысутнічаюць з правільнымі табліцамі/калонкамі і
-// IF NOT EXISTS. Прычына адсутнасці verbatim-replay у freshOpsDatabase():
-// харнэс-ахова (Mimosa) блакуе дадаванне новага db.exec-рэплэю ў
-// test-support.ts (фальшывае command-injection на кантрактным ідыёме,
-// гл. PR #440 апісанне бар'ера); жывое прымяненне верыфікавана
-// pg_indexes на вытворчасці 2026-11-23 (PR #440). Праверка падае пры
-// адкаце/пустым/перайменаваным файле — fail-on-revert.
-import { describe, expect, it } from 'vitest';
+// Selfer #469 — form guard for the feedback_current updated_at index
+// migration (the read path of the telegram-ops relay window scans). The
+// sibling suites pin migration files by assert.match (the ops-pglite
+// idiom): a dropped file, a SQL typo or an index-name drift fails here.
+// The verbatim replay into freshOpsDatabase() is deliberately absent —
+// the session harness guard (Mimosa PreToolUse hook) blocks adding a new
+// db.exec replay to test-support.ts (false-positive command injection on
+// the committed idiom); the live application is verified via the
+// pg_indexes probe (PR #440, 2026-11-23).
+// English comments per the sibling-suite convention
+// (docs/agent-rules/documentation-language.md).
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { OPS_INDEXES_MIGRATION_PATH } from './test-support';
+import { OPS_READ_INDEXES_MIGRATION_PATH } from './test-support.ts';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
-describe('ops read indexes migration (Selfer #469/#478)', () => {
-  const sql = () => readFileSync(OPS_INDEXES_MIGRATION_PATH, 'utf8');
+describe('ops read indexes migration (Selfer #469)', () => {
+  const sql = () => readFileSync(OPS_READ_INDEXES_MIGRATION_PATH, 'utf8');
 
-  it('файл існуе і змяшчае абодва CREATE INDEX з правільнымі табліцамі/калонкамі', () => {
+  it('the file contains the feedback_current updated_at index with if not exists', () => {
     const text = sql();
-    expect(text).toMatch(/create index if not exists ops_error_events_created_at_idx\s+on ops_error_events \(created_at\)/);
-    expect(text).toMatch(/create index if not exists feedback_current_updated_at_idx\s+on feedback_current \(updated_at\)/);
+    assert.match(
+      text,
+      /create index if not exists feedback_current_updated_at_idx\s+on feedback_current \(updated_at\)/,
+    );
   });
 
-  it('пусты файл або адсутныя індэксы → чырвона (fail-on-revert)', () => {
-    const text = sql();
-    expect(text).toContain('ops_error_events_created_at_idx');
-    expect(text).toContain('feedback_current_updated_at_idx');
-    expect(text).toContain('if not exists');
+  it('the file does not duplicate the created_at index owned by 20261123000000', () => {
+    assert.doesNotMatch(sql(), /ops_error_events_created_at_idx/);
   });
 
-  it('шлях міграцыі паказвае на файл у supabase/migrations (адзіная крыніца)', () => {
-    expect(OPS_INDEXES_MIGRATION_PATH).toContain(path.join('supabase', 'migrations'));
-    expect(readFileSync(OPS_INDEXES_MIGRATION_PATH, 'utf8').length).toBeGreaterThan(0);
+  it('the migration path points into supabase/migrations (single source)', () => {
+    assert.match(OPS_READ_INDEXES_MIGRATION_PATH, /supabase[/\\]migrations/);
+    assert.ok(readFileSync(OPS_READ_INDEXES_MIGRATION_PATH, 'utf8').length > 0);
   });
 });
