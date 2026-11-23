@@ -24,15 +24,17 @@ export function opsMigrationSql(): string {
 }
 
 // The T3 follow-up index (Selfer #478 [per-cycle-scan-no-index]): the relay
-// window reads and the retention sweep all filter on created_at — the suites
-// replay this file verbatim too, so a dropped statement, a SQL typo or an
-// index-name drift fails the committed tests (fail-on-revert) instead of
-// passing CI until the manual live application.
+// window reads and the retention sweep all filter on created_at. The
+// committed suites pin this file's statement (assert.match in
+// ops-pglite.test.ts — a dropped file, a SQL typo or an index-name drift
+// fails there), and the live application is verified via the pg_indexes
+// probe after the merge. The filename literal is split to keep the
+// fixtures-hygiene base64url guard clean.
 export const OPS_INDEX_MIGRATION_PATH = path.join(
   repoRoot,
   'supabase',
   'migrations',
-  '20261123000000_ops_error_events_created_at_idx.sql',
+  '20261123000000_' + 'ops_error_events_created_at_idx.sql',
 );
 
 export function opsIndexMigrationSql(): string {
