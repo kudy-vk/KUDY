@@ -79,7 +79,7 @@ const KA = { code: 'ka', nativeName: 'ქართული' };
 const HY = { code: 'hy', nativeName: 'Հայերեն' };
 const AZ = { code: 'az', nativeName: 'Azərbaycan dili' };
 const FORTY_THREE_ENTRIES = [...EIGHT, ZH, NB, PL, DA, NL, PT, IT, FI, LT, ET, LV, SK, HU, SL, HR, RO, BG, EL, SR, BS, MK, SQ, IS, GA, MT, CA, TR, RU, LB, CNR, NN, RM, KA, HY, AZ];
-const FROZEN_OPEN = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv'];
+const FROZEN_OPEN = ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'nb', 'pl', 'da', 'nl', 'pt', 'it'];
 
 test('the registry defines the eight requested UI codes plus zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb, cnr, nn, rm, ka, hy and az, with native names, once (criterion 1)', () => {
   assert.deepEqual([...UI_LOCALES], FORTY_THREE_ENTRIES);
@@ -164,11 +164,11 @@ test('the store derives its vocabulary from the registry and keeps unknown-input
 // G21.50 (G21.42-chinese-language.md — G21.50): the open subset is a separate fact from the complete
 // set. zh is the first real gated consumer (it lands with G21.46 and stays
 // closed): a code can be complete and still closed, only the flag opens it,
-// and the frozen eight stay open under every flag state. Removing the
+// and the fourteen owner-decided open locales stay open under every flag state. Removing the
 // resolver's union or its complete-set check turns these red.
 const TEN = [...COMPLETE_UI_LOCALES, 'zz'];
 
-test('the release resolver keeps the frozen eight open when the flag is absent, empty or corrupt (criterion 1)', () => {
+test('the release resolver keeps the fourteen owner-decided open locales when the flag is absent, empty or corrupt (criterion 1)', () => {
   for (const flag of [undefined, null, '', '   ', ',', ' , , ', 'bogus', 'sh', 'bogus, ,sh']) {
     assert.deepEqual(
       [...releaseOpenUiLocales(flag, TEN)],
@@ -184,16 +184,26 @@ test('the release resolver keeps the frozen eight open when the flag is absent, 
 });
 
 test('the release resolver opens a registered complete code only when the flag names it, additively (criterion 1)', () => {
-  // The real gated codes: naming the gated codes opens them alongside the frozen eight.
+  // The real gated codes: naming the gated codes opens them alongside the fourteen.
   assert.deepEqual([...releaseOpenUiLocales('zh')], [...FROZEN_OPEN, 'zh']);
-  assert.deepEqual([...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl,hr,ro,bg,el,sr,bs,mk,sq,is,ga,mt,ca,tr,ru,lb,cnr,nn,rm,ka,hy,az')], COMPLETE_UI_LOCALES);
-  assert.deepEqual([...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl , hr , ro , bg , el , sr , bs , mk , sq , is , ga , mt , ca , tr , ru , lb , cnr , nn , rm , ka , hy , az ,bogus,sh\t')], COMPLETE_UI_LOCALES);
+  // Resolver order: the fourteen default-open codes first, then flag-named codes in flag order (zh precedes the 43-code registry order's nb..it block).
+  assert.deepEqual(
+    [...releaseOpenUiLocales('zh,nb,pl,da,nl,pt,it,fi,lt,et,lv,sk,hu,sl,hr,ro,bg,el,sr,bs,mk,sq,is,ga,mt,ca,tr,ru,lb,cnr')],
+    [...FROZEN_OPEN, 'zh', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq', 'is', 'ga', 'mt', 'ca', 'tr', 'ru', 'lb', 'cnr'],
+  );
+  assert.deepEqual(
+    [...releaseOpenUiLocales('  zh , nb , pl , da , nl , pt , it , fi , lt , et , lv , sk , hu , sl , hr , ro , bg , el , sr , bs , mk , sq , is , ga , mt , ca , tr , ru , lb , cnr , nn , rm , ka , hy , az ,bogus,sh\t')],
+    [...FROZEN_OPEN, 'zh', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq', 'is', 'ga', 'mt', 'ca', 'tr', 'ru', 'lb', 'cnr', 'nn', 'rm', 'ka', 'hy', 'az'],
+  );
   // A synthetic extra code keeps the generic additive proof independent of
   // which codes exist today: naming zz opens exactly zz (gated codes stay closed).
   assert.deepEqual([...releaseOpenUiLocales('zz', TEN)], [...FROZEN_OPEN, 'zz']);
   assert.deepEqual([...releaseOpenUiLocales('  zz ,bogus,sh\t', TEN)], [...FROZEN_OPEN, 'zz']);
   // Additive only: naming an already-open code neither duplicates it nor
-  // removes any of the frozen eight (hiding sv is out of scope, G21.50).
+  // removes any of the fourteen (hiding sv is out of scope, G21.50).
   assert.deepEqual([...releaseOpenUiLocales('be, en', TEN)], FROZEN_OPEN);
-  assert.deepEqual([...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb, cnr, nn, rm, ka, hy, az, zz', TEN)], TEN);
+  assert.deepEqual(
+    [...releaseOpenUiLocales('sv, zh, nb, pl, da, nl, pt, it, fi, lt, et, lv, sk, hu, sl, hr, ro, bg, el, sr, bs, mk, sq, is, ga, mt, ca, tr, ru, lb, cnr, nn, rm, ka, hy, az, zz', TEN)],
+    [...FROZEN_OPEN, 'zh', 'fi', 'lt', 'et', 'lv', 'sk', 'hu', 'sl', 'hr', 'ro', 'bg', 'el', 'sr', 'bs', 'mk', 'sq', 'is', 'ga', 'mt', 'ca', 'tr', 'ru', 'lb', 'cnr', 'nn', 'rm', 'ka', 'hy', 'az', 'zz'],
+  );
 });

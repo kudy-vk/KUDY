@@ -22,7 +22,7 @@ test('sitemap_actual_translations: chrome routes are advertised in every UI loca
   // The same localePath scheme the links serve: the default catalog sits at
   // the root, every other locale is a prefix (the home href carries the
   // trailing slash).
-  const prefixes = ['', '/en', '/uk', '/de', '/es', '/fr', '/cs', '/sv'];
+  const prefixes = ['', '/en', '/uk', '/de', '/es', '/fr', '/cs', '/sv', '/nb', '/pl', '/da', '/nl', '/pt', '/it'];
   const expected = prefixes.flatMap((prefix) =>
     prefix ? [`${prefix}/`, `${prefix}/map`, `${prefix}/app`, `${prefix}/privacy`] : ['/', '/map', '/app', '/privacy'],
   );
@@ -38,13 +38,13 @@ test('sitemap_actual_translations: guide and stop pages only for published text 
   assert.ok(paths.includes('/uk/guides/demo-route-a1'));
   assert.ok(paths.includes('/uk/guides/demo-route-a1/stops/stop-1'));
   assert.ok(paths.includes('/uk/guides/demo-route-a1/stops/stop-2'));
-  for (const locale of ['de', 'es', 'fr', 'cs', 'sv']) {
+  for (const locale of ['de', 'es', 'fr', 'cs', 'sv', 'nb', 'pl', 'da', 'nl', 'pt', 'it']) {
     assert.ok(!paths.includes(`/${locale}/guides/demo-route-a1`), `${locale} guide variant must not be advertised`);
     assert.ok(!paths.includes(`/${locale}/guides/demo-route-a1/stops/stop-1`), `${locale} stop variant must not be advertised`);
   }
   // Nothing paid or private exists on the web channel; the count pins the
-  // full derivation: 32 chrome + 3 guides + 6 stops.
-  assert.equal(paths.length, 41);
+  // full derivation: 56 chrome (14 open locales × 4 routes) + 3 guides + 6 stops.
+  assert.equal(paths.length, 65);
 });
 
 test('sitemap_actual_translations: unpublished origin emits nothing (no fabricated origin)', () => {

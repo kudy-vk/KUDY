@@ -554,16 +554,22 @@ test('G21.45+#347: the 9→10 move is the only count-limit change; the residual 
   const residualSources = [
     ['tools/build-bundle/build-bundle.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'LOCALE_ALLOWLIST'],
     ['tools/validate/validate-authoring.mjs', "['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']", 'LOCALES'],
-    // G21.46 (G21.42-chinese-language.md — G21.46): the UI registry's COMPLETE set moved to nine, so the
-    // residual eight in that file is now the frozen release default (the
-    // label names the line the literal actually matches). The nine is pinned
-    // just below at the source and by the registry suite at runtime.
-    ['contracts/ui-locales.ts', '["be", "en", "uk", "de", "es", "fr", "cs", "sv"]', 'RELEASE_DEFAULT_OPEN'],
   ];
   for (const [file, eight, label] of residualSources) {
     const text = fs.readFileSync(path.join(REPO, file), 'utf8');
     assert.ok(text.includes(eight), `${file} ${label} must stay at the residual eight until a zh task extends it`);
   }
+  // Owner decision 2026-11-23 (chat, on merging EU-UI-01–06): the UI registry's
+  // RELEASE_DEFAULT_OPEN consciously widened from the residual eight to the
+  // fourteen open-by-default codes — pinned at the source like the COMPLETE
+  // set below, so a silent revert to eight fails in the same place.
+  const releaseDefault = fs.readFileSync(path.join(REPO, 'contracts/ui-locales.ts'), 'utf8');
+  assert.ok(
+    releaseDefault.includes(
+      'RELEASE_DEFAULT_OPEN: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "nb", "pl", "da", "nl", "pt", "it"]',
+    ),
+    'contracts/ui-locales.ts RELEASE_DEFAULT_OPEN must carry the fourteen owner-decided open-by-default UI locales',
+  );
   // G21.46 (G21.42-chinese-language.md — G21.46): the one owner that DID move — the UI registry's complete
   // set — is pinned at the source too, so a silent revert to eight fails here
   // in the same place the residual pins catch drift in the other direction.
