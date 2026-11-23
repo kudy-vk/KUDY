@@ -153,6 +153,44 @@ test('the disabled piece snaps like any neighbour while navigation stays host-ga
   for(const group of [...m.groups])if(group!==k.group)joinGroups(k.group,group,m.pieces,m.groups);
   m.completeNow();assert.equal(m.phase,'complete'); // поўная зборка з неактыўным кавалком завершаецца
 });
+test('MAP-10: screen-reader actions work with drag disabled and never open a route', () => {
+  const m = new CityPuzzle(320, () => 0, undefined, {
+    height: 2500,
+    positions: {nearby: {x: 110, y: 600}}, dragEnabled: false,
+  });
+  const before = m.position('nearby');
+  assert.equal(m.groupSize('nearby'), 1);
+  assert.equal(m.moveAccessible('nearby', 8, 0), true);
+  assert.equal(m.position('nearby').x - before.x, 40); // 8 dp / (320/1600)
+  assert.equal(m.groups.size, 5, 'moving alone must never magnetize');
+  m.cancelAccessible();
+  assert.deepEqual(m.position('nearby'), before, 'cancel restores the prior placement');
+  assert.equal(m.groups.size, 5, 'no implicit join without an explicit snap action');
+  assert.equal(m.moveAccessible('nearby', Number.NaN, 0), false);
+  assert.deepEqual(m.position('nearby'), before);
+});
+
+test('MAP-10: explicit accessible snap joins real neighbours and grouped pieces move together', () => {
+  const m = new CityPuzzle(360, () => .5, undefined, {
+    height: 1800, positions: {}, dragEnabled: false,
+  });
+  const near = m.pieces.get('nearby'), guides = m.pieces.get('guides');
+  guides.group.dx = near.group.dx + 20;
+  guides.group.dy = near.group.dy;
+  const merged = m.snapAccessible('guides', 1000);
+  assert.equal(merged.kind, 'snap');
+  assert.equal(merged.complete, false);
+  assert.equal(m.groupSize('nearby'), 2);
+  assert.equal(m.groupSize('guides'), 2);
+  const at1 = m.position('nearby'), at2 = m.position('guides');
+  assert.equal(m.moveAccessible('guides', 8, 0), true);
+  assert.equal(m.position('nearby').x - at1.x, m.position('guides').x - at2.x);
+  m.cancel();
+  assert.deepEqual(m.position('nearby'), at1);
+  assert.deepEqual(m.position('guides'), at2);
+  assert.equal(m.groups.size, 4, 'cancel does not split a joined group');
+});
+
 test('snapped groups never split: cancel and new drags keep members together',()=>{
   const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
   g.group.dx=n.group.dx+20;

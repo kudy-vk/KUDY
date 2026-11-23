@@ -33,6 +33,8 @@ export class CityPuzzle {
   radius = 0;
   effectProgress = 0;
   active: Gesture | null = null;
+  // A screen-reader/keyboard move can be undone without requiring a touch gesture.
+  private accessibleMove: { group: Group; original: Point } | null = null;
   private motion: { at: number; group: Group; from: Point } | null = null;
   private scale: number;
   private readonly layout?: CityMenuLayout;
@@ -61,6 +63,46 @@ export class CityPuzzle {
     group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min((this.layout?.height??1800)-430-Math.max(...members.map(p=>p.y+p.height)),group.dy));
   }
   resize(width: number) { this.cancel(); this.scale = this.validScale(width); }
+  // Directional actions move the same piece/group and obey the same scene bounds
+  // as held dragging. The caller passes dp, not source-image pixels.
+  moveAccessible(id: PieceId, dxDp: number, dyDp: number): boolean {
+    const piece = this.pieces.get(id);
+    if (!piece || this.phase !== 'scattered' || !Number.isFinite(dxDp) || !Number.isFinite(dyDp)) return false;
+    this.cancelTouch();
+    const group = piece.group;
+    if (this.accessibleMove?.group !== group) this.accessibleMove = {group, original: {x: group.dx, y: group.dy}};
+    const before = {x: group.dx, y: group.dy};
+    group.dx += dxDp / this.scale;
+    group.dy += dyDp / this.scale;
+    this.clampGroup(group);
+    return group.dx !== before.x || group.dy !== before.y;
+  }
+  // Manual snap intentionally has no auto-join: only a canonical neighbour
+  // within the normal magnet threshold can join, exactly like held dragging.
+  snapAccessible(id: PieceId, now: number): PuzzleEvent {
+    const piece = this.pieces.get(id);
+    if (!piece || this.phase !== 'scattered') return none;
+    this.cancelTouch(); // Do not calculate a snap against an unfinished touch displacement.
+    const group = piece.group;
+    const joints = nativeLayout.joints.filter(joint => this.pieces.has(joint.a) && this.pieces.has(joint.b));
+    const target = findMagnet(group, this.pieces, joints, nativeLayout.gesture.snapDistanceDp / this.scale);
+    if (!target) return none;
+    this.accessibleMove = null;
+    joinGroups(group, target.other, this.pieces, this.groups);
+    this.clampGroup(group);
+    const complete = group.members.size === this.pieces.size;
+    if (complete) { this.motion = {at: now, group, from: {x: group.dx, y: group.dy}}; this.phase = 'assembling'; }
+    return {kind: 'snap', complete, point: {x: 125 + group.dx + target.joint.port[0], y: 320 + group.dy + target.joint.port[1]}};
+  }
+  cancelAccessible() {
+    if (this.accessibleMove) {
+      const {group, original} = this.accessibleMove;
+      group.dx = original.x;
+      group.dy = original.y;
+      this.accessibleMove = null;
+    }
+  }
+  groupSize(id: PieceId): number { return this.pieces.get(id)?.group.members.size ?? 0; }
   position(id: PieceId): Point {
     const piece = this.pieces.get(id)!;
     return { x: 125 + piece.x + piece.group.dx, y: 320 + piece.y + piece.group.dy };
@@ -80,7 +122,10 @@ export class CityPuzzle {
     }
   }
   begin(point: Point, now: number): Hit | undefined {
-    this.cancel();
+    // Switching to a direct touch commits the last keyboard move; only the
+    // explicit cancel action restores that move's starting position.
+    this.accessibleMove = null;
+    this.cancelTouch();
     const hit = this.hit(point);
     if (!hit) return;
     const group = hit.passive ? undefined : this.pieces.get(hit.id)!.group;
@@ -124,10 +169,11 @@ export class CityPuzzle {
     if (!active || active.cancelled || active.held || now-active.at >= nativeLayout.gesture.holdMs) return none;
     return active.hit.passive ? {kind:'passive',id:active.hit.id,point:active.start} : {kind:'select',id:active.hit.id};
   }
-  cancel() {
-    if (this.active?.group && this.active.original) { this.active.group.dx=this.active.original.x; this.active.group.dy=this.active.original.y; }
+  private cancelTouch() {
+    if (this.active?.group && this.active.original) { this.active.group.dx = this.active.original.x; this.active.group.dy = this.active.original.y; }
     this.active = null;
   }
+  cancel() { this.cancelTouch(); this.cancelAccessible(); }
   advance(now: number): boolean {
     if (!this.motion) return false;
     const {at,group,from} = this.motion;
