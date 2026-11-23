@@ -34,6 +34,6 @@ for part in manifest["pieces"]:
     image_piece.putalpha(alpha)
     assembled.alpha_composite(image_piece, (x, y))
     scattered.alpha_composite(image_piece, slots[part["id"]])
-assembled.save(OUT / "gdansk-fragments-assembled.png")
-scattered.save(OUT / "gdansk-fragments-scattered.png")
+assembled.save(OUT / "gdansk-map-joined.png")
+scattered.save(OUT / "gdansk-map-pieces.png")
 print("Gdańsk preview derived from existing map and five masks")
