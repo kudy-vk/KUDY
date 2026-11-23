@@ -36,12 +36,14 @@ where indexname = 'feedback_current_updated_at_idx';
 
 ## Абмежаванні праверкі
 
-- **Showboat: NOT-VERIFIED.** Для гэтага ізаляванага worktree лакальны MCP
-  адхіліў `uvx showboat==0.6.1 verify docs/demos/2026-11-23-440-ops-read-indexes.md`
-  з адказам `uvx is limited to the KUDY #835 worktree.` Таму праверка
-  супадзення `output` і адмоўная праверка са змененым значэннем праз сам
-  Showboat тут не выкананыя. Звычайны запуск Node-тэсту прайшоў, але ён
-  не замяняе `showboat verify`.
+- **Showboat: ПРАВЕРАНА карыстальнікам 2026-11-23** на каміце
+  `f4a47b04a855c6bafa7ebdaa564e3afb7dc4dcf3`.
+  `uvx showboat==0.6.1 verify docs/demos/2026-11-23-440-ops-read-indexes.md`
+  завяршылася без памылак; пасля замены захаванага `....` на `BROKEN`
+  `verify` выдаў `block 2: expected: BROKEN; actual: ....`.
+  Гэта пацвярджае, што `output` сапраўды параўноўваецца, а не ігнаруецца.
+  Лакальны MCP агента па-ранейшаму не запускае `uvx` у гэтым worktree
+  (`uvx is limited to the KUDY #835 worktree.`).
 - **Verbatim-replay SQL: NOT-VERIFIED.** Тэст міграцыі правярае форму файла,
   але не выконвае SQL у новай базе праз `freshOpsDatabase()`. У PR #440
   быў задакументаваны блок Mimosa PreToolUse для дадання `db.exec` у
