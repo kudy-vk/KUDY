@@ -6,6 +6,7 @@ export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
 export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean };
+export type MapAccessibilityAction = 'moveLeft' | 'moveRight' | 'moveUp' | 'moveDown' | 'snap' | 'cancel';
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
 type Group = { dx: number; dy: number; members: Set<PieceId> };
 type Shape = { id: string; x: number; y: number; width: number; height: number; rows: number[][] };
@@ -33,6 +34,7 @@ export class CityPuzzle {
   radius = 0;
   effectProgress = 0;
   active: Gesture | null = null;
+  private accessibleMove: { group: Group; original: Point } | null = null;
   private motion: { at: number; group: Group; from: Point } | null = null;
   private scale: number;
   private readonly layout?: CityMenuLayout;
@@ -106,6 +108,28 @@ export class CityPuzzle {
     group.dx += dx; group.dy += dy;
     this.clampGroup(group);
     active.last = point;
+    return this.snapGroup(group,now);
+  }
+  // Same step size as the approved keyboard controls in production/menu.mjs.
+  accessibilityAction(id: PieceId, action: MapAccessibilityAction, now: number): PuzzleEvent {
+    const group = this.pieces.get(id)?.group;
+    if (!group || this.phase !== 'scattered') return none;
+    if (action === 'cancel') { this.cancel(); return none; }
+    if (this.active) this.cancel();
+    if (action === 'snap') {
+      this.accessibleMove = null;
+      return this.snapGroup(group,now);
+    }
+    const step = 8 / this.scale;
+    if (this.accessibleMove?.group !== group) this.accessibleMove = {group,original:{x:group.dx,y:group.dy}};
+    if (action === 'moveLeft') group.dx -= step;
+    if (action === 'moveRight') group.dx += step;
+    if (action === 'moveUp') group.dy -= step;
+    if (action === 'moveDown') group.dy += step;
+    this.clampGroup(group);
+    return none;
+  }
+  private snapGroup(group: Group, now: number): PuzzleEvent {
     const joints = nativeLayout.joints.filter(joint=>this.pieces.has(joint.a)&&this.pieces.has(joint.b));
     const target = findMagnet(group,this.pieces,joints,nativeLayout.gesture.snapDistanceDp/this.scale);
     if (!target) return none;
@@ -125,6 +149,11 @@ export class CityPuzzle {
     return active.hit.passive ? {kind:'passive',id:active.hit.id,point:active.start} : {kind:'select',id:active.hit.id};
   }
   cancel() {
+    if (this.accessibleMove) {
+      const {group,original} = this.accessibleMove;
+      group.dx = original.x; group.dy = original.y;
+      this.accessibleMove = null;
+    }
     if (this.active?.group && this.active.original) { this.active.group.dx=this.active.original.x; this.active.group.dy=this.active.original.y; }
     this.active = null;
   }

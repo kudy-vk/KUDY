@@ -7,7 +7,7 @@ import manifest from '../manifest.json';
 import {cityMenuAssets,citySceneAssets} from '../native-assets';
 import {nativeLayout} from '../native-layout';
 import {CityPuzzle} from './model';
-import type {CityMenuLayout,PieceId,Point,PuzzleEvent,SceneId} from './model';
+import type {CityMenuLayout,MapAccessibilityAction,PieceId,Point,PuzzleEvent,SceneId} from './model';
 import {CanonIcon,type CanonGlyph} from '../../../../../../components/canon-icon';
 import {tokens} from '../../../../../../components/design-tokens';
 
@@ -20,6 +20,7 @@ export interface CityMapMenuProps {
   width: number;
   labels: Readonly<Record<PieceId,string>>;
   hint?: string;
+  accessibilityLabels?: Readonly<Record<MapAccessibilityAction | 'joined',string>>;
   sceneLabels?: Readonly<Record<SceneId,string>>;
   items?: readonly CityMenuItem[];
   layout?: CityMenuLayout;
@@ -41,9 +42,11 @@ const OFF_INK = '#7d6c58';
 // mask; a press lights the piece back for the mockup's 700 ms.
 const DIM_OPACITY = 0.55;
 const LIT_MS = 700;
+const movementActions: readonly MapAccessibilityAction[] = ['moveLeft','moveRight','moveUp','moveDown','snap','cancel'];
+const keyboardActions: Readonly<Partial<Record<string,MapAccessibilityAction>>> = {ArrowLeft:'moveLeft',ArrowRight:'moveRight',ArrowUp:'moveUp',ArrowDown:'moveDown',s:'snap',S:'snap',Escape:'cancel'};
 
 export function CityMapMenu(props:CityMapMenuProps) {
-  const {width,labels,hint,sceneLabels,style}=props;
+  const {width,labels,hint,sceneLabels,style,accessibilityLabels}=props;
   const items:readonly CityMenuItem[]=props.items??nativeLayout.pieces.map(p=>({id:p.id}));
   const pieceKey=items.map(item=>item.id).join(',');
   const layoutKey=JSON.stringify(props.layout);
@@ -196,7 +199,23 @@ export function CityMapMenu(props:CityMapMenuProps) {
         const disabled=entry.disabled===true;
         const medal=medalAt(item.id);
         const activate=()=>activatePiece(item.id);
-        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} accessibilityActions={disabled?[]:[{name:'activate'}]} onAccessibilityTap={activate} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')activate();}} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
+        const actions = disabled ? [] : [{name:'activate'}, ...(!complete && accessibilityLabels ? movementActions.map(name=>({name,label:accessibilityLabels[name]})) : [])];
+        const joined = (model.pieces.get(item.id)?.group.members.size ?? 0) > 1;
+        const performMovement = (action:MapAccessibilityAction) => {
+          clearHold();handle(model.accessibilityAction(item.id,action,Date.now()));refresh();
+        };
+        const onAction = (name:string) => {
+          if(name==='activate'){activate();return;}
+          if(disabled||complete||!accessibilityLabels)return;
+          const action=movementActions.find(candidate=>candidate===name);
+          if(action)performMovement(action);
+        };
+        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} onKeyDown={event=>{
+          const {key,altKey,ctrlKey,metaKey,shiftKey,isComposing}=event.nativeEvent;
+          if(disabled||complete||altKey||ctrlKey||metaKey||shiftKey||isComposing)return;
+          const action=Object.hasOwn(keyboardActions,key)?keyboardActions[key]:undefined;
+          if(action){event.preventDefault();event.stopPropagation();performMovement(action);}
+        }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
           {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:disabled?OFF_RIM:focused===item.id?tokens.colorAccent:tokens.colorMedalRim,backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
             <View pointerEvents="none" style={[styles.medalInner,{borderColor:disabled?OFF_RIM:tokens.colorMedalRim}]}/>
             <CanonIcon glyph={entry.icon} label={labels[item.id]} color={disabled?OFF_INK:tokens.colorMedalInk} size={20}/>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {jest,expect,test,afterEach} from '@jest/globals';
 import {render,fireEvent,screen,act} from '@testing-library/react-native';
-import {processColor} from 'react-native';
+import {processColor,StyleSheet} from 'react-native';
 import {CityMapMenu} from './CityMapMenu';
 import {nativeLayout} from '../native-layout';
 import RouteIcon from 'lucide-react-native/icons/route';
@@ -93,5 +93,48 @@ test('real native drags assemble all five, retain five flows and give the scene 
   select.mockClear();
   await act(()=>{canvas.props.onResponderGrant(event(775*scale,530*scale),gesture);canvas.props.onResponderRelease(event(775*scale,530*scale),gesture);});
   await fireEvent(screen.getByTestId('city-menu-scene-water'),'accessibilityTap');
+  expect(select).not.toHaveBeenCalled();
+});
+
+
+test('localized accessibility actions move and cancel without opening a destination',async()=>{
+  jest.spyOn(Math,'random').mockReturnValue(.5);
+  const select=jest.fn();
+  const accessibilityLabels={moveLeft:'Улева',moveRight:'Управа',moveUp:'Уверх',moveDown:'Уніз',snap:'Злучыць',cancel:'Скасаваць',joined:'Злучана'};
+  await render(<CityMapMenu {...props} accessibilityLabels={accessibilityLabels} items={[{id:'guides'},{id:'kudy',disabled:true}]} onSelect={select}/>);
+  const access=()=>screen.getByTestId('city-menu-access-guides');
+  const position=()=>StyleSheet.flatten(access().props.style).left;
+  const before=position();
+  expect(access().props.accessibilityActions).toContainEqual({name:'moveRight',label:'Управа'});
+  expect(screen.getByTestId('city-menu-access-kudy').props.accessibilityActions).toEqual([]);
+  await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'moveRight'}});
+  expect(position()).not.toEqual(before);
+  await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'cancel'}});
+  expect(position()).toEqual(before);
+  expect(select).not.toHaveBeenCalled();
+  await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'activate'}});
+  expect(select).toHaveBeenCalledWith('guides');
+});
+
+
+test('keyboard arrows and Escape share the non-pointer movement path',async()=>{
+  jest.spyOn(Math,'random').mockReturnValue(.5);
+  const select=jest.fn();
+  await render(<CityMapMenu {...props} onSelect={select}/>);
+  const access=()=>screen.getByTestId('city-menu-access-guides');
+  const position=()=>StyleSheet.flatten(access().props.style).left;
+  const key=async(key:string,extra={})=>{
+    const event={nativeEvent:{key,...extra},preventDefault:jest.fn(),stopPropagation:jest.fn()};
+    await fireEvent(access(),'keyDown',event);
+    return event;
+  };
+  const before=position();
+  expect((await key('Tab')).preventDefault).not.toHaveBeenCalled();
+  expect((await key('ArrowRight',{ctrlKey:true})).preventDefault).not.toHaveBeenCalled();
+  expect(position()).toEqual(before);
+  expect((await key('ArrowRight')).preventDefault).toHaveBeenCalled();
+  expect(position()).not.toEqual(before);
+  await key('Escape');
+  expect(position()).toEqual(before);
   expect(select).not.toHaveBeenCalled();
 });

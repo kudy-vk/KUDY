@@ -165,3 +165,47 @@ test('snapped groups never split: cancel and new drags keep members together',()
   assert.equal(m.pieces.get('nearby').group,m.pieces.get('guides').group);
   assert.equal(n.group.members,members); // склад групы нязменны ўсялякай цягай
 });
+
+test('non-pointer movement works in the tap-only host and cancel restores its group',()=>{
+  const m=new CityPuzzle(320,()=>0,undefined,{height:1800,positions:{},dragEnabled:false});
+  const before=m.position('guides'),step=8/(320/1600);
+  for(const [action,x,y] of [['moveRight',step,0],['moveDown',step,step],['moveLeft',0,step],['moveUp',0,0],['moveLeft',-step,0]]){
+    assert.equal(m.accessibilityAction('guides',action,100).kind,'none');
+    assert.deepEqual(m.position('guides'),{x:before.x+x,y:before.y+y});
+  }
+  assert.equal(m.groups.size,5);
+  m.accessibilityAction('guides','cancel',101);
+  assert.deepEqual(m.position('guides'),before);
+});
+test('accessible snap uses canonical neighbours and never activates a destination',()=>{
+  const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+  g.group.dx=n.group.dx+20;g.group.dy=n.group.dy;
+  const before=m.groups.size;
+  m.accessibilityAction('guides','moveRight',100);
+  assert.equal(m.groups.size,before,'directional movement never joins automatically');
+  const result=m.accessibilityAction('guides','snap',101);
+  assert.equal(result.kind,'snap');assert.equal(result.complete,false);
+  assert.equal(m.groups.size,before-1);assert.equal(n.group,g.group);
+  const position=m.position('nearby');
+  m.accessibilityAction('guides','moveLeft',102);
+  m.accessibilityAction('guides','cancel',103);
+  assert.deepEqual(m.position('nearby'),position);
+  assert.equal(n.group,g.group);
+  invariants(m);
+});
+test('explicit accessibility snap with no nearby joint is a no-op',()=>{
+  const m=puzzle(),before=m.position('guides');
+  assert.equal(m.accessibilityAction('guides','snap',100).kind,'none');
+  assert.deepEqual(m.position('guides'),before);
+  assert.equal(m.groups.size,5);
+});
+
+
+test('accessible movement is rolled back on resize and respects the scene bounds',()=>{
+  const m=puzzle(),before=m.position('guides');
+  for(let i=0;i<100;i++)m.accessibilityAction('guides','moveRight',i);
+  assert.notDeepEqual(m.position('guides'),before);
+  invariants(m);
+  m.resize(320);
+  assert.deepEqual(m.position('guides'),before);
+});
