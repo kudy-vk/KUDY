@@ -30,13 +30,13 @@ function mergeEntriesWithoutLabelCleanup(markdown) {
     if (!hasCleanup) missing.push(header);
   }
 
-  // One-line entries (the `- Табе зрабіць:` convention): a merge handoff that
+  // One-line entries use `Табе зрабіць:` (legacy entries may include `- `). A merge handoff that
   // CLOSES a linked issue must name the agent:running removal — closing the
   // issue does not clear the status label. Handoffs that merely route a task
   // elsewhere (no close) leave the issue's label alone.
-  const lines = markdown.split("\n").filter((line) => line.startsWith("- Табе зрабіць:"));
+  const lines = markdown.split("\n").filter((line) => /^(?:- )?Табе зрабіць:/u.test(line));
   for (const line of lines) {
-    if (!/зліце|змержы|мерж/iu.test(line)) continue;
+    if (!/(?:зліце|злівай|змержы(?:це|ць)?|мержыць)/iu.test(line)) continue;
     // Short refs guard the same way as full URLs: «зліце PR #140, закрывае
     // #132» (#154). A bare `#N` counts as the issue ref only when it is not
     // the PR's own ref.
@@ -92,6 +92,20 @@ test("one-line entries: short-ref closing handoffs are guarded like full URLs", 
     [],
     "a bare `#N` ref must name the issue, not the PR's own number",
   );
+});
+
+test("canonical one-line closing handoffs require status cleanup", () => {
+  const closing = "Табе зрабіць: зліце [PR #140](https://github.com/kudy-vk/KUDY/pull/140), закрывае [issue #132](https://github.com/kudy-vk/KUDY/issues/132), пасля мержу знімі `agent:running` з issue #132.";
+  const missing = "Табе зрабіць: зліце [PR #140](https://github.com/kudy-vk/KUDY/pull/140), закрывае [issue #132](https://github.com/kudy-vk/KUDY/issues/132).";
+  const anotherVerb = "Табе зрабіць: для [PR #140](https://github.com/kudy-vk/KUDY/pull/140) закрывае [issue #132](https://github.com/kudy-vk/KUDY/issues/132); злівай толькі пасля CI.";
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(closing), []);
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(missing), [missing.slice(0, 120)]);
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(anotherVerb), [anotherVerb.slice(0, 120)]);
+});
+
+test("historical merged PR references are not actionable merge handoffs", () => {
+  const completed = "Табе зрабіць: зачыні эпік #376: [PR #420](https://github.com/kudy-vk/KUDY/pull/420) ужо смаш-мержаны; issue #377 закрывае этап, а не патрабуе новага мержа.";
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(completed), []);
 });
 
 test("the guard accepts explicit cleanup and ignores historical completed entries", () => {
