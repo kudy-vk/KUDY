@@ -3,6 +3,104 @@
   "source_locale": "be",
   "records": [
     {
+      "id": "native.chrome.mapAccessibility.moveLeft",
+      "source": "Перасунуць улева",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок улева",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveLeft"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "b6368d3a0db0c487f6c82087a3230ded99cfb5b2ec47172c43703a46cbad7c12"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveRight",
+      "source": "Перасунуць управа",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок управа",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveRight"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "2c8acb0d2085b9d568935fd1adae489e6488e0248c6ff67ef202520275175600"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveUp",
+      "source": "Перасунуць уверх",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок уверх",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveUp"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "4031711a7aba53fd4667556346550099745adcf754bcb814b2edd74fd26d76b4"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveDown",
+      "source": "Перасунуць уніз",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок уніз",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveDown"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "75f9804513e72df06f2daaceb6d26862695da6308b8f66cdd09241b7fb38fd0d"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.snap",
+      "source": "Злучыць",
+      "context": "Меню карты, чытач экрана: злучыць фрагмент з суседнім, калі яны дастаткова блізка",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.snap"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "de3be84ec5ec0396f74a9f5df1980ca3d6315127f3898bcd8b42845103278ed1"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.cancel",
+      "source": "Скасаваць перасоўванне",
+      "context": "Меню карты, чытач экрана: скасаваць незавершанае перасоўванне фрагмента",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.cancel"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "f5ef55cb0297ba1d4b01a08294d1c0f86617d18e59e5f4882057e477388e239e"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.joined",
+      "source": "Злучана",
+      "context": "Меню карты, чытач экрана: фрагмент ужо злучаны з іншым фрагментам",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.joined"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "743359d65d76ad6726630eb0ea08a66a1d85a2ab83c6c9ea516c58c461c2f000"
+    },
+    {
       "id": "native.chrome.comingSoon",
       "source": "Хутка",
       "context": "Неактыўны пункт галоўнага меню: раздзел яшчэ недаступны",

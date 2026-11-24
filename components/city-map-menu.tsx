@@ -69,5 +69,5 @@ export function HomeMapMenu({ width, locale, onSelect }: {
       icon: entry.icon,
     };
   });
-  return <CityMapMenu width={width} labels={labels} items={items} layout={cityMenuConfig.layout} onSelect={onSelect} />;
+  return <CityMapMenu width={width} labels={labels} accessibilityLabels={strings.mapAccessibility} items={items} layout={cityMenuConfig.layout} onSelect={onSelect} />;
 }

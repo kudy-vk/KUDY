@@ -8,6 +8,69 @@
   },
   "records": [
     {
+      "id": "native.chrome.mapAccessibility.moveLeft",
+      "value": "Mover a la izquierda",
+      "reviewedSourceHash": "b6368d3a0db0c487f6c82087a3230ded99cfb5b2ec47172c43703a46cbad7c12",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; дзеянне называе фізічны кірунак зруху.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveRight",
+      "value": "Mover a la derecha",
+      "reviewedSourceHash": "2c8acb0d2085b9d568935fd1adae489e6488e0248c6ff67ef202520275175600",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; дзеянне называе фізічны кірунак зруху.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveUp",
+      "value": "Mover hacia arriba",
+      "reviewedSourceHash": "4031711a7aba53fd4667556346550099745adcf754bcb814b2edd74fd26d76b4",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; дзеянне называе фізічны кірунак зруху.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveDown",
+      "value": "Mover hacia abajo",
+      "reviewedSourceHash": "75f9804513e72df06f2daaceb6d26862695da6308b8f66cdd09241b7fb38fd0d",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; дзеянне называе фізічны кірунак зруху.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
+      "id": "native.chrome.mapAccessibility.snap",
+      "value": "Unir",
+      "reviewedSourceHash": "de3be84ec5ec0396f74a9f5df1980ca3d6315127f3898bcd8b42845103278ed1",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; дзеянне злучае фрагменты.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
+      "id": "native.chrome.mapAccessibility.cancel",
+      "value": "Cancelar movimiento",
+      "reviewedSourceHash": "f5ef55cb0297ba1d4b01a08294d1c0f86617d18e59e5f4882057e477388e239e",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; скасаванне незавершанага руху, не навігацыі.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
+      "id": "native.chrome.mapAccessibility.joined",
+      "value": "Unido",
+      "reviewedSourceHash": "743359d65d76ad6726630eb0ea08a66a1d85a2ab83c6c9ea516c58c461c2f000",
+      "review": {
+        "outcome": "approved",
+        "note": "MAP-10 (#83): аўтарскі пераклад і сэнсавая самаправерка ChatGPT 2026-11-25; стан ужо злучанага фрагмента.  Незалежнае рэв’ю не праводзілася."
+      }
+    },
+    {
       "id": "native.chrome.comingSoon",
       "value": "Pronto",
       "reviewedSourceHash": "ddd8d54d445057e907cd788a7e2a70b26423e2dbe88a1f3dbfd8f884ca624750",

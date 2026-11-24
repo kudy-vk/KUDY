@@ -201,6 +201,19 @@ test('explicit accessibility snap with no nearby joint is a no-op',()=>{
 });
 
 
+test('failed accessible snap retains cancel, and changing focus cannot orphan a move',()=>{
+  const m=puzzle(),before=m.position('guides'),other=m.position('nearby');
+  m.accessibilityAction('guides','moveRight',100);
+  assert.equal(m.accessibilityAction('guides','snap',101).kind,'none');
+  m.accessibilityAction('guides','cancel',102);
+  assert.deepEqual(m.position('guides'),before);
+  m.accessibilityAction('guides','moveRight',103);
+  m.accessibilityAction('nearby','moveDown',104);
+  assert.deepEqual(m.position('guides'),before);
+  m.accessibilityAction('nearby','cancel',105);
+  assert.deepEqual(m.position('nearby'),other);
+});
+
 test('accessible movement is rolled back on resize and respects the scene bounds',()=>{
   const m=puzzle(),before=m.position('guides');
   for(let i=0;i<100;i++)m.accessibilityAction('guides','moveRight',i);

@@ -1,25 +1,34 @@
-# MAP-10 / #83 — даступнасць карты-меню
+# MAP-10 — вынікі рэалізацыі #83
 
-Стан: **часткова рэалізавана, NOT-VERIFIED для рэлізу**.
-База: `origin/main` `4ccde4257ad06c73c1b4deb60cfc54c41e96401b`.
-Галіна: `chatgpt/83-accessibility`. Ізаляваны worktree: `/home/viktar/Projects/KUDY-chat-20261125`.
+Галіна: `chatgpt/83-accessibility`. База: `4ccde425`.
 
-## Вынік па крытэрыях
+## Рэалізацыя
 
-1. Мадэль падтрымлівае перасоўванне на 8 dp, яўнае злучэнне суседніх груп і скасаванне. Кампанент апрацоўвае стрэлкі, S і Escape, не перахоплівае Tab і мадыфікаваныя камбінацыі. Дзеянні чытача экрана прымаюць лакалізаваныя назвы, але яшчэ не падключаныя ў `components/city-map-menu.tsx`: патрэбныя кананічныя пераклады. Фізічная клавіятура і чытачы экрана — NOT-VERIFIED.
-2. Застаюцца кнопка, назва, disabled і непасрэдная актывацыя. Дададзены лакалізаваны стан злучанай групы ў кампаненце. Парадак і абвяшчэнні на прыладах — NOT-VERIFIED.
-3. Не змененыя геаметрыя, дызайн, медальёны, рэсурсы, існыя вобласці націску і safe areas. 320/360 dp — мадэльныя тэсты; буйны шрыфт, паварот, кантраст і зоны націску на прыладах — NOT-VERIFIED.
-4. Паўторна выкарыстаныя межы, magnet/snap і існая апрацоўка reduced motion. Змена памеру скасоўвае незавершаны рух. Back, сістэмныя жэсты і пракрутка на прыладах — NOT-VERIFIED.
-5. Дададзены 4 тэсты мадэлі і 2 тэсты кампанента. Здымкі экрана і прыладавая матрыца не атрыманыя.
+- Чатыры кірункі руху, яўнае злучэнне і скасаванне руху з клавіятуры і праз дзеянні даступнасці. Няўдалае злучэнне не губляе магчымасць скасавання; пераход да іншай групы скасоўвае незавершаны рух.
+- Дзеянні падключаныя ў асноўным меню; сем радкоў у кананічным каталогу і ўсіх 42 перакладах. Пераклады правераны аўтарам з пазнакай пра адсутнасць незалежнага рэв'ю.
+- Стан злучэння абвяшчаецца праз AccessibilityInfo. Звычайная актывацыя адкрывае ранейшы маршрут; рух сам па сабе не адкрывае экран. Існыя выявы, геаметрыя, маршруты, анімацыя і рэжым pointer drag не змененыя.
+- Падрыхтаваны тэст вяртання з маршруту ў меню і скіду пазіцый.
 
-## Праверкі
+## Матрыца праверкі
 
-- `node --test docs/design/brand/outputs/menu-map-city-only/native/model.test.mjs docs/design/brand/outputs/menu-map-city-only/magnet.test.mjs docs/design/brand/outputs/menu-map-city-only/amber-light.test.mjs test/agent-preflight.test.mjs` — 27 passed, 1 skipped (няма Python OpenCV).
-- `node node_modules/jest/bin/jest.js --runInBand --runTestsByPath docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.test.tsx` — 8 passed.
-- Мэтавы TypeScript: `node node_modules/typescript/bin/tsc --noEmit --jsx react-jsx --moduleResolution bundler --module esnext --target es2022 --strict --skipLibCheck --resolveJsonModule --allowJs --allowImportingTsExtensions docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.tsx docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.test.tsx` — PASS.
-- Поўны `tsc --noEmit` — TS6053: у рабочай копіі адсутнічае `spikes/G00.03-sandbox-grant/server/device-auth.mjs`.
-- Поўны CI, Showboat і прыладавыя праверкі — NOT-VERIFIED. PR не адкрыты.
+| Крытэрый | Вынік |
+| --- | --- |
+| Клавіятура, дзеянні screen reader, рух, злучэнне, скасаванне | Мадэльныя і кампанентныя тэсты прайшлі; фізічная клавіятура і TalkBack/VoiceOver не правераныя |
+| Парадак, назвы, disabled, joined, актывацыя | Кампанентныя тэсты прайшлі; незалежнае рэв'ю перакладаў не праведзена |
+| 320, 360, 390, 430 dp | Кампанентныя тэсты парадку і абвешчаных мінімальных памераў 48 dp прайшлі; фактычныя hit areas, вялікі шрыфт, кантраст, safe areas, паварот і тэмы на прыладах не правераныя |
+| Reduced motion, вяртанне і скід | Кампанентны тэст reduced motion і скіду пры remount прайшоў; тэст поўнага маршруту не запусціўся; фізічныя back/edge gesture/scroll не правераныя |
+| Скрыншоты і прыладная матрыца | Адсутнічаюць; патрабуецца прыладная праверка |
 
-## Што засталося
+## Каманды і вынікі
 
-Кананічныя радкі дзеянняў і стану ў каталогу UI з праверанымі перакладамі ўсіх патрабаваных моў; падключэнне ў production host; праверка рэальных клавіятуры, TalkBack/VoiceOver, адаптыўнасці і сістэмных жэстаў. Не мяняць ілюстрацыі і анімацыю і не аднаўляць адхілены PR #453.
+- `node --test docs/design/brand/outputs/menu-map-city-only/native/model.test.mjs docs/design/brand/outputs/menu-map-city-only/magnet.test.mjs docs/design/brand/outputs/menu-map-city-only/amber-light.test.mjs test/agent-preflight.test.mjs` — 28 прайшлі, 1 прапушчаны (cv2).
+- `node node_modules/jest/bin/jest.js --runInBand --runTestsByPath docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.test.tsx` — 13 прайшлі.
+- Мэтавы TypeScript для CityMapMenu, тэсту і асноўнага кампанента — прайшоў.
+- `node --experimental-strip-types tools/i18n/generate-messages.mjs` — прайшоў. `check-messages.mjs` — не прайшоў: недаступны `controllers/run/runMap-strings.generated.ts` у пясочніцы. Поўная праверка кантрактаў лакалізацыі не пацверджаная.
+- `app/menu.test.tsx` — запуск заблакіраваны недаступным `controllers/run/runSurfaceController.ts`.
+- Поўны TypeScript — TS6053: недаступны `spikes/G00.03-sandbox-grant/server/device-auth.mjs`.
+- `npm test` і `jscpd` — тайм-аўт. Showboat — запуск забаронены для гэтага worktree.
+
+## Статус
+
+Рэалізацыя падключаная ў асноўным меню; PR не гатовы да зліцця без поўных CI і прыладных доказаў, якія патрабуе #83. Праверкі, якія не запускаліся або не прайшлі, не лічацца паспяховымі. Праблема Android host E2E адсочваецца ў #451.

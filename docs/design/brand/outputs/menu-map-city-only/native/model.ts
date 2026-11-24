@@ -115,13 +115,17 @@ export class CityPuzzle {
     const group = this.pieces.get(id)?.group;
     if (!group || this.phase !== 'scattered') return none;
     if (action === 'cancel') { this.cancel(); return none; }
-    if (this.active) this.cancel();
+    if (this.active || (this.accessibleMove && this.accessibleMove.group !== group)) this.cancel();
     if (action === 'snap') {
-      this.accessibleMove = null;
-      return this.snapGroup(group,now);
+      const result = this.snapGroup(group,now);
+      if (result.kind === 'snap') this.accessibleMove = null;
+      return result;
     }
     const step = 8 / this.scale;
-    if (this.accessibleMove?.group !== group) this.accessibleMove = {group,original:{x:group.dx,y:group.dy}};
+    if (this.accessibleMove?.group !== group) {
+      this.cancel();
+      this.accessibleMove = {group,original:{x:group.dx,y:group.dy}};
+    }
     if (action === 'moveLeft') group.dx -= step;
     if (action === 'moveRight') group.dx += step;
     if (action === 'moveUp') group.dy -= step;

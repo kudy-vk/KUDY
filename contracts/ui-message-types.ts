@@ -43,6 +43,7 @@ export interface UiStrings {
   readonly nearby: string;
   readonly guidesLink: string;
   readonly comingSoon: string;
+  readonly mapAccessibility: Readonly<Record<"moveLeft" | "moveRight" | "moveUp" | "moveDown" | "snap" | "cancel" | "joined", string>>;
   // The map menu's «Пра горад» entry (issue #200): the reserve-1 fragment
   // opens the static Gdańsk practical guide — it takes the slot that
   // previously rendered the comingSoon word.

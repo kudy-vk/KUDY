@@ -9,6 +9,7 @@ import { OPEN_UI_LOCALES } from "../contracts/ui-locales";
 import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
+import { StyleSheet } from "react-native";
 import HourglassIcon from "lucide-react-native/icons/hourglass";
 import LightbulbIcon from "lucide-react-native/icons/lightbulb";
 
@@ -34,6 +35,25 @@ test.each([
   await fireEvent.press(screen.getByTestId(back));
   expect(await screen.findByTestId("screen-Menu")).toBeTruthy();
   expect(screen.getByTestId("city-menu-canvas")).not.toBe(before);
+});
+
+test("production menu exposes localized actions and resets movement after returning", async () => {
+  await openMenu();
+  const piece = () => screen.getByTestId("city-menu-access-guides");
+  const position = () => StyleSheet.flatten(piece().props.style).left;
+  const initial = position();
+  expect(piece().props.accessibilityActions).toContainEqual({ name: "moveLeft", label: uiStrings("be").mapAccessibility.moveLeft });
+  await fireEvent(piece(), "accessibilityAction", { nativeEvent: { actionName: "moveLeft" } });
+  expect(position()).not.toEqual(initial);
+  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
+  await fireEvent(piece(), "accessibilityAction", { nativeEvent: { actionName: "activate" } });
+  expect(await screen.findByTestId("screen-Guides")).toBeTruthy();
+  await fireEvent.press(screen.getByTestId("btn-guides-back"));
+  expect(await screen.findByTestId("screen-Menu")).toBeTruthy();
+  expect(position()).toEqual(initial);
+  for (const locale of OPEN_UI_LOCALES) {
+    expect(Object.values(uiStrings(locale).mapAccessibility).every(label => label.trim().length > 0)).toBe(true);
+  }
 });
 
 test("the kudy piece stays visible, named and disabled without navigating", async () => {

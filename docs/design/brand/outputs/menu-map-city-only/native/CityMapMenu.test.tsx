@@ -1,7 +1,9 @@
 import React from 'react';
 import {jest,expect,test,afterEach} from '@jest/globals';
 import {render,fireEvent,screen,act} from '@testing-library/react-native';
-import {processColor,StyleSheet} from 'react-native';
+import {AccessibilityInfo,processColor,StyleSheet} from 'react-native';
+import {HomeMapMenu,cityMenuConfig} from '../../../../../../components/city-map-menu';
+import {uiStrings} from '../../../../../../components/ui-strings';
 import {CityMapMenu} from './CityMapMenu';
 import {nativeLayout} from '../native-layout';
 import RouteIcon from 'lucide-react-native/icons/route';
@@ -116,6 +118,49 @@ test('localized accessibility actions move and cancel without opening a destinat
   expect(select).toHaveBeenCalledWith('guides');
 });
 
+
+test.each([320,360,390,430])('host at %i dp preserves localized navigation, targets and menu order',async(width)=>{
+  jest.spyOn(Math,'random').mockReturnValue(.5);
+  const select=jest.fn();
+  const {rerender}=await render(<HomeMapMenu key="first" width={width} locale="pl" onSelect={select}/>);
+  const access=(id:string)=>screen.getByTestId(`city-menu-access-${id}`);
+  const position=()=>StyleSheet.flatten(access('guides').props.style).left;
+  const initial=position();
+  expect(screen.getAllByRole('button').map(node=>node.props.testID)).toEqual(cityMenuConfig.items.map(item=>`city-menu-access-${item.id}`));
+  for(const item of cityMenuConfig.items){
+    const target=access(item.id);
+    const size=StyleSheet.flatten(target.props.style);
+    expect(size.width).toBeGreaterThanOrEqual(48);
+    expect(size.height).toBeGreaterThanOrEqual(48);
+    if(item.destination)expect(target.props.accessibilityActions).toContainEqual({name:'moveLeft',label:uiStrings('pl').mapAccessibility.moveLeft});
+    else expect(target.props.accessibilityState.disabled).toBe(true);
+  }
+  await fireEvent(access('guides'),'accessibilityAction',{nativeEvent:{actionName:'moveLeft'}});
+  expect(position()).not.toEqual(initial);
+  expect(select).not.toHaveBeenCalled();
+  await fireEvent(access('guides'),'accessibilityAction',{nativeEvent:{actionName:'activate'}});
+  expect(select).toHaveBeenCalledWith('guides');
+  await rerender(<HomeMapMenu key="second" width={width} locale="pl" onSelect={select}/>);
+  expect(position()).toEqual(initial);
+});
+
+test('joining via accessibility announces joined state and preserves navigation with reduced motion',async()=>{
+  jest.spyOn(Math,'random').mockReturnValue(0);
+  const announce=jest.spyOn(AccessibilityInfo,'announceForAccessibility').mockImplementation(()=>{});
+  const select=jest.fn();
+  const accessibilityLabels={...uiStrings('en').mapAccessibility};
+  const ids=['nearby','guides'] as const;
+  const positions=Object.fromEntries(nativeLayout.pieces.filter(p=>ids.some(id=>id===p.id)).map(p=>[p.id,{x:125+p.x,y:320+p.y}]));
+  await render(<CityMapMenu {...props} accessibilityLabels={accessibilityLabels} items={ids.map(id=>({id}))} layout={{height:1800,positions,dragEnabled:false}} onSelect={select}/>);
+  const access=()=>screen.getByTestId('city-menu-access-guides');
+  await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'snap'}});
+  expect(announce).toHaveBeenCalledWith(accessibilityLabels.joined);
+  expect(access().props.accessibilityValue).toEqual({text:accessibilityLabels.joined});
+  expect(access().props.accessibilityActions).toEqual([{name:'activate'}]);
+  expect(select).not.toHaveBeenCalled();
+  await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'activate'}});
+  expect(select).toHaveBeenCalledWith('guides');
+});
 
 test('keyboard arrows and Escape share the non-pointer movement path',async()=>{
   jest.spyOn(Math,'random').mockReturnValue(.5);

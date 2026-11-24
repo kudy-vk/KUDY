@@ -13,6 +13,15 @@ import type { UiStrings } from "../contracts/ui-message-types.ts";
 
 export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
   "be": {
+    "mapAccessibility": {
+      "moveLeft": "Перасунуць улева",
+      "moveRight": "Перасунуць управа",
+      "moveUp": "Перасунуць уверх",
+      "moveDown": "Перасунуць уніз",
+      "snap": "Злучыць",
+      "cancel": "Скасаваць перасоўванне",
+      "joined": "Злучана",
+    },
     "comingSoon": "Хутка",
     "aboutCity": "Пра горад",
     "access": {
@@ -106,6 +115,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Куды сёння?",
   },
   "en": {
+    "mapAccessibility": {
+      "moveLeft": "Move left",
+      "moveRight": "Move right",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "snap": "Join",
+      "cancel": "Cancel move",
+      "joined": "Joined",
+    },
     "comingSoon": "Coming soon",
     "aboutCity": "City guide",
     "access": {
@@ -199,6 +217,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Where to today?",
   },
   "uk": {
+    "mapAccessibility": {
+      "moveLeft": "Перемістити ліворуч",
+      "moveRight": "Перемістити праворуч",
+      "moveUp": "Перемістити вгору",
+      "moveDown": "Перемістити вниз",
+      "snap": "З’єднати",
+      "cancel": "Скасувати переміщення",
+      "joined": "З’єднано",
+    },
     "comingSoon": "Скоро",
     "aboutCity": "Про місто",
     "access": {
@@ -292,6 +319,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Куди сьогодні?",
   },
   "de": {
+    "mapAccessibility": {
+      "moveLeft": "Nach links verschieben",
+      "moveRight": "Nach rechts verschieben",
+      "moveUp": "Nach oben verschieben",
+      "moveDown": "Nach unten verschieben",
+      "snap": "Verbinden",
+      "cancel": "Verschieben abbrechen",
+      "joined": "Verbunden",
+    },
     "comingSoon": "Bald",
     "aboutCity": "Stadttipps",
     "access": {
@@ -385,6 +421,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Wohin heute?",
   },
   "es": {
+    "mapAccessibility": {
+      "moveLeft": "Mover a la izquierda",
+      "moveRight": "Mover a la derecha",
+      "moveUp": "Mover hacia arriba",
+      "moveDown": "Mover hacia abajo",
+      "snap": "Unir",
+      "cancel": "Cancelar movimiento",
+      "joined": "Unido",
+    },
     "comingSoon": "Pronto",
     "aboutCity": "Guía práctica",
     "access": {
@@ -478,6 +523,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "¿Adónde hoy?",
   },
   "fr": {
+    "mapAccessibility": {
+      "moveLeft": "Déplacer à gauche",
+      "moveRight": "Déplacer à droite",
+      "moveUp": "Déplacer vers le haut",
+      "moveDown": "Déplacer vers le bas",
+      "snap": "Assembler",
+      "cancel": "Annuler le déplacement",
+      "joined": "Assemblé",
+    },
     "comingSoon": "Bientôt",
     "aboutCity": "Côté pratique",
     "access": {
@@ -571,6 +625,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Où va-t-on ?",
   },
   "cs": {
+    "mapAccessibility": {
+      "moveLeft": "Posunout doleva",
+      "moveRight": "Posunout doprava",
+      "moveUp": "Posunout nahoru",
+      "moveDown": "Posunout dolů",
+      "snap": "Spojit",
+      "cancel": "Zrušit posun",
+      "joined": "Spojeno",
+    },
     "comingSoon": "Brzy",
     "aboutCity": "Praktické",
     "access": {
@@ -664,6 +727,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kam dnes?",
   },
   "sv": {
+    "mapAccessibility": {
+      "moveLeft": "Flytta åt vänster",
+      "moveRight": "Flytta åt höger",
+      "moveUp": "Flytta uppåt",
+      "moveDown": "Flytta nedåt",
+      "snap": "Foga samman",
+      "cancel": "Avbryt förflyttning",
+      "joined": "Sammanfogad",
+    },
     "comingSoon": "Kommer snart",
     "aboutCity": "Stadsguide",
     "access": {
@@ -757,6 +829,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Vart i dag?",
   },
   "zh": {
+    "mapAccessibility": {
+      "moveLeft": "\u5411\u5DE6\u79FB\u52A8",
+      "moveRight": "\u5411\u53F3\u79FB\u52A8",
+      "moveUp": "\u5411\u4E0A\u79FB\u52A8",
+      "moveDown": "\u5411\u4E0B\u79FB\u52A8",
+      "snap": "\u62FC\u63A5",
+      "cancel": "\u53D6\u6D88\u79FB\u52A8",
+      "joined": "\u5DF2\u62FC\u63A5",
+    },
     "comingSoon": "\u5373\u5C06\u63A8\u51FA",
     "aboutCity": "\u57CE\u5E02\u6307\u5357",
     "access": {
@@ -850,6 +931,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "\u4ECA\u5929\u53BB\u54EA\u513F\uFF1F",
   },
   "nb": {
+    "mapAccessibility": {
+      "moveLeft": "Flytt til venstre",
+      "moveRight": "Flytt til høyre",
+      "moveUp": "Flytt opp",
+      "moveDown": "Flytt ned",
+      "snap": "Sett sammen",
+      "cancel": "Avbryt flytting",
+      "joined": "Satt sammen",
+    },
     "comingSoon": "Kommer snart",
     "aboutCity": "Byguide",
     "access": {
@@ -943,6 +1033,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Hvor går turen i dag?",
   },
   "pl": {
+    "mapAccessibility": {
+      "moveLeft": "Przesuń w lewo",
+      "moveRight": "Przesuń w prawo",
+      "moveUp": "Przesuń w górę",
+      "moveDown": "Przesuń w dół",
+      "snap": "Połącz",
+      "cancel": "Anuluj przesuwanie",
+      "joined": "Połączono",
+    },
     "comingSoon": "Wkrótce",
     "aboutCity": "Praktycznie",
     "access": {
@@ -1036,6 +1135,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Dokąd ruszamy?",
   },
   "da": {
+    "mapAccessibility": {
+      "moveLeft": "Flyt til venstre",
+      "moveRight": "Flyt til højre",
+      "moveUp": "Flyt op",
+      "moveDown": "Flyt ned",
+      "snap": "Sæt sammen",
+      "cancel": "Annuller flytning",
+      "joined": "Sat sammen",
+    },
     "comingSoon": "Kommer snart",
     "aboutCity": "Praktisk info",
     "access": {
@@ -1129,6 +1237,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Hvor går turen hen i dag?",
   },
   "nl": {
+    "mapAccessibility": {
+      "moveLeft": "Naar links verplaatsen",
+      "moveRight": "Naar rechts verplaatsen",
+      "moveUp": "Omhoog verplaatsen",
+      "moveDown": "Omlaag verplaatsen",
+      "snap": "Samenvoegen",
+      "cancel": "Verplaatsing annuleren",
+      "joined": "Samengevoegd",
+    },
     "comingSoon": "Binnenkort",
     "aboutCity": "Praktische info",
     "access": {
@@ -1222,6 +1339,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Waar gaan we vandaag heen?",
   },
   "pt": {
+    "mapAccessibility": {
+      "moveLeft": "Mover para a esquerda",
+      "moveRight": "Mover para a direita",
+      "moveUp": "Mover para cima",
+      "moveDown": "Mover para baixo",
+      "snap": "Juntar",
+      "cancel": "Cancelar movimento",
+      "joined": "Unido",
+    },
     "comingSoon": "Em breve",
     "aboutCity": "Guia prático",
     "access": {
@@ -1315,6 +1441,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Para onde vamos hoje?",
   },
   "it": {
+    "mapAccessibility": {
+      "moveLeft": "Sposta a sinistra",
+      "moveRight": "Sposta a destra",
+      "moveUp": "Sposta in alto",
+      "moveDown": "Sposta in basso",
+      "snap": "Unisci",
+      "cancel": "Annulla spostamento",
+      "joined": "Unito",
+    },
     "comingSoon": "Prossimamente",
     "aboutCity": "Guida città",
     "access": {
@@ -1408,6 +1543,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Dove oggi?",
   },
   "fi": {
+    "mapAccessibility": {
+      "moveLeft": "Siirrä vasemmalle",
+      "moveRight": "Siirrä oikealle",
+      "moveUp": "Siirrä ylös",
+      "moveDown": "Siirrä alas",
+      "snap": "Yhdistä",
+      "cancel": "Peruuta siirto",
+      "joined": "Yhdistetty",
+    },
     "comingSoon": "Tulossa",
     "aboutCity": "Kaupunkiopas",
     "access": {
@@ -1501,6 +1645,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Minne tänään?",
   },
   "lt": {
+    "mapAccessibility": {
+      "moveLeft": "Perkelti į kairę",
+      "moveRight": "Perkelti į dešinę",
+      "moveUp": "Perkelti aukštyn",
+      "moveDown": "Perkelti žemyn",
+      "snap": "Sujungti",
+      "cancel": "Atšaukti perkėlimą",
+      "joined": "Sujungta",
+    },
     "comingSoon": "Jau greitai",
     "aboutCity": "Miesto gidas",
     "access": {
@@ -1594,6 +1747,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kur šiandien?",
   },
   "et": {
+    "mapAccessibility": {
+      "moveLeft": "Liiguta vasakule",
+      "moveRight": "Liiguta paremale",
+      "moveUp": "Liiguta üles",
+      "moveDown": "Liiguta alla",
+      "snap": "Ühenda",
+      "cancel": "Tühista liigutamine",
+      "joined": "Ühendatud",
+    },
     "comingSoon": "Varsti",
     "aboutCity": "Linna teejuht",
     "access": {
@@ -1687,6 +1849,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kuhu täna?",
   },
   "lv": {
+    "mapAccessibility": {
+      "moveLeft": "Pārvietot pa kreisi",
+      "moveRight": "Pārvietot pa labi",
+      "moveUp": "Pārvietot uz augšu",
+      "moveDown": "Pārvietot uz leju",
+      "snap": "Savienot",
+      "cancel": "Atcelt pārvietošanu",
+      "joined": "Savienots",
+    },
     "comingSoon": "Drīzumā",
     "aboutCity": "Par pilsētu",
     "access": {
@@ -1780,6 +1951,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kur šodien?",
   },
   "sk": {
+    "mapAccessibility": {
+      "moveLeft": "Posunúť doľava",
+      "moveRight": "Posunúť doprava",
+      "moveUp": "Posunúť nahor",
+      "moveDown": "Posunúť nadol",
+      "snap": "Spojiť",
+      "cancel": "Zrušiť posun",
+      "joined": "Spojené",
+    },
     "comingSoon": "Čoskoro",
     "aboutCity": "O meste",
     "access": {
@@ -1873,6 +2053,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kam dnes?",
   },
   "hu": {
+    "mapAccessibility": {
+      "moveLeft": "Mozgatás balra",
+      "moveRight": "Mozgatás jobbra",
+      "moveUp": "Mozgatás felfelé",
+      "moveDown": "Mozgatás lefelé",
+      "snap": "Összeillesztés",
+      "cancel": "Mozgatás megszakítása",
+      "joined": "Összeillesztve",
+    },
     "comingSoon": "Hamarosan",
     "aboutCity": "A városról",
     "access": {
@@ -1966,6 +2155,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Merre ma?",
   },
   "sl": {
+    "mapAccessibility": {
+      "moveLeft": "Premakni levo",
+      "moveRight": "Premakni desno",
+      "moveUp": "Premakni navzgor",
+      "moveDown": "Premakni navzdol",
+      "snap": "Združi",
+      "cancel": "Prekliči premik",
+      "joined": "Združeno",
+    },
     "comingSoon": "Kmalu",
     "aboutCity": "O mestu",
     "access": {
@@ -2059,6 +2257,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kam danes?",
   },
   "hr": {
+    "mapAccessibility": {
+      "moveLeft": "Pomakni ulijevo",
+      "moveRight": "Pomakni udesno",
+      "moveUp": "Pomakni gore",
+      "moveDown": "Pomakni dolje",
+      "snap": "Spoji",
+      "cancel": "Otkaži pomicanje",
+      "joined": "Spojeno",
+    },
     "comingSoon": "Uskoro",
     "aboutCity": "O gradu",
     "access": {
@@ -2152,6 +2359,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kamo danas?",
   },
   "ro": {
+    "mapAccessibility": {
+      "moveLeft": "Mută la stânga",
+      "moveRight": "Mută la dreapta",
+      "moveUp": "Mută în sus",
+      "moveDown": "Mută în jos",
+      "snap": "Unește",
+      "cancel": "Anulează mutarea",
+      "joined": "Îmbinat",
+    },
     "comingSoon": "În curând",
     "aboutCity": "Despre oraș",
     "access": {
@@ -2245,6 +2461,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Unde azi?",
   },
   "bg": {
+    "mapAccessibility": {
+      "moveLeft": "Премести наляво",
+      "moveRight": "Премести надясно",
+      "moveUp": "Премести нагоре",
+      "moveDown": "Премести надолу",
+      "snap": "Свържи",
+      "cancel": "Отмени преместването",
+      "joined": "Свързано",
+    },
     "comingSoon": "Очаквайте",
     "aboutCity": "За града",
     "access": {
@@ -2338,6 +2563,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Къде днес?",
   },
   "el": {
+    "mapAccessibility": {
+      "moveLeft": "Μετακίνηση αριστερά",
+      "moveRight": "Μετακίνηση δεξιά",
+      "moveUp": "Μετακίνηση πάνω",
+      "moveDown": "Μετακίνηση κάτω",
+      "snap": "Ένωση",
+      "cancel": "Ακύρωση μετακίνησης",
+      "joined": "Ενωμένο",
+    },
     "comingSoon": "Σύντομα",
     "aboutCity": "Για την πόλη",
     "access": {
@@ -2431,6 +2665,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Πού σήμερα;",
   },
   "sr": {
+    "mapAccessibility": {
+      "moveLeft": "Помери улево",
+      "moveRight": "Помери удесно",
+      "moveUp": "Помери нагоре",
+      "moveDown": "Помери надоле",
+      "snap": "Споји",
+      "cancel": "Откажи померање",
+      "joined": "Спојено",
+    },
     "comingSoon": "Ускоро",
     "aboutCity": "О граду",
     "access": {
@@ -2524,6 +2767,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Куде данас?",
   },
   "bs": {
+    "mapAccessibility": {
+      "moveLeft": "Pomjeri ulijevo",
+      "moveRight": "Pomjeri udesno",
+      "moveUp": "Pomjeri gore",
+      "moveDown": "Pomjeri dolje",
+      "snap": "Spoji",
+      "cancel": "Otkaži pomjeranje",
+      "joined": "Spojeno",
+    },
     "comingSoon": "Uskoro",
     "aboutCity": "O gradu",
     "access": {
@@ -2617,6 +2869,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kamo danas?",
   },
   "mk": {
+    "mapAccessibility": {
+      "moveLeft": "Помести налево",
+      "moveRight": "Помести надесно",
+      "moveUp": "Помести нагоре",
+      "moveDown": "Помести надолу",
+      "snap": "Спои",
+      "cancel": "Откажи го поместувањето",
+      "joined": "Споено",
+    },
     "comingSoon": "Наскоро",
     "aboutCity": "За градот",
     "access": {
@@ -2710,6 +2971,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Каде денес?",
   },
   "sq": {
+    "mapAccessibility": {
+      "moveLeft": "Lëviz majtas",
+      "moveRight": "Lëviz djathtas",
+      "moveUp": "Lëviz lart",
+      "moveDown": "Lëviz poshtë",
+      "snap": "Bashko",
+      "cancel": "Anulo lëvizjen",
+      "joined": "Bashkuar",
+    },
     "comingSoon": "Së shpejti",
     "aboutCity": "Për qytetin",
     "access": {
@@ -2803,6 +3073,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Ku sot?",
   },
   "is": {
+    "mapAccessibility": {
+      "moveLeft": "Færa til vinstri",
+      "moveRight": "Færa til hægri",
+      "moveUp": "Færa upp",
+      "moveDown": "Færa niður",
+      "snap": "Tengja saman",
+      "cancel": "Hætta við færslu",
+      "joined": "Tengt",
+    },
     "comingSoon": "Fljótlega",
     "aboutCity": "Um borgina",
     "access": {
@@ -2896,6 +3175,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Hvert í dag?",
   },
   "ga": {
+    "mapAccessibility": {
+      "moveLeft": "Bog ar chlé",
+      "moveRight": "Bog ar dheis",
+      "moveUp": "Bog suas",
+      "moveDown": "Bog síos",
+      "snap": "Ceangail",
+      "cancel": "Cealaigh an bogadh",
+      "joined": "Ceangailte",
+    },
     "comingSoon": "Go luath",
     "aboutCity": "Faoin gcathair",
     "access": {
@@ -2989,6 +3277,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Cá inniu?",
   },
   "mt": {
+    "mapAccessibility": {
+      "moveLeft": "Ċaqlaq lejn ix-xellug",
+      "moveRight": "Ċaqlaq lejn il-lemin",
+      "moveUp": "Ċaqlaq ’l fuq",
+      "moveDown": "Ċaqlaq ’l isfel",
+      "snap": "Għaqqad",
+      "cancel": "Ikkanċella ċ-ċaqliq",
+      "joined": "Magħqud",
+    },
     "comingSoon": "Dalwaqt",
     "aboutCity": "Dwar il-belt",
     "access": {
@@ -3082,6 +3379,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Fejn illum?",
   },
   "ca": {
+    "mapAccessibility": {
+      "moveLeft": "Mou a l’esquerra",
+      "moveRight": "Mou a la dreta",
+      "moveUp": "Mou amunt",
+      "moveDown": "Mou avall",
+      "snap": "Uneix",
+      "cancel": "Cancel·la el moviment",
+      "joined": "Unit",
+    },
     "comingSoon": "Aviat",
     "aboutCity": "Sobre la ciutat",
     "access": {
@@ -3175,6 +3481,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "On anem avui?",
   },
   "tr": {
+    "mapAccessibility": {
+      "moveLeft": "Sola taşı",
+      "moveRight": "Sağa taşı",
+      "moveUp": "Yukarı taşı",
+      "moveDown": "Aşağı taşı",
+      "snap": "Birleştir",
+      "cancel": "Taşımayı iptal et",
+      "joined": "Birleştirildi",
+    },
     "comingSoon": "Yakında",
     "aboutCity": "Şehir hakkında",
     "access": {
@@ -3268,6 +3583,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Bugün nereye?",
   },
   "ru": {
+    "mapAccessibility": {
+      "moveLeft": "Переместить влево",
+      "moveRight": "Переместить вправо",
+      "moveUp": "Переместить вверх",
+      "moveDown": "Переместить вниз",
+      "snap": "Соединить",
+      "cancel": "Отменить перемещение",
+      "joined": "Соединено",
+    },
     "comingSoon": "Скоро",
     "aboutCity": "О городе",
     "access": {
@@ -3361,6 +3685,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Куда сегодня?",
   },
   "lb": {
+    "mapAccessibility": {
+      "moveLeft": "No lénks réckelen",
+      "moveRight": "No riets réckelen",
+      "moveUp": "No uewen réckelen",
+      "moveDown": "No ënnen réckelen",
+      "snap": "Zesummesetzen",
+      "cancel": "Réckelen ofbriechen",
+      "joined": "Zesummegesat",
+    },
     "comingSoon": "Bald",
     "aboutCity": "Iwwer d'Stad",
     "access": {
@@ -3454,6 +3787,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Wou haut?",
   },
   "cnr": {
+    "mapAccessibility": {
+      "moveLeft": "Помјери улијево",
+      "moveRight": "Помјери удесно",
+      "moveUp": "Помјери горе",
+      "moveDown": "Помјери доље",
+      "snap": "Споји",
+      "cancel": "Откажи помјерање",
+      "joined": "Спојено",
+    },
     "comingSoon": "Ускоро",
     "aboutCity": "О граду",
     "access": {
@@ -3547,6 +3889,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Куде данас?",
   },
   "nn": {
+    "mapAccessibility": {
+      "moveLeft": "Flytt til venstre",
+      "moveRight": "Flytt til høgre",
+      "moveUp": "Flytt opp",
+      "moveDown": "Flytt ned",
+      "snap": "Set saman",
+      "cancel": "Avbryt flytting",
+      "joined": "Sett saman",
+    },
     "comingSoon": "Snart",
     "aboutCity": "Om byen",
     "access": {
@@ -3640,6 +3991,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Kvar i dag?",
   },
   "rm": {
+    "mapAccessibility": {
+      "moveLeft": "Spustar a sanestra",
+      "moveRight": "Spustar a dretga",
+      "moveUp": "Spustar ensi",
+      "moveDown": "Spustar engiu",
+      "snap": "Colliar",
+      "cancel": "Interrumper il spustament",
+      "joined": "Collià",
+    },
     "comingSoon": "Insumèss",
     "aboutCity": "Davart la citad",
     "access": {
@@ -3733,6 +4093,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Nua oz?",
   },
   "ka": {
+    "mapAccessibility": {
+      "moveLeft": "მარცხნივ გადაადგილება",
+      "moveRight": "მარჯვნივ გადაადგილება",
+      "moveUp": "ზემოთ გადაადგილება",
+      "moveDown": "ქვემოთ გადაადგილება",
+      "snap": "შეერთება",
+      "cancel": "გადაადგილების გაუქმება",
+      "joined": "შეერთებულია",
+    },
     "comingSoon": "მალე",
     "aboutCity": "ქალაქის შესახებ",
     "access": {
@@ -3826,6 +4195,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "სად დღეს?",
   },
   "hy": {
+    "mapAccessibility": {
+      "moveLeft": "Տեղափոխել ձախ",
+      "moveRight": "Տեղափոխել աջ",
+      "moveUp": "Տեղափոխել վերև",
+      "moveDown": "Տեղափոխել ներքև",
+      "snap": "Միացնել",
+      "cancel": "Չեղարկել տեղափոխումը",
+      "joined": "Միացված է",
+    },
     "comingSoon": "Շուտով",
     "aboutCity": "Քաղաքի մասին",
     "access": {
@@ -3919,6 +4297,15 @@ export const UI_STRINGS: Record<CompleteUiLocaleCode, UiStrings> = {
     "whereToToday": "Որտեղ այսօր։",
   },
   "az": {
+    "mapAccessibility": {
+      "moveLeft": "Sola köçür",
+      "moveRight": "Sağa köçür",
+      "moveUp": "Yuxarı köçür",
+      "moveDown": "Aşağı köçür",
+      "snap": "Birləşdir",
+      "cancel": "Köçürməni ləğv et",
+      "joined": "Birləşdirilib",
+    },
     "comingSoon": "Tezliklə",
     "aboutCity": "Şəhər haqqında",
     "access": {

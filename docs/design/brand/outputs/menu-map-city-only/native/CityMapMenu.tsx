@@ -202,7 +202,10 @@ export function CityMapMenu(props:CityMapMenuProps) {
         const actions = disabled ? [] : [{name:'activate'}, ...(!complete && accessibilityLabels ? movementActions.map(name=>({name,label:accessibilityLabels[name]})) : [])];
         const joined = (model.pieces.get(item.id)?.group.members.size ?? 0) > 1;
         const performMovement = (action:MapAccessibilityAction) => {
-          clearHold();handle(model.accessibilityAction(item.id,action,Date.now()));refresh();
+          clearHold();
+          const result=model.accessibilityAction(item.id,action,Date.now());
+          handle(result);refresh();
+          if(result.kind==='snap'&&accessibilityLabels)AccessibilityInfo.announceForAccessibility(accessibilityLabels.joined);
         };
         const onAction = (name:string) => {
           if(name==='activate'){activate();return;}
@@ -212,7 +215,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
         };
         return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} onKeyDown={event=>{
           const {key,altKey,ctrlKey,metaKey,shiftKey,isComposing}=event.nativeEvent;
-          if(disabled||complete||altKey||ctrlKey||metaKey||shiftKey||isComposing)return;
+          if(disabled||complete||altKey||ctrlKey||metaKey||isComposing||(shiftKey&&key!=='S'))return;
           const action=Object.hasOwn(keyboardActions,key)?keyboardActions[key]:undefined;
           if(action){event.preventDefault();event.stopPropagation();performMovement(action);}
         }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
