@@ -95,3 +95,31 @@ test('real native drags assemble all five, retain five flows and give the scene 
   await fireEvent(screen.getByTestId('city-menu-scene-water'),'accessibilityTap');
   expect(select).not.toHaveBeenCalled();
 });
+
+test('MAP-10: native screen-reader and keyboard actions move and restore pieces without selection',async () => {
+  const select=jest.fn();
+  const actionLabels={moveLeft:'Налева',moveRight:'Направа',moveUp:'Уверх',moveDown:'Уніз',snap:'Злучыць',cancel:'Скасаваць'};
+  await render(<CityMapMenu {...props} actionLabels={actionLabels} connectedLabel={(count,total)=>`${count}/${total}`} items={[{id:'guides'},{id:'kudy',disabled:true}]} layout={{height:2500,positions:{guides:{x:800,y:500}},dragEnabled:false}} onSelect={select}/>);
+  const canvas=screen.getByTestId('city-menu-canvas');
+  expect(canvas.props.onStartShouldSetResponder({nativeEvent:{touches:[{}],locationX:80,locationY:65}})).toBe(false);
+  const button=screen.getByTestId('city-menu-access-guides');
+  const position=()=>screen.getByTestId('city-menu-access-guides').props.style.at(-1).left as number;
+  const start=position();
+  expect(button.props.accessibilityActions.map((action:{name:string})=>action.name)).toEqual(['activate','moveLeft','moveRight','moveUp','moveDown','snap','cancel']);
+  expect(button.props.accessibilityValue).toEqual({text:'1/2'});
+  expect(screen.getByTestId('city-menu-access-kudy').props.focusable).toBe(true);
+  await fireEvent(button,'accessibilityAction',{nativeEvent:{actionName:'moveRight'}});
+  const moved=position();
+  expect(moved).not.toBe(start);
+  expect(select).not.toHaveBeenCalled();
+  await fireEvent(button,'accessibilityAction',{nativeEvent:{actionName:'cancel'}});
+  expect(position()).toBe(start);
+  const preventDefault=jest.fn();
+  await fireEvent(button,'keyDown',{nativeEvent:{key:'ArrowRight',altKey:false,ctrlKey:false,metaKey:false},preventDefault});
+  expect(preventDefault).toHaveBeenCalledTimes(1);
+  expect(position()).not.toBe(start);
+  await fireEvent(button,'keyDown',{nativeEvent:{key:'Escape',altKey:false,ctrlKey:false,metaKey:false},preventDefault});
+  expect(position()).toBe(start);
+  await fireEvent(screen.getByTestId('city-menu-access-kudy'),'accessibilityTap');
+  expect(select).not.toHaveBeenCalled();
+});

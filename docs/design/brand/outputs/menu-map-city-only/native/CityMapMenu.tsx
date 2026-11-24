@@ -4,7 +4,7 @@ import type {GestureResponderEvent,StyleProp,ViewStyle} from 'react-native';
 import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
 import {amberPalette,lightThreads} from '../amber-light.mjs';
 import manifest from '../manifest.json';
-import {cityMenuAssets,citySceneAssets} from '../native-assets';
+import {historicalMenuAssets as cityMenuAssets,historicalSceneAssets as citySceneAssets} from '../../MAP-10/native-assets';
 import {nativeLayout} from '../native-layout';
 import {CityPuzzle} from './model';
 import type {CityMenuLayout,PieceId,Point,PuzzleEvent,SceneId} from './model';
@@ -16,6 +16,10 @@ export type {PieceId,SceneId} from './model';
 // the renderer places it on the medallion disc itself — the pieces carry no
 // visible text captions any more, the label stays the screen-reader name.
 export type CityMenuItem = {id:PieceId;disabled?:boolean;icon?:CanonGlyph};
+export type CityMenuAction = 'moveLeft'|'moveRight'|'moveUp'|'moveDown'|'snap'|'cancel';
+export type CityMenuActionLabels = Readonly<Record<CityMenuAction,string>>;
+const ACCESSIBLE_STEP_DP = 8;
+const ACCESSIBLE_ACTIONS:readonly CityMenuAction[] = ['moveLeft','moveRight','moveUp','moveDown','snap','cancel'];
 export interface CityMapMenuProps {
   width: number;
   labels: Readonly<Record<PieceId,string>>;
@@ -25,6 +29,8 @@ export interface CityMapMenuProps {
   layout?: CityMenuLayout;
   onSelect: (id:PieceId)=>void;
   reduceMotion?: boolean;
+  actionLabels?: CityMenuActionLabels;
+  connectedLabel?: (count:number,total:number)=>string;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -94,6 +100,19 @@ export function CityMapMenu(props:CityMapMenuProps) {
       if(event.kind==='snap'&&event.complete){if(reducedRef.current)model.completeNow();else startFrame();}
     }
   },[model,pulse,startFrame]);
+  const accessibleAction=useCallback((id:PieceId,action:CityMenuAction)=>{
+    if(action==='cancel') model.cancelAccessible();
+    else if(action==='snap') handle(model.snapAccessible(id,Date.now()));
+    else {
+      const steps:Record<'moveLeft'|'moveRight'|'moveUp'|'moveDown',Point>={
+        moveLeft:{x:-ACCESSIBLE_STEP_DP,y:0},moveRight:{x:ACCESSIBLE_STEP_DP,y:0},
+        moveUp:{x:0,y:-ACCESSIBLE_STEP_DP},moveDown:{x:0,y:ACCESSIBLE_STEP_DP},
+      };
+      const shift=steps[action];
+      model.moveAccessible(id,shift.x,shift.y);
+    }
+    refresh();
+  },[model,handle,refresh]);
   const activatePiece=useCallback((id:PieceId)=>{
     const item=latest.current.items?.find(item=>item.id===id);
     if(item?.disabled){
@@ -128,7 +147,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
     return PanResponder.create({
-      onStartShouldSetPanResponder:event=>event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event))),
+      onStartShouldSetPanResponder:event=>props.layout?.dragEnabled!==false&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event))),
       onPanResponderGrant:event=>{
         clearHold();if(event.nativeEvent.touches.length!==1){cancel();return;}
         const hit=model.begin(point(event),Date.now());refresh();
@@ -146,7 +165,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh]);
+  },[width,model,cancel,clearHold,handle,refresh,props.layout?.dragEnabled]);
 
   const scale=width/1600,complete=model.phase!=='scattered';
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
@@ -196,7 +215,18 @@ export function CityMapMenu(props:CityMapMenuProps) {
         const disabled=entry.disabled===true;
         const medal=medalAt(item.id);
         const activate=()=>activatePiece(item.id);
-        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} accessibilityActions={disabled?[]:[{name:'activate'}]} onAccessibilityTap={activate} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')activate();}} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
+        const actions=[{name:'activate'},...(!complete&&props.actionLabels?ACCESSIBLE_ACTIONS.map(name=>({name,label:props.actionLabels![name]})):[])];
+        const connected=props.connectedLabel?.(model.groupSize(item.id),items.length);
+        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete&&props.layout?.dragEnabled!==false?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityValue={connected?{text:connected}:undefined} accessibilityState={{disabled}} focusable onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} onKeyDown={event=>{
+          if(event.nativeEvent.altKey||event.nativeEvent.ctrlKey||event.nativeEvent.metaKey)return;
+          const name=event.nativeEvent.key;
+          const keys:Record<string,CityMenuAction>={ArrowLeft:'moveLeft',ArrowRight:'moveRight',ArrowUp:'moveUp',ArrowDown:'moveDown',s:'snap',S:'snap',Escape:'cancel'};
+          if(keys[name]){event.preventDefault();accessibleAction(item.id,keys[name]);}
+        }} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>{
+          const name=event.nativeEvent.actionName;
+          if(name==='activate')activate();
+          else if(ACCESSIBLE_ACTIONS.some(action=>action===name))accessibleAction(item.id,name as CityMenuAction);
+        }} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
           {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:disabled?OFF_RIM:focused===item.id?tokens.colorAccent:tokens.colorMedalRim,backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
             <View pointerEvents="none" style={[styles.medalInner,{borderColor:disabled?OFF_RIM:tokens.colorMedalRim}]}/>
             <CanonIcon glyph={entry.icon} label={labels[item.id]} color={disabled?OFF_INK:tokens.colorMedalInk} size={20}/>

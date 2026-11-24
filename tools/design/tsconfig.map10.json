@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "../../components/city-map-menu.tsx",
+    "../../docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu.tsx",
+    "../../docs/design/brand/outputs/menu-map-city-only/native/model.ts",
+    "../../docs/design/brand/outputs/MAP-10/native-assets.ts"
+  ],
+  "exclude": [
+    "../../node_modules",
+    "../../web",
+    "../../services",
+    "../../core",
+    "../../supabase",
+    "../../spikes"
+  ]
+}

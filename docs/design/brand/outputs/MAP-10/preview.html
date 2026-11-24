@@ -3,57 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAP-10 — зацверджаны спосаб кіравання, карта Гданьска на праверцы</title>
+<title>MAP-10 — гістарычная карта Гданьска ў пяці частках</title>
 <style>
-:root{color-scheme:light dark;font:16px/1.5 system-ui,sans-serif}
+:root{color-scheme:light dark;font:16px/1.55 system-ui,sans-serif}
 *{box-sizing:border-box}
-body{margin:0;background:#f4eee4;color:#352d26}
-header{padding:24px clamp(16px,4vw,48px);border-bottom:1px solid #ccbdab}
-header h1{font-size:1.65rem;margin:0 0 8px}
-header p{max-width:850px;margin:0}
-.geo{padding:24px;max-width:1240px;margin:auto}.geo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.geo figure{margin:0;padding:12px;background:#fff9f0;border:1px solid #bdad93;border-radius:12px}.geo img{display:block;max-width:100%;height:240px;object-fit:contain;margin:auto}.geo figcaption{margin-top:8px;font-size:.87rem}.geo p{max-width:920px}.geo .warn{font-weight:600}@media(max-width:860px){.geo-grid{grid-template-columns:1fr}.geo img{height:210px}}main{display:grid;grid-template-columns:minmax(340px,700px) minmax(280px,400px);gap:24px;max-width:1240px;margin:auto;padding:24px}
-.preview{background:#fff9f0;border:1px solid #bdad93;border-radius:16px;overflow:hidden}
-.preview h2{font-size:1rem;margin:16px 18px 0}
-iframe{display:block;width:100%;height:820px;border:0}
-aside{align-self:start;padding:20px;background:#fff9f0;border:1px solid #bdad93;border-radius:16px}
-aside h2{margin:0;font-size:1.15rem}
-kbd{font:inherit;font-size:.82rem;background:#e9ddce;border:1px solid #a99479;border-radius:5px;padding:1px 5px;white-space:nowrap}
-dl{display:grid;grid-template-columns:max-content 1fr;gap:8px 12px}
-dt{font-weight:700}
-dd{margin:0}
-strong{color:#7b412c}
-a{color:#065f47}
-.notice{padding:12px 14px;border-left:3px solid #97632d;background:#f0e4d3;margin-top:20px}
-@media(max-width:860px){main{grid-template-columns:1fr}iframe{height:700px}}
-@media(prefers-color-scheme:dark){body{background:#211c1a;color:#eee5d9}header{border-color:#6a5343}.geo figure,.preview,aside{background:#302621;border-color:#715440}kbd{background:#594337;border-color:#9f765e}.notice{background:#443126}strong{color:#ffc88b}a{color:#a9e6d2}}
+body{margin:0;background:#f4eee4;color:#332b23}
+header,main,footer{padding:24px clamp(16px,4vw,48px)}
+header{border-bottom:1px solid #bda988}h1{font-size:1.65rem;margin:0 0 8px}
+h2{font-size:1.2rem;margin:0 0 8px}p{max-width:920px}
+main{max-width:1250px;margin:auto}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+figure{margin:0;border:1px solid #c2aa83;border-radius:16px;overflow:hidden;background:#eae0cc}
+figure img{width:100%;height:440px;display:block;object-fit:contain}
+figcaption{padding:12px 16px;background:#f9f3e8}
+.details{margin-top:22px;padding:20px;border:1px solid #bda988;border-radius:16px;background:#f9f3e8}
+kbd{font:inherit;border:1px solid #ac9675;border-radius:5px;padding:1px 5px}
+table{border-collapse:collapse;width:100%}td,th{padding:8px;border-bottom:1px solid #cebda6;text-align:left}
+a{color:#075c47}small{color:#685c4b}
+iframe{width:100%;height:720px;border:0}
+footer{padding-top:0}
+@media(max-width:760px){.gallery{grid-template-columns:1fr}figure img{height:350px}td,th{padding:6px}}
+@media(prefers-color-scheme:dark){body{background:#211c19;color:#f3e8d8}figure,.details{background:#322820;border-color:#74634d}figcaption{background:#3a3026}td,th{border-color:#6e5b46}a{color:#9fe5c7}small{color:#c3b49b}}
 </style>
 </head>
 <body>
 <header>
-<h1>MAP-10 — кіраванне без перацягвання, фрагменты Гданьска</h1>
-<p><strong>Спосаб кіравання A зацверджаны 2026-11-23.</strong> Умова ўладальніка: усе пяць частак павінны грунтавацца на карце Гданьска. Новыя бачныя кнопкі не патрэбныя. Ніжэй — варыянт сапраўднай геаграфічнай асновы для асобнай візуальнай праверкі.</p>
+<h1>MAP-10 — гістарычная карта Гданьска</h1>
+<p><strong>Візуальны кірунак зацверджаны ўладальнікам 24 лістапада 2026 года.</strong> Пяць асобных частак з сапраўднага зацверджанага ў сесіі гістарычнага эскіза. Гэтую графіку падключана да натыўнага меню, а не толькі да макета.</p>
 </header>
-<section class="geo" aria-labelledby="geo-title"><h2 id="geo-title">Кандыдат: карта Гданьска як аснова пяці фрагментаў</h2><p>За аснову ўзятая наяўная ў праекце ілюстраваная карта Труймяста <code>about-map.webp</code> з прывязкамі да Гданьска. Яна не ў геадэзічным маштабе; цяперашнія формы фрагментаў захаваныя толькі для параўнання. Гэта не зацверджаныя production-асеты.</p><div class="geo-grid"><figure><img src="gdansk-reference.png" alt="Геаграфічны фрагмент карты Гданьска з раёнамі, рэкамі і вуліцамі"><figcaption>Аснова: фрагмент карты Гданьска</figcaption></figure><figure><img src="gdansk-map-pieces.png" alt="Пяць разнесеных частак той самай карты Гданьска"><figcaption>Пяць разабраных фрагментаў — новая прапанова</figcaption></figure><figure><img src="gdansk-map-joined.png" alt="Злучаныя часткі аднаўляюць бесперапынную карту"><figcaption>Злучаныя часткі, без змены іх ID</figcaption></figure></div><p class="warn">Фінальную геаграфічную дакладнасць і правы на паўторнае выкарыстанне выявы трэба праверыць да змены production-асетаў.</p></section>
 <main>
-<section class="preview" aria-label="Макет галоўнага экрана">
-<h2>Ранейшы макет M11 — у ім пакуль старая ілюстрацыя, не пацверджаная як карта Гданьска</h2>
-<iframe src="../../../production/menu.html" title="Інтэрактыўны макет галоўнага экрана"></iframe>
+<section class="gallery" aria-label="Рэжымы гістарычнай карты">
+<figure><img src="historical/scattered.png" alt="Пяць разабраных фрагментаў гістарычнай карты Гданьска"><figcaption><strong>Меню пры адкрыцці.</strong> Пяць частак карты. Яны не патрабуюць зборкі, каб адкрыць раздзел.</figcaption></figure>
+<figure><img src="historical/assembled.png" alt="Складзеная гістарычная карта са сценамі, вадой і вуліцамі"><figcaption><strong>Сабраная карта.</strong> Пяць частак і два пасіўныя слаі аднаўляюць малюнак без дзірак.</figcaption></figure>
 </section>
-<aside>
-<h2>Прапанаваныя спосабы кіравання</h2>
-<p>Спачатку перайдзі клавішай Tab у макет злева, потым выберы частку. Гэты спосаб кіравання ўжо ўзгоднены; яго трэба рэалізаваць і праверыць у дадатку.</p>
-<dl>
-<dt><kbd>Tab</kbd></dt><dd>Выбар часткі і кантур фокусу</dd>
-<dt><kbd>Enter</kbd></dt><dd>Адкрыць раздзел; для «Хутка» толькі кароткае падсвятленне</dd>
-<dt><kbd>←</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>→</kbd></dt><dd>Рух часткі без адкрыцця раздзела</dd>
-<dt><kbd>S</kbd></dt><dd>Стыкоўка з суседам</dd>
-<dt><kbd>Esc</kbd></dt><dd>Скасаваць рух</dd>
-</dl>
-<h2>Для экраннага чытальніка</h2>
-<p>Можна выбраць кожную частку, уключаючы «Хутка». Прапануюцца дзеянні «перасунуць» у чатыры бакі, «стыкаваць» і «скасаваць рух», каб не патрабаваўся доўгі жэст.</p>
-<div class="notice"><b>Дзеянні зацверджаныя.</b> Пакуль не рэалізаваныя ў натыўным дадатку. Асобна патрэбны візуальны вердыкт па карце Гданьска ўверсе.</div>
-<p><a href="README.md">Поўная прапанова і ўмовы праверкі</a></p>
-</aside>
+<section class="details">
+<h2>Што захавана</h2>
+<p>Існыя формы пяці фрагментаў, кропкі стыкоўкі, маршруты, медальёны навігацыі, панарама і рэкламная зона. Малюнак не з'яўляецца дакладнай архіўнай копіяй і не пацвярджае гістарычнае становішча ўсіх аб’ектаў. Новых знакаў славутасцяў на карту не дадавалі.</p>
+<h2>Кіраванне без перацягвання</h2>
+<table><thead><tr><th>Каманда</th><th>Дзеянне</th></tr></thead><tbody>
+<tr><td><kbd>Tab</kbd></td><td>Пераход паміж часткамі карты</td></tr>
+<tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Адкрыць раздзел або падсвятліць «Хутка»</td></tr>
+<tr><td><kbd>←</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>→</kbd></td><td>Перасунуць частку ці злучаную групу</td></tr>
+<tr><td><kbd>S</kbd></td><td>Стыкаваць з суседам</td></tr>
+<tr><td><kbd>Escape</kbd></td><td>Адмяніць апошні рух</td></tr>
+</tbody></table>
+<p>Для TalkBack і VoiceOver у натыўным кампаненце дададзены такія ж дзеянні, уключаючы інфармацыю пра колькасць злучаных частак.</p>
+<small>Гэта дызайн-агляд PNG, не скрыншот Android/iOS і не доказ праверкі на фізічнай прыладзе. Клавіятурная інтэрактыўнасць у гэтым HTML не эмітуецца.</small>
+</section>
+<details class="details"><summary>Ранейшы браўзерны макет M11 (яго графіка не з'яўляецца production)</summary><iframe src="../../../production/menu.html" title="Архіўны інтэрактыўны макет M11"></iframe></details>
 </main>
+<footer><a href="README.md">Падрабязнасці рэалізацыі і праверак</a></footer>
 </body>
 </html>

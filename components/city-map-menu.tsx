@@ -5,6 +5,7 @@ import LandmarkIcon from "lucide-react-native/icons/landmark";
 import HourglassIcon from "lucide-react-native/icons/hourglass";
 
 import { CityMapMenu, type PieceId } from "../docs/design/brand/outputs/menu-map-city-only/native";
+import type { CityMenuActionLabels } from "../docs/design/brand/outputs/menu-map-city-only/native/CityMapMenu";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
 import { tokens } from "./design-tokens";
 import { uiStrings } from "./ui-strings";
@@ -48,6 +49,19 @@ export const cityMenuConfig = {
   ] satisfies readonly MenuEntry[],
 };
 
+// MAP-10: candidate labels for new screen-reader controls. The base locale is
+// Belarusian; other reviewed translations are kept unchanged in the catalog.
+const mapActionLabels: Record<string,CityMenuActionLabels> = {
+  be: {moveLeft:"Перамясціць налева",moveRight:"Перамясціць направа",moveUp:"Перамясціць уверх",moveDown:"Перамясціць уніз",snap:"Злучыць з суседам",cancel:"Скасаваць рух"},
+  en: {moveLeft:"Move left",moveRight:"Move right",moveUp:"Move up",moveDown:"Move down",snap:"Join with neighbour",cancel:"Cancel movement"},
+  uk: {moveLeft:"Перемістити ліворуч",moveRight:"Перемістити праворуч",moveUp:"Перемістити вгору",moveDown:"Перемістити вниз",snap:"З’єднати із сусідом",cancel:"Скасувати рух"},
+  pl: {moveLeft:"Przesuń w lewo",moveRight:"Przesuń w prawo",moveUp:"Przesuń w górę",moveDown:"Przesuń w dół",snap:"Połącz z sąsiadem",cancel:"Anuluj ruch"},
+};
+const connectedDescription = (locale:string,count:number,total:number) =>
+  locale==="be"?`Злучана: ${count} з ${total}`:
+  locale==="uk"?`З’єднано: ${count} з ${total}`:
+  locale==="pl"?`Połączono: ${count} z ${total}`:`Joined: ${count} of ${total}`;
+
 export function HomeMapMenu({ width, locale, onSelect }: {
   width: number;
   locale: string;
@@ -69,5 +83,5 @@ export function HomeMapMenu({ width, locale, onSelect }: {
       icon: entry.icon,
     };
   });
-  return <CityMapMenu width={width} labels={labels} items={items} layout={cityMenuConfig.layout} onSelect={onSelect} />;
+  return <CityMapMenu width={width} labels={labels} items={items} layout={cityMenuConfig.layout} actionLabels={mapActionLabels[locale]??mapActionLabels.en} connectedLabel={(count,total)=>connectedDescription(locale,count,total)} onSelect={onSelect} />;
 }
