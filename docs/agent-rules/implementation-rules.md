@@ -331,6 +331,45 @@ cross-zone dependencies updates the config in the same PR.
 its README explanation; the revert experiment (drop the script or the glob, watch
 the guard fail) ran in the shipping session.
 
+## 19. Inspect the shipped feature before making or generating anything (hard stop)
+
+**Occurrence (2026-11-24):** [PR #453](https://github.com/kudy-vk/KUDY/pull/453)
+was closed unmerged after avoidable work. The native menu already had five
+pieces, their geometry, joining rules and a reveal animation in
+`docs/design/brand/outputs/menu-map-city-only/native/{CityMapMenu.tsx,model.ts}`
+and was wired from `app/menu.tsx`. Instead of first establishing the actual
+missing behavior, the agent generated a parallel set of pieces, changed the
+native renderer, and created a separate visual preview. It also failed to
+follow the approved design-catalog rule in `AGENTS.md`. Passing unit tests
+does not make an unauthorized duplicate implementation necessary.
+
+**Rule:** Before changing any feature, perform an *existing implementation audit*.
+Follow the actual owning entry point for the request (mobile/web screen,
+CI workflow, automation script, contract, documentation or another real surface),
+the relevant existing implementation, tests, design decisions and prior PRs.
+Inspect components, animation and source assets for UI/visual work; for unrelated
+work, record `N/A` with an evidence-based reason, never invent an app path.
+Distinguish mobile from web, live implementation from mockups, and art approval
+from authorization to replace production assets. Classify every requested
+outcome as `ALREADY DONE`, `MISSING` or `UNVERIFIED` with file or test evidence.
+Define the minimum change for confirmed `MISSING` items only. If all criteria
+are already satisfied, stop with no implementation diff and use the
+owner-controlled *no-change completion* process in `issue-workflow.md` §5a:
+**never return an already-complete issue to `agent:ready`**. If a necessary fact
+is `UNVERIFIED`, obtain the missing evidence or ask for the smallest
+clarification; do not assume a gap or create an alternative feature. A generic
+instruction to "continue" does not authorize reworking a completed component.
+
+**Check before the first edit:** identify the actual owning entry point,
+related source files, tests and accepted decisions, with `N/A` explained for
+nonapplicable UI/animation paths, and classify each criterion in the issue's
+`## Brief` or a dated task note. If the relevant evidence is missing,
+implementation is blocked. Before PR, compare every changed file with the
+recorded minimum gap and remove anything unrelated. Run
+`node --test test/agent-preflight.test.mjs` to guard the written policy
+against accidental removal; it **does not** prove an agent performed the
+audit, which remains a mandatory evidence-based review.
+
 ## Environment facts on the primary host — check, don't assume
 
 - Windows with `core.autocrlf=true`: bytes on disk may differ from blobs (rules 2–4).
