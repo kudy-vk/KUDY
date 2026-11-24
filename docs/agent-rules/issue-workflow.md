@@ -69,7 +69,7 @@ Do this in one pass, before writing any code:
    ## Brief
    - Goal: <one sentence in your own words>
    - Sources read: <task file, docs, code you actually opened>
-   - Shipping path: <actual mobile/web entrypoint -> component -> assets/animation -> tests>
+   - Owning path: <actual entrypoint for mobile/web/CI/docs/etc. -> relevant implementation -> tests; N/A with reasons for unrelated UI or animation>
    - Existing vs missing: <each requested outcome: ALREADY DONE / MISSING / UNVERIFIED + evidence>
    - Minimum gap: <confirmed missing behavior and precise files to change; 'none' if already complete>
    - Constraints: <scope limits you will respect, incl. Out of scope>
@@ -77,10 +77,12 @@ Do this in one pass, before writing any code:
    - Questions: none | <what the materials do not answer>
    ```
 
-3. Apply the existing-implementation audit in `implementation-rules.md` §19. If
-   everything requested is `ALREADY DONE`, hand back with no code change. If
-   the shipping path or any requirement is `UNVERIFIED`, this is a question,
-   not permission to implement a speculative replacement.
+3. Apply the existing-implementation audit in `implementation-rules.md` §19.
+   For non-UI tasks use their actual owning entry point, marking irrelevant
+   UI, asset and animation paths `N/A` with evidence. If all criteria are
+   `ALREADY DONE`, use the *no-change completion* path (§5a), **not** ordinary
+   hand-back to `agent:ready`. If the owning path or required evidence is
+   `UNVERIFIED`, this is a question, not permission to implement a replacement.
 4. If `Questions` is not empty: additionally replace `agent:running` with
    `agent:blocked` and stop. Wait for a human answer in the issue, then set
    `agent:running` again and proceed. Do not guess requirements.
@@ -142,6 +144,37 @@ same defect there as a missing one. Work happens on a branch named `<tool>/<issu
 Review findings on the PR (human or CodeRabbit) are fixed in the same branch —
 never open a duplicate PR for the same issue.
 
+## 5a. Already complete before implementation — no-change completion
+
+When every acceptance criterion is evidenced as `ALREADY DONE` in the current
+`main` implementation, **do not make code changes, create a PR or hand the
+open issue back to `agent:ready`**. The ordinary PR-merge completion signal in
+§5 does not apply when there is no implementation diff.
+
+1. Record each criterion's evidence (canonical file/commit or test result)
+   in the issue. This is a verified no-change outcome, not an opinion that
+   the task seems done.
+2. Replace `agent:running` with `agent:blocked` (never `agent:ready`), so the
+   dispatcher cannot claim the already-completed task again.
+3. Post this comment:
+
+   ```markdown
+   ## No-change verification
+   - Criteria and evidence: <numbered criteria and exact evidence on main>
+   - Implementation: none needed; no code change or PR
+   - Needs from operator: close this issue as completed after checking the evidence, or explicitly clarify which criterion remains incomplete
+   ```
+
+4. **Only the operator** makes the terminal decision: close the issue as
+   `completed` if the evidence is accepted, or change its requirements/status
+   through the normal owner-controlled workflow if not. The agent never
+   sets `agent:approved` and never requeues an already-complete issue. Until
+   that decision, the issue remains open and `agent:blocked`.
+
+If any acceptance criterion is `UNVERIFIED`, do **not** use this completion
+path. Report the missing evidence and use the regular blocked/question path
+in §6.
+
 ## 6. Blocked and hand-back
 
 External blocker (missing account, device, secret, service) or a question that
@@ -160,7 +193,8 @@ stops you:
 For a spike without the required tool or account, mark the outcome `blocked-external`
 per `docs/agent-tasks/README.md` — never a mock pretending success.
 
-Handing a task back unworked or abandoned:
+Handing back an unworked or abandoned task **that still requires work**
+(never an already-complete task; see §5a):
 
 1. Replace `agent:running` with `agent:ready`.
 2. Post:

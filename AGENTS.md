@@ -7,11 +7,13 @@ This applies to new development, UI/art changes, animation, accessibility, refac
 and requests to "continue" earlier work. Follow `docs/agent-rules/implementation-rules.md`
 §19 and record these facts in the issue claim or task notes:
 
-1. **Actual shipping path:** open the product entry point and follow it to the
-   component, its existing assets/masks, interaction and animation code, tests,
-   and existing approval/decision records. Verify the current `origin/main`
-   revision and relevant earlier issues/PRs. Distinguish native app code from
-   website mockups, drafts and archived design files.
+1. **Actual owning path:** open the real entry point for the requested change
+   (mobile app, web, CI workflow, script, contract or documentation) and trace
+   the existing implementation, relevant tests and decisions. Include components,
+   image assets/masks and animation only when the task concerns them; record
+   `N/A` with a reason for irrelevant paths. Verify the current `origin/main`
+   revision and related issues/PRs. Distinguish shipped behavior from mockups,
+   drafts and archived assets.
 2. **Existing / missing / unknown:** for each requested outcome write
    `ALREADY DONE`, `MISSING` or `UNVERIFIED`, supported by concrete file
    paths or test evidence. A plan or a mockup is not evidence of a missing feature.
@@ -21,11 +23,12 @@ and requests to "continue" earlier work. Follow `docs/agent-rules/implementation
    never regenerate pieces, change their shapes, rewrite snapping or animation,
    or create another design gallery without evidence of a gap and explicit owner
    authorization for that specific change.
-4. **Stop instead of guessing:** if the functionality is already complete, do
-   not reimplement it. If the target surface (mobile vs web), existing behavior,
-   approval status or true gap cannot be verified, stop and report the blocker.
-   Approval of a visual idea does not by itself authorize replacing production
-   assets or rewriting a completed mobile component.
+4. **Stop instead of guessing:** if all requested outcomes are already complete,
+   do not reimplement them or return the issue to the ready queue; use the
+   owner-controlled no-change disposition in `issue-workflow.md` §5a. If the
+   owning path, existing behavior, approval or true gap cannot be verified,
+   stop and report the blocker. Approval of a visual idea does not authorize
+   replacing completed assets or behavior.
 5. **Before a PR:** compare the changed files with the written minimum change.
    Remove any unrelated modification and include the existing-vs-missing audit
    and the reason each touched file was necessary.
