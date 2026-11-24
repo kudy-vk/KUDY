@@ -69,12 +69,19 @@ Do this in one pass, before writing any code:
    ## Brief
    - Goal: <one sentence in your own words>
    - Sources read: <task file, docs, code you actually opened>
+   - Shipping path: <actual mobile/web entrypoint -> component -> assets/animation -> tests>
+   - Existing vs missing: <each requested outcome: ALREADY DONE / MISSING / UNVERIFIED + evidence>
+   - Minimum gap: <confirmed missing behavior and precise files to change; 'none' if already complete>
    - Constraints: <scope limits you will respect, incl. Out of scope>
    - Plan per criterion: 1. … 2. … 3. …
    - Questions: none | <what the materials do not answer>
    ```
 
-3. If `Questions` is not empty: additionally replace `agent:running` with
+3. Apply the existing-implementation audit in `implementation-rules.md` §19. If
+   everything requested is `ALREADY DONE`, hand back with no code change. If
+   the shipping path or any requirement is `UNVERIFIED`, this is a question,
+   not permission to implement a speculative replacement.
+4. If `Questions` is not empty: additionally replace `agent:running` with
    `agent:blocked` and stop. Wait for a human answer in the issue, then set
    `agent:running` again and proceed. Do not guess requirements.
 
@@ -84,6 +91,9 @@ same defect there as a missing one. Work happens on a branch named `<tool>/<issu
 
 ## 4. While running
 
+- Recheck the §19 shipping-path audit when the owner changes or approves a
+  requirement mid-task. An approval is not permission to replace completed
+  behavior, graphics or animation without a demonstrated gap.
 - Implement exactly the numbered criteria. "Out of scope" on the issue is binding;
   a neighbouring task's file is not yours to fix.
 - Never edit the issue title, body or acceptance criteria of a claimed issue. The

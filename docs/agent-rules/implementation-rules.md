@@ -331,6 +331,39 @@ cross-zone dependencies updates the config in the same PR.
 its README explanation; the revert experiment (drop the script or the glob, watch
 the guard fail) ran in the shipping session.
 
+## 19. Inspect the shipped feature before making or generating anything (hard stop)
+
+**Occurrence (2026-11-24):** [PR #453](https://github.com/kudy-vk/KUDY/pull/453)
+was closed unmerged after avoidable work. The native menu already had five
+pieces, their geometry, joining rules and a reveal animation in
+`docs/design/brand/outputs/menu-map-city-only/native/{CityMapMenu.tsx,model.ts}`
+and was wired from `app/menu.tsx`. Instead of first establishing the actual
+missing behavior, the agent generated a parallel set of pieces, changed the
+native renderer, and created a separate visual preview. It also failed to
+follow the approved design-catalog rule in `AGENTS.md`. Passing unit tests
+does not make an unauthorized duplicate implementation necessary.
+
+**Rule:** Before changing any feature, do an *existing implementation audit*:
+follow the exact shipping entry point to components, animation, source assets,
+tests, design decisions, and prior PRs. Explicitly distinguish mobile from
+web, live implementation from mockups, and art approval from authorization
+to replace production assets. For every requested outcome write one of
+`ALREADY DONE`, `MISSING`, `UNVERIFIED` with evidence. Define the minimal
+change for confirmed `MISSING` items only. If everything is done, stop with
+no code change. If any necessary fact is `UNVERIFIED`, obtain the missing
+evidence or ask for the smallest clarification; do not infer a gap or create
+an alternative feature. A generic instruction to "continue" does not
+authorize reworking a completed component.
+
+**Check before the first edit:** point to the actual app path, existing
+component and asset/animation paths, related accepted decisions, and the
+per-outcome status in the issue's `## Brief` or a dated task note. If any is
+missing, the implementation is blocked. Before PR, compare every changed
+file to the recorded minimal gap and remove anything unrelated. Run
+`node --test test/agent-preflight.test.mjs` to guard the written policy
+against accidental removal; it **does not** prove an agent performed the
+audit, which remains a mandatory evidence-based review.
+
 ## Environment facts on the primary host — check, don't assume
 
 - Windows with `core.autocrlf=true`: bytes on disk may differ from blobs (rules 2–4).

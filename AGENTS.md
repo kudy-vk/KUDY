@@ -1,5 +1,39 @@
 # Agent instructions
 
+## Mandatory pre-change audit: prove the gap first (owner decision 2026-11-24)
+
+**Hard stop before the first edit, generated image/asset, code change, commit, or PR.**
+This applies to new development, UI/art changes, animation, accessibility, refactors
+and requests to "continue" earlier work. Follow `docs/agent-rules/implementation-rules.md`
+§19 and record these facts in the issue claim or task notes:
+
+1. **Actual shipping path:** open the product entry point and follow it to the
+   component, its existing assets/masks, interaction and animation code, tests,
+   and existing approval/decision records. Verify the current `origin/main`
+   revision and relevant earlier issues/PRs. Distinguish native app code from
+   website mockups, drafts and archived design files.
+2. **Existing / missing / unknown:** for each requested outcome write
+   `ALREADY DONE`, `MISSING` or `UNVERIFIED`, supported by concrete file
+   paths or test evidence. A plan or a mockup is not evidence of a missing feature.
+3. **Minimum necessary change:** name the exact gap, owning component and files
+   that must change. Reuse the existing implementation and tests. For a requested
+   map/image update, determine whether graphics are already approved and in use;
+   never regenerate pieces, change their shapes, rewrite snapping or animation,
+   or create another design gallery without evidence of a gap and explicit owner
+   authorization for that specific change.
+4. **Stop instead of guessing:** if the functionality is already complete, do
+   not reimplement it. If the target surface (mobile vs web), existing behavior,
+   approval status or true gap cannot be verified, stop and report the blocker.
+   Approval of a visual idea does not by itself authorize replacing production
+   assets or rewriting a completed mobile component.
+5. **Before a PR:** compare the changed files with the written minimum change.
+   Remove any unrelated modification and include the existing-vs-missing audit
+   and the reason each touched file was necessary.
+
+A complete task with no proven gap has **no implementation diff**. This check
+must be recorded with the normal issue-workflow claim before implementation;
+design catalog review and automated tests do not substitute for it.
+
 For a design-QA review, read `docs/agent-rules/design-qa.md` and run it on request and before closing any task that changes the interface. Design-QA is not run in CI and needs no model API key. Record unavailable device or baseline evidence as NOT-VERIFIED.
 
 Before completing any implementation task, read and follow `docs/agent-rules/showboat.md`. It defines the mandatory, measurable conditions for creating a Showboat proof of work.
