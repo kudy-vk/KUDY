@@ -168,7 +168,7 @@ export function AboutCityFood({ ctx }: { ctx: FoodContext }) {
           <View style={styles.facts}>
             <Fact label={label("pln")} glyph={LandmarkIcon} styles={styles} />
             <Fact label={label("card")} glyph={CreditCardIcon} styles={styles} />
-            <Fact label="BLIK" glyph={SmartphoneIcon} styles={styles} />
+            <Fact label={t("food.blik.title")} glyph={SmartphoneIcon} styles={styles} />
           </View>
           {hint("dcc", "dccTitle", <View style={styles.body}>
             <ScaledText style={styles.detailText}>{label("dccText")}</ScaledText>
