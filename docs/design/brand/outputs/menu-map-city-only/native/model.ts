@@ -5,13 +5,15 @@ import { amberMotion } from '../amber-light.mjs';
 export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
-export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean };
+export const MEDAL_DIAMETER_DP = 38;
+export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean; centerAssembled?: boolean; assembledLift?: number };
+export type MapAccessibilityAction = 'moveLeft' | 'moveRight' | 'moveUp' | 'moveDown' | 'snap' | 'cancel';
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
 type Group = { dx: number; dy: number; members: Set<PieceId> };
 type Shape = { id: string; x: number; y: number; width: number; height: number; rows: number[][] };
 type Piece = Shape & { id: PieceId; group: Group };
 type Hit = { id: PieceId; passive: false } | { id: SceneId; passive: true };
-type Gesture = { hit: Hit; start: Point; last: Point; at: number; group?: Group; original?: Point; held: boolean; cancelled: boolean };
+type Gesture = { hit: Hit; start: Point; last: Point; at: number; group?: Group; original?: Point; held: boolean; heldAt?: number; lastMoveAt?: number; cancelled: boolean };
 export type PuzzleEvent = { kind: 'none' } | { kind: 'select'; id: PieceId } | { kind: 'passive'; id: SceneId; point: Point } | { kind: 'snap'; point: Point; complete: boolean };
 
 const rows = (value: string) => value.split(';').map(row => row ? row.split(',').map(Number) : []);
@@ -22,6 +24,8 @@ const contains = (shape: Shape, x: number, y: number) => {
   return false;
 };
 const none: PuzzleEvent = { kind: 'none' };
+const INERTIA_MS = 200;
+const GRAB_MS = 180;
 
 export class CityPuzzle {
   readonly pieces = new Map<PieceId, Piece>();
@@ -33,7 +37,9 @@ export class CityPuzzle {
   radius = 0;
   effectProgress = 0;
   active: Gesture | null = null;
+  private accessibleMove: { group: Group; original: Point } | null = null;
   private motion: { at: number; group: Group; from: Point } | null = null;
+  private inertia: { at: number; group: Group; from: Point; delta: Point } | null = null;
   private scale: number;
   private readonly layout?: CityMenuLayout;
 
@@ -57,16 +63,29 @@ export class CityPuzzle {
   // краі; паварот не існуе — арыентацыя фрагмента нязменная.
   private clampGroup(group: Group) {
     const members = [...group.members].map(id => this.pieces.get(id)!);
-    group.dx = Math.max(-Math.min(...members.map(p=>p.x))-55,Math.min(1390-Math.max(...members.map(p=>p.x+p.width)),group.dx));
-    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min((this.layout?.height??1800)-430-Math.max(...members.map(p=>p.y+p.height)),group.dy));
+    const configured = this.layout !== undefined;
+    group.dx = Math.max(-Math.min(...members.map(p=>p.x))-(configured?125:55),Math.min((configured?1475:1390)-Math.max(...members.map(p=>p.x+p.width)),group.dx));
+    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-(configured?320:130),Math.min((this.layout?.height??1800)-(configured?320:430)-Math.max(...members.map(p=>p.y+p.height)),group.dy));
+  }
+  get sceneOrigin(): Point {
+    // The accepted source is 1351 × 1164; the production canvas is square.
+    return {x:125,y:this.layout?.centerAssembled ? Math.max(0,(this.layout.height-1164)/2-(this.layout.assembledLift??0)) : 320};
   }
   resize(width: number) { this.cancel(); this.scale = this.validScale(width); }
   position(id: PieceId): Point {
     const piece = this.pieces.get(id)!;
     return { x: 125 + piece.x + piece.group.dx, y: 320 + piece.y + piece.group.dy };
   }
-  hit(point: Point): Hit | undefined {
-    for (const piece of [...this.pieces.values()].reverse()) {
+  hit(point: Point, medallions?: ReadonlyMap<PieceId, Point>): Hit | undefined {
+    const topFirst = [...this.pieces.values()].reverse();
+    // The medallions render above the polygon artwork, including their rims.
+    for (const piece of topFirst) {
+      const center = medallions?.get(piece.id);
+      if (!center) continue;
+      const at = this.position(piece.id);
+      if (Math.hypot(point.x-at.x-center.x,point.y-at.y-center.y)*this.scale <= MEDAL_DIAMETER_DP/2) return {id:piece.id,passive:false};
+    }
+    for (const piece of topFirst) {
       const at = this.position(piece.id);
       if (contains(piece, point.x-at.x, point.y-at.y)) return { id: piece.id, passive: false };
     }
@@ -74,14 +93,15 @@ export class CityPuzzle {
       const at = this.position(piece.id), labelWidth = Math.max(350, Math.min(650, piece.width+80));
       if (Math.abs(point.x-at.x-piece.width/2) < labelWidth/2 && point.y < at.y && point.y > at.y-48/this.scale) return { id: piece.id, passive: false };
     }
-    const x = point.x-125, y = point.y-320;
+    const origin=this.sceneOrigin;
+    const x = point.x-origin.x, y = point.y-origin.y;
     if (Math.hypot(x-675,y-582) <= this.radius && this.radius > 0) for (const part of this.scenery) {
       if (contains(part,x-part.x,y-part.y)) return { id: part.id, passive: true };
     }
   }
-  begin(point: Point, now: number): Hit | undefined {
+  begin(point: Point, now: number, medallions?: ReadonlyMap<PieceId, Point>): Hit | undefined {
     this.cancel();
-    const hit = this.hit(point);
+    const hit = this.hit(point,medallions);
     if (!hit) return;
     const group = hit.passive ? undefined : this.pieces.get(hit.id)!.group;
     this.active = { hit, group, start: point, last: point, at: now, original: group ? {x:group.dx,y:group.dy} : undefined, held: false, cancelled: false };
@@ -90,9 +110,13 @@ export class CityPuzzle {
   hold(now: number) {
     if (this.layout?.dragEnabled === false) return;
     const active = this.active;
-    if (active && !active.hit.passive && !active.cancelled && this.phase === 'scattered' && now-active.at >= nativeLayout.gesture.holdMs) active.held = true;
+    if (active && !active.hit.passive && !active.cancelled && !active.held && this.phase === 'scattered' && now-active.at >= nativeLayout.gesture.holdMs) { active.held = true; active.heldAt = now; }
   }
-  move(point: Point, now: number): PuzzleEvent {
+  grabProgress(now: number): number {
+    const at=this.active?.heldAt;
+    return at===undefined?0:1-(1-Math.max(0,Math.min(1,(now-at)/GRAB_MS)))**2;
+  }
+  move(point: Point, now: number, withInertia = false): PuzzleEvent {
     const active = this.active;
     if (!active || active.cancelled) return none;
     this.hold(now);
@@ -103,9 +127,48 @@ export class CityPuzzle {
     const group = active.group!;
     const dx = point.x-active.last.x, dy = point.y-active.last.y;
     if (dx === 0 && dy === 0) return none;
+    const previous={x:group.dx,y:group.dy};
+    const dt=Math.max(16,Math.min(64,now-(active.lastMoveAt??active.heldAt??now)));
     group.dx += dx; group.dy += dy;
     this.clampGroup(group);
-    active.last = point;
+    active.last = point; active.lastMoveAt=now;
+    const velocity={x:(group.dx-previous.x)/dt,y:(group.dy-previous.y)/dt};
+    const result=this.snapGroup(group,now);
+    const speed=Math.hypot(velocity.x,velocity.y)*this.scale;
+    if (withInertia && result.kind==='snap' && speed>=0.2) {
+      // Both pieces already share one group. Dampen the incoming velocity
+      // without ever changing their joint or starting another automatic snap.
+      const distance=Math.min(24,speed*80)/this.scale;
+      const length=Math.hypot(velocity.x,velocity.y);
+      this.inertia={at:now,group,from:{x:group.dx,y:group.dy},delta:{x:velocity.x/length*distance,y:velocity.y/length*distance}};
+    }
+    return result;
+  }
+  // Same step size as the approved keyboard controls in production/menu.mjs.
+  accessibilityAction(id: PieceId, action: MapAccessibilityAction, now: number): PuzzleEvent {
+    const group = this.pieces.get(id)?.group;
+    if (!group || this.phase !== 'scattered') return none;
+    if (action === 'cancel') { this.cancel(); return none; }
+    this.stopInertia();
+    if (this.active || (this.accessibleMove && this.accessibleMove.group !== group)) this.cancel();
+    if (action === 'snap') {
+      const result = this.snapGroup(group,now);
+      if (result.kind === 'snap') this.accessibleMove = null;
+      return result;
+    }
+    const step = 8 / this.scale;
+    if (this.accessibleMove?.group !== group) {
+      this.cancel();
+      this.accessibleMove = {group,original:{x:group.dx,y:group.dy}};
+    }
+    if (action === 'moveLeft') group.dx -= step;
+    if (action === 'moveRight') group.dx += step;
+    if (action === 'moveUp') group.dy -= step;
+    if (action === 'moveDown') group.dy += step;
+    this.clampGroup(group);
+    return none;
+  }
+  private snapGroup(group: Group, now: number): PuzzleEvent {
     const joints = nativeLayout.joints.filter(joint=>this.pieces.has(joint.a)&&this.pieces.has(joint.b));
     const target = findMagnet(group,this.pieces,joints,nativeLayout.gesture.snapDistanceDp/this.scale);
     if (!target) return none;
@@ -124,15 +187,37 @@ export class CityPuzzle {
     if (!active || active.cancelled || active.held || now-active.at >= nativeLayout.gesture.holdMs) return none;
     return active.hit.passive ? {kind:'passive',id:active.hit.id,point:active.start} : {kind:'select',id:active.hit.id};
   }
+  stopInertia() {
+    if (!this.inertia) return;
+    const {group,at}=this.inertia;
+    if(this.motion?.group===group) this.motion={at:at+INERTIA_MS,group,from:{x:group.dx,y:group.dy}};
+    this.inertia=null;
+  }
   cancel() {
+    this.stopInertia();
+    if (this.accessibleMove) {
+      const {group,original} = this.accessibleMove;
+      group.dx = original.x; group.dy = original.y;
+      this.accessibleMove = null;
+    }
     if (this.active?.group && this.active.original) { this.active.group.dx=this.active.original.x; this.active.group.dy=this.active.original.y; }
     this.active = null;
   }
   advance(now: number): boolean {
+    if (this.inertia) {
+      const {at,group,from,delta}=this.inertia;
+      const progress=Math.max(0,Math.min(1,(now-at)/INERTIA_MS));
+      const eased=1-(1-progress)**2;
+      group.dx=from.x+delta.x*eased; group.dy=from.y+delta.y*eased;
+      this.clampGroup(group);
+      if(progress<1)return true;
+      this.stopInertia();
+    }
     if (!this.motion) return false;
     const {at,group,from} = this.motion;
     const elapsed = Math.max(0,now-at),center = Math.min(1,elapsed/400);
-    group.dx=from.x*(1-center)**3; group.dy=from.y*(1-center)**3;
+    const targetY=this.sceneOrigin.y-320;
+    group.dx=from.x*(1-center)**3; group.dy=targetY+(from.y-targetY)*(1-center)**3;
     const t=elapsed-400,{chargeMs,crestMs,revealMs,settleMs}=nativeLayout.reveal;
     this.phase=t<0?'assembling':t<chargeMs?'charging':t<chargeMs+crestMs?'crest':t<chargeMs+crestMs+revealMs?'revealing':'settling';
     const effect=amberMotion(t,nativeLayout.reveal);
@@ -144,6 +229,6 @@ export class CityPuzzle {
     if (this.groups.size !== 1) return;
     const group = [...this.groups][0];
     if (group.members.size !== this.pieces.size) return;
-    group.dx=0;group.dy=0;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
+    group.dx=0;group.dy=this.sceneOrigin.y-320;this.inertia=null;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
   }
 }

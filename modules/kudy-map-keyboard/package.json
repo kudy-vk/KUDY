@@ -1,0 +1,7 @@
+{
+  "name": "kudy-map-keyboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "iOS map menu hardware keyboard focus adapter",
+  "license": "SEE LICENSE IN ../../LICENSE"
+}
