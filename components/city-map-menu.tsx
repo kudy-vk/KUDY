@@ -28,6 +28,7 @@ export const cityMenuConfig = {
     height: 1600,
     dragEnabled: true,
     centerAssembled: true,
+    assembledLift: 96,
     positions: {
       nearby: { x: 153, y: 138 },
       guides: { x: 984, y: 153 },

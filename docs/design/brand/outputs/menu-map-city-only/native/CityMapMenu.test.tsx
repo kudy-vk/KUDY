@@ -44,7 +44,7 @@ test('the medallion renders only with a host glyph and carries no text caption (
 });
 test('translations change while the native piece positions remain stable', async () => {
   const {rerender}= await render(<CityMapMenu {...props} onSelect={()=>{}}/>);
-  const before=screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.transform;
+  const before=StyleSheet.flatten(screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.style);
   // RNTL 14: rerender is async like render — await it so the translated
   // labels land before the assertions.
   await rerender(<CityMapMenu {...props} labels={{...labels,guides:'Stadtführungen durch die Altstadt'}} onSelect={()=>{}}/>);
@@ -52,7 +52,7 @@ test('translations change while the native piece positions remain stable', async
   // visible text label renders, the medallion carries the glyph instead.
   expect(screen.getByTestId('city-menu-access-guides').props.accessibilityLabel).toBe('Stadtführungen durch die Altstadt');
   expect(screen.queryByText('Stadtführungen durch die Altstadt',{includeHiddenElements:true})).toBeNull();
-  expect(screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.transform).toEqual(before);
+  expect(StyleSheet.flatten(screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.style)).toEqual(before);
 });
 test('native responder tap selects, while early movement cancels selection',async () => {
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
@@ -172,18 +172,23 @@ test('production host separates pointer drag from screen reader activation',asyn
   await act(()=>canvas().props.onResponderMove(movement,gesture));
   expect(position()).toBeCloseTo(initial);
   await act(()=>jest.advanceTimersByTime(32));
-  expect(position()).toBeGreaterThan(initial);expect(position()).toBeLessThan(initial+4);
-  await act(()=>jest.advanceTimersByTime(120));
+  expect(position()).toBeCloseTo(initial+9);
+  const artwork=StyleSheet.flatten(screen.getByTestId('city-menu-piece-nearby',{includeHiddenElements:true}).props.style);
+  expect(artwork.transform).toEqual([{translateX:expect.closeTo(position()-nativeLayout.pieces.find(p=>p.id==='nearby')!.padding*scale)},{translateY:expect.any(Number)}]);
   await act(()=>canvas().props.onResponderRelease(movement,gesture));
   expect(position()).toBeCloseTo(initial+9);expect(select).not.toHaveBeenCalled();
   await act(()=>canvas().props.onResponderGrant(event(378*scale,236*scale),gesture));
   await act(()=>jest.advanceTimersByTime(301));
-  await act(()=>canvas().props.onResponderMove(event(478*scale,236*scale),gesture));
-  await act(()=>jest.advanceTimersByTime(32));
-  const stopped=position();
-  await act(()=>canvas().props.onResponderRelease(event(478*scale,236*scale),gesture));
+  // Multiple moves within a frame use the latest target. Releasing before
+  // that frame flushes it once and leaves no deferred movement.
+  await act(()=>{
+    canvas().props.onResponderMove(event(418*scale,236*scale),gesture);
+    canvas().props.onResponderMove(event(478*scale,236*scale),gesture);
+    canvas().props.onResponderRelease(event(478*scale,236*scale),gesture);
+  });
+  expect(position()).toBeCloseTo(initial+31.5);
   await act(()=>jest.advanceTimersByTime(500));
-  expect(position()).toBeCloseTo(stopped);expect(select).not.toHaveBeenCalled();
+  expect(position()).toBeCloseTo(initial+31.5);expect(select).not.toHaveBeenCalled();
   read.mockResolvedValue(true);
   await rerender(<HomeMapMenu key="reader" width={360} locale="be" onSelect={select}/>);
   expect(piece('nearby').props.pointerEvents).toBe('auto');

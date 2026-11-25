@@ -1,4 +1,4 @@
-import React,{useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
+import React,{memo,useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {AccessibilityInfo,AppState,PanResponder,Pressable,StyleSheet,View} from 'react-native';
 import type {GestureResponderEvent,StyleProp,ViewStyle} from 'react-native';
 import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
@@ -42,10 +42,26 @@ const OFF_INK = '#7d6c58';
 // mask; a press lights the piece back for the mockup's 700 ms.
 const DIM_OPACITY = 0.55;
 const LIT_MS = 700;
-// Slow, weighty movement with a bounded step even after a delayed JS frame.
-const DRAG_SPEED_DP_PER_SECOND = 100;
 const movementActions: readonly MapAccessibilityAction[] = ['moveLeft','moveRight','moveUp','moveDown','snap','cancel'];
 const keyboardActions: Readonly<Partial<Record<string,MapAccessibilityAction>>> = {ArrowLeft:'moveLeft',ArrowRight:'moveRight',ArrowUp:'moveUp',ArrowDown:'moveDown',s:'snap',S:'snap',Escape:'cancel'};
+
+// Keep each piece's SVG local and memoized: translating a native View does
+// not invalidate the other pieces' masks and full-canvas SVG on every drag frame.
+const PieceArtwork = memo(function PieceArtwork({item,scale,complete,pressed,disabled,lit,veil}:{
+  item:typeof nativeLayout.pieces[number];scale:number;complete:boolean;pressed:boolean;disabled:boolean;lit:boolean;veil:number;
+}){
+  const {id,width,height,padding}=item;
+  const maskId=`city-menu-veil-${id}`;
+  return <Svg width={(width+2*padding)*scale} height={(height+2*padding)*scale} viewBox={`${-padding} ${-padding} ${width+2*padding} ${height+2*padding}`}>
+    <Defs><Mask id={maskId} maskUnits="userSpaceOnUse" x={0} y={0} width={width} height={height}><SvgImage href={cityMenuAssets[id].light} width={width} height={height}/></Mask></Defs>
+    <G opacity={pressed?0.86:1}>
+      <SvgImage href={cityMenuAssets[id].city} width={width} height={height}/>
+      {!complete&&<SvgImage href={cityMenuAssets[id].ui} x={-padding} y={-padding} width={width+2*padding} height={height+2*padding}/>}
+      <Rect testID={maskId} x={0} y={0} width={width} height={height} fill={amberPalette.veil} mask={`url(#${maskId})`} opacity={veil}/>
+      {disabled&&<Rect testID={`city-menu-dim-${id}`} x={0} y={0} width={width} height={height} fill={tokens.colorPaper} mask={`url(#${maskId})`} opacity={lit?0:DIM_OPACITY}/>}
+    </G>
+  </Svg>;
+});
 
 export function CityMapMenu(props:CityMapMenuProps) {
   const {width,labels,hint,sceneLabels,style,accessibilityLabels}=props;
@@ -114,26 +130,22 @@ export function CityMapMenu(props:CityMapMenuProps) {
     }
   },[activatePiece,model,pulse,startFrame]);
 
+  const flushDrag=useCallback(()=>{
+    const next=dragTarget.current;
+    dragTarget.current=null;
+    if(!model.active?.held||model.active.cancelled||!next)return;
+    const result=model.move(next,Date.now());
+    handle(result);refresh();
+    if(result.kind==='snap'){clearHold();stopDrag();}
+  },[model,handle,refresh,clearHold,stopDrag]);
   const queueDrag=useCallback((target:Point)=>{
     dragTarget.current=target;
     if(dragFrame.current!==null)return;
-    let previous=Date.now();
-    const tick=()=>{
+    dragFrame.current=requestAnimationFrame(()=>{
       dragFrame.current=null;
-      const now=Date.now(),active=model.active,next=dragTarget.current;
-      if(!active?.held||active.cancelled||!next)return;
-      const dx=next.x-active.last.x,dy=next.y-active.last.y,distance=Math.hypot(dx,dy);
-      if(distance===0)return;
-      const limit=DRAG_SPEED_DP_PER_SECOND*Math.min(32,Math.max(1,now-previous))/1000*1600/width;
-      previous=now;
-      const fraction=Math.min(1,limit/distance);
-      const result=model.move({x:active.last.x+dx*fraction,y:active.last.y+dy*fraction},now);
-      handle(result);refresh();
-      if(result.kind==='snap'){clearHold();stopDrag();return;}
-      if(fraction<1&&model.active?.held)dragFrame.current=requestAnimationFrame(tick);
-    };
-    dragFrame.current=requestAnimationFrame(tick);
-  },[width,model,handle,refresh,clearHold,stopDrag]);
+      flushDrag();
+    });
+  },[flushDrag]);
 
   useEffect(()=>{
     let active=true;
@@ -187,12 +199,12 @@ export function CityMapMenu(props:CityMapMenuProps) {
         if(result.kind==='snap'){clearHold();stopDrag();}
         handle(result);refresh();
       },
-      onPanResponderRelease:()=>{clearHold();stopDrag();const result=model.release(Date.now());refresh();handle(result);},
+      onPanResponderRelease:()=>{clearHold();flushDrag();stopDrag();const result=model.release(Date.now());refresh();handle(result);},
       onPanResponderTerminate:cancel,
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,props.layout?.dragEnabled]);
+  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,props.layout?.dragEnabled]);
 
   const scale=width/1600,complete=model.phase!=='scattered';
   const origin=model.sceneOrigin;
@@ -212,8 +224,6 @@ export function CityMapMenu(props:CityMapMenuProps) {
         <Svg width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
           <Defs>
             <RadialGradient id="city-menu-light"><Stop offset={0} stopColor={amberPalette.core}/><Stop offset={0.4} stopColor={amberPalette.glow} stopOpacity={0.95}/><Stop offset={1} stopColor={amberPalette.edge} stopOpacity={0}/></RadialGradient>
-            <ClipPath id="city-menu-reveal"><Circle cx="675" cy="582" r={model.radius}/></ClipPath>
-            {pieces.map(item=><Mask key={item.id} id={`city-menu-veil-${item.id}`} maskUnits="userSpaceOnUse" x={0} y={0} width={item.width} height={item.height}><SvgImage href={cityMenuAssets[item.id].light} width={item.width} height={item.height}/></Mask>)}
           </Defs>
           <Ellipse cx="800" cy={origin.y+582} rx={350+model.light*530} ry={320+model.light*470} fill="url(#city-menu-light)" opacity={model.light}/>
           <G opacity={model.light*.25} fill="none" stroke={amberPalette.glow}><Ellipse cx="800" cy={origin.y+582} rx="690" ry="560" strokeWidth={5}/><Ellipse cx="800" cy={origin.y+582} rx="740" ry="610" strokeWidth={2}/></G>
@@ -224,17 +234,17 @@ export function CityMapMenu(props:CityMapMenuProps) {
               <Path d={thread.d} fill="none" stroke={thread.core} strokeWidth={thread.width} strokeOpacity={0.95} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
             </G>)}
           </G>
-          {pieces.map(item=>{
-            const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!,disabled=entry.disabled===true;
-            return <G key={item.id} testID={`city-menu-piece-${item.id}`} transform={`translate(${at.x} ${at.y})`} opacity={model.active?.hit.id===item.id&&!model.active?.held?0.86:1}>
-              <SvgImage href={cityMenuAssets[item.id].city} width={item.width} height={item.height}/>
-              {!complete&&<SvgImage href={cityMenuAssets[item.id].ui} x={-item.padding} y={-item.padding} width={item.width+item.padding*2} height={item.height+item.padding*2}/>}
-              <Rect testID={`city-menu-veil-${item.id}`} x={0} y={0} width={item.width} height={item.height} fill={amberPalette.veil} mask={`url(#city-menu-veil-${item.id})`} opacity={model.silhouette}/>
-              {disabled&&<Rect testID={`city-menu-dim-${item.id}`} x={0} y={0} width={item.width} height={item.height} fill={tokens.colorPaper} mask={`url(#city-menu-veil-${item.id})`} opacity={litId===item.id?0:DIM_OPACITY}/>}
-            </G>;
-          })}
+        </Svg>
+        {pieces.map(item=>{
+          const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
+          return <View key={item.id} testID={`city-menu-piece-${item.id}`} pointerEvents="none" style={[styles.piece,{left:0,top:0,transform:[{translateX:(at.x-item.padding)*scale},{translateY:(at.y-item.padding)*scale}]}]}>
+            <PieceArtwork item={item} scale={scale} complete={complete} pressed={model.active?.hit.id===item.id&&!model.active?.held} disabled={entry.disabled===true} lit={litId===item.id} veil={model.silhouette}/>
+          </View>;
+        })}
+        <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+          <Defs><ClipPath id="city-menu-reveal"><Circle cx="675" cy="582" r={model.radius}/></ClipPath></Defs>
           <G transform={sceneTransform} clipPath="url(#city-menu-reveal)">
-            {complete&&nativeLayout.layers.map(item=><SvgImage key={item.id} href={citySceneAssets[item.id]} x={item.x} y={item.y} width={item.width} height={item.height}/>)}
+            {nativeLayout.layers.map(item=><SvgImage key={item.id} href={citySceneAssets[item.id]} x={item.x} y={item.y} width={item.width} height={item.height}/>)}
           </G>
           {feedback.current&&<Circle cx={feedback.current.point.x} cy={feedback.current.point.y} r={reduced?55:40+(1-pulseProgress)*140} stroke="#bd852c" strokeWidth={6} fill="#f4d68a" fillOpacity={.2} opacity={pulseProgress}/>}
         </Svg>

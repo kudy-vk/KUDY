@@ -5,7 +5,7 @@ import { amberMotion } from '../amber-light.mjs';
 export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
-export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean; centerAssembled?: boolean };
+export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean; centerAssembled?: boolean; assembledLift?: number };
 export type MapAccessibilityAction = 'moveLeft' | 'moveRight' | 'moveUp' | 'moveDown' | 'snap' | 'cancel';
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
 type Group = { dx: number; dy: number; members: Set<PieceId> };
@@ -65,7 +65,7 @@ export class CityPuzzle {
   }
   get sceneOrigin(): Point {
     // The accepted source is 1351 × 1164; the production canvas is square.
-    return {x:125,y:this.layout?.centerAssembled ? (this.layout.height-1164)/2 : 320};
+    return {x:125,y:this.layout?.centerAssembled ? Math.max(0,(this.layout.height-1164)/2-(this.layout.assembledLift??0)) : 320};
   }
   resize(width: number) { this.cancel(); this.scale = this.validScale(width); }
   position(id: PieceId): Point {
