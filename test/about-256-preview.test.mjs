@@ -232,3 +232,13 @@ test('#256: station scope and optional BLIK explanation are localized correctly'
   const html = readFileSync(new URL('../docs/design/production/about.html', import.meta.url), 'utf8');
   assert.match(html, /\.food-brand-note\s*\{[^}]*white-space:\s*pre-line/);
 });
+
+test('#256: all food.v2 canonical words are anchored to their generated native keys', () => {
+  const data = JSON.parse(readFileSync(new URL('../contracts/ui-messages/source.json', import.meta.url), 'utf8'));
+  const records = data.records.filter((record) => record.id.startsWith('native.aboutCity.food.v2.'));
+  assert.equal(records.length, 26);
+  for (const record of records) {
+    const key = record.id.slice('native.aboutCity.'.length);
+    assert.deepEqual(record.migratedFrom, ['components/about-city-strings.generated.ts#' + key]);
+  }
+});

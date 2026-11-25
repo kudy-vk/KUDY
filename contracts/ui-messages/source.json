@@ -5532,7 +5532,7 @@
       "parameters": [],
       "sourceHash": "97822ef61c9b1500823cd1ad8d0335e6d4413c9a0d0cf3d2141d1d000a25dfcd",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#payTitle"
+        "components/about-city-strings.generated.ts#food.v2.payTitle"
       ]
     },
     {
@@ -5543,7 +5543,7 @@
       "parameters": [],
       "sourceHash": "52779b5f4e80ac3b96aec510f5bf242322b4dbbd1f4b17cd67db09e6892afea6",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#payMeta"
+        "components/about-city-strings.generated.ts#food.v2.payMeta"
       ]
     },
     {
@@ -5554,7 +5554,7 @@
       "parameters": [],
       "sourceHash": "ce30c01587dcbc11b8698de8875df48afcea88df93e71d7ce05d9b327c159ee1",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#pln"
+        "components/about-city-strings.generated.ts#food.v2.pln"
       ]
     },
     {
@@ -5565,7 +5565,7 @@
       "parameters": [],
       "sourceHash": "8b18324dd73c592c4cc0a5a06975aded7f34633c45587db0f53168f52f3bd4a3",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#card"
+        "components/about-city-strings.generated.ts#food.v2.card"
       ]
     },
     {
@@ -5576,7 +5576,7 @@
       "parameters": [],
       "sourceHash": "a83bf1fc7223b32a09c29ebdbfd2c8d705becd4921a41607b5935e30830f7366",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#dccTitle"
+        "components/about-city-strings.generated.ts#food.v2.dccTitle"
       ]
     },
     {
@@ -5587,7 +5587,7 @@
       "parameters": [],
       "sourceHash": "6179f907356a192711c0c8df0c8056329d20674a94a63cc296f0baa0ee78c782",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#dccText"
+        "components/about-city-strings.generated.ts#food.v2.dccText"
       ]
     },
     {
@@ -5598,7 +5598,7 @@
       "parameters": [],
       "sourceHash": "2ffed392de7ac2f8293a07b4dccadd976ca4f57ab751eb184efbce8864d650bb",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#dccSource"
+        "components/about-city-strings.generated.ts#food.v2.dccSource"
       ]
     },
     {
@@ -5609,7 +5609,7 @@
       "parameters": [],
       "sourceHash": "fb3c35517543271e2520064b6be06f95c38a9a90fa779939e290d6bf45419362",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#cashTitle"
+        "components/about-city-strings.generated.ts#food.v2.cashTitle"
       ]
     },
     {
@@ -5620,7 +5620,7 @@
       "parameters": [],
       "sourceHash": "ea2abaf7483e6305cdf5399935c37a0c9ea0215a91a0cad72cea3632dc31fb8e",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#cashMeta"
+        "components/about-city-strings.generated.ts#food.v2.cashMeta"
       ]
     },
     {
@@ -5631,7 +5631,7 @@
       "parameters": [],
       "sourceHash": "b8efca21dcc19e014ca0b83f11b0a6acafc5c23de0aa370de940c8e01a539f70",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#cashTip"
+        "components/about-city-strings.generated.ts#food.v2.cashTip"
       ]
     },
     {
@@ -5642,7 +5642,7 @@
       "parameters": [],
       "sourceHash": "85cdcb95c00d5c2e35cd52cb15e4da43d9a5b8e72f4d081d52ce6f29075e5bb4",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#rateCompare"
+        "components/about-city-strings.generated.ts#food.v2.rateCompare"
       ]
     },
     {
@@ -5653,7 +5653,7 @@
       "parameters": [],
       "sourceHash": "f063b37ab6d58cbacaebb37e9f49eba0677ac2c4936de89644c99aa1bc6ddd4e",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#nbpRate"
+        "components/about-city-strings.generated.ts#food.v2.nbpRate"
       ]
     },
     {
@@ -5664,7 +5664,7 @@
       "parameters": [],
       "sourceHash": "5e60fefd7be575527dc7dbc3c5c07a6b6af57f439cd1f5d038634434046db559",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#offices"
+        "components/about-city-strings.generated.ts#food.v2.offices"
       ]
     },
     {
@@ -5675,7 +5675,7 @@
       "parameters": [],
       "sourceHash": "84c2b9a1bba394326a7f52a3ace8d6e007b202074f107aca0fe24628debbb0d1",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#centreExchange"
+        "components/about-city-strings.generated.ts#food.v2.centreExchange"
       ]
     },
     {
@@ -5686,7 +5686,7 @@
       "parameters": [],
       "sourceHash": "059e5e905972f785c32388bfb5ffb2ef103044383bd875775fbc2d8643a35a83",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#atmTitle"
+        "components/about-city-strings.generated.ts#food.v2.atmTitle"
       ]
     },
     {
@@ -5697,7 +5697,7 @@
       "parameters": [],
       "sourceHash": "486ff5a63e2559e9f99407d0c2bf6e317ac1194cce87b83fc002c4fc6cc176e7",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#atmText"
+        "components/about-city-strings.generated.ts#food.v2.atmText"
       ]
     },
     {
@@ -5708,7 +5708,7 @@
       "parameters": [],
       "sourceHash": "a9c4868a7e054c360d01a71d8b9f42c85dc889cdb1bedbb25d2d93cf47e63831",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#lateTitle"
+        "components/about-city-strings.generated.ts#food.v2.lateTitle"
       ]
     },
     {
@@ -5719,7 +5719,7 @@
       "parameters": [],
       "sourceHash": "666f7b48822f37248189b96ccbee4d438629eb4d1b1432841ae8fbb9e8114c10",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#lateMeta"
+        "components/about-city-strings.generated.ts#food.v2.lateMeta"
       ]
     },
     {
@@ -5730,7 +5730,7 @@
       "parameters": [],
       "sourceHash": "bc52f5a037548de4b2a2edcc127eed129260e61db53bf54b955ca2ddb7618a56",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#station"
+        "components/about-city-strings.generated.ts#food.v2.station"
       ]
     },
     {
@@ -5741,7 +5741,7 @@
       "parameters": [],
       "sourceHash": "899078d8bb5a5db54b9762c36dace39457dab32ad6a7aeb6395368348e4fca53",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#mcdHours"
+        "components/about-city-strings.generated.ts#food.v2.mcdHours"
       ]
     },
     {
@@ -5752,7 +5752,7 @@
       "parameters": [],
       "sourceHash": "efd1a0e452dc1e546f5fdba78c5603ea36e457f610447881d32c8256fdcd4f24",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#kfcHours"
+        "components/about-city-strings.generated.ts#food.v2.kfcHours"
       ]
     },
     {
@@ -5763,7 +5763,7 @@
       "parameters": [],
       "sourceHash": "e9d11bacdeff04f194166cb7aae580a3291cb3f4eb60d467a433d9585db1d236",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#otherPlaces"
+        "components/about-city-strings.generated.ts#food.v2.otherPlaces"
       ]
     },
     {
@@ -5774,7 +5774,7 @@
       "parameters": [],
       "sourceHash": "fa099786e0e628d792be1cb5383414d860533ccc66f074825df12c7d45c5bbf9",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#kitchenTitle"
+        "components/about-city-strings.generated.ts#food.v2.kitchenTitle"
       ]
     },
     {
@@ -5785,7 +5785,7 @@
       "parameters": [],
       "sourceHash": "7bde0487c4a361343f2d757cc9af408ca5b066d53e8841aa3161daf5f4201ffe",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#kitchenText"
+        "components/about-city-strings.generated.ts#food.v2.kitchenText"
       ]
     },
     {
@@ -5796,7 +5796,7 @@
       "parameters": [],
       "sourceHash": "46f11b8a1decee58d656cdfcdb10b1a37500b4f0c0f8c6a0b1e110c815552d25",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#deliveryTitle"
+        "components/about-city-strings.generated.ts#food.v2.deliveryTitle"
       ]
     },
     {
@@ -5807,7 +5807,7 @@
       "parameters": [],
       "sourceHash": "6b848a6b839ce76f67edd203b3f5143b7aeab3535120ebc411d11e519bd537d8",
       "migratedFrom": [
-        "docs/design/production/about-256-content.mjs#deliveryMeta"
+        "components/about-city-strings.generated.ts#food.v2.deliveryMeta"
       ]
     }
   ]

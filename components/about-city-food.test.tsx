@@ -66,6 +66,8 @@ test("#256 native: station hours are scoped to Gdańsk Główny and delivery use
   await fireEvent.press(view.getByTestId("about-food-link-mapKfc"));
   expect(open).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS.mapKfc);
   await fireEvent.press(view.getByTestId("fold-food-delivery"));
+  // Pyszne renders its title as the wordmark; a separate title is a duplicate.
+  expect(view.getAllByText("Pyszne.pl")).toHaveLength(1);
   for (const id of ["pyszne","wolt","glovo","uber","bolt"] as const) {
     await fireEvent.press(view.getByTestId(`about-food-link-${id}`));
     expect(open).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS[id]);

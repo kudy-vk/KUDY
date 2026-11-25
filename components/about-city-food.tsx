@@ -62,7 +62,7 @@ function BrandTile({ id, title, logo, note, styles, open }: {
   styles: FoodStyles;
   open: (url: string) => void;
 }) {
-  const markOnly = logo === "wolt" || logo === "bolt";
+  const markOnly = logo === "pyszne" || logo === "wolt" || logo === "bolt";
   const accessibilityLabel = [title, note].filter(Boolean).join(", ");
   return (
     <PressableSurface
