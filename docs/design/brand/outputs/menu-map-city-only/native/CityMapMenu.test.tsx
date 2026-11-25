@@ -223,11 +223,11 @@ test('production host separates pointer drag from screen reader activation',asyn
   expect(position()).toBeCloseTo(initial+16);
   await fireEvent(piece('nearby'),'accessibilityAction',{nativeEvent:{actionName:'cancel'}});
   expect(position()).toBeCloseTo(initial);
-  const soon=()=>StyleSheet.flatten(piece('kudy').props.style).left;
-  const soonStart=soon();
+  const kudyPosition=()=>StyleSheet.flatten(piece('kudy').props.style).left;
+  const kudyStart=kudyPosition();
   await fireEvent(piece('kudy'),'accessibilityAction',{nativeEvent:{actionName:'moveLeft'}});
-  expect(soon()).toBeCloseTo(soonStart-8);
-  await fireEvent(piece('kudy'),'accessibilityTap');expect(select).not.toHaveBeenCalled();
+  expect(kudyPosition()).toBeCloseTo(kudyStart-8);
+  await fireEvent(piece('kudy'),'accessibilityTap');expect(select).toHaveBeenCalledWith('kudy');
   await fireEvent(piece('nearby'),'accessibilityTap');expect(select).toHaveBeenCalledWith('nearby');
 });
 

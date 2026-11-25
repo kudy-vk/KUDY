@@ -13,6 +13,7 @@ import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useCatalogController } from "../../controllers/catalog/useCatalogController";
+import { resolveCatalogSource } from "../../controllers/catalogSource";
 import { useServices, useUiLocale } from "../_layout";
 import { darkTokens, tokens, type ThemeTokens } from "../../components/design-tokens";
 import { useThemeStyles } from "../../components/theme";
@@ -75,6 +76,11 @@ export default function Explore() {
   // G06.05 (16_delivery_backlog.md — G06.05, AC1): the shared words in the display locale; the
   // failed catalog load gets its named retry (AC4).
   const strings = uiStrings(locale);
+  const embeddedCatalog = resolveCatalogSource({
+    origin: process.env.EXPO_PUBLIC_CATALOG_ORIGIN,
+    demo: process.env.EXPO_PUBLIC_DEMO_MODE,
+    sandbox: process.env.EXPO_PUBLIC_SANDBOX,
+  })?.embedded === true;
   return (
     // G06.10.e (issue #405): the calm surface's paper — the shared wrapper
     // layers the canon grain over the unchanged paper token.
@@ -91,7 +97,7 @@ export default function Explore() {
         leading={<ScaledText style={styles.brand}>{strings.kudyLink.replace(/\s*→$/, "")}</ScaledText>}
         middle={
           <>
-            {process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? (
+            {embeddedCatalog ? (
               <StateBanner
                 tone="notice"
                 reason={strings.demoVersion}
