@@ -77,7 +77,7 @@ test('real native drags assemble all five, retain five flows and give the scene 
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
   const select=jest.fn();await render(<CityMapMenu {...props} onSelect={select}/>);
   const canvas=screen.getByTestId('city-menu-canvas');let stamp=0;
-  const event=(x:number,y:number)=>({nativeEvent:{locationX:x,locationY:y,touches:[{}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:++stamp,touchBank:[{touchActive:true,currentTimeStamp:stamp,currentPageX:x,currentPageY:y,previousPageX:x,previousPageY:y}]}});
+  const event=(x:number,y:number)=>({nativeEvent:{locationX:x,locationY:y,pageX:x,pageY:y,touches:[{}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:++stamp,touchBank:[{touchActive:true,currentTimeStamp:stamp,currentPageX:x,currentPageY:y,previousPageX:x,previousPageY:y}]}});
   const gesture={dx:0,dy:0,numberActiveTouches:1};
   const scale=360/1600;
   for(const [sx,sy,tx,ty] of [[1072,397,709,352],[1201,989,909,252],[358,1054,419,632],[579,1520,709,712]]){
@@ -166,8 +166,24 @@ test('production host separates pointer drag from screen reader activation',asyn
   expect(piece('nearby').props.pointerEvents).toBe('none');
   await act(()=>canvas().props.onResponderGrant(event(338*scale,236*scale),gesture));
   await act(()=>jest.advanceTimersByTime(301));
-  await act(()=>{canvas().props.onResponderMove(event(378*scale,236*scale),gesture);canvas().props.onResponderRelease(event(378*scale,236*scale),gesture);});
+  const movement=event(378*scale,236*scale);
+  // Android's local coordinates may change with the hit view. Page delta must not.
+  movement.nativeEvent.locationX=999;movement.nativeEvent.locationY=999;
+  await act(()=>canvas().props.onResponderMove(movement,gesture));
+  expect(position()).toBeCloseTo(initial);
+  await act(()=>jest.advanceTimersByTime(32));
+  expect(position()).toBeGreaterThan(initial);expect(position()).toBeLessThan(initial+4);
+  await act(()=>jest.advanceTimersByTime(120));
+  await act(()=>canvas().props.onResponderRelease(movement,gesture));
   expect(position()).toBeCloseTo(initial+9);expect(select).not.toHaveBeenCalled();
+  await act(()=>canvas().props.onResponderGrant(event(378*scale,236*scale),gesture));
+  await act(()=>jest.advanceTimersByTime(301));
+  await act(()=>canvas().props.onResponderMove(event(478*scale,236*scale),gesture));
+  await act(()=>jest.advanceTimersByTime(32));
+  const stopped=position();
+  await act(()=>canvas().props.onResponderRelease(event(478*scale,236*scale),gesture));
+  await act(()=>jest.advanceTimersByTime(500));
+  expect(position()).toBeCloseTo(stopped);expect(select).not.toHaveBeenCalled();
   read.mockResolvedValue(true);
   await rerender(<HomeMapMenu key="reader" width={360} locale="be" onSelect={select}/>);
   expect(piece('nearby').props.pointerEvents).toBe('auto');

@@ -5,7 +5,7 @@ import { amberMotion } from '../amber-light.mjs';
 export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
-export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean };
+export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean; centerAssembled?: boolean };
 export type MapAccessibilityAction = 'moveLeft' | 'moveRight' | 'moveUp' | 'moveDown' | 'snap' | 'cancel';
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
 type Group = { dx: number; dy: number; members: Set<PieceId> };
@@ -63,6 +63,10 @@ export class CityPuzzle {
     group.dx = Math.max(-Math.min(...members.map(p=>p.x))-(configured?125:55),Math.min((configured?1475:1390)-Math.max(...members.map(p=>p.x+p.width)),group.dx));
     group.dy = Math.max(-Math.min(...members.map(p=>p.y))-(configured?320:130),Math.min((this.layout?.height??1800)-(configured?320:430)-Math.max(...members.map(p=>p.y+p.height)),group.dy));
   }
+  get sceneOrigin(): Point {
+    // The accepted source is 1351 × 1164; the production canvas is square.
+    return {x:125,y:this.layout?.centerAssembled ? (this.layout.height-1164)/2 : 320};
+  }
   resize(width: number) { this.cancel(); this.scale = this.validScale(width); }
   position(id: PieceId): Point {
     const piece = this.pieces.get(id)!;
@@ -77,7 +81,8 @@ export class CityPuzzle {
       const at = this.position(piece.id), labelWidth = Math.max(350, Math.min(650, piece.width+80));
       if (Math.abs(point.x-at.x-piece.width/2) < labelWidth/2 && point.y < at.y && point.y > at.y-48/this.scale) return { id: piece.id, passive: false };
     }
-    const x = point.x-125, y = point.y-320;
+    const origin=this.sceneOrigin;
+    const x = point.x-origin.x, y = point.y-origin.y;
     if (Math.hypot(x-675,y-582) <= this.radius && this.radius > 0) for (const part of this.scenery) {
       if (contains(part,x-part.x,y-part.y)) return { id: part.id, passive: true };
     }
@@ -166,7 +171,8 @@ export class CityPuzzle {
     if (!this.motion) return false;
     const {at,group,from} = this.motion;
     const elapsed = Math.max(0,now-at),center = Math.min(1,elapsed/400);
-    group.dx=from.x*(1-center)**3; group.dy=from.y*(1-center)**3;
+    const targetY=this.sceneOrigin.y-320;
+    group.dx=from.x*(1-center)**3; group.dy=targetY+(from.y-targetY)*(1-center)**3;
     const t=elapsed-400,{chargeMs,crestMs,revealMs,settleMs}=nativeLayout.reveal;
     this.phase=t<0?'assembling':t<chargeMs?'charging':t<chargeMs+crestMs?'crest':t<chargeMs+crestMs+revealMs?'revealing':'settling';
     const effect=amberMotion(t,nativeLayout.reveal);
@@ -178,6 +184,6 @@ export class CityPuzzle {
     if (this.groups.size !== 1) return;
     const group = [...this.groups][0];
     if (group.members.size !== this.pieces.size) return;
-    group.dx=0;group.dy=0;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
+    group.dx=0;group.dy=this.sceneOrigin.y-320;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
   }
 }

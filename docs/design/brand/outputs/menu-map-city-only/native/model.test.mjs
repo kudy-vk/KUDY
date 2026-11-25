@@ -251,6 +251,21 @@ test('all five production fragments can be joined with accessibility actions alo
   }
 });
 
+test('production assembly centers the source and aligns its hit geometry in both motion modes',()=>{
+  const layout={height:1600,positions:{},dragEnabled:true,centerAssembled:true};
+  for(const reduced of [false,true]){
+    const m=new CityPuzzle(360,()=>.5,undefined,layout),first=m.pieces.get('nearby').group;
+    for(const group of [...m.groups])if(group!==first&&!group.members.has('kudy'))joinGroups(first,group,m.pieces,m.groups);
+    const last=m.pieces.get('kudy');last.group.dx=first.dx+20;last.group.dy=first.dy;
+    const result=m.accessibilityAction('kudy','snap',100);
+    assert.equal(result.complete,true);
+    if(reduced)m.completeNow();else {m.advance(500);assert.equal(m.position('guides').y,218+361);m.advance(3000);}
+    assert.equal(m.phase,'complete');assert.deepEqual(m.sceneOrigin,{x:125,y:218});
+    assert.deepEqual(m.position('guides'),{x:125+469,y:218+361});
+    assert.equal(m.hit({x:125+650,y:218+210})?.passive,true);
+  }
+});
+
 test('accessible movement is rolled back on resize and respects the scene bounds',()=>{
   const m=puzzle(),before=m.position('guides');
   for(let i=0;i<100;i++)m.accessibilityAction('guides','moveRight',i);

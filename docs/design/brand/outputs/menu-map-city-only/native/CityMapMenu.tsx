@@ -42,6 +42,8 @@ const OFF_INK = '#7d6c58';
 // mask; a press lights the piece back for the mockup's 700 ms.
 const DIM_OPACITY = 0.55;
 const LIT_MS = 700;
+// Slow, weighty movement with a bounded step even after a delayed JS frame.
+const DRAG_SPEED_DP_PER_SECOND = 100;
 const movementActions: readonly MapAccessibilityAction[] = ['moveLeft','moveRight','moveUp','moveDown','snap','cancel'];
 const keyboardActions: Readonly<Partial<Record<string,MapAccessibilityAction>>> = {ArrowLeft:'moveLeft',ArrowRight:'moveRight',ArrowUp:'moveUp',ArrowDown:'moveDown',s:'snap',S:'snap',Escape:'cancel'};
 
@@ -63,6 +65,9 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const latest=useRef(props);latest.current=props;
   const reducedRef=useRef(reduced);reducedRef.current=reduced;
   const frame=useRef<number|null>(null);
+  const dragFrame=useRef<number|null>(null);
+  const dragTarget=useRef<Point|null>(null);
+  const dragStart=useRef<{local:Point;page:Point}|null>(null);
   const hold=useRef<ReturnType<typeof setTimeout>|null>(null);
   const lit=useRef<ReturnType<typeof setTimeout>|null>(null);
   const feedback=useRef<{point:Point;until:number}|null>(null);
@@ -71,7 +76,8 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const clearHold=useCallback(()=>{if(hold.current!==null)clearTimeout(hold.current);hold.current=null;},[]);
   const clearLit=useCallback(()=>{if(lit.current!==null)clearTimeout(lit.current);lit.current=null;},[]);
   const stopFrame=useCallback(()=>{if(frame.current!==null)cancelAnimationFrame(frame.current);frame.current=null;},[]);
-  const cancel=useCallback(()=>{clearHold();model.cancel();refresh();},[clearHold,model,refresh]);
+  const stopDrag=useCallback(()=>{if(dragFrame.current!==null)cancelAnimationFrame(dragFrame.current);dragFrame.current=null;dragTarget.current=null;dragStart.current=null;},[]);
+  const cancel=useCallback(()=>{clearHold();stopDrag();model.cancel();refresh();},[clearHold,stopDrag,model,refresh]);
   const startFrame=useCallback(()=>{
     if(frame.current!==null)return;
     const tick=()=>{
@@ -108,13 +114,35 @@ export function CityMapMenu(props:CityMapMenuProps) {
     }
   },[activatePiece,model,pulse,startFrame]);
 
+  const queueDrag=useCallback((target:Point)=>{
+    dragTarget.current=target;
+    if(dragFrame.current!==null)return;
+    let previous=Date.now();
+    const tick=()=>{
+      dragFrame.current=null;
+      const now=Date.now(),active=model.active,next=dragTarget.current;
+      if(!active?.held||active.cancelled||!next)return;
+      const dx=next.x-active.last.x,dy=next.y-active.last.y,distance=Math.hypot(dx,dy);
+      if(distance===0)return;
+      const limit=DRAG_SPEED_DP_PER_SECOND*Math.min(32,Math.max(1,now-previous))/1000*1600/width;
+      previous=now;
+      const fraction=Math.min(1,limit/distance);
+      const result=model.move({x:active.last.x+dx*fraction,y:active.last.y+dy*fraction},now);
+      handle(result);refresh();
+      if(result.kind==='snap'){clearHold();stopDrag();return;}
+      if(fraction<1&&model.active?.held)dragFrame.current=requestAnimationFrame(tick);
+    };
+    dragFrame.current=requestAnimationFrame(tick);
+  },[width,model,handle,refresh,clearHold,stopDrag]);
+
   useEffect(()=>{
     let active=true;
     AccessibilityInfo.isScreenReaderEnabled().then(value=>{if(active)setScreenReader(value);}).catch(error=>console.warn('Could not read screen reader state',error));
     const subscription=AccessibilityInfo.addEventListener('screenReaderChanged',setScreenReader);
     return()=>{active=false;subscription.remove();};
   },[]);
-  useLayoutEffect(()=>{stopFrame();clearHold();model.resize(width);if(model.phase!=='scattered'&&model.phase!=='complete')model.completeNow();feedback.current=null;refresh();},[width,model,refresh,clearHold,stopFrame]);
+  useEffect(()=>{if(screenReader&&model.active)cancel();},[screenReader,model,cancel]);
+  useLayoutEffect(()=>{stopFrame();stopDrag();clearHold();model.resize(width);if(model.phase!=='scattered'&&model.phase!=='complete')model.completeNow();feedback.current=null;refresh();},[width,model,refresh,clearHold,stopFrame,stopDrag]);
   useEffect(()=>{
     if(props.reduceMotion!==undefined)return;
     let active=true;
@@ -127,10 +155,10 @@ export function CityMapMenu(props:CityMapMenuProps) {
   },[reduced,model,stopFrame,refresh]);
   useEffect(()=>{
     const subscription=AppState.addEventListener('change',state=>{
-      if(state!=='active'){clearHold();stopFrame();model.cancel();model.completeNow();feedback.current=null;refresh();}
+      if(state!=='active'){clearHold();stopFrame();stopDrag();model.cancel();model.completeNow();feedback.current=null;refresh();}
     });
-    return()=>{subscription.remove();clearHold();clearLit();stopFrame();model.cancel();feedback.current=null;};
-  },[model,clearHold,clearLit,stopFrame,refresh]);
+    return()=>{subscription.remove();clearHold();clearLit();stopFrame();stopDrag();model.cancel();feedback.current=null;};
+  },[model,clearHold,clearLit,stopFrame,stopDrag,refresh]);
 
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
@@ -138,26 +166,39 @@ export function CityMapMenu(props:CityMapMenuProps) {
       onStartShouldSetPanResponder:event=>!screenReader&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event))),
       onPanResponderGrant:event=>{
         clearHold();if(event.nativeEvent.touches.length!==1){cancel();return;}
-        const hit=model.begin(point(event),Date.now());refresh();
+        stopDrag();
+        const local=point(event);
+        dragStart.current={local,page:{x:event.nativeEvent.pageX,y:event.nativeEvent.pageY}};
+        const hit=model.begin(local,Date.now());refresh();
         if(hit&&!hit.passive)hold.current=setTimeout(()=>{hold.current=null;model.hold(Date.now());refresh();},nativeLayout.gesture.holdMs);
       },
       onPanResponderStart:event=>{if(event.nativeEvent.touches.length!==1)cancel();},
       onPanResponderMove:event=>{
-        if(event.nativeEvent.touches.length!==1){cancel();return;}
-        const result=model.move(point(event),Date.now());
-        if(result.kind==='snap')clearHold();
+        if(screenReader||event.nativeEvent.touches.length!==1){cancel();return;}
+        const start=dragStart.current;
+        if(!start)return;
+        // Page coordinates remain stable if the underlying view changes while dragging.
+        const target={x:start.local.x+(event.nativeEvent.pageX-start.page.x)*1600/width,y:start.local.y+(event.nativeEvent.pageY-start.page.y)*1600/width};
+        if(!Number.isFinite(target.x)||!Number.isFinite(target.y)){cancel();return;}
+        const now=Date.now();
+        model.hold(now);
+        if(props.layout?.dragEnabled===true&&model.active?.held){queueDrag(target);return;}
+        const result=model.move(target,now);
+        if(result.kind==='snap'){clearHold();stopDrag();}
         handle(result);refresh();
       },
-      onPanResponderRelease:()=>{clearHold();const result=model.release(Date.now());refresh();handle(result);},
+      onPanResponderRelease:()=>{clearHold();stopDrag();const result=model.release(Date.now());refresh();handle(result);},
       onPanResponderTerminate:cancel,
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh,screenReader]);
+  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,props.layout?.dragEnabled]);
 
   const scale=width/1600,complete=model.phase!=='scattered';
+  const origin=model.sceneOrigin;
+  const sceneTransform=`translate(${origin.x} ${origin.y})`;
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
-  const passivePress=(id:SceneId)=>{const part=model.scenery.find(p=>p.id===id)!;pulse({x:125+part.x+part.width/2,y:320+part.y+part.height/2});};
+  const passivePress=(id:SceneId)=>{const part=model.scenery.find(p=>p.id===id)!;pulse({x:origin.x+part.x+part.width/2,y:origin.y+part.y+part.height/2});};
   // The piece-relative medallion anchor of each piece, from the accepted
   // package manifest (menu.mjs: [anchor] − [x, y]).
   const medalAt=(id:PieceId)=>{
@@ -174,10 +215,10 @@ export function CityMapMenu(props:CityMapMenuProps) {
             <ClipPath id="city-menu-reveal"><Circle cx="675" cy="582" r={model.radius}/></ClipPath>
             {pieces.map(item=><Mask key={item.id} id={`city-menu-veil-${item.id}`} maskUnits="userSpaceOnUse" x={0} y={0} width={item.width} height={item.height}><SvgImage href={cityMenuAssets[item.id].light} width={item.width} height={item.height}/></Mask>)}
           </Defs>
-          <Ellipse cx="800" cy="902" rx={350+model.light*530} ry={320+model.light*470} fill="url(#city-menu-light)" opacity={model.light}/>
-          <G opacity={model.light*.25} fill="none" stroke={amberPalette.glow}><Ellipse cx="800" cy="902" rx="690" ry="560" strokeWidth={5}/><Ellipse cx="800" cy="902" rx="740" ry="610" strokeWidth={2}/></G>
-          <G testID="city-menu-light-threads" pointerEvents="none" transform="translate(125 320)" opacity={reduced?0:1}>
-            {lightThreads(model.effectProgress,model.light).map((thread,i)=><G key={i} transform={`translate(${thread.x} ${thread.y})`} opacity={thread.opacity}>
+          <Ellipse cx="800" cy={origin.y+582} rx={350+model.light*530} ry={320+model.light*470} fill="url(#city-menu-light)" opacity={model.light}/>
+          <G opacity={model.light*.25} fill="none" stroke={amberPalette.glow}><Ellipse cx="800" cy={origin.y+582} rx="690" ry="560" strokeWidth={5}/><Ellipse cx="800" cy={origin.y+582} rx="740" ry="610" strokeWidth={2}/></G>
+          <G testID="city-menu-light-threads" pointerEvents="none" transform={sceneTransform} opacity={reduced?0:1}>
+            {(model.light>0?lightThreads(model.effectProgress,model.light):[]).map((thread,i)=><G key={i} transform={`translate(${thread.x} ${thread.y})`} opacity={thread.opacity}>
               <Path d={thread.d} fill="none" stroke={amberPalette.glow} strokeWidth={18} strokeOpacity={0.1} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
               <Path d={thread.d} fill="none" stroke={amberPalette.edge} strokeWidth={7} strokeOpacity={0.4} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
               <Path d={thread.d} fill="none" stroke={thread.core} strokeWidth={thread.width} strokeOpacity={0.95} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
@@ -192,8 +233,8 @@ export function CityMapMenu(props:CityMapMenuProps) {
               {disabled&&<Rect testID={`city-menu-dim-${item.id}`} x={0} y={0} width={item.width} height={item.height} fill={tokens.colorPaper} mask={`url(#city-menu-veil-${item.id})`} opacity={litId===item.id?0:DIM_OPACITY}/>}
             </G>;
           })}
-          <G transform="translate(125 320)" clipPath="url(#city-menu-reveal)">
-            {nativeLayout.layers.map(item=><SvgImage key={item.id} href={citySceneAssets[item.id]} x={item.x} y={item.y} width={item.width} height={item.height}/>)}
+          <G transform={sceneTransform} clipPath="url(#city-menu-reveal)">
+            {complete&&nativeLayout.layers.map(item=><SvgImage key={item.id} href={citySceneAssets[item.id]} x={item.x} y={item.y} width={item.width} height={item.height}/>)}
           </G>
           {feedback.current&&<Circle cx={feedback.current.point.x} cy={feedback.current.point.y} r={reduced?55:40+(1-pulseProgress)*140} stroke="#bd852c" strokeWidth={6} fill="#f4d68a" fillOpacity={.2} opacity={pulseProgress}/>}
         </Svg>
@@ -232,7 +273,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
           </View>}
         </Pressable>;
       })}
-      {sceneLabels&&model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(125+item.x)*scale,top:(320+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
+      {sceneLabels&&model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(origin.x+item.x)*scale,top:(origin.y+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
     </View>
   </View>;
 }
