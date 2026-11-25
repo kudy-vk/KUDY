@@ -12,7 +12,7 @@ type Group = { dx: number; dy: number; members: Set<PieceId> };
 type Shape = { id: string; x: number; y: number; width: number; height: number; rows: number[][] };
 type Piece = Shape & { id: PieceId; group: Group };
 type Hit = { id: PieceId; passive: false } | { id: SceneId; passive: true };
-type Gesture = { hit: Hit; start: Point; last: Point; at: number; group?: Group; original?: Point; held: boolean; cancelled: boolean };
+type Gesture = { hit: Hit; start: Point; last: Point; at: number; group?: Group; original?: Point; held: boolean; heldAt?: number; lastMoveAt?: number; cancelled: boolean };
 export type PuzzleEvent = { kind: 'none' } | { kind: 'select'; id: PieceId } | { kind: 'passive'; id: SceneId; point: Point } | { kind: 'snap'; point: Point; complete: boolean };
 
 const rows = (value: string) => value.split(';').map(row => row ? row.split(',').map(Number) : []);
@@ -23,6 +23,8 @@ const contains = (shape: Shape, x: number, y: number) => {
   return false;
 };
 const none: PuzzleEvent = { kind: 'none' };
+const INERTIA_MS = 200;
+const GRAB_MS = 180;
 
 export class CityPuzzle {
   readonly pieces = new Map<PieceId, Piece>();
@@ -36,6 +38,7 @@ export class CityPuzzle {
   active: Gesture | null = null;
   private accessibleMove: { group: Group; original: Point } | null = null;
   private motion: { at: number; group: Group; from: Point } | null = null;
+  private inertia: { at: number; group: Group; from: Point; delta: Point } | null = null;
   private scale: number;
   private readonly layout?: CityMenuLayout;
 
@@ -98,9 +101,13 @@ export class CityPuzzle {
   hold(now: number) {
     if (this.layout?.dragEnabled === false) return;
     const active = this.active;
-    if (active && !active.hit.passive && !active.cancelled && this.phase === 'scattered' && now-active.at >= nativeLayout.gesture.holdMs) active.held = true;
+    if (active && !active.hit.passive && !active.cancelled && !active.held && this.phase === 'scattered' && now-active.at >= nativeLayout.gesture.holdMs) { active.held = true; active.heldAt = now; }
   }
-  move(point: Point, now: number): PuzzleEvent {
+  grabProgress(now: number): number {
+    const at=this.active?.heldAt;
+    return at===undefined?0:1-(1-Math.max(0,Math.min(1,(now-at)/GRAB_MS)))**2;
+  }
+  move(point: Point, now: number, withInertia = false): PuzzleEvent {
     const active = this.active;
     if (!active || active.cancelled) return none;
     this.hold(now);
@@ -111,16 +118,29 @@ export class CityPuzzle {
     const group = active.group!;
     const dx = point.x-active.last.x, dy = point.y-active.last.y;
     if (dx === 0 && dy === 0) return none;
+    const previous={x:group.dx,y:group.dy};
+    const dt=Math.max(16,Math.min(64,now-(active.lastMoveAt??active.heldAt??now)));
     group.dx += dx; group.dy += dy;
     this.clampGroup(group);
-    active.last = point;
-    return this.snapGroup(group,now);
+    active.last = point; active.lastMoveAt=now;
+    const velocity={x:(group.dx-previous.x)/dt,y:(group.dy-previous.y)/dt};
+    const result=this.snapGroup(group,now);
+    const speed=Math.hypot(velocity.x,velocity.y)*this.scale;
+    if (withInertia && result.kind==='snap' && speed>=0.2) {
+      // Both pieces already share one group. Dampen the incoming velocity
+      // without ever changing their joint or starting another automatic snap.
+      const distance=Math.min(24,speed*80)/this.scale;
+      const length=Math.hypot(velocity.x,velocity.y);
+      this.inertia={at:now,group,from:{x:group.dx,y:group.dy},delta:{x:velocity.x/length*distance,y:velocity.y/length*distance}};
+    }
+    return result;
   }
   // Same step size as the approved keyboard controls in production/menu.mjs.
   accessibilityAction(id: PieceId, action: MapAccessibilityAction, now: number): PuzzleEvent {
     const group = this.pieces.get(id)?.group;
     if (!group || this.phase !== 'scattered') return none;
     if (action === 'cancel') { this.cancel(); return none; }
+    this.stopInertia();
     if (this.active || (this.accessibleMove && this.accessibleMove.group !== group)) this.cancel();
     if (action === 'snap') {
       const result = this.snapGroup(group,now);
@@ -158,7 +178,14 @@ export class CityPuzzle {
     if (!active || active.cancelled || active.held || now-active.at >= nativeLayout.gesture.holdMs) return none;
     return active.hit.passive ? {kind:'passive',id:active.hit.id,point:active.start} : {kind:'select',id:active.hit.id};
   }
+  stopInertia() {
+    if (!this.inertia) return;
+    const {group,at}=this.inertia;
+    if(this.motion?.group===group) this.motion={at:at+INERTIA_MS,group,from:{x:group.dx,y:group.dy}};
+    this.inertia=null;
+  }
   cancel() {
+    this.stopInertia();
     if (this.accessibleMove) {
       const {group,original} = this.accessibleMove;
       group.dx = original.x; group.dy = original.y;
@@ -168,6 +195,15 @@ export class CityPuzzle {
     this.active = null;
   }
   advance(now: number): boolean {
+    if (this.inertia) {
+      const {at,group,from,delta}=this.inertia;
+      const progress=Math.max(0,Math.min(1,(now-at)/INERTIA_MS));
+      const eased=1-(1-progress)**2;
+      group.dx=from.x+delta.x*eased; group.dy=from.y+delta.y*eased;
+      this.clampGroup(group);
+      if(progress<1)return true;
+      this.stopInertia();
+    }
     if (!this.motion) return false;
     const {at,group,from} = this.motion;
     const elapsed = Math.max(0,now-at),center = Math.min(1,elapsed/400);
@@ -184,6 +220,6 @@ export class CityPuzzle {
     if (this.groups.size !== 1) return;
     const group = [...this.groups][0];
     if (group.members.size !== this.pieces.size) return;
-    group.dx=0;group.dy=this.sceneOrigin.y-320;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
+    group.dx=0;group.dy=this.sceneOrigin.y-320;this.inertia=null;this.motion=null;this.phase='complete';this.radius=1000;this.light=0;this.silhouette=0;this.effectProgress=1;this.active=null;
   }
 }

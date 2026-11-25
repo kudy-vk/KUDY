@@ -206,6 +206,24 @@ test('production host separates pointer drag from screen reader activation',asyn
   await fireEvent(piece('nearby'),'accessibilityTap');expect(select).toHaveBeenCalledWith('nearby');
 });
 
+test.each([false,true])('held fragment shows stronger grab feedback (reduced motion %s)',async(reduceMotion)=>{
+  jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
+  await render(<CityMapMenu {...props} reduceMotion={reduceMotion} layout={cityMenuConfig.layout} items={cityMenuConfig.items.map(item=>({id:item.id,icon:item.icon}))} onSelect={()=>{}}/>);
+  const canvas=()=>screen.getByTestId('city-menu-canvas');
+  const veil=()=>screen.getByTestId('city-menu-veil-nearby',{includeHiddenElements:true}).props.opacity;
+  const rim=()=>StyleSheet.flatten(screen.getByTestId('city-menu-medal-nearby',{includeHiddenElements:true}).props.style).borderWidth;
+  const x=338*360/1600,y=236*360/1600;
+  const event={nativeEvent:{locationX:x,locationY:y,pageX:x,pageY:y,touches:[{pageX:x,pageY:y}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:1,touchBank:[{touchActive:true,currentTimeStamp:1,currentPageX:x,currentPageY:y,previousPageX:x,previousPageY:y}]}};
+  const gesture={dx:0,dy:0,numberActiveTouches:1};
+  await act(()=>canvas().props.onResponderGrant(event,gesture));
+  expect(veil()).toBe(0);
+  await act(()=>jest.advanceTimersByTime(301));
+  if(!reduceMotion){expect(veil()).toBeLessThan(.38);await act(()=>jest.advanceTimersByTime(200));}
+  expect(veil()).toBeCloseTo(.38);expect(rim()).toBeCloseTo(3);
+  await act(()=>canvas().props.onResponderRelease(event,gesture));
+  expect(veil()).toBe(0);expect(rim()).toBeCloseTo(1.3);
+});
+
 test('joining via accessibility announces joined state and preserves navigation with reduced motion',async()=>{
   jest.spyOn(Math,'random').mockReturnValue(0);
   const announce=jest.spyOn(AccessibilityInfo,'announceForAccessibility').mockImplementation(()=>{});

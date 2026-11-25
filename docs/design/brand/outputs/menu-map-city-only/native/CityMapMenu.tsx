@@ -102,7 +102,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
       const moving=model.advance(clock.current);
       if(feedback.current&&feedback.current.until<=clock.current)feedback.current=null;
       refresh();
-      if(moving||feedback.current)frame.current=requestAnimationFrame(tick);
+      if(moving||feedback.current||(!reducedRef.current&&model.active?.held&&model.grabProgress(clock.current)<1))frame.current=requestAnimationFrame(tick);
     };
     frame.current=requestAnimationFrame(tick);
   },[model,refresh]);
@@ -134,7 +134,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
     const next=dragTarget.current;
     dragTarget.current=null;
     if(!model.active?.held||model.active.cancelled||!next)return;
-    const result=model.move(next,Date.now());
+    const result=model.move(next,Date.now(),!reducedRef.current);
     handle(result);refresh();
     if(result.kind==='snap'){clearHold();stopDrag();}
   },[model,handle,refresh,clearHold,stopDrag]);
@@ -163,7 +163,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
     return()=>{active=false;listener.remove();};
   },[props.reduceMotion]);
   useEffect(()=>{
-    if(reduced){stopFrame();feedback.current=null;model.completeNow();refresh();}
+    if(reduced){stopFrame();feedback.current=null;model.stopInertia();model.completeNow();refresh();}
   },[reduced,model,stopFrame,refresh]);
   useEffect(()=>{
     const subscription=AppState.addEventListener('change',state=>{
@@ -171,6 +171,15 @@ export function CityMapMenu(props:CityMapMenuProps) {
     });
     return()=>{subscription.remove();clearHold();clearLit();stopFrame();stopDrag();model.cancel();feedback.current=null;};
   },[model,clearHold,clearLit,stopFrame,stopDrag,refresh]);
+
+  const updateHold=useCallback((now:number)=>{
+    const held=model.active?.held;
+    model.hold(now);
+    if(!held&&model.active?.held){
+      clock.current=now;refresh();
+      if(!reducedRef.current)startFrame();
+    }
+  },[model,refresh,startFrame]);
 
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
@@ -182,7 +191,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
         const local=point(event);
         dragStart.current={local,page:{x:event.nativeEvent.pageX,y:event.nativeEvent.pageY}};
         const hit=model.begin(local,Date.now());refresh();
-        if(hit&&!hit.passive)hold.current=setTimeout(()=>{hold.current=null;model.hold(Date.now());refresh();},nativeLayout.gesture.holdMs);
+        if(hit&&!hit.passive)hold.current=setTimeout(()=>{hold.current=null;updateHold(Date.now());},nativeLayout.gesture.holdMs);
       },
       onPanResponderStart:event=>{if(event.nativeEvent.touches.length!==1)cancel();},
       onPanResponderMove:event=>{
@@ -193,9 +202,9 @@ export function CityMapMenu(props:CityMapMenuProps) {
         const target={x:start.local.x+(event.nativeEvent.pageX-start.page.x)*1600/width,y:start.local.y+(event.nativeEvent.pageY-start.page.y)*1600/width};
         if(!Number.isFinite(target.x)||!Number.isFinite(target.y)){cancel();return;}
         const now=Date.now();
-        model.hold(now);
+        updateHold(now);
         if(props.layout?.dragEnabled===true&&model.active?.held){queueDrag(target);return;}
-        const result=model.move(target,now);
+        const result=model.move(target,now,!reducedRef.current);
         if(result.kind==='snap'){clearHold();stopDrag();}
         handle(result);refresh();
       },
@@ -204,9 +213,11 @@ export function CityMapMenu(props:CityMapMenuProps) {
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,props.layout?.dragEnabled]);
+  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,updateHold,props.layout?.dragEnabled]);
 
   const scale=width/1600,complete=model.phase!=='scattered';
+  const grab=(id:PieceId)=>model.active?.held&&model.active.group===model.pieces.get(id)?.group
+    ? (reduced?1:model.grabProgress(clock.current)):0;
   const origin=model.sceneOrigin;
   const sceneTransform=`translate(${origin.x} ${origin.y})`;
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
@@ -238,7 +249,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
         {pieces.map(item=>{
           const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
           return <View key={item.id} testID={`city-menu-piece-${item.id}`} pointerEvents="none" style={[styles.piece,{left:0,top:0,transform:[{translateX:(at.x-item.padding)*scale},{translateY:(at.y-item.padding)*scale}]}]}>
-            <PieceArtwork item={item} scale={scale} complete={complete} pressed={model.active?.hit.id===item.id&&!model.active?.held} disabled={entry.disabled===true} lit={litId===item.id} veil={model.silhouette}/>
+            <PieceArtwork item={item} scale={scale} complete={complete} pressed={model.active?.hit.id===item.id&&!model.active?.held} disabled={entry.disabled===true} lit={litId===item.id} veil={Math.max(model.silhouette,0.38*grab(item.id))}/>
           </View>;
         })}
         <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
@@ -277,7 +288,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
           const action=Object.hasOwn(keyboardActions,key)?keyboardActions[key]:undefined;
           if(action){event.preventDefault();event.stopPropagation();performMovement(action);}
         }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
-          {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:disabled?OFF_RIM:focused===item.id?tokens.colorAccent:tokens.colorMedalRim,backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
+          {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:grab(item.id)>0?tokens.colorAccent:disabled?OFF_RIM:focused===item.id?tokens.colorAccent:tokens.colorMedalRim,borderWidth:1.3+1.7*grab(item.id),backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
             <View pointerEvents="none" style={[styles.medalInner,{borderColor:disabled?OFF_RIM:tokens.colorMedalRim}]}/>
             <CanonIcon glyph={entry.icon} label={labels[item.id]} color={disabled?OFF_INK:tokens.colorMedalInk} size={20}/>
           </View>}

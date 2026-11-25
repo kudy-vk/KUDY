@@ -267,6 +267,62 @@ test('production assembly centers and lifts the source with aligned hit geometry
   }
 });
 
+test('fast pointer snap coasts as one rigid group and decelerates without extra joins',()=>{
+  const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+  n.group.dx=0;n.group.dy=0;g.group.dx=140;g.group.dy=0;
+  const p=anchor(m,'guides');assert.equal(m.begin(p,0)?.id,'guides');m.hold(300);
+  assert.equal(m.move({x:p.x-120,y:p.y},320,true).kind,'snap');
+  assert.equal(n.group,g.group);
+  const x0=m.position('guides').x,y0=m.position('guides').y;
+  const gap=m.position('guides').x-m.position('nearby').x;
+  assert.equal(m.advance(370),true);const x1=m.position('guides').x;
+  assert.equal(m.advance(420),true);const x2=m.position('guides').x;
+  assert.ok(x0>x1&&x1>x2);assert.ok(x0-x1>x1-x2);
+  assert.equal(m.advance(520),false);
+  const end=m.position('guides').x;
+  assert.ok(end<x2);assert.ok((x0-end)*360/1600<=24+1e-8);
+  assert.equal(m.position('guides').y,y0);
+  assert.equal(m.position('guides').x-m.position('nearby').x,gap);
+  assert.equal(m.groups.size,4);assert.equal(m.advance(1000),false);invariants(m);
+});
+
+test('slow snaps and reduced motion do not coast; cancellation freezes a joined group',()=>{
+  for(const [enabled,distance,expectCoast] of [[false,120,false],[true,1,false],[true,120,true]]){
+    const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+    n.group.dx=0;n.group.dy=0;g.group.dx=distance===1?20:140;g.group.dy=0;
+    const p=anchor(m,'guides');m.begin(p,0);m.hold(300);
+    assert.equal(m.move({x:p.x-distance,y:p.y},320,enabled).kind,'snap');
+    assert.equal(m.advance(370),expectCoast);
+    const before=m.position('guides');m.cancel();assert.equal(m.advance(1000),false);
+    assert.deepEqual(m.position('guides'),before);assert.equal(n.group,g.group);
+  }
+});
+
+test('final fast snap coasts before centering and finishes at the same origin',()=>{
+  const m=puzzle(),first=m.pieces.get('nearby').group;
+  for(const group of [...m.groups])if(group!==first&&!group.members.has('kudy'))joinGroups(first,group,m.pieces,m.groups);
+  first.dx=0;first.dy=0;
+  const last=m.pieces.get('kudy');last.group.dx=140;last.group.dy=0;
+  const p=anchor(m,'kudy');assert.equal(m.begin(p,0)?.id,'kudy');m.hold(300);
+  assert.equal(m.move({x:p.x-120,y:p.y},320,true).complete,true);
+  const x0=m.position('guides').x;
+  assert.equal(m.advance(420),true);assert.ok(m.position('guides').x<x0);
+  assert.equal(m.phase,'assembling');
+  m.advance(920);assert.equal(m.position('guides').x,125+469);
+  m.advance(4000);assert.equal(m.phase,'complete');
+  assert.deepEqual(m.position('guides'),{x:125+469,y:320+361});
+});
+
+test('grab feedback grows after hold and clears on release or cancel',()=>{
+  const m=puzzle(),p=anchor(m,'guides');m.begin(p,0);
+  assert.equal(m.grabProgress(299),0);m.hold(300);
+  assert.equal(m.grabProgress(300),0);
+  assert.ok(m.grabProgress(390)>0&&m.grabProgress(390)<1);
+  assert.equal(m.grabProgress(480),1);
+  m.release(500);assert.equal(m.grabProgress(500),0);
+  m.begin(p,1000);m.hold(1300);m.cancel();assert.equal(m.grabProgress(1500),0);
+});
+
 test('accessible movement is rolled back on resize and respects the scene bounds',()=>{
   const m=puzzle(),before=m.position('guides');
   for(let i=0;i<100;i++)m.accessibilityAction('guides','moveRight',i);
