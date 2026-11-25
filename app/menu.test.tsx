@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { fireEvent, renderRouter, screen } from "expo-router/testing-library";
+import { act, fireEvent, renderRouter, screen, within } from "expo-router/testing-library";
 import Menu, { menuTopBlockHeight } from "./menu";
 import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
@@ -119,23 +119,46 @@ test("the header renders the contract city name and the display heading", async 
 // visible captions; the map-point, route and lamp signs replace the compass.
 test("pieces carry medallions with unique glyphs and no visible captions", async () => {
   await openMenu();
+  const canvas = screen.getByTestId("city-menu-canvas");
   for (const item of cityMenuConfig.items) {
     expect(screen.getByTestId(`city-menu-medal-${item.id}`, { includeHiddenElements: true })).toBeTruthy();
     // The caption stays the screen-reader label only; the disabled entry's
     // honest «· Хутка» note rides the same label (HomeMapMenu).
     const word = uiStrings("be")[item.labelKey].replace(/\s*→$/, "");
     const caption = item.destination === null ? `${word} · ${uiStrings("be").comingSoon}` : word;
-    expect(screen.queryByText(caption, { includeHiddenElements: true })).toBeNull();
+    expect(within(canvas).queryByText(caption, { includeHiddenElements: true })).toBeNull();
   }
   expect(new Set(cityMenuConfig.items.map(item => item.icon)).size).toBe(cityMenuConfig.items.length);
   expect(cityMenuConfig.items.find(item => item.id === "discovery")?.icon).toBe(LightbulbIcon);
   expect(cityMenuConfig.items.find(item => item.id === "kudy")?.icon).toBe(SettingsIcon);
 });
 
-// The settings fragment must navigate on direct touch as well as keyboard/TalkBack activation.
-test("touching the KUDY fragment opens the settings and history screen", async () => {
+// Drag-enabled fragments receive a real finger tap through the canvas
+// PanResponder, not the inner accessibility Pressable (pointerEvents="none").
+test("touching the KUDY medallion through the canvas opens settings", async () => {
   await openMenu();
-  await fireEvent.press(screen.getByTestId("city-menu-access-kudy"));
+  const canvas = screen.getByTestId("city-menu-canvas");
+  const piece = StyleSheet.flatten(screen.getByTestId("city-menu-access-kudy").props.style);
+  const medal = StyleSheet.flatten(screen.getByTestId("city-menu-medal-kudy", { includeHiddenElements: true }).props.style);
+  const x = Number(piece.left) + Number(medal.left) + 19 - 9;
+  const y = Number(piece.top) + Number(medal.top) + 19 + 15;
+  expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
+  let stamp = 0;
+  const touch = {
+    nativeEvent: { locationX: x, locationY: y, pageX: x, pageY: y, touches: [{ pageX: x, pageY: y }] },
+    touchHistory: {
+      numberActiveTouches: 1,
+      indexOfSingleActiveTouch: 0,
+      mostRecentTimeStamp: ++stamp,
+      touchBank: [{ touchActive: true, currentTimeStamp: stamp, currentPageX: x, currentPageY: y, previousPageX: x, previousPageY: y }],
+    },
+  };
+  const gesture = { dx: 0, dy: 0, numberActiveTouches: 1 };
+  expect(canvas.props.onStartShouldSetResponder(touch)).toBe(true);
+  await act(() => {
+    canvas.props.onResponderGrant(touch, gesture);
+    canvas.props.onResponderRelease(touch, gesture);
+  });
   expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
   expect(screen.getByTestId("my-ui-locale")).toBeTruthy();
 });
