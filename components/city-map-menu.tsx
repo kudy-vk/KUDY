@@ -23,11 +23,12 @@ export const cityMenuConfig = {
   // drawing area is the mockup's square 1600×1600 canvas and the pieces sit
   // at the mockup SLOTS fractions of it (top-left = centre − half piece), so
   // the whole set fits the 5/8 band of the screen without scrolling. The
-  // renderer is tap-only until MAP-11 (#84) wires drag/snap; layout.height is
-  // also the drag bound the model clamps to.
+  // layout.height is also the drag bound the model clamps to.
   layout: {
     height: 1600,
-    dragEnabled: false,
+    dragEnabled: true,
+    centerAssembled: true,
+    assembledLift: 96,
     positions: {
       nearby: { x: 153, y: 138 },
       guides: { x: 984, y: 153 },
@@ -69,5 +70,5 @@ export function HomeMapMenu({ width, locale, onSelect }: {
       icon: entry.icon,
     };
   });
-  return <CityMapMenu width={width} labels={labels} items={items} layout={cityMenuConfig.layout} onSelect={onSelect} />;
+  return <CityMapMenu width={width} labels={labels} accessibilityLabels={strings.mapAccessibility} items={items} layout={cityMenuConfig.layout} onSelect={onSelect} />;
 }
