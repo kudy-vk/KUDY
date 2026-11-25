@@ -108,7 +108,9 @@ test('localized accessibility actions move and cancel without opening a destinat
   const position=()=>StyleSheet.flatten(access().props.style).left;
   const before=position();
   expect(access().props.accessibilityActions).toContainEqual({name:'moveRight',label:'Управа'});
-  expect(screen.getByTestId('city-menu-access-kudy').props.accessibilityActions).toEqual([]);
+  const soon=screen.getByTestId('city-menu-access-kudy');
+  expect(soon.props.accessibilityActions).toContainEqual({name:'moveRight',label:'Управа'});
+  expect(soon.props.accessibilityActions).not.toContainEqual({name:'activate'});
   await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'moveRight'}});
   expect(position()).not.toEqual(before);
   await fireEvent(access(),'accessibilityAction',{nativeEvent:{actionName:'cancel'}});
@@ -133,7 +135,11 @@ test.each([320,360,390,430])('host at %i dp preserves localized navigation, targ
     expect(size.width).toBeGreaterThanOrEqual(48);
     expect(size.height).toBeGreaterThanOrEqual(48);
     if(item.destination)expect(target.props.accessibilityActions).toContainEqual({name:'moveLeft',label:uiStrings('pl').mapAccessibility.moveLeft});
-    else expect(target.props.accessibilityState.disabled).toBe(true);
+    else {
+      expect(target.props.accessibilityLabel).toContain(uiStrings('pl').comingSoon);
+      expect(target.props.accessibilityActions).not.toContainEqual({name:'activate'});
+      expect(target.props.accessibilityActions).toContainEqual({name:'moveLeft',label:uiStrings('pl').mapAccessibility.moveLeft});
+    }
   }
   await fireEvent(access('guides'),'accessibilityAction',{nativeEvent:{actionName:'moveLeft'}});
   expect(position()).not.toEqual(initial);
@@ -142,6 +148,41 @@ test.each([320,360,390,430])('host at %i dp preserves localized navigation, targ
   expect(select).toHaveBeenCalledWith('guides');
   await rerender(<HomeMapMenu key="second" width={width} locale="pl" onSelect={select}/>);
   expect(position()).toEqual(initial);
+});
+
+test('production host separates pointer drag from screen reader activation',async()=>{
+  jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
+  const read=jest.spyOn(AccessibilityInfo,'isScreenReaderEnabled').mockResolvedValue(false);
+  const select=jest.fn();
+  const {rerender}=await render(<HomeMapMenu key="pointer" width={360} locale="be" onSelect={select}/>);
+  const canvas=()=>screen.getByTestId('city-menu-canvas');
+  const piece=(id:string)=>screen.getByTestId(`city-menu-access-${id}`);
+  const position=()=>StyleSheet.flatten(piece('nearby').props.style).left;
+  const initial=position(),scale=360/1600;
+  let stamp=0;
+  const event=(x:number,y:number)=>({nativeEvent:{locationX:x,locationY:y,pageX:x,pageY:y,touches:[{pageX:x,pageY:y}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:++stamp,touchBank:[{touchActive:true,currentTimeStamp:stamp,currentPageX:x,currentPageY:y,previousPageX:x,previousPageY:y}]}});
+  const gesture={dx:0,dy:0,numberActiveTouches:1};
+  expect(cityMenuConfig.layout.dragEnabled).toBe(true);
+  expect(piece('nearby').props.pointerEvents).toBe('none');
+  await act(()=>canvas().props.onResponderGrant(event(338*scale,236*scale),gesture));
+  await act(()=>jest.advanceTimersByTime(301));
+  await act(()=>{canvas().props.onResponderMove(event(378*scale,236*scale),gesture);canvas().props.onResponderRelease(event(378*scale,236*scale),gesture);});
+  expect(position()).toBeCloseTo(initial+9);expect(select).not.toHaveBeenCalled();
+  read.mockResolvedValue(true);
+  await rerender(<HomeMapMenu key="reader" width={360} locale="be" onSelect={select}/>);
+  expect(piece('nearby').props.pointerEvents).toBe('auto');
+  await fireEvent(piece('nearby'),'accessibilityAction',{nativeEvent:{actionName:'moveRight'}});
+  expect(position()).toBeCloseTo(initial+8);
+  await fireEvent(piece('nearby'),'accessibilityAction',{nativeEvent:{actionName:'moveRight'}});
+  expect(position()).toBeCloseTo(initial+16);
+  await fireEvent(piece('nearby'),'accessibilityAction',{nativeEvent:{actionName:'cancel'}});
+  expect(position()).toBeCloseTo(initial);
+  const soon=()=>StyleSheet.flatten(piece('kudy').props.style).left;
+  const soonStart=soon();
+  await fireEvent(piece('kudy'),'accessibilityAction',{nativeEvent:{actionName:'moveLeft'}});
+  expect(soon()).toBeCloseTo(soonStart-8);
+  await fireEvent(piece('kudy'),'accessibilityTap');expect(select).not.toHaveBeenCalled();
+  await fireEvent(piece('nearby'),'accessibilityTap');expect(select).toHaveBeenCalledWith('nearby');
 });
 
 test('joining via accessibility announces joined state and preserves navigation with reduced motion',async()=>{

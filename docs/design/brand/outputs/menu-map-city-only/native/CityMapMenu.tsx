@@ -58,6 +58,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const [litId,setLitId]=useState<PieceId|null>(null);
   const [,setRevision]=useState(0);
   const [systemReduced,setSystemReduced]=useState(true);
+  const [screenReader,setScreenReader]=useState(false);
   const reduced=props.reduceMotion??systemReduced;
   const latest=useRef(props);latest.current=props;
   const reducedRef=useRef(reduced);reducedRef.current=reduced;
@@ -87,16 +88,6 @@ export function CityMapMenu(props:CityMapMenuProps) {
     feedback.current={point,until:Date.now()+(reducedRef.current?120:380)};
     startFrame();refresh();
   },[startFrame,refresh]);
-  const handle=useCallback((event:PuzzleEvent)=>{
-    if(event.kind==='select'){
-      const item=latest.current.items?.find(item=>item.id===event.id);
-      if(!latest.current.items||item&&!item.disabled)latest.current.onSelect(event.id);
-    }
-    else if(event.kind==='passive'||event.kind==='snap'){
-      pulse(event.point);
-      if(event.kind==='snap'&&event.complete){if(reducedRef.current)model.completeNow();else startFrame();}
-    }
-  },[model,pulse,startFrame]);
   const activatePiece=useCallback((id:PieceId)=>{
     const item=latest.current.items?.find(item=>item.id===id);
     if(item?.disabled){
@@ -109,7 +100,20 @@ export function CityMapMenu(props:CityMapMenuProps) {
     }
     if(!latest.current.items||item)latest.current.onSelect(id);
   },[clearLit]);
+  const handle=useCallback((event:PuzzleEvent)=>{
+    if(event.kind==='select')activatePiece(event.id);
+    else if(event.kind==='passive'||event.kind==='snap'){
+      pulse(event.point);
+      if(event.kind==='snap'&&event.complete){if(reducedRef.current)model.completeNow();else startFrame();}
+    }
+  },[activatePiece,model,pulse,startFrame]);
 
+  useEffect(()=>{
+    let active=true;
+    AccessibilityInfo.isScreenReaderEnabled().then(value=>{if(active)setScreenReader(value);}).catch(error=>console.warn('Could not read screen reader state',error));
+    const subscription=AccessibilityInfo.addEventListener('screenReaderChanged',setScreenReader);
+    return()=>{active=false;subscription.remove();};
+  },[]);
   useLayoutEffect(()=>{stopFrame();clearHold();model.resize(width);if(model.phase!=='scattered'&&model.phase!=='complete')model.completeNow();feedback.current=null;refresh();},[width,model,refresh,clearHold,stopFrame]);
   useEffect(()=>{
     if(props.reduceMotion!==undefined)return;
@@ -131,7 +135,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
     return PanResponder.create({
-      onStartShouldSetPanResponder:event=>event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event))),
+      onStartShouldSetPanResponder:event=>!screenReader&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event))),
       onPanResponderGrant:event=>{
         clearHold();if(event.nativeEvent.touches.length!==1){cancel();return;}
         const hit=model.begin(point(event),Date.now());refresh();
@@ -149,7 +153,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh]);
+  },[width,model,cancel,clearHold,handle,refresh,screenReader]);
 
   const scale=width/1600,complete=model.phase!=='scattered';
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
@@ -199,7 +203,10 @@ export function CityMapMenu(props:CityMapMenuProps) {
         const disabled=entry.disabled===true;
         const medal=medalAt(item.id);
         const activate=()=>activatePiece(item.id);
-        const actions = disabled ? [] : [{name:'activate'}, ...(!complete && accessibilityLabels ? movementActions.map(name=>({name,label:accessibilityLabels[name]})) : [])];
+        const canMove = !complete && accessibilityLabels !== undefined;
+        // Soon disables the destination, not the movable fragment. The host label
+        // already carries the localized Soon note; keep its movement actions reachable.
+        const actions = [...(disabled ? [] : [{name:'activate'}]), ...(canMove && accessibilityLabels ? movementActions.map(name=>({name,label:accessibilityLabels[name]})) : [])];
         const joined = (model.pieces.get(item.id)?.group.members.size ?? 0) > 1;
         const performMovement = (action:MapAccessibilityAction) => {
           clearHold();
@@ -209,13 +216,13 @@ export function CityMapMenu(props:CityMapMenuProps) {
         };
         const onAction = (name:string) => {
           if(name==='activate'){activate();return;}
-          if(disabled||complete||!accessibilityLabels)return;
+          if(!canMove)return;
           const action=movementActions.find(candidate=>candidate===name);
           if(action)performMovement(action);
         };
-        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled}} focusable={!disabled} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} onKeyDown={event=>{
+        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete||(!screenReader&&props.layout?.dragEnabled===true)?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled:disabled&&!canMove}} focusable={!disabled||canMove} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} onKeyDown={event=>{
           const {key,altKey,ctrlKey,metaKey,shiftKey,isComposing}=event.nativeEvent;
-          if(disabled||complete||altKey||ctrlKey||metaKey||isComposing||(shiftKey&&key!=='S'))return;
+          if(complete||(disabled&&!canMove)||altKey||ctrlKey||metaKey||isComposing||(shiftKey&&key!=='S'))return;
           const action=Object.hasOwn(keyboardActions,key)?keyboardActions[key]:undefined;
           if(action){event.preventDefault();event.stopPropagation();performMovement(action);}
         }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>

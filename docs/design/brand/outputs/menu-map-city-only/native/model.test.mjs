@@ -214,6 +214,43 @@ test('failed accessible snap retains cancel, and changing focus cannot orphan a 
   assert.deepEqual(m.position('nearby'),other);
 });
 
+test('production scatter remains within canvas, with axis-exact first moves and held drag',()=>{
+  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
+  for(const width of [320,360,390,430]){
+    const step=8*1600/width;
+    for(const id of nativeLayout.pieces.map(p=>p.id))for(const [action,dx,dy] of [['moveRight',step,0],['moveLeft',-step,0],['moveDown',0,step],['moveUp',0,-step]]){
+      const m=new CityPuzzle(width,()=>.5,undefined,layout),before=m.position(id);
+      m.accessibilityAction(id,action,100);
+      const after=m.position(id);
+      assert.ok(Math.abs(after.x-before.x-dx)<1e-8,`${width} ${id} ${action} x`);
+      assert.ok(Math.abs(after.y-before.y-dy)<1e-8,`${width} ${id} ${action} y`);
+      m.accessibilityAction(id,'cancel',101);assert.deepEqual(m.position(id),before);
+    }
+    const m=new CityPuzzle(width,()=>.5,undefined,layout),before=m.position('nearby'),p=anchor(m,'nearby');
+    m.begin(p,0);m.hold(301);m.move({x:p.x+40,y:p.y},350);
+    assert.deepEqual(m.position('nearby'),{x:before.x+40,y:before.y});assert.equal(m.release(400).kind,'none');
+  }
+});
+
+test('all five production fragments can be joined with accessibility actions alone',()=>{
+  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
+  for(const width of [320,360,390,430]){
+    const m=new CityPuzzle(width,()=>.5,undefined,layout);let time=1;
+    for(const id of ['guides','reserve-1','discovery','kudy']){
+      const target=m.pieces.get('nearby').group,g=m.pieces.get(id).group;
+      for(const [axis,plus,minus] of [['dx','moveRight','moveLeft'],['dy','moveDown','moveUp']]){
+        for(let i=0;i<100&&Math.abs(g[axis]-target[axis])>4*1600/width;i++){
+          const previous=g[axis];m.accessibilityAction(id,g[axis]<target[axis]?plus:minus,time++);if(previous===g[axis])break;
+        }
+      }
+      const result=m.accessibilityAction(id,'snap',time++);
+      assert.equal(result.kind,'snap',`${width} ${id}`);
+      assert.equal(result.complete,id==='kudy');
+    }
+    assert.equal(m.groups.size,1);m.completeNow();assert.equal(m.phase,'complete');
+  }
+});
+
 test('accessible movement is rolled back on resize and respects the scene bounds',()=>{
   const m=puzzle(),before=m.position('guides');
   for(let i=0;i<100;i++)m.accessibilityAction('guides','moveRight',i);

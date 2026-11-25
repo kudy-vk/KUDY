@@ -59,8 +59,9 @@ export class CityPuzzle {
   // краі; паварот не існуе — арыентацыя фрагмента нязменная.
   private clampGroup(group: Group) {
     const members = [...group.members].map(id => this.pieces.get(id)!);
-    group.dx = Math.max(-Math.min(...members.map(p=>p.x))-55,Math.min(1390-Math.max(...members.map(p=>p.x+p.width)),group.dx));
-    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-130,Math.min((this.layout?.height??1800)-430-Math.max(...members.map(p=>p.y+p.height)),group.dy));
+    const configured = this.layout !== undefined;
+    group.dx = Math.max(-Math.min(...members.map(p=>p.x))-(configured?125:55),Math.min((configured?1475:1390)-Math.max(...members.map(p=>p.x+p.width)),group.dx));
+    group.dy = Math.max(-Math.min(...members.map(p=>p.y))-(configured?320:130),Math.min((this.layout?.height??1800)-(configured?320:430)-Math.max(...members.map(p=>p.y+p.height)),group.dy));
   }
   resize(width: number) { this.cancel(); this.scale = this.validScale(width); }
   position(id: PieceId): Point {
