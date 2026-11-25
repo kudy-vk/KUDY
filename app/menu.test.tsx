@@ -30,7 +30,7 @@ test.each([
 ])("%s opens its real destination and Back returns to the map menu", async (id, destination, back) => {
   await openMenu();
   const before = screen.getByTestId("city-menu-canvas");
-  await fireEvent.press(screen.getByTestId(`city-menu-access-${id}`));
+  await fireEvent(screen.getByTestId(`city-menu-access-${id}`), "accessibilityAction", { nativeEvent: { actionName: "activate" } });
   expect(await screen.findByTestId(destination)).toBeTruthy();
   await fireEvent.press(screen.getByTestId(back));
   expect(await screen.findByTestId("screen-Menu")).toBeTruthy();
@@ -56,12 +56,14 @@ test("production menu exposes localized actions and resets movement after return
   }
 });
 
-test("the kudy piece stays visible, named and disabled without navigating", async () => {
+test("the kudy piece stays visible, named and movable but cannot navigate", async () => {
   await openMenu();
   const piece = screen.getByTestId("city-menu-access-kudy");
-  expect(piece.props.accessibilityState.disabled).toBe(true);
+  expect(piece.props.accessibilityState.disabled).toBe(false);
+  expect(piece.props.accessibilityActions).toContainEqual({ name: "moveLeft", label: uiStrings("be").mapAccessibility.moveLeft });
+  expect(piece.props.accessibilityActions).not.toContainEqual({ name: "activate" });
   expect(piece.props.accessibilityLabel).toContain(uiStrings("be").comingSoon);
-  await fireEvent.press(piece);
+  await fireEvent(piece, "accessibilityAction", { nativeEvent: { actionName: "activate" } });
   await fireEvent(piece, "accessibilityTap");
   expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
@@ -124,12 +126,12 @@ test("pieces carry medallions with unique glyphs and no visible captions", async
 test("pressing the waiting piece lights it back for a moment without navigating", async () => {
   jest.useFakeTimers();
   await openMenu();
-  const dim = screen.getByTestId("city-menu-dim-kudy", { includeHiddenElements: true });
-  expect(dim.props.opacity).toBe(0.55);
-  await fireEvent.press(screen.getByTestId("city-menu-access-kudy"));
-  expect(dim.props.opacity).toBe(0);
+  const dim = () => screen.getByTestId("city-menu-dim-kudy", { includeHiddenElements: true });
+  expect(dim().props.opacity).toBe(0.55);
+  await fireEvent(screen.getByTestId("city-menu-access-kudy"), "accessibilityTap");
+  expect(dim().props.opacity).toBe(0);
   await act(() => { jest.advanceTimersByTime(701); });
-  expect(dim.props.opacity).toBe(0.55);
+  expect(dim().props.opacity).toBe(0.55);
   expect(screen.getByTestId("screen-Menu")).toBeTruthy();
 });
 
