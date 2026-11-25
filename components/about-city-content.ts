@@ -60,8 +60,32 @@ export const ABOUT_CITY_SECTIONS = [
   { id: "airport", icon: PlaneIcon, links: ["airportBuses", "airportTrains", "ztmSchedule"] },
   { id: "transport", icon: TramFrontIcon, links: ["ztmSchedule", "skmSearch"] },
   { id: "city", icon: MapIcon, links: [] },
-  { id: "food", icon: UtensilsCrossedIcon, links: ["pysznePayment", "blikHow"] },
+  { id: "food", icon: UtensilsCrossedIcon, links: [] },
 ] as const satisfies readonly { id: AboutCitySectionId; icon: CanonGlyph; links: readonly AboutCityLinkKey[] }[];
+
+
+// Shortcuts for #256. Maps queries include addresses to disambiguate station
+// branches and exchange offices, but the guide never shows street names.
+// External sites supply live opening hours, rates and delivery availability.
+const googleMapsSearch = (query: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+export const ABOUT_CITY_FOOD_LINKS = {
+  mapMcd: googleMapsSearch("McDonald's Gdańsk Główny, Podwale Grodzkie 2, Gdańsk"),
+  mapKfc: googleMapsSearch("KFC Gdańsk PKP, Podwale Grodzkie 2c, Gdańsk"),
+  mapLate: googleMapsSearch("jedzenie po 21 Gdańsk"),
+  mapPromes: googleMapsSearch("Kantor Promes Forum Gdańsk, Targ Sienny 7, Gdańsk"),
+  mapManhattan: googleMapsSearch("Kantor Manhattan, Grunwaldzka 92, Gdańsk"),
+  mapExchange: googleMapsSearch("Kantor Exchange, Kaletnicza 10/13, Gdańsk"),
+  ratesEur: "https://marketportal.pl/kantory/kursy-walut/gdansk/eur",
+  nbpRates: "https://nbp.pl/statystyka-i-sprawozdawczosc/kursy/tabela-a/",
+  visaDcc: "https://www.visa.com/en-us/personal/travel/dynamic-currency-conversion",
+  pyszne: "https://www.pyszne.pl/jedzenie-na-dowoz/gdansk",
+  wolt: "https://wolt.com/pl/pol/gdansk",
+  glovo: "https://glovoapp.com/pl/pl/trojmiasto",
+  uber: "https://www.ubereats.com/pl/city/gdansk-pomorskie",
+  bolt: "https://bolt.eu/pl-pl/cities/gdansk/",
+} as const;
 
 // The signs the ride facts and the airport steps use; a fact names its sign
 // by key and the section resolves it to the glyph. The map's zone ways use
@@ -146,24 +170,8 @@ export const ABOUT_CITY_RIDES: readonly AboutCityRide[] = [
   },
 ] as const;
 
-// Delivery services and the payment methods their official pages confirm.
-export const ABOUT_CITY_PAY_METHODS = ["card", "blik", "cash", "apple", "google", "paypal"] as const;
-export type AboutCityPayMethod = (typeof ABOUT_CITY_PAY_METHODS)[number];
-
-export type AboutCityDelivery = {
-  readonly name: string;
-  readonly pay: readonly AboutCityPayMethod[];
-  readonly note?: string;
-};
-
-export const ABOUT_CITY_DELIVERY: readonly AboutCityDelivery[] = [
-  { name: "Pyszne.pl", pay: ["card", "blik", "cash", "apple", "google", "paypal"] },
-  { name: "Glovo", pay: ["card", "blik", "cash"] },
-  { name: "Wolt", pay: ["card", "blik", "cash"] },
-  { name: "Uber Eats", pay: ["card", "blik", "apple"] },
-  { name: "Bolt Food", pay: ["card", "cash"], note: "food.bolt.note" },
-];
-
+// Delivery payment filters were intentionally removed by #256; only live
+// catalogue links remain in ABOUT_CITY_FOOD_LINKS.
 // The guide's word resolver over the generated catalogue's nested shape: a
 // key walks the path, a template calls its function, an unknown key is an
 // error and not an empty string (the mockup translator's own rule). Returns

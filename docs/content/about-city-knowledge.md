@@ -72,7 +72,7 @@
 |---|---|---|---|---|
 | Што такое BLIK | польскі мабільны плацёж: аднаразовы 6-лічбавы код з банкоўскага ап; кантактлес у крамах; P2P па нумары тэлефона; зняцце ў банкамаце без карты | [blik.com — how to use](https://www.blik.com/en/how-to-use-blik) | 2026-11-10 | ✅ |
 | Што патрэбна | рахунак у банку-ўдзельніку + мабільная аплікацыя банка | blik.com | 2026-11-10 | ✅ |
-| Банкі-ўдзельнікі | PKO BP, mBank, ING, Millennium, Pekao, Santander/BNP, Credit Agricole, Alior, VeloBank, Nest, Revolut і інш. (поўны спіс на старонцы) | [blik.com/partnerzy](https://blik.com/partnerzy) | 2026-11-10 | ✅ |
+| Банкі-ўдзельнікі | PKO BP, mBank, ING, Millennium, Pekao, Credit Agricole, Alior, VeloBank, Nest, Revolut, UniCredit і інш. | [BLIK — актуальны спіс](https://www.blik.com/partnerzy) | 2026-11-25 | ✅; банк не абавязкова польскі, патрэбна падтрымка ў праграме |
 | Карткі/гатоўка «паўсюль» | афіцыйнай статыстыкі няма (NBP пад бот-блокам); у даведніку трымаецца сумленная фармулёўка без агульнага абяцання | — | 2026-11-10 | ❔ |
 
 ## 6. Karta Turysty
