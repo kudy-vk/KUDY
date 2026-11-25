@@ -25,9 +25,10 @@ test('unpublished site origin: no QR target exists, nothing fabricated', () => {
 test('one target per route × UI locale, through the config and the URL builder', async () => {
   const { publicRoot } = await buildDemoFixture();
   const routes = readSiteCatalogPage(publicRoot, 'be').cards.map((card) => ({ route_id: card.route_id }));
-  // G21.22: the QR targets follow the live UI locale set — all eight since
-  // the route release stopped waiting for narration (an unavailable-language
-  // QR lands on the localized unavailable state, never substituted content).
+  // G21.22: the QR targets follow the live UI locale set — all fourteen
+  // owner-decided open locales since the route release stopped waiting for
+  // narration (an unavailable-language QR lands on the localized unavailable
+  // state, never substituted content).
   assert.deepEqual(routeQrTargets(liveOriginLinks, routes, uiLocales), [
     { route_id: 'demo-route-a1', locale: 'be', url: 'https://kudy-test.example/guides/demo-route-a1' },
     { route_id: 'demo-route-a1', locale: 'en', url: 'https://kudy-test.example/en/guides/demo-route-a1' },
@@ -37,12 +38,18 @@ test('one target per route × UI locale, through the config and the URL builder'
     { route_id: 'demo-route-a1', locale: 'fr', url: 'https://kudy-test.example/fr/guides/demo-route-a1' },
     { route_id: 'demo-route-a1', locale: 'cs', url: 'https://kudy-test.example/cs/guides/demo-route-a1' },
     { route_id: 'demo-route-a1', locale: 'sv', url: 'https://kudy-test.example/sv/guides/demo-route-a1' },
+    { route_id: 'demo-route-a1', locale: 'nb', url: 'https://kudy-test.example/nb/guides/demo-route-a1' },
+    { route_id: 'demo-route-a1', locale: 'pl', url: 'https://kudy-test.example/pl/guides/demo-route-a1' },
+    { route_id: 'demo-route-a1', locale: 'da', url: 'https://kudy-test.example/da/guides/demo-route-a1' },
+    { route_id: 'demo-route-a1', locale: 'nl', url: 'https://kudy-test.example/nl/guides/demo-route-a1' },
+    { route_id: 'demo-route-a1', locale: 'pt', url: 'https://kudy-test.example/pt/guides/demo-route-a1' },
+    { route_id: 'demo-route-a1', locale: 'it', url: 'https://kudy-test.example/it/guides/demo-route-a1' },
   ]);
 });
 
 test('every generated QR asset decodes back to the exact target URL', async () => {
   const targets = routeQrTargets(liveOriginLinks, [{ route_id: 'demo-route-a1' }], uiLocales);
-  assert.equal(targets.length, 8);
+  assert.equal(targets.length, 14);
   for (const target of targets) {
     // The same print parameters the build script writes (width, quiet zone).
     const png = await QRCode.toBuffer(target.url, { type: 'png', width: 1024, margin: 4, errorCorrectionLevel: 'M' });

@@ -99,11 +99,12 @@ export function isCompleteUiLocale(value: string): value is CompleteUiLocaleCode
 
 // G21.50 (G21.42-chinese-language.md — G21.50): the open subset the pickers advertise is a separate
 // fact from COMPLETE_UI_LOCALES — a code may be complete and still closed.
-// The frozen default is the G21.50 decision set: the eight advertised codes
-// stay open under every flag state (hiding any of them is out of scope),
-// and a code registered complete after this decision (zh first, G21.42 §11)
-// stays closed until the flag names it.
-const RELEASE_DEFAULT_OPEN: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv"];
+// The default open set is the G21.50 decision set (eight) extended by the
+// owner decision of 2026-11-23 (chat, on merging EU-UI-01–06): nb/pl/da/nl/pt/it
+// join the advertised default — fourteen codes stay open under every flag
+// state (hiding any of them is out of scope), and a code registered complete
+// after this decision stays closed until the flag names it.
+const RELEASE_DEFAULT_OPEN: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "nb", "pl", "da", "nl", "pt", "it"];
 
 // The one build/deploy input that names additionally open codes (additive,
 // comma- or whitespace-separated; `zh` once its catalogue lands). No flag

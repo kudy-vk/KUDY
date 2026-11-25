@@ -10,6 +10,7 @@ import type { JourneyContext } from '../test-browser/e2e-harness.mjs';
 import { withE2ePage, assertCleanJourney, discoveryIndex } from '../test-browser/e2e-harness.mjs';
 import { evaluateValue } from '../test-browser/cdp-browser.mjs';
 import { be } from '../lib/i18n/be.ts';
+import { uiLocales } from '../lib/i18n/index.ts';
 
 // Focus facts of the active element: keyboard focus must be visible (the
 // outline the UA focus ring draws — the site ships no outline reset) and the
@@ -32,10 +33,13 @@ const FOCUS_PROBE = `(() => {
 test('G23.02: keyboard-only navigation reaches and activates the main links', async (t) => {
   await withE2ePage(t, async ({ browser, page, goto, press, waitForPath, pageErrors, blockedRequests }: JourneyContext) => {
     await goto('/');
-    // Tab from the document start through the header and the card list; the
-    // guide card link must be reachable and every focused link visibly so.
+    // SiteShell focuses the brand link, then one link per other open locale
+    // (the current locale is text, not a link). The guide card is the next
+    // link, so the budget is the open-locale count plus that card. A wider
+    // default-open set stays reachable without a fixed tab ceiling.
+    const tabBudget = uiLocales.length + 1;
     let reached = false;
-    for (let tab = 0; tab < 12; tab += 1) {
+    for (let tab = 0; tab < tabBudget; tab += 1) {
       await press('Tab');
       const focus = await evaluateValue(browser, page, FOCUS_PROBE);
       if (!focus) continue;
