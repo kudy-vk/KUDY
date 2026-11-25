@@ -4,9 +4,8 @@
 // State rendering only: every decision about what exists lives in the
 // controllers (19 §4.2), no audio path exists here at all (R04 — a radius
 // entry and a card tap start nothing, the render suite fails if one is
-// wired), and the honest map note stands in for the tiles decision (ADR
-// G00.02 — the Run surface's precedent, no invented geometry: the index
-// publishes no coordinates).
+// wired). The live map uses the shared Run tile source. Only published
+// guide preview coordinates become markers; no place coordinates are invented.
 import { Link, useRouter } from "expo-router";
 import { useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -33,6 +32,7 @@ import { uiStrings } from "../components/ui-strings";
 import { darkTokens, tokens, type ThemeTokens } from "../components/design-tokens";
 import { useThemeStyles } from "../components/theme";
 import { ScreenSurface } from "../components/screen-surface";
+import { NearbyNativeMap } from "../components/nearby-native-map";
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   screen: { backgroundColor: palette.colorPaper },
@@ -42,65 +42,16 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontWeight: palette.fontWeightStrong,
     marginBottom: palette.spaceS,
   },
-  mapNote: {
-    color: palette.colorMuted,
-    fontSize: palette.fontBaseSize,
-    marginBottom: palette.spaceM,
-  },
-  demoMap: {
-    backgroundColor: "#eaf1eb",
-    borderColor: "#cbdccf",
-    borderRadius: palette.radiusBase,
-    borderWidth: 1,
-    height: 174,
-    marginBottom: palette.spaceM,
-    overflow: "hidden",
-  },
-  demoStreet: {
-    backgroundColor: "#fffdf7",
-    height: 15,
-    position: "absolute",
-    width: "125%",
-  },
-  demoMapLabel: {
-    backgroundColor: "#fffdf7",
-    borderRadius: 9,
-    color: tokens.colorInk,
-    fontSize: 13,
-    fontWeight: palette.fontWeightStrong,
-    left: 13,
-    overflow: "hidden",
-    paddingHorizontal: 9,
-    paddingVertical: 6,
-    position: "absolute",
-    top: 12,
-  },
-  demoPin: {
-    alignItems: "center",
-    backgroundColor: "#176d51",
-    borderColor: "#fffdf7",
-    borderRadius: 18,
-    borderWidth: 3,
-    height: 36,
-    justifyContent: "center",
-    position: "absolute",
-    width: 36,
-  },
-  demoPinText: {
-    color: "#fffdf7",
-    fontSize: 15,
-    fontWeight: palette.fontWeightStrong,
-  },
   modeHeader: {
     color: palette.colorInk,
     fontSize: palette.fontBaseSize,
     fontWeight: palette.fontWeightStrong,
     marginBottom: palette.spaceS,
   },
+  locationSlot: { minHeight: palette.fontBaseSize * 3, marginBottom: palette.spaceS },
   note: {
     color: palette.colorMuted,
     fontSize: palette.fontBaseSize,
-    marginBottom: palette.spaceM,
   },
   card: {
     backgroundColor: palette.colorCard,
@@ -234,35 +185,13 @@ function locationNote(view: NearbyLocationView, strings: ReturnType<typeof nearb
   return view.note === "acquiring" ? strings.noteAcquiring : strings.noteUnstable;
 }
 
-function DemoMapPreview({ locale }: { locale: string }) {
-  const styles = useThemeStyles(lightStyles, darkStyles);
-  const strings = uiStrings(locale);
-  return (
-    <View style={styles.demoMap} testID="nearby-demo-map" accessibilityLabel={strings.demoNearbyMapAccessibility}>
-      <View style={[styles.demoStreet, { left: -24, top: 54, transform: [{ rotate: "-13deg" }] }]} />
-      <View style={[styles.demoStreet, { left: -18, top: 119, transform: [{ rotate: "11deg" }] }]} />
-      <View style={[styles.demoStreet, { left: 132, top: 14, transform: [{ rotate: "74deg" }] }]} />
-      <ScaledText style={styles.demoMapLabel}>{strings.demoNearbyMapLabel}</ScaledText>
-      {([
-        { left: "17%", top: 91 },
-        { left: "48%", top: 65 },
-        { left: "75%", top: 109 },
-      ] as const).map((pin, index) => (
-        <View key={index} style={[styles.demoPin, pin]}>
-          <ScaledText style={styles.demoPinText}>{index + 1}</ScaledText>
-        </View>
-      ))}
-    </View>
-  );
-}
-
 export default function Map() {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const services = useServices();
   // One binding per open: the factory resolves the offers store and the
   // location guard (the composition root owns both — 19 §4.2).
   const binding = useMemo(() => services.nearby?.create(), [services.nearby]);
-  const { surface, locationView } = useNearbySurface(binding);
+  const { surface, locationView, position } = useNearbySurface(binding);
   // The chrome words read the UI-locale switch (the G14.04.d store,
   // the same useUiLocale subscription the catalog row and My KUDY hold) — the
   // binding's locale is the content-display preference (be first), so without
@@ -309,13 +238,16 @@ export default function Map() {
       />
       {/* UX 01: the offer list scrolls — the last card is
           reachable beyond the fold, never cut by the screen edge. */}
+      <ScaledText style={styles.title}>{strings.title}</ScaledText>
+      <NearbyNativeMap
+        offers={list}
+        position={locationView.state === "proximity" ? position : null}
+        onOpenGuide={(routeId) => router.push("/route/" + routeId)}
+        guideLabel={strings.guideLabel}
+        recenterLabel={strings.proximityHeader}
+        retryLabel={uiStrings(uiLocale).retry}
+      />
       <ScrollView testID="scroll-nearby">
-        <ScaledText style={styles.title}>{strings.title}</ScaledText>
-        {process.env.EXPO_PUBLIC_DEMO_MODE === "1" ? (
-          <DemoMapPreview locale={uiLocale} />
-        ) : (
-          <ScaledText style={styles.mapNote}>{strings.mapNote}</ScaledText>
-        )}
         {surface === null ? (
           <View testID="nearby-error">
             <StateBanner tone="notice" reason={strings.unavailable} testID="nearby-unavailable-notice" />
@@ -331,11 +263,13 @@ export default function Map() {
             <ScaledText style={styles.modeHeader} testID="nearby-mode">
               {locationView.state === "proximity" ? strings.proximityHeader : strings.reviewHeader}
             </ScaledText>
-            {note ? (
-              <ScaledText style={styles.note} testID="nearby-location-note">
-                {note}
-              </ScaledText>
-            ) : null}
+            <View style={styles.locationSlot} testID="nearby-location-slot">
+              {note ? (
+                <ScaledText style={styles.note} testID="nearby-location-note">
+                  {note}
+                </ScaledText>
+              ) : null}
+            </View>
             {surface.kind === "ready" && surface.degraded !== null ? (
               <StateBanner tone="notice" reason={strings.indexDegraded} testID="nearby-degraded" />
             ) : null}

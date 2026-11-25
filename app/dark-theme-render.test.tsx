@@ -60,7 +60,7 @@ async function openDiscovery(url: string) {
   }, { initialUrl: url });
 }
 
-test("Nearby chrome and Back icon use dark tokens while the map preview remains light", async () => {
+test("Nearby chrome and Back icon use dark tokens while the live map frame remains light", async () => {
   const previous = process.env.EXPO_PUBLIC_DEMO_MODE;
   process.env.EXPO_PUBLIC_DEMO_MODE = "1";
   try {
@@ -69,8 +69,8 @@ test("Nearby chrome and Back icon use dark tokens while the map preview remains 
     expect(flatStyle(root).backgroundColor).toBe(darkTokens.colorPaper);
     const back = screen.getByTestId("btn-map-back");
     expect(getByType(back, "RNSVGSvgView").props.stroke).toBe(darkTokens.colorAccent);
-    const map = screen.getByTestId("nearby-demo-map");
-    expect(flatStyle(map).backgroundColor).toBe("#eaf1eb");
+    const map = screen.getByTestId("nearby-map-frame");
+    expect(flatStyle(map).backgroundColor).toBe("#eef3ee");
   } finally {
     if (previous === undefined) delete process.env.EXPO_PUBLIC_DEMO_MODE;
     else process.env.EXPO_PUBLIC_DEMO_MODE = previous;

@@ -92,19 +92,18 @@ afterEach(() => {
 });
 
 describe("Nearby surface (G07.01)", () => {
-  test("only the demo build shows the illustrative map", async () => {
+  test("demo and normal builds render the interactive native map instead of the static diagram", async () => {
     const previous = process.env.EXPO_PUBLIC_DEMO_MODE;
     try {
       process.env.EXPO_PUBLIC_DEMO_MODE = "1";
       const demo = await renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
-      expect(await screen.findByTestId("nearby-demo-map")).toBeTruthy();
-      // RNTL 14: unmount is async and act-wrapped — an unawaited unmount leaves
-      // overlapping act state that breaks every later render in the file.
+      expect(await screen.findByTestId("nearby-native-map")).toBeTruthy();
+      expect(screen.queryByTestId("nearby-demo-map")).toBeNull();
       await demo.unmount();
 
       process.env.EXPO_PUBLIC_DEMO_MODE = "0";
       await renderRouter(withMapRoutes(createServices({})), { initialUrl: "/map" });
-      expect(await screen.findByTestId("screen-Map")).toBeTruthy();
+      expect(await screen.findByTestId("nearby-native-map")).toBeTruthy();
       expect(screen.queryByTestId("nearby-demo-map")).toBeNull();
       await screen.unmount();
     } finally {
@@ -169,6 +168,21 @@ describe("Nearby surface (G07.01)", () => {
     ]);
     // The collection offer is not a Nearby card (G07.02 owns collections).
     expect(screen.queryByTestId("nearby-card-offer-f1-collection")).toBeNull();
+  });
+
+  test("location note changes without moving the list and GPS appears on the live map", async () => {
+    const env = makeRunSession();
+    await openNearby(env);
+    const slot = screen.getByTestId("nearby-location-slot");
+    expect(slot.props.style.minHeight).toBeGreaterThan(0);
+    expect(screen.getByText("Шукаем пазіцыю…")).toBeTruthy();
+    await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
+    await act(() => {
+      env.locationPort.emitFix(1, { lat: 54.35, lng: 18.65, accuracy: 5, at: 0 });
+    });
+    expect(screen.queryByText("Шукаем пазіцыю…")).toBeNull();
+    expect(screen.getByTestId("nearby-location-slot").props.style.minHeight).toBe(slot.props.style.minHeight);
+    expect(screen.getByTestId("nearby-current-position")).toBeTruthy();
   });
 
   test("with an allowed position the proximity view orders by the published distance", async () => {
@@ -420,7 +434,7 @@ describe("Nearby UI-locale words", () => {
     await renderRouter(withMapRoutes(services), { initialUrl: "/map" });
     expect(await screen.findByTestId("screen-Map")).toBeTruthy();
     expect(screen.getByText("Поруч")).toBeTruthy();
-    expect(screen.getByText("Карта міста з’явиться після рішення про тайли")).toBeTruthy();
+    expect(screen.getByTestId("nearby-native-map")).toBeTruthy();
     expect(screen.getByTestId("nearby-error")).toBeTruthy();
     expect(screen.getByText("Каталог недоступний")).toBeTruthy();
     expect(screen.getByTestId("btn-map-back").props.accessibilityLabel).toBe("Назад");
@@ -438,7 +452,7 @@ describe("Nearby UI-locale words", () => {
       services.uiLocale.set("en");
     });
     expect(screen.getByText("Nearby")).toBeTruthy();
-    expect(screen.getByText("The city map arrives after the tiles decision")).toBeTruthy();
+    expect(screen.getByTestId("nearby-native-map")).toBeTruthy();
     expect(screen.getByTestId("nearby-mode").props.children).toBe("Near you");
     // en.back differs from the be default («← Назад») — the label itself
     // proves the switch reached the back element (review round 1).
