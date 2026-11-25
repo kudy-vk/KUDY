@@ -6,7 +6,8 @@ import {amberPalette,lightThreads} from '../amber-light.mjs';
 import manifest from '../manifest.json';
 import {cityMenuAssets,citySceneAssets} from '../native-assets';
 import {nativeLayout} from '../native-layout';
-import {CityPuzzle} from './model';
+import {CityPuzzle,MEDAL_DIAMETER_DP as MEDAL} from './model';
+import {MapKeyboardTarget} from './MapKeyboardTarget';
 import type {CityMenuLayout,MapAccessibilityAction,PieceId,Point,PuzzleEvent,SceneId} from './model';
 import {CanonIcon,type CanonGlyph} from '../../../../../../components/canon-icon';
 import {tokens} from '../../../../../../components/design-tokens';
@@ -33,7 +34,6 @@ export interface CityMapMenuProps {
 // 38dp cream disc with the sand-gold rim and the section glyph in brown ink.
 // The off (disabled) tones are the mockup's literal `.medal.off` values; the
 // disc sits on the light map art (DT-4), so the tones are theme-independent.
-const MEDAL = 38;
 const OFF_PAPER = '#f3ead6';
 const OFF_RIM = '#a8957c';
 const OFF_INK = '#7d6c58';
@@ -72,6 +72,11 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const model=useMemo(()=>new CityPuzzle(width,Math.random,pieceKey.split(',') as PieceId[],props.layout),[pieceKey,layoutKey]);
   const sceneHeight=props.layout?.height??1800;
   const pieces=items.map(item=>nativeLayout.pieces.find(piece=>piece.id===item.id)!);
+  const medalKey=items.filter(item=>item.icon).map(item=>item.id).join(',');
+  const medallions=useMemo(()=>new Map<PieceId,Point>(nativeLayout.pieces.flatMap(({id})=>{
+    const piece=manifest.pieces.find(piece=>piece.id===id);
+    return piece&&medalKey.split(',').includes(id)?[[id,{x:piece.anchor[0]-piece.x,y:piece.anchor[1]-piece.y}]]:[];
+  })),[medalKey]);
   const [focused,setFocused]=useState<PieceId|null>(null);
   const [litId,setLitId]=useState<PieceId|null>(null);
   const [,setRevision]=useState(0);
@@ -184,13 +189,13 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
     return PanResponder.create({
-      onStartShouldSetPanResponder:event=>!screenReader&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event))),
+      onStartShouldSetPanResponder:event=>!screenReader&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event),medallions)),
       onPanResponderGrant:event=>{
         clearHold();if(event.nativeEvent.touches.length!==1){cancel();return;}
         stopDrag();
         const local=point(event);
         dragStart.current={local,page:{x:event.nativeEvent.pageX,y:event.nativeEvent.pageY}};
-        const hit=model.begin(local,Date.now());refresh();
+        const hit=model.begin(local,Date.now(),medallions);refresh();
         if(hit&&!hit.passive)hold.current=setTimeout(()=>{hold.current=null;updateHold(Date.now());},nativeLayout.gesture.holdMs);
       },
       onPanResponderStart:event=>{if(event.nativeEvent.touches.length!==1)cancel();},
@@ -213,7 +218,7 @@ export function CityMapMenu(props:CityMapMenuProps) {
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,updateHold,props.layout?.dragEnabled]);
+  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,updateHold,props.layout?.dragEnabled,medallions]);
 
   const scale=width/1600,complete=model.phase!=='scattered';
   const grab=(id:PieceId)=>model.active?.held&&model.active.group===model.pieces.get(id)?.group
@@ -225,9 +230,8 @@ export function CityMapMenu(props:CityMapMenuProps) {
   // The piece-relative medallion anchor of each piece, from the accepted
   // package manifest (menu.mjs: [anchor] − [x, y]).
   const medalAt=(id:PieceId)=>{
-    const piece=manifest.pieces.find(piece=>piece.id===id);
-    if(!piece)return null;
-    return {x:(piece.anchor[0]-piece.x)*scale,y:(piece.anchor[1]-piece.y)*scale};
+    const center=medallions.get(id);
+    return center?{x:center.x*scale,y:center.y*scale}:null;
   };
   return <View style={[styles.host,style,{width,height:width*sceneHeight/1600}]}>
     <View testID="city-menu-canvas" collapsable={false} style={StyleSheet.absoluteFill} {...responder.panHandlers}>
@@ -282,17 +286,25 @@ export function CityMapMenu(props:CityMapMenuProps) {
           const action=movementActions.find(candidate=>candidate===name);
           if(action)performMovement(action);
         };
-        return <Pressable key={item.id} testID={`city-menu-access-${item.id}`} pointerEvents={complete||(!screenReader&&props.layout?.dragEnabled===true)?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled:disabled&&!canMove}} focusable={!disabled||canMove} onFocus={()=>setFocused(item.id)} onBlur={()=>setFocused(null)} onPress={activate} onKeyDown={event=>{
+        const keyboardMove=(key:string)=>{
+          if(complete||(disabled&&!canMove))return false;
+          const action=Object.hasOwn(keyboardActions,key)?keyboardActions[key]:undefined;
+          if(!action)return false;
+          performMovement(action);return true;
+        };
+        const targetStyle={left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)};
+        const blur=()=>setFocused(value=>value===item.id?null:value);
+        return <MapKeyboardTarget key={item.id} id={item.id} enabled={!complete&&(!disabled||canMove)&&!screenReader} style={[styles.piece,targetStyle]} onKey={keyboardMove} onFocusChange={value=>value?setFocused(item.id):blur()}>
+        <Pressable testID={`city-menu-access-${item.id}`} pointerEvents={complete||(!screenReader&&props.layout?.dragEnabled===true)?'none':'auto'} accessible accessibilityRole="button" accessibilityLabel={labels[item.id]} accessibilityHint={disabled?undefined:hint} accessibilityState={{disabled:disabled&&!canMove}} focusable={!disabled||canMove} onFocus={()=>setFocused(item.id)} onBlur={blur} onPress={activate} onKeyDown={event=>{
           const {key,altKey,ctrlKey,metaKey,shiftKey,isComposing}=event.nativeEvent;
           if(complete||(disabled&&!canMove)||altKey||ctrlKey||metaKey||isComposing||(shiftKey&&key!=='S'))return;
-          const action=Object.hasOwn(keyboardActions,key)?keyboardActions[key]:undefined;
-          if(action){event.preventDefault();event.stopPropagation();performMovement(action);}
-        }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,{left:at.x*scale,top:at.y*scale,width:Math.max(48,item.width*scale),height:Math.max(48,item.height*scale)}]}>
-          {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:grab(item.id)>0?tokens.colorAccent:disabled?OFF_RIM:focused===item.id?tokens.colorAccent:tokens.colorMedalRim,borderWidth:1.3+1.7*grab(item.id),backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
+          if(keyboardMove(key)){event.preventDefault();event.stopPropagation();}
+        }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,targetStyle]}>
+          {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:grab(item.id)>0||focused===item.id?tokens.colorAccent:disabled?OFF_RIM:tokens.colorMedalRim,borderWidth:1.3+1.7*grab(item.id),backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
             <View pointerEvents="none" style={[styles.medalInner,{borderColor:disabled?OFF_RIM:tokens.colorMedalRim}]}/>
             <CanonIcon glyph={entry.icon} label={labels[item.id]} color={disabled?OFF_INK:tokens.colorMedalInk} size={20}/>
           </View>}
-        </Pressable>;
+        </Pressable></MapKeyboardTarget>;
       })}
       {sceneLabels&&model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(origin.x+item.x)*scale,top:(origin.y+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
     </View>
@@ -302,6 +314,6 @@ export function CityMapMenu(props:CityMapMenuProps) {
 const styles=StyleSheet.create({
   host:{backgroundColor:tokens.colorPaper,overflow:'hidden'},
   piece:{position:'absolute'},
-  medal:{position:'absolute',width:38,height:38,borderRadius:19,borderWidth:1.3,alignItems:'center',justifyContent:'center',shadowColor:'#4a341e',shadowOpacity:0.38,shadowRadius:1.5,shadowOffset:{width:0,height:1.5}},
+  medal:{position:'absolute',width:MEDAL,height:MEDAL,borderRadius:MEDAL/2,borderWidth:1.3,alignItems:'center',justifyContent:'center',shadowColor:'#4a341e',shadowOpacity:0.38,shadowRadius:1.5,shadowOffset:{width:0,height:1.5}},
   medalInner:{position:'absolute',width:31,height:31,borderRadius:15.5,borderWidth:0.7,opacity:0.45},
 });

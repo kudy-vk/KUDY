@@ -73,6 +73,31 @@ test('native responder tap selects, while early movement cancels selection',asyn
   await act(()=>{rerenderedCanvas.props.onResponderGrant(event(358*360/1600,1054*360/1600),gesture);rerenderedCanvas.props.onResponderRelease(event(358*360/1600,1054*360/1600),gesture);});
   expect(select).not.toHaveBeenCalled();
 });
+test('the full visible medallion accepts tap and held drag at 320 dp',async()=>{
+  jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
+  jest.spyOn(AccessibilityInfo,'isScreenReaderEnabled').mockResolvedValue(false);
+  const select=jest.fn();
+  await render(<HomeMapMenu width={320} locale="be" onSelect={select}/>);
+  const canvas=()=>screen.getByTestId('city-menu-canvas');
+  const access=()=>screen.getByTestId('city-menu-access-nearby');
+  const position=()=>StyleSheet.flatten(access().props.style).left;
+  const center=StyleSheet.flatten(screen.getByTestId('city-menu-medal-nearby',{includeHiddenElements:true}).props.style);
+  const target=StyleSheet.flatten(access().props.style);
+  const x=target.left!+center.left!+19-9,y=target.top!+center.top!+19+15;
+  let stamp=0;
+  const event=(px:number,py:number)=>({nativeEvent:{locationX:px,locationY:py,pageX:px,pageY:py,touches:[{pageX:px,pageY:py}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:++stamp,touchBank:[{touchActive:true,currentTimeStamp:stamp,currentPageX:px,currentPageY:py,previousPageX:px,previousPageY:py}]}});
+  const gesture={dx:0,dy:0,numberActiveTouches:1};
+  const touch=event(x,y);
+  expect(canvas().props.onStartShouldSetResponder(touch)).toBe(true);
+  await act(()=>{canvas().props.onResponderGrant(touch,gesture);canvas().props.onResponderRelease(touch,gesture);});
+  expect(select).toHaveBeenCalledWith('nearby');select.mockClear();
+  const initial=position();
+  await act(()=>canvas().props.onResponderGrant(event(x,y),gesture));
+  await act(()=>jest.advanceTimersByTime(301));
+  await act(()=>{canvas().props.onResponderMove(event(x+8,y),gesture);canvas().props.onResponderRelease(event(x+8,y),gesture);});
+  expect(position()).toBeCloseTo(initial+8);expect(select).not.toHaveBeenCalled();
+});
+
 test('real native drags assemble all five, retain five flows and give the scene no flow',async () => {
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
   const select=jest.fn();await render(<CityMapMenu {...props} onSelect={select}/>);

@@ -63,6 +63,14 @@
 
 - Абноўленыя інтэграцыйныя тэсты выкарыстоўваюць accessibility activation/tap і правяраюць Soon без activate. Лакальны Jest двойчы завершаны кодам 137, без вердыкту; `ci:local` — тайм-аўт npm ci, Android E2E — NOT-VERIFIED (sandbox git). Патрэбны свежы CI і незалежнае review. Дазвол уладальніка перадаць PR не азначае поўнага PASS прыладнай матрыцы.
 
+## Выпраўленні Voka — 2026-11-25
+
+- Аўдыт перад зменай: HEAD `17fb9611`, база `4ccde425` (fetch main), [Voka review](https://github.com/kudy-vk/KUDY/pull/457#issuecomment-7169546875). High — iOS hardware keyboard: RN 0.88.1 JS `onKeyDown` не мае iOS native dispatch; MISSING. Medium — бачнае кола медальёна па-за polygon hit-test; MISSING. #461 — ALREADY DONE у `fbeffad2`, рэгрэсія праходзіць. Шлях: `app/menu.tsx` → `components/city-map-menu.tsx` → `native/CityMapMenu.tsx` → `native/model.ts`. Мінімум: iOS-only Expo native focus/key-command view, той самы JS movement path; hit-test бачнага медальёна з той самай геаметрыяй, што renderer. Без змены art, snap/reveal, routes, лакалізацыі. Натыўная iOS зборка і фізічны keyboard/VoiceOver — UNVERIFIED (Linux host); не замяняць іх Jest-імітацыяй.
+
+- Змены: `modules/kudy-map-keyboard` — лакальны Apple-only Expo module з UIKit focus і UIKeyCommand, абмежаваны сфакусаваным фрагментам; Tab/сістэмная актывацыя не перахопліваюцца, VoiceOver мае прыярытэт. JS adapter на iOS перадае стрэлкі/S/Escape ў існы `accessibilityAction`; Android `onKeyDown` застаецца. Бачны медальён мае кругавы hit-test у source coordinates з той самай 38 dp геаметрыяй, што renderer; невідочныя медальёны не актыўныя.
+- Праверкі: Node 36 pass, 1 skip (cv2); native JS Jest 19/19, мэтавы TypeScript PASS. Expo autolinking resolve apple знаходзіць `MapKeyboardModule` і `KudyMapKeyboard` pod; resolve android не ўключае модуль. Гэта праверка рэгістрацыі, не кампіляцыя Swift. CI local — timeout npm ci / Git sandbox; Android E2E — NOT-VERIFIED (git rev-parse HEAD failed). Showboat забаронены MCP для гэтага worktree.
+- iOS device acceptance (NOT-VERIFIED): сабраць новы native binary на macOS, падключыць апаратную клавіятуру, уключыць Full Keyboard Access, Tab пераходзіць паміж элементамі; на фрагменце стрэлкі рухаюць па 8 dp, Escape вяртае зыходную пазіцыю, S злучае суседнія фрагменты без адкрыцця раздзела; Tab выходзіць з фрагмента, актывацыя адкрывае раздзел, Soon не адкрывае. Пасля зборкі стрэлкі не перахопліваюцца; VoiceOver чытае адзін target на фрагмент і мае тыя самыя шэсць дзеянняў. Праверыць Android 320 dp: tap/hold па кропцы −9,+15 dp ад цэнтра медальёна Nearby. Фізічны PASS не заяўлены.
+
 ## Статус
 
 Рэалізацыя падключаная ў асноўным меню; PR не гатовы да зліцця без поўных CI і прыладных доказаў, якія патрабуе #83. Праверкі, якія не запускаліся або не прайшлі, не лічацца паспяховымі. Праблема Android host E2E адсочваецца ў #451.

@@ -5,6 +5,7 @@ import { amberMotion } from '../amber-light.mjs';
 export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
+export const MEDAL_DIAMETER_DP = 38;
 export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean; centerAssembled?: boolean; assembledLift?: number };
 export type MapAccessibilityAction = 'moveLeft' | 'moveRight' | 'moveUp' | 'moveDown' | 'snap' | 'cancel';
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
@@ -75,8 +76,16 @@ export class CityPuzzle {
     const piece = this.pieces.get(id)!;
     return { x: 125 + piece.x + piece.group.dx, y: 320 + piece.y + piece.group.dy };
   }
-  hit(point: Point): Hit | undefined {
-    for (const piece of [...this.pieces.values()].reverse()) {
+  hit(point: Point, medallions?: ReadonlyMap<PieceId, Point>): Hit | undefined {
+    const topFirst = [...this.pieces.values()].reverse();
+    // The medallions render above the polygon artwork, including their rims.
+    for (const piece of topFirst) {
+      const center = medallions?.get(piece.id);
+      if (!center) continue;
+      const at = this.position(piece.id);
+      if (Math.hypot(point.x-at.x-center.x,point.y-at.y-center.y)*this.scale <= MEDAL_DIAMETER_DP/2) return {id:piece.id,passive:false};
+    }
+    for (const piece of topFirst) {
       const at = this.position(piece.id);
       if (contains(piece, point.x-at.x, point.y-at.y)) return { id: piece.id, passive: false };
     }
@@ -90,9 +99,9 @@ export class CityPuzzle {
       if (contains(part,x-part.x,y-part.y)) return { id: part.id, passive: true };
     }
   }
-  begin(point: Point, now: number): Hit | undefined {
+  begin(point: Point, now: number, medallions?: ReadonlyMap<PieceId, Point>): Hit | undefined {
     this.cancel();
-    const hit = this.hit(point);
+    const hit = this.hit(point,medallions);
     if (!hit) return;
     const group = hit.passive ? undefined : this.pieces.get(hit.id)!.group;
     this.active = { hit, group, start: point, last: point, at: now, original: group ? {x:group.dx,y:group.dy} : undefined, held: false, cancelled: false };

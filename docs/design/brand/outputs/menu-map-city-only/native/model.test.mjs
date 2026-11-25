@@ -39,6 +39,21 @@ test('only real held movement can snap and never emits a section press',()=>{
   assert.equal(m.groups.size,4);assert.equal(a.group,b.group);
   assert.equal(m.release(350).kind,'none');
 });
+test('a visible medallion extends the polygon hit without activating an invisible icon',()=>{
+  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
+  const m=new CityPuzzle(320,()=>.5,undefined,layout),before=m.position('nearby');
+  const center={x:330-122,y:485-366};
+  const point={x:before.x+center.x-9/.2,y:before.y+center.y+15/.2};
+  const medallions=new Map([['nearby',center]]);
+  assert.equal(m.hit(point),undefined);
+  assert.deepEqual(m.hit(point,medallions),{id:'nearby',passive:false});
+  assert.deepEqual(m.begin(point,0,medallions),{id:'nearby',passive:false});
+  assert.deepEqual(m.release(50),{kind:'select',id:'nearby'});
+  m.begin(point,100,medallions);m.hold(401);m.move({x:point.x+40,y:point.y},420);
+  assert.deepEqual(m.position('nearby'),{x:before.x+40,y:before.y});
+  m.cancel();assert.deepEqual(m.position('nearby'),before);
+});
+
 test('early movement cancels tap; cancellation restores a group',()=>{
   const m=puzzle(),p=anchor(m,'guides'),before={...m.pieces.get('guides').group};
   m.begin(p,0);m.move({x:p.x+100,y:p.y},20);assert.equal(m.release(50).kind,'none');
