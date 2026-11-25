@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { act, fireEvent, renderRouter, screen } from "expo-router/testing-library";
+import { fireEvent, renderRouter, screen } from "expo-router/testing-library";
 import Menu, { menuTopBlockHeight } from "./menu";
 import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
@@ -10,7 +10,7 @@ import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
 import { StyleSheet } from "react-native";
-import HourglassIcon from "lucide-react-native/icons/hourglass";
+import SettingsIcon from "lucide-react-native/icons/settings";
 import LightbulbIcon from "lucide-react-native/icons/lightbulb";
 
 afterEach(() => { jest.restoreAllMocks(); jest.useRealTimers(); });
@@ -27,6 +27,7 @@ test.each([
   // Issue #200: the reserve-1 fragment opens the «Пра горад» guide — the
   // row fails when the transition (or its destination route) is removed.
   ["reserve-1", "screen-AboutCity", "btn-about-back"],
+  ["kudy", "screen-KUDY", "btn-my-back"],
 ])("%s opens its real destination and Back returns to the map menu", async (id, destination, back) => {
   await openMenu();
   const before = screen.getByTestId("city-menu-canvas");
@@ -56,28 +57,38 @@ test("production menu exposes localized actions and resets movement after return
   }
 });
 
-test("the kudy piece stays visible, named and movable but cannot navigate", async () => {
+test("the KUDY fragment is active and accessible instead of the former coming-soon placeholder", async () => {
   await openMenu();
   const piece = screen.getByTestId("city-menu-access-kudy");
   expect(piece.props.accessibilityState.disabled).toBe(false);
-  expect(piece.props.accessibilityActions).toContainEqual({ name: "moveLeft", label: uiStrings("be").mapAccessibility.moveLeft });
-  expect(piece.props.accessibilityActions).not.toContainEqual({ name: "activate" });
-  expect(piece.props.accessibilityLabel).toContain(uiStrings("be").comingSoon);
+  expect(piece.props.accessibilityActions).toContainEqual({ name: "activate" });
+  expect(piece.props.accessibilityLabel).not.toContain(uiStrings("be").comingSoon);
   await fireEvent(piece, "accessibilityAction", { nativeEvent: { actionName: "activate" } });
-  await fireEvent(piece, "accessibilityTap");
-  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
+  expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
 });
 
 test("menu config names existing geometry and localizable labels for every open locale", async () => {
   expect(cityMenuConfig.items).toHaveLength(5);
   expect(new Set(cityMenuConfig.items.map(item => item.id)).size).toBe(5);
-  // Issue #200: reserve-1 carries the guide destination; only kudy stays null.
-  expect(cityMenuConfig.items.filter(item => item.destination)).toHaveLength(4);
+  // Every visible fragment now has a real destination.
+  expect(cityMenuConfig.items.filter(item => item.destination)).toHaveLength(5);
+  expect(cityMenuConfig.items.find(item => item.id === "kudy")?.destination).toBe("/my");
   expect(cityMenuConfig.items.find(item => item.id === "reserve-1")?.destination).toBe("/city/gdansk/about");
   for (const locale of OPEN_UI_LOCALES) {
     for (const item of cityMenuConfig.items) expect(uiStrings(locale)[item.labelKey].trim()).not.toBe("");
   }
   for (const item of cityMenuConfig.items) expect(manifest.pieces.find(piece => piece.id === item.id)?.png).toBeTruthy();
+});
+
+test("the main menu settings shortcut opens KUDY and its language picker", async () => {
+  await openMenu();
+  const settings = screen.getByTestId("btn-menu-settings");
+  expect(settings.props.accessibilityLabel).toBe(uiStrings("be").myKudy);
+  await fireEvent.press(settings);
+  expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
+  expect(screen.getByTestId("my-ui-locale")).toBeTruthy();
+  await fireEvent.press(screen.getByTestId("btn-my-back"));
+  expect(await screen.findByTestId("screen-Menu")).toBeTruthy();
 });
 
 test("the active-walk icon returns to the same Run without writing session state", async () => {
@@ -118,21 +129,15 @@ test("pieces carry medallions with unique glyphs and no visible captions", async
   }
   expect(new Set(cityMenuConfig.items.map(item => item.icon)).size).toBe(cityMenuConfig.items.length);
   expect(cityMenuConfig.items.find(item => item.id === "discovery")?.icon).toBe(LightbulbIcon);
-  expect(cityMenuConfig.items.find(item => item.id === "kudy")?.icon).toBe(HourglassIcon);
+  expect(cityMenuConfig.items.find(item => item.id === "kudy")?.icon).toBe(SettingsIcon);
 });
 
-// Issue #216 (AC5): pressing the waiting piece lights it back for a moment
-// and nothing opens — the honest no-section answer of the mockup.
-test("pressing the waiting piece lights it back for a moment without navigating", async () => {
-  jest.useFakeTimers();
+// The settings fragment must navigate on direct touch as well as keyboard/TalkBack activation.
+test("touching the KUDY fragment opens the settings and history screen", async () => {
   await openMenu();
-  const dim = () => screen.getByTestId("city-menu-dim-kudy", { includeHiddenElements: true });
-  expect(dim().props.opacity).toBe(0.55);
-  await fireEvent(screen.getByTestId("city-menu-access-kudy"), "accessibilityTap");
-  expect(dim().props.opacity).toBe(0);
-  await act(() => { jest.advanceTimersByTime(701); });
-  expect(dim().props.opacity).toBe(0.55);
-  expect(screen.getByTestId("screen-Menu")).toBeTruthy();
+  await fireEvent.press(screen.getByTestId("city-menu-access-kudy"));
+  expect(await screen.findByTestId("screen-KUDY")).toBeTruthy();
+  expect(screen.getByTestId("my-ui-locale")).toBeTruthy();
 });
 
 // Issue #216 (AC7): the engraved panorama rests in the free space and the
