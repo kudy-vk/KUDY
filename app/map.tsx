@@ -201,7 +201,7 @@ export default function Map() {
   const uiLocale = useUiLocale();
   const strings = nearbyStrings(uiLocale);
   // G07.05 — the R07 hint card of the open city surface: the one app-wide
-  // hint controller's state, mounted below the back button; the tap opens
+  // hint controller's state, scrollable below the back button; the tap opens
   // the preview the usual way (no Start, no audio).
   const router = useRouter();
   const offers =
@@ -231,23 +231,23 @@ export default function Map() {
           it never had one (AC2); the label is hosted by the shared
           component's <Text> (the bare-string Pressable class guard). */}
       <BackButton label={uiStrings(uiLocale).back} testID="btn-map-back" />
-      <GuideHintMount
-        binding={services.hints}
-        locale={uiLocale}
-        onOpen={(routeId) => router.push(`/route/${routeId}`)}
-      />
-      {/* UX 01: the offer list scrolls — the last card is
-          reachable beyond the fold, never cut by the screen edge. */}
-      <ScaledText style={styles.title}>{strings.title}</ScaledText>
-      <NearbyNativeMap
-        offers={list}
-        position={locationView.state === "proximity" ? position : null}
-        onOpenGuide={(routeId) => router.push("/route/" + routeId)}
-        guideLabel={strings.guideLabel}
-        recenterLabel={strings.proximityHeader}
-        retryLabel={uiStrings(uiLocale).retry}
-      />
-      <ScrollView testID="scroll-nearby">
+      {/* Hints, map and offers scroll together. Large text and small screens
+          cannot leave the offer list below fixed map/hint content. */}
+      <ScrollView style={{ flex: 1 }} testID="scroll-nearby">
+        <GuideHintMount
+          binding={services.hints}
+          locale={uiLocale}
+          onOpen={(routeId) => router.push("/route/" + routeId)}
+        />
+        <ScaledText style={styles.title}>{strings.title}</ScaledText>
+        <NearbyNativeMap
+          offers={list}
+          position={locationView.state === "proximity" && locationView.note === null ? position : null}
+          onOpenGuide={(routeId) => router.push("/route/" + routeId)}
+          guideLabel={strings.guideLabel}
+          recenterLabel={strings.proximityHeader}
+          retryLabel={uiStrings(uiLocale).retry}
+        />
         {surface === null ? (
           <View testID="nearby-error">
             <StateBanner tone="notice" reason={strings.unavailable} testID="nearby-unavailable-notice" />

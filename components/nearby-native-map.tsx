@@ -89,6 +89,8 @@ export function NearbyNativeMap({
 }) {
   const camera = useRef<CameraRef>(null);
   const following = useRef(true);
+  const hadGpsPosition = useRef(false);
+  const guideCentered = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
@@ -101,13 +103,18 @@ export function NearbyNativeMap({
   const initialViewState = useRef({ center: points[0]?.coordinate ?? TRICITY_CENTER, zoom: MAP_ZOOM }).current;
 
   useEffect(() => {
+    if (position) hadGpsPosition.current = true;
     if (loaded && position && following.current) {
       camera.current?.easeTo({ center: [...position] as [number, number], zoom: MAP_ZOOM, duration: 650, easing: "ease" });
     }
   }, [loaded, position]);
 
   useEffect(() => {
-    if (loaded && !position && points.length && following.current) {
+    // On catalog arrival, center once on the first published guide. A GPS
+    // timeout must not move the camera back to a guide or the city center.
+    if (loaded && !position && points.length && following.current &&
+        !hadGpsPosition.current && !guideCentered.current) {
+      guideCentered.current = true;
       camera.current?.easeTo({ center: points[0].coordinate, zoom: MAP_ZOOM, duration: 650, easing: "ease" });
     }
   }, [loaded, points, position]);

@@ -29,3 +29,9 @@
 - Rejected candidate RULE: a light map in the dark theme is **not** a contrast/theme violation, because DT-4 explicitly exempts cartography.
 - Rejected candidate RULE: a missing point pin for a place with no catalog geometry is not a violation; making up coordinates would contradict the published-data contract.
 - No verified accepted-rule violation survives. Missing device evidence remains NOT-VERIFIED; this is not a design-QA approval.
+
+## Рэакцыя на Voka (2026-11-26)
+
+- Застарэлая пазнака GPS пры `recovering` і `stalled` цяпер прыбіраецца; тэст `components/nearby-location-watch.test.tsx` правярае фікс → тайм-аўт → аднаўленне.
+- Падказкі, карта, статус і спіс перамешчаныя ў адну пракрутку. `components/nearby-scroll-layout.test.tsx` правярае JSX-структуру, але рэальная геаметрыя на прыладзе застаецца NOT-VERIFIED.
+- Дададзены ўзнаўляльны доказ `docs/demos/2026-11-26-nearby-gps-scroll.md`; `showboat verify` заблакаваны MCP: `uvx is limited to the KUDY #835 worktree.` Яго вынік пакуль NOT-VERIFIED.

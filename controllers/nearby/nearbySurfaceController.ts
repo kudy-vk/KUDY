@@ -175,7 +175,8 @@ export function useNearbySurface(
       }
       const view = nearbyLocationView(location);
       updateView(view);
-      if (view.state !== 'proximity') setPosition(null);
+      // Watchdog recovery/stall invalidates the displayed GPS position.
+      if (view.state !== 'proximity' || view.note !== null) setPosition(null);
     };
     // Pure Node consumers call controller decisions without a native runtime;
     // React mounts this lifecycle observer only on the rendered surface.
@@ -185,6 +186,9 @@ export function useNearbySurface(
       foreground = state === 'active';
       read();
     });
+    // Handle watchdog and permission changes immediately. Polling still
+    // handles mode handovers whose status value does not change.
+    const unwatchStatus = location.onStatusChange(read);
     const unwatchFix = location.onRawFix(fix => {
       if (!foreground || location.currentMode() !== 'city-surface') return;
       if (!Number.isFinite(fix.lat) || fix.lat < -90 || fix.lat > 90 ||
@@ -204,6 +208,7 @@ export function useNearbySurface(
       // what this surface armed, never a walk's own mode.
       appStateSubscription.remove();
       unwatchFix();
+      unwatchStatus();
       releaseLocation();
     };
   }, [location]);
