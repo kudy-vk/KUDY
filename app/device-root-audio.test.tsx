@@ -45,23 +45,29 @@ jest.mock('../services/device-secure-store', () => ({
   expoSecureSecretStore: () => ({}),
 }));
 jest.mock('../controllers/deviceServices', () => ({
-  catalogOriginFrom: () => 'https://catalog.example.test',
   createDeviceServicePorts: (facilities: unknown) => facilities,
 }));
 
 import { createDeviceServiceSet } from '../controllers/deviceRoot';
 
 test('G20.29 AC4: device root waits for speech mode before physical playback', async () => {
-  const facilities = createDeviceServiceSet() as unknown as { audio: AudioService } | null;
-  expect(facilities).not.toBeNull();
-  const pending = facilities!.audio.play({
-    token: { kind: 'guide', ref: 'device-root', seq: 1 },
-    path: 'file:///installed/root.m4a',
-  });
-  expect(mockModeCalls).toBe(1);
-  expect(mockPhysicalPlays).toEqual([]);
-  expect(mockCompleteMode).not.toBeNull();
-  mockCompleteMode!();
-  await pending;
-  expect(mockPhysicalPlays).toEqual(['file:///installed/root.m4a']);
+  const previousOrigin = process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  process.env.EXPO_PUBLIC_CATALOG_ORIGIN = 'https://catalog.example.test';
+  try {
+    const facilities = createDeviceServiceSet() as unknown as { audio: AudioService } | null;
+    expect(facilities).not.toBeNull();
+    const pending = facilities!.audio.play({
+      token: { kind: 'guide', ref: 'device-root', seq: 1 },
+      path: 'file:///installed/root.m4a',
+    });
+    expect(mockModeCalls).toBe(1);
+    expect(mockPhysicalPlays).toEqual([]);
+    expect(mockCompleteMode).not.toBeNull();
+    mockCompleteMode!();
+    await pending;
+    expect(mockPhysicalPlays).toEqual(['file:///installed/root.m4a']);
+  } finally {
+    if (previousOrigin === undefined) delete process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+    else process.env.EXPO_PUBLIC_CATALOG_ORIGIN = previousOrigin;
+  }
 });
