@@ -185,6 +185,23 @@ describe("Nearby surface (G07.01)", () => {
     expect(screen.getByTestId("nearby-current-position")).toBeTruthy();
   });
 
+  test("recenter button announces the existing location action in Belarusian and English", async () => {
+    const env = makeRunSession();
+    const { services } = await openNearby(env);
+    await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
+    await act(() => {
+      env.locationPort.emitFix(1, { lat: 54.35, lng: 18.65, accuracy: 5, at: 0 });
+    });
+    await fireEvent(screen.getByTestId("nearby-native-map"), "onRegionWillChange", {
+      nativeEvent: { userInteraction: true },
+    });
+    expect(screen.getByTestId("nearby-map-recenter").props.accessibilityRole).toBe("button");
+    expect(screen.getByTestId("nearby-map-recenter").props.accessibilityLabel).toBe("Дзе я");
+    await act(() => services.uiLocale.set("en"));
+    expect(screen.getByTestId("nearby-map-recenter").props.accessibilityLabel).toBe("My location");
+    expect(screen.getByTestId("nearby-mode").props.children).toBe("Near you");
+  });
+
   test("with an allowed position the proximity view orders by the published distance", async () => {
     const env = makeRunSession();
     await openNearby(env);

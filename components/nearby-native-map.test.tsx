@@ -40,7 +40,7 @@ const props = {
   position: null,
   onOpenGuide,
   guideLabel: "Гід",
-  recenterLabel: "Паблізу",
+  recenterLabel: "Дзе я",
   retryLabel: "Паўтарыць",
 };
 
@@ -72,6 +72,7 @@ test("GPS uses the existing position observer, pan keeps the user's view, and re
   const callsBefore = cameraCalls.length;
   await rendered.rerender(<NearbyNativeMap {...props} position={[18.652, 54.352]} />);
   expect(cameraCalls).toHaveLength(callsBefore);
+  expect(screen.getByTestId("nearby-map-recenter").props.accessibilityLabel).toBe("Дзе я");
   await fireEvent.press(screen.getByTestId("nearby-map-recenter"));
   expect(cameraCalls.at(-1)).toEqual(expect.objectContaining({ center: [18.652, 54.352] }));
   expect(screen.queryByTestId("nearby-map-recenter")).toBeNull();

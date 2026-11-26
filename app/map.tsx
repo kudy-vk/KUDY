@@ -21,6 +21,7 @@ import {
   type NearbyOfferFacts,
 } from "../controllers/nearby/nearbySurfaceController";
 import { useServices, useUiLocale } from "./_layout";
+import { runMapStrings } from "../controllers/run/runMap";
 import { BackButton } from "../components/back-button";
 import { CanonIcon } from "../components/canon-icon";
 import { AccessBadge, offerShownInTextLocale, StateBanner } from "../components/guide-card";
@@ -245,7 +246,7 @@ export default function Map() {
           position={locationView.state === "proximity" && locationView.note === null ? position : null}
           onOpenGuide={(routeId) => router.push("/route/" + routeId)}
           guideLabel={strings.guideLabel}
-          recenterLabel={strings.proximityHeader}
+          recenterLabel={runMapStrings(uiLocale).recenter}
           retryLabel={uiStrings(uiLocale).retry}
         />
         {surface === null ? (

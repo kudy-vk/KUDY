@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import { beforeEach, expect, jest, test } from "@jest/globals";
 import { AppState, Text } from "react-native";
 
-import { NearbyNativeMap } from "./nearby-native-map";
+import { NearbyNativeMap } from "../components/nearby-native-map";
 import { createControllerStore } from "../controllers/createControllerStore";
 import { useNearbySurface, type NearbySurfaceBinding, type NearbySurfaceState } from "../controllers/nearby/nearbySurfaceController";
 import { FakeLocationOsPort } from "../services/location/fake-port";
@@ -45,7 +45,7 @@ function NearbyGpsProbe({ binding }: { binding: NearbySurfaceBinding }) {
         position={locationView.state === "proximity" && locationView.note === null ? position : null}
         onOpenGuide={() => {}}
         guideLabel="Гід"
-        recenterLabel="Паблізу"
+        recenterLabel="Дзе я"
         retryLabel="Паўтарыць"
       />
     </>

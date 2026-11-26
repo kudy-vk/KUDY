@@ -16,11 +16,11 @@
 Праверка не пацвярджае жэсты і памеры шрыфту на фізічнай прыладзе.
 
 ```bash
-node --no-warnings -e 'const cp=require("node:child_process");const files=["components/nearby-native-map.test.tsx","components/nearby-location-watch.test.tsx","components/nearby-scroll-layout.test.tsx"];const r=cp.spawnSync(process.execPath,["node_modules/jest/bin/jest.js","--runInBand","--config","jest.config.js",...files],{encoding:"utf8"});const lines=(r.stdout+"\n"+r.stderr).split(/\r?\n/);const passed=lines.filter(x=>/^PASS components\/nearby-/.test(x)).map(x=>x.replace(/\s+\([\d.]+ s\)$/,"")).sort();for(const line of passed)console.log(line);for(const key of ["Test Suites:","Tests:"]){const line=lines.find(x=>x.trim().startsWith(key));if(line)console.log(line.trim().replace(/\s+/g," "));}if(r.status!==0){console.error("Jest failed");process.exit(r.status||1);}'
+node --no-warnings -e 'const cp=require("node:child_process");const files=["components/nearby-native-map.test.tsx","app/nearby-location-watch.test.tsx","components/nearby-scroll-layout.test.tsx"];const r=cp.spawnSync(process.execPath,["node_modules/jest/bin/jest.js","--runInBand","--config","jest.config.js",...files],{encoding:"utf8"});const lines=(r.stdout+"\n"+r.stderr).split(/\r?\n/);const passed=lines.filter(x=>/^PASS (?:app|components)\/nearby-/.test(x)).map(x=>x.replace(/\s+\([\d.]+ s\)$/,"")).sort();for(const line of passed)console.log(line);for(const key of ["Test Suites:","Tests:"]){const line=lines.find(x=>x.trim().startsWith(key));if(line)console.log(line.trim().replace(/\s+/g," "));}if(r.status!==0){console.error("Jest failed");process.exit(r.status||1);}'
 ```
 
 ```output
-PASS components/nearby-location-watch.test.tsx
+PASS app/nearby-location-watch.test.tsx
 PASS components/nearby-native-map.test.tsx
 PASS components/nearby-scroll-layout.test.tsx
 Test Suites: 3 passed, 3 total
@@ -29,7 +29,7 @@ Tests: 5 passed, 5 total
 
 ## Стан праверак
 
-- Каманда вышэй завяршылася з кодам 0 у асобным worktree 2026-11-26.
+- Папярэдні запуск гэтай праверкі завяршыўся з кодам 0 у асобным worktree 2026-11-26. Пасля пераносу тэсту і змены каманды паўторнае лакальнае выкананне пакуль NOT-VERIFIED (лакальны MCP вяртае 429).
 - **Showboat: NOT-VERIFIED.** Лакальны MCP адхіліў
   `uvx showboat==0.6.1` з паведамленнем
   `uvx is limited to the KUDY #835 worktree.`
