@@ -64,6 +64,34 @@ test("the map renders with the hint card and the four layer switches", async () 
   expect(screen.getByText("12")).toBeTruthy();
 });
 
+test("the map keeps a native clipping viewport at every zoom, without the caption", async () => {
+  await renderMap();
+  const map = screen.getByTestId("city-map");
+  const box = StyleSheet.flatten(map.props.style);
+  expect(box).toMatchObject({ overflow: "hidden", width: "100%" });
+  expect(box.aspectRatio).toBeGreaterThan(0);
+  expect(box.transform).toBeUndefined();
+  expect(map.props.collapsable).toBe(false);
+  const assertViewport = () => {
+    const viewport = within(screen.getByTestId("city-map")).getByTestId("city-map-viewport");
+    expect(viewport.props.collapsable).toBe(false);
+    expect(StyleSheet.flatten(viewport.props.style)).toMatchObject({ overflow: "hidden", position: "absolute", top: 0, right: 0, bottom: 0, left: 0 });
+    expect(within(viewport).getByTestId("city-map-world")).toBeTruthy();
+    for (const id of ["zoom-in", "zoom-out", "fit", "google"]) {
+      expect(within(viewport).getByTestId(`city-map-${id}`)).toBeTruthy();
+    }
+    expect(within(viewport).queryByTestId("city-map-layers")).toBeNull();
+    expect(screen.queryByText(aboutCityText(ABOUT_CITY_STRINGS.be)("city.caption"))).toBeNull();
+    expect(StyleSheet.flatten(screen.getByTestId("city-map").props.style)).toEqual(box);
+  };
+  await fireEvent(map, "layout", { nativeEvent: { layout: { width: 320 } } });
+  assertViewport();
+  await fireEvent.press(screen.getByTestId("city-map-zone-glowne"));
+  assertViewport();
+  await fireEvent.press(screen.getByTestId("city-map-fit"));
+  assertViewport();
+});
+
 test("a layer switch turns its chip off through the atlas state", async () => {
   await renderMap();
   await fireEvent.press(screen.getByTestId("city-map-layer-stay"));

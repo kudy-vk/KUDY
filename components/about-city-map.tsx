@@ -798,21 +798,21 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
 
   return (
     <>
-      <View style={styles.orientation}>
-        {/* The gesture root is the map box itself: the app carries no global
-            GestureHandlerRootView, and this section is the only gesture
-            surface (the menu map uses the pressable pieces, not RNGH). */}
-        <GestureHandlerRootView
-          accessibilityLabel={t("map.label")}
-          onLayout={(event) => {
-            const { width } = event.nativeEvent.layout;
-            setBoxW(width);
-          }}
-          style={mapStyles.box}
-          testID="city-map"
-        >
+      {/* Keep a native, fixed-aspect clipping box outside the gesture root:
+          zoom changes the drawing, never the layout of the surrounding screen. */}
+      <View
+        accessibilityLabel={t("map.label")}
+        collapsable={false}
+        onLayout={(event) => {
+          const { width } = event.nativeEvent.layout;
+          setBoxW(width);
+        }}
+        style={mapStyles.box}
+        testID="city-map"
+      >
+        <GestureHandlerRootView style={mapStyles.fill}>
           <GestureDetector gesture={gesture}>
-            <View style={mapStyles.fill}>
+            <View collapsable={false} style={mapStyles.fill} testID="city-map-viewport">
             {/* The world scales with the camera; the signs above do not. */}
             <View style={[mapStyles.world, worldTransform]} testID="city-map-world">
               <Image fadeDuration={0} resizeMode="cover" source={MAP_PICTURE} style={mapStyles.picture} />
@@ -955,7 +955,6 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
             </View>
           </GestureDetector>
         </GestureHandlerRootView>
-        <ScaledText style={styles.note}>{t("city.caption")}</ScaledText>
       </View>
 
       {/* The layer switches: the zone kinds with how many zones each holds,
@@ -1062,6 +1061,7 @@ const mapStyles = StyleSheet.create({
     borderRadius: tokens.radiusBase,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: "hidden",
+    width: "100%",
   },
   // transformOrigin pins the camera math to the top-left corner: the mockup
   // drives the same translate+scale about the picture origin (the browser's
@@ -1069,7 +1069,7 @@ const mapStyles = StyleSheet.create({
   world: { height: MAP_H, left: 0, position: "absolute", top: 0, transformOrigin: "0px 0px", width: MAP_W },
   picture: { height: MAP_H, width: MAP_W },
   drawing: { height: MAP_H, left: 0, position: "absolute", top: 0, width: MAP_W },
-  fill: { ...StyleSheet.absoluteFill },
+  fill: { ...StyleSheet.absoluteFill, overflow: "hidden" },
   marks: { ...StyleSheet.absoluteFill },
   mark: { left: 0, position: "absolute", top: 0 },
   tools: { gap: 8, position: "absolute", right: 8, top: 8 },
@@ -1100,8 +1100,6 @@ const mapStyles = StyleSheet.create({
 // The switches, the card and the zone list follow the screen's palette.
 const createStyles = (palette: ThemeTokens) =>
   StyleSheet.create({
-    orientation: { gap: 6 },
-    note: { color: palette.colorMuted, fontSize: 13, lineHeight: 18 },
     chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
     chip: {
       alignItems: "center",
