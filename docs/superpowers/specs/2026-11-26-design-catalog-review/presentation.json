@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "language": "be",
+  "title": {
+    "be": "Каталог макетаў — мовы і спасылка на кадр",
+    "ru": "Каталог макетов — языки и ссылка на кадр",
+    "en": "Design catalog — languages and frame links"
+  },
+  "zones": {
+    "inputs": {
+      "components": [
+        "c-language",
+        "c-link"
+      ],
+      "explanation": {
+        "be": "Дызайнер выбірае мову або адкрывае адрас патрэбнага кадра.",
+        "ru": "Дизайнер выбирает язык или открывает адрес нужного кадра.",
+        "en": "The designer chooses a language or opens a link to a specific frame."
+      }
+    },
+    "processing": {
+      "components": [
+        "c-captions",
+        "c-view",
+        "c-controls"
+      ],
+      "explanation": {
+        "be": "Каталог знаходзіць прагляд. Дошка правярае налады і выбірае наяўныя подпісы.",
+        "ru": "Каталог находит предпросмотр. Макет проверяет настройки и выбирает доступные подписи.",
+        "en": "The catalog finds the preview. The board validates its controls and selects available labels."
+      }
+    },
+    "outputs": {
+      "components": [
+        "c-frame"
+      ],
+      "explanation": {
+        "be": "Адкрываецца патрэбны прагляд. У макеце адноўленыя налады для светлай і цёмнай тэм.",
+        "ru": "Открывается нужный предпросмотр. Для светлой и тёмной темы восстановлены настройки макета.",
+        "en": "The requested preview opens. A board restores the settings in both light and dark themes."
+      }
+    }
+  },
+  "actions": [
+    {
+      "componentId": "c-language",
+      "label": {
+        "be": "Выбраць мову",
+        "ru": "Выбрать язык",
+        "en": "Choose a language"
+      }
+    },
+    {
+      "componentId": "c-link",
+      "label": {
+        "be": "Адкрыць спасылку",
+        "ru": "Открыть ссылку",
+        "en": "Open a link"
+      }
+    }
+  ],
+  "icons": {},
+  "context": []
+}

@@ -1,0 +1,8 @@
+{
+  "root": {
+    "id": "KUDY-DESIGN-CATALOG-REVIEW",
+    "identifier": "KUDY-DESIGN-CATALOG-REVIEW",
+    "url": "spec.md"
+  },
+  "tasksDirectory": "issues"
+}
