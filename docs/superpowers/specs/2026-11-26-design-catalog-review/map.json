@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 2,
+  "source": {
+    "kind": "files"
+  },
+  "spec": {
+    "id": "kudy-design-catalog-review",
+    "title": "Каталог макетаў — мовы і спасылка на кадр",
+    "sourceUrl": "spec.md",
+    "version": 1,
+    "allowedRepositories": [
+      {
+        "name": "kudy-vk/KUDY",
+        "baseBranches": [
+          "main"
+        ]
+      }
+    ]
+  },
+  "root": {
+    "id": "KUDY-DESIGN-CATALOG-REVIEW",
+    "identifier": "KUDY-DESIGN-CATALOG-REVIEW",
+    "url": "spec.md"
+  },
+  "components": [
+    {
+      "key": "captions",
+      "id": "c-captions",
+      "title": "Подпісы макетаў",
+      "description": "Макет паказвае наяўныя радкі і пазначае выкарыстаны запасны тэкст.",
+      "shape": "rect",
+      "x": 30,
+      "y": 210
+    },
+    {
+      "key": "controls",
+      "id": "c-controls",
+      "title": "Перамыкачы дошкі",
+      "description": "Дошка звярае агульныя налады і перамыкачы экрана з іх дапушчальнымі значэннямі.",
+      "shape": "rect",
+      "x": 445,
+      "y": 210
+    },
+    {
+      "key": "frame",
+      "id": "c-frame",
+      "title": "Кадр для рэвью",
+      "description": "Адкрываецца патрэбны прагляд. У HTML-дошцы бачны той жа набор налад у абедзвюх тэмах.",
+      "shape": "rect",
+      "x": 860,
+      "y": 210
+    },
+    {
+      "key": "language",
+      "id": "c-language",
+      "title": "Выбар мовы",
+      "description": "Дызайнер задае мову ў перамыкачы HTML-макета.",
+      "shape": "rect",
+      "x": 30,
+      "y": 530
+    },
+    {
+      "key": "link",
+      "id": "c-link",
+      "title": "Адрас каталога",
+      "description": "Спасылка змяшчае пункт, укладку і значэнні перамыкачоў кадра.",
+      "shape": "rect",
+      "x": 445,
+      "y": 530
+    },
+    {
+      "key": "view",
+      "id": "c-view",
+      "title": "Выбар прагляду",
+      "description": "Каталог знаходзіць пункт і ўкладку ў кананічным рэестры.",
+      "shape": "rect",
+      "x": 860,
+      "y": 530
+    }
+  ],
+  "connections": [
+    {
+      "key": "captions-frame",
+      "id": "e-captions-frame",
+      "from": "c-captions",
+      "to": "c-frame",
+      "kind": "request",
+      "label": "Аформленыя подпісы"
+    },
+    {
+      "key": "controls-captions",
+      "id": "e-controls-captions",
+      "from": "c-controls",
+      "to": "c-captions",
+      "kind": "request",
+      "label": "Адноўленая мова"
+    },
+    {
+      "key": "controls-frame",
+      "id": "e-controls-frame",
+      "from": "c-controls",
+      "to": "c-frame",
+      "kind": "request",
+      "label": "Прынятыя налады"
+    },
+    {
+      "key": "language-captions",
+      "id": "e-language-captions",
+      "from": "c-language",
+      "to": "c-captions",
+      "kind": "request",
+      "label": "Абраная мова"
+    },
+    {
+      "key": "link-view",
+      "id": "e-link-view",
+      "from": "c-link",
+      "to": "c-view",
+      "kind": "request",
+      "label": "Пункт і ўкладка"
+    },
+    {
+      "key": "view-controls",
+      "id": "e-view-controls",
+      "from": "c-view",
+      "to": "c-controls",
+      "kind": "request",
+      "label": "Параметры кадра"
+    },
+    {
+      "key": "view-frame",
+      "id": "e-view-frame",
+      "from": "c-view",
+      "to": "c-frame",
+      "kind": "request",
+      "label": "Патрэбны прагляд"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T01",
+      "identifier": "T01",
+      "title": "01. «Налады» і «Прагулка» на ўсіх мовах перамыкача",
+      "url": "issues/01-render-critical-locales.md",
+      "evidence": {
+        "type": "merged_pr",
+        "requiredPRs": []
+      }
+    },
+    {
+      "id": "T02",
+      "identifier": "T02",
+      "title": "02. Подпісы ў меню, гідах і прэв’ю гіда",
+      "url": "issues/02-complete-mockup-labels.md",
+      "evidence": {
+        "type": "merged_pr",
+        "requiredPRs": []
+      }
+    },
+    {
+      "id": "T03",
+      "identifier": "T03",
+      "title": "03. Спасылка на выбраны прагляд каталога",
+      "url": "issues/03-link-catalog-view.md",
+      "evidence": {
+        "type": "merged_pr",
+        "requiredPRs": []
+      }
+    },
+    {
+      "id": "T04",
+      "identifier": "T04",
+      "title": "04. Спасылка з памерам, мовай і маштабам тэксту",
+      "url": "issues/04-restore-board-controls.md",
+      "evidence": {
+        "type": "merged_pr",
+        "requiredPRs": []
+      }
+    },
+    {
+      "id": "T05",
+      "identifier": "T05",
+      "title": "05. Подпісы ў KUDY, «Чым заняцца» і форме ацэнкі",
+      "url": "issues/05-label-discovery-and-feedback.md",
+      "evidence": {
+        "type": "merged_pr",
+        "requiredPRs": []
+      }
+    },
+    {
+      "id": "T06",
+      "identifier": "T06",
+      "title": "06. Спасылка з перамыкачамі канкрэтнага макета",
+      "url": "issues/06-restore-screen-presets.md",
+      "evidence": {
+        "type": "merged_pr",
+        "requiredPRs": []
+      }
+    }
+  ],
+  "mapping": [
+    {
+      "componentId": "c-captions",
+      "taskId": "T01"
+    },
+    {
+      "componentId": "c-frame",
+      "taskId": "T01"
+    },
+    {
+      "componentId": "c-language",
+      "taskId": "T01"
+    },
+    {
+      "componentId": "c-captions",
+      "taskId": "T02"
+    },
+    {
+      "componentId": "c-frame",
+      "taskId": "T02"
+    },
+    {
+      "componentId": "c-language",
+      "taskId": "T02"
+    },
+    {
+      "componentId": "c-frame",
+      "taskId": "T03"
+    },
+    {
+      "componentId": "c-link",
+      "taskId": "T03"
+    },
+    {
+      "componentId": "c-view",
+      "taskId": "T03"
+    },
+    {
+      "componentId": "c-controls",
+      "taskId": "T04"
+    },
+    {
+      "componentId": "c-frame",
+      "taskId": "T04"
+    },
+    {
+      "componentId": "c-link",
+      "taskId": "T04"
+    },
+    {
+      "componentId": "c-captions",
+      "taskId": "T05"
+    },
+    {
+      "componentId": "c-frame",
+      "taskId": "T05"
+    },
+    {
+      "componentId": "c-language",
+      "taskId": "T05"
+    },
+    {
+      "componentId": "c-controls",
+      "taskId": "T06"
+    },
+    {
+      "componentId": "c-frame",
+      "taskId": "T06"
+    },
+    {
+      "componentId": "c-link",
+      "taskId": "T06"
+    }
+  ],
+  "links": []
+}

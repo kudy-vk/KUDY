@@ -1,0 +1,190 @@
+{
+  "spec": {
+    "id": "kudy-design-catalog-review",
+    "title": "Каталог макетаў — мовы і спасылка на кадр",
+    "sourceUrl": "spec.md",
+    "version": 1,
+    "allowedRepositories": [
+      {
+        "name": "kudy-vk/KUDY",
+        "baseBranches": [
+          "main"
+        ]
+      }
+    ]
+  },
+  "root": {
+    "id": "KUDY-DESIGN-CATALOG-REVIEW",
+    "identifier": "KUDY-DESIGN-CATALOG-REVIEW",
+    "url": "spec.md"
+  },
+  "source": {
+    "kind": "files"
+  },
+  "components": [
+    {
+      "key": "language",
+      "title": "Выбар мовы",
+      "description": "Дызайнер задае мову ў перамыкачы HTML-макета.",
+      "shape": "rect"
+    },
+    {
+      "key": "link",
+      "title": "Адрас каталога",
+      "description": "Спасылка змяшчае пункт, укладку і значэнні перамыкачоў кадра.",
+      "shape": "rect"
+    },
+    {
+      "key": "captions",
+      "title": "Подпісы макетаў",
+      "description": "Макет паказвае наяўныя радкі і пазначае выкарыстаны запасны тэкст.",
+      "shape": "rect"
+    },
+    {
+      "key": "view",
+      "title": "Выбар прагляду",
+      "description": "Каталог знаходзіць пункт і ўкладку ў кананічным рэестры.",
+      "shape": "rect"
+    },
+    {
+      "key": "controls",
+      "title": "Перамыкачы дошкі",
+      "description": "Дошка звярае агульныя налады і перамыкачы экрана з іх дапушчальнымі значэннямі.",
+      "shape": "rect"
+    },
+    {
+      "key": "frame",
+      "title": "Кадр для рэвью",
+      "description": "Адкрываецца патрэбны прагляд. У HTML-дошцы бачны той жа набор налад у абедзвюх тэмах.",
+      "shape": "rect"
+    }
+  ],
+  "connections": [
+    {
+      "key": "language-captions",
+      "fromKey": "language",
+      "toKey": "captions",
+      "kind": "request",
+      "label": "Абраная мова"
+    },
+    {
+      "key": "link-view",
+      "fromKey": "link",
+      "toKey": "view",
+      "kind": "request",
+      "label": "Пункт і ўкладка"
+    },
+    {
+      "key": "view-controls",
+      "fromKey": "view",
+      "toKey": "controls",
+      "kind": "request",
+      "label": "Параметры кадра"
+    },
+    {
+      "key": "controls-captions",
+      "fromKey": "controls",
+      "toKey": "captions",
+      "kind": "request",
+      "label": "Адноўленая мова"
+    },
+    {
+      "key": "view-frame",
+      "fromKey": "view",
+      "toKey": "frame",
+      "kind": "request",
+      "label": "Патрэбны прагляд"
+    },
+    {
+      "key": "captions-frame",
+      "fromKey": "captions",
+      "toKey": "frame",
+      "kind": "request",
+      "label": "Аформленыя подпісы"
+    },
+    {
+      "key": "controls-frame",
+      "fromKey": "controls",
+      "toKey": "frame",
+      "kind": "request",
+      "label": "Прынятыя налады"
+    }
+  ],
+  "assignments": [
+    {
+      "componentKey": "language",
+      "taskIds": [
+        "T01",
+        "T02",
+        "T05"
+      ]
+    },
+    {
+      "componentKey": "link",
+      "taskIds": [
+        "T03",
+        "T04",
+        "T06"
+      ]
+    },
+    {
+      "componentKey": "captions",
+      "taskIds": [
+        "T01",
+        "T02",
+        "T05"
+      ]
+    },
+    {
+      "componentKey": "view",
+      "taskIds": [
+        "T03"
+      ]
+    },
+    {
+      "componentKey": "controls",
+      "taskIds": [
+        "T04",
+        "T06"
+      ]
+    },
+    {
+      "componentKey": "frame",
+      "taskIds": [
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06"
+      ]
+    }
+  ],
+  "evidence": {
+    "T01": {
+      "type": "merged_pr",
+      "requiredPRs": []
+    },
+    "T02": {
+      "type": "merged_pr",
+      "requiredPRs": []
+    },
+    "T03": {
+      "type": "merged_pr",
+      "requiredPRs": []
+    },
+    "T04": {
+      "type": "merged_pr",
+      "requiredPRs": []
+    },
+    "T05": {
+      "type": "merged_pr",
+      "requiredPRs": []
+    },
+    "T06": {
+      "type": "merged_pr",
+      "requiredPRs": []
+    }
+  },
+  "links": []
+}
