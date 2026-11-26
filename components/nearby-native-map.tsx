@@ -100,7 +100,7 @@ export function NearbyNativeMap({
     const first = offer.preview_points[0];
     return [{ offer, routeId: offer.route_id, coordinate: [first.lng, first.lat] as [number, number] }];
   }), [offers]);
-  const initialViewState = useRef({ center: points[0]?.coordinate ?? TRICITY_CENTER, zoom: MAP_ZOOM }).current;
+  const initialViewState = useRef({ center: points[0]?.coordinate ?? TRICITY_CENTER, zoom: MAP_ZOOM });
 
   useEffect(() => {
     if (position) hadGpsPosition.current = true;
@@ -115,8 +115,8 @@ export function NearbyNativeMap({
     if (loaded && !position && points.length && following.current &&
         !hadGpsPosition.current && !guideCentered.current) {
       guideCentered.current = true;
-      // A tile retry remounts Camera: use this guide, not the older Tricity start.
-      initialViewState.center = points[0].coordinate;
+      // MapLibre can freeze camera props; a retry needs a fresh viewport object.
+      initialViewState.current = { center: points[0].coordinate, zoom: MAP_ZOOM };
       camera.current?.easeTo({ center: points[0].coordinate, zoom: MAP_ZOOM, duration: 650, easing: "ease" });
     }
   }, [loaded, points, position]);
@@ -146,7 +146,7 @@ export function NearbyNativeMap({
           }}
           testID="nearby-native-map"
         >
-          <Camera ref={camera} initialViewState={initialViewState} />
+          <Camera ref={camera} initialViewState={initialViewState.current} />
           {loaded && position ? (
             <Marker id="nearby-position" lngLat={[...position] as [number, number]}>
               <View style={styles.position} testID="nearby-current-position" />

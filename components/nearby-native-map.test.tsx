@@ -97,15 +97,21 @@ test("retry restores a late-arriving guide center after a tile failure with no G
   cameraCalls.length = 0;
   const rendered = await render(<NearbyNativeMap {...props} offers={[]} />);
   await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
-  expect(screen.getByTestId("mock-map-camera").props.initialViewState.center).toEqual([18.6, 54.41]);
+  const firstCameraState = screen.getByTestId("mock-map-camera").props.initialViewState;
+  expect(firstCameraState.center).toEqual([18.6, 54.41]);
+  // Native MapLibre may freeze the supplied prop. The late guide must not mutate it.
+  Object.freeze(firstCameraState);
 
   await rendered.rerender(<NearbyNativeMap {...props} offers={[guide]} />);
+  expect(firstCameraState.center).toEqual([18.6, 54.41]);
   expect(cameraCalls.at(-1)).toEqual(expect.objectContaining({ center: [18.65, 54.35] }));
 
   await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFailLoadingMap");
   expect(screen.queryByTestId("nearby-native-map")).toBeNull();
   await fireEvent.press(screen.getByTestId("nearby-map-retry"));
-  expect(screen.getByTestId("mock-map-camera").props.initialViewState.center).toEqual([18.65, 54.35]);
+  const retryCameraState = screen.getByTestId("mock-map-camera").props.initialViewState;
+  expect(retryCameraState).not.toBe(firstCameraState);
+  expect(retryCameraState.center).toEqual([18.65, 54.35]);
 
   const callsAtRetry = cameraCalls.length;
   await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
