@@ -1,6 +1,7 @@
 // Discovery's Android screen can have more offer cards than fit in one
 // UIAutomator dump. Exercise real viewport-aware scrolling without an AVD.
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import { runDiscoverySuite, scrollTo } from './discovery.mjs';
@@ -55,6 +56,61 @@ test('Discovery reaches an offscreen paid card and badge, then scrolls back to i
     ['shell', 'input', 'swipe', '540', '1853', '540', '722', '350'],
     ['shell', 'input', 'swipe', '540', '722', '540', '1853', '350'],
   ]);
+});
+
+test('Discovery finds the Nearby place card below the visible guide cards', async () => {
+  let scrolled = false;
+  const swipes = [];
+  const driver = {
+    dump: async () => ({
+      xml: viewport('scroll-nearby') +
+        item('nearby-card-offer-guide-e2e-free') +
+        item('nearby-card-offer-place-e2e-1',
+          scrolled ? '[44,1600][1036,2000]' : '[44,2610][1036,2230]'),
+    }),
+    exec: async (args) => { swipes.push(args); scrolled = true; },
+  };
+  const place = await scrollTo(driver, 'nearby-card-offer-place-e2e-1',
+    'nearby-place', { scrollID: 'scroll-nearby' });
+  assert.equal(place.resourceId, 'nearby-card-offer-place-e2e-1');
+  assert.equal(swipes.length, 1, 'a visible place should be found after a single scroll');
+});
+
+test('Discovery can navigate the offscreen feedback Send/Delete and the delivery row at the top', async () => {
+  let position = 'top';
+  const swipes = [];
+  const driver = {
+    dump: async () => ({
+      xml: viewport('scroll-feedback') +
+        item('feedback-title', position === 'top' ? '[44,450][1036,570]' : '[44,-250][1036,-150]') +
+        item('btn-feedback-send', position === 'bottom' ? '[44,1600][1036,1720]' : '[44,2381][1036,2230]') +
+        item('btn-feedback-delete', position === 'bottom' ? '[44,1750][1036,1880]' : '[44,2540][1036,2230]'),
+    }),
+    exec: async (args) => {
+      swipes.push(args);
+      position = args[4] === '1853' ? 'bottom' : 'top';
+    },
+  };
+  assert.equal((await scrollTo(driver, 'btn-feedback-send', 'send-first',
+    { scrollID: 'scroll-feedback' })).resourceId, 'btn-feedback-send');
+  assert.equal((await scrollTo(driver, 'feedback-title', 'delivery-up',
+    { scrollID: 'scroll-feedback', direction: 'up' })).resourceId, 'feedback-title');
+  assert.equal((await scrollTo(driver, 'btn-feedback-delete', 'delete-down',
+    { scrollID: 'scroll-feedback' })).resourceId, 'btn-feedback-delete');
+  assert.deepEqual(swipes.map((args) => args[4]), ['1853', '722', '1853']);
+});
+
+test('Discovery E2E scrolls to the Nearby card and Feedback actions before selecting them', () => {
+  const script = readFileSync(new URL('./discovery.mjs', import.meta.url), 'utf8');
+  assert.match(script, /scrollTo\(driver, 'nearby-card-offer-place-e2e-1',[^\n]*'scroll-nearby'/);
+  assert.match(script, /scrollTo\(driver, 'btn-feedback-send', 'feedback-send-first',[^\n]*'scroll-feedback'/);
+  assert.match(script, /scrollTo\(driver, 'btn-feedback-send', 'feedback-send-edited',[^\n]*'scroll-feedback'/);
+  assert.match(script, /scrollTo\(driver, 'feedback-title', 'feedback-after-send',[^\n]*'up'/);
+  assert.match(script, /scrollTo\(driver, 'feedback-title', 'feedback-after-edit',[^\n]*'up'/);
+  assert.match(script, /scrollTo\(driver, 'btn-feedback-delete', 'feedback-delete',[^\n]*'scroll-feedback'/);
+  assert.match(script, /scrollTo\(driver, 'feedback-title', `feedback-deletion-state-\$\{attempt\}`,[^\n]*'up'/);
+  assert.match(script, /scrollTo\(driver, 'btn-feedback-delete', 'feedback-delete-retry',[^\n]*'scroll-feedback'/);
+  assert.doesNotMatch(script, /driver\.waitFor\(\{ testID: 'nearby-card-offer-place-e2e-1'/);
 });
 
 test('Discovery scroll helper supports the separate guide preview viewport', async () => {
