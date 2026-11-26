@@ -3,7 +3,7 @@
 // знаходкі», comfort, help and data — and the separate exclusions screen of
 // «Гіды для мяне» (S2). Choices made inside the phone are real: they redraw
 // both phones, because both show the same app with one stored preference.
-import { button, el, icon, LOCALES, mountBoard, registerIcons, topbar, walkButton } from './kit.mjs';
+import { button, el, icon, LOCALES, markDraftLanguages, mountBoard, registerIcons, resolveDraftString, topbar, walkButton } from './kit.mjs';
 
 // Lucide shapes this screen alone needs (lucide-react-native, ISC).
 registerIcons({
@@ -105,8 +105,15 @@ await mountBoard({
     { id: 'sounds', label: 'Гукі дракона', options: [['no', 'Не выпушчаныя'], ['yes', 'Выпушчаныя']] },
   ],
   stringIds: [BACK, WALK, LANGUAGE, SOON, PRIVACY],
-  build({ frame, body, theme, state, strings, say }) {
-    const t = (key, values = {}) => T[key][ORDER.indexOf(state.locale)].replace(/\$\{(\w+)\}/g, (_, name) => values[name]);
+  build({ frame, body, theme, state, strings, say, markFallback }) {
+    const draftLanguages = new Map();
+    const t = (key, values = {}) => {
+      const draft = resolveDraftString(T[key], state.locale, ORDER);
+      if (draft.language !== state.locale) markFallback(draft.language);
+      const text = draft.value.replace(/\$\{(\w+)\}/g, (_, name) => values[name]);
+      if (draft.language !== state.locale) draftLanguages.set(text, draft.language);
+      return text;
+    };
     const act = (text, focus, control, value) => apply(text, theme, focus, control, value);
     const walk = state.walk === 'yes' && walkButton(strings[WALK], () => say(`Вяртанне да бягучай прагулкі («${strings[WALK]}»): панэль у ранейшым становішчы.`));
     const hidden = prefs.hidden.size;
@@ -216,6 +223,7 @@ await mountBoard({
         right: walk ? [walk] : [],
       }),
       scroller);
+    markDraftLanguages(body, draftLanguages);
 
     // After a choice: keep the place, the focus and the report of what happened.
     const place = `${theme}:${state.view}`;

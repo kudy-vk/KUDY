@@ -110,6 +110,7 @@ button, select, input { font: inherit; color: inherit; }
 }
 .controls button { cursor: pointer; }
 .event { min-height: 24px; margin: 12px 0 0; font-size: 14px; color: #6b7280; }
+.fallback-status { margin: 4px 0 0; font-size: 14px; color: #6b7280; }
 .phones { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin-top: 16px; }
 .phones figure { margin: 0; }
 .phones figcaption { margin-bottom: 8px; font-size: 13px; color: #6b7280; }

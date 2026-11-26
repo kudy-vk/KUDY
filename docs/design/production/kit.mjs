@@ -45,6 +45,27 @@ export const LOCALES = {
   pt: 'Português',
 };
 
+// Resolve only the mockup's local draft strings. App-contract strings continue
+// to come from appStrings() in the locale selected on the review board.
+export function resolveDraftString(values, locale, order = []) {
+  const valueFor = (language) => (Array.isArray(values)
+    ? values[order.indexOf(language)]
+    : values[language]);
+  for (const language of [locale, 'en', 'be']) {
+    const value = valueFor(language);
+    if (typeof value === 'string' && value.length > 0) return { value, language };
+  }
+  throw new Error(`No local draft string for ${locale}, en or be`);
+}
+
+export function markDraftLanguages(root, languagesByText) {
+  for (const node of root.querySelectorAll('*')) {
+    const text = node.children.length === 0 ? node.textContent.trim() : '';
+    const language = languagesByText.get(text) ?? languagesByText.get(node.getAttribute('aria-label'));
+    if (language) node.lang = language;
+  }
+}
+
 // ---------- icons ----------
 
 // A screen may add Lucide shapes it alone needs without touching the shared file.
@@ -132,14 +153,25 @@ export async function mountBoard({ controls = [], stringIds = [], build }) {
   const bar = el('div', { className: 'controls' });
   const event = el('p', { className: 'event' });
   event.setAttribute('role', 'status');
+  const fallback = el('p', { className: 'fallback-status', hidden: true });
+  fallback.setAttribute('role', 'status');
   const phones = el('div', { className: 'phones' });
   const say = (text) => { event.textContent = text; };
+  const fallbackLanguages = new Set();
+  const markFallback = (language) => {
+    fallbackLanguages.add(language);
+    fallback.hidden = false;
+    fallback.textContent = `Draft text: ${[...fallbackLanguages].map((code) => LOCALES[code] ?? code).join(', ')}`;
+  };
   let cleanups = [];
   let latest = 0;
 
   // A newer redraw supersedes one still in progress, so the board never shows stale phones.
   async function draw() {
     const run = (latest += 1);
+    fallbackLanguages.clear();
+    fallback.hidden = true;
+    fallback.textContent = '';
     try {
       const strings = await appStrings(state.locale, stringIds);
       if (run !== latest) return;
@@ -152,7 +184,7 @@ export async function mountBoard({ controls = [], stringIds = [], build }) {
         made.frame.lang = state.locale;
         made.frame.style.setProperty('--fs', state.scale);
         phones.append(el('figure', {}, el('figcaption', { textContent: theme === 'dark' ? 'Цёмная тэма' : 'Светлая тэма' }), made.frame));
-        const cleanup = await build({ ...made, theme, state, strings, say });
+        const cleanup = await build({ ...made, theme, state, strings, say, markFallback });
         if (run !== latest) {
           if (typeof cleanup === 'function') cleanup();
           return;
@@ -178,7 +210,7 @@ export async function mountBoard({ controls = [], stringIds = [], build }) {
   const again = el('button', { type: 'button', textContent: 'Адкрыць экран нанова' });
   again.addEventListener('click', draw);
   bar.append(again);
-  root.append(bar, event, phones);
+  root.append(bar, event, fallback, phones);
   await document.fonts.load('16px "Golos Text"');
   await document.fonts.load('32px Alegreya');
   await draw();
