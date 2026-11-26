@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import { PNG } from 'pngjs';
+import { scrollTo } from './discovery.mjs';
 
 import {
   COMPARISON,
@@ -105,6 +106,29 @@ test('captureFileName maps the slot id to the driver-safe name and rejects non-s
 
 test('storySurfacesFromNames names the surfaces after the stories', () => {
   assert.deepEqual(storySurfacesFromNames(['free']).map((surface) => surface.id), ['guide-card-free']);
+});
+
+test('about-city visual capture scrolls its clipped atlas row into the 1.5× viewport', async () => {
+  // Captured Android XML: scroll-about-city [0,692][1080,2274], and the
+  // open fold row [112,2323][968,2274] (inverted by clipping).
+  const viewport = '<node resource-id="scroll-about-city" bounds="[0,692][1080,2274]"/>';
+  let visible = false;
+  const swipes = [];
+  const driver = {
+    dump: async () => ({ xml: viewport + (visible
+      ? '<node resource-id="city-map-zone-glowne" bounds="[112,1530][968,1730]"/>'
+      : '<node resource-id="city-map-zone-glowne" bounds="[112,2323][968,2274]"/>') }),
+    exec: async (args) => { swipes.push(args); visible = true; },
+  };
+  const zone = await scrollTo(driver, 'city-map-zone-glowne', 'about-city-list-font1.5',
+    { scrollID: 'scroll-about-city' });
+  assert.equal(zone.resourceId, 'city-map-zone-glowne');
+  assert.equal(swipes.length, 1, 'a clipped row should need one swipe, not a 30s wait');
+
+  // Integration guard: a helper unit test alone cannot protect the caller.
+  const source = fs.readFileSync(SCRIPT, 'utf8');
+  assert.match(source, /await driver\.tapSelector\(\{ testID: 'fold-atlas-list' \}[^\n]*\);\s*\/\/[^\n]*\n[^]*?await scrollTo\(driver, 'city-map-zone-glowne', [^\n]*'scroll-about-city'/);
+  assert.match(source, /await scrollTo\(driver, 'city-map-zone-glowne'[^\n]*\);\s*await waitSettled\(driver, \{ testID: 'city-map-zone-glowne' \}/);
 });
 
 // ---------- comparison (criterion 3) ----------
