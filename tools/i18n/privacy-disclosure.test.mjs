@@ -76,6 +76,19 @@ const RETENTION_PROBES = {
   bs: { aggregate: 'agregirani brojevi', retention: '14 mjeseci' },
   mk: { aggregate: 'агрегирани бројки', retention: '14 месеци' },
   sq: { aggregate: 'numra të agreguar', retention: '14 muaj' },
+  is: { aggregate: 'samanteiknaðar tölur', retention: '14 mánuði' },
+  ga: { aggregate: 'uimhreacha comhiomlánta', retention: '14 mí' },
+  mt: { aggregate: 'numri miġma', retention: '14 xahar' },
+  ca: { aggregate: 'xifres agregades', retention: '14 mesos' },
+  tr: { aggregate: 'toplu sayılar', retention: '14 ay' },
+  ru: { aggregate: 'агрегированные числа', retention: '14 месяцев' },
+  lb: { aggregate: 'aggregéiert Zuelen', retention: '14 Mount' },
+  cnr: { aggregate: 'агрегирани бројеви', retention: '14 мјесеци' },
+  nn: { aggregate: 'samantelte tal', retention: '14 månader' },
+  rm: { aggregate: 'numers agregads', retention: '14 mais' },
+  ka: { aggregate: 'აგრეგირებული რიცხვები', retention: '14 თვე' },
+  hy: { aggregate: 'ագրեգացված թվեր', retention: '14 ամիս' },
+  az: { aggregate: 'aqreqatlı rəqəmlər', retention: '14 ay' },
 };
 
 test('be source names RevenueCat, the device registration, the IP hash and the deletion boundary', () => {
@@ -248,6 +261,71 @@ const APPDATA_PROBES = {
     ipHash: 'hash njëdrejtimsh të adresës IP',
     ratings: 'arsyet e zgjedhura',
     accessKey: 'si çelës qasjeje',
+  },
+  is: {
+    ipHash: 'einþáttarhash á IP-vistfangi',
+    ratings: 'valdar ástæður',
+    accessKey: 'sem aðgangslykil',
+  },
+  ga: {
+    ipHash: 'hais aonbhealaigh ar an seoladh IP',
+    ratings: 'na cúiseanna roghnaithe',
+    accessKey: 'mar eochair rochtana',
+  },
+  mt: {
+    ipHash: "hash unidirezzjonali ta' l-indirizz IP",
+    ratings: 'raġuni magħżula',
+    accessKey: "ta' aċċess",
+  },
+  ca: {
+    ipHash: "hash unidireccional de l'adreça IP",
+    ratings: 'els motius seleccionats',
+    accessKey: "com a clau d'accés",
+  },
+  tr: {
+    ipHash: 'tek yönlü karma',
+    ratings: 'seçilen nedenler',
+    accessKey: 'erişim anahtarı olarak',
+  },
+  ru: {
+    ipHash: 'однонаправленный хеш IP-адреса',
+    ratings: 'выбранные причины',
+    accessKey: 'как ключ доступа',
+  },
+  lb: {
+    ipHash: 'Hash vun der IP-Adress',
+    ratings: 'gewielte Grënn',
+    accessKey: 'Zougangsschlëssel',
+  },
+  cnr: {
+    ipHash: 'једносмјерни hash IP адресе',
+    ratings: 'изабрани разлози',
+    accessKey: 'као кључ за приступ',
+  },
+  nn: {
+    ipHash: 'einsretta hash av IP-adressa',
+    ratings: 'valde årsaker',
+    accessKey: 'som tilgangsnøkkel',
+  },
+  rm: {
+    ipHash: "hash en ina direcziun da l'adressa IP",
+    ratings: 'las raschuns tschernidas',
+    accessKey: "clav d'access",
+  },
+  ka: {
+    ipHash: 'ერთმხრივ ჰეშს',
+    ratings: 'არჩეული მიზეზები',
+    accessKey: 'წვდომის გასაღებად',
+  },
+  hy: {
+    ipHash: 'IP հասցեի միակողմանի հեշ',
+    ratings: 'ընտրված պատճառներ',
+    accessKey: 'որպես մուտքի բանալի',
+  },
+  az: {
+    ipHash: 'tək istiqamətli heşi',
+    ratings: 'seçilmiş səbəblər',
+    accessKey: 'giriş açarı kimi',
   },
 };
 

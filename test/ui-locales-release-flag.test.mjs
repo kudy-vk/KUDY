@@ -3,8 +3,8 @@
 // import, so the module facts evaluate under a set flag exactly as a build
 // would inline it. The flag names only unregistered codes here (no gated
 // code exists in the real registry until G21.45/G21.46), so the facts must
-// answer with the frozen eight — the same answer the absent-flag case gives.
-process.env.EXPO_PUBLIC_OPEN_UI_LOCALES = 'bogus, ,ru';
+// answer with the fourteen owner-decided open locales — the same answer the absent-flag case gives.
+process.env.EXPO_PUBLIC_OPEN_UI_LOCALES = 'bogus, ,aa';
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,7 +16,7 @@ const { uiLocales, prefixedUiLocales, defaultUiLocale, isPrefixedUiLocale } = aw
 
 test('the module facts evaluate under the set flag and open nothing unregistered (criterion 1)', () => {
   assert.equal(RELEASE_FLAG_ENV, 'EXPO_PUBLIC_OPEN_UI_LOCALES');
-  assert.deepEqual([...OPEN_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv']);
+  assert.deepEqual([...OPEN_UI_LOCALES], ['be', 'en', 'uk', 'de', 'es', 'fr', 'cs', 'sv', 'nb', 'pl', 'da', 'nl', 'pt', 'it']);
   assert.deepEqual([...releaseOpenUiLocales(process.env[RELEASE_FLAG_ENV])], [...OPEN_UI_LOCALES]);
 });
 

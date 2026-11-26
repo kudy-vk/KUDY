@@ -272,21 +272,88 @@
   .srow:active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
   .srow .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
   .srow > .icon { color: var(--accent); }
+  /* About City: hide the visual scrollbar only. Touch, wheel, keyboard
+     and assistive-technology scrolling must continue to work. */
+  .page.scroll { scrollbar-width: none; -ms-overflow-style: none; }
+  .page.scroll::-webkit-scrollbar { display: none; }
+  /* #256: compact, branded actions within the accepted KUDY materials. */
+  .food-short-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .food-short-fact {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; min-width: 0; min-height: 65px; padding: 6px 3px; color: var(--ink);
+    text-align: center; font-size: calc(12px * var(--fs)); line-height: 1.28;
+  }
+  .food-short-fact .icon { color: var(--accent); flex: none; }
+  .food-cash-compact { display: grid; gap: 8px; min-width: 0; }
+  .food-key-tip { color: var(--ink); font-size: calc(14px * var(--fs)); line-height: 1.45; }
+  .food-link-pair { display: flex; flex-wrap: wrap; gap: 2px 14px; align-items: center; }
+  .food-mini-link {
+    display: inline-flex; align-items: center; justify-content: flex-start; gap: 5px;
+    min-height: 44px; padding: 6px 0; border: 0; background: none;
+    color: var(--accent); cursor: pointer; font-size: calc(13px * var(--fs));
+    font-weight: 600; line-height: 1.3; text-align: left;
+  }
+  .food-mini-link > span { display: inline-flex; align-items: center; gap: 5px; }
+  .food-mini-link .icon { flex: none; }
+  .food-hint { display: grid; gap: 2px; min-width: 0; }
+  .food-hint-trigger {
+    display: inline-flex; align-items: center; justify-self: start; gap: 8px;
+    min-height: 44px; padding: 7px 4px; border: 0; border-radius: 7px;
+    background: transparent; color: var(--accent); cursor: pointer;
+    font-size: calc(13px * var(--fs)); line-height: 1.4; text-align: left;
+  }
+  .food-hint-panel { display: grid; gap: 8px; padding: 5px 2px 9px; line-height: 1.45; }
+  .food-hint-panel[hidden] { display: none !important; }
+  .food-hint-panel p { margin: 0; font-size: calc(13px * var(--fs)); }
+  .food-brand-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .food-brand {
+    display: grid; place-items: center; width: 100%; min-width: 0;
+    min-height: 104px; padding: 9px 5px; border: 1px solid var(--line);
+    border-radius: 11px; background: var(--card); color: var(--ink);
+    cursor: pointer; text-align: center;
+  }
+  .food-brand:hover { background: color-mix(in srgb, var(--accent) 5%, var(--card)); }
+  .food-brand:active { background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
+  .food-brand-stack { display: grid; justify-items: center; align-content: center; gap: 5px; min-width: 0; }
+  .food-brand-art { display: grid; place-items: center; height: 45px; width: 100%; }
+  .food-brand-art img { display: block; width: 44px; height: 44px; object-fit: contain; }
+  .food-brand-art > .icon { color: var(--accent); }
+  .food-brand-name { font-size: calc(12px * var(--fs)); font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+  .food-brand-note { color: var(--muted); font-size: calc(11px * var(--fs)); line-height: 1.25; white-space: pre-line; }
+  /* These wordmarks are labels for brands without bundled vector sources,
+     not stand-ins for KUDY icons or additional UI accent colours. */
+  .food-wordmark { display: block; max-width: 100%; font-weight: 700; line-height: 1.1; }
+  .food-wordmark-pyszne { color: #FF8000; font-size: calc(15px * var(--fs)); }
+  .food-wordmark-wolt { color: #0099c7; font-size: calc(23px * var(--fs)); font-style: italic; letter-spacing: -.04em; }
+  .food-wordmark-bolt { color: #20a85b; font-size: calc(16px * var(--fs)); letter-spacing: -.025em; }
+  .food-brand:focus-visible, .food-mini-link:focus-visible, .food-hint-trigger:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 2px;
+  }
+  @media (max-width: 380px) {
+    .food-brand { min-height: 98px; }
+    .food-brand-art img { width: 37px; height: 37px; }
+    .food-wordmark-wolt { font-size: calc(20px * var(--fs)); }
+  }
 </style>
 </head>
 <body>
 <main class="board">
   <h1>Пра горад</h1>
-  <p class="lead">Фінальны макет. Практычны даведнік па Гданьску. Уверсе круціцца кола раздзелаў: пацягні яго і адпусці — яно пакоціцца далей з той сілай, з якой яго штурхнулі, і спыніцца роўна на раздзеле. Пад колам адкрыты раздзел, што стаіць пасярэдзіне. Раздзел складзены з крокаў, рэйсаў з лічбамі, цэн, пераключальнікаў і згортванняў, а не з абзацаў. Даведнік паказваецца мовай інтэрфейсу, калі для яе ёсць тэкст, інакш па-англійску (рашэнне L1); цяпер тэкст ёсць па-англійску і па-беларуску. Перамыкачы над тэлефонам да экрана не належаць.</p>
+  <p class="lead">Фінальны макет. Усе чатыры згортванні раздзела «Ежа і аплата» спачатку закрытыя. Практычны даведнік па Гданьску. Уверсе круціцца кола раздзелаў: пацягні яго і адпусці — яно пакоціцца далей з той сілай, з якой яго штурхнулі, і спыніцца роўна на раздзеле. Пад колам адкрыты раздзел, што стаіць пасярэдзіне. Раздзел складзены з крокаў, рэйсаў з лічбамі, цэн, пераключальнікаў і згортванняў, а не з абзацаў. Даведнік паказваецца мовай інтэрфейсу, калі для яе ёсць тэкст, інакш па-англійску (рашэнне L1); цяпер тэкст ёсць па-англійску і па-беларуску. Перамыкачы над тэлефонам да экрана не належаць.</p>
   <ul class="based">
     <li>Шапка са стрэлкай «Назад» і кнопкай вяртання да прагулкі — як у <a href="place.html">«Месцы»</a> і <a href="discovery.html">«Чым заняцца»</a>.</li>
     <li>Кружочкі кола — медальёны частак карты з <a href="menu.html">галоўнага экрана</a> з няроўным, нібы намаляваным рукой кантам; абраны мае акцэнтнае кольца і бурштынавае свячэнне. У цёмнай тэме дыск цёмны (рашэнне M9).</li>
     <li>Загаловак раздзела набраны Golos, а не Alegreya: канон пакідае Alegreya назвам гідаў і гісторый.</li>
-    <li>Пераключальнікі — пераключальнік тэмы з <a href="settings.html">«Налад»</a>; чыпы спосабу аплаты — чыпы выбару з <a href="discovery.html">«Чым заняцца»</a>.</li>
+    <li>Пераключальнікі — пераключальнік тэмы з <a href="settings.html">«Налад»</a>; кнопкі спасылак — кампактныя дзеянні ў групах.</li>
     <li>Згортванні — прыём доўгіх спісаў з <a href="preview.html">«Прэв'ю гіда»</a>; спіс афіцыйных старонак — радкі <a href="settings.html">«Налад»</a>.</li>
     <li>Раздзел «Гданьск з аднаго погляду» — карта Труймяста з мэтавага экрана ўладальніка (#248): малюнак карты з яго ўзятыя як падкладка, а зоны, чыгунка, станцыі і аэрапорт нанесеныя паверх па геаграфічных каардынатах і націскаюцца. Карту можна наблізіць і аддаліць. Як і мапа ў <a href="nearby.html">«Побач»</a>, яна светлая ў абедзвюх тэмах (рашэнне DT-4).</li>
   </ul>
 </main>
-<script type="module" src="about.mjs"></script>
+<script type="module">
+  import './about.mjs';
+  const section = document.getElementById('section');
+  section.value = 'food';
+  section.dispatchEvent(new Event('change', { bubbles: true }));
+</script>
 </body>
 </html>

@@ -55,13 +55,20 @@ psql "$ADMIN_DB_URL" -f supabase/queries/ops-error-retention.sql
 
 Крокі па падключэнні рэлея (Selfer-бок, задачы T1/T3):
 
-1. Стварыць для worker-а асобнае злучэнне пад роляй `telegram_ops_reader`
-   (DSN — толькі env на Selfer; адсутнасць env — fail-closed старт без друку
+1. Стварыць на жывой БД login-карыстальніка для worker-а і даць яму
+   членства ў `telegram_ops_reader` (роля NOLOGIN — непасрэдна
+   злучыцца ёй нельга; права наследуецца з INHERIT, RLS-палітыкі
+   ўжываюцца да членаў): `create role telegram_ops_login login password
+   '<сакрэт>';` + `grant telegram_ops_reader to telegram_ops_login;`.
+   DSN гэтага login-карыстальніка — толькі env на Selfer
+   (`TELEGRAM_OPS_KUDY_DSN`; адсутнасць env — fail-closed старт без друку
    значэнняў).
 2. Праверыць правы на жывой БД: `SELECT` з названых табліц вяртае радкі,
    спроба запісу і `SELECT` з чужых табліц — `permission denied`.
-3. Ратацыя DSN — стандартны крок ратацыі пароляў ролі ў Supabase; пасля
-   ратацыі абнавіць env на Selfer і перазапусціць worker.
+3. Ратацыя DSN — ратацыя пароля login-карыстальніка
+   (`ALTER ROLE telegram_ops_login WITH PASSWORD '<новы>';` — не роля
+   `telegram_ops_reader`: яна NOLOGIN і пароля не мае); пасля ратацыі
+   абнавіць env на Selfer і перазапусціць worker.
 
 ## 3. Межы доступу і праводка
 

@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { assertNoReadyStart, waitForRun, locationListeners, waitForManualStart, tapMapPoint, visiblePointStatus, startWalkAtLocation, previewNodesWith, tapPlayAndWaitForAudio, dismissGuideHintBeforePlay } from './walk.mjs';
+import { assertNoReadyStart, waitForRun, locationListeners, waitForManualStart, tapMapPoint, visiblePointStatus, startWalkAtLocation, grantWalkLocationPermissions, previewNodesWith, tapPlayAndWaitForAudio, dismissGuideHintBeforePlay } from './walk.mjs';
 
 test('walk scrolls clipped preview lock badges into the UIAutomator viewport', async () => {
   let position = 0;
@@ -24,6 +24,43 @@ test('walk scrolls clipped preview lock badges into the UIAutomator viewport', a
   assert.deepEqual(swipes, [['shell', 'input', 'swipe', '540', '1853', '540', '722', '350']]);
   await previewNodesWith(driver, 'btn-download', 'free-download');
   assert.equal(swipes.length, 1, 'a visible control must not trigger another scroll');
+});
+
+test('walk grants foreground before background on the installed test package', async () => {
+  const calls = [];
+  const driver = {
+    pkg: 'by.kudy.app.demo',
+    exec: async (args) => { calls.push(args); return { stdout: '' }; },
+  };
+  await grantWalkLocationPermissions(driver);
+  assert.deepEqual(calls, [
+    ['shell', 'pm', 'grant', driver.pkg, 'android.permission.ACCESS_COARSE_LOCATION'],
+    ['shell', 'pm', 'grant', driver.pkg, 'android.permission.ACCESS_FINE_LOCATION'],
+    ['shell', 'pm', 'grant', driver.pkg, 'android.permission.ACCESS_BACKGROUND_LOCATION'],
+  ]);
+  // The walk suite has to prepare grants before its cold-start/Start flow;
+  // a helper that exists but is never called does not prevent this regression.
+  const source = fs.readFileSync(new URL('./walk.mjs', import.meta.url), 'utf8');
+  assert.match(source, /await grantWalkLocationPermissions\(driver\);\s*await coldStart\(driver, url/);
+  const gps = fs.readFileSync(new URL('./gps-ownership.mjs', import.meta.url), 'utf8');
+  assert.match(gps, /await grantWalkLocationPermissions\(driver\)/);
+});
+
+test('walk aborts permission setup instead of waiting 30s for an impossible GPS subscription', async () => {
+  const attempted = [];
+  const driver = {
+    pkg: 'by.kudy.app',
+    exec: async (args) => {
+      attempted.push(args.at(-1));
+      if (args.at(-1) === 'android.permission.ACCESS_FINE_LOCATION') throw new Error('pm grant failed');
+    },
+  };
+  await assert.rejects(grantWalkLocationPermissions(driver), /pm grant failed/);
+  assert.deepEqual(attempted, [
+    'android.permission.ACCESS_COARSE_LOCATION',
+    'android.permission.ACCESS_FINE_LOCATION',
+  ]);
+  await assert.rejects(grantWalkLocationPermissions({ pkg: '', exec: async () => {} }), /installed test package/);
 });
 
 test('walk seeds the emulator position before starting its location watcher', async () => {

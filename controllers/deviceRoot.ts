@@ -5,9 +5,9 @@
 // LocationService and AudioService — and hands them to the pure composition
 // root (deviceServices.ts). Node tests never import this file (expo modules
 // do not resolve under node); the app and jest-expo render tests do.
-// An absent configuration (no catalog origin) yields null and the surfaces
-// keep their honest unavailable state; purchase/restore stays the
-// explicitly-unavailable port until G20.21 wires and verifies the live path.
+// An absent production catalog source yields null. Sandbox builds can use
+// the validated embedded sample catalog; purchase/restore still stays
+// explicitly unavailable until G20.21 verifies the live path.
 import { openDatabaseSync, type SQLiteDatabase } from 'expo-sqlite';
 import { Directory, File, Paths, type Directory as FsDirectory } from 'expo-file-system';
 import { CryptoDigestAlgorithm, digest, randomUUID } from 'expo-crypto';
@@ -24,12 +24,17 @@ import { createDeviceSha256, newDeviceSessionId } from '../services/device-crypt
 import { createExpoSqliteDriver, openExpoDatabase } from '../services/db/expo/expo-sqlite-driver.ts';
 import { expoSecureSecretStore } from '../services/device-secure-store.ts';
 import { createE2EFeedbackBindings } from '../services/feedback-e2e.ts';
-import { catalogOriginFrom, createDeviceServicePorts } from './deviceServices.ts';
+import { createDeviceServicePorts } from './deviceServices.ts';
+import { resolveCatalogSource } from './catalogSource.ts';
 
 export function createDeviceServiceSet(): ReturnType<typeof createDeviceServicePorts> | null {
-  const demo = process.env.EXPO_PUBLIC_DEMO_MODE === '1';
-  const origin = demo ? 'demo://embedded' : catalogOriginFrom(process.env);
-  if (origin === null) return null;
+  const source = resolveCatalogSource({
+    origin: process.env.EXPO_PUBLIC_CATALOG_ORIGIN,
+    demo: process.env.EXPO_PUBLIC_DEMO_MODE,
+    sandbox: process.env.EXPO_PUBLIC_SANDBOX,
+  });
+  if (source === null) return null;
+  const { origin } = source;
   // Issue #979: the open itself can hit a dead cached binding after an
   // activity recreation — openExpoDatabase retries it with a new connection,
   // and the driver gets a reopen of its own for later deaths.
@@ -40,7 +45,7 @@ export function createDeviceServiceSet(): ReturnType<typeof createDeviceServiceP
   const extra = (Constants.expoConfig?.extra ?? {}) as {
     locationExplanations?: { foreground: string; background: string };
   };
-  const demoSource = demo ? require('./demoCatalog.ts') as typeof import('./demoCatalog.ts') : null;
+  const demoSource = source.embedded ? require('./demoCatalog.ts') as typeof import('./demoCatalog.ts') : null;
   const secretStore = expoSecureSecretStore();
   const e2eFeedback = __DEV__ && process.env.EXPO_PUBLIC_E2E_FEEDBACK === '1'
     ? createE2EFeedbackBindings(origin, secretStore)

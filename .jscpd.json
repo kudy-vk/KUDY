@@ -14,7 +14,10 @@
     "**/package-lock.json",
     "**/yarn.lock",
     "**/pnpm-lock.yaml",
-    "**/.rnstorybook/storybook.requires.ts"
+    "**/.rnstorybook/storybook.requires.ts",
+    "**/*.generated.ts",
+    "**/web/lib/i18n/??.ts",
+    "**/web/lib/i18n/???.ts"
   ],
   "formats": [
     "javascript",

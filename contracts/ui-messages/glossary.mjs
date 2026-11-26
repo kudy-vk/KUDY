@@ -33,7 +33,7 @@ const KEYWORD_NAMES = {
 // entry's locale key and the record must exist in that locale's shipped set.
 function locatorTarget(locator) {
   if (typeof locator !== 'string') return null;
-  const match = locator.match(/^translations\/([a-z]{2})\.json#(.+)$/);
+  const match = locator.match(/^translations\/([a-z]{2,3})\.json#(.+)$/);
   return match ? { locale: match[1], recordId: match[2] } : null;
 }
 

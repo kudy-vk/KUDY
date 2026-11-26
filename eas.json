@@ -6,30 +6,20 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": {
-        "bundleIdentifier": "by.kudy.app.dev"
-      },
-      "android": {
-        "package": "by.kudy.app.dev"
+      "env": {
+        "EXPO_PUBLIC_DEV_CLIENT_BUILD": "1"
       }
     },
     "sandbox": {
       "distribution": "internal",
-      "ios": {
-        "bundleIdentifier": "by.kudy.app.sandbox"
+      "env": {
+        "EXPO_PUBLIC_SANDBOX": "1"
       },
       "android": {
-        "package": "by.kudy.app.sandbox"
+        "buildType": "apk"
       }
     },
-    "production": {
-      "ios": {
-        "bundleIdentifier": "by.kudy.app"
-      },
-      "android": {
-        "package": "by.kudy.app"
-      }
-    }
+    "production": {}
   },
   "submit": {
     "production": {}

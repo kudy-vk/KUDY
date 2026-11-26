@@ -1,11 +1,13 @@
 import { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
+import SettingsIcon from "lucide-react-native/icons/settings";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useServices, useUiLocale } from "./_layout";
 import { AdContainer } from "../components/ad-container";
 import { CityPanorama } from "../components/city-panorama";
+import { PressableSurface } from "../components/pressable-surface";
 import { HomeMapMenu, cityMenuConfig } from "../components/city-map-menu";
 import { tokens } from "../components/design-tokens";
 import { ScaledText } from "../components/scaled-text";
@@ -56,6 +58,15 @@ export default function Menu() {
           <ScaledText accessibilityRole="header" style={[styles.brand, { color: palette.colorAccent }]}>{uiStrings(locale).myKudy}</ScaledText>
           <View style={styles.headRight}>
             <ScaledText style={[styles.city, { color: palette.colorMuted }]}>{uiStrings(locale).cityName}</ScaledText>
+            <PressableSurface
+              accessibilityRole="button"
+              accessibilityLabel={uiStrings(locale).myKudy}
+              onPress={() => router.push("/my")}
+              style={styles.settingsButton}
+              testID="btn-menu-settings"
+            >
+              <SettingsIcon size={22} color={palette.colorAccent} />
+            </PressableSurface>
             <WalkButton walk={services.walk} locale={locale} iconOnly />
           </View>
         </View>
@@ -91,6 +102,7 @@ const styles = StyleSheet.create({
   headRight: { marginLeft: "auto", flexDirection: "row", alignItems: "center", gap: tokens.spaceS },
   brand: { fontFamily: tokens.fontFamilyUiStrong, fontSize: 22, letterSpacing: -0.4 },
   city: { fontSize: 13 },
+  settingsButton: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   canvas: { flex: 1, minHeight: 0, alignItems: "center", justifyContent: "center" },
   rest: { flex: 1, minHeight: 0, justifyContent: "flex-end", overflow: "hidden" },
 });

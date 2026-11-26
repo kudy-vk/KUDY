@@ -12,7 +12,19 @@ import test, { type TestContext } from 'node:test';
 
 import { recordOpsError, type OpsErrorClient } from '../../functions/_shared/ops-error-core.ts';
 import { publishFixtureTargets, registerFeedbackDevice } from '../feedback/test-support.ts';
-import { freshOpsDatabase, opsMigrationSql } from './test-support.ts';
+import { freshOpsDatabase, opsIndexMigrationSql, opsMigrationSql } from './test-support.ts';
+
+// Selfer #478 [per-cycle-scan-no-index]: the relay window reads and the
+// retention sweep filter on created_at — the index migration file must stay
+// committed with its statement; dropping the file or the statement fails
+// this assertion. (The behavioral replay of the statement is covered by the
+// live pg_indexes probe recorded on the tracked issue after the merge.)
+test('guard: the created_at index migration stays committed for the relay and retention', () => {
+  assert.match(
+    opsIndexMigrationSql(),
+    /create index ops_error_events_created_at_idx on ops_error_events \(created_at\);/,
+  );
+});
 
 // The four tables the relay reader may SELECT (issue AC3, verbatim).
 const READER_TABLES = ['feedback_current', 'webhook_events', 'ops_error_events', 'feedback_target_registry'];
@@ -99,7 +111,6 @@ test('guard: nothing is granted to anon or authenticated anywhere in the migrati
 test('anon and authenticated have zero access to ops_error_events, even with a grant re-added', async (t) => {
   const db = await freshOpsDatabase();
   t.after(() => db.close());
-
   await db.query('set role anon');
   await assert.rejects(db.query('select * from ops_error_events'), /permission denied/i, 'anon: no grants, no access');
   await assert.rejects(

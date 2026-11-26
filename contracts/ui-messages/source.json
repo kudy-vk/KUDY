@@ -3,6 +3,104 @@
   "source_locale": "be",
   "records": [
     {
+      "id": "native.chrome.mapAccessibility.moveLeft",
+      "source": "Перасунуць улева",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок улева",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveLeft"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "b6368d3a0db0c487f6c82087a3230ded99cfb5b2ec47172c43703a46cbad7c12"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveRight",
+      "source": "Перасунуць управа",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок управа",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveRight"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "2c8acb0d2085b9d568935fd1adae489e6488e0248c6ff67ef202520275175600"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveUp",
+      "source": "Перасунуць уверх",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок уверх",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveUp"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "4031711a7aba53fd4667556346550099745adcf754bcb814b2edd74fd26d76b4"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.moveDown",
+      "source": "Перасунуць уніз",
+      "context": "Меню карты, чытач экрана: перасунуць фрагмент карты на адзін крок уніз",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.moveDown"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "75f9804513e72df06f2daaceb6d26862695da6308b8f66cdd09241b7fb38fd0d"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.snap",
+      "source": "Злучыць",
+      "context": "Меню карты, чытач экрана: злучыць фрагмент з суседнім, калі яны дастаткова блізка",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.snap"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "de3be84ec5ec0396f74a9f5df1980ca3d6315127f3898bcd8b42845103278ed1"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.cancel",
+      "source": "Скасаваць перасоўванне",
+      "context": "Меню карты, чытач экрана: скасаваць незавершанае перасоўванне фрагмента",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.cancel"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "f5ef55cb0297ba1d4b01a08294d1c0f86617d18e59e5f4882057e477388e239e"
+    },
+    {
+      "id": "native.chrome.mapAccessibility.joined",
+      "source": "Злучана",
+      "context": "Меню карты, чытач экрана: фрагмент ужо злучаны з іншым фрагментам",
+      "format": "plain",
+      "parameters": [],
+      "migratedFrom": [
+        "components/ui-strings.ts#mapAccessibility.joined"
+      ],
+      "constraints": {
+        "accessibility": "label"
+      },
+      "sourceHash": "743359d65d76ad6726630eb0ea08a66a1d85a2ab83c6c9ea516c58c461c2f000"
+    },
+    {
       "id": "native.chrome.comingSoon",
       "source": "Хутка",
       "context": "Неактыўны пункт галоўнага меню: раздзел яшчэ недаступны",
@@ -3537,14 +3635,14 @@
     },
     {
       "id": "native.aboutCity.tab.food",
-      "source": "Ежа і грошы",
+      "source": "Ежа і аплата",
       "context": "Назва раздзела на медальёне кола і ў яго назве для экраннага чытальніка",
       "format": "plain",
       "parameters": [],
       "migratedFrom": [
         "components/about-city-strings.generated.ts#tab.food"
       ],
-      "sourceHash": "b933ddbadc01214fc6a877df8e3cbb7bc7f34e5c653dc1e26472699c9b2bb8e5"
+      "sourceHash": "fe28625e62075bfbff1038013f622cb199462c1dd47bc308925364f3e9e9ff96"
     },
     {
       "id": "native.aboutCity.head.airport",
@@ -5425,6 +5523,292 @@
         "components/about-city-strings.generated.ts#card.openOfficial"
       ],
       "sourceHash": "6212ff916e5e16c29938d03c624124cd89258b1fa64b5e0737a0dba238984fd7"
+    },
+    {
+      "id": "native.aboutCity.food.v2.payTitle",
+      "source": "Як плаціць",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "97822ef61c9b1500823cd1ad8d0335e6d4413c9a0d0cf3d2141d1d000a25dfcd",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.payTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.payMeta",
+      "source": "PLN · картка · BLIK",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "52779b5f4e80ac3b96aec510f5bf242322b4dbbd1f4b17cd67db09e6892afea6",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.payMeta"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.pln",
+      "source": "Злоты (PLN)",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "ce30c01587dcbc11b8698de8875df48afcea88df93e71d7ce05d9b327c159ee1",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.pln"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.card",
+      "source": "Картка ці тэлефон",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "8b18324dd73c592c4cc0a5a06975aded7f34633c45587db0f53168f52f3bd4a3",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.card"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.dccTitle",
+      "source": "Выбар валюты на тэрмінале",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "a83bf1fc7223b32a09c29ebdbfd2c8d705becd4921a41607b5935e30830f7366",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.dccTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.dccText",
+      "source": "Калі тэрмінал прапануе канвертацыю ў іншую валюту, звычайна выгадней выбраць PLN. Правер умовы свайго банка.",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "6179f907356a192711c0c8df0c8056329d20674a94a63cc296f0baa0ee78c782",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.dccText"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.dccSource",
+      "source": "Парада Visa",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "2ffed392de7ac2f8293a07b4dccadd976ca4f57ab751eb184efbce8864d650bb",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.dccSource"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.cashTitle",
+      "source": "Абмен і банкаматы",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "fb3c35517543271e2520064b6be06f95c38a9a90fa779939e290d6bf45419362",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.cashTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.cashMeta",
+      "source": "Курсы · зняцце грошай",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "ea2abaf7483e6305cdf5399935c37a0c9ea0215a91a0cad72cea3632dc31fb8e",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.cashMeta"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.cashTip",
+      "source": "EUR → PLN? Параўнай «kupno» і канчатковую суму ў злотых.",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "b8efca21dcc19e014ca0b83f11b0a6acafc5c23de0aa370de940c8e01a539f70",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.cashTip"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.rateCompare",
+      "source": "Курсы EUR у Гданьску",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "85cdcb95c00d5c2e35cd52cb15e4da43d9a5b8e72f4d081d52ce6f29075e5bb4",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.rateCompare"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.nbpRate",
+      "source": "Курс NBP",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "f063b37ab6d58cbacaebb37e9f49eba0677ac2c4936de89644c99aa1bc6ddd4e",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.nbpRate"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.offices",
+      "source": "3 пункты абмену на карце",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "5e60fefd7be575527dc7dbc3c5c07a6b6af57f439cd1f5d038634434046db559",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.offices"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.centreExchange",
+      "source": "Цэнтр · Exchange",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "84c2b9a1bba394326a7f52a3ace8d6e007b202074f107aca0fe24628debbb0d1",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.centreExchange"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.atmTitle",
+      "source": "Зняцце ў банкамаце",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "059e5e905972f785c32388bfb5ffb2ef103044383bd875775fbc2d8643a35a83",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.atmTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.atmText",
+      "source": "Глядзі камісію да зняцця. Калі банкамат прапануе канвертацыю, выбірай PLN.",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "486ff5a63e2559e9f99407d0c2bf6e317ac1194cce87b83fc002c4fc6cc176e7",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.atmText"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.lateTitle",
+      "source": "Пасля 21:00",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "a9c4868a7e054c360d01a71d8b9f42c85dc889cdb1bedbb25d2d93cf47e63831",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.lateTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.lateMeta",
+      "source": "Дзе яшчэ можна паесці",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "666f7b48822f37248189b96ccbee4d438629eb4d1b1432841ae8fbb9e8114c10",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.lateMeta"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.station",
+      "source": "Галоўны вакзал",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "bc52f5a037548de4b2a2edcc127eed129260e61db53bf54b955ca2ddb7618a56",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.station"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.mcdHours",
+      "source": "да 00:00",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "899078d8bb5a5db54b9762c36dace39457dab32ad6a7aeb6395368348e4fca53",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.mcdHours"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.kfcHours",
+      "source": "звычайна да 01:00",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "efd1a0e452dc1e546f5fdba78c5603ea36e457f610447881d32c8256fdcd4f24",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.kfcHours"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.otherPlaces",
+      "source": "Іншыя месцы",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "e9d11bacdeff04f194166cb7aae580a3291cb3f4eb60d467a433d9585db1d236",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.otherPlaces"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.kitchenTitle",
+      "source": "Час працы кухні",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "fa099786e0e628d792be1cb5383414d860533ccc66f074825df12c7d45c5bbf9",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.kitchenTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.kitchenText",
+      "source": "Кухня можа закрывацца раней за залу. Гадзіны сетак змяняюцца, асабліва ў святы.",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "7bde0487c4a361343f2d757cc9af408ca5b066d53e8841aa3161daf5f4201ffe",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.kitchenText"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.deliveryTitle",
+      "source": "Дастаўка ежы",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "46f11b8a1decee58d656cdfcdb10b1a37500b4f0c0f8c6a0b1e110c815552d25",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.deliveryTitle"
+      ]
+    },
+    {
+      "id": "native.aboutCity.food.v2.deliveryMeta",
+      "source": "5 сэрвісаў",
+      "context": "Кароткі раздзел «Ежа і аплата» KUDY (#256): пазнавальны мабільны даведнік, чатыры згортванні; зацверджаны напрамак у жывым аглядзе макета 2026-11-25.",
+      "format": "plain",
+      "parameters": [],
+      "sourceHash": "6b848a6b839ce76f67edd203b3f5143b7aeab3535120ebc411d11e519bd537d8",
+      "migratedFrom": [
+        "components/about-city-strings.generated.ts#food.v2.deliveryMeta"
+      ]
     }
   ]
 }

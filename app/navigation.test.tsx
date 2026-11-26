@@ -234,7 +234,7 @@ describe("city surface on the published catalog (G06.01.a)", () => {
     );
     // RNTL 14 moves the wait timeout to the waitForOptions (3rd parameter).
     expect(await screen.findByTestId("screen-Menu", {}, { timeout: 10_000 })).toBeTruthy();
-    await fireEvent.press(screen.getByTestId("city-menu-access-guides"));
+    await fireEvent(screen.getByTestId("city-menu-access-guides"), "accessibilityAction", { nativeEvent: { actionName: "activate" } });
     expect(await screen.findByTestId("guide-card-guide-route-a1")).toBeTruthy();
   });
 

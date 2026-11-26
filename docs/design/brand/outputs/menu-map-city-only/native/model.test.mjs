@@ -39,6 +39,21 @@ test('only real held movement can snap and never emits a section press',()=>{
   assert.equal(m.groups.size,4);assert.equal(a.group,b.group);
   assert.equal(m.release(350).kind,'none');
 });
+test('a visible medallion extends the polygon hit without activating an invisible icon',()=>{
+  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
+  const m=new CityPuzzle(320,()=>.5,undefined,layout),before=m.position('nearby');
+  const center={x:330-122,y:485-366};
+  const point={x:before.x+center.x-9/.2,y:before.y+center.y+15/.2};
+  const medallions=new Map([['nearby',center]]);
+  assert.equal(m.hit(point),undefined);
+  assert.deepEqual(m.hit(point,medallions),{id:'nearby',passive:false});
+  assert.deepEqual(m.begin(point,0,medallions),{id:'nearby',passive:false});
+  assert.deepEqual(m.release(50),{kind:'select',id:'nearby'});
+  m.begin(point,100,medallions);m.hold(401);m.move({x:point.x+40,y:point.y},420);
+  assert.deepEqual(m.position('nearby'),{x:before.x+40,y:before.y});
+  m.cancel();assert.deepEqual(m.position('nearby'),before);
+});
+
 test('early movement cancels tap; cancellation restores a group',()=>{
   const m=puzzle(),p=anchor(m,'guides'),before={...m.pieces.get('guides').group};
   m.begin(p,0);m.move({x:p.x+100,y:p.y},20);assert.equal(m.release(50).kind,'none');
@@ -164,4 +179,170 @@ test('snapped groups never split: cancel and new drags keep members together',()
   p=anchor(m,'nearby');m.begin(p,3000);m.hold(3301);m.move({x:p.x+120,y:p.y},3320);m.release(3340);
   assert.equal(m.pieces.get('nearby').group,m.pieces.get('guides').group);
   assert.equal(n.group.members,members); // склад групы нязменны ўсялякай цягай
+});
+
+test('non-pointer movement works in the tap-only host and cancel restores its group',()=>{
+  const m=new CityPuzzle(320,()=>0,undefined,{height:1800,positions:{},dragEnabled:false});
+  const before=m.position('guides'),step=8/(320/1600);
+  for(const [action,x,y] of [['moveRight',step,0],['moveDown',step,step],['moveLeft',0,step],['moveUp',0,0],['moveLeft',-step,0]]){
+    assert.equal(m.accessibilityAction('guides',action,100).kind,'none');
+    assert.deepEqual(m.position('guides'),{x:before.x+x,y:before.y+y});
+  }
+  assert.equal(m.groups.size,5);
+  m.accessibilityAction('guides','cancel',101);
+  assert.deepEqual(m.position('guides'),before);
+});
+test('accessible snap uses canonical neighbours and never activates a destination',()=>{
+  const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+  g.group.dx=n.group.dx+20;g.group.dy=n.group.dy;
+  const before=m.groups.size;
+  m.accessibilityAction('guides','moveRight',100);
+  assert.equal(m.groups.size,before,'directional movement never joins automatically');
+  const result=m.accessibilityAction('guides','snap',101);
+  assert.equal(result.kind,'snap');assert.equal(result.complete,false);
+  assert.equal(m.groups.size,before-1);assert.equal(n.group,g.group);
+  const position=m.position('nearby');
+  m.accessibilityAction('guides','moveLeft',102);
+  m.accessibilityAction('guides','cancel',103);
+  assert.deepEqual(m.position('nearby'),position);
+  assert.equal(n.group,g.group);
+  invariants(m);
+});
+test('explicit accessibility snap with no nearby joint is a no-op',()=>{
+  const m=puzzle(),before=m.position('guides');
+  assert.equal(m.accessibilityAction('guides','snap',100).kind,'none');
+  assert.deepEqual(m.position('guides'),before);
+  assert.equal(m.groups.size,5);
+});
+
+
+test('failed accessible snap retains cancel, and changing focus cannot orphan a move',()=>{
+  const m=puzzle(),before=m.position('guides'),other=m.position('nearby');
+  m.accessibilityAction('guides','moveRight',100);
+  assert.equal(m.accessibilityAction('guides','snap',101).kind,'none');
+  m.accessibilityAction('guides','cancel',102);
+  assert.deepEqual(m.position('guides'),before);
+  m.accessibilityAction('guides','moveRight',103);
+  m.accessibilityAction('nearby','moveDown',104);
+  assert.deepEqual(m.position('guides'),before);
+  m.accessibilityAction('nearby','cancel',105);
+  assert.deepEqual(m.position('nearby'),other);
+});
+
+test('production scatter remains within canvas, with axis-exact first moves and held drag',()=>{
+  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
+  for(const width of [320,360,390,430]){
+    const step=8*1600/width;
+    for(const id of nativeLayout.pieces.map(p=>p.id))for(const [action,dx,dy] of [['moveRight',step,0],['moveLeft',-step,0],['moveDown',0,step],['moveUp',0,-step]]){
+      const m=new CityPuzzle(width,()=>.5,undefined,layout),before=m.position(id);
+      m.accessibilityAction(id,action,100);
+      const after=m.position(id);
+      assert.ok(Math.abs(after.x-before.x-dx)<1e-8,`${width} ${id} ${action} x`);
+      assert.ok(Math.abs(after.y-before.y-dy)<1e-8,`${width} ${id} ${action} y`);
+      m.accessibilityAction(id,'cancel',101);assert.deepEqual(m.position(id),before);
+    }
+    const m=new CityPuzzle(width,()=>.5,undefined,layout),before=m.position('nearby'),p=anchor(m,'nearby');
+    m.begin(p,0);m.hold(301);m.move({x:p.x+40,y:p.y},350);
+    assert.deepEqual(m.position('nearby'),{x:before.x+40,y:before.y});assert.equal(m.release(400).kind,'none');
+  }
+});
+
+test('all five production fragments can be joined with accessibility actions alone',()=>{
+  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
+  for(const width of [320,360,390,430]){
+    const m=new CityPuzzle(width,()=>.5,undefined,layout);let time=1;
+    for(const id of ['guides','reserve-1','discovery','kudy']){
+      const target=m.pieces.get('nearby').group,g=m.pieces.get(id).group;
+      for(const [axis,plus,minus] of [['dx','moveRight','moveLeft'],['dy','moveDown','moveUp']]){
+        for(let i=0;i<100&&Math.abs(g[axis]-target[axis])>4*1600/width;i++){
+          const previous=g[axis];m.accessibilityAction(id,g[axis]<target[axis]?plus:minus,time++);if(previous===g[axis])break;
+        }
+      }
+      const result=m.accessibilityAction(id,'snap',time++);
+      assert.equal(result.kind,'snap',`${width} ${id}`);
+      assert.equal(result.complete,id==='kudy');
+    }
+    assert.equal(m.groups.size,1);m.completeNow();assert.equal(m.phase,'complete');
+  }
+});
+
+test('production assembly centers and lifts the source with aligned hit geometry in both motion modes',()=>{
+  const layout={height:1600,positions:{},dragEnabled:true,centerAssembled:true,assembledLift:96};
+  const expectedY=122;
+  for(const reduced of [false,true]){
+    const m=new CityPuzzle(360,()=>.5,undefined,layout),first=m.pieces.get('nearby').group;
+    for(const group of [...m.groups])if(group!==first&&!group.members.has('kudy'))joinGroups(first,group,m.pieces,m.groups);
+    const last=m.pieces.get('kudy');last.group.dx=first.dx+20;last.group.dy=first.dy;
+    const result=m.accessibilityAction('kudy','snap',100);
+    assert.equal(result.complete,true);
+    if(reduced)m.completeNow();else {m.advance(500);assert.equal(m.position('guides').y,expectedY+361);m.advance(3000);}
+    assert.equal(m.phase,'complete');assert.deepEqual(m.sceneOrigin,{x:125,y:expectedY});
+    assert.deepEqual(m.position('guides'),{x:125+469,y:expectedY+361});
+    assert.equal(m.hit({x:125+650,y:expectedY+210})?.passive,true);
+  }
+});
+
+test('fast pointer snap coasts as one rigid group and decelerates without extra joins',()=>{
+  const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+  n.group.dx=0;n.group.dy=0;g.group.dx=140;g.group.dy=0;
+  const p=anchor(m,'guides');assert.equal(m.begin(p,0)?.id,'guides');m.hold(300);
+  assert.equal(m.move({x:p.x-120,y:p.y},320,true).kind,'snap');
+  assert.equal(n.group,g.group);
+  const x0=m.position('guides').x,y0=m.position('guides').y;
+  const gap=m.position('guides').x-m.position('nearby').x;
+  assert.equal(m.advance(370),true);const x1=m.position('guides').x;
+  assert.equal(m.advance(420),true);const x2=m.position('guides').x;
+  assert.ok(x0>x1&&x1>x2);assert.ok(x0-x1>x1-x2);
+  assert.equal(m.advance(520),false);
+  const end=m.position('guides').x;
+  assert.ok(end<x2);assert.ok((x0-end)*360/1600<=24+1e-8);
+  assert.equal(m.position('guides').y,y0);
+  assert.equal(m.position('guides').x-m.position('nearby').x,gap);
+  assert.equal(m.groups.size,4);assert.equal(m.advance(1000),false);invariants(m);
+});
+
+test('slow snaps and reduced motion do not coast; cancellation freezes a joined group',()=>{
+  for(const [enabled,distance,expectCoast] of [[false,120,false],[true,1,false],[true,120,true]]){
+    const m=puzzle(),n=m.pieces.get('nearby'),g=m.pieces.get('guides');
+    n.group.dx=0;n.group.dy=0;g.group.dx=distance===1?20:140;g.group.dy=0;
+    const p=anchor(m,'guides');m.begin(p,0);m.hold(300);
+    assert.equal(m.move({x:p.x-distance,y:p.y},320,enabled).kind,'snap');
+    assert.equal(m.advance(370),expectCoast);
+    const before=m.position('guides');m.cancel();assert.equal(m.advance(1000),false);
+    assert.deepEqual(m.position('guides'),before);assert.equal(n.group,g.group);
+  }
+});
+
+test('final fast snap coasts before centering and finishes at the same origin',()=>{
+  const m=puzzle(),first=m.pieces.get('nearby').group;
+  for(const group of [...m.groups])if(group!==first&&!group.members.has('kudy'))joinGroups(first,group,m.pieces,m.groups);
+  first.dx=0;first.dy=0;
+  const last=m.pieces.get('kudy');last.group.dx=140;last.group.dy=0;
+  const p=anchor(m,'kudy');assert.equal(m.begin(p,0)?.id,'kudy');m.hold(300);
+  assert.equal(m.move({x:p.x-120,y:p.y},320,true).complete,true);
+  const x0=m.position('guides').x;
+  assert.equal(m.advance(420),true);assert.ok(m.position('guides').x<x0);
+  assert.equal(m.phase,'assembling');
+  m.advance(920);assert.equal(m.position('guides').x,125+469);
+  m.advance(4000);assert.equal(m.phase,'complete');
+  assert.deepEqual(m.position('guides'),{x:125+469,y:320+361});
+});
+
+test('grab feedback grows after hold and clears on release or cancel',()=>{
+  const m=puzzle(),p=anchor(m,'guides');m.begin(p,0);
+  assert.equal(m.grabProgress(299),0);m.hold(300);
+  assert.equal(m.grabProgress(300),0);
+  assert.ok(m.grabProgress(390)>0&&m.grabProgress(390)<1);
+  assert.equal(m.grabProgress(480),1);
+  m.release(500);assert.equal(m.grabProgress(500),0);
+  m.begin(p,1000);m.hold(1300);m.cancel();assert.equal(m.grabProgress(1500),0);
+});
+
+test('accessible movement is rolled back on resize and respects the scene bounds',()=>{
+  const m=puzzle(),before=m.position('guides');
+  for(let i=0;i<100;i++)m.accessibilityAction('guides','moveRight',i);
+  assert.notDeepEqual(m.position('guides'),before);
+  invariants(m);
+  m.resize(320);
+  assert.deepEqual(m.position('guides'),before);
 });

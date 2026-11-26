@@ -12,8 +12,8 @@
 //                            plan renders messages for the locale;
 //   missing_locale_key     — the plan renders a message the set has no record
 //                            for (planned coverage, so the documented uk
-//                            guideHint be-fallback stays legal — the plan
-//                            does not render those for uk);
+//                            guideHint English fallback stays legal — the
+//                            plan does not render those for uk);
 //   translation_contract   — the per-file contract rules of
 //                            translations.mjs (schema, extra/empty keys,
 //                            placeholder and plural-form compatibility,

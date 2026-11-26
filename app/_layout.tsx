@@ -4,17 +4,21 @@ import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } f
 import { createServices, type Services } from "../controllers/createServices";
 import { useAppFonts } from "../components/fonts";
 import { statusBarStyle, useThemeScheme } from "../components/theme";
+import { resolveCatalogSource } from "../controllers/catalogSource";
 
-// The device composition binding is loaded lazily and only when a catalog
-// origin is configured: the render tests import the screens that import this
-// module, and the Expo facility modules (expo-audio and siblings) cannot
-// initialize outside a native runtime. With no origin the root passes the
-// empty port set and the surfaces keep their honest unavailable state (V5).
+// The device composition binding is loaded lazily for a remote catalog or
+// an explicitly selected embedded phone-test source. Without either, the
+// surfaces keep their honest unavailable state; tests never import Expo
+// facilities outside the native runtime.
 function createDeviceServiceSet(): ReturnType<
   typeof import("../controllers/deviceRoot")["createDeviceServiceSet"]
 > | null {
-  const origin = process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
-  if (!origin && process.env.EXPO_PUBLIC_DEMO_MODE !== '1') return null;
+  const source = resolveCatalogSource({
+    origin: process.env.EXPO_PUBLIC_CATALOG_ORIGIN,
+    demo: process.env.EXPO_PUBLIC_DEMO_MODE,
+    sandbox: process.env.EXPO_PUBLIC_SANDBOX,
+  });
+  if (source === null) return null;
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const deviceRoot = require("../controllers/deviceRoot") as typeof import("../controllers/deviceRoot");
   return deviceRoot.createDeviceServiceSet();
@@ -49,11 +53,9 @@ export default function RootLayout() {
   // (docs/design/dark-theme.md): repaint native chrome on an OS theme change without rebuilding
   // services, Run, audio or location ownership.
   const theme = useThemeScheme();
-  // G20.20 (issue #491): the ONE production service set comes from the
-  // device composition root (controllers/deviceRoot.ts — the only file that
-  // binds the Expo facilities); with no catalog origin configured the root
-  // passes the empty port set and the surfaces keep their honest unavailable
-  // state — no fake stands in for a device adapter (spec V5).
+  // G20.20 (issue #491): the ONE device service set comes from the
+  // device composition root. A source-less production build keeps empty
+  // ports; the sandbox's embedded sample data is selected explicitly.
   const device = useMemo(createDeviceServiceSet, []);
   const services = useMemo(
     () => (device === null ? createServices({}) : createServices(device.ports)),

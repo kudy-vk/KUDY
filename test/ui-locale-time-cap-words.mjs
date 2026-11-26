@@ -33,6 +33,19 @@ export const TIME_CAP_WORDS = {
   bs: { 60: 'Do jednog sata', 120: 'Do dva sata', 240: 'Pola dana' },
   mk: { 60: 'До еден час', 120: 'До два часа', 240: 'Половина ден' },
   sq: { 60: 'Deri në një orë', 120: 'Deri në dy orë', 240: 'Gjysmë dite' },
+  is: { 60: 'Allt að eina klukkustund', 120: 'Allt að tvær klukkustundir', 240: 'Hálfur dagur' },
+  ga: { 60: 'Suas le uair an chloig', 120: 'Suas le dhá uair an chloig', 240: 'Leath lae' },
+  mt: { 60: 'Sakemm siegħa', 120: 'Sakemm sagħtejn', 240: 'Nofs jum' },
+  ca: { 60: 'Fins a una hora', 120: 'Fins a dues hores', 240: 'Mig dia' },
+  tr: { 60: 'En fazla bir saat', 120: 'En fazla iki saat', 240: 'Yarım gün' },
+  ru: { 60: 'До часа', 120: 'До двух часов', 240: 'На полдня' },
+  lb: { 60: 'Bis zu enger Stonn', 120: 'Bis zu zwou Stonnen', 240: 'Hallefdag' },
+  cnr: { 60: 'До једног сата', 120: 'До два сата', 240: 'Пола дана' },
+  nn: { 60: 'Opp til éi time', 120: 'Opp til to timar', 240: 'Halv dag' },
+  rm: { 60: 'Fin ad ina ura', 120: 'Fin a duas uras', 240: 'Mez di' },
+  ka: { 60: 'ერთ საათამდე', 120: 'ორ საათამდე', 240: 'ნახევარი დღე' },
+  hy: { 60: 'Մինչև մեկ ժամ', 120: 'Մինչև երկու ժամ', 240: 'Կես օր' },
+  az: { 60: 'Ən çox bir saat', 120: 'Ən çox iki saat', 240: 'Yarım gün' },
 };
 
 // The wave's slice of the table: timeCapForms = timeCapWordsFor('hr', 'ro', ...).

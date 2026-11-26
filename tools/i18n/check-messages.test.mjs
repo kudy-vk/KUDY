@@ -2,7 +2,7 @@
 // named deliverables of the issue run here: missing_locale_key,
 // stale_source_hash, unreviewed_hash_bump, valid_same_commit_update and
 // standard_runner_enforces_messages; the remaining suites cover the real-tree
-// green path (plan-aware: uk's guideHint be-fallback stays legal), the
+// green path (plan-aware: uk's guideHint English fallback stays legal), the
 // missing-file case, the generated-freshness surfacing and corrupt input
 // (diagnostics, never a throw). Controlled cases run on a fixture root built
 // from the real contract files — the real tree is never mutated. Node stdlib
@@ -71,11 +71,11 @@ test('standard_gate_green: the shipped-locale gate passes the committed tree', (
   assert.equal(verdict.ok, true);
 });
 
-test('standard_gate_green: the requirements are plan-aware — uk keeps its documented guideHint fallback', () => {
+test('standard_gate_green: uk uses English guideHint fallback without requiring uk records', () => {
   const sourceDoc = loadUiMessagesSource(join(root, 'contracts/ui-messages/source.json'));
   const required = plannedTranslationRequirements(sourceDoc);
-  // guide-hint-strings.generated.ts renders be/en only (uk-release-scope
-  // §6.4): the plan must not demand uk guideHint records the set lacks —
+  // guide-hint-strings.generated.ts omits uk (decision L1, issue #261):
+  // the plan must not demand uk guideHint records the set lacks —
   // and must demand the chrome records it does ship.
   for (const guideHintId of ['native.guideHint.heading', 'native.guideHint.paid']) {
     assert.ok(!required.get('uk')?.has(guideHintId), `${guideHintId}: not required for uk`);

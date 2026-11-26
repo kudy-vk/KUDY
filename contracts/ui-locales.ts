@@ -21,11 +21,11 @@
 // repository bytes stay CJK-free (G21.40 pattern, criterion 7); the runtime
 // value carries the real glyphs.
 
-export type UiLocaleCode = "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq";
+export type UiLocaleCode = "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq" | "is" | "ga" | "mt" | "ca" | "tr" | "ru" | "lb" | "cnr" | "nn" | "rm" | "ka" | "hy" | "az";
 
 // The codes whose catalogues are complete today (criterion 4): the subset of
 // UiLocaleCode the adapters may advertise.
-export type CompleteUiLocaleCode = Extract<UiLocaleCode, "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq">;
+export type CompleteUiLocaleCode = Extract<UiLocaleCode, "be" | "en" | "uk" | "de" | "es" | "fr" | "cs" | "sv" | "zh" | "nb" | "pl" | "da" | "nl" | "pt" | "it" | "fi" | "lt" | "et" | "lv" | "sk" | "hu" | "sl" | "hr" | "ro" | "bg" | "el" | "sr" | "bs" | "mk" | "sq" | "is" | "ga" | "mt" | "ca" | "tr" | "ru" | "lb" | "cnr" | "nn" | "rm" | "ka" | "hy" | "az">;
 
 export interface UiLocaleEntry {
   readonly code: UiLocaleCode;
@@ -33,7 +33,7 @@ export interface UiLocaleEntry {
 }
 
 // Issue #542 criterion 1: the eight requested UI codes and native names,
-// defined once — zh joins as the ninth code with the G21.46 catalogue; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) follow the same record.
+// defined once — zh joins as the ninth code with the G21.46 catalogue; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) and is/ga/mt/ca/tr (EU-UI-04, issue #380) and ru/lb/cnr (EU-UI-05, issue #394) and nn/rm/ka/hy/az (EU-UI-06, issue #395) follow the same record.
 export const UI_LOCALES: readonly UiLocaleEntry[] = [
   { code: "be", nativeName: "Беларуская" },
   { code: "en", nativeName: "English" },
@@ -65,6 +65,19 @@ export const UI_LOCALES: readonly UiLocaleEntry[] = [
   { code: "bs", nativeName: "Bosanski" },
   { code: "mk", nativeName: "Македонски" },
   { code: "sq", nativeName: "Shqip" },
+  { code: "is", nativeName: "Íslenska" },
+  { code: "ga", nativeName: "Gaeilge" },
+  { code: "mt", nativeName: "Malti" },
+  { code: "ca", nativeName: "Català" },
+  { code: "tr", nativeName: "Türkçe" },
+  { code: "ru", nativeName: "Русский" },
+  { code: "lb", nativeName: "Lëtzebuergesch" },
+  { code: "cnr", nativeName: "Црногорски" },
+  { code: "nn", nativeName: "Nynorsk" },
+  { code: "rm", nativeName: "Rumantsch" },
+  { code: "ka", nativeName: "ქართული" },
+  { code: "hy", nativeName: "Հայերեն" },
+  { code: "az", nativeName: "Azərbaycan dili" },
 ];
 
 // The registered complete catalogues (criterion 4): what the selector and
@@ -73,8 +86,8 @@ export const UI_LOCALES: readonly UiLocaleEntry[] = [
 // (de joined with the G21.10 catalogue, 2026-10-03-single-source-translations.md; es joins with the
 // G21.11 catalogue, same record; fr with the G21.12 catalogue, same record;
 // cs with the G21.13 catalogue, same record; sv with the G21.14 catalogue,
-// same record; zh with the G21.46 catalogue, G21.42-chinese-language.md; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) follow the same record).
-export const COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "nb", "pl", "da", "nl", "pt", "it", "fi", "lt", "et", "lv", "sk", "hu", "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq"];
+// same record; zh with the G21.46 catalogue, G21.42-chinese-language.md; nb/pl/da/nl/pt, it/fi/lt (EU-UI-01, issue #377), et/lv/sk/hu/sl (EU-UI-02, issue #378) and hr/ro/bg/el/sr/bs/mk/sq (EU-UI-03, issue #379) and is/ga/mt/ca/tr (EU-UI-04, issue #380) and ru/lb/cnr (EU-UI-05, issue #394) and nn/rm/ka/hy/az (EU-UI-06, issue #395) follow the same record).
+export const COMPLETE_UI_LOCALES: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "zh", "nb", "pl", "da", "nl", "pt", "it", "fi", "lt", "et", "lv", "sk", "hu", "sl", "hr", "ro", "bg", "el", "sr", "bs", "mk", "sq", "is", "ga", "mt", "ca", "tr", "ru", "lb", "cnr", "nn", "rm", "ka", "hy", "az"];
 
 export function isUiLocaleCode(value: string): value is UiLocaleCode {
   return UI_LOCALES.some((entry) => entry.code === value);
@@ -86,11 +99,12 @@ export function isCompleteUiLocale(value: string): value is CompleteUiLocaleCode
 
 // G21.50 (G21.42-chinese-language.md — G21.50): the open subset the pickers advertise is a separate
 // fact from COMPLETE_UI_LOCALES — a code may be complete and still closed.
-// The frozen default is the G21.50 decision set: the eight advertised codes
-// stay open under every flag state (hiding any of them is out of scope),
-// and a code registered complete after this decision (zh first, G21.42 §11)
-// stays closed until the flag names it.
-const RELEASE_DEFAULT_OPEN: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv"];
+// The default open set is the G21.50 decision set (eight) extended by the
+// owner decision of 2026-11-23 (chat, on merging EU-UI-01–06): nb/pl/da/nl/pt/it
+// join the advertised default — fourteen codes stay open under every flag
+// state (hiding any of them is out of scope), and a code registered complete
+// after this decision stays closed until the flag names it.
+const RELEASE_DEFAULT_OPEN: readonly CompleteUiLocaleCode[] = ["be", "en", "uk", "de", "es", "fr", "cs", "sv", "nb", "pl", "da", "nl", "pt", "it"];
 
 // The one build/deploy input that names additionally open codes (additive,
 // comma- or whitespace-separated; `zh` once its catalogue lands). No flag
