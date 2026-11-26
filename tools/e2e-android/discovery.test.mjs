@@ -3,11 +3,35 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { scrollTo } from './discovery.mjs';
+import { runDiscoverySuite, scrollTo } from './discovery.mjs';
 
 const viewport = (id) => `<node resource-id="${id}" bounds="[44,345][1036,2230]"/>`;
 const item = (id, bounds = '[44,900][1036,1360]', label = '') =>
   `<node resource-id="${id}" bounds="${bounds}" content-desc="${label}"/>`;
+
+test('Discovery grants GPS scopes before cold start, ahead of Nearby and active walk', async () => {
+  const calls = [];
+  const stop = new Error('fixture cold start interrupted');
+  const driver = {
+    pkg: 'by.kudy.app',
+    exec: async (args) => { calls.push(args); return { stdout: '' }; },
+  };
+  await assert.rejects(runDiscoverySuite({
+    driver,
+    url: 'kudy://fixture',
+    runCase: async (_name, slug, _driver, testCase) => {
+      assert.equal(slug, 'discovery-offers');
+      await testCase();
+    },
+    coldStart: async () => { calls.push('cold-start'); throw stop; },
+  }), (error) => error === stop);
+  assert.deepEqual(calls, [
+    ['shell', 'pm', 'grant', 'by.kudy.app', 'android.permission.ACCESS_COARSE_LOCATION'],
+    ['shell', 'pm', 'grant', 'by.kudy.app', 'android.permission.ACCESS_FINE_LOCATION'],
+    ['shell', 'pm', 'grant', 'by.kudy.app', 'android.permission.ACCESS_BACKGROUND_LOCATION'],
+    'cold-start',
+  ]);
+});
 
 test('Discovery reaches an offscreen paid card and badge, then scrolls back to its filters', async () => {
   let atBottom = false;

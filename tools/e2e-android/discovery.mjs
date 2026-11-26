@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 
 import { findNode, parseDump } from './driver.mjs';
-import { startWalkAtLocation, tapMapPoint, visiblePointStatus, waitForRun } from './walk.mjs';
+import { grantWalkLocationPermissions, startWalkAtLocation, tapMapPoint, visiblePointStatus, waitForRun } from './walk.mjs';
 
 const SHORT_MS = 30_000;
 const DOWNLOAD_MS = 120_000;
@@ -130,6 +130,10 @@ export async function waitForServerFeedback(feedbackBaseUrl, expected, timeoutMs
 
 export async function runDiscoverySuite({ driver, url, runCase, coldStart, stopOrigin, startOrigin, feedbackBaseUrl }) {
   await runCase('discovery: city offers, filters and previews', 'discovery-offers', driver, async () => {
+    // This suite verifies Nearby + an active walk, not Android's permission prompt.
+    // Fresh AVD installs have no grants; without this the first Nearby tap
+    // leaves a foreground permission dialog covering the Map screen.
+    await grantWalkLocationPermissions(driver);
     await coldStart(driver, url, { timeoutMs: 420_000, caseSlug: 'discovery-explore' });
     await driver.tapSelector({ testID: 'link-discovery' });
     await driver.waitFor({ testID: 'screen-Discovery' }, { timeoutMs: SHORT_MS });
