@@ -62,7 +62,8 @@ function BrandTile({ id, title, logo, note, styles, open }: {
   styles: FoodStyles;
   open: (url: string) => void;
 }) {
-  const markOnly = logo === "pyszne" || logo === "wolt" || logo === "bolt";
+  // Uber Eats' vector already spells the brand name; avoid a second caption.
+  const markOnly = logo === "pyszne" || logo === "wolt" || logo === "bolt" || logo === "ubereats";
   const accessibilityLabel = [title, note].filter(Boolean).join(", ");
   return (
     <PressableSurface

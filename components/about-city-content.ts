@@ -84,7 +84,7 @@ export const ABOUT_CITY_FOOD_LINKS = {
   wolt: "https://wolt.com/pl/pol/gdansk",
   glovo: "https://glovoapp.com/pl/pl/trojmiasto",
   uber: "https://www.ubereats.com/pl/city/gdansk-pomorskie",
-  bolt: "https://bolt.eu/pl-pl/cities/gdansk/",
+  bolt: "https://food.bolt.eu/pl-pl/449-gdansk/",
 } as const;
 
 // The signs the ride facts and the airport steps use; a fact names its sign

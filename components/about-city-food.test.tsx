@@ -68,6 +68,12 @@ test("#256 native: station hours are scoped to Gdańsk Główny and delivery use
   await fireEvent.press(view.getByTestId("fold-food-delivery"));
   // Pyszne renders its title as the wordmark; a separate title is a duplicate.
   expect(view.getAllByText("Pyszne.pl")).toHaveLength(1);
+  // The Uber Eats SVG contains its full wordmark, so do not render it twice.
+  expect(view.queryByText("Uber Eats")).toBeNull();
+  expect(view.getByTestId("about-food-link-uber").props.accessibilityLabel).toBe("Uber Eats");
+  // A generic Bolt rides landing page is not a delivery catalog.
+  expect(new URL(ABOUT_CITY_FOOD_LINKS.bolt).host).toBe("food.bolt.eu");
+  expect(new URL(ABOUT_CITY_FOOD_LINKS.bolt).pathname).toBe("/pl-pl/449-gdansk/");
   for (const id of ["pyszne","wolt","glovo","uber","bolt"] as const) {
     await fireEvent.press(view.getByTestId(`about-food-link-${id}`));
     expect(open).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS[id]);

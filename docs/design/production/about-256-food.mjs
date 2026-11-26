@@ -30,7 +30,7 @@ export function foodProposal(c) {
     const accessibleTitle = note ? title + ', ' + note.replace(/\n/g, ', ') : title;
     return action(key, accessibleTitle, el('span', { className: 'food-brand-stack' },
       el('span', { className: 'food-brand-art' }, badge),
-      mark.startsWith('brand:') ? null : el('span', { className: 'food-brand-name', textContent: title }),
+      mark.startsWith('brand:') || mark === 'ubereats' ? null : el('span', { className: 'food-brand-name', textContent: title }),
       note ? el('span', { className: 'food-brand-note', textContent: note }) : null),
     'food-brand');
   };

@@ -73,12 +73,35 @@ test('#256: 5 delivery shortcuts are clickable brands in a 3-column grid', () =>
     tile.click();
   }
   assert.equal(events.length, 5);
+  // The Uber Eats image is itself a wordmark, no duplicate caption below it.
+  const uber = grid.children.find((tile) => tile.getAttribute('aria-label') === 'Uber Eats');
+  assert.ok(uber);
+  assert.equal(walk(uber).filter((part) => part.className === 'food-brand-name').length, 0);
+  const foodUrl = new URL(LINKS.boltGdansk);
+  assert.equal(foodUrl.host, 'food.bolt.eu');
+  assert.equal(foodUrl.pathname, '/pl-pl/449-gdansk/');
   for (const key of ['pyszneGdansk', 'woltGdansk','glovoGdansk','uberGdansk','boltGdansk'])
     assert.ok(events.some(e => e.includes(LINKS[key])));
   const html = readFileSync(new URL('../docs/design/production/about.html', import.meta.url), 'utf8');
   assert.match(html, /\.food-brand-grid\s*\{[^}]*repeat\(3,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(html, /\.food-brand:focus-visible/);
   assert.ok(!delivery.some(n => n.className === 'food-hint-trigger'), 'no obvious delivery disclaimer');
+});
+
+// The native app and production mockup store delivery destinations separately.
+// Fail in the default npm test when one copy changes without the other.
+test('#256: native and HTML delivery destinations stay identical', () => {
+  const native = readFileSync(new URL('../components/about-city-content.ts', import.meta.url), 'utf8');
+  const routes = [
+    ['pyszne', 'pyszneGdansk'], ['wolt', 'woltGdansk'],
+    ['glovo', 'glovoGdansk'], ['uber', 'uberGdansk'], ['bolt', 'boltGdansk'],
+  ];
+  for (const [key, htmlKey] of routes) {
+    const pattern = new RegExp('\\b' + key + ': "([^"]+)"');
+    const found = native.match(pattern);
+    assert.ok(found, 'native delivery URL missing for ' + key);
+    assert.equal(found[1], LINKS[htmlKey], 'delivery URL drift for ' + key);
+  }
 });
 
 test('#256: bundled real logo vectors are local, with text fallback for other brands', () => {

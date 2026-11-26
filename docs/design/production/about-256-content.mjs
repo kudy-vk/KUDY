@@ -17,7 +17,7 @@ export const LINKS = {
   woltGdansk: 'https://wolt.com/pl/pol/gdansk',
   glovoGdansk: 'https://glovoapp.com/pl/pl/trojmiasto',
   uberGdansk: 'https://www.ubereats.com/pl/city/gdansk-pomorskie',
-  boltGdansk: 'https://bolt.eu/pl-pl/cities/gdansk/',
+  boltGdansk: 'https://food.bolt.eu/pl-pl/449-gdansk/',
   visaDcc: 'https://www.visa.com/en-us/personal/travel/dynamic-currency-conversion',
   nbpRates: 'https://nbp.pl/statystyka-i-sprawozdawczosc/kursy/tabela-a/',
   kantorCompare: 'https://marketportal.pl/kantory/kursy-walut/gdansk/eur',
