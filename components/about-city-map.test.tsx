@@ -7,9 +7,9 @@
 // the reused mockup modules: dropping the design/production transform from
 // jest.config.js dies here on the ESM parse error.
 import { expect, jest, test } from "@jest/globals";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react-native";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react-native";
 import { useState } from "react";
-import { Linking } from "react-native";
+import { Linking, StyleSheet } from "react-native";
 
 import { AboutCityMap, ABOUT_CITY_ATLAS_INITIAL, type AboutCityAtlasState } from "./about-city-map";
 import { aboutCityText } from "./about-city-content";
@@ -80,6 +80,50 @@ test("the zone list picks the zone; the card names it, its kind and the way in",
   expect(card.getByText("Курортны цэнтр: вуліца Monte Cassino (Monciak) вядзе да мора і мола.")).toBeTruthy();
   // The nearest running stop rides the ways (zone.stop, ≤1.5 km).
   expect(card.getByText(/\d+,\d км па прамой/)).toBeTruthy();
+});
+
+test("a list pick flies the measured map using relative animation-frame timestamps", async () => {
+  const frames = new Map<number, FrameRequestCallback>();
+  let nextId = 0;
+  const raf = jest.spyOn(globalThis, "requestAnimationFrame").mockImplementation((callback) => {
+    frames.set(++nextId, callback);
+    return nextId;
+  });
+  const cancel = jest.spyOn(globalThis, "cancelAnimationFrame").mockImplementation((id) => {
+    if (id != null) frames.delete(id);
+  });
+  const frame = async (timestamp: number) => {
+    await act(async () => {
+      const pending = [...frames.keys()];
+      for (const id of pending) {
+        const callback = frames.get(id);
+        frames.delete(id);
+        callback?.(timestamp);
+      }
+    });
+  };
+  const transform = () => StyleSheet.flatten(screen.getByTestId("city-map-world").props.style).transform;
+  try {
+    await renderMap();
+    await fireEvent(screen.getByTestId("city-map"), "layout", { nativeEvent: { layout: { width: 320 } } });
+    const initial = transform();
+    await fireEvent.press(screen.getByTestId("city-map-zone-glowne"));
+    await frame(100);
+    expect(transform()).toEqual(initial);
+    await frame(230);
+    const middle = transform();
+    expect(middle.every((entry: Record<string, number>) => Object.values(entry).every(Number.isFinite))).toBe(true);
+    expect(middle[2].scale).toBeGreaterThan(initial[2].scale);
+    await frame(360);
+    const final = transform();
+    expect(final[2].scale).toBeGreaterThan(middle[2].scale);
+    expect(final.every((entry: Record<string, number>) => Object.values(entry).every(Number.isFinite))).toBe(true);
+    await frame(500);
+    expect(transform()).toEqual(final);
+  } finally {
+    cancel.mockRestore();
+    raf.mockRestore();
+  }
 });
 
 test("the English zone card keeps one decimal digit with a point", async () => {

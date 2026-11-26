@@ -572,9 +572,11 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
         return;
       }
       const from = { centre: [...camRef.current.centre] as [number, number], zoom: camRef.current.zoom };
-      const started = Date.now();
+      // Use the same frame clock for the start and all subsequent frames.
+      let started: number | undefined;
       const tick = (now: number) => {
-        const k = Math.min(1, (now - started) / FLIGHT_MS);
+        started ??= now;
+        const k = Math.min(1, Math.max(0, (now - started) / FLIGHT_MS));
         const e = 1 - (1 - k) ** 3;
         setCam({
           centre: [from.centre[0] + (target.centre[0] - from.centre[0]) * e, from.centre[1] + (target.centre[1] - from.centre[1]) * e],
@@ -812,7 +814,7 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
           <GestureDetector gesture={gesture}>
             <View style={mapStyles.fill}>
             {/* The world scales with the camera; the signs above do not. */}
-            <View style={[mapStyles.world, worldTransform]}>
+            <View style={[mapStyles.world, worldTransform]} testID="city-map-world">
               <Image fadeDuration={0} resizeMode="cover" source={MAP_PICTURE} style={mapStyles.picture} />
               <Svg style={mapStyles.drawing} viewBox={`0 0 ${MAP_W} ${MAP_H}`}>
                 {/* Places to stay lie under places to visit where they
