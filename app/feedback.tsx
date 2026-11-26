@@ -59,6 +59,18 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontSize: 12,
     marginBottom: palette.spaceM,
   },
+  reasonsHeader: {
+    alignItems: "baseline",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: palette.spaceS,
+  },
+  reasonCount: {
+    color: palette.colorMuted,
+    fontFamily: palette.fontFamilyUiStrong,
+    fontSize: 12,
+    fontWeight: palette.fontWeightStrong,
+  },
   section: {
     color: palette.colorMuted,
     fontFamily: palette.fontFamilyUiStrong,
@@ -248,7 +260,10 @@ export default function FeedbackForm() {
               );
             })}
           </View>
-          <ScaledText style={styles.section}>{strings.reasonsTitle}</ScaledText>
+          <View style={styles.reasonsHeader}>
+            <ScaledText style={[styles.section, { marginBottom: 0 }]}>{strings.reasonsTitle}</ScaledText>
+            <ScaledText style={styles.reasonCount} testID="feedback-reasons-count">{`${open.reasons.length} / 3`}</ScaledText>
+          </View>
           <View style={styles.chipRow}>
             {reasonsFor(open.target.kind).map((code) => {
               const selected = open.reasons.includes(code);

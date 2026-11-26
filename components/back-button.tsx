@@ -28,6 +28,9 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     minHeight: 48,
     minWidth: 48,
   },
+  touchCompact: {
+    marginBottom: 0,
+  },
   row: {
     alignItems: "center",
     columnGap: palette.spaceS,
@@ -42,10 +45,12 @@ const lightStyles = createStyles(tokens);
 const darkStyles = createStyles(darkTokens);
 
 export function BackButton({
+  compact = false,
   label,
   onPress,
   testID,
 }: {
+  compact?: boolean;
   label: string;
   onPress?: () => void;
   testID: string;
@@ -59,7 +64,7 @@ export function BackButton({
       accessibilityRole="button"
       hitSlop={{ bottom: 8, left: 8, right: 8, top: 8 }}
       onPress={onPress ?? (() => router.back())}
-      style={styles.touch}
+      style={compact ? [styles.touch, styles.touchCompact] : styles.touch}
       testID={testID}
     >
       <View style={styles.row}>

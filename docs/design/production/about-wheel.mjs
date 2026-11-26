@@ -41,7 +41,7 @@ let drawn = 0;
 // The round sign of an item: the medallion of the home screen pieces (owner's
 // choice, decision M9) — a hand-drawn sand-gold rim round a disc with a Lucide
 // sign. The item in the middle gets an accent ring and the amber light.
-function medallion(iconName) {
+function medallion(iconName, code) {
   const hand = `wheel-hand-${(drawn += 1)}`;
   return svg('svg', { class: 'medal', viewBox: '-36 -36 72 72', 'aria-hidden': 'true' },
     penStroke(hand),
@@ -50,7 +50,9 @@ function medallion(iconName) {
     svg('g', { filter: `url(#${hand})` },
       svg('circle', { class: 'disc', r: 28 }),
       svg('circle', { class: 'inner', r: 24.4 })),
-    svg('g', { class: 'glyph', transform: 'translate(-13 -13) scale(1.0833)' }, ...iconShapes(iconName)));
+    iconName
+      ? svg('g', { class: 'glyph', transform: 'translate(-13 -13) scale(1.0833)' }, ...iconShapes(iconName))
+      : svg('text', { class: 'medal-code', x: 0, y: 5, 'text-anchor': 'middle' }, code));
 }
 
 // items: [{ id, icon, label }]. `slot` is the width of one item in px,
@@ -67,7 +69,7 @@ export function wheel({ items, index = 0, slot, label, lang, controls, onSelect 
   root.style.setProperty('--slot', `${slot}px`);
 
   const nodes = items.map((item) => {
-    const node = el('button', { className: 'slot', type: 'button' }, medallion(item.icon), el('span', { className: 'label', textContent: item.label }));
+    const node = el('button', { className: 'slot', type: 'button' }, medallion(item.icon, item.code), el('span', { className: 'label', textContent: item.label }));
     node.setAttribute('role', 'tab');
     node.setAttribute('aria-controls', controls);
     return node;

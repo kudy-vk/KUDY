@@ -19,7 +19,7 @@ import { CanonIcon, type CanonGlyph } from "./canon-icon";
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { PressableSurface } from "./pressable-surface";
 import { ScaledText } from "./scaled-text";
-import { useThemeStyles } from "./theme";
+import { useThemeStyles, useThemeTokens } from "./theme";
 // The food body needs only the shared fold state and link handler; keeping
 // its contract narrow also lets it render/test without booting the app.
 type FoodContext = {
@@ -34,10 +34,11 @@ type FoodLink = keyof typeof ABOUT_CITY_FOOD_LINKS;
 type FoodStyles = ReturnType<typeof createStyles>;
 const FOOD_FOLD_IDS = ["food-payment", "food-cash", "food-late", "food-delivery"] as const;
 
-function BrandSign({ brand, title, styles }: {
+function BrandSign({ brand, title, styles, accent }: {
   brand: string;
   title: string;
   styles: FoodStyles;
+  accent: string;
 }) {
   const entry = FOOD_BRAND_PATHS[brand as keyof typeof FOOD_BRAND_PATHS];
   if (entry) {
@@ -48,18 +49,19 @@ function BrandSign({ brand, title, styles }: {
     );
   }
   if (brand === "map") {
-    return <CanonIcon glyph={MapPinIcon} label={title} size={30} color={tokens.colorAccent} />;
+    return <CanonIcon glyph={MapPinIcon} label={title} size={30} color={accent} />;
   }
   // An honest text mark is preferable to inventing a service's official logo.
   return <ScaledText style={[styles.wordmark, brand === "wolt" ? styles.wolt : brand === "pyszne" ? styles.pyszne : styles.bolt]}>{title}</ScaledText>;
 }
 
-function BrandTile({ id, title, logo, note, styles, open }: {
+function BrandTile({ id, title, logo, note, styles, accent, open }: {
   id: FoodLink;
   title: string;
   logo: string;
   note?: string;
   styles: FoodStyles;
+  accent: string;
   open: (url: string) => void;
 }) {
   // Uber Eats' vector already spells the brand name; avoid a second caption.
@@ -74,7 +76,7 @@ function BrandTile({ id, title, logo, note, styles, open }: {
       onPress={() => open(ABOUT_CITY_FOOD_LINKS[id])}
     >
       <View style={styles.brandIcon}>
-        <BrandSign brand={logo} title={title} styles={styles} />
+        <BrandSign brand={logo} title={title} styles={styles} accent={accent} />
       </View>
       {markOnly ? null : <ScaledText style={styles.tileName}>{title}</ScaledText>}
       {note ? <ScaledText style={styles.tileNote}>{note}</ScaledText> : null}
@@ -86,11 +88,12 @@ function TileGrid({ children, styles }: { children: ReactNode; styles: FoodStyle
   return <View style={styles.tileGrid}>{children}</View>;
 }
 
-function FoodHint({ label, children, styles, id }: {
+function FoodHint({ label, children, styles, accent, id }: {
   id: string;
   label: string;
   children: ReactNode;
   styles: FoodStyles;
+  accent: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -103,7 +106,7 @@ function FoodHint({ label, children, styles, id }: {
         style={styles.hintButton}
         onPress={() => setOpen(!open)}
       >
-        <CanonIcon glyph={InfoIcon} label={label} size={17} color={tokens.colorAccent} />
+        <CanonIcon glyph={InfoIcon} label={label} size={17} color={accent} />
         <ScaledText style={styles.hintText}>{label}</ScaledText>
       </PressableSurface>
       {open ? <View style={styles.hintBody}>{children}</View> : null}
@@ -111,10 +114,11 @@ function FoodHint({ label, children, styles, id }: {
   );
 }
 
-function ShortLink({ id, title, styles, open }: {
+function ShortLink({ id, title, styles, accent, open }: {
   id: FoodLink;
   title: string;
   styles: FoodStyles;
+  accent: string;
   open: (url: string) => void;
 }) {
   return (
@@ -126,15 +130,15 @@ function ShortLink({ id, title, styles, open }: {
       onPress={() => open(ABOUT_CITY_FOOD_LINKS[id])}
     >
       <ScaledText style={styles.actionText}>{title}</ScaledText>
-      <CanonIcon glyph={ExternalLinkIcon} label={title} size={16} color={tokens.colorAccent} />
+      <CanonIcon glyph={ExternalLinkIcon} label={title} size={16} color={accent} />
     </PressableSurface>
   );
 }
 
-function Fact({ label, glyph, styles }: { label: string; glyph: CanonGlyph; styles: FoodStyles }) {
+function Fact({ label, glyph, styles, accent }: { label: string; glyph: CanonGlyph; styles: FoodStyles; accent: string }) {
   return (
     <View style={styles.fact}>
-      <CanonIcon glyph={glyph} label={label} size={21} color={tokens.colorAccent} />
+      <CanonIcon glyph={glyph} label={label} size={21} color={accent} />
       <ScaledText style={styles.factText}>{label}</ScaledText>
     </View>
   );
@@ -143,13 +147,15 @@ function Fact({ label, glyph, styles }: { label: string; glyph: CanonGlyph; styl
 export function AboutCityFood({ ctx }: { ctx: FoodContext }) {
   const { t, ui, toggleFold, openLink } = ctx;
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
+  const accent = palette.colorAccent;
   const fold = (id: string, glyph: CanonGlyph, title: string, meta: string, body: ReactNode) => (
     <Fold
       key={id}
       id={id}
       open={Boolean(ui.folds[id])}
       onToggle={(key, open) => toggleFold(FOOD_FOLD_IDS, key, open)}
-      lead={<CanonIcon glyph={glyph} label={title} size={22} color={tokens.colorAccent} />}
+      lead={<CanonIcon glyph={glyph} label={title} size={22} color={accent} />}
       title={title}
       meta={meta}
       body={body}
@@ -157,19 +163,19 @@ export function AboutCityFood({ ctx }: { ctx: FoodContext }) {
   );
   const label = (key: string) => t(`food.v2.${key}`);
   const tile = (id: FoodLink, title: string, logo: string, note?: string) =>
-    <BrandTile key={id} id={id} title={title} logo={logo} note={note} styles={styles} open={openLink} />;
+    <BrandTile key={id} id={id} title={title} logo={logo} note={note} styles={styles} accent={accent} open={openLink} />;
   const link = (id: FoodLink, key: string) =>
-    <ShortLink key={id} id={id} title={label(key)} styles={styles} open={openLink} />;
+    <ShortLink key={id} id={id} title={label(key)} styles={styles} accent={accent} open={openLink} />;
   const hint = (id: string, key: string, body: ReactNode) =>
-    <FoodHint id={id} key={id} label={label(key)} styles={styles}>{body}</FoodHint>;
+    <FoodHint id={id} key={id} label={label(key)} styles={styles} accent={accent}>{body}</FoodHint>;
   return (
     <View style={styles.section} testID="about-food-v2">
       {fold("food-payment", CreditCardIcon, label("payTitle"), label("payMeta"),
         <View style={styles.body}>
           <View style={styles.facts}>
-            <Fact label={label("pln")} glyph={LandmarkIcon} styles={styles} />
-            <Fact label={label("card")} glyph={CreditCardIcon} styles={styles} />
-            <Fact label={t("food.blik.title")} glyph={SmartphoneIcon} styles={styles} />
+            <Fact label={label("pln")} glyph={LandmarkIcon} styles={styles} accent={accent} />
+            <Fact label={label("card")} glyph={CreditCardIcon} styles={styles} accent={accent} />
+            <Fact label={t("food.blik.title")} glyph={SmartphoneIcon} styles={styles} accent={accent} />
           </View>
           {hint("dcc", "dccTitle", <View style={styles.body}>
             <ScaledText style={styles.detailText}>{label("dccText")}</ScaledText>

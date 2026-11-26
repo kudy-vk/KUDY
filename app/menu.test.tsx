@@ -180,3 +180,39 @@ test("the map block height is 5/8 of the screen height minus the status inset", 
   expect(menuTopBlockHeight(932, 47)).toBeCloseTo(535.5);
 });
 
+test("first-run language carousel sheet shows when cache is empty and caches the chosen locale on confirm", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  let cached: "be" | "en" | null = null;
+  const uiLocalePersistence = {
+    read: () => cached,
+    write: (locale: string) => {
+      cached = locale as "be" | "en";
+    },
+  };
+  const services = createServices({ uiLocalePersistence });
+  await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+
+  // First launch with empty cache shows the language carousel sheet.
+  expect(screen.getByTestId("language-onboarding-sheet")).toBeTruthy();
+  expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("Беларуская");
+
+  // Step to the next language on the carousel ('en' -> English) and confirm.
+  await fireEvent.press(screen.getByTestId("btn-language-next"));
+  expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("English");
+  await fireEvent.press(screen.getByTestId("btn-language-onboarding-confirm"));
+
+  // Sheet dismisses, cache holds 'en', and the menu heading updates to English.
+  expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
+  expect(cached).toBe("en");
+  expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+});
+
+test("language carousel sheet is skipped on launch when a locale is already cached", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  const services = createServices({
+    uiLocalePersistence: { read: () => "en", write: () => {} },
+  });
+  await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+  expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
+  expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+});

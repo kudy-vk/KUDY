@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Гіды / Прапанова паліроўкі</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .g-title { display: flex; align-items: center; gap: 8px; }
+  .g-title .icon { color: var(--accent); }
+  .g-title span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 80ch; }
+
+  /* Filter chips appear only when there are ≥2 guides to filter — no empty drawer. */
+  .g-filter-row {
+    flex: none; display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 4px 16px 10px; border-bottom: 1px solid var(--line);
+  }
+  .g-filter-row[hidden] { display: none; }
+
+  .g-scroll { display: flex; flex-direction: column; }
+  .g-list { flex: none; display: grid; gap: 12px; margin: 0; padding: 10px 16px 16px; list-style: none; }
+  .g-card { display: grid; gap: 10px; width: 100%; text-align: left; cursor: pointer; }
+  .g-card:active { border-color: var(--accent); }
+  .g-head { display: flex; align-items: flex-start; gap: 12px; }
+  .g-photo {
+    flex: none; display: grid; place-items: center;
+    width: 64px; height: 64px;
+    border: 1px solid var(--medal-rim); border-radius: 10px;
+    background: color-mix(in srgb, var(--medal-glow) 12%, var(--paper));
+    color: var(--engrave);
+  }
+  [data-theme="dark"] .g-photo {
+    background: color-mix(in srgb, var(--medal-glow) 10%, var(--card));
+    border-color: color-mix(in srgb, var(--medal-rim) 70%, var(--line));
+  }
+  .g-heading { flex: 1; min-width: 0; display: grid; gap: 4px; }
+  .g-name { display: block; font-size: calc(20px * var(--fs)); line-height: 1.2; overflow-wrap: anywhere; }
+  .g-facts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; color: var(--muted); font-size: calc(13px * var(--fs)); }
+  .g-fact { display: inline-flex; align-items: center; gap: 4px; }
+  .g-fact .icon { color: var(--accent); }
+  .g-dot { opacity: .6; }
+
+  .g-summary {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;
+    overflow: hidden; color: var(--muted); font-size: calc(14px * var(--fs)); line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .g-meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px;
+    padding-top: 8px; border-top: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  }
+  .g-langs { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .g-lang { display: inline-flex; align-items: center; gap: 5px; font-size: calc(12px * var(--fs)); font-weight: 600; letter-spacing: .02em; }
+  .g-lang .icon { color: var(--accent); }
+  .g-none { font-weight: 400; opacity: .65; }
+  .g-meta .tag {
+    margin-left: auto; font-weight: 600;
+    border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  .g-cache { display: flex; align-items: center; gap: 8px; margin: 10px 16px 2px; }
+  .g-empty { margin: 12px 16px; color: var(--muted); }
+  .g-rest { flex: none; margin-top: auto; }
+  .g-ad { padding-bottom: 8px; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Гіды — прапанова паліроўкі</h1>
+  <p class="lead">Прапанова паліроўкі экрана «Гіды» ў адзіным HTML-каталогу (базавы макет <code>guides.html</code> захаваны без змен). Пераключы ўверсе «Спіс: Адзін маршрут» і «Спіс: Доўгі спіс (з фільтрамі)».</p>
+  <ul class="based">
+    <li><b>Час і колькасць прыпынкаў адразу ў картцы:</b> пад назвай маршруту дададзеныя <code>🕒 60–90 хв · 📍 7 кропак</code>, каб вандроўнік ацэньваў прагулку яшчэ ў спісе (раней на экране «Гіды» часу і кропак у картцы не было).</li>
+    <li><b>Сумленныя фільтры без пустой заглушкі:</b> калі ў горадзе адзін маршрут, у шапцы няма кнопкі-заглушкі «Катэгорыі яшчэ вызначаюцца»; калі маршрутаў некалькі («Доўгі спіс»), адразу пад шапкай з'яўляюцца жывыя чыпы <code>Усе</code> · <code>Бясплатныя</code> · <code>З аўдыё</code>.</li>
+    <li><b>Гравюрная мініяцюра замест «бітай карцінкі»:</b> калі ў маршруту няма фота, у квадраце 64×64 малюецца не тэхнічны значок «фотаапарат/файл», а міні-віньетка маршруту ў колерах гравюры і медальёна.</li>
+    <li><b>Чытэльны падвал карткі:</b> мовы тэксту і аўдыё набраныя выразнымі капсамі (<code>📖 BE · EN</code>, <code>🎧 BE</code>) з мятнымі значкамі і аддзеленыя тонкім падзельнікам, а бірка доступу (<code>Платны</code> / <code>Бясплатна</code>) мае тонкі кант для кантрасту ў цёмнай тэме.</li>
+  </ul>
+</main>
+<script type="module">
+  import './guides.mjs';
+  import { mountPolishEnhancer } from './polish-enhancers.mjs';
+  mountPolishEnhancer('guides');
+</script>
+</body>
+</html>

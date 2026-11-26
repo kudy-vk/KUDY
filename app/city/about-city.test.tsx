@@ -348,3 +348,15 @@ test("tourist and resident card links point to the accepted official destination
   expect(Object.keys(ABOUT_CITY_LINK_URLS)).not.toContain("muzeumGdanska");
   expect(Object.keys(ABOUT_CITY_LINK_URLS)).not.toContain("muzeum1939");
 });
+
+test("AboutCity back button has zero bottom margin and closed airport steps display orientation subtitles", async () => {
+  await openGuide();
+  const back = screen.getByTestId("btn-about-back");
+  const backStyle = Object.assign({}, ...(Array.isArray(back.props.style) ? back.props.style : [back.props.style]));
+  expect(backStyle.marginBottom).toBe(0);
+
+  const page = pageOf("airport");
+  expect(page.getByText("Port Lotniczy 01, 02 · PKM")).toBeTruthy();
+  expect(page.getByText("210 · 110 · N3 · POLREGIO")).toBeTruthy();
+  expect(page.getByText("Аўтобус ZTM · Цягнік POLREGIO")).toBeTruthy();
+});

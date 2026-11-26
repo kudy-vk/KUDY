@@ -23,9 +23,9 @@ import { slotOffset } from "./about-city-wheel";
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { PressableSurface } from "./pressable-surface";
 import { ScaledText } from "./scaled-text";
-import { useThemeStyles } from "./theme";
+import { useThemeStyles, useThemeTokens } from "./theme";
 
-export type AboutCityPagesContext = Omit<AboutCitySectionContext, "styles">;
+export type AboutCityPagesContext = Omit<AboutCitySectionContext, "styles" | "palette">;
 
 // One section page: the body rides the wheel's position through `pos` (px
 // along the ring), so the page sits where its medal stands — the open page
@@ -43,6 +43,7 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
   failedLink: string | null;
 }): ReactNode {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   const scrollRef = useRef<ScrollViewInstance>(null);
   // A change of section resets the scroll (the mockup's rule): the page
   // resets itself the moment it becomes the open one.
@@ -74,11 +75,12 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
       <ScrollView contentContainerStyle={styles.content} ref={scrollRef} style={styles.scroll} testID={`scroll-about-${id}`}>
         <ScaledText accessibilityRole="header" style={styles.head}>{t(`head.${id}`)}</ScaledText>
         <AboutCitySection id={id} ctx={ctx} />
+        {tourist ? <TouristCard context={ctx} /> : null}
         {links.length > 0 ? (
           <Fold id={foldId} title={t("sources.title")} open={Boolean(ctx.ui.folds[foldId])}
             onToggle={(key, open) => ctx.toggleFold([key], key, open)}
-            body={<View style={styles.stack}>
-              {links.map((linkKey) => {
+            body={<View style={styles.sourceList}>
+              {links.map((linkKey, rowIdx) => {
                 const label = t(`links.${linkKey}`);
                 return (
                   <PressableSurface
@@ -86,18 +88,17 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
                     accessibilityLabel={label}
                     key={linkKey}
                     onPress={() => ctx.openLink(ABOUT_CITY_LINK_URLS[linkKey])}
-                    style={[styles.card, styles.linkRow]}
+                    style={[styles.linkRow, rowIdx > 0 ? styles.linkRowDivider : null]}
                     testID={`link-about-${linkKey}`}
                   >
                     <ScaledText style={styles.linkLabel}>{label}</ScaledText>
-                    <CanonIcon glyph={ExternalLinkIcon} label={label} color={tokens.colorAccent} size={18} />
+                    <CanonIcon glyph={ExternalLinkIcon} label={label} color={palette.colorAccent} size={18} />
                   </PressableSurface>
                 );
               })}
             </View>} />
         ) : null}
         {failedHere ? <Remark tone="error" text={t("link.failed", { url: failedHere })} /> : null}
-        {tourist ? <TouristCard context={ctx} /> : null}
       </ScrollView>
     </Animated.View>
   );
@@ -161,25 +162,27 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     fontWeight: tokens.fontWeightStrong,
     lineHeight: 27,
   },
-  stack: { gap: 8 },
-  card: {
-    backgroundColor: palette.colorCard,
-    borderColor: palette.colorLine,
-    borderRadius: tokens.radiusBase,
-    borderWidth: StyleSheet.hairlineWidth,
+  sourceList: {
+    borderTopColor: palette.colorLine,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   linkRow: {
     alignItems: "center",
     columnGap: 12,
     flexDirection: "row",
-    minHeight: 56,
-    paddingHorizontal: 12,
+    minHeight: 52,
+    paddingHorizontal: 4,
     paddingVertical: 10,
   },
+  linkRowDivider: {
+    borderTopColor: palette.colorLine,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
   linkLabel: {
-    color: palette.colorAccent,
+    color: palette.colorInk,
+    flex: 1,
     flexShrink: 1,
-    fontSize: 16,
+    fontSize: 15,
   },
 });
 const lightStyles = createStyles(tokens);

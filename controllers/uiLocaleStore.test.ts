@@ -148,3 +148,31 @@ test('G21.50: without an injection the open set is the registry fact', () => {
     assert.equal(store.current(), code);
   }
 });
+
+test('first-run language onboarding: needsOnboarding is true when persistence has null, and confirm writes even the default be choice', () => {
+  let cached: 'be' | 'en' | 'uk' | null = null;
+  const persistence = {
+    read: () => cached,
+    write: (locale: string) => {
+      cached = locale as 'be' | 'en' | 'uk';
+    },
+  };
+  const firstLaunch = createUiLocaleStore(persistence);
+  assert.equal(firstLaunch.needsOnboarding?.(), true);
+  assert.equal(firstLaunch.current(), 'be');
+
+  // Confirming the default ('be') writes to cache and clears needsOnboarding.
+  firstLaunch.confirm?.('be');
+  assert.equal(cached, 'be');
+  assert.equal(firstLaunch.needsOnboarding?.(), false);
+
+  // Second launch reads the cached 'be' and skips onboarding.
+  const secondLaunch = createUiLocaleStore(persistence);
+  assert.equal(secondLaunch.needsOnboarding?.(), false);
+  assert.equal(secondLaunch.current(), 'be');
+
+  // Clearing the cache restores first-run onboarding on next launch.
+  cached = null;
+  const afterClear = createUiLocaleStore(persistence);
+  assert.equal(afterClear.needsOnboarding?.(), true);
+});

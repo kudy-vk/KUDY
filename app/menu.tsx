@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import SettingsIcon from "lucide-react-native/icons/settings";
@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useServices, useUiLocale } from "./_layout";
 import { AdContainer } from "../components/ad-container";
 import { CityPanorama } from "../components/city-panorama";
+import { LanguageOnboardingSheet } from "../components/language-onboarding-sheet";
 import { PressableSurface } from "../components/pressable-surface";
 import { HomeMapMenu, cityMenuConfig } from "../components/city-map-menu";
 import { tokens } from "../components/design-tokens";
@@ -39,6 +40,10 @@ export default function Menu() {
   const themedStyles = useScreenStyles();
   const locale = useUiLocale();
   const services = useServices();
+  const needsOnboarding = useSyncExternalStore(
+    services.uiLocale.subscribe,
+    () => services.uiLocale.needsOnboarding?.() ?? false,
+  );
   const router = useRouter();
   const [visit, setVisit] = useState(0);
   useFocusEffect(useCallback(() => { setVisit(value => value + 1); }, []));
@@ -89,6 +94,7 @@ export default function Menu() {
         <CityPanorama testID="menu-panorama" />
       </View>
       <AdContainer loaded={false} testID="menu-ad" />
+      {needsOnboarding ? <LanguageOnboardingSheet uiLocale={services.uiLocale} /> : null}
     </ScreenSurface>
   );
 }
