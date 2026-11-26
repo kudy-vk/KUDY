@@ -1,0 +1,48 @@
+{
+  "source": {
+    "kind": "files"
+  },
+  "root": {
+    "id": "KUDY-DESIGN-CATALOG-REVIEW",
+    "identifier": "KUDY-DESIGN-CATALOG-REVIEW",
+    "url": "spec.md"
+  },
+  "leaves": [
+    {
+      "id": "T01",
+      "identifier": "T01",
+      "title": "01. «Налады» і «Прагулка» на ўсіх мовах перамыкача",
+      "url": "issues/01-render-critical-locales.md"
+    },
+    {
+      "id": "T02",
+      "identifier": "T02",
+      "title": "02. Подпісы ў меню, гідах і прэв’ю гіда",
+      "url": "issues/02-complete-mockup-labels.md"
+    },
+    {
+      "id": "T03",
+      "identifier": "T03",
+      "title": "03. Спасылка на выбраны прагляд каталога",
+      "url": "issues/03-link-catalog-view.md"
+    },
+    {
+      "id": "T04",
+      "identifier": "T04",
+      "title": "04. Спасылка з памерам, мовай і маштабам тэксту",
+      "url": "issues/04-restore-board-controls.md"
+    },
+    {
+      "id": "T05",
+      "identifier": "T05",
+      "title": "05. Подпісы ў KUDY, «Чым заняцца» і форме ацэнкі",
+      "url": "issues/05-label-discovery-and-feedback.md"
+    },
+    {
+      "id": "T06",
+      "identifier": "T06",
+      "title": "06. Спасылка з перамыкачамі канкрэтнага макета",
+      "url": "issues/06-restore-screen-presets.md"
+    }
+  ]
+}

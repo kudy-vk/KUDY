@@ -158,8 +158,8 @@ test("the city section shows the illustrated Tricity map, not the schematic (iss
   expect(screen.getByTestId("city-map")).toBeTruthy();
   expect(screen.getByTestId("city-map-layers")).toBeTruthy();
   expect(screen.getByText("Націсні на каляровую зону, станцыю або знак аэрапорта, каб даведацца, што гэта.")).toBeTruthy();
-  // The map's caption is the mockup's own: the drawing is approximate.
-  expect(screen.getByText(/малюнак прыблізны\. Не для навігацыі\./)).toBeTruthy();
+  // The owner removed the caption; the map, switches and hint remain.
+  expect(pageOf("city").queryByText(/малюнак прыблізны\. Не для навігацыі\./)).toBeNull();
   // The old schematic's places are gone with it.
   expect(screen.queryByTestId("city-spot-stogi")).toBeNull();
 });
