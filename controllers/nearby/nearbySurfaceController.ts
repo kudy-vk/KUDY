@@ -197,9 +197,8 @@ export function useNearbySurface(
         ? previous : [fix.lng, fix.lat]);
     });
     read();
-    // The service emits no status change event; the surface polls its
-    // status() read while open (a permission answer, a grant or a watchdog
-    // step land within one poll — the render suite's waits rely on it).
+    // Status changes arrive through the observer above. Polling remains the
+    // fallback for walk-mode handovers that do not change the status value.
     const timer = setInterval(read, STATUS_POLL_MS);
     return () => {
       disposed = true;
