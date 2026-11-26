@@ -450,6 +450,36 @@ export interface AboutCityStrings {
     readonly westerplatte: string;
   };
   readonly food: {
+    // #256: four compact groups and their optional hints. Localized in the
+    // canonical contracts/ui-messages registry, never inline in the UI.
+    readonly v2: {
+      readonly payTitle: string;
+      readonly payMeta: string;
+      readonly pln: string;
+      readonly card: string;
+      readonly dccTitle: string;
+      readonly dccText: string;
+      readonly dccSource: string;
+      readonly cashTitle: string;
+      readonly cashMeta: string;
+      readonly cashTip: string;
+      readonly rateCompare: string;
+      readonly nbpRate: string;
+      readonly offices: string;
+      readonly centreExchange: string;
+      readonly atmTitle: string;
+      readonly atmText: string;
+      readonly lateTitle: string;
+      readonly lateMeta: string;
+      readonly station: string;
+      readonly mcdHours: string;
+      readonly kfcHours: string;
+      readonly otherPlaces: string;
+      readonly kitchenTitle: string;
+      readonly kitchenText: string;
+      readonly deliveryTitle: string;
+      readonly deliveryMeta: string;
+    };
     readonly deliveryLabel: string;
     readonly delivery: {
       readonly lead: string;

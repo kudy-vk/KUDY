@@ -6,10 +6,11 @@
 // Words and facts: about-content.mjs. The parts every variant shares (the
 // wheel, the open section, transport, food, the map): about-screen.mjs.
 import { el, icon } from './kit.mjs';
-import * as words from './about-content.mjs';
-import { CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, FREE_DAYS, LINKS, PRICES, RIDES, hasText, price } from './about-content.mjs';
+import * as words from './about-256-content.mjs';
+import { CARD_HOURS, CARD_PACKAGES, CARD_SMAKI_PRICE, FREE_DAYS, LINKS, PRICES, RIDES, hasText, price } from './about-256-content.mjs';
 import { fold, heading, prices, remark, seg, sr, steps } from './about-parts.mjs';
-import { airportSteps, card, city, directionSwitch, food, mountAbout, sourceRows, text, transport } from './about-screen.mjs';
+import { foodProposal } from './about-256-food.mjs';
+import { airportSteps, card, city, directionSwitch, mountAbout, sourceRows, text, transport } from './about-screen.mjs';
 
 // Each section returns its nodes. `c` carries: t (words), money (a price in
 // the guide language), ui (what the visitor chose inside the sections),
@@ -84,10 +85,10 @@ function touristCard(c) {
 
 mountAbout({
   words,
-  build: { airport, transport: (c) => transport(c), city, food, card: touristCard },
+  build: { airport, transport: (c) => transport(c), city, food: foodProposal, card: touristCard },
   ui: { hours: 24, day: 1 },
   context: (state) => ({ money: (amount, cents) => price(state.locale, amount, cents) }),
-  head: ({ t }) => [el('p', { className: 'g-checked' }, icon('check', 14), t('verified'))],
+  head: ({ t, section }) => [el('p', { className: 'g-checked' }, icon(section.id === 'food' ? 'info' : 'check', 14), t(section.id === 'food' ? 'food.verified' : 'verified'))],
   sources: (c) => {
     const { t, section, state } = c;
     // A section without official pages (the map) has no block for them.

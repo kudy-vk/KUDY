@@ -15,7 +15,7 @@ import { ScrollView, StyleSheet, View, type ScrollViewInstance } from "react-nat
 import Animated, { useAnimatedStyle, type SharedValue } from "react-native-reanimated";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
 
-import { ABOUT_CITY_APPS, ABOUT_CITY_LINK_URLS, type AboutCityLinkKey, type AboutCitySectionId } from "./about-city-content";
+import { ABOUT_CITY_APPS, ABOUT_CITY_FOOD_LINKS, ABOUT_CITY_LINK_URLS, type AboutCityLinkKey, type AboutCitySectionId } from "./about-city-content";
 import { AboutCitySection, TouristCard, type AboutCitySectionContext } from "./about-city-sections";
 import { Fold, Remark } from "./about-city-parts";
 import { CanonIcon } from "./canon-icon";
@@ -59,7 +59,8 @@ function AboutCityPage({ index, id, links, pos, slot, ring, width, active, ctx, 
   const foldId = `official-sources-${id}`;
   const ownsLink = links.some((key) => ABOUT_CITY_LINK_URLS[key] === failedLink)
     || (tourist && failedLink === ABOUT_CITY_LINK_URLS.kartaTurysty)
-    || (id === "transport" && (failedLink === ABOUT_CITY_LINK_URLS.jestemZGdanska || ABOUT_CITY_APPS.some((app) => app.url === failedLink)));
+    || (id === "transport" && (failedLink === ABOUT_CITY_LINK_URLS.jestemZGdanska || ABOUT_CITY_APPS.some((app) => app.url === failedLink)))
+    || (id === "food" && Object.values(ABOUT_CITY_FOOD_LINKS).some((url) => url === failedLink));
   const failedHere = ownsLink ? failedLink : null;
 
   return (

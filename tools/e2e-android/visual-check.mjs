@@ -45,6 +45,7 @@ import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 
 import { DriverError, E2eDriver, findNode, listBootedDevices, parseDump, resolveAdb } from './driver.mjs';
+import { scrollTo } from './discovery.mjs';
 import { MIN_TARGET_DP, checkA11y, listHitSlopSources, parseA11yTree, readHitSlops } from './visual-a11y.mjs';
 import {
   APP_PACKAGE,
@@ -585,6 +586,10 @@ export async function captureAll({ driver, matrix, capturesDir, metroPort, origi
             await driver.exec(['shell', 'input', 'swipe', '540', '1780', '540', '700', '450']);
           }
           await driver.tapSelector({ testID: 'fold-atlas-list' }, { timeoutMs: 10000 });
+          // The open fold's first row can still be below the 1.5× viewport.
+          // UIAutomator exposes a clipped node with inverted bounds there;
+          // scroll it into view before recording a settled visual specimen.
+          await scrollTo(driver, 'city-map-zone-glowne', `about-city-list-font${scale}`, { scrollID: 'scroll-about-city' });
           await waitSettled(driver, { testID: 'city-map-zone-glowne' }, { timeoutMs: 30000, dumpBasename: dumpBasenameForSlot({ surface: 'about-city-list', story: null, scale }) });
           await shot('about-city-list', scale);
         }

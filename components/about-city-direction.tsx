@@ -1,6 +1,6 @@
 // #334, M14 — the airport route cards reuse the accepted HTML paths.
 import { StyleSheet, View } from "react-native";
-import Svg, { Path } from "react-native-svg";
+import Svg, { G, Path } from "react-native-svg";
 import { OLD_TOWN, PLANE_PATH } from "../docs/design/production/route-art-paths.mjs";
 import { PressableSurface } from "./pressable-surface";
 import { useThemeTokens } from "./theme";
@@ -40,17 +40,19 @@ export function AirportDirection({ value, onChange, t }: {
             }]}
           >
             <Svg accessibilityElementsHidden importantForAccessibility="no-hide-descendants" viewBox="0 0 156 50" width="100%" height={54}>
-              <Svg x={townX} y={0} width={54} height={54} viewBox="0 6 100 90">
+              {/* The reported Android rendering lost the plane and arrow inside
+                  nested SVGs. Position every symbol in one viewport instead. */}
+              <G testID={`direction-${direction}-town`} transform={`translate(${townX} -0.54) scale(0.54)`}>
                 {OLD_TOWN.map(([kind, d], index) => (
                   <Path key={index} d={d} stroke={ink} fill={kind === "mass" ? ground : "none"}
                     strokeWidth={kind === "fine" ? 0.7 : 1.1} strokeLinecap="round" strokeLinejoin="round"
                     opacity={kind === "fine" ? 0.6 : 1} vectorEffect="non-scaling-stroke" />
                 ))}
-              </Svg>
-              <Svg x={planeX} y={7} width={36} height={36} viewBox="0 0 24 24">
+              </G>
+              <G testID={`direction-${direction}-plane`} transform={`translate(${planeX} 7) scale(1.5)`}>
                 <Path d={PLANE_PATH} stroke={ink} fill={ground} strokeWidth={1.1} strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-              </Svg>
-              <Path d={`M${arrowX} 25h16m-6-6 6 6-6 6`} fill="none" stroke={ink} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
+              </G>
+              <Path testID={`direction-${direction}-arrow`} d={`M${arrowX} 25h16m-6-6 6 6-6 6`} fill="none" stroke={ink} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
             </Svg>
           </PressableSurface>
         );
