@@ -115,6 +115,8 @@ export function NearbyNativeMap({
     if (loaded && !position && points.length && following.current &&
         !hadGpsPosition.current && !guideCentered.current) {
       guideCentered.current = true;
+      // A tile retry remounts Camera: use this guide, not the older Tricity start.
+      initialViewState.center = points[0].coordinate;
       camera.current?.easeTo({ center: points[0].coordinate, zoom: MAP_ZOOM, duration: 650, easing: "ease" });
     }
   }, [loaded, points, position]);

@@ -92,3 +92,36 @@ test("tile errors show retry in the same sized frame; missing catalog coordinate
   await fireEvent.press(screen.getByTestId("nearby-map-retry"));
   expect(screen.getByTestId("nearby-native-map")).toBeTruthy();
 });
+
+test("retry restores a late-arriving guide center after a tile failure with no GPS", async () => {
+  cameraCalls.length = 0;
+  const rendered = await render(<NearbyNativeMap {...props} offers={[]} />);
+  await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
+  expect(screen.getByTestId("mock-map-camera").props.initialViewState.center).toEqual([18.6, 54.41]);
+
+  await rendered.rerender(<NearbyNativeMap {...props} offers={[guide]} />);
+  expect(cameraCalls.at(-1)).toEqual(expect.objectContaining({ center: [18.65, 54.35] }));
+
+  await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFailLoadingMap");
+  expect(screen.queryByTestId("nearby-native-map")).toBeNull();
+  await fireEvent.press(screen.getByTestId("nearby-map-retry"));
+  expect(screen.getByTestId("mock-map-camera").props.initialViewState.center).toEqual([18.65, 54.35]);
+
+  const callsAtRetry = cameraCalls.length;
+  await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
+  expect(screen.getByTestId("mock-map-camera").props.initialViewState.center).toEqual([18.65, 54.35]);
+  expect(cameraCalls).toHaveLength(callsAtRetry);
+  expect(screen.getByTestId("nearby-map-marker-guide-1")).toBeTruthy();
+});
+
+test("manual pan without GPS keeps the map from jumping to a late guide", async () => {
+  cameraCalls.length = 0;
+  const rendered = await render(<NearbyNativeMap {...props} offers={[]} />);
+  await fireEvent(screen.getByTestId("nearby-native-map"), "onDidFinishLoadingMap");
+  await fireEvent(screen.getByTestId("nearby-native-map"), "onRegionWillChange", {
+    nativeEvent: { userInteraction: true },
+  });
+  await rendered.rerender(<NearbyNativeMap {...props} offers={[guide]} />);
+  expect(cameraCalls).toHaveLength(0);
+  expect(screen.getByTestId("mock-map-camera").props.initialViewState.center).toEqual([18.6, 54.41]);
+});
