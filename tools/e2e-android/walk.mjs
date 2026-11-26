@@ -260,6 +260,21 @@ export async function visiblePointStatus(driver, stopId, predicate, slug, timeou
   }
 }
 
+// This suite tests a live walk, not Android's permission-onboarding UI.
+// After the local runner clears app data the app has no runtime grants; asking
+// for background location then may be refused before foreground is granted.
+// The GPS ownership suite uses the same fixture and must share this setup.
+export async function grantWalkLocationPermissions(driver) {
+  assert.ok(driver.pkg, 'walk E2E needs its installed test package to grant location');
+  for (const scope of [
+    'android.permission.ACCESS_COARSE_LOCATION',
+    'android.permission.ACCESS_FINE_LOCATION',
+    'android.permission.ACCESS_BACKGROUND_LOCATION',
+  ]) {
+    await driver.exec(['shell', 'pm', 'grant', driver.pkg, scope]);
+  }
+}
+
 export async function startWalkAtLocation(driver, latitude, longitude) {
   // Seed before the watcher starts so a fresh AVD cannot supply a distant
   // default fix that makes the next fix look like an impossible GPS jump.
@@ -284,6 +299,9 @@ export async function waitForManualStart(driver) {
 export async function runWalkSuite({ driver, url, runCase, coldStart, originLogPath }) {
   let rowId = null;
   await runCase('walk: Explore, Guides and preview show theme, languages and locks', 'walk-preview', driver, async () => {
+    // Grant foreground first, background last, before any OS prompt can race Start.
+    // Do not weaken waitForLocationListeners: the real OS subscription is still checked.
+    await grantWalkLocationPermissions(driver);
     await coldStart(driver, url, { timeoutMs: 420000, caseSlug: 'walk-explore' });
     await driver.waitFor({ testID: `guide-card-${FREE}` }, { timeoutMs: SHORT_MS });
     await driver.tapSelector({ testID: 'link-guides' });

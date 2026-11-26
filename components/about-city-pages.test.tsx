@@ -12,7 +12,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react-native
 import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
-import { ABOUT_CITY_LINK_URLS, ABOUT_CITY_SECTIONS, aboutCityText, type AboutCitySectionId } from "./about-city-content";
+import { ABOUT_CITY_FOOD_LINKS, ABOUT_CITY_LINK_URLS, ABOUT_CITY_SECTIONS, aboutCityText, type AboutCitySectionId } from "./about-city-content";
 import { ABOUT_CITY_STRINGS } from "./about-city-strings.generated";
 import { ABOUT_CITY_INITIAL_UI } from "./about-city-sections";
 import { AboutCityPages, type AboutCityPagesContext } from "./about-city-pages";
@@ -207,6 +207,26 @@ test("resident card opens its official site; other official links start closed",
   await fireEvent.press(fold);
   await fireEvent.press(page.getByTestId("link-about-ztmSchedule"));
   expect(openLink).toHaveBeenCalledWith(ABOUT_CITY_LINK_URLS.ztmSchedule);
+});
+
+test.each([
+  ["delivery", ABOUT_CITY_FOOD_LINKS.pyszne],
+  ["restaurant map", ABOUT_CITY_FOOD_LINKS.mapKfc],
+  ["currency rates", ABOUT_CITY_FOOD_LINKS.nbpRates],
+])("#256 failed %s link shows an error only on food page", async (_name, url) => {
+  await render(<InteractivePages activeId="food" failedLink={url} />);
+  const food = within(screen.getByTestId("about-page-food"));
+  const error = ABOUT_CITY_STRINGS.be.link.failed(url);
+  expect(food.getByText(error)).toBeTruthy();
+  expect(food.queryByTestId("fold-official-sources-food")).toBeNull();
+  expect(within(screen.getByTestId("about-page-transport")).queryByText(error)).toBeNull();
+  expect(within(screen.getByTestId("about-page-airport")).queryByText(error)).toBeNull();
+});
+
+test("#256 unrelated failed link does not render on food page", async () => {
+  await render(<InteractivePages activeId="food" failedLink={ABOUT_CITY_LINK_URLS.ztmSchedule} />);
+  const food = within(screen.getByTestId("about-page-food"));
+  expect(food.queryByText(ABOUT_CITY_STRINGS.be.link.failed(ABOUT_CITY_LINK_URLS.ztmSchedule))).toBeNull();
 });
 
 test("the failed card link is shown even while the official list is closed", async () => {

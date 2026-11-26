@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 
 import { findNode, parseDump } from './driver.mjs';
-import { startWalkAtLocation, tapMapPoint, visiblePointStatus, waitForRun } from './walk.mjs';
+import { grantWalkLocationPermissions, startWalkAtLocation, tapMapPoint, visiblePointStatus, waitForRun } from './walk.mjs';
 
 const SHORT_MS = 30_000;
 const DOWNLOAD_MS = 120_000;
@@ -130,6 +130,10 @@ export async function waitForServerFeedback(feedbackBaseUrl, expected, timeoutMs
 
 export async function runDiscoverySuite({ driver, url, runCase, coldStart, stopOrigin, startOrigin, feedbackBaseUrl }) {
   await runCase('discovery: city offers, filters and previews', 'discovery-offers', driver, async () => {
+    // This suite verifies Nearby + an active walk, not Android's permission prompt.
+    // Fresh AVD installs have no grants; without this the first Nearby tap
+    // leaves a foreground permission dialog covering the Map screen.
+    await grantWalkLocationPermissions(driver);
     await coldStart(driver, url, { timeoutMs: 420_000, caseSlug: 'discovery-explore' });
     await driver.tapSelector({ testID: 'link-discovery' });
     await driver.waitFor({ testID: 'screen-Discovery' }, { timeoutMs: SHORT_MS });
@@ -197,7 +201,9 @@ export async function runDiscoverySuite({ driver, url, runCase, coldStart, stopO
     await driver.geoFix(53.9, 27.56);
     await driver.tapSelector({ testID: 'link-nearby' });
     await driver.waitFor({ testID: 'screen-Map' }, { timeoutMs: SHORT_MS });
-    await driver.waitFor({ testID: 'nearby-card-offer-place-e2e-1' }, { timeoutMs: SHORT_MS });
+    // The place card is below the first guide offers on a 1080×2340 AVD.
+    // UIAutomator does not expose off-viewport descendants to waitFor().
+    await scrollTo(driver, 'nearby-card-offer-place-e2e-1', 'nearby-place', { scrollID: 'scroll-nearby' });
     await driver.tapSelector({ testID: 'nearby-card-offer-place-e2e-1' });
     await driver.waitFor({ testID: 'screen-Place detail' }, { timeoutMs: SHORT_MS });
     const nodes = await nodesOn(driver, 'moment-before-play');
@@ -259,24 +265,28 @@ export async function runDiscoverySuite({ driver, url, runCase, coldStart, stopO
       await driver.tapSelector({ testID: 'btn-run-invite-rate' });
       await driver.waitFor({ testID: 'screen-Feedback' }, { timeoutMs: SHORT_MS });
       await driver.tapSelector({ testID: 'feedback-star-4' });
+      await scrollTo(driver, 'btn-feedback-send', 'feedback-send-first', { scrollID: 'scroll-feedback' });
       await stopOrigin();
       await driver.tapSelector({ testID: 'btn-feedback-send' });
+      // Delivery status is near the top, while Send lives below the disclosure.
+      await scrollTo(driver, 'feedback-title', 'feedback-after-send', { scrollID: 'scroll-feedback', direction: 'up' });
       await waitForText(driver, 'feedback-delivery', /пры сетцы|pending/i, 'feedback-queued', 45_000);
       await startOrigin();
       await waitForFeedbackRetry(driver);
       await waitForServerFeedback(feedbackBaseUrl, { revision: 1, score: 4, deleted: false });
       await driver.tapSelector({ testID: 'feedback-star-5' });
+      await scrollTo(driver, 'btn-feedback-send', 'feedback-send-edited', { scrollID: 'scroll-feedback' });
       await driver.tapSelector({ testID: 'btn-feedback-send' });
+      await scrollTo(driver, 'feedback-title', 'feedback-after-edit', { scrollID: 'scroll-feedback', direction: 'up' });
       await waitForServerFeedback(feedbackBaseUrl, { revision: 2, score: 5, deleted: false });
       await waitForText(driver, 'feedback-delivery', /Адпраўлена|Sent/i, 'feedback-edited');
+      await scrollTo(driver, 'btn-feedback-delete', 'feedback-delete', { scrollID: 'scroll-feedback' });
       await driver.waitFor({ testID: 'btn-feedback-delete', enabled: true }, { timeoutMs: SHORT_MS });
-      // The long disclosure can leave Delete against the bottom edge while
-      // the edited delivery line settles. Bring it into the scroll viewport
-      // before tapping; an offscreen accessibility node is still findable.
-      await driver.exec(['shell', 'input', 'swipe', '540', '1780', '540', '700', '450']);
       let deleteStarted = false;
       for (let attempt = 0; attempt < 2 && !deleteStarted; attempt += 1) {
         await driver.tapSelector({ testID: 'btn-feedback-delete', enabled: true });
+        // Never mistake an offscreen delivery row for a successful deletion.
+        await scrollTo(driver, 'feedback-title', `feedback-deletion-state-${attempt}`, { scrollID: 'scroll-feedback', direction: 'up' });
         for (let poll = 0; poll < 4; poll += 1) {
           const delivery = findNode(await nodesOn(driver, 'delete-started'), { testID: 'feedback-delivery' });
           if (!delivery || !/Адпраўлена|Sent/i.test(delivery.text)) {
@@ -284,6 +294,9 @@ export async function runDiscoverySuite({ driver, url, runCase, coldStart, stopO
             break;
           }
           await delay();
+        }
+        if (!deleteStarted && attempt === 0) {
+          await scrollTo(driver, 'btn-feedback-delete', 'feedback-delete-retry', { scrollID: 'scroll-feedback' });
         }
       }
       assert.ok(deleteStarted, 'Delete tap left the sent feedback unchanged');

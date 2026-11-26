@@ -2577,11 +2577,11 @@
     },
     {
       "id": "native.aboutCity.tab.food",
-      "value": "Food & pay",
-      "reviewedSourceHash": "b933ddbadc01214fc6a877df8e3cbb7bc7f34e5c653dc1e26472699c9b2bb8e5",
+      "value": "Food and payment",
+      "reviewedSourceHash": "fe28625e62075bfbff1038013f622cb199462c1dd47bc308925364f3e9e9ff96",
       "review": {
         "outcome": "approved",
-        "note": "Скарочаная назва ўкладкі ежы і аплаты на коле даведніка."
+        "note": "#256 (2026-11-25): matches the owner-reviewed section title in both languages; semantic self-review, no independent reviewer."
       }
     },
     {
@@ -4085,6 +4085,240 @@
       "review": {
         "outcome": "approved",
         "note": "Даслоўна з макета #257; перанос #334."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.payTitle",
+      "value": "How to pay",
+      "reviewedSourceHash": "97822ef61c9b1500823cd1ad8d0335e6d4413c9a0d0cf3d2141d1d000a25dfcd",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.payMeta",
+      "value": "PLN · cards · BLIK",
+      "reviewedSourceHash": "52779b5f4e80ac3b96aec510f5bf242322b4dbbd1f4b17cd67db09e6892afea6",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.pln",
+      "value": "Złoty (PLN)",
+      "reviewedSourceHash": "ce30c01587dcbc11b8698de8875df48afcea88df93e71d7ce05d9b327c159ee1",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.card",
+      "value": "Card or phone",
+      "reviewedSourceHash": "8b18324dd73c592c4cc0a5a06975aded7f34633c45587db0f53168f52f3bd4a3",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.dccTitle",
+      "value": "Currency choice at checkout",
+      "reviewedSourceHash": "a83bf1fc7223b32a09c29ebdbfd2c8d705becd4921a41607b5935e30830f7366",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.dccText",
+      "value": "When offered dynamic conversion, paying in PLN is usually better. Check your bank’s charges.",
+      "reviewedSourceHash": "6179f907356a192711c0c8df0c8056329d20674a94a63cc296f0baa0ee78c782",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.dccSource",
+      "value": "Visa advice",
+      "reviewedSourceHash": "2ffed392de7ac2f8293a07b4dccadd976ca4f57ab751eb184efbce8864d650bb",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.cashTitle",
+      "value": "Cash exchange & ATMs",
+      "reviewedSourceHash": "fb3c35517543271e2520064b6be06f95c38a9a90fa779939e290d6bf45419362",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.cashMeta",
+      "value": "Rates · withdrawals",
+      "reviewedSourceHash": "ea2abaf7483e6305cdf5399935c37a0c9ea0215a91a0cad72cea3632dc31fb8e",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.cashTip",
+      "value": "EUR → PLN? Compare the “kupno” rate and final amount in złoty.",
+      "reviewedSourceHash": "b8efca21dcc19e014ca0b83f11b0a6acafc5c23de0aa370de940c8e01a539f70",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.rateCompare",
+      "value": "EUR rates in Gdańsk",
+      "reviewedSourceHash": "85cdcb95c00d5c2e35cd52cb15e4da43d9a5b8e72f4d081d52ce6f29075e5bb4",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.nbpRate",
+      "value": "NBP reference rate",
+      "reviewedSourceHash": "f063b37ab6d58cbacaebb37e9f49eba0677ac2c4936de89644c99aa1bc6ddd4e",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.offices",
+      "value": "3 exchange offices on the map",
+      "reviewedSourceHash": "5e60fefd7be575527dc7dbc3c5c07a6b6af57f439cd1f5d038634434046db559",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.centreExchange",
+      "value": "Centre · Exchange",
+      "reviewedSourceHash": "84c2b9a1bba394326a7f52a3ace8d6e007b202074f107aca0fe24628debbb0d1",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.atmTitle",
+      "value": "ATM withdrawals",
+      "reviewedSourceHash": "059e5e905972f785c32388bfb5ffb2ef103044383bd875775fbc2d8643a35a83",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.atmText",
+      "value": "Check fees before withdrawing. If offered conversion, choose PLN.",
+      "reviewedSourceHash": "486ff5a63e2559e9f99407d0c2bf6e317ac1194cce87b83fc002c4fc6cc176e7",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.lateTitle",
+      "value": "After 9 PM",
+      "reviewedSourceHash": "a9c4868a7e054c360d01a71d8b9f42c85dc889cdb1bedbb25d2d93cf47e63831",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.lateMeta",
+      "value": "Where to eat late",
+      "reviewedSourceHash": "666f7b48822f37248189b96ccbee4d438629eb4d1b1432841ae8fbb9e8114c10",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.station",
+      "value": "Main station",
+      "reviewedSourceHash": "bc52f5a037548de4b2a2edcc127eed129260e61db53bf54b955ca2ddb7618a56",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.mcdHours",
+      "value": "until midnight",
+      "reviewedSourceHash": "899078d8bb5a5db54b9762c36dace39457dab32ad6a7aeb6395368348e4fca53",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.kfcHours",
+      "value": "usually until 1 AM",
+      "reviewedSourceHash": "efd1a0e452dc1e546f5fdba78c5603ea36e457f610447881d32c8256fdcd4f24",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.otherPlaces",
+      "value": "More places",
+      "reviewedSourceHash": "e9d11bacdeff04f194166cb7aae580a3291cb3f4eb60d467a433d9585db1d236",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.kitchenTitle",
+      "value": "Kitchen hours",
+      "reviewedSourceHash": "fa099786e0e628d792be1cb5383414d860533ccc66f074825df12c7d45c5bbf9",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.kitchenText",
+      "value": "Kitchens can close before the venue. Opening hours vary, especially on holidays.",
+      "reviewedSourceHash": "7bde0487c4a361343f2d757cc9af408ca5b066d53e8841aa3161daf5f4201ffe",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.deliveryTitle",
+      "value": "Food delivery",
+      "reviewedSourceHash": "46f11b8a1decee58d656cdfcdb10b1a37500b4f0c0f8c6a0b1e110c815552d25",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
+      }
+    },
+    {
+      "id": "native.aboutCity.food.v2.deliveryMeta",
+      "value": "5 services",
+      "reviewedSourceHash": "6b848a6b839ce76f67edd203b3f5143b7aeab3535120ebc411d11e519bd537d8",
+      "review": {
+        "outcome": "approved",
+        "note": "#256, 2026-11-25: English text transferred from the owner-reviewed interactive v7 prototype; bilingual semantic check by the submitting agent, not independent translation certification."
       }
     }
   ]

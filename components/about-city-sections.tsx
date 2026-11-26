@@ -11,22 +11,17 @@ import HouseIcon from "lucide-react-native/icons/house";
 import { AirportDirection } from "./about-city-direction";
 import { ABOUT_CITY_STRINGS } from "./about-city-strings.generated";
 import BusIcon from "lucide-react-native/icons/bus";
-import CreditCardIcon from "lucide-react-native/icons/credit-card";
 import ExternalLinkIcon from "lucide-react-native/icons/external-link";
 import RouteIcon from "lucide-react-native/icons/route";
-import SmartphoneIcon from "lucide-react-native/icons/smartphone";
 import TramFrontIcon from "lucide-react-native/icons/tram-front";
 import TrainFrontIcon from "lucide-react-native/icons/train-front";
 
 import {
   ABOUT_CITY_APPS,
-  ABOUT_CITY_DELIVERY,
   ABOUT_CITY_FACT_ICONS,
-  ABOUT_CITY_PAY_METHODS,
   ABOUT_CITY_RIDES,
   aboutCityHasText,
   ABOUT_CITY_LINK_URLS,
-  type AboutCityPayMethod,
   type AboutCitySectionId,
   type AboutCityText,
 } from "./about-city-content";
@@ -38,19 +33,18 @@ import { ScaledText } from "./scaled-text";
 import type { AboutCityStrings } from "../contracts/ui-message-types";
 import { useThemeStyles } from "./theme";
 import { ABOUT_CITY_ATLAS_INITIAL, AboutCityMap, type AboutCityAtlasState } from "./about-city-map";
+import { AboutCityFood } from "./about-city-food";
 
 // What the visitor chose and opened inside the sections; it outlives a
 // section switch. The map's choices ride `atlas` (the mockup's ui.atlas).
 export type AboutCityUiState = {
   direction: "from" | "to";
-  pay: "any" | AboutCityPayMethod;
   folds: Record<string, boolean>;
   atlas: AboutCityAtlasState;
 };
 
 export const ABOUT_CITY_INITIAL_UI: AboutCityUiState = {
   direction: "from",
-  pay: "any",
   // The first transport fold starts open, as the mockup says (open: true).
   folds: { "mode-ztm": true },
   atlas: ABOUT_CITY_ATLAS_INITIAL,
@@ -80,8 +74,6 @@ export type AboutCitySectionContext = {
 
 const AIRPORT_RIDE_IDS = ABOUT_CITY_RIDES.map((ride) => `ride-${ride.id}`);
 const TRANSPORT_MODE_IDS = ["mode-ztm", "mode-skm", "mode-rail"];
-const FOOD_PAY_IDS = ["pay-cards", "pay-blik"];
-const FOOD_PAY_OPTIONS: readonly ("any" | AboutCityPayMethod)[] = ["any", ...ABOUT_CITY_PAY_METHODS];
 
 function airport(ctx: AboutCitySectionContext): ReactNode {
   const { t, ui, setUi, toggleFold, styles } = ctx;
@@ -231,78 +223,7 @@ function city(ctx: AboutCitySectionContext): ReactNode {
 }
 
 function food(ctx: AboutCitySectionContext): ReactNode {
-  const { t, ui, setUi, toggleFold, styles } = ctx;
-  const takes = (service: (typeof ABOUT_CITY_DELIVERY)[number]) => ui.pay === "any" || (service.pay as readonly string[]).includes(ui.pay);
-  // Services that take the chosen way to pay come first.
-  const services = [...ABOUT_CITY_DELIVERY].sort((a, b) => Number(takes(b)) - Number(takes(a)));
-  return (
-    <>
-      <SubHeading>{t("food.deliveryLabel")}</SubHeading>
-      <ScaledText style={styles.text}>{t("food.delivery.lead")}</ScaledText>
-      <View accessibilityLabel={t("food.pay")} style={styles.chips}>
-        {FOOD_PAY_OPTIONS.map((key) => (
-          <PressableSurface
-            key={key}
-            accessibilityRole="button"
-            accessibilityLabel={t(`pay.${key}`)}
-            accessibilityState={{ selected: ui.pay === key }}
-            onPress={() => setUi({ pay: key })}
-            style={[styles.chip, ui.pay === key ? styles.chipSelected : null]}
-            testID={`pay-${key}`}
-          >
-            <ScaledText style={[styles.chipText, ui.pay === key ? styles.chipSelectedText : null]}>{t(`pay.${key}`)}</ScaledText>
-          </PressableSurface>
-        ))}
-      </View>
-      <View style={styles.stack}>
-        {services.map((service) => (
-          <View key={service.name} style={[styles.card, styles.service]}>
-            <ScaledText style={[styles.serviceName, takes(service) ? null : styles.serviceNameOff]}>{service.name}</ScaledText>
-            {takes(service) ? (
-              <View style={styles.tags}>
-                {service.pay.map((key) => (
-                  <ScaledText key={key} style={[styles.tag, key === ui.pay ? styles.tagFree : null]}>
-                    {t(`pay.${key}`)}
-                  </ScaledText>
-                ))}
-              </View>
-            ) : (
-              <ScaledText style={styles.note}>{`${t(`pay.${ui.pay}`)}: ${t("food.unconfirmed")}`}</ScaledText>
-            )}
-            {service.note && takes(service) ? <ScaledText style={styles.note}>{t(service.note)}</ScaledText> : null}
-          </View>
-        ))}
-      </View>
-      <ScaledText style={styles.note}>{t("food.note")}</ScaledText>
-      <SubHeading>{t("food.city")}</SubHeading>
-      <View style={styles.stack}>
-        <Fold
-          id="pay-cards"
-          open={Boolean(ui.folds["pay-cards"])}
-          onToggle={(id, open) => toggleFold(FOOD_PAY_IDS, id, open)}
-          lead={<CanonIcon glyph={CreditCardIcon} label={t("food.cards.title")} size={22} color={tokens.colorAccent} />}
-          title={t("food.cards.title")}
-          meta={t("food.cards.meta")}
-          body={<ScaledText style={styles.text}>{t("food.cards.text")}</ScaledText>}
-        />
-        <Fold
-          id="pay-blik"
-          open={Boolean(ui.folds["pay-blik"])}
-          onToggle={(id, open) => toggleFold(FOOD_PAY_IDS, id, open)}
-          lead={<CanonIcon glyph={SmartphoneIcon} label={t("food.blik.title")} size={22} color={tokens.colorAccent} />}
-          title={t("food.blik.title")}
-          meta={t("food.blik.meta")}
-          body={
-            <View style={styles.stack}>
-              <ScaledText style={styles.text}>{t("food.blik.need")}</ScaledText>
-              <DetailRows rows={[[t("food.blik.online.title"), t("food.blik.online.text")], [t("food.blik.till.title"), t("food.blik.till.text")]]} />
-              <ScaledText style={styles.note}>{t("food.blik.more")}</ScaledText>
-            </View>
-          }
-        />
-      </View>
-    </>
-  );
+  return <AboutCityFood ctx={ctx} />;
 }
 
 function OfficialCardLink({ ctx, kind, url }: {

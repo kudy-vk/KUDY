@@ -17,6 +17,7 @@ import path from 'node:path';
 import { parseDump, findNode } from './driver.mjs';
 import {
   backToExplore,
+  grantWalkLocationPermissions,
   nodesOn,
   requireId,
   sessionRow,
@@ -106,9 +107,7 @@ async function assertNoRevival(driver, slug, geoFix) {
 // this suite proves subscription ownership, not the permission ask, and an
 // unanswered runtime dialog would leave no subscription to observe.
 export async function arrangeReadyStart(driver, url, coldStart) {
-  for (const scope of ['android.permission.ACCESS_COARSE_LOCATION', 'android.permission.ACCESS_FINE_LOCATION', 'android.permission.ACCESS_BACKGROUND_LOCATION']) {
-    await driver.exec(['shell', 'pm', 'grant', 'by.kudy.app', scope]);
-  }
+  await grantWalkLocationPermissions(driver);
   await coldStart(driver, url, { timeoutMs: 420000, caseSlug: 'gps-explore' });
   await driver.waitFor({ testID: `guide-card-${FREE}` }, { timeoutMs: SHORT_MS, dumpBasename: 'dump-gps-guide-card.xml' });
   await driver.tapSelector({ testID: 'link-guides' });

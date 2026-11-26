@@ -14,7 +14,8 @@ import test from 'node:test';
 import { repoRoot } from '../validate/tools-check.mjs';
 import { createE2EOriginServer } from '../e2e-origin/serve-e2e-origin.mjs';
 import { waitForServerFeedback } from './discovery.mjs';
-import { coldStart } from './run-e2e.mjs';
+import { assertWaitingKudyPiece, coldStart } from './run-e2e.mjs';
+import { parseDump } from './driver.mjs';
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
 
@@ -28,6 +29,23 @@ test('the npm-test glob includes the e2e-android suite', () => {
 
 test('the e2e:android script points at the runner', () => {
   assert.equal(packageJson.scripts['e2e:android'], 'node tools/e2e-android/run-e2e.mjs');
+});
+
+// #464: the KUDY piece can be moved and read aloud but has no destination.
+// Both Android XML dumps expose enabled=true, unlike the pre-#216 smoke test.
+test('the Android smoke assertion agrees with the native movable KUDY piece', () => {
+  const node = (enabled, description = 'KUDY · Хутка') =>
+    parseDump('<node resource-id="city-menu-access-kudy" clickable="true" enabled="' +
+      enabled + '" content-desc="' + description + '" bounds="[0,0][100,100]"/>');
+  assert.doesNotThrow(() => assertWaitingKudyPiece(node('true')));
+  assert.throws(() => assertWaitingKudyPiece(node('false')), /enabled for movement/);
+  assert.throws(() => assertWaitingKudyPiece(node('true', '')), /enabled for movement/);
+  assert.throws(() => assertWaitingKudyPiece([]), /enabled for movement/);
+  const source = fs.readFileSync(path.join(repoRoot, 'tools/e2e-android/run-e2e.mjs'), 'utf8');
+  assert.match(source, /assertWaitingKudyPiece\(nodes\)/);
+  assert.match(source, /driver\.tapSelector\(\{ testID: 'city-menu-access-kudy' \}/);
+  assert.match(source, /dump-map-menu-after-kudy\.xml/);
+  assert.doesNotMatch(source, /kudy\.enabled\) throw new DriverError/);
 });
 
 test('the Metro spawn pins every runner-controlled EXPO_PUBLIC_ key against a host .env', () => {

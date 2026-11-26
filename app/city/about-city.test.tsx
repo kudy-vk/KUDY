@@ -14,7 +14,7 @@ import { fireEvent, renderRouter, screen, waitFor, within } from "expo-router/te
 import { Linking } from "react-native";
 
 import AboutCity from "./[id]/about";
-import { ABOUT_CITY_APPS, ABOUT_CITY_LINK_URLS, ABOUT_CITY_SECTIONS } from "../../components/about-city-content";
+import { ABOUT_CITY_APPS, ABOUT_CITY_FOOD_LINKS, ABOUT_CITY_LINK_URLS, ABOUT_CITY_SECTIONS } from "../../components/about-city-content";
 import { aboutCityStrings } from "../../components/about-city-strings";
 import { ABOUT_CITY_STRINGS } from "../../components/about-city-strings.generated";
 import { frameRoutes } from "../../test/render-helpers";
@@ -96,7 +96,7 @@ test("a press on a wheel point opens that section under the wheel (criterion 4)"
   expectOpenPage("food");
   // The food heading doubles as the wheel label, so the section body carries
   // the assertion.
-  expect(pageOf("food").getByText("Аплата ў горадзе")).toBeTruthy();
+  expect(pageOf("food").getByTestId("about-food-v2")).toBeTruthy();
   await fireEvent.press(screen.getByTestId("wheel-item-airport"));
   expectOpenPage("airport");
 });
@@ -175,12 +175,72 @@ test("the city section carries no official-pages rows (decision M13)", async () 
   expect(pageOf("transport").getByTestId("link-about-ztmSchedule")).toBeTruthy();
 });
 
-test("the payment filter dims the services that refuse the chosen way (criterion 5)", async () => {
+test("#256 food starts with four closed tasks, without payment filters or restaurant lists", async () => {
   await openGuide();
   await fireEvent.press(screen.getByTestId("wheel-item-food"));
-  await fireEvent.press(pageOf("food").getByTestId("pay-blik"));
-  // Bolt Food takes no BLIK: the honest unconfirmed line replaces its tags.
-  expect(pageOf("food").getByText("BLIK: афіцыйна не пацверджана")).toBeTruthy();
+  const page = pageOf("food");
+  const ids = ["food-payment", "food-cash", "food-late", "food-delivery"];
+  for (const id of ids) {
+    const head = page.getByTestId(`fold-${id}`);
+    expect(head.props.accessibilityState).toMatchObject({ expanded: false });
+  }
+  expect(page.queryByTestId("pay-blik")).toBeNull();
+  expect(page.queryByText("Аплата ў горадзе")).toBeNull();
+  await fireEvent.press(page.getByTestId("fold-food-payment"));
+  expect(page.getByText("Злоты (PLN)")).toBeTruthy();
+  expect(page.getByText("BLIK")).toBeTruthy();
+  expect(page.queryByText(/Патрэбны рахунак у польскім банку/)).toBeNull();
+  expect(page.getByTestId("about-food-hint-trigger-dcc")).toBeTruthy();
+  await fireEvent.press(page.getByTestId("fold-food-cash"));
+  expect(page.getByTestId("fold-food-payment").props.accessibilityState).toMatchObject({ expanded: false });
+  expect(page.getByTestId("fold-food-cash").props.accessibilityState).toMatchObject({ expanded: true });
+});
+
+test("#256 opens exact station places and five delivery catalogs, with offline failure feedback", async () => {
+  const spy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as never);
+  try {
+    await openGuide();
+    await fireEvent.press(screen.getByTestId("wheel-item-food"));
+    const page = pageOf("food");
+    await fireEvent.press(page.getByTestId("fold-food-late"));
+    expect(page.getByText("Галоўны вакзал\nда 00:00")).toBeTruthy();
+    expect(page.getByText("Галоўны вакзал\nзвычайна да 01:00")).toBeTruthy();
+    await fireEvent.press(page.getByTestId("about-food-link-mapKfc"));
+    expect(spy).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS.mapKfc);
+    await fireEvent.press(page.getByTestId("fold-food-delivery"));
+    const names = ["pyszne", "wolt", "glovo", "uber", "bolt"] as const;
+    for (const key of names) {
+      await fireEvent.press(page.getByTestId(`about-food-link-${key}`));
+      expect(spy).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS[key]);
+    }
+    expect(page.queryByText("Што трэба ведаць?")).toBeNull();
+    spy.mockRejectedValueOnce(new Error("offline"));
+    await fireEvent.press(page.getByTestId("about-food-link-pyszne"));
+    expect(await screen.findByText(new RegExp("Не ўдалося адкрыць старонку"))).toBeTruthy();
+  } finally {
+    spy.mockRestore();
+  }
+});
+
+test("#256 maps office locations but never displays street addresses", async () => {
+  const spy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as never);
+  try {
+    await openGuide();
+    await fireEvent.press(screen.getByTestId("wheel-item-food"));
+    const page = pageOf("food");
+    await fireEvent.press(page.getByTestId("fold-food-cash"));
+    expect(page.getByText(/EUR.*PLN.*kupno/i)).toBeTruthy();
+    expect(page.queryByText(/Podwale Grodzkie|Grunwaldzka 92|Targ Sienny/)).toBeNull();
+    await fireEvent.press(page.getByTestId("about-food-hint-trigger-offices"));
+    await fireEvent.press(page.getByTestId("about-food-link-mapPromes"));
+    expect(spy).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS.mapPromes);
+    await fireEvent.press(page.getByTestId("about-food-link-ratesEur"));
+    expect(spy).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS.ratesEur);
+    await fireEvent.press(page.getByTestId("about-food-link-nbpRates"));
+    expect(spy).toHaveBeenCalledWith(ABOUT_CITY_FOOD_LINKS.nbpRates);
+  } finally {
+    spy.mockRestore();
+  }
 });
 
 test("every section link row points at an official page and opens it (criterion 7)", async () => {

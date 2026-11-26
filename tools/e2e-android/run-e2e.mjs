@@ -378,6 +378,16 @@ async function backToExplore(driver, caseSlug) {
 
 // ---------- smoke phases ----------
 
+// KUDY is a movable, accessible menu piece with a "coming soon" label,
+// not a disabled Android node. It has no destination or activate action;
+// app/menu.test.tsx asserts the React Native side of that same contract.
+export function assertWaitingKudyPiece(nodes) {
+  const kudy = findNode(nodes, { testID: 'city-menu-access-kudy' });
+  if (!kudy || !kudy.enabled || !kudy.clickable || !kudy.contentDesc.includes('KUDY')) {
+    throw new DriverError('reserved KUDY piece must be visible, named and enabled for movement');
+  }
+}
+
 async function phaseA(driver, metroPort) {
   const url = devClientUrl(metroPort);
 
@@ -385,14 +395,21 @@ async function phaseA(driver, metroPort) {
     coldStart(driver, url, { timeoutMs: FIRST_BUNDLE_TIMEOUT_MS, caseSlug: 'cold-start', homeOnly: true }),
   );
 
-  await runCase('map menu routes return home and the kudy piece stays disabled', 'map-menu', driver, async () => {
+  await runCase('map menu routes return home and KUDY remains on the menu', 'map-menu', driver, async () => {
     await coldStart(driver, url, { timeoutMs: BUNDLE_TIMEOUT_MS, caseSlug: 'map-menu', homeOnly: true });
     const nodes = parseDump((await driver.dump('dump-map-menu.xml')).xml);
-    // Issue #200 (PR #242) made reserve-1 open the «Пра горад» guide — the
-    // old assertion (reserve-1 AND kudy both disabled, from #80) could not
-    // pass any main build since that merge. Only kudy stays reserved.
-    const kudy = findNode(nodes, { testID: 'city-menu-access-kudy' });
-    if (!kudy || kudy.enabled) throw new DriverError('reserved map menu piece kudy must be visible and disabled');
+    // #216: this reserved piece is movable and named, but does not navigate.
+    // Android exposes it as enabled; treating "no destination" as disabled
+    // contradicted the native menu test and made physical + emulator smoke fail.
+    assertWaitingKudyPiece(nodes);
+    await driver.tapSelector({ testID: 'city-menu-access-kudy' }, { timeoutMs: CASE_TIMEOUT_MS });
+    await sleep(350);
+    const afterKudy = parseDump((await driver.dump('dump-map-menu-after-kudy.xml')).xml);
+    if (!findNode(afterKudy, { testID: 'screen-Menu' })
+      || findNode(afterKudy, { testID: 'screen-AboutCity' })
+      || findNode(afterKudy, { testID: 'screen-Explore' })) {
+      throw new DriverError('reserved KUDY piece must keep the visitor on the map menu');
+    }
     const about = findNode(nodes, { testID: 'city-menu-access-reserve-1' });
     if (!about || !about.enabled) throw new DriverError('map menu piece reserve-1 must be visible and enabled (issue #200)');
     await driver.tapSelector({ testID: 'city-menu-access-reserve-1' }, { timeoutMs: CASE_TIMEOUT_MS });
