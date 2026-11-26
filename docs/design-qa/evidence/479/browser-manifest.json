@@ -68,6 +68,21 @@
       "textScale": 1.5,
       "browserViewport": "1280x1200",
       "deviceScaleFactor": 1
+    },
+    {
+      "file": "guides-nb-320x640-font1.5-scrolled.png",
+      "capturedAt": "2026-11-26T23:44:55Z",
+      "mockup": "settings.html",
+      "locale": "nb",
+      "themeFrames": [
+        "light",
+        "dark"
+      ],
+      "devicePreset": "320x640",
+      "textScale": 1.5,
+      "browserViewport": "1280x1200",
+      "deviceScaleFactor": 1,
+      "view": "guides"
     }
   ]
 }
