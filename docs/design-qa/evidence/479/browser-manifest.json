@@ -1,0 +1,73 @@
+{
+  "sourceCommit": "779d7256b456d324646314619c8e28587d633b18",
+  "capturedAt": "2026-11-26T23:15:49.485Z",
+  "browser": "Chromium 153.0.8010.12",
+  "server": "local test/browser-page.mjs",
+  "captures": [
+    {
+      "file": "settings-nb-dual.png",
+      "mockup": "settings.html",
+      "locale": "nb",
+      "themeFrames": [
+        "light",
+        "dark"
+      ],
+      "devicePreset": "390x844",
+      "textScale": 1,
+      "browserViewport": "1280x1200",
+      "deviceScaleFactor": 1
+    },
+    {
+      "file": "guides-nb-dual.png",
+      "mockup": "settings.html",
+      "locale": "nb",
+      "themeFrames": [
+        "light",
+        "dark"
+      ],
+      "devicePreset": "390x844",
+      "textScale": 1,
+      "browserViewport": "1280x1200",
+      "deviceScaleFactor": 1
+    },
+    {
+      "file": "walk-nb-dual.png",
+      "mockup": "run.html",
+      "locale": "nb",
+      "themeFrames": [
+        "light",
+        "dark"
+      ],
+      "devicePreset": "390x844",
+      "textScale": 1,
+      "browserViewport": "1280x1200",
+      "deviceScaleFactor": 1
+    },
+    {
+      "file": "settings-nb-320x640-font1.5.png",
+      "mockup": "settings.html",
+      "locale": "nb",
+      "themeFrames": [
+        "light",
+        "dark"
+      ],
+      "devicePreset": "320x640",
+      "textScale": 1.5,
+      "browserViewport": "1280x1200",
+      "deviceScaleFactor": 1
+    },
+    {
+      "file": "walk-nb-320x640-font1.5.png",
+      "mockup": "run.html",
+      "locale": "nb",
+      "themeFrames": [
+        "light",
+        "dark"
+      ],
+      "devicePreset": "320x640",
+      "textScale": 1.5,
+      "browserViewport": "1280x1200",
+      "deviceScaleFactor": 1
+    }
+  ]
+}
