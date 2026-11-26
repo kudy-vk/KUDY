@@ -62,9 +62,9 @@ Before editing or generating any design asset:
 
 This rule applies to all future design tasks, not just issue #257.
 
-Local pre-push on the Linux host: `npm run ci:local` (the fast CI checks in workflow order, including `arch:check` and the jscpd gate `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`), then `npm run e2e:android:local` when `tools/ci/android-e2e-scope.mjs` says run=true (docs/agent-rules/android-e2e-local.md).
+Local pre-push on the Linux host: `npm run ci:local` (the fast CI checks in workflow order, including `arch:check` and the jscpd gate `npx --yes jscpd@5.1.2 --config .jscpd.json --no-tips .`).
 
-Before every push to a pull-request branch, read and follow `docs/agent-rules/android-e2e-local.md`. CI runs only the fast checks; when the change touches project code, the Android E2E suites run on a local emulator, and documentation-only or design-mockup changes skip them.
+For Android PR verification, follow the risk and evidence requirements in `docs/agent-rules/android-e2e-local.md`.
 
 ## Publish task breakdowns to GitHub Issues
 

@@ -1,9 +1,8 @@
 // #132 — the one command behind `npm run ci:local`: the fast CI checks, on
 // the Linux dev host, in the same order as `.github/workflows/`. Since the
 // hosted Android E2E job stopped running on pull requests (PR #125), this is
-// the pre-push fast check an agent runs before every push; the Android suites
-// are `npm run e2e:android:local` (tools/e2e-android/run-local.mjs) when the
-// scope in tools/ci/android-e2e-scope.mjs says run=true.
+// the pre-push fast check. See docs/agent-rules/android-e2e-local.md for
+// risk-based Android PR verification.
 //
 //   npm run ci:local            # full list, stops at the first failure
 //
