@@ -166,7 +166,9 @@ await mountBoard({
         return option;
       }));
       segments.setAttribute('role', 'radiogroup');
-      segments.setAttribute('aria-label', t('look'));
+      const appearanceHeading = heading(t('look'));
+      appearanceHeading.id = `settings-appearance-label-${body.closest('.phone')?.dataset.theme ?? 'phone'}`;
+      segments.setAttribute('aria-labelledby', appearanceHeading.id);
 
       // 4. «Мае знаходкі»: shown in the first release as a «soon» placeholder (S3).
       const finds = row('gem', t('finds'), { note: t('findsReason'), trailing: el('span', { className: 'tag' }, icon('hourglass', 12), strings[SOON]) });
@@ -180,7 +182,7 @@ await mountBoard({
           trailing: icon('chevron-right', 20),
           onPress: () => say('Адкрываецца тлумачэнне: мова гісторый выбіраецца для гіда асобна. Бягучую прагулку гэта не пераключае.'),
         })),
-        heading(t('look')),
+        appearanceHeading,
         // The control alone: the screen itself shows which theme is on, and nothing shifts when the choice changes.
         el('div', { className: 'card theme' }, segments),
         // 3. «Гіды для мяне»: the summary; the exclusions live on their own screen.
