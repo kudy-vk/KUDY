@@ -1,0 +1,63 @@
+{
+  "receiptVersion": 1,
+  "date": "2026-11-26T18:35:46.171Z",
+  "input": {
+    "map": "map.json",
+    "presentation": "presentation.json",
+    "states": null,
+    "sourceAnchors": "absent",
+    "fingerprint": {
+      "specId": "kudy-design-catalog-review",
+      "specVersion": 1,
+      "sourceKind": "files",
+      "rootId": "KUDY-DESIGN-CATALOG-REVIEW",
+      "mapHash": "565b5b2c5233cacb7ca7feb48ba5d56ca13f3e7d2c0476045135bc7b5346d5e7"
+    }
+  },
+  "gates": {
+    "input": {
+      "outcome": "pass",
+      "checks": 5,
+      "failures": []
+    },
+    "artifact": {
+      "outcome": "pass",
+      "checks": 2,
+      "failures": []
+    },
+    "browser": {
+      "outcome": "pass",
+      "checks": 26,
+      "failures": []
+    }
+  },
+  "promotion": {
+    "promoted": true,
+    "files": [
+      "index.html",
+      "overview.html",
+      "overview.svg",
+      "overview-2x.png"
+    ],
+    "lastGood": [
+      {
+        "file": "index.html",
+        "bytes": 273370
+      },
+      {
+        "file": "overview.html",
+        "bytes": 283287
+      },
+      {
+        "file": "overview.svg",
+        "bytes": 229993
+      },
+      {
+        "file": "overview-2x.png",
+        "bytes": 288908
+      }
+    ],
+    "error": null
+  },
+  "exitCode": 0
+}

@@ -39,19 +39,15 @@ test('only real held movement can snap and never emits a section press',()=>{
   assert.equal(m.groups.size,4);assert.equal(a.group,b.group);
   assert.equal(m.release(350).kind,'none');
 });
-test('a visible medallion extends the polygon hit without activating an invisible icon',()=>{
-  const layout={height:1600,dragEnabled:true,positions:{nearby:{x:153,y:138},guides:{x:984,y:153},discovery:{x:1006,y:806},'reserve-1':{x:125,y:698},kudy:{x:448,y:1292}}};
-  const m=new CityPuzzle(320,()=>.5,undefined,layout),before=m.position('nearby');
-  const center={x:330-122,y:485-366};
-  const point={x:before.x+center.x-9/.2,y:before.y+center.y+15/.2};
-  const medallions=new Map([['nearby',center]]);
+test('the measured ribbon extends the piece hit and accepts tap and drag',()=>{
+  const m=puzzle(),at=m.position('nearby'),point={x:at.x-25,y:at.y+55};
+  const ribbons=new Map([['nearby',{x:at.x-35,y:at.y+20,width:120,height:60}]]);
   assert.equal(m.hit(point),undefined);
-  assert.deepEqual(m.hit(point,medallions),{id:'nearby',passive:false});
-  assert.deepEqual(m.begin(point,0,medallions),{id:'nearby',passive:false});
+  assert.deepEqual(m.begin(point,0,ribbons),{id:'nearby',passive:false});
   assert.deepEqual(m.release(50),{kind:'select',id:'nearby'});
-  m.begin(point,100,medallions);m.hold(401);m.move({x:point.x+40,y:point.y},420);
-  assert.deepEqual(m.position('nearby'),{x:before.x+40,y:before.y});
-  m.cancel();assert.deepEqual(m.position('nearby'),before);
+  m.begin(point,100,ribbons);m.hold(401);m.move({x:point.x+40,y:point.y},420);
+  assert.equal(m.release(450).kind,'none');
+  assert.deepEqual(m.position('nearby'),{x:at.x+40,y:at.y});
 });
 
 test('early movement cancels tap; cancellation restores a group',()=>{
@@ -65,6 +61,7 @@ test('tap returns a stable menu ID; a revealed scene point has no section ID',()
   const first=[...m.groups][0];for(const group of [...m.groups].slice(1))joinGroups(first,group,m.pieces,m.groups);
   m.completeNow();const point={x:125+650,y:320+210};
   assert.equal(m.begin(point,0).passive,true);assert.equal(m.release(50).kind,'passive');
+  for(const [x,y] of [[1225,350],[1219,380]])assert.equal(m.hit({x:125+x,y:320+y}),undefined);
 });
 test('only the final user snap starts transformation, which can finish safely',()=>{
   const m=puzzle(),first=m.pieces.get('nearby').group;
