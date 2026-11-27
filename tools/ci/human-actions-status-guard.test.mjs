@@ -36,7 +36,11 @@ function mergeEntriesWithoutLabelCleanup(markdown) {
   // elsewhere (no close) leave the issue's label alone.
   const lines = markdown.split("\n").filter((line) => /^(?:- )?Табе зрабіць:/u.test(line));
   for (const line of lines) {
-    if (!/(?:зліце|злівай|змержы(?:це|ць)?|мержыць)/iu.test(line)) continue;
+    // Only positive merge imperatives name a handoff. Negated historical notes
+    // use the infinitives `змержыць`/`мержыць` — «паўторна мержыць яго не
+    // трэба» (#456) — so the `змержы` stem is bounded against a following
+    // letter to keep infinitives and participles out of the intent check.
+    if (!/(?:зліце|злівай|змержы(?:це)?(?![а-яёўі]))/iu.test(line)) continue;
     // Short refs guard the same way as full URLs: «зліце PR #140, закрывае
     // #132» (#154). A bare `#N` counts as the issue ref only when it is not
     // the PR's own ref.
@@ -106,6 +110,22 @@ test("canonical one-line closing handoffs require status cleanup", () => {
 test("historical merged PR references are not actionable merge handoffs", () => {
   const completed = "Табе зрабіць: зачыні эпік #376: [PR #420](https://github.com/kudy-vk/KUDY/pull/420) ужо смаш-мержаны; issue #377 закрывае этап, а не патрабуе новага мержа.";
   assert.deepEqual(mergeEntriesWithoutLabelCleanup(completed), []);
+});
+
+test("negated historical merge infinitives are not actionable handoffs", () => {
+  // #456: the entry explicitly forbids re-merging and already cites the PR ref,
+  // the closing-issue ref and `закрывае`, so the verb matcher alone decides
+  // whether this false violation appears.
+  const negated = "Табе зрабіць: зачыні эпік #376: [PR #420](https://github.com/kudy-vk/KUDY/pull/420) закрывае [issue #377](https://github.com/kudy-vk/KUDY/issues/377); паўторна мержыць яго не трэба.";
+  const perfectiveNegated = "Табе зрабіць: зачыні эпік #376: [PR #420](https://github.com/kudy-vk/KUDY/pull/420) закрывае [issue #377](https://github.com/kudy-vk/KUDY/issues/377); дадаткова змержыць яго не трэба.";
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(negated), []);
+  assert.deepEqual(mergeEntriesWithoutLabelCleanup(perfectiveNegated), []);
+  // The perfective imperative stays a handoff verb: without cleanup it flags.
+  const imperative = "Табе зрабіць: змержы [PR #140](https://github.com/kudy-vk/KUDY/pull/140), закрывае [issue #132](https://github.com/kudy-vk/KUDY/issues/132).";
+  assert.deepEqual(
+    mergeEntriesWithoutLabelCleanup(imperative),
+    [imperative.slice(0, 120)],
+  );
 });
 
 test("the guard accepts explicit cleanup and ignores historical completed entries", () => {
