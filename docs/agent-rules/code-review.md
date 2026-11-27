@@ -128,6 +128,32 @@ a contract asking to be extracted? The numbers are orientation, not a gate — n
 check enforces them and nothing is refactored for the count's sake; the assessment
 happens on the next real touch of the file.
 
+### PR size warning — derived design artifacts
+
+The shared judge gate `pr-size.mjs` (threshold of 400 changed lines) counts every
+line of a PR diff and emits the Low warning `pr-size-over`; the line and the count
+are never suppressed. Nothing is hidden by the exception below — the gate still
+reports the full diff, and the warning stays visible in the judge report.
+
+Two derived-artifact classes legitimately exceed the threshold as one design
+release. A PR carrying them states the exception in its PR body with one line
+naming this section, instead of splitting the delivery or deleting needed
+artifacts:
+
+- **Generated spec-catalog bundles** — `docs/superpowers/specs/**`:
+  machine-built catalog views of a spec delivery (`index.html`, `overview.html`,
+  `inventory.json`, `delivery-receipt.json`).
+- **Design-release mockup bundles** — `docs/design/production/*.html` and
+  `docs/design/brand/outputs/**`: a whole design release delivered as one archive
+  (for example the menu variants archive `menu-polish.html`).
+
+The exception covers only these listed classes. Authored code, spec prose
+(`spec.md`, `tasks.md`, `issues/*.md`) and app sources count toward the warning
+as before — a large authored diff stays a signal, answered by the size question
+above. With the exception stated for listed artifacts, a judge records the
+warning as deliberately accepted (the same disposition as a deliberately
+deferred gap); without it, `pr-size-over` stays a finding.
+
 ### Recurring corpus classes — `docs/agent-rules/lessons-learned.md`
 
 The closed-PR corpus (52 closed PRs → 369 findings, 2026-09-19) ranks the defect classes
