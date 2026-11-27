@@ -127,7 +127,7 @@ await mountBoard({
     if (state.view === 'guides') {
       // The exclusions screen: everything is shown by default, a pressed chip hides its group.
       const hideHeading = heading(t('hide'));
-      hideHeading.id = `settings-guides-label-${body.closest('.phone')?.dataset.theme ?? 'phone'}`;
+      hideHeading.id = `settings-guides-label-${theme}`;
       const chips = el('div', { className: 'chips' }, ...Object.entries(TAGS).map(([id, name]) => {
         const off = prefs.hidden.has(id);
         const chip = el('button', { className: 'chip', type: 'button', lang: 'be' }, off && icon('eye-off', 16), name);
@@ -141,9 +141,11 @@ await mountBoard({
       }));
       chips.setAttribute('role', 'group');
       chips.setAttribute('aria-labelledby', hideHeading.id);
-      content.append(hideHeading, chips, el('p', { className: 'hide-status', textContent: guidesStatus }),
-        hidden > 0 && button(t('reset'), { onPress: () => { prefs.hidden.clear(); act('Нічога не схавана: зноў паказваюцца ўсе гіды.', '.chip'); } }),
-        el('p', { className: 't-small keep', textContent: t('keep') }));
+      content.append(hideHeading, chips, el('p', { className: 'hide-status', textContent: guidesStatus }));
+      if (hidden > 0) {
+        content.append(button(t('reset'), { onPress: () => { prefs.hidden.clear(); act('Нічога не схавана: зноў паказваюцца ўсе гіды.', '.chip'); } }));
+      }
+      content.append(el('p', { className: 't-small keep', textContent: t('keep') }));
     } else {
       // 1. Language: self-names; the choice changes the interface at once.
       const languages = el('div', { className: 'chips' }, ...Object.entries(LOCALES).map(([code, name]) => {
@@ -167,7 +169,7 @@ await mountBoard({
       }));
       segments.setAttribute('role', 'radiogroup');
       const appearanceHeading = heading(t('look'));
-      appearanceHeading.id = `settings-appearance-label-${body.closest('.phone')?.dataset.theme ?? 'phone'}`;
+      appearanceHeading.id = `settings-appearance-label-${theme}`;
       segments.setAttribute('aria-labelledby', appearanceHeading.id);
 
       // 4. «Мае знаходкі»: shown in the first release as a «soon» placeholder (S3).
