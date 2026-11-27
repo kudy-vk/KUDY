@@ -230,4 +230,14 @@ describe("G16.03: the rating form route (issue #74)", () => {
     await waitFor(() => expect(services.feedback?.controller?.getState().form.kind).toBe("closed"));
     expect(screen.queryByTestId("feedback-title")).toBeNull();
   });
+
+  test("the reasons counter updates as reason chips are toggled up to 3", async () => {
+    const { services } = feedbackServices();
+    await renderRouter(withRoutes(services), {
+      initialUrl: "/feedback?kind=guide&id=guide-route-a1&version=1&locale=be",
+    });
+    expect((await screen.findByTestId("feedback-reasons-count")).props.children).toBe("0 / 3");
+    await fireEvent.press(screen.getByTestId("feedback-reason-interesting_stories"));
+    expect(screen.getByTestId("feedback-reasons-count").props.children).toBe("1 / 3");
+  });
 });

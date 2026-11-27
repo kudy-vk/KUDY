@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Пра горад / Прапанова паліроўкі (усе 4 раздзелы)</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  /* A long title in a wide language takes a second line instead of being cut. */
+  .topbar .title { white-space: normal; line-height: 1.2; overflow-wrap: anywhere; }
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 80ch; }
+  .board .based a { color: #1d6b4f; }
+
+  /* ---------- the wheel of sections (compact bottom air + soft edge fade) ---------- */
+
+  .wheel {
+    --label: calc(12px * min(var(--fs), 1.25));
+    flex: none; position: relative; height: calc(88px + 2.1 * var(--label) + 8px);
+    overflow: hidden; border-bottom: 1px solid var(--line);
+    touch-action: pan-y; user-select: none; cursor: grab;
+    mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+  }
+  .wheel.dragging { cursor: grabbing; }
+  .wheel::before { content: ""; position: absolute; top: 44px; left: 0; right: 0; border-top: 2px dotted var(--line); }
+  .wheel::after {
+    content: ""; position: absolute; bottom: -6px; left: calc(50% - 6px); width: 11px; height: 11px;
+    border: 1px solid var(--line); border-width: 1px 0 0 1px; background: var(--paper); rotate: 45deg;
+  }
+  .slot {
+    --near: 0;
+    position: absolute; top: 4px; left: calc(50% - var(--slot) / 2); width: var(--slot);
+    display: grid; justify-items: center; gap: 3px; padding: 0; border: 0; background: none;
+    color: color-mix(in srgb, var(--ink) calc(var(--near) * 100%), var(--muted));
+    font-size: var(--label); line-height: 1.2; text-align: center; cursor: inherit; will-change: transform;
+    border-radius: 10px;
+  }
+  .slot .label { display: block; width: 100%; height: 2.2em; padding: 0 2px; overflow-wrap: anywhere; }
+  .medal { width: 80px; height: 80px; scale: calc(.72 + .28 * var(--near)); filter: drop-shadow(0 1.5px 1.5px rgb(74 52 30 / 38%)); }
+  .medal circle { fill: none; }
+  .medal .disc { fill: var(--medal-paper); stroke: var(--medal-rim); stroke-width: 2; }
+  .medal .inner { stroke: var(--medal-rim); stroke-width: .7; opacity: .45; }
+  .medal .glyph * { fill: none; stroke: var(--medal-ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .medal .glow { stroke: var(--medal-glow); stroke-width: 6; opacity: var(--near); }
+  .medal .pick { stroke: var(--accent); stroke-width: 3; opacity: var(--near); }
+  [data-theme="dark"] .medal .disc { fill: var(--card); }
+  [data-theme="dark"] .medal .glyph * { stroke: var(--ink); }
+
+  /* ---------- the open section ---------- */
+
+  .page { display: grid; grid-auto-rows: max-content; align-content: start; gap: 12px; padding: 18px 16px 24px; }
+  .page > * { min-width: 0; margin: 0; }
+  .page p { margin: 0; overflow-wrap: anywhere; }
+  @keyframes from-right { from { opacity: 0; translate: 18px 0; } }
+  @keyframes from-left { from { opacity: 0; translate: -18px 0; } }
+  .page.from-right > * { animation: from-right 220ms ease-out; }
+  .page.from-left > * { animation: from-left 220ms ease-out; }
+  @media (prefers-reduced-motion: reduce) { .page > * { animation: none !important; } .fold-body, .fold-head > .icon { transition: none !important; } }
+
+  .g-head { margin: 0; font-size: calc(22px * var(--fs)); font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+  .g-sub { margin: 10px 0 -2px; font-size: calc(13px * var(--fs)); font-weight: 400; color: var(--muted); }
+  .stack { display: grid; gap: 6px; }
+  .g-end { margin: 12px -16px -24px !important; opacity: .8; }
+
+  /* ---------- airport direction cards (warm amber-lit active card in dark theme + short caption) ---------- */
+
+  .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .seg button {
+    flex: 1 1 calc((240px * var(--fs) - 100%) * 999);
+    min-width: 0; min-height: 44px; padding: 6px 8px; border: 0; border-radius: 7px; background: none; color: var(--ink);
+    font-size: calc(14px * var(--fs)); line-height: 1.2; text-align: center; cursor: pointer;
+  }
+  .seg button[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); }
+
+  .route-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0; border: 0; background: none; }
+  .route-pick button {
+    --route-ground: var(--card);
+    display: grid; justify-items: center; align-content: center; gap: 4px;
+    min-height: 82px; padding: 8px 8px 7px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--route-ground); color: var(--engrave);
+  }
+  .route-pick button[aria-checked="true"] {
+    --route-ground: var(--medal-paper);
+    border-color: var(--accent); background: var(--route-ground); color: var(--medal-ink);
+    box-shadow: 0 0 0 1px var(--accent), 0 0 0 4px var(--medal-glow);
+  }
+  [data-theme="dark"] .route-pick button[aria-checked="true"] {
+    --route-ground: color-mix(in srgb, var(--medal-glow) 15%, var(--card));
+    color: var(--ink);
+    box-shadow: 0 0 0 1.5px var(--accent), 0 0 0 4px color-mix(in srgb, var(--medal-glow) 42%, transparent);
+  }
+  .route-art { display: block; width: 100%; max-width: 150px; height: auto; margin: 0 auto; }
+  .route-art * { vector-effect: non-scaling-stroke; }
+  .route-mass { fill: var(--route-ground); stroke: currentColor; stroke-width: 1.1; stroke-linejoin: round; }
+  .route-line { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .route-ink { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linecap: round; }
+  .route-fine { fill: none; stroke: currentColor; stroke-width: .7; stroke-linecap: round; opacity: .6; }
+  .route-caption {
+    display: block; font-size: calc(12px * var(--fs)); font-weight: 600; line-height: 1.15;
+    color: var(--muted); letter-spacing: .01em;
+  }
+  .route-pick button[aria-checked="true"] .route-caption { color: currentColor; }
+
+  /* ---------- numbered steps (centered circles + continuous connecting line + meta hint) ---------- */
+
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; --n: calc(32px * min(var(--fs), 1.25)); }
+  .step { position: relative; display: grid; grid-template-columns: var(--n) minmax(0, 1fr); column-gap: 12px; padding-bottom: 10px; }
+  .step:last-child { padding-bottom: 0; }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    display: flex; align-items: center; justify-content: center;
+    width: var(--n); height: var(--n); box-sizing: border-box;
+    border: 2px solid var(--accent); border-radius: 50%;
+    background: var(--paper);
+    color: var(--accent); font-size: calc(14px * min(var(--fs), 1.25)); font-weight: 600; line-height: 1;
+    z-index: 1;
+  }
+  .step::after {
+    content: ""; position: absolute;
+    top: calc(14px + var(--n)); bottom: -14px;
+    left: calc(var(--n) / 2 - 1px); width: 2px;
+    background: color-mix(in srgb, var(--accent) 40%, var(--line));
+  }
+  .step:last-child::after { display: none; }
+  .airport-fold-steps .step::before { margin-top: 14px; }
+  .airport-step-fold { min-width: 0; align-self: start; }
+  .airport-step-fold .fold-head { min-height: 60px; }
+  .airport-step-fold .fold-name { font-size: calc(16px * var(--fs)); }
+  .airport-step-fold .fold-pad { padding: 2px 12px 14px; }
+
+  /* ---------- folds (shared collapsible cards) ---------- */
+
+  .folds { display: grid; gap: 8px; }
+  .fold { border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .fold-head {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 58px; padding: 10px 12px;
+    border: 0; border-radius: 10px; background: none; color: var(--ink); font-size: calc(16px * var(--fs)); text-align: left; cursor: pointer;
+  }
+  .fold-head > .icon:first-child { color: var(--accent); }
+  .fold-head > .icon:last-child { color: var(--accent); transition: rotate 200ms; }
+  .fold.open .fold-head > .icon:last-child { rotate: 180deg; }
+  .fold-title { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .fold-name { font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+  .fold-meta { color: var(--muted); font-size: calc(13px * var(--fs)); line-height: 1.25; }
+  .fold-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 240ms ease; }
+  .fold.open .fold-body { grid-template-rows: 1fr; }
+  .fold-inner { min-height: 0; overflow: hidden; }
+  .fold-pad { display: grid; gap: 10px; padding: 2px 12px 14px; }
+
+  /* ---------- line badges, facts, rows, remarks ---------- */
+
+  .line {
+    flex: none; display: inline-grid; place-items: center; min-width: 52px; min-height: 36px; padding: 2px 8px;
+    border-radius: 10px; font-size: calc(15px * var(--fs)); font-weight: 600;
+  }
+  .line.bus { background: var(--accent); color: var(--accent-ink); }
+  .line.night { background: var(--ink); color: var(--paper); }
+  .line.train { border: 2px solid var(--accent); color: var(--accent); font-size: calc(12px * var(--fs)); }
+
+  .gfacts { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); font-size: calc(13px * var(--fs)); font-weight: 400; }
+  .gfact { display: inline-flex; align-items: flex-start; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
+  .gfact .icon { flex: none; margin-top: 2px; color: var(--accent); }
+  .fold-pad > .gfacts { color: var(--ink); font-size: calc(14px * var(--fs)); line-height: 1.35; }
+
+  .rows { display: grid; gap: 10px; margin: 0; }
+  .rows > div { display: grid; gap: 2px; }
+  .rows dt { color: var(--muted); font-size: calc(12px * var(--fs)); }
+  .rows dd { margin: 0; overflow-wrap: anywhere; }
+
+  .page .row { display: flex; gap: 8px; font-size: calc(14px * var(--fs)); }
+  .page .row .icon { flex: none; margin-top: 2px; }
+  .page .card.row .icon { color: var(--accent); }
+
+  .ticket { display: grid; gap: 8px; }
+  .ticket h5 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: calc(16px * var(--fs)); font-weight: 600; }
+  .ticket h5 .icon { color: var(--accent); }
+
+  /* ---------- unified pass cards: Gdańska Karta Turysty & Jestem z Gdańska ---------- */
+
+  .pass-card-wrap { position: relative; }
+  .pass-card-fold .fold-head { padding-right: 58px; min-height: 64px; }
+  .pass-card-fold .fold-pad { padding: 0 12px 14px; }
+  .pass-ext-btn {
+    position: absolute; top: 12px; right: 10px; z-index: 1;
+    width: 38px; height: 38px; border-radius: 9px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+    background: color-mix(in srgb, var(--accent) 10%, var(--card));
+    color: var(--accent);
+  }
+  .brand-symbol {
+    flex: none; display: grid; place-items: center;
+    width: 44px; height: 44px; border-radius: 9px; overflow: hidden;
+  }
+  .kt-symbol {
+    background: color-mix(in srgb, var(--medal-glow) 22%, var(--card));
+    border: 1px solid var(--medal-rim);
+    color: var(--ink);
+  }
+  .resident-symbol {
+    background: color-mix(in srgb, var(--accent) 16%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+    color: var(--accent);
+  }
+  .tourist-brand-logo { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .tourist-brand-fallback {
+    display: grid; width: 100%; height: 100%; place-items: center;
+    font-size: 15px; font-weight: 600; color: var(--ink);
+  }
+  .tourist-brand-fallback[hidden], .tourist-brand-logo[hidden] { display: none; }
+
+  /* ---------- «Дзе купіць»: full-width app rows with bold ink title & accent icons ---------- */
+
+  .app-list { display: grid; gap: 8px; }
+  .app-row {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 10px 12px;
+    text-align: left; cursor: pointer;
+  }
+  .app-row:active { border-color: var(--accent); }
+  .app-icon-box {
+    flex: none; display: grid; place-items: center;
+    width: 40px; height: 40px; border-radius: 9px;
+    background: color-mix(in srgb, var(--accent) 12%, var(--card));
+    color: var(--accent);
+  }
+  .app-copy { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .app-title { color: var(--ink); font-size: calc(16px * var(--fs)); font-weight: 600; line-height: 1.25; }
+  .app-desc { color: var(--muted); font-size: calc(13px * var(--fs)); line-height: 1.25; overflow-wrap: anywhere; }
+  .app-ext { flex: none; color: var(--accent); display: grid; place-items: center; }
+
+  /* ---------- «Афіцыйныя спасылкі»: quiet section footer with flat divider rows ---------- */
+
+  .source-fold {
+    margin-top: 4px;
+    border-style: dashed;
+    background: color-mix(in srgb, var(--card) 65%, transparent);
+  }
+  .source-fold .fold-head { min-height: 48px; padding: 8px 12px; }
+  .source-fold .fold-name { font-size: calc(14px * var(--fs)); font-weight: 600; color: var(--muted); }
+  .source-fold .fold-pad { padding: 0 12px 6px; }
+  .source-rows { display: grid; border-top: 1px solid var(--line); }
+  .srow {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 8px 2px;
+    border: 0; background: none; color: var(--ink); font-size: calc(15px * var(--fs)); text-align: left; cursor: pointer;
+  }
+  .srow + .srow { border-top: 1px solid color-mix(in srgb, var(--line) 65%, transparent); }
+  .srow:active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .srow .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .srow > .icon { flex: none; color: var(--accent); }
+
+  /* ---------- «Раёны і карта» («Гданьск з аднаго погляду»): card right under map + clean zone list ---------- */
+
+  .atlas {
+    --visit: #e9973f; --stay: #3f9461; --pick: #9a5d24;
+    --skm: #1d6b4f; --pkm: #276c8c; --plan: #6c7520;
+  }
+  .zone { stroke-width: 6; stroke-linejoin: round; }
+  .zone.visit { fill: var(--visit); stroke: var(--visit); opacity: .62; }
+  .zone.stay { fill: var(--stay); stroke: var(--stay); opacity: .42; }
+  .zone.picked { fill: var(--pick); stroke: var(--pick); opacity: .82; }
+  .line path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .line .casing { stroke: #ffffff; stroke-width: 7; stroke-opacity: .9; }
+  .line .ink { stroke-width: 3.5; }
+  .line.skm .ink { stroke: var(--skm); }
+  .line.pkm .ink { stroke: var(--pkm); }
+  .line.plan .ink { stroke: var(--plan); stroke-width: 3; stroke-dasharray: 6 5; }
+  .line.plan .casing { stroke-width: 6; }
+  .line .beyond { stroke-opacity: .45; }
+  .stop .halo, .airport .halo { fill: none; }
+  .stop .dot { fill: #ffffff; stroke-width: 2.4; }
+  .atlas[data-names="none"] .stop:not(.main):not(.picked) .dot { r: 2.6px; stroke-width: 1.8; }
+  .stop.skm .dot, .stop .outer { stroke: var(--skm); }
+  .stop.pkm .dot { stroke: var(--pkm); }
+  .stop.plan .dot { stroke: var(--plan); }
+  .stop .outer { fill: #ffffff; stroke-width: 1.6; }
+  .stop.change .dot { stroke: var(--pkm); }
+  .atlas[data-names="main"] .stop.main text,
+  .atlas[data-names="all"] .stop text,
+  .atlas[data-names="all"] .zname text { display: block; }
+  .atlas .zname text { font-size: calc(13px * var(--ms)); fill: #6b3a12; }
+  .stop.picked .halo, .airport.picked .halo { fill: rgb(154 93 36 / 22%); stroke: var(--pick); stroke-width: 2.5; }
+  .stop:focus-visible .halo, .airport:focus-visible .halo { stroke: #1d6b4f; stroke-width: 3; }
+  .zoomview .mark:focus-visible text { display: block; }
+  .zoomview[data-names] .mark:focus-visible text.hidden { display: block; }
+  .sw.visit, .sw.stay { width: 16px; height: 16px; border-radius: 50%; }
+  .sw.visit { background: #ecab64; box-shadow: 0 0 0 3px #f2cfa7; }
+  .sw.stay { background: #84b997; box-shadow: 0 0 0 3px #b5d6c0; }
+  .sw.rail { width: 20px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #1d6b4f 50%, #276c8c 50%); }
+  .sw.plan { width: 20px; height: 3px; background: repeating-linear-gradient(90deg, #6c7520 0 5px, transparent 5px 8px); }
+  .atlas-card .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .atlas-card.row > .icon { color: var(--accent); }
+  .zone-tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; }
+  .zone-tag.visit::before { background: #e9973f; }
+  .zone-tag.stay::before { background: #3f9461; }
+  .lbadge { display: inline-grid; place-items: center; min-height: 28px; padding: 2px 10px; border-radius: 8px; color: #ffffff; font-size: calc(13px * var(--fs)); font-weight: 600; }
+  .lbadge.skm { background: #1d6b4f; }
+  .lbadge.pkm { background: #276c8c; }
+  .lbadge.plan { border: 2px dashed #6c7520; background: transparent; color: var(--ink); }
+  .atlas-card .btn { justify-self: start; }
+  .page .atlas-card.row { align-items: flex-start; }
+  .place { display: grid; gap: 10px; }
+  .place-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .place-head h4 { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
+  /* Clean list inside «Усе зоны спісам»: no nested card borders */
+  .atlas-list-clean .card.group {
+    padding: 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent;
+  }
+  .atlas-list-clean .g-sub { margin: 6px 0 2px; font-weight: 600; }
+
+  /* ---------- «Ежа і аплата» (#256 polished: zero nested double-clicks, clear pills & brand rows) ---------- */
+
+  .food-pay-badges { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .food-pay-badge {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    min-height: 68px; padding: 8px 4px; border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+    background: color-mix(in srgb, var(--accent) 8%, var(--card));
+    color: var(--ink); font-size: calc(12px * var(--fs)); font-weight: 600; line-height: 1.25; text-align: center;
+  }
+  .food-pay-badge .icon { color: var(--accent); }
+  .food-tip-box { align-items: flex-start; }
+  .food-tip-box > .icon { color: var(--accent); margin-top: 2px; }
+  .food-tip-copy { display: grid; gap: 6px; flex: 1; min-width: 0; }
+  .food-tip-copy strong { font-size: calc(14px * var(--fs)); font-weight: 600; color: var(--ink); }
+  .food-tip-copy > span { font-size: calc(13px * var(--fs)); color: var(--ink); line-height: 1.4; }
+  .food-key-tip { color: var(--ink); font-size: calc(14px * var(--fs)); font-weight: 600; line-height: 1.4; }
+  .food-pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .food-pill-link {
+    display: inline-flex; align-items: center; gap: 6px; justify-self: start;
+    min-height: 38px; padding: 6px 12px; border-radius: 99px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+    background: color-mix(in srgb, var(--accent) 10%, var(--card));
+    color: var(--accent); font-size: calc(13px * var(--fs)); font-weight: 600; cursor: pointer;
+  }
+  .food-pill-link:active { background: color-mix(in srgb, var(--accent) 20%, var(--card)); }
+  .food-inner-sub { margin: 4px 0 -2px; font-size: calc(12px * var(--fs)); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+  .food-place-list { display: grid; border-top: 1px solid var(--line); }
+  .food-place-row {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 54px; padding: 8px 2px;
+    border: 0; background: none; color: var(--ink); text-align: left; cursor: pointer;
+  }
+  .food-place-row + .food-place-row { border-top: 1px solid color-mix(in srgb, var(--line) 65%, transparent); }
+  .food-place-row:active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .food-place-copy { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .food-place-title { font-size: calc(15px * var(--fs)); font-weight: 600; color: var(--ink); line-height: 1.25; }
+  .food-place-sub { font-size: calc(12px * var(--fs)); color: var(--muted); line-height: 1.25; }
+  .food-place-row > .icon { flex: none; color: var(--accent); }
+  .food-badge-pin, .food-badge-logo {
+    flex: none; display: grid; place-items: center;
+    width: 38px; height: 38px; border-radius: 9px; overflow: hidden;
+  }
+  .food-badge-pin {
+    background: color-mix(in srgb, var(--accent) 14%, var(--card));
+    color: var(--accent);
+  }
+  .food-badge-logo { border: 1px solid color-mix(in srgb, var(--line) 65%, transparent); }
+  .food-badge-logo img { display: block; width: 24px; height: 24px; object-fit: contain; }
+  .food-badge-word { font-size: 17px; font-weight: 700; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Пра горад — прапанова паліроўкі (усе 4 раздзелы)</h1>
+  <p class="lead">Прапанова па выніках разбору ўсіх чатырох раздзелаў экрана «Пра горад» («Аэрапорт», «Транспарт», «Раёны і карта», «Ежа і аплата») у адзіным HTML-каталогу (не зацверджана; базавыя макеты <code>about.html</code> і <code>about-257.html</code> захаваныя без змен). Пераключай уверсе раздзелы або круці кола медальёнаў мышкай/пальцам у светлай і цёмнай тэмах.</p>
+  <ul class="based">
+    <li><b>Шапка і кола:</b> чыстая стрэлка «Назад» без лішняга слова, выраўнаваная па адной восі з загалоўкам; мяккае зацямненне краёў кола і падцягнутая пустата пад подпісамі медальёнаў.</li>
+    <li><b>1. «Аэрапорт»:</b> у цёмнай тэме выбраная картка кірунку атрымлівае цёплы бурштынава-падсвечаны фон унутры і кароткі подпіс (<code>З аэрапорта · у горад</code> / <code>У аэрапорт · з горада</code>); крокі <code>1–2–3</code> застаюцца згорнутымі па змоўчанні, але маюць кароткія радкі-арыенціры і роўную лінію паміж кружкамі; картка <code>Gdańska Karta Turysty</code> паднятая над спасылкамі і мае як стрэлку <code>⌄</code> для чытання афлайн, так і асобную кнопку <code>↗</code>.</li>
+    <li><b>2. «Транспарт»:</b> іконкі ў цёмнай тэме свецяцца мятным акцэнтам; доўгія кніжныя абзацы ўнутры раскрытых відаў транспарту замененыя на кароткія радкі са значкамі; <code>Jestem z Gdańska</code> згортваецца па тым жа стандарце, што і <code>KT</code>; дадаткі ў «Дзе купіць» маюць паўтлустыя крэмавыя назвы.</li>
+    <li><b>3. «Раёны і карта»:</b> картка выбранага раёна ці станцыі паднятая <b>адразу пад карту</b> (а не схаваная пад двума радкамі тумблераў слаёў), каб націск на карту адразу даваў адказ пад пальцам; у спісе «Усе зоны спісам» прыбраныя ўкладзеныя рамкі-«матрошкі» і дададзены значок паказу на карце.</li>
+    <li><b>4. «Ежа і аплата»:</b> сінхранізавана з актуальнай 4-блокавай структурай (#256); прыбраныя «калапсы ўнутры калапсаў» (парады пра выбар валюты PLN на тэрмінале, банкаматы, час працы кухні і 3 кантары бачныя адразу пасля адкрыцця патрэбнай укладкі без другога схаванага націску); спасылкі на курсы аформленыя выразнымі пілюлямі, а сэрвісы дастаўкі і кантары выбудаваныя ў чыстыя радкі з чытэльнымі значкамі ў абедзвюх тэмах.</li>
+  </ul>
+</main>
+<script type="module">
+  import './about-257.mjs';
+  import { mountPolishEnhancer } from './polish-enhancers.mjs';
+  mountPolishEnhancer('about');
+</script>
+</body>
+</html>

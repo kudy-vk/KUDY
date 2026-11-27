@@ -31,7 +31,7 @@ import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { PressableSurface } from "./pressable-surface";
 import { ScaledText } from "./scaled-text";
 import type { AboutCityStrings } from "../contracts/ui-message-types";
-import { useThemeStyles } from "./theme";
+import { useThemeStyles, useThemeTokens } from "./theme";
 import { ABOUT_CITY_ATLAS_INITIAL, AboutCityMap, type AboutCityAtlasState } from "./about-city-map";
 import { AboutCityFood } from "./about-city-food";
 
@@ -70,6 +70,7 @@ export type AboutCitySectionContext = {
   onOpenSection: (id: AboutCitySectionId) => void;
   openLink: (url: string) => void;
   styles: AboutCitySectionStyles;
+  palette: ThemeTokens;
 };
 
 const AIRPORT_RIDE_IDS = ABOUT_CITY_RIDES.map((ride) => `ride-${ride.id}`);
@@ -80,7 +81,7 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
   const way = ui.direction;
   const stepIds = [1, 2, 3].map((n) => `airport-${way}-step-${n}`);
   const rideIds = AIRPORT_RIDE_IDS.map((id) => `${way}-${id}`);
-  const step = (n: number, title: string, body: ReactNode) => [title, <Fold key={stepIds[n]} id={stepIds[n]} open={Boolean(ui.folds[stepIds[n]])} title={title} body={body} onToggle={(id, open) => toggleFold(stepIds, id, open)} />] as const;
+  const step = (n: number, title: string, meta: string, body: ReactNode) => [title, <Fold key={stepIds[n]} id={stepIds[n]} open={Boolean(ui.folds[stepIds[n]])} title={title} meta={meta} body={body} onToggle={(id, open) => toggleFold(stepIds, id, open)} />] as const;
   const rides = (
     <View style={styles.stack}>
       {ABOUT_CITY_RIDES.map((ride) => (
@@ -100,7 +101,7 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
   const ticket = (glyph: CanonGlyph, title: string, where: string) => (
     <View key={title} style={[styles.card, styles.ticket]}>
       <View style={styles.ticketHead}>
-        <CanonIcon glyph={glyph} label={title} size={18} color={tokens.colorAccent} />
+        <CanonIcon glyph={glyph} label={title} size={18} color={ctx.palette.colorAccent} />
         <ScaledText style={styles.ticketTitle}>{title}</ScaledText>
       </View>
       <ScaledText style={styles.note}>{where}</ScaledText>
@@ -112,6 +113,7 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
       <Steps
         items={[
           step(0, t(`air.${way}.s1.title`),
+            way === "from" ? "Port Lotniczy 01, 02 · PKM" : "Dworzec Główny 10 · Wrzeszcz",
             <Fragment key="s1">
               <ScaledText style={styles.text}>{t(`air.${way}.s1.text`)}</ScaledText>
               {way === "from" ? (
@@ -121,8 +123,8 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
                 </View>
               ) : null}
             </Fragment>),
-          step(1, t("air.s2.title"), rides),
-          step(2, t("air.s3.title"),
+          step(1, t("air.s2.title"), ABOUT_CITY_RIDES.map((ride) => ride.line).join(" · "), rides),
+          step(2, t("air.s3.title"), `${t("sr.bus")} ZTM · ${t("sr.train")} POLREGIO`,
             <View key="s3" style={styles.stack}>
               {ticket(BusIcon, t("air.ticket.bus.title"), t("air.ticket.bus.where"))}
               {ticket(TrainFrontIcon, t("air.ticket.train.title"), t("air.ticket.train.where"))}
@@ -134,14 +136,14 @@ function airport(ctx: AboutCitySectionContext): ReactNode {
 }
 
 function transport(ctx: AboutCitySectionContext): ReactNode {
-  const { t, ui, toggleFold, styles, openLink } = ctx;
+  const { t, ui, toggleFold, styles, openLink, palette } = ctx;
   const fold = (id: string, group: readonly string[], glyph: CanonGlyph, title: string, body: ReactNode, meta?: string) => (
     <Fold
       key={id}
       id={id}
       open={Boolean(ui.folds[id])}
       onToggle={(foldId, open) => toggleFold(group, foldId, open)}
-      lead={<CanonIcon glyph={glyph} label={title} size={22} color={tokens.colorAccent} />}
+      lead={<CanonIcon glyph={glyph} label={title} size={22} color={palette.colorAccent} />}
       title={title}
       meta={meta}
       body={body}
@@ -164,12 +166,12 @@ function transport(ctx: AboutCitySectionContext): ReactNode {
         style={[styles.card, styles.appRow]}
         testID={`about-app-${app.key}`}
       >
-        <CanonIcon glyph={app.glyph} label={title} size={22} color={tokens.colorAccent} />
+        <CanonIcon glyph={app.glyph} label={title} size={22} color={palette.colorAccent} />
         <View style={styles.appLabel}>
           <ScaledText style={styles.appTitle}>{title}</ScaledText>
           <ScaledText style={styles.appNote}>{note}</ScaledText>
         </View>
-        <CanonIcon glyph={ExternalLinkIcon} label={title} color={tokens.colorAccent} size={18} />
+        <CanonIcon glyph={ExternalLinkIcon} label={title} color={palette.colorAccent} size={18} />
       </PressableSurface>
     );
   };
@@ -231,19 +233,20 @@ function OfficialCardLink({ ctx, kind, url }: {
   kind: "card" | "resident";
   url: string;
 }) {
-  const { t, openLink, styles } = ctx;
+  const { t, openLink, styles, palette } = ctx;
   const label = t(`${kind}.openOfficial`, { name: t(`${kind}.title`) });
   return (
     <PressableSurface accessibilityRole="link" accessibilityLabel={label} onPress={() => openLink(url)}
       style={styles.officialButton} testID={`official-${kind}`}>
-      <CanonIcon glyph={ExternalLinkIcon} label={label} size={20} />
+      <CanonIcon glyph={ExternalLinkIcon} label={label} size={20} color={palette.colorAccent} />
     </PressableSurface>
   );
 }
 
-export function TouristCard({ context }: { context: Omit<AboutCitySectionContext, "styles"> }) {
+export function TouristCard({ context }: { context: Omit<AboutCitySectionContext, "styles" | "palette"> }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
-  const ctx = { ...context, styles };
+  const palette = useThemeTokens();
+  const ctx = { ...context, styles, palette };
   const { t, ui, toggleFold } = ctx;
   return (
     <View testID="about-tourist-card">
@@ -257,12 +260,12 @@ export function TouristCard({ context }: { context: Omit<AboutCitySectionContext
 }
 
 function ResidentCard({ ctx }: { ctx: AboutCitySectionContext }) {
-  const { t, styles } = ctx;
+  const { t, styles, palette } = ctx;
   return (
     <View style={[styles.card, styles.stack]} testID="about-resident-card">
       <View style={styles.briefRow}>
         <View style={[styles.ticketHead, styles.briefContent]}>
-          <View style={styles.residentSymbol}><CanonIcon glyph={HouseIcon} label={t("resident.title")} size={24} /></View>
+          <View style={styles.residentSymbol}><CanonIcon glyph={HouseIcon} label={t("resident.title")} size={24} color={palette.colorAccent} /></View>
           <ScaledText style={[styles.ticketTitle, styles.briefContent]}>{t("resident.title")}</ScaledText>
         </View>
         <OfficialCardLink ctx={ctx} kind="resident" url={ABOUT_CITY_LINK_URLS.jestemZGdanska} />
@@ -277,10 +280,11 @@ const BUILD: Record<AboutCitySectionId, (ctx: AboutCitySectionContext) => ReactN
 // The open section under the wheel. `ui` keeps what the visitor chose.
 export function AboutCitySection({ id, ctx }: {
   id: AboutCitySectionId;
-  ctx: Omit<AboutCitySectionContext, "styles">;
+  ctx: Omit<AboutCitySectionContext, "styles" | "palette">;
 }): ReactNode {
   const styles = useThemeStyles(lightStyles, darkStyles);
-  return <>{BUILD[id]({ ...ctx, styles })}</>;
+  const palette = useThemeTokens();
+  return <>{BUILD[id]({ ...ctx, styles, palette })}</>;
 }
 
 const createStyles = (palette: ThemeTokens) => StyleSheet.create({
@@ -291,7 +295,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   // one-line note; the row opens the app's page.
   appRow: { alignItems: "center", columnGap: 12, flexDirection: "row", minHeight: 56 },
   appLabel: { flex: 1, flexShrink: 1, gap: 2 },
-  appTitle: { color: palette.colorAccent, fontSize: 16 },
+  appTitle: { color: palette.colorInk, fontSize: 16, fontWeight: tokens.fontWeightStrong },
   appNote: { color: palette.colorMuted, fontSize: 12 },
   card: {
     backgroundColor: palette.colorCard,
@@ -303,7 +307,7 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
   briefRow: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
   briefContent: { flex: 1, minWidth: 0 },
   officialButton: { alignItems: "center", justifyContent: "center", marginTop: 8 },
-  brandSymbol: { width: 46, height: 46, borderRadius: 9, alignItems: "center", justifyContent: "center", backgroundColor: palette.colorMedalPaper },
+  brandSymbol: { width: 46, height: 46, borderRadius: 9, alignItems: "center", justifyContent: "center", backgroundColor: palette.colorBadgePaid, borderColor: tokens.colorMedalRim, borderWidth: 1 },
   brandText: { color: palette.colorMedalInk, fontWeight: tokens.fontWeightStrong, fontSize: 15 },
   residentSymbol: { width: 46, height: 46, borderRadius: 9, alignItems: "center", justifyContent: "center", backgroundColor: palette.colorBadgeFree },
   ticket: { gap: 10 },

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Карусель выбару мовы пры першым запуску</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 80ch; }
+
+  /* ---------- live menu background behind the language sheet ---------- */
+  .lo-menu-bg {
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+    transition: filter 220ms ease;
+  }
+  .lo-menu-bg.lo-dimmed { filter: saturate(.85); pointer-events: none; user-select: none; }
+  .lo-menu-top { flex: none; display: flex; flex-direction: column; height: calc(var(--h) * 5 / 8 - var(--status)); }
+  .lo-menu-head { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 8px 0 16px; }
+  .lo-brand { font-size: calc(22px * var(--fs)); font-weight: 600; letter-spacing: -0.02em; color: var(--accent); }
+  .lo-city { margin-left: auto; font-size: calc(13px * var(--fs)); color: var(--muted); }
+  .lo-menu-title { margin: 4px 16px 0; font-size: calc(30px * var(--fs)); font-weight: 400; }
+  .lo-canvas { flex: 1; min-height: 0; display: grid; place-items: center; padding: 8px 16px; }
+  .lo-map-svg { width: 100%; max-height: 100%; height: auto; }
+  .lo-piece-shape { fill: #efe5d0; stroke: #bd852c; stroke-width: 1.5; stroke-linejoin: round; }
+  .lo-piece.off .lo-piece-shape { fill: #e6decb; stroke: #a8957c; opacity: .75; }
+  .lo-medal-disc { fill: var(--medal-paper); stroke: var(--medal-rim); stroke-width: 1.5; }
+  .lo-medal-inner { fill: none; stroke: var(--medal-rim); stroke-width: .7; opacity: .5; }
+  .lo-rest { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+
+  /* ---------- cached-state confirmation banner (2nd launch) ---------- */
+  .lo-cached-banner { margin: 0 16px 12px; display: flex; align-items: flex-start; gap: 10px; }
+  .lo-cached-banner > .icon { color: var(--accent); margin-top: 2px; }
+  .lo-cached-copy { display: grid; gap: 8px; flex: 1; min-width: 0; font-size: calc(13px * var(--fs)); }
+  .lo-reset-btn {
+    justify-self: start; min-height: 34px; padding: 4px 10px;
+    border: 1px solid var(--accent); border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 12%, var(--card));
+    color: var(--accent); font-size: calc(12px * var(--fs)); font-weight: 600; cursor: pointer;
+  }
+
+  /* ---------- Bottom sheet over the live map ---------- */
+  .lo-scrim {
+    position: absolute; inset: var(--status) 0 var(--nav) 0; z-index: 4;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    background: rgb(20 12 8 / 46%);
+  }
+  .lo-sheet {
+    display: grid; gap: 10px; padding: 10px 16px 18px;
+    border-top: 1px solid var(--medal-rim);
+    border-radius: 22px 22px 0 0;
+    background: var(--paper-fill);
+    box-shadow: 0 -10px 30px rgb(20 12 8 / 42%);
+  }
+  .lo-grip {
+    justify-self: center; width: 42px; height: 4px;
+    border-radius: 4px; background: var(--line);
+  }
+  .lo-head-center { display: grid; gap: 2px; text-align: center; }
+  .lo-title { margin: 0; font-size: calc(18px * var(--fs)); font-weight: 600; line-height: 1.2; }
+  .lo-sub { margin: 0; font-size: calc(12px * var(--fs)); color: var(--muted); }
+
+  /* ---------- Infinite Inertia Carousel (Medallions & Ticket Cards) ---------- */
+  .lo-carousel {
+    --label: calc(12px * min(var(--fs), 1.25));
+    position: relative; margin: 2px -16px;
+    overflow: hidden; touch-action: pan-y; user-select: none; cursor: grab;
+    mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  }
+  .lo-carousel.dragging { cursor: grabbing; }
+
+  /* Variant 1: Medallion Wheel (exact M9 medallion family of «Пра горад») */
+  .lo-carousel-wheel {
+    height: calc(88px + 1.8 * var(--label));
+    border-block: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
+    background: color-mix(in srgb, var(--card) 45%, transparent);
+  }
+  .lo-carousel-wheel::before {
+    content: ""; position: absolute; top: 44px; left: 0; right: 0;
+    border-top: 2px dotted var(--line);
+  }
+  .lo-carousel-wheel .slot {
+    --near: 0;
+    position: absolute; top: 4px; left: calc(50% - var(--slot) / 2); width: var(--slot);
+    display: grid; justify-items: center; gap: 2px; padding: 0; border: 0; background: none;
+    color: color-mix(in srgb, var(--ink) calc(var(--near) * 100%), var(--muted));
+    font-size: var(--label); font-weight: 600; line-height: 1.2; text-align: center;
+    cursor: inherit; will-change: transform; border-radius: 10px;
+  }
+  .lo-carousel-wheel .slot .label {
+    display: block; width: 100%; padding: 0 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .medal {
+    width: 80px; height: 80px;
+    scale: calc(.68 + .32 * var(--near));
+    filter: drop-shadow(0 1.5px 1.5px rgb(74 52 30 / 38%));
+  }
+  .medal circle { fill: none; }
+  .medal .disc { fill: var(--medal-paper); stroke: var(--medal-rim); stroke-width: 2; }
+  .medal .inner { stroke: var(--medal-rim); stroke-width: .7; opacity: .45; }
+  .medal .glow { stroke: var(--medal-glow); stroke-width: 6; opacity: var(--near); }
+  .medal .pick { stroke: var(--accent); stroke-width: 3; opacity: var(--near); }
+  .medal .medal-code {
+    fill: var(--medal-ink);
+    font: 600 17px/1 "Golos Text", system-ui, sans-serif;
+    letter-spacing: .04em;
+  }
+  [data-theme="dark"] .medal .disc { fill: color-mix(in srgb, var(--medal-glow) calc(var(--near) * 18%), var(--card)); }
+  [data-theme="dark"] .medal .medal-code { fill: var(--ink); }
+
+  /* Variant 2: Ticket-card carousel */
+  .lo-carousel-cards { height: 124px; padding-block: 6px; }
+  .lo-carousel-cards .slot {
+    --near: 0;
+    position: absolute; top: 8px; left: calc(50% - var(--slot) / 2);
+    width: calc(var(--slot) - 10px); height: 108px; margin-left: 5px;
+    display: grid; align-content: center; justify-items: center; gap: 4px;
+    padding: 8px; border-radius: 14px;
+    border: 1.5px solid color-mix(in srgb, var(--accent) calc(var(--near) * 100%), var(--line));
+    background: color-mix(in srgb, var(--medal-glow) calc(var(--near) * 14%), var(--card));
+    box-shadow: 0 0 0 calc(3px * var(--near)) color-mix(in srgb, var(--medal-glow) 35%, transparent);
+    color: var(--ink);
+    scale: calc(.84 + .16 * var(--near));
+    opacity: calc(.55 + .45 * var(--near));
+    cursor: inherit; will-change: transform; text-align: center;
+  }
+  .lo-card-code {
+    padding: 2px 8px; border-radius: 99px;
+    background: color-mix(in srgb, var(--accent) 16%, var(--paper));
+    color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: .05em;
+  }
+  .lo-card-name { font-size: calc(18px * var(--fs)); font-weight: 400; line-height: 1.15; }
+  .lo-card-greet { font-size: 11px; color: var(--muted); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+
+  /* ---------- Center spotlight under the carousel ---------- */
+  .lo-stage-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 2px 4px;
+  }
+  .lo-Spotlight { flex: 1; min-width: 0; text-align: center; display: grid; gap: 2px; }
+  .lo-picked-name { font-size: calc(26px * var(--fs)); font-weight: 400; line-height: 1.1; color: var(--ink); }
+  .lo-picked-greet { font-size: calc(13px * var(--fs)); color: var(--accent); font-weight: 600; }
+
+  .lo-foot-note { margin: 0; font-size: calc(12px * var(--fs)); color: var(--muted); line-height: 1.35; text-align: center; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Карусель выбару мовы пры першым запуску</h1>
+  <p class="lead">Твая ідэя з каруселлю, дзе ўсе 13 моў роўныя і круцяцца па крузе з інерцыяй! Пацягні кола мышкай/пальцам налева-направа, націсні на бакавы медальён або пераключы ўверсе <b>«Выгляд каруселі: Кола медальёнаў»</b> і <b>«Карткавая карусель»</b>.</p>
+  <ul class="based">
+    <li><b>Усе 13 моў роўныя ў адным кальцы:</b> ніякага падзелу на «галоўныя» і «схаваныя пад спойлерам» — кожная мова мае свой медальён аднаго памеру на бясконцай каруселі.</li>
+    <li><b>Родная фізіка і стыль KUDY:</b> выкарыстоўваецца тое самае інерцыйнае кола з ручным залацістым кантам медальёнаў і бурштынавым свячэннем у цэнтры, што і ў раздзеле «Пра горад» (рашэнне M9).</li>
+    <li><b>Жывы водгук фону і захаванне ў кэш:</b> пакуль круціш кола, пад ім буйна паказваецца саманазва мовы і дэвіз KUDY (<code>Хадзем, паглядзім · у сваім тэмпе</code> / <code>Let’s go and see · at your own pace</code> — без прывязкі да аднаго горада!), а карта галоўнага экрана ззаду адразу перакладаецца. Націск на кнопку ўнізе запісвае мову ў кэш і закрывае вакно.</li>
+  </ul>
+</main>
+<script type="module" src="language-onboarding.mjs"></script>
+</body>
+</html>

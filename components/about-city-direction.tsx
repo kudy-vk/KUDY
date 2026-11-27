@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Svg, { G, Path } from "react-native-svg";
 import { OLD_TOWN, PLANE_PATH } from "../docs/design/production/route-art-paths.mjs";
 import { PressableSurface } from "./pressable-surface";
-import { useThemeTokens } from "./theme";
+import { useThemeScheme, useThemeTokens } from "./theme";
 import { tokens } from "./design-tokens";
 import type { AboutCityText } from "./about-city-content";
 
@@ -15,11 +15,14 @@ export function AirportDirection({ value, onChange, t }: {
   t: AboutCityText;
 }) {
   const palette = useThemeTokens();
+  const scheme = useThemeScheme();
   return (
     <View accessibilityRole="radiogroup" accessibilityLabel={t("air.dirLabel")} style={styles.row}>
       {(["from", "to"] as const).map((direction) => {
         const checked = direction === value;
-        const ground = checked ? palette.colorMedalPaper : palette.colorCard;
+        const ground = checked
+          ? (scheme === "dark" ? palette.colorBadgePaid : palette.colorMedalPaper)
+          : palette.colorCard;
         const ink = checked ? palette.colorMedalInk : palette.colorEngrave;
         const townX = direction === "from" ? 88 : 14;
         const planeX = direction === "from" ? 14 : 104;

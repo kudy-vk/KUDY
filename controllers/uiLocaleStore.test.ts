@@ -111,7 +111,9 @@ test('G21.50: a stored registered-but-closed code falls back to be without a wri
   const written: string[] = [];
   const store = createUiLocaleStore({ read: () => 'en', write: (locale) => written.push(locale) }, ['be', 'uk']);
   assert.equal(store.current(), 'be');
-  assert.deepEqual(written, [], 'the stored row is not overwritten');
+  assert.equal(store.needsOnboarding?.(), false, 'a valid stored closed code is already chosen and does not trigger onboarding');
+  store.confirm?.('be');
+  assert.deepEqual(written, [], 'the stored row is not overwritten even if confirm(be) is called');
 });
 
 test('G21.50: the stored code restores on a later read once the open set includes it', () => {
@@ -147,4 +149,32 @@ test('G21.50: without an injection the open set is the registry fact', () => {
     store.set(code);
     assert.equal(store.current(), code);
   }
+});
+
+test('first-run language onboarding: needsOnboarding is true when persistence has null, and confirm writes even the default be choice', () => {
+  let cached: 'be' | 'en' | 'uk' | null = null;
+  const persistence = {
+    read: () => cached,
+    write: (locale: string) => {
+      cached = locale as 'be' | 'en' | 'uk';
+    },
+  };
+  const firstLaunch = createUiLocaleStore(persistence);
+  assert.equal(firstLaunch.needsOnboarding?.(), true);
+  assert.equal(firstLaunch.current(), 'be');
+
+  // Confirming the default ('be') writes to cache and clears needsOnboarding.
+  firstLaunch.confirm?.('be');
+  assert.equal(cached, 'be');
+  assert.equal(firstLaunch.needsOnboarding?.(), false);
+
+  // Second launch reads the cached 'be' and skips onboarding.
+  const secondLaunch = createUiLocaleStore(persistence);
+  assert.equal(secondLaunch.needsOnboarding?.(), false);
+  assert.equal(secondLaunch.current(), 'be');
+
+  // Clearing the cache restores first-run onboarding on next launch.
+  cached = null;
+  const afterClear = createUiLocaleStore(persistence);
+  assert.equal(afterClear.needsOnboarding?.(), true);
 });

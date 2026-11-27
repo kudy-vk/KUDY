@@ -48,7 +48,7 @@ jest.mock('../controllers/deviceServices', () => ({
   createDeviceServicePorts: (facilities: unknown) => facilities,
 }));
 
-import { createDeviceServiceSet } from '../controllers/deviceRoot';
+import { createDeviceLocalePersistence, createDeviceServiceSet } from '../controllers/deviceRoot';
 
 test('G20.29 AC4: device root waits for speech mode before physical playback', async () => {
   const previousOrigin = process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
@@ -69,5 +69,19 @@ test('G20.29 AC4: device root waits for speech mode before physical playback', a
   } finally {
     if (previousOrigin === undefined) delete process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
     else process.env.EXPO_PUBLIC_CATALOG_ORIGIN = previousOrigin;
+  }
+});
+
+test('createDeviceLocalePersistence returns a working persistence port even when no catalog source is configured', () => {
+  const previousOrigin = process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  delete process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  try {
+    expect(createDeviceServiceSet()).toBeNull();
+    const persistence = createDeviceLocalePersistence();
+    expect(persistence.read()).toBeNull();
+    persistence.write('en');
+    expect(persistence.read()).toBe('en');
+  } finally {
+    if (previousOrigin !== undefined) process.env.EXPO_PUBLIC_CATALOG_ORIGIN = previousOrigin;
   }
 });
