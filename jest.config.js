@@ -24,7 +24,7 @@ module.exports = {
   setupFilesAfterEnv: ["<rootDir>/test/rntl-configure.js"],
   testMatch: ["<rootDir>/app/**/*.test.tsx", "<rootDir>/components/**/*.test.tsx", "<rootDir>/docs/design/brand/outputs/menu-map-city-only/native/**/*.test.tsx"],
   transform: {
-    "menu-map-city-only[/\\\\](magnet|amber-light)\\.mjs$": ["babel-jest", {
+    "menu-map-city-only[/\\\\](magnet|amber-light|atlas-art)\\.mjs$": ["babel-jest", {
       presets: [require.resolve("babel-preset-expo", { paths: [require.resolve("expo/package.json")] })],
       caller: { name: "metro", bundler: "metro", platform: "ios" },
     }],

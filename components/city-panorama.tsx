@@ -9,7 +9,7 @@
 // Lives in components/, not app/: expo-router treats every app/ file as a
 // route (docs/architecture/19_class_and_module_map.md — the components zone).
 import { StyleSheet, View } from "react-native";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Defs, Path, RadialGradient, Rect, Stop } from "react-native-svg";
 
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { panoramaPaths, PANORAMA_VIEWBOX } from "../docs/design/production/panorama-paths.mjs";
@@ -30,7 +30,7 @@ const darkStyles = createStyles(darkTokens);
 
 const paths = panoramaPaths();
 
-export function CityPanorama({ testID }: { testID?: string }) {
+export function CityPanorama({ testID, lit = false }: { testID?: string; lit?: boolean }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
   const palette = useThemeTokens();
   return (
@@ -41,6 +41,13 @@ export function CityPanorama({ testID }: { testID?: string }) {
         style={StyleSheet.absoluteFill}
         viewBox={PANORAMA_VIEWBOX}
       >
+        {lit && <>
+          <Defs><RadialGradient id="menu-panorama-light" cx="50%" cy="75%" rx="50%" ry="72%">
+            <Stop offset={0} stopColor="#ebaa30" stopOpacity={0.33}/>
+            <Stop offset={1} stopColor="#ebaa30" stopOpacity={0}/>
+          </RadialGradient></Defs>
+          <Rect testID="menu-panorama-light" width="100%" height="100%" fill="url(#menu-panorama-light)"/>
+        </>}
         {paths.map(({ cls, d }, index) => (
           <Path
             key={index}
