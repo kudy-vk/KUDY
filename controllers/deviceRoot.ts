@@ -22,10 +22,37 @@ import { LocationService, systemLocationClock } from '../services/location/servi
 import { createExpoLocationOsPort } from '../services/location/expo/expo-location-port.ts';
 import { createDeviceSha256, newDeviceSessionId } from '../services/device-crypto.ts';
 import { createExpoSqliteDriver, openExpoDatabase } from '../services/db/expo/expo-sqlite-driver.ts';
+import { openDatabase } from '../services/db/db.ts';
 import { expoSecureSecretStore } from '../services/device-secure-store.ts';
 import { createE2EFeedbackBindings } from '../services/feedback-e2e.ts';
+import type { CompleteUiLocaleCode } from '../contracts/ui-locales.ts';
 import { createDeviceServicePorts } from './deviceServices.ts';
 import { resolveCatalogSource } from './catalogSource.ts';
+import { createUiLocalePersistence } from './sessionPorts.ts';
+import type { UiLocalePersistence } from './uiLocaleStore.ts';
+
+// Initializes the durable UI-locale persistence independently of catalog
+// availability so a source-less first launch still presents and persists the
+// language onboarding choice. Falls back to an in-memory store when the native
+// SQLite binding is unavailable (e.g. unmocked host render tests).
+export function createDeviceLocalePersistence(): UiLocalePersistence {
+  try {
+    const db: SQLiteDatabase = openExpoDatabase((useNewConnection) =>
+      useNewConnection ? openDatabaseSync('kudy.db', { useNewConnection: true }) : openDatabaseSync('kudy.db'),
+    );
+    const driver = createExpoSqliteDriver(db, () => openDatabaseSync('kudy.db', { useNewConnection: true }));
+    openDatabase(driver);
+    return createUiLocalePersistence(driver);
+  } catch {
+    let cached: CompleteUiLocaleCode | null = null;
+    return {
+      read: () => cached,
+      write: (locale) => {
+        cached = locale;
+      },
+    };
+  }
+}
 
 export function createDeviceServiceSet(): ReturnType<typeof createDeviceServicePorts> | null {
   const source = resolveCatalogSource({

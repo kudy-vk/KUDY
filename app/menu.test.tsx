@@ -1,11 +1,12 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { act, fireEvent, renderRouter, screen, within } from "expo-router/testing-library";
+import RootLayout from "./_layout";
 import Menu, { menuTopBlockHeight } from "./menu";
 import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
 import { cityMenuConfig } from "../components/city-map-menu";
 import { uiStrings } from "../components/ui-strings";
-import { OPEN_UI_LOCALES } from "../contracts/ui-locales";
+import { OPEN_UI_LOCALES, releaseOpenUiLocales, type CompleteUiLocaleCode } from "../contracts/ui-locales";
 import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
@@ -215,4 +216,63 @@ test("language carousel sheet is skipped on launch when a locale is already cach
   await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
   expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
   expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+});
+
+test("RootLayout initializes locale persistence and shows the onboarding sheet even when no catalog source is configured", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  const prevOrigin = process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  const prevDemo = process.env.EXPO_PUBLIC_DEMO_MODE;
+  const prevSandbox = process.env.EXPO_PUBLIC_SANDBOX;
+  delete process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  delete process.env.EXPO_PUBLIC_DEMO_MODE;
+  delete process.env.EXPO_PUBLIC_SANDBOX;
+  try {
+    await renderRouter({ _layout: RootLayout, menu: Menu }, { initialUrl: "/menu" });
+    expect(screen.getByTestId("language-onboarding-sheet")).toBeTruthy();
+    await fireEvent.press(screen.getByTestId("btn-language-next"));
+    expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("English");
+    await fireEvent.press(screen.getByTestId("btn-language-onboarding-confirm"));
+    expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
+    expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+  } finally {
+    if (prevOrigin !== undefined) process.env.EXPO_PUBLIC_CATALOG_ORIGIN = prevOrigin;
+    if (prevDemo !== undefined) process.env.EXPO_PUBLIC_DEMO_MODE = prevDemo;
+    if (prevSandbox !== undefined) process.env.EXPO_PUBLIC_SANDBOX = prevSandbox;
+  }
+});
+
+test("flag-opened locale (fi) is offered on the carousel and omits the motto instead of falling back to English", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  const mutableOpen = OPEN_UI_LOCALES as CompleteUiLocaleCode[];
+  const originalOpen = [...mutableOpen];
+  const withFi = releaseOpenUiLocales("fi");
+  mutableOpen.length = 0;
+  mutableOpen.push(...withFi);
+  try {
+    let cached: CompleteUiLocaleCode | null = null;
+    const services = createServices({
+      uiLocalePersistence: {
+        read: () => cached,
+        write: (locale) => {
+          cached = locale;
+        },
+      },
+    });
+    await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+    expect(screen.getByTestId("language-onboarding-sheet")).toBeTruthy();
+    expect(screen.getByTestId("language-onboarding-motto")).toBeTruthy();
+
+    // Step backward from index 0 ('be') to the last item ('fi' -> Suomi).
+    await fireEvent.press(screen.getByTestId("btn-language-prev"));
+    expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("Suomi");
+    expect(screen.queryByTestId("language-onboarding-motto")).toBeNull();
+    expect(screen.queryByText(/Let’s go and see/)).toBeNull();
+
+    await fireEvent.press(screen.getByTestId("btn-language-onboarding-confirm"));
+    expect(cached).toBe("fi");
+    expect(screen.getAllByText(uiStrings("fi").whereToToday).length).toBeGreaterThan(0);
+  } finally {
+    mutableOpen.length = 0;
+    mutableOpen.push(...originalOpen);
+  }
 });

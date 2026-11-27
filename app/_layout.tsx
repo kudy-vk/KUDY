@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } from "react";
 import { createServices, type Services } from "../controllers/createServices";
+import type { UiLocalePersistence, UiLocaleSwitchCode } from "../controllers/uiLocaleStore";
 import { useAppFonts } from "../components/fonts";
 import { statusBarStyle, useThemeScheme } from "../components/theme";
 import { resolveCatalogSource } from "../controllers/catalogSource";
@@ -22,6 +23,22 @@ function createDeviceServiceSet(): ReturnType<
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const deviceRoot = require("../controllers/deviceRoot") as typeof import("../controllers/deviceRoot");
   return deviceRoot.createDeviceServiceSet();
+}
+
+function createDeviceLocalePersistence(): UiLocalePersistence {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const deviceRoot = require("../controllers/deviceRoot") as typeof import("../controllers/deviceRoot");
+    return deviceRoot.createDeviceLocalePersistence();
+  } catch {
+    let cached: UiLocaleSwitchCode | null = null;
+    return {
+      read: () => cached,
+      write: (locale) => {
+        cached = locale;
+      },
+    };
+  }
 }
 
 // Screens consume services only through this provider (19 §4.2: UI never
@@ -58,7 +75,10 @@ export default function RootLayout() {
   // ports; the sandbox's embedded sample data is selected explicitly.
   const device = useMemo(createDeviceServiceSet, []);
   const services = useMemo(
-    () => (device === null ? createServices({}) : createServices(device.ports)),
+    () =>
+      device === null
+        ? createServices({ uiLocalePersistence: createDeviceLocalePersistence() })
+        : createServices(device.ports),
     [device],
   );
   // Release controller observers before the device ports they watched.

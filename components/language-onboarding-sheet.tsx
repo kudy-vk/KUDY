@@ -5,7 +5,7 @@
 // open UI locales (reusing AboutCityWheel and AboutCityMedal). Confirming writes
 // `settings.ui_locale` through `uiLocale.confirm()` and dismisses the sheet;
 // subsequent launches skip straight to the menu until cache is cleared.
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import CheckIcon from "lucide-react-native/icons/check";
 import ChevronLeftIcon from "lucide-react-native/icons/chevron-left";
@@ -43,22 +43,18 @@ export function LanguageOnboardingSheet({ uiLocale }: { uiLocale: UiLocaleSwitch
   const palette = useThemeTokens();
   const { width } = useWindowDimensions();
 
-  const items = useMemo(
-    () =>
-      OPEN_UI_LOCALES.map((code) => ({
-        id: code,
-        code: code.toUpperCase(),
-        label: uiLocaleNativeName(code),
-      })),
-    [],
-  );
+  const items = OPEN_UI_LOCALES.map((code) => ({
+    id: code,
+    code: code.toUpperCase(),
+    label: uiLocaleNativeName(code),
+  }));
 
   const initialIndex = Math.max(0, OPEN_UI_LOCALES.indexOf(uiLocale.current()));
   const [index, setIndex] = useState(initialIndex);
   const pickedCode = OPEN_UI_LOCALES[index] ?? OPEN_UI_LOCALES[0];
   const pickedName = uiLocaleNativeName(pickedCode);
   const strings = uiStrings(pickedCode);
-  const motto = MOTTO[pickedCode] ?? MOTTO.en ?? "";
+  const motto = MOTTO[pickedCode];
   const slot = Math.min(96, Math.max(76, Math.floor(width / 3.4)));
 
   const onSelect = useCallback((nextIndex: number) => {
@@ -110,7 +106,11 @@ export function LanguageOnboardingSheet({ uiLocale }: { uiLocale: UiLocaleSwitch
             <ScaledText style={styles.pickedName} testID="language-onboarding-picked">
               {pickedName}
             </ScaledText>
-            <ScaledText style={styles.motto}>{motto}</ScaledText>
+            {motto !== undefined ? (
+              <ScaledText style={styles.motto} testID="language-onboarding-motto">
+                {motto}
+              </ScaledText>
+            ) : null}
           </View>
           <PressableSurface
             accessibilityRole="button"
