@@ -208,6 +208,46 @@ test('#256: owner-review evidence exists and does not claim shipping approval', 
   assert.ok(!board.includes('Усе пяць падраздзелаў спачатку'));
 });
 
+test('#256: brand-asset inventory names what both components actually render', () => {
+  const nativeSource = readFileSync(new URL('../components/about-city-food.tsx', import.meta.url), 'utf8');
+  const vectorEntries = readFileSync(new URL('../components/about-city-food-brands.ts', import.meta.url), 'utf8');
+  const sources = readFileSync(new URL('../docs/content/about-city-sources.md', import.meta.url), 'utf8');
+  const inventory = sources.match(/\*\*Актывы і брэнды\.\*\*[^\n]*/)?.[0];
+  assert.ok(inventory, 'the asset inventory paragraph exists');
+
+  // Native truth: tile(title, logo) call sites; logo keys of FOOD_BRAND_PATHS render SVG.
+  const paths = new Set([...vectorEntries.matchAll(/^ {2}(\w+):\s*\{/gm)].map((m) => m[1]));
+  const nativeTitle = new Map();
+  for (const call of nativeSource.match(/tile\("([^"]+)", "([^"]+)", "([^"]+)"/g) ?? []) {
+    const [, , title, logo] = call.match(/tile\("([^"]+)", "([^"]+)", "([^"]+)"/);
+    if (logo !== 'map') nativeTitle.set(logo, title);
+  }
+
+  // Rendered HTML truth: img badges are bundled SVGs, food-wordmark spans are text marks.
+  const htmlSvg = new Map();
+  const htmlText = new Map();
+  for (const node of walk(render('be'))) {
+    if (node.className !== 'food-brand-art') continue;
+    const badge = node.children[0];
+    if (badge.tag === 'img' && typeof badge.src === 'string') htmlSvg.set(badge.src.replace('food-logos/', '').replace('.svg', ''), true);
+    const wordmark = String(badge.className ?? '').split(' ').find((c) => c.startsWith('food-wordmark-'));
+    if (wordmark) htmlText.set(wordmark.slice('food-wordmark-'.length), true);
+  }
+
+  assert.deepEqual([...htmlSvg.keys()].sort(), [...nativeTitle.keys()].filter((l) => paths.has(l)).sort(),
+    'HTML and native bundle the same SVG brands');
+  assert.deepEqual([...htmlText.keys()].sort(), [...nativeTitle.keys()].filter((l) => !paths.has(l)).sort(),
+    'HTML and native mark the same brands as text');
+  for (const mark of htmlSvg.keys()) {
+    assert.ok(existsSync(new URL('../docs/design/production/food-logos/' + mark + '.svg', import.meta.url)),
+      mark + ' ships a bundled SVG file');
+  }
+  for (const [logo, title] of nativeTitle) {
+    assert.ok(inventory.includes(title), 'inventory names the ' + logo + ' asset as the components render it');
+  }
+  assert.ok(!inventory.includes('Just Eat'), 'inventory does not claim a Just Eat SVG for Pyszne.pl');
+});
+
 test('#256: named station and office Maps searches include verified address disambiguation', () => {
   const cases = [
     ['mapMcd', 'Podwale Grodzkie 2'],
