@@ -7,6 +7,7 @@
 // subsequent launches skip straight to the menu until cache is cleared.
 import { useCallback, useState } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CheckIcon from "lucide-react-native/icons/check";
 import ChevronLeftIcon from "lucide-react-native/icons/chevron-left";
 import ChevronRightIcon from "lucide-react-native/icons/chevron-right";
@@ -42,6 +43,7 @@ export function LanguageOnboardingSheet({ uiLocale }: { uiLocale: UiLocaleSwitch
   const styles = useThemeStyles(lightStyles, darkStyles);
   const palette = useThemeTokens();
   const { width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   const items = OPEN_UI_LOCALES.map((code) => ({
     id: code,
@@ -75,11 +77,18 @@ export function LanguageOnboardingSheet({ uiLocale }: { uiLocale: UiLocaleSwitch
   }, [pickedCode, uiLocale]);
 
   return (
-    <View style={styles.scrim} testID="language-onboarding-sheet">
+    <View
+      style={[styles.scrim, { paddingBottom: insets.bottom }]}
+      testID="language-onboarding-sheet"
+    >
       <View
         accessibilityRole="none"
         accessibilityLabel={strings.languageLabel}
-        style={styles.sheet}
+        style={[
+          styles.sheet,
+          { paddingBottom: Math.max(24, insets.bottom + tokens.spaceL) },
+        ]}
+        testID="language-onboarding-card"
       >
         <View style={styles.grip} />
         <ScaledText accessibilityRole="header" style={styles.title}>

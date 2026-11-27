@@ -193,8 +193,12 @@ test("first-run language carousel sheet shows when cache is empty and caches the
   const services = createServices({ uiLocalePersistence });
   await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
 
-  // First launch with empty cache shows the language carousel sheet.
-  expect(screen.getByTestId("language-onboarding-sheet")).toBeTruthy();
+  // First launch with empty cache shows the language carousel sheet above the system nav inset.
+  const sheet = screen.getByTestId("language-onboarding-sheet");
+  const card = screen.getByTestId("language-onboarding-card");
+  expect(sheet).toBeTruthy();
+  const cardStyle = StyleSheet.flatten(card.props.style);
+  expect(cardStyle.paddingBottom).toBeGreaterThanOrEqual(24);
   expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("Беларуская");
 
   // Step to the next language on the carousel ('en' -> English) and confirm.

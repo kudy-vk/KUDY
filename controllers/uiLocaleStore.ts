@@ -63,7 +63,10 @@ export function createUiLocaleStore(
   // is not overwritten and nothing throws; a later read may restore the code
   // once the flag opens it.
   let current: UiLocaleSwitchCode = stored !== null && open.includes(stored) ? stored : 'be';
-  let confirmed = stored !== null && open.includes(stored);
+  // G21.50 (#496): any valid stored locale counts as an existing user choice
+  // even when closed by the release flag, so onboarding is not re-opened and
+  // confirming the 'be' session fallback never overwrites the stored closed code.
+  let confirmed = stored !== null;
   const listeners = new Set<() => void>();
 
   const validate = (locale: string): UiLocaleSwitchCode => {
@@ -103,6 +106,7 @@ export function createUiLocaleStore(
     },
     confirm: (locale?: string) => {
       const next = locale !== undefined ? validate(locale) : current;
+      if (confirmed && next === current) return;
       const changed = next !== current || !confirmed;
       current = next;
       confirmed = true;

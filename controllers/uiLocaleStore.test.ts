@@ -111,7 +111,9 @@ test('G21.50: a stored registered-but-closed code falls back to be without a wri
   const written: string[] = [];
   const store = createUiLocaleStore({ read: () => 'en', write: (locale) => written.push(locale) }, ['be', 'uk']);
   assert.equal(store.current(), 'be');
-  assert.deepEqual(written, [], 'the stored row is not overwritten');
+  assert.equal(store.needsOnboarding?.(), false, 'a valid stored closed code is already chosen and does not trigger onboarding');
+  store.confirm?.('be');
+  assert.deepEqual(written, [], 'the stored row is not overwritten even if confirm(be) is called');
 });
 
 test('G21.50: the stored code restores on a later read once the open set includes it', () => {
