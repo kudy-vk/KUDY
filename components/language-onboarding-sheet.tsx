@@ -84,6 +84,7 @@ export function LanguageOnboardingSheet({ uiLocale }: { uiLocale: UiLocaleSwitch
       <View
         accessibilityRole="none"
         accessibilityLabel={strings.languageLabel}
+        accessibilityViewIsModal={true}
         style={[
           styles.sheet,
           { paddingBottom: Math.max(24, insets.bottom + tokens.spaceL) },

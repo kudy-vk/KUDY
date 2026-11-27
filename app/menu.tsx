@@ -59,42 +59,50 @@ export default function Menu() {
   const mapWidth = Math.max(1, Math.floor(Math.min(canvasWidth, canvasHeight)));
   return (
     <ScreenSurface testID="screen-Menu" style={[styles.screen, { backgroundColor: palette.colorPaper, paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }]}>
-      <View style={[styles.top, { height: topBlockHeight }]}>
-        <View style={styles.header}>
-          <ScaledText accessibilityRole="header" style={[styles.brand, { color: palette.colorAccent }]}>{uiStrings(locale).myKudy}</ScaledText>
-          <View style={styles.headRight}>
-            <ScaledText style={[styles.city, { color: palette.colorMuted }]}>{uiStrings(locale).cityName}</ScaledText>
-            <PressableSurface
-              accessibilityRole="button"
-              accessibilityLabel={uiStrings(locale).myKudy}
-              onPress={() => router.push("/my")}
-              style={styles.settingsButton}
-              testID="btn-menu-settings"
-            >
-              <SettingsIcon size={22} color={palette.colorAccent} />
-            </PressableSurface>
-            <WalkButton walk={services.walk} locale={locale} iconOnly />
+      <View
+        accessibilityElementsHidden={needsOnboarding}
+        importantForAccessibility={needsOnboarding ? "no-hide-descendants" : "auto"}
+        pointerEvents={needsOnboarding ? "none" : "auto"}
+        style={styles.screen}
+        testID="menu-background"
+      >
+        <View style={[styles.top, { height: topBlockHeight }]}>
+          <View style={styles.header}>
+            <ScaledText accessibilityRole="header" style={[styles.brand, { color: palette.colorAccent }]}>{uiStrings(locale).myKudy}</ScaledText>
+            <View style={styles.headRight}>
+              <ScaledText style={[styles.city, { color: palette.colorMuted }]}>{uiStrings(locale).cityName}</ScaledText>
+              <PressableSurface
+                accessibilityRole="button"
+                accessibilityLabel={uiStrings(locale).myKudy}
+                onPress={() => router.push("/my")}
+                style={styles.settingsButton}
+                testID="btn-menu-settings"
+              >
+                <SettingsIcon size={22} color={palette.colorAccent} />
+              </PressableSurface>
+              <WalkButton walk={services.walk} locale={locale} iconOnly />
+            </View>
+          </View>
+          <ScaledText accessibilityRole="header" style={themedStyles.menuDisplayTitle}>{uiStrings(locale).whereToToday}</ScaledText>
+          <View
+            testID="menu-map-block"
+            style={styles.canvas}
+            onLayout={event => {
+              const next = Math.floor(event.nativeEvent.layout.height);
+              if (Math.abs(next - canvasHeight) > 1) setCanvasHeight(next);
+            }}
+          >
+            <HomeMapMenu key={`${cityMenuConfig.mapVersion}:${visit}`} width={mapWidth} locale={locale} onRevealed={() => setRevealedVisit(visit)} onSelect={id => {
+              const entry = cityMenuConfig.items.find(item => item.id === id);
+              if (entry?.destination) router.push(entry.destination);
+            }} />
           </View>
         </View>
-        <ScaledText accessibilityRole="header" style={themedStyles.menuDisplayTitle}>{uiStrings(locale).whereToToday}</ScaledText>
-        <View
-          testID="menu-map-block"
-          style={styles.canvas}
-          onLayout={event => {
-            const next = Math.floor(event.nativeEvent.layout.height);
-            if (Math.abs(next - canvasHeight) > 1) setCanvasHeight(next);
-          }}
-        >
-          <HomeMapMenu key={`${cityMenuConfig.mapVersion}:${visit}`} width={mapWidth} locale={locale} onRevealed={() => setRevealedVisit(visit)} onSelect={id => {
-            const entry = cityMenuConfig.items.find(item => item.id === id);
-            if (entry?.destination) router.push(entry.destination);
-          }} />
+        <View style={styles.rest} testID="menu-rest">
+          <CityPanorama testID="menu-panorama" lit={revealedVisit === visit} />
         </View>
+        <AdContainer loaded={false} testID="menu-ad" />
       </View>
-      <View style={styles.rest} testID="menu-rest">
-        <CityPanorama testID="menu-panorama" lit={revealedVisit === visit} />
-      </View>
-      <AdContainer loaded={false} testID="menu-ad" />
       {needsOnboarding ? <LanguageOnboardingSheet uiLocale={services.uiLocale} /> : null}
     </ScreenSurface>
   );
