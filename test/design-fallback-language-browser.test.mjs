@@ -118,6 +118,59 @@ test('Settings theme radiogroup uses its visible heading language', async (t) =>
   }
 });
 
+test('manual themes keep Settings and Guides headings unique and phone-local', async (t) => {
+  const setup = await openMockupPage(t);
+  if (!setup) return;
+  const { page, port } = setup;
+  await page.goto(`http://127.0.0.1:${port}/docs/design/production/settings.html`);
+
+  for (const theme of ['light', 'dark']) {
+    await t.test(theme, async () => {
+      await page.selectOption('#view', 'settings');
+      await page.locator('.phone').first().locator(`[data-key="theme-${theme}"]`).click();
+      await page.waitForFunction((selectedTheme) => [...document.querySelectorAll('.phone')].length === 2
+        && [...document.querySelectorAll('.phone')].every((phone) => phone.dataset.theme === selectedTheme), theme);
+
+      const observed = [];
+      for (const [view, selector] of [
+        ['settings', '.phone [role="radiogroup"]'],
+        ['guides', '.phone .chips[role="group"]'],
+      ]) {
+        if (view === 'guides') await page.selectOption('#view', 'guides');
+        await page.waitForFunction((groupSelector) => document.querySelectorAll(groupSelector).length === 2, selector);
+
+        const labels = await page.evaluate((groupSelector) => [...document.querySelectorAll('.phone')].map((phone) => {
+          const group = phone.querySelector(groupSelector);
+          const id = group?.getAttribute('aria-labelledby');
+          const label = id ? document.getElementById(id) : null;
+          const occurrences = id
+            ? [...document.querySelectorAll('[id]')].filter((element) => element.id === id).length
+            : 0;
+          return {
+            groupFound: Boolean(group),
+            labelIsHeading: label?.tagName === 'H3',
+            labelWithinPhone: Boolean(label && phone.contains(label)),
+            labelOccurrences: occurrences,
+          };
+        }), selector);
+
+        observed.push({ view, labels });
+      }
+
+      assert.deepEqual(observed, ['settings', 'guides'].map((view) => ({
+        view,
+        labels: [0, 1].map(() => ({
+          groupFound: true,
+          labelIsHeading: true,
+          labelWithinPhone: true,
+          labelOccurrences: 1,
+        })),
+      })), `${theme}: every Settings and Guides group has a unique heading inside its own phone`);
+      await page.selectOption('#view', 'settings');
+    });
+  }
+});
+
 test('an obsolete draw cannot restore a fallback status after a locale switch', async (t) => {
   const setup = await openMockupPage(t);
   if (!setup) return;
