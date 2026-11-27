@@ -309,13 +309,15 @@ function overlay(c) {
       c.say('Прагулка прыпынена: гук гіда спынены, пазіцыя больш не сочыцца, прагрэс захаваны.');
     };
     const guide = () => { close(); c.say('Адкрываецца спіс гідаў. Іншы гід пачынаецца толькі праз пытанне-пацвярджэнне; да яго прагулка не мяняецца.'); };
+    const menuTitle = el('span', { textContent: c.n('menu') });
+    menuTitle.id = `run-menu-label-${c.root.closest('.phone')?.dataset.theme ?? 'phone'}`;
     const panel = el('div', { className: 'run-menu' },
-      el('div', { className: 'run-menu-head' }, el('span', { textContent: c.n('menu') }), keyed(iconButton('x', c.w('close'), close), 'x')),
+      el('div', { className: 'run-menu-head' }, menuTitle, keyed(iconButton('x', c.w('close'), close), 'x')),
       !s.walkPaused && button(c.w('pauseWalk'), { iconName: 'circle-pause', block: true, onPress: pause }),
       button(c.w('endWalk'), { iconName: 'flag', block: true, onPress: () => c.set({ over: 'end' }) }),
       button(c.n('changeGuide'), { iconName: 'route', block: true, onPress: guide }));
     panel.setAttribute('role', 'dialog');
-    panel.setAttribute('aria-label', c.n('menu'));
+    panel.setAttribute('aria-labelledby', menuTitle.id);
     const layer = el('div', { className: 'run-over' }, panel);
     layer.addEventListener('click', (event) => { if (event.target === layer) close(); });
     return layer;

@@ -126,6 +126,8 @@ await mountBoard({
 
     if (state.view === 'guides') {
       // The exclusions screen: everything is shown by default, a pressed chip hides its group.
+      const hideHeading = heading(t('hide'));
+      hideHeading.id = `settings-guides-label-${body.closest('.phone')?.dataset.theme ?? 'phone'}`;
       const chips = el('div', { className: 'chips' }, ...Object.entries(TAGS).map(([id, name]) => {
         const off = prefs.hidden.has(id);
         const chip = el('button', { className: 'chip', type: 'button' }, off && icon('eye-off', 16), name);
@@ -138,8 +140,8 @@ await mountBoard({
         return chip;
       }));
       chips.setAttribute('role', 'group');
-      chips.setAttribute('aria-label', t('hide'));
-      content.append(heading(t('hide')), chips, el('p', { className: 'hide-status', textContent: guidesStatus }),
+      chips.setAttribute('aria-labelledby', hideHeading.id);
+      content.append(hideHeading, chips, el('p', { className: 'hide-status', textContent: guidesStatus }),
         hidden > 0 && button(t('reset'), { onPress: () => { prefs.hidden.clear(); act('Нічога не схавана: зноў паказваюцца ўсе гіды.', '.chip'); } }),
         el('p', { className: 't-small keep', textContent: t('keep') }));
     } else {

@@ -68,7 +68,7 @@ export function markDraftLanguages(root, languagesByText) {
       .join(' ');
     const language = languagesByText.get(text)
       ?? languagesByText.get(directText)
-      ?? languagesByText.get(node.getAttribute('aria-label'));
+      ?? (node.textContent.trim() ? undefined : languagesByText.get(node.getAttribute('aria-label')));
     if (language) node.lang = language;
   }
 }
