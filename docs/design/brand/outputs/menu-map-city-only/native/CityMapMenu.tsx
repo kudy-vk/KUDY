@@ -1,22 +1,22 @@
-import React,{memo,useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
-import {AccessibilityInfo,AppState,PanResponder,Pressable,StyleSheet,View} from 'react-native';
+import React,{memo,useCallback,useEffect,useId,useLayoutEffect,useMemo,useRef,useState} from 'react';
+import {AccessibilityInfo,AppState,PanResponder,Pressable,StyleSheet,useWindowDimensions,View} from 'react-native';
 import type {GestureResponderEvent,StyleProp,ViewStyle} from 'react-native';
-import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
+import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Line,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
 import {amberPalette,lightThreads} from '../amber-light.mjs';
+import {atlasColors,atlasLight} from '../atlas-art.mjs';
 import manifest from '../manifest.json';
-import {cityMenuAssets,citySceneAssets} from '../native-assets';
+import {cityMenuAssets} from '../native-assets';
 import {nativeLayout} from '../native-layout';
-import {CityPuzzle,MEDAL_DIAMETER_DP as MEDAL} from './model';
+import {CityPuzzle} from './model';
+import {AtlasBackdrop,AtlasBastions,AtlasRibbon,AtlasScenery} from './AtlasArtwork';
+import type {AtlasPalette,RibbonSize} from './AtlasArtwork';
 import {MapKeyboardTarget} from './MapKeyboardTarget';
-import type {CityMenuLayout,MapAccessibilityAction,PieceId,Point,PuzzleEvent,SceneId} from './model';
-import {CanonIcon,type CanonGlyph} from '../../../../../../components/canon-icon';
+import type {CityMenuLayout,MapAccessibilityAction,PieceId,Point,PuzzleEvent,RibbonHit,SceneId} from './model';
+import {useThemeScheme} from '../../../../../../components/theme';
 import {tokens} from '../../../../../../components/design-tokens';
 
 export type {PieceId,SceneId} from './model';
-// Issue #216 (M11): the medallion glyph arrives as the component (CanonGlyph),
-// the renderer places it on the medallion disc itself — the pieces carry no
-// visible text captions any more, the label stays the screen-reader name.
-export type CityMenuItem = {id:PieceId;disabled?:boolean;icon?:CanonGlyph};
+export type CityMenuItem = {id:PieceId;disabled?:boolean};
 export interface CityMapMenuProps {
   width: number;
   labels: Readonly<Record<PieceId,string>>;
@@ -26,37 +26,34 @@ export interface CityMapMenuProps {
   items?: readonly CityMenuItem[];
   layout?: CityMenuLayout;
   onSelect: (id:PieceId)=>void;
+  onRevealed?: ()=>void;
   reduceMotion?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
-// The medallion of the map pieces (mockup menu.mjs MEDAL/GLYPH): a constant
-// 38dp cream disc with the sand-gold rim and the section glyph in brown ink.
-// The off (disabled) tones are the mockup's literal `.medal.off` values; the
-// disc sits on the light map art (DT-4), so the tones are theme-independent.
-const OFF_PAPER = '#f3ead6';
-const OFF_RIM = '#a8957c';
-const OFF_INK = '#7d6c58';
-// The mockup's `.piece.off` tone: a pale, desaturated art. React Native has
-// no SVG filters, so the dim is a paper veil through the piece's own light
-// mask; a press lights the piece back for the mockup's 700 ms.
 const DIM_OPACITY = 0.55;
 const LIT_MS = 700;
+const anchors = Object.fromEntries(manifest.pieces.map(piece=>[piece.id,{x:piece.anchor[0]-piece.x,y:piece.anchor[1]-piece.y}])) as Record<PieceId,Point>;
+const piecePaths = Object.fromEntries(manifest.pieces.map(piece=>[piece.id,piece.path])) as Record<PieceId,string>;
 const movementActions: readonly MapAccessibilityAction[] = ['moveLeft','moveRight','moveUp','moveDown','snap','cancel'];
 const keyboardActions: Readonly<Partial<Record<string,MapAccessibilityAction>>> = {ArrowLeft:'moveLeft',ArrowRight:'moveRight',ArrowUp:'moveUp',ArrowDown:'moveDown',s:'snap',S:'snap',Escape:'cancel'};
 
 // Keep each piece's SVG local and memoized: translating a native View does
 // not invalidate the other pieces' masks and full-canvas SVG on every drag frame.
-const PieceArtwork = memo(function PieceArtwork({item,scale,complete,pressed,disabled,lit,veil}:{
-  item:typeof nativeLayout.pieces[number];scale:number;complete:boolean;pressed:boolean;disabled:boolean;lit:boolean;veil:number;
+const PieceArtwork = memo(function PieceArtwork({item,scale,complete,pressed,disabled,lit,veil,palette,joined}:{
+  item:typeof nativeLayout.pieces[number];scale:number;complete:boolean;pressed:boolean;disabled:boolean;lit:boolean;veil:number;palette:AtlasPalette;joined:boolean;
 }){
   const {id,width,height,padding}=item;
   const maskId=`city-menu-veil-${id}`;
   return <Svg width={(width+2*padding)*scale} height={(height+2*padding)*scale} viewBox={`${-padding} ${-padding} ${width+2*padding} ${height+2*padding}`}>
     <Defs><Mask id={maskId} maskUnits="userSpaceOnUse" x={0} y={0} width={width} height={height}><SvgImage href={cityMenuAssets[id].light} width={width} height={height}/></Mask></Defs>
     <G opacity={pressed?0.86:1}>
+      {!complete&&<G fill="none" strokeLinejoin="round" strokeLinecap="round">
+        <Path testID={`city-menu-outer-rim-${id}`} d={piecePaths[id]} stroke={palette.brass} strokeWidth={6.5/scale} opacity={joined?0.65:1}/>
+        <Path testID={`city-menu-paper-rim-${id}`} d={piecePaths[id]} stroke={palette.paper} strokeWidth={3.4/scale} opacity={joined?0.35:1}/>
+      </G>}
       <SvgImage href={cityMenuAssets[id].city} width={width} height={height}/>
-      {!complete&&<SvgImage href={cityMenuAssets[id].ui} x={-padding} y={-padding} width={width+2*padding} height={height+2*padding}/>}
+      {!joined&&!complete&&<SvgImage href={cityMenuAssets[id].ui} x={-padding} y={-padding} width={width+2*padding} height={height+2*padding}/>}
       <Rect testID={maskId} x={0} y={0} width={width} height={height} fill={amberPalette.veil} mask={`url(#${maskId})`} opacity={veil}/>
       {disabled&&<Rect testID={`city-menu-dim-${id}`} x={0} y={0} width={width} height={height} fill={tokens.colorPaper} mask={`url(#${maskId})`} opacity={lit?0:DIM_OPACITY}/>}
     </G>
@@ -72,11 +69,12 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const model=useMemo(()=>new CityPuzzle(width,Math.random,pieceKey.split(',') as PieceId[],props.layout),[pieceKey,layoutKey]);
   const sceneHeight=props.layout?.height??1800;
   const pieces=items.map(item=>nativeLayout.pieces.find(piece=>piece.id===item.id)!);
-  const medalKey=items.filter(item=>item.icon).map(item=>item.id).join(',');
-  const medallions=useMemo(()=>new Map<PieceId,Point>(nativeLayout.pieces.flatMap(({id})=>{
-    const piece=manifest.pieces.find(piece=>piece.id===id);
-    return piece&&medalKey.split(',').includes(id)?[[id,{x:piece.anchor[0]-piece.x,y:piece.anchor[1]-piece.y}]]:[];
-  })),[medalKey]);
+  const palette=atlasColors[useThemeScheme()];
+  const fontScale=Math.min(useWindowDimensions().fontScale||1,tokens.fontBigTextFactor);
+  const svgId=useId();
+  const [ribbonSizes,setRibbonSizes]=useState<Partial<Record<PieceId,RibbonSize>>>({});
+  const ribbonHits=useRef(new Map<PieceId,RibbonHit>());
+  const backgroundOrigin=useMemo(()=>({x:125,y:(sceneHeight-1164)/2}),[sceneHeight]);
   const [focused,setFocused]=useState<PieceId|null>(null);
   const [litId,setLitId]=useState<PieceId|null>(null);
   const [,setRevision]=useState(0);
@@ -189,13 +187,13 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const responder=useMemo(()=>{
     const point=(event:GestureResponderEvent)=>({x:event.nativeEvent.locationX*1600/width,y:event.nativeEvent.locationY*1600/width});
     return PanResponder.create({
-      onStartShouldSetPanResponder:event=>!screenReader&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event),medallions)),
+      onStartShouldSetPanResponder:event=>!screenReader&&event.nativeEvent.touches.length===1&&Boolean(model.hit(point(event),ribbonHits.current)),
       onPanResponderGrant:event=>{
         clearHold();if(event.nativeEvent.touches.length!==1){cancel();return;}
         stopDrag();
         const local=point(event);
         dragStart.current={local,page:{x:event.nativeEvent.pageX,y:event.nativeEvent.pageY}};
-        const hit=model.begin(local,Date.now(),medallions);refresh();
+        const hit=model.begin(local,Date.now(),ribbonHits.current);refresh();
         if(hit&&!hit.passive)hold.current=setTimeout(()=>{hold.current=null;updateHold(Date.now());},nativeLayout.gesture.holdMs);
       },
       onPanResponderStart:event=>{if(event.nativeEvent.touches.length!==1)cancel();},
@@ -218,30 +216,57 @@ export function CityMapMenu(props:CityMapMenuProps) {
       onPanResponderTerminationRequest:()=>true,
       onShouldBlockNativeResponder:()=>true,
     });
-  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,updateHold,props.layout?.dragEnabled,medallions]);
+  },[width,model,cancel,clearHold,handle,refresh,screenReader,stopDrag,queueDrag,flushDrag,updateHold,props.layout?.dragEnabled]);
 
-  const scale=width/1600,complete=model.phase!=='scattered';
+  const scale=width/1600,complete=model.phase!=='scattered',revealed=model.phase==='complete';
+  useEffect(()=>{if(revealed)latest.current.onRevealed?.();},[revealed]);
+  const ribbons=new Map(pieces.map(({id})=>{
+    const at=model.position(id),size=ribbonSizes[id],anchor=anchors[id];
+    const x=(at.x+anchor.x)*scale-(size?.width??0)/2;
+    const y=(at.y+anchor.y)*scale-(size?.height??0)/2;
+    return [id,{
+      x:Math.max(0,Math.min(width-(size?.width??0),x)),
+      y:Math.max(0,Math.min(width*sceneHeight/1600-(size?.height??0),y)),
+      width:size?.width??0,height:size?.height??0,
+    }];
+  }));
+  useLayoutEffect(()=>{
+    ribbonHits.current=new Map([...ribbons].filter(([,area])=>area.width>0&&area.height>0).map(([id,{x,y,width,height}])=>[
+      id,{x:x/scale,y:y/scale,width:width/scale,height:height/scale},
+    ]));
+  });
   const grab=(id:PieceId)=>model.active?.held&&model.active.group===model.pieces.get(id)?.group
     ? (reduced?1:model.grabProgress(clock.current)):0;
   const origin=model.sceneOrigin;
   const sceneTransform=`translate(${origin.x} ${origin.y})`;
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
   const passivePress=(id:SceneId)=>{const part=model.scenery.find(p=>p.id===id)!;pulse({x:origin.x+part.x+part.width/2,y:origin.y+part.y+part.height/2});};
-  // The piece-relative medallion anchor of each piece, from the accepted
-  // package manifest (menu.mjs: [anchor] − [x, y]).
-  const medalAt=(id:PieceId)=>{
-    const center=medallions.get(id);
-    return center?{x:center.x*scale,y:center.y*scale}:null;
-  };
+  const light=atlasLight(model.effectElapsed,{light:model.light,progress:model.effectProgress},revealed);
+  const lightId=`${svgId}-amber`,backClip=`${svgId}-back-wall`,frontClip=`${svgId}-front-wall`;
+  const vignette=`${svgId}-vignette`,maskId=`${svgId}-paper-mask`,revealId=`${svgId}-reveal`;
   return <View style={[styles.host,style,{width,height:width*sceneHeight/1600}]}>
     <View testID="city-menu-canvas" collapsable={false} style={StyleSheet.absoluteFill} {...responder.panHandlers}>
       <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={StyleSheet.absoluteFill}>
         <Svg width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
           <Defs>
-            <RadialGradient id="city-menu-light"><Stop offset={0} stopColor={amberPalette.core}/><Stop offset={0.4} stopColor={amberPalette.glow} stopOpacity={0.95}/><Stop offset={1} stopColor={amberPalette.edge} stopOpacity={0}/></RadialGradient>
+            <AtlasBastions clipId={backClip}/>
+            <RadialGradient id={vignette} cx="50%" cy="50%" rx="52%" ry="52%">
+              <Stop offset={0} stopColor="white"/><Stop offset={0.62} stopColor="white" stopOpacity={0.88}/>
+              <Stop offset={0.86} stopColor="white" stopOpacity={0.32}/><Stop offset={1} stopColor="white" stopOpacity={0}/>
+            </RadialGradient>
+            <Mask id={maskId} maskUnits="userSpaceOnUse" x={-200} y={-200} width={2000} height={sceneHeight+400}>
+              <Rect x={-200} y={-200} width={2000} height={sceneHeight+400} fill={`url(#${vignette})`}/>
+            </Mask>
+            <RadialGradient id={lightId}><Stop offset={0} stopColor="#fff6cf"/><Stop offset={0.28} stopColor="#ffca57" stopOpacity={0.95}/><Stop offset={0.62} stopColor={amberPalette.glow} stopOpacity={0.72}/><Stop offset={1} stopColor={amberPalette.edge} stopOpacity={0}/></RadialGradient>
           </Defs>
-          <Ellipse cx="800" cy={origin.y+582} rx={350+model.light*530} ry={320+model.light*470} fill="url(#city-menu-light)" opacity={model.light}/>
-          <G opacity={model.light*.25} fill="none" stroke={amberPalette.glow}><Ellipse cx="800" cy={origin.y+582} rx="690" ry="560" strokeWidth={5}/><Ellipse cx="800" cy={origin.y+582} rx="740" ry="610" strokeWidth={2}/></G>
+          <AtlasBackdrop ratio={scale} origin={backgroundOrigin} maskId={maskId} clipId={backClip} palette={palette} revealed={revealed}/>
+          <G testID="city-menu-aura" opacity={light.glow}>
+            <Ellipse cx={800} cy={origin.y+582} rx={940*(0.45+light.glow*0.7)} ry={840*(0.45+light.glow*0.7)} fill={`url(#${lightId})`}/>
+          </G>
+          <G fill="none">
+            <Ellipse testID="city-menu-inner-wave" cx={800} cy={origin.y+582} rx={610*light.innerScale} ry={510*light.innerScale} stroke="#ffcf66" strokeWidth={14} opacity={light.inner}/>
+            <Ellipse testID="city-menu-outer-wave" cx={800} cy={origin.y+582} rx={740*light.outerScale} ry={630*light.outerScale} stroke="#e59a28" strokeWidth={8} strokeDasharray={[28,18]} opacity={light.outer}/>
+          </G>
           <G testID="city-menu-light-threads" pointerEvents="none" transform={sceneTransform} opacity={reduced?0:1}>
             {(model.light>0?lightThreads(model.effectProgress,model.light):[]).map((thread,i)=><G key={i} transform={`translate(${thread.x} ${thread.y})`} opacity={thread.opacity}>
               <Path d={thread.d} fill="none" stroke={amberPalette.glow} strokeWidth={18} strokeOpacity={0.1} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
@@ -252,22 +277,53 @@ export function CityMapMenu(props:CityMapMenuProps) {
         </Svg>
         {pieces.map(item=>{
           const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
+          const joined=(model.pieces.get(item.id)?.group.members.size??0)>1;
           return <View key={item.id} testID={`city-menu-piece-${item.id}`} pointerEvents="none" style={[styles.piece,{left:0,top:0,transform:[{translateX:(at.x-item.padding)*scale},{translateY:(at.y-item.padding)*scale}]}]}>
-            <PieceArtwork item={item} scale={scale} complete={complete} pressed={model.active?.hit.id===item.id&&!model.active?.held} disabled={entry.disabled===true} lit={litId===item.id} veil={Math.max(model.silhouette,0.38*grab(item.id))}/>
+            <PieceArtwork item={item} scale={scale} complete={complete} joined={joined} palette={palette} pressed={model.active?.hit.id===item.id&&!model.active?.held} disabled={entry.disabled===true} lit={litId===item.id} veil={Math.max(model.silhouette,0.38*grab(item.id))}/>
           </View>;
         })}
         <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
-          <Defs><ClipPath id="city-menu-reveal"><Circle cx="675" cy="582" r={model.radius}/></ClipPath></Defs>
-          <G transform={sceneTransform} clipPath="url(#city-menu-reveal)">
-            {nativeLayout.layers.map(item=><SvgImage key={item.id} href={citySceneAssets[item.id]} x={item.x} y={item.y} width={item.width} height={item.height}/>)}
-          </G>
+          <Defs>
+            <AtlasBastions clipId={frontClip}/>
+            <ClipPath id={revealId}><Circle cx="675" cy="582" r={model.radius}/></ClipPath>
+          </Defs>
+          {model.radius>0&&<G transform={sceneTransform} clipPath={`url(#${revealId})`}>
+            <AtlasScenery clipId={frontClip} testID="city-menu-revealed-scenery"/>
+          </G>}
+          {complete&&<G testID="city-menu-seams" fill="none" strokeLinejoin="round" strokeLinecap="round">
+            {pieces.map(({id})=>{
+              const at=model.position(id);
+              return <G key={id} transform={`translate(${at.x} ${at.y})`}>
+                <Path d={piecePaths[id]} stroke="#ffae2b" strokeWidth={22} opacity={light.seam*0.6}/>
+                <Path d={piecePaths[id]} stroke={light.seam>0.5?'#fff7d6':'#f3bc52'} strokeWidth={7}
+                  opacity={Math.max(0.55,light.seam)}/>
+              </G>;
+            })}
+          </G>}
+          {!reduced&&light.seam>0&&!revealed&&model.effectElapsed<650&&
+            <G testID="city-menu-joint-sparks" transform={sceneTransform} stroke="#ffcf5c" strokeWidth={7} strokeLinecap="round"
+              opacity={Math.max(0,1-model.effectElapsed/650)}>
+              {manifest.joints.flatMap(({port:[x,y]},index)=>Array.from({length:5},(_,ray)=>{
+                const angle=ray*2*Math.PI/5,dist=50+model.effectElapsed/12;
+                const dx=Math.cos(angle),dy=Math.sin(angle);
+                return <Line key={`${index}-${ray}`} x1={x+dx*(dist-20)} y1={y+dy*(dist-20)} x2={x+dx*dist} y2={y+dy*dist}/>;
+              }))}
+            </G>}
           {feedback.current&&<Circle cx={feedback.current.point.x} cy={feedback.current.point.y} r={reduced?55:40+(1-pulseProgress)*140} stroke="#bd852c" strokeWidth={6} fill="#f4d68a" fillOpacity={.2} opacity={pulseProgress}/>}
         </Svg>
+        {pieces.map(({id})=>{
+          const ribbon=ribbons.get(id)!;
+          return <AtlasRibbon key={id} id={id} label={labels[id]} size={ribbonSizes[id]} fontScale={fontScale}
+            canvasWidth={width} palette={palette} highlight={Math.max(grab(id),focused===id?1:0)}
+            disabled={items.find(item=>item.id===id)?.disabled===true}
+            position={{left:0,top:0,transform:[{translateX:ribbon.x},{translateY:ribbon.y}]}}
+            onLayout={({nativeEvent:{layout:{width,height}}})=>setRibbonSizes(previous=>
+              previous[id]?.width===width&&previous[id]?.height===height?previous:{...previous,[id]:{width,height}})}/>;
+        })}
       </View>
       {pieces.map(item=>{
         const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
         const disabled=entry.disabled===true;
-        const medal=medalAt(item.id);
         const activate=()=>activatePiece(item.id);
         const canMove = !complete && accessibilityLabels !== undefined;
         // Soon disables the destination, not the movable fragment. The host label
@@ -300,10 +356,6 @@ export function CityMapMenu(props:CityMapMenuProps) {
           if(complete||(disabled&&!canMove)||altKey||ctrlKey||metaKey||isComposing||(shiftKey&&key!=='S'))return;
           if(keyboardMove(key)){event.preventDefault();event.stopPropagation();}
         }} accessibilityValue={joined&&accessibilityLabels?{text:accessibilityLabels.joined}:undefined} accessibilityActions={actions} onAccessibilityTap={activate} onAccessibilityAction={event=>onAction(event.nativeEvent.actionName)} style={[styles.piece,targetStyle]}>
-          {medal&&entry.icon&&<View testID={`city-menu-medal-${item.id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={[styles.medal,{left:medal.x-MEDAL/2,top:medal.y-MEDAL/2,borderColor:grab(item.id)>0||focused===item.id?tokens.colorAccent:disabled?OFF_RIM:tokens.colorMedalRim,borderWidth:1.3+1.7*grab(item.id),backgroundColor:disabled?OFF_PAPER:tokens.colorMedalPaper}]}>
-            <View pointerEvents="none" style={[styles.medalInner,{borderColor:disabled?OFF_RIM:tokens.colorMedalRim}]}/>
-            <CanonIcon glyph={entry.icon} label={labels[item.id]} color={disabled?OFF_INK:tokens.colorMedalInk} size={20}/>
-          </View>}
         </Pressable></MapKeyboardTarget>;
       })}
       {sceneLabels&&model.phase==='complete'&&nativeLayout.layers.map(item=><View key={item.id} testID={`city-menu-scene-${item.id}`} pointerEvents="none" accessible accessibilityRole="button" accessibilityLabel={sceneLabels[item.id]} onAccessibilityTap={()=>passivePress(item.id)} accessibilityActions={[{name:'activate'}]} onAccessibilityAction={event=>{if(event.nativeEvent.actionName==='activate')passivePress(item.id);}} style={{position:'absolute',left:(origin.x+item.x)*scale,top:(origin.y+item.y)*scale,width:item.width*scale,height:item.height*scale}}/>)}
@@ -312,8 +364,6 @@ export function CityMapMenu(props:CityMapMenuProps) {
 }
 
 const styles=StyleSheet.create({
-  host:{backgroundColor:tokens.colorPaper,overflow:'hidden'},
+  host:{overflow:'hidden'},
   piece:{position:'absolute'},
-  medal:{position:'absolute',width:MEDAL,height:MEDAL,borderRadius:MEDAL/2,borderWidth:1.3,alignItems:'center',justifyContent:'center',shadowColor:'#4a341e',shadowOpacity:0.38,shadowRadius:1.5,shadowOffset:{width:0,height:1.5}},
-  medalInner:{position:'absolute',width:31,height:31,borderRadius:15.5,borderWidth:0.7,opacity:0.45},
 });

@@ -41,6 +41,14 @@ test.each([
   expect(within(root).getByTestId("screen-gradient", { includeHiddenElements: true })).toBeTruthy();
 });
 
+test("the dark menu uses the approved legible ribbon palette", async () => {
+  await renderRouter({ ...frameRoutes(), menu: Menu }, { initialUrl: "/menu" });
+  const ribbon = screen.getByTestId("city-menu-ribbon-nearby", { includeHiddenElements: true });
+  const caption = within(ribbon).getByText("Побач", { includeHiddenElements: true });
+  expect(flatStyle(caption)).toMatchObject({ color: "#f4eadb", fontFamily: darkTokens.fontFamilyDisplay });
+  expect(flatStyle(screen.getByTestId("screen-Menu")).backgroundColor).toBe(darkTokens.colorPaper);
+});
+
 async function openDiscovery(url: string) {
   serve({ "catalog.json": CATALOG_FIXTURES["catalog.json"], [CATALOG_POINTER]: CATALOG_FIXTURES[CATALOG_POINTER] });
   let cached: Uint8Array | null = null;

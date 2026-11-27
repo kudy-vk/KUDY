@@ -149,12 +149,12 @@ function phone(deviceKey, theme) {
 //   build({ theme, frame, body, device, state, strings, say }) — fills `body`;
 //     runs after the phone is in the page, so sizes can be measured;
 //     may return a cleanup function, called before the next redraw.
-export async function mountBoard({ controls = [], stringIds = [], build }) {
+export async function mountBoard({ controls = [], stringIds = [], locales = LOCALES, build }) {
   const root = document.querySelector('.board');
   const state = { device: '390x844', locale: 'be', scale: 1 };
   const standard = [
     { id: 'device', label: 'Экран', options: Object.keys(DEVICES).map((key) => [key, key.replace('x', ' × ')]) },
-    { id: 'locale', label: 'Мова', options: Object.entries(LOCALES) },
+    { id: 'locale', label: 'Мова', options: Object.entries(locales) },
     { id: 'scale', label: 'Тэкст', options: [['1', 'Звычайны'], ['1.5', 'Буйны ×1,5']] },
   ];
   const bar = el('div', { className: 'controls' });

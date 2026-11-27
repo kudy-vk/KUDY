@@ -6,8 +6,6 @@ import {HomeMapMenu,cityMenuConfig} from '../../../../../../components/city-map-
 import {uiStrings} from '../../../../../../components/ui-strings';
 import {CityMapMenu} from './CityMapMenu';
 import {nativeLayout} from '../native-layout';
-import RouteIcon from 'lucide-react-native/icons/route';
-import HourglassIcon from 'lucide-react-native/icons/hourglass';
 
 const labels={nearby:'Побач',guides:'Гіды',discovery:'Чым заняцца','reserve-1':'Хутка',kudy:'KUDY'};
 const props={width:360,labels,hint:'Утрымлівай і перацягвай',sceneLabels:{water:'Вада',fortifications:'Астатняя карта'},reduceMotion:true};
@@ -32,15 +30,12 @@ test('five native accessibility activations call only their stable menu IDs',asy
   for(const p of nativeLayout.pieces)await fireEvent(screen.getByTestId(`city-menu-access-${p.id}`),'accessibilityTap');
   expect(select.mock.calls.map(call=>call[0])).toEqual(nativeLayout.pieces.map(p=>p.id));
 });
-test('the medallion renders only with a host glyph and carries no text caption (M11)',async () => {
-  const {rerender}= await render(<CityMapMenu {...props} items={[{id:'guides'},{id:'kudy',disabled:true}]} onSelect={()=>{}}/>);
-  expect(screen.queryByTestId('city-menu-medal-guides',{includeHiddenElements:true})).toBeNull();
-  // RNTL 14: rerender is async like render — await it so the medallions
-  // mount before the assertions.
-  await rerender(<CityMapMenu {...props} items={[{id:'guides',icon:RouteIcon},{id:'kudy',disabled:true,icon:HourglassIcon}]} onSelect={()=>{}}/>);
-  expect(screen.getByTestId('city-menu-medal-guides',{includeHiddenElements:true})).toBeTruthy();
-  expect(screen.getByTestId('city-menu-medal-kudy',{includeHiddenElements:true})).toBeTruthy();
-  expect(screen.queryByText(labels.guides,{includeHiddenElements:true})).toBeNull();
+test('configured labels render as visible ribbon captions',async () => {
+  await render(<CityMapMenu {...props} items={[{id:'guides'},{id:'kudy',disabled:true}]} onSelect={()=>{}}/>);
+  for(const id of ['guides','kudy'] as const) {
+    expect(screen.getByTestId(`city-menu-ribbon-${id}`,{includeHiddenElements:true})).toBeTruthy();
+    expect(screen.getByText(labels[id],{includeHiddenElements:true})).toBeTruthy();
+  }
 });
 test('translations change while the native piece positions remain stable', async () => {
   const {rerender}= await render(<CityMapMenu {...props} onSelect={()=>{}}/>);
@@ -48,10 +43,8 @@ test('translations change while the native piece positions remain stable', async
   // RNTL 14: rerender is async like render — await it so the translated
   // labels land before the assertions.
   await rerender(<CityMapMenu {...props} labels={{...labels,guides:'Stadtführungen durch die Altstadt'}} onSelect={()=>{}}/>);
-  // Issue #216 (M11): the caption is the screen-reader name only — no
-  // visible text label renders, the medallion carries the glyph instead.
   expect(screen.getByTestId('city-menu-access-guides').props.accessibilityLabel).toBe('Stadtführungen durch die Altstadt');
-  expect(screen.queryByText('Stadtführungen durch die Altstadt',{includeHiddenElements:true})).toBeNull();
+  expect(screen.getByText('Stadtführungen durch die Altstadt',{includeHiddenElements:true})).toBeTruthy();
   expect(StyleSheet.flatten(screen.getByTestId('city-menu-piece-guides',{includeHiddenElements:true}).props.style)).toEqual(before);
 });
 test('native responder tap selects, while early movement cancels selection',async () => {
@@ -73,7 +66,7 @@ test('native responder tap selects, while early movement cancels selection',asyn
   await act(()=>{rerenderedCanvas.props.onResponderGrant(event(358*360/1600,1054*360/1600),gesture);rerenderedCanvas.props.onResponderRelease(event(358*360/1600,1054*360/1600),gesture);});
   expect(select).not.toHaveBeenCalled();
 });
-test('the full visible medallion accepts tap and held drag at 320 dp',async()=>{
+test('the measured ribbon accepts tap and held drag at 320 dp',async()=>{
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
   jest.spyOn(AccessibilityInfo,'isScreenReaderEnabled').mockResolvedValue(false);
   const select=jest.fn();
@@ -81,9 +74,10 @@ test('the full visible medallion accepts tap and held drag at 320 dp',async()=>{
   const canvas=()=>screen.getByTestId('city-menu-canvas');
   const access=()=>screen.getByTestId('city-menu-access-nearby');
   const position=()=>StyleSheet.flatten(access().props.style).left;
-  const center=StyleSheet.flatten(screen.getByTestId('city-menu-medal-nearby',{includeHiddenElements:true}).props.style);
-  const target=StyleSheet.flatten(access().props.style);
-  const x=target.left!+center.left!+19-9,y=target.top!+center.top!+19+15;
+  const ribbon=()=>screen.getByTestId('city-menu-ribbon-nearby',{includeHiddenElements:true});
+  await fireEvent(ribbon(),'layout',{nativeEvent:{layout:{width:125,height:30}}});
+  const center=StyleSheet.flatten(ribbon().props.style);
+  const x=center.transform[0].translateX+8,y=center.transform[1].translateY+15;
   let stamp=0;
   const event=(px:number,py:number)=>({nativeEvent:{locationX:px,locationY:py,pageX:px,pageY:py,touches:[{pageX:px,pageY:py}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:++stamp,touchBank:[{touchActive:true,currentTimeStamp:stamp,currentPageX:px,currentPageY:py,previousPageX:px,previousPageY:py}]}});
   const gesture={dx:0,dy:0,numberActiveTouches:1};
@@ -98,9 +92,15 @@ test('the full visible medallion accepts tap and held drag at 320 dp',async()=>{
   expect(position()).toBeCloseTo(initial+8);expect(select).not.toHaveBeenCalled();
 });
 
-test('real native drags assemble all five, retain five flows and give the scene no flow',async () => {
+test.each([false,true])('real native drags reveal five usable fragments (reduced motion %s)',async (reduceMotion) => {
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
-  const select=jest.fn();await render(<CityMapMenu {...props} onSelect={select}/>);
+  const select=jest.fn(),revealed=jest.fn();
+  await render(<CityMapMenu {...props} reduceMotion={reduceMotion} onSelect={select} onRevealed={revealed}/>);
+  const decoration=(id:string)=>screen.getByTestId(`city-menu-${id}`,{includeHiddenElements:true});
+  expect(decoration('cosmos')).toBeTruthy();
+  expect(decoration('watermark')).toBeTruthy();
+  expect(decoration('paper-rim-nearby')).toBeTruthy();
+  expect(decoration('outer-rim-nearby')).toBeTruthy();
   const canvas=screen.getByTestId('city-menu-canvas');let stamp=0;
   const event=(x:number,y:number)=>({nativeEvent:{locationX:x,locationY:y,pageX:x,pageY:y,touches:[{}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:++stamp,touchBank:[{touchActive:true,currentTimeStamp:stamp,currentPageX:x,currentPageY:y,previousPageX:x,previousPageY:y}]}});
   const gesture={dx:0,dy:0,numberActiveTouches:1};
@@ -111,7 +111,23 @@ test('real native drags assemble all five, retain five flows and give the scene 
     await act(()=>{canvas.props.onResponderMove(event(tx*scale,ty*scale),gesture);canvas.props.onResponderRelease(event(tx*scale,ty*scale),gesture);});
   }
   expect(select).not.toHaveBeenCalled();
+  if(!reduceMotion){
+    expect(revealed).not.toHaveBeenCalled();
+    await act(()=>jest.advanceTimersByTime(900));
+    expect(decoration('joint-sparks')).toBeTruthy();
+    expect(decoration('inner-wave').props.opacity).toBeGreaterThan(0);
+    expect(decoration('outer-wave').props.opacity).toBeGreaterThan(0);
+    await act(()=>jest.advanceTimersByTime(4000));
+  }
   expect(screen.getByTestId('city-menu-scene-water')).toBeTruthy();
+  expect(screen.queryByTestId('city-menu-watermark',{includeHiddenElements:true})).toBeNull();
+  expect(screen.queryByTestId('city-menu-paper-rim-nearby',{includeHiddenElements:true})).toBeNull();
+  expect(decoration('revealed-scenery').props.clipPath).toMatch(/front-wall/);
+  expect(decoration('seams')).toBeTruthy();
+  expect(decoration('aura').props.opacity).toBe(0.42);
+  expect(decoration('inner-wave').props.opacity).toBe(0.22);
+  expect(decoration('outer-wave').props.opacity).toBe(0.14);
+  expect(revealed).toHaveBeenCalledTimes(1);
   expect(screen.getByTestId('city-menu-access-guides').props.pointerEvents).toBe('none');
   for(const [id,x,y] of [['nearby',330,485],['guides',650,520],['discovery',850,420],['reserve-1',360,800],['kudy',650,880]] as const){
     await act(()=>{canvas.props.onResponderGrant(event((125+x)*scale,(320+y)*scale),gesture);canvas.props.onResponderRelease(event((125+x)*scale,(320+y)*scale),gesture);});
@@ -233,10 +249,11 @@ test('production host separates pointer drag from screen reader activation',asyn
 
 test.each([false,true])('held fragment shows stronger grab feedback (reduced motion %s)',async(reduceMotion)=>{
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
-  await render(<CityMapMenu {...props} reduceMotion={reduceMotion} layout={cityMenuConfig.layout} items={cityMenuConfig.items.map(item=>({id:item.id,icon:item.icon}))} onSelect={()=>{}}/>);
+  await render(<CityMapMenu {...props} reduceMotion={reduceMotion} layout={cityMenuConfig.layout} items={cityMenuConfig.items} onSelect={()=>{}}/>);
   const canvas=()=>screen.getByTestId('city-menu-canvas');
   const veil=()=>screen.getByTestId('city-menu-veil-nearby',{includeHiddenElements:true}).props.opacity;
-  const rim=()=>StyleSheet.flatten(screen.getByTestId('city-menu-medal-nearby',{includeHiddenElements:true}).props.style).borderWidth;
+  await fireEvent(screen.getByTestId('city-menu-ribbon-nearby',{includeHiddenElements:true}),'layout',{nativeEvent:{layout:{width:90,height:30}}});
+  const rim=()=>screen.getByTestId('city-menu-ribbon-body-nearby',{includeHiddenElements:true}).props.strokeWidth;
   const x=338*360/1600,y=236*360/1600;
   const event={nativeEvent:{locationX:x,locationY:y,pageX:x,pageY:y,touches:[{pageX:x,pageY:y}]},touchHistory:{numberActiveTouches:1,indexOfSingleActiveTouch:0,mostRecentTimeStamp:1,touchBank:[{touchActive:true,currentTimeStamp:1,currentPageX:x,currentPageY:y,previousPageX:x,previousPageY:y}]}};
   const gesture={dx:0,dy:0,numberActiveTouches:1};
@@ -244,9 +261,9 @@ test.each([false,true])('held fragment shows stronger grab feedback (reduced mot
   expect(veil()).toBe(0);
   await act(()=>jest.advanceTimersByTime(301));
   if(!reduceMotion){expect(veil()).toBeLessThan(.38);await act(()=>jest.advanceTimersByTime(200));}
-  expect(veil()).toBeCloseTo(.38);expect(rim()).toBeCloseTo(3);
+  expect(veil()).toBeCloseTo(.38);expect(rim()).toBeCloseTo(3.15);
   await act(()=>canvas().props.onResponderRelease(event,gesture));
-  expect(veil()).toBe(0);expect(rim()).toBeCloseTo(1.3);
+  expect(veil()).toBe(0);expect(rim()).toBeCloseTo(1.45);
 });
 
 test('joining via accessibility announces joined state and preserves navigation with reduced motion',async()=>{
