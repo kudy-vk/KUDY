@@ -61,7 +61,14 @@ export function resolveDraftString(values, locale, order = []) {
 export function markDraftLanguages(root, languagesByText) {
   for (const node of root.querySelectorAll('*')) {
     const text = node.children.length === 0 ? node.textContent.trim() : '';
-    const language = languagesByText.get(text) ?? languagesByText.get(node.getAttribute('aria-label'));
+    const directText = [...node.childNodes]
+      .filter((child) => child.nodeType === Node.TEXT_NODE)
+      .map((child) => child.textContent.trim())
+      .filter(Boolean)
+      .join(' ');
+    const language = languagesByText.get(text)
+      ?? languagesByText.get(directText)
+      ?? languagesByText.get(node.getAttribute('aria-label'));
     if (language) node.lang = language;
   }
 }
