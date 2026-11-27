@@ -137,15 +137,11 @@ unavailable-станы гіда, прагулкі, месца, калекцыі 
 не рапартуе праход. На супольным хосце ранер не спаўняе і не забівае
 эмулятараў — пазначайце свой serial.
 
-## Лакальныя праверкі перад push на Linux: `ci:local` і `e2e:android:local` (#132)
+## Лакальныя праверкі CI і Android (#132)
 
-Дзве каманды — увесь pre-push правераны прагон на Linux-хосце распрацоўкі
-(CachyOS). Правіла іх прымянення — `docs/agent-rules/android-e2e-local.md`.
-
-```sh
-npm run ci:local           # хуткія праверкі CI ў парадку workflow-файлаў
-npm run e2e:android:local  # Android-сюіты на лакальным эмулятары, калі scope кажа run=true
-```
+Перад пушам на Linux-хосце распрацоўкі (CachyOS) запускай `npm run ci:local`.
+Праверку APK на фізічным тэлефоне і запуск асобнага smoke апісвае
+[правіла праверкі Android PR](agent-rules/android-e2e-local.md).
 
 `ci:local` ідзе ў парадку `.github/workflows/`: tests → lint → server-typecheck →
 engine-regressions → web-build → gitleaks → web-e2e → jscpd → guard-required-checks,
@@ -156,7 +152,7 @@ engine-regressions → web-build → gitleaks → web-e2e → jscpd → guard-re
 кроку няма ў `ci:local`, — спіс не можа адстайваць ад CI. На Windows ранер
 адмаўляецца працаваць з патлумачэннем (#124).
 
-`e2e:android:local` сам выконвае scope-праверку
+Пры асобным запыце на поўны прагон `npm run e2e:android:local` сам выконвае scope-праверку
 (`tools/ci/android-e2e-scope.mjs` супраць `merge-base origin/main HEAD`):
 `run=false` — «not needed» і выхад 0; `run=true` — зборка debug-APK дакладна
 гэтага HEAD (`tools/android-build/android-build.mjs`, task-owned build-root),

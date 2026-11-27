@@ -34,7 +34,7 @@
 | Абмежаванне росту шрыфту да 1,25× | `components/scaled-text.tsx:14` |
 | Android-драйвер: усталёўка, тапы, дамп дрэва элементаў, скрыншот | `tools/e2e-android/driver.mjs:342` (`screencap`), `parseDump` |
 | Наборы e2e на эмулятары, у тым ліку ўсе мовы пры сістэмным шрыфце 1,5 са скрыншотамі | `tools/e2e-android/locales.mjs:56-69`, `:136`, `:157`, `:185` |
-| CI на эмулятары API 35 (swiftshader; вобраз зменены ўладальнікам у #164): толькі ўручную (рашэнне ўладальніка 2026-11-04); на PR тыя самыя сюіты запускаюцца лакальна перад кожным push, калі зменены код праекта (спіс выключэнняў — `tools/ci/android-e2e-scope.mjs`, правіла — `docs/agent-rules/android-e2e-local.md`); ліміт 90 хв; справаздача `visual:check` — пры кожным прагоне, журналы — толькі пры падзенні | `.github/workflows/android-e2e.yml:2-14`, `:52-106` |
+| CI на эмулятары API 35 (swiftshader; вобраз зменены ўладальнікам у #164): толькі ўручную (рашэнне ўладальніка 2026-11-04); для PR дзейнічае [праверка Android паводле рызыкі](../../agent-rules/android-e2e-local.md); ліміт 90 хв; справаздача `visual:check` — пры кожным прагоне, журналы — толькі пры падзенні | `.github/workflows/android-e2e.yml:2-14`, `:52-106` |
 | Сінтэтычны каталог для e2e — фіксаваныя даныя | `tools/e2e-origin/serve-e2e-origin.mjs` (G23.01) |
 | Прэцэдэнт dev-экрана, які не трапляе ў production | `app/han-probe.tsx:143` (`if (!__DEV__) return null`) |
 | HTML-узор макета з тэстам, што прывязвае яго да канона, маршрутаў і ключоў | `docs/design/brand/outputs/MAP-05/specimen.html`, `test/map-05-specimen.test.mjs` |

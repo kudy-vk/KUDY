@@ -45,14 +45,19 @@ test('Android E2E workflow runs smoke, walk and discovery when started manually'
 });
 
 // Owner decision 2026-11-04: the hosted emulator job (up to 90 min) no
-// longer runs automatically; the PR-time check is the local pre-push rule.
-test('Android E2E starts only manually; the local pre-push rule owns the PR check', () => {
+// longer runs automatically; the local Android verification rule owns PR evidence.
+test('Android E2E starts only manually; PRs use the risk-based verification rule', () => {
   const { workflow } = read('android-e2e.yml');
   assert.deepEqual(Object.keys(workflow.on), ['workflow_dispatch'], 'no pull_request, push or schedule trigger');
   assert.deepEqual(Object.keys(workflow.jobs), ['smoke-and-walk']);
   assert.equal(workflow.jobs['smoke-and-walk'].needs, undefined, 'a manual run always runs the suites');
   const rule = fs.readFileSync(path.join(root, 'docs', 'agent-rules', 'android-e2e-local.md'), 'utf8');
-  assert.match(rule, /node tools\/ci\/android-e2e-scope\.mjs/, 'the rule decides with the shared scope script');
+  assert.match(rule, /### Standard Android risk/);
+  assert.match(rule, /adb -s <phone-serial> install -r <apk-path>/, 'standard Android PRs use a physical device');
+  assert.match(rule, /### High Android risk/);
+  assert.match(rule, /npm run e2e:android -- --suite smoke --serial <emulator-serial> --apk <apk-path>/,
+    'high-risk PRs can run smoke without starting every suite');
+  assert.match(rule, /### No Android impact/);
   assert.match(rule, /npm run e2e:android:local/, 'the rule names the one-command local runner');
   assert.match(rule, /npm run ci:local/, 'the rule names the local fast-check command');
   assert.match(rule, /runs the suites `smoke`, `walk` and `discovery`/, 'the rule must enumerate the suites smoke, walk and discovery as the one-command runner contract');
