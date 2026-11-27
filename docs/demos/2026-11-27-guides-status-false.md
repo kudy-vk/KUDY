@@ -12,3 +12,9 @@ node --test --test-reporter=dot --test-name-pattern='Guides screen does not rend
 ```output
 .
 ```
+
+```bash {image}
+![Guides after the fix on the active phone at 320x640, 1.5x text, locale nb](/tmp/codex-pr492-verified-guides-320x640-15.png)
+```
+
+![Guides after the fix on the active phone at 320x640, 1.5x text, locale nb](0b672b88-2026-11-27.png)
