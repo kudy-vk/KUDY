@@ -1,11 +1,12 @@
 import { nativeLayout } from '../native-layout.ts';
 import { findMagnet, joinGroups } from '../magnet.mjs';
 import { amberMotion } from '../amber-light.mjs';
+import { insideBastions } from '../atlas-art.mjs';
 
 export type PieceId = typeof nativeLayout.pieces[number]['id'];
 export type SceneId = typeof nativeLayout.layers[number]['id'];
 export type Point = { x: number; y: number };
-export const MEDAL_DIAMETER_DP = 38;
+export type RibbonHit = Point & { width: number; height: number };
 export type CityMenuLayout = { height: number; positions: Partial<Record<PieceId, Point>>; dragEnabled: boolean; centerAssembled?: boolean; assembledLift?: number };
 export type MapAccessibilityAction = 'moveLeft' | 'moveRight' | 'moveUp' | 'moveDown' | 'snap' | 'cancel';
 export type Phase = 'scattered' | 'assembling' | 'charging' | 'crest' | 'revealing' | 'settling' | 'complete';
@@ -36,6 +37,7 @@ export class CityPuzzle {
   silhouette = 0;
   radius = 0;
   effectProgress = 0;
+  effectElapsed = -1;
   active: Gesture | null = null;
   private accessibleMove: { group: Group; original: Point } | null = null;
   private motion: { at: number; group: Group; from: Point } | null = null;
@@ -76,32 +78,28 @@ export class CityPuzzle {
     const piece = this.pieces.get(id)!;
     return { x: 125 + piece.x + piece.group.dx, y: 320 + piece.y + piece.group.dy };
   }
-  hit(point: Point, medallions?: ReadonlyMap<PieceId, Point>): Hit | undefined {
+  hit(point: Point, ribbons?: ReadonlyMap<PieceId, RibbonHit>): Hit | undefined {
     const topFirst = [...this.pieces.values()].reverse();
-    // The medallions render above the polygon artwork, including their rims.
+    // Ribbons sit over the polygons, including any overhang outside the art.
     for (const piece of topFirst) {
-      const center = medallions?.get(piece.id);
-      if (!center) continue;
-      const at = this.position(piece.id);
-      if (Math.hypot(point.x-at.x-center.x,point.y-at.y-center.y)*this.scale <= MEDAL_DIAMETER_DP/2) return {id:piece.id,passive:false};
+      const area = ribbons?.get(piece.id);
+      if (area && point.x >= area.x && point.x <= area.x + area.width && point.y >= area.y && point.y <= area.y + area.height) {
+        return { id: piece.id, passive: false };
+      }
     }
     for (const piece of topFirst) {
       const at = this.position(piece.id);
       if (contains(piece, point.x-at.x, point.y-at.y)) return { id: piece.id, passive: false };
     }
-    if (this.phase === 'scattered') for (const piece of this.pieces.values()) {
-      const at = this.position(piece.id), labelWidth = Math.max(350, Math.min(650, piece.width+80));
-      if (Math.abs(point.x-at.x-piece.width/2) < labelWidth/2 && point.y < at.y && point.y > at.y-48/this.scale) return { id: piece.id, passive: false };
-    }
     const origin=this.sceneOrigin;
     const x = point.x-origin.x, y = point.y-origin.y;
-    if (Math.hypot(x-675,y-582) <= this.radius && this.radius > 0) for (const part of this.scenery) {
+    if (Math.hypot(x-675,y-582) <= this.radius && this.radius > 0 && insideBastions(x,y)) for (const part of this.scenery) {
       if (contains(part,x-part.x,y-part.y)) return { id: part.id, passive: true };
     }
   }
-  begin(point: Point, now: number, medallions?: ReadonlyMap<PieceId, Point>): Hit | undefined {
+  begin(point: Point, now: number, ribbons?: ReadonlyMap<PieceId, RibbonHit>): Hit | undefined {
     this.cancel();
-    const hit = this.hit(point,medallions);
+    const hit = this.hit(point,ribbons);
     if (!hit) return;
     const group = hit.passive ? undefined : this.pieces.get(hit.id)!.group;
     this.active = { hit, group, start: point, last: point, at: now, original: group ? {x:group.dx,y:group.dy} : undefined, held: false, cancelled: false };
@@ -220,6 +218,7 @@ export class CityPuzzle {
     group.dx=from.x*(1-center)**3; group.dy=targetY+(from.y-targetY)*(1-center)**3;
     const t=elapsed-400,{chargeMs,crestMs,revealMs,settleMs}=nativeLayout.reveal;
     this.phase=t<0?'assembling':t<chargeMs?'charging':t<chargeMs+crestMs?'crest':t<chargeMs+crestMs+revealMs?'revealing':'settling';
+    this.effectElapsed=t;
     const effect=amberMotion(t,nativeLayout.reveal);
     this.light=effect.light;this.silhouette=effect.veil;this.radius=effect.radius;this.effectProgress=effect.progress;
     if(t>=chargeMs+crestMs+revealMs+settleMs)this.completeNow();

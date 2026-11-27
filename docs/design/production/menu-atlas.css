@@ -1,0 +1,273 @@
+@font-face {
+  font-family: Alegreya;
+  font-weight: 600;
+  src: url("../brand/outputs/menu-map-city-only/fonts/Alegreya-SemiBold.ttf") format("truetype");
+}
+
+  .menu-top {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    height: calc(var(--h) * 5 / 8 - var(--status));
+  }
+  .menu-head {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 16px;
+  }
+  .menu-head .walkbtn { margin-right: -4px; }
+  .brand { font-size: calc(22px * var(--fs)); font-weight: 600; letter-spacing: -0.02em; color: var(--accent); }
+  .city { margin-left: auto; font-size: calc(13px * var(--fs)); color: var(--muted); }
+  .menu-title {
+    position: relative;
+    z-index: 2;
+    margin: 6px 16px 0;
+    font-size: calc(30px * var(--fs));
+    font-weight: 400;
+  }
+  .canonical-menu .menu-title { margin-top: 8px; font-size: calc(32px * var(--fs)); }
+  .menu-canvas {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    --rim-paper: #faf5ea;
+    --rim-outer: #b8832e;
+    --badge-fill: #fdf8ee;
+    --badge-fill-alt: #efe2c6;
+    --badge-rim: #c48c32;
+    --badge-inner: rgba(196, 140, 50, 0.42);
+    --badge-ink: #2b2118;
+    --badge-icon: #1d6b4f;
+    --seal-fill: #b85d28;
+    --seal-rim: #e3a24a;
+    --seal-ink: #fff8eb;
+    --pin-halo: rgba(250, 246, 236, 0.96);
+    --engrave-stroke: #8c6a3d;
+    --engrave-opacity: 0.14;
+    --watermark-opacity: 0.11;
+    --callout-line: #b8832e;
+    --callout-bg: rgba(253, 248, 238, 0.92);
+  }
+  [data-theme="dark"] .menu-canvas {
+    --rim-paper: #492c21;
+    --rim-outer: #d89b3c;
+    --badge-fill: #382219;
+    --badge-fill-alt: #28160f;
+    --badge-rim: #d89b3c;
+    --badge-inner: rgba(235, 179, 86, 0.38);
+    --badge-ink: #f4eadb;
+    --badge-icon: #8ad4b0;
+    --seal-fill: #8f3d16;
+    --seal-rim: #ebb356;
+    --seal-ink: #fff6e5;
+    --pin-halo: rgba(38, 19, 14, 0.95);
+    --engrave-stroke: #deb068;
+    --engrave-opacity: 0.17;
+    --watermark-opacity: 0.15;
+    --callout-line: #e5a946;
+    --callout-bg: rgba(48, 28, 20, 0.92);
+  }
+  .menu-canvas svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .menu-rest {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    transition: filter 600ms ease;
+  }
+  .menu-rest.panorama-lit .panorama {
+    filter: drop-shadow(0 -6px 16px rgba(235, 168, 48, 0.32));
+  }
+
+  /* Background layers: Gdańsk maritime & astronomy symbols + trimmed water */
+  .bg-motifs {
+    pointer-events: none;
+    opacity: var(--engrave-opacity);
+    stroke: var(--engrave-stroke);
+    fill: none;
+    transition: opacity 500ms ease;
+  }
+  .complete .bg-motifs {
+    opacity: calc(var(--engrave-opacity) * 1.25);
+  }
+  .bg-layers {
+    pointer-events: none;
+    transition: opacity 420ms ease, filter 420ms ease;
+  }
+  .bg-layers[data-bg="cosmos"],
+  .bg-layers[data-bg="watermark"] {
+    opacity: var(--watermark-opacity);
+    filter: sepia(0.85) saturate(0.3) contrast(0.92);
+  }
+  .bg-layers[data-bg="extended"] {
+    opacity: 0.24;
+    filter: sepia(0.6) saturate(0.45);
+  }
+  .complete .bg-layers[data-bg="cosmos"],
+  .complete .bg-layers[data-bg="watermark"] {
+    opacity: 0;
+  }
+  .complete .bg-layers[data-bg="extended"] {
+    opacity: 0.38;
+    filter: sepia(0.35) saturate(0.75);
+  }
+
+  /* Map pieces and their tactile rims */
+  .piece { outline: none; cursor: pointer; }
+  .piece .art {
+    filter: drop-shadow(0 8px 12px rgba(42, 26, 12, 0.22));
+    transition: opacity 120ms ease-out, transform 160ms cubic-bezier(.2, .8, .2, 1), filter 200ms ease;
+  }
+  [data-theme="dark"] .piece .art {
+    filter: drop-shadow(0 9px 14px rgba(10, 4, 2, 0.52));
+  }
+  .piece .ui-art { transition: opacity 200ms ease; }
+  .piece.grouped .ui-art,
+  .complete .piece .ui-art { opacity: 0; }
+
+  .piece .rim-outer {
+    fill: none;
+    stroke: var(--rim-outer);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    transition: opacity 260ms ease, stroke 260ms ease;
+  }
+  .piece .rim-paper {
+    fill: none;
+    stroke: var(--rim-paper);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    transition: opacity 260ms ease;
+  }
+  .piece.grouped .rim-paper { opacity: 0.35; }
+  .piece.grouped .rim-outer { opacity: 0.65; }
+
+  .complete .piece .rim-paper { opacity: 0; }
+  .complete .piece .rim-outer {
+    stroke: #f3bc52;
+    opacity: 0.55;
+  }
+  .complete .piece:hover .rim-outer,
+  .complete .piece:focus-visible .rim-outer,
+  .complete .piece[data-touch="pressed"] .rim-outer,
+  .piece.dock-active .rim-outer {
+    stroke: #ffd875;
+    opacity: 0.98;
+  }
+  .piece.dock-active .art {
+    transform: translateY(-5px) scale(1.015);
+    filter: drop-shadow(0 14px 16px rgba(212, 142, 28, 0.38));
+  }
+  .complete .piece .art {
+    transform: none;
+    filter: drop-shadow(0 3px 6px rgba(42, 26, 12, 0.16));
+  }
+  .complete .piece.dock-active .art {
+    transform: translateY(-3px);
+    filter: drop-shadow(0 8px 14px rgba(235, 168, 48, 0.45));
+  }
+
+  .piece[data-touch="pressed"] .art { transform: scale(0.985); }
+  .piece[data-touch="held"] .art,
+  .piece[data-touch="dragging"] .art {
+    transform: translateY(-8px) scale(1.02);
+    filter: drop-shadow(0 18px 18px rgba(55, 36, 14, 0.32));
+  }
+  .piece .ring { fill: none; stroke: var(--accent); opacity: 0; transition: opacity 150ms ease; }
+  .piece:focus-visible .ring,
+  .piece.near .ring,
+  .piece.dock-active .ring { opacity: 1; }
+  .piece.near .ring,
+  .piece.dock-active .ring { stroke: #f0a830; }
+  .settling .piece { transition: transform 380ms cubic-bezier(.2, .8, .2, 1); }
+
+  /* 1. Clean Atlas Ribbon Scroll WITHOUT left icon («Атласная стужка без іконкі») */
+  .ribbon-badge {
+    filter: drop-shadow(0 2.5px 4px rgba(32, 18, 8, 0.3));
+    transition: transform 220ms ease;
+  }
+  .ribbon-badge .r-tail {
+    fill: var(--badge-fill-alt);
+    stroke: var(--badge-rim);
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+  }
+  .ribbon-badge .r-fold {
+    fill: var(--badge-rim);
+    opacity: 0.52;
+  }
+  .ribbon-badge .r-body {
+    fill: var(--badge-fill);
+    stroke: var(--badge-rim);
+    stroke-width: 1.45;
+    stroke-linejoin: round;
+  }
+  .ribbon-badge .r-inner {
+    fill: none;
+    stroke: var(--badge-inner);
+    stroke-width: 0.75;
+  }
+  .ribbon-badge .r-dot {
+    fill: var(--badge-rim);
+  }
+  .ribbon-badge .r-text {
+    fill: var(--badge-ink);
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+  }
+
+  /* Brighter secret reveal & persistent aura */
+  .radiance, .energy-ring, .energy-ring-outer, .seam-glow {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    pointer-events: none;
+  }
+  .energy-ring { fill: none; stroke: #ffcf66; stroke-width: 14; }
+  .energy-ring-outer { fill: none; stroke: #e59a28; stroke-width: 8; stroke-dasharray: 28 18; }
+  .seam-glow path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+  .spark {
+    stroke: #ffcf5c;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: glimmer 440ms ease-out forwards;
+  }
+  .ripple {
+    fill: #f9d87a66;
+    stroke: var(--badge-rim);
+    stroke-width: 6;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ripple 460ms ease-out forwards;
+  }
+  .scene-part image { pointer-events: none; }
+  @keyframes glimmer { from { opacity: 1; scale: .55; } to { opacity: 0; scale: 1.85; } }
+  @keyframes ripple { from { opacity: .95; transform: scale(.55); } to { opacity: 0; transform: scale(2.4); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .piece, .piece .art, .piece .ui-art, .ribbon-badge, .diorama-badge, .crest-badge { transition: none; }
+    .spark, .ripple { animation: none; opacity: 0; }
+  }
+
+/* The revealed scenery sits beneath the section buttons and their fine seams. */
+.revealed .piece .ui-art { opacity: 0; }
+.revealed .piece .rim-outer { stroke-width: 8; }
+.revealed .piece .art { filter: none; }
+
+.canonical-menu .seam-glow.surge path { stroke: #ffca57; }
