@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Галоўны экран / Прапанова паліроўкі</title>
+<link rel="stylesheet" href="kit.css">
+<link rel="stylesheet" href="menu-atlas.css">
+<style>
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 86ch; display: grid; gap: 6px; }
+  /* 2. Marginalia Callouts outside the map («Вынаскі Гевелія за межамі мапы») */
+  .marginalia-layer .m-line {
+    fill: none;
+    stroke: var(--callout-line);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.78;
+    transition: opacity 180ms ease, stroke-width 180ms ease;
+  }
+  .marginalia-layer .m-node {
+    fill: var(--seal-fill);
+    stroke: #fff6dc;
+    transition: transform 180ms ease;
+  }
+  .marginalia-layer .m-pulse {
+    fill: none;
+    stroke: var(--callout-line);
+    opacity: 0.45;
+  }
+  .marginalia-item {
+    cursor: pointer;
+  }
+  .marginalia-item .m-plate {
+    fill: var(--callout-bg);
+    stroke: var(--badge-rim);
+    stroke-width: 1.25;
+    filter: drop-shadow(0 2px 5px rgba(32, 18, 8, 0.18));
+    transition: transform 160ms ease, stroke-width 160ms ease;
+  }
+  .marginalia-item .m-rule {
+    stroke: var(--badge-rim);
+    stroke-width: 1.1;
+    opacity: 0.65;
+  }
+  .marginalia-item .m-icon {
+    fill: none;
+    stroke: var(--badge-icon);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .marginalia-item .m-text {
+    fill: var(--badge-ink);
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 600;
+  }
+  .marginalia-item .m-arrow {
+    fill: none;
+    stroke: var(--badge-rim);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .marginalia-item.active .m-plate,
+  .marginalia-item:hover .m-plate {
+    stroke-width: 2;
+    stroke: #f0a830;
+  }
+
+  /* 3. Pop-Up Architectural Diorama Figurines + Curved Map Text («Архітэктурныя мініяцюры + дугавы надпіс») */
+  .diorama-badge {
+    transition: transform 220ms ease;
+  }
+  .diorama-badge .d-pedestal {
+    fill: var(--badge-fill);
+    stroke: var(--badge-rim);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 3px 4px rgba(28, 16, 6, 0.34));
+  }
+  .diorama-badge .d-monument {
+    fill: var(--badge-fill);
+    stroke: var(--badge-ink);
+    stroke-width: 1.45;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 3px rgba(28, 16, 6, 0.26));
+  }
+  .diorama-badge .d-accent {
+    fill: var(--seal-fill);
+    stroke: var(--seal-rim);
+    stroke-width: 1.1;
+  }
+  .diorama-badge .d-gold {
+    fill: #f0b243;
+    stroke: var(--badge-ink);
+    stroke-width: 0.9;
+  }
+  .diorama-badge .d-arc-text {
+    fill: var(--badge-ink);
+    stroke: var(--pin-halo);
+    stroke-width: 4.6px;
+    paint-order: stroke fill;
+    stroke-linejoin: round;
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  /* 4. Pure Map Shards + Bottom Compass Legend Dock («Чыстая мапа + Компас-док унізе») */
+  .dock-token .dt-ring {
+    fill: var(--badge-fill);
+    stroke: var(--badge-rim);
+    stroke-width: 1.6;
+    filter: drop-shadow(0 2px 4px rgba(32, 18, 8, 0.3));
+  }
+  .dock-token .dt-num {
+    fill: var(--badge-ink);
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 700;
+  }
+  .compass-dock .cd-arc {
+    fill: none;
+    stroke: var(--badge-rim);
+    stroke-dasharray: 4 4;
+    opacity: 0.55;
+  }
+  .compass-dock-item {
+    cursor: pointer;
+  }
+  .compass-dock-item .cd-pill {
+    fill: var(--badge-fill);
+    stroke: var(--badge-rim);
+    stroke-width: 1.4;
+    filter: drop-shadow(0 2px 4px rgba(32, 18, 8, 0.24));
+    transition: transform 160ms ease, stroke 160ms ease;
+  }
+  .compass-dock-item .cd-badge {
+    fill: var(--seal-fill);
+    stroke: var(--seal-rim);
+    stroke-width: 1.2;
+  }
+  .compass-dock-item .cd-num {
+    fill: var(--seal-ink);
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 700;
+  }
+  .compass-dock-item .cd-text {
+    fill: var(--badge-ink);
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 600;
+  }
+  .compass-dock-item:hover .cd-pill,
+  .compass-dock-item.active .cd-pill {
+    stroke: #f0a830;
+    stroke-width: 2.1;
+  }
+
+  /* 5. Refined Baroque Guild Crest («Цэхавы герб-шыльда») */
+  .crest-badge {
+    filter: drop-shadow(0 2.5px 4px rgba(32, 18, 8, 0.32));
+    transition: transform 220ms ease;
+  }
+  .crest-badge .cr-plate {
+    fill: var(--badge-fill);
+    stroke: var(--badge-rim);
+    stroke-width: 1.45;
+    stroke-linejoin: round;
+  }
+  .crest-badge .cr-inner {
+    fill: none;
+    stroke: var(--badge-inner);
+    stroke-width: 0.85;
+    stroke-linejoin: round;
+  }
+  .crest-badge .cr-rivet {
+    fill: var(--badge-rim);
+  }
+  .crest-badge .cr-icon {
+    fill: none;
+    stroke: var(--badge-icon);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .crest-badge .cr-text {
+    fill: var(--badge-ink);
+    font-family: Alegreya, Georgia, serif;
+    font-weight: 600;
+  }
+
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Галоўны экран — прынятая «Атласная стужка без іконкі» + архіў канцэпцый</h1>
+  <p class="lead">Рашэнне ўладальніка (27.11.2026): для інтэграцыі ў дадатак прынятыя <b>«1. Прынята: Атласная стужка БЕЗ іконкі»</b> (<code>ribbon</code>) і фон <b>«Прынята: Сімвалы Гданьска (мора і космас) + вада ў мурах»</b> (<code>cosmos</code> са зрэзам вады па <code>BASTION_CLIP_PATH</code>). Астатнія 4 канцэпцыі кнопак захаваныя ў перамыкачы як архіў на будучыню (не для бягучай інтэграцыі).</p>
+  <ul class="based">
+    <li><b>ПРЫНЯТА ДЛЯ ІНТЭГРАЦЫІ — Атласная стужка-світак БЕЗ іконкі злева (<code>ribbon</code>) + Фон <code>cosmos</code>:</b> выгнуты пергаментны світак з «ластаўчынымі» хвосцікамі, маленькімі ромбікамі і надпісам <code>Alegreya</code>; двайны тактыльны кант кавалкаў; зрэз лішняй вады справа па контуры бастыёнаў; гравюрныя сімвалы Гданьска (секстант і армілярная сфера Яна Гевелія, сузор'і, ганзейскі ког, трызубец Нептуна, шалі і ружа вятроў) з віньеткай; узмоцненая бурштынавая анімацыя па швах пры зборцы.</li>
+    <li><b>АРХІЎ (захавана ў перамыкачы на будучыню, не інтэграваць цяпер):</b>
+      <br>• <b>2. Архіў — Вынаскі Гевелія за межамі мапы (<code>marginalia</code>):</b> чыстыя кварталы з бурштынавымі маячкамі і жывымі залатымі прамянямі-вынаскамі да краёў.
+      <br>• <b>3. Архіў — Архітэктурныя фігуркі Гданьска + дугавы надпіс (<code>diorama</code>):</b> 3D-гравюрныя мініяцюры (Ратуша, Жураў, ліхтар з аркай, вежа з флюгерам, куфар) і тэкст па дузе.
+      <br>• <b>4. Архіў — Чыстая мапа з клеймамі I–V + Компас-док унізе (<code>dock</code>):</b> рымскія клеймы на кавалках і дугавы док з 5 жэтонаў унізе.
+      <br>• <b>5. Архіў — Цэхавы герб-шыльда (<code>crest</code>):</b> барочны герб з верхняй каронай і заклёпкамі.</li>
+  </ul>
+</main>
+<script type="module" src="menu-polish.mjs"></script>
+</body>
+</html>

@@ -41,6 +41,7 @@ export default function Menu() {
   const services = useServices();
   const router = useRouter();
   const [visit, setVisit] = useState(0);
+  const [revealedVisit, setRevealedVisit] = useState<number | null>(null);
   useFocusEffect(useCallback(() => { setVisit(value => value + 1); }, []));
   // The mockup measures 5/8 from the top edge: block height = 5/8·h − status.
   const topBlockHeight = menuTopBlockHeight(height, insets.top);
@@ -79,14 +80,14 @@ export default function Menu() {
             if (Math.abs(next - canvasHeight) > 1) setCanvasHeight(next);
           }}
         >
-          <HomeMapMenu key={`${cityMenuConfig.mapVersion}:${visit}`} width={mapWidth} locale={locale} onSelect={id => {
+          <HomeMapMenu key={`${cityMenuConfig.mapVersion}:${visit}`} width={mapWidth} locale={locale} onRevealed={() => setRevealedVisit(visit)} onSelect={id => {
             const entry = cityMenuConfig.items.find(item => item.id === id);
             if (entry?.destination) router.push(entry.destination);
           }} />
         </View>
       </View>
       <View style={styles.rest} testID="menu-rest">
-        <CityPanorama testID="menu-panorama" />
+        <CityPanorama testID="menu-panorama" lit={revealedVisit === visit} />
       </View>
       <AdContainer loaded={false} testID="menu-ad" />
     </ScreenSurface>

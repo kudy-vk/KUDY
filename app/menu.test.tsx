@@ -10,8 +10,6 @@ import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
 import { StyleSheet } from "react-native";
-import SettingsIcon from "lucide-react-native/icons/settings";
-import LightbulbIcon from "lucide-react-native/icons/lightbulb";
 
 afterEach(() => { jest.restoreAllMocks(); jest.useRealTimers(); });
 
@@ -115,33 +113,27 @@ test("the header renders the contract city name and the display heading", async 
   }
 });
 
-// Issue #216 (AC4/AC6): pieces carry medallions with unique glyphs, no
-// visible captions; the map-point, route and lamp signs replace the compass.
-test("pieces carry medallions with unique glyphs and no visible captions", async () => {
+test("all five ribbons carry their localized captions without chapter icons", async () => {
   await openMenu();
-  const canvas = screen.getByTestId("city-menu-canvas");
   for (const item of cityMenuConfig.items) {
-    expect(screen.getByTestId(`city-menu-medal-${item.id}`, { includeHiddenElements: true })).toBeTruthy();
-    // The caption stays the screen-reader label only; the disabled entry's
-    // honest «· Хутка» note rides the same label (HomeMapMenu).
-    const word = uiStrings("be")[item.labelKey].replace(/\s*→$/, "");
-    const caption = item.destination === null ? `${word} · ${uiStrings("be").comingSoon}` : word;
-    expect(within(canvas).queryByText(caption, { includeHiddenElements: true })).toBeNull();
+    const ribbon = screen.getByTestId(`city-menu-ribbon-${item.id}`, { includeHiddenElements: true });
+    const caption = uiStrings("be")[item.labelKey].replace(/\s*→$/, "");
+    expect(within(ribbon).getByText(caption, { includeHiddenElements: true })).toBeTruthy();
+    expect(screen.queryByTestId(`city-menu-medal-${item.id}`, { includeHiddenElements: true })).toBeNull();
+    expect(screen.getByTestId(`city-menu-access-${item.id}`).props.accessibilityLabel).toBe(caption);
   }
-  expect(new Set(cityMenuConfig.items.map(item => item.icon)).size).toBe(cityMenuConfig.items.length);
-  expect(cityMenuConfig.items.find(item => item.id === "discovery")?.icon).toBe(LightbulbIcon);
-  expect(cityMenuConfig.items.find(item => item.id === "kudy")?.icon).toBe(SettingsIcon);
 });
 
 // Drag-enabled fragments receive a real finger tap through the canvas
 // PanResponder, not the inner accessibility Pressable (pointerEvents="none").
-test("touching the KUDY medallion through the canvas opens settings", async () => {
+test("touching the KUDY ribbon through the canvas opens settings", async () => {
   await openMenu();
   const canvas = screen.getByTestId("city-menu-canvas");
-  const piece = StyleSheet.flatten(screen.getByTestId("city-menu-access-kudy").props.style);
-  const medal = StyleSheet.flatten(screen.getByTestId("city-menu-medal-kudy", { includeHiddenElements: true }).props.style);
-  const x = Number(piece.left) + Number(medal.left) + 19 - 9;
-  const y = Number(piece.top) + Number(medal.top) + 19 + 15;
+  const ribbon = screen.getByTestId("city-menu-ribbon-kudy", { includeHiddenElements: true });
+  await fireEvent(ribbon, "layout", { nativeEvent: { layout: { width: 108, height: 30 } } });
+  const bounds = StyleSheet.flatten(screen.getByTestId("city-menu-ribbon-kudy", { includeHiddenElements: true }).props.style);
+  const x = bounds.transform[0].translateX + 8;
+  const y = bounds.transform[1].translateY + 15;
   expect(Number.isFinite(x) && Number.isFinite(y)).toBe(true);
   let stamp = 0;
   const touch = {
