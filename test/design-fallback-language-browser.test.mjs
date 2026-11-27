@@ -77,6 +77,48 @@ test('fallback accessible names do not change the language inherited by localize
   assert.equal(await groupLabel.getAttribute('lang'), 'en');
   assert.notEqual(await group.getAttribute('lang'), 'en', 'English group name does not retag Belarusian content');
   for (const chip of await group.locator('.chip').all()) {
+    assert.equal(await chip.getAttribute('lang'), 'be', 'Belarusian tag declares its content language');
+    assert.equal(await chip.evaluate((node) => node.closest('[lang]')?.lang), 'be', 'Belarusian tag has effective Belarusian language metadata');
     assert.notEqual(await chip.getAttribute('lang'), 'en', 'content tags keep their inherited locale');
   }
+});
+
+test('an obsolete draw cannot restore a fallback status after a locale switch', async (t) => {
+  const setup = await openMockupPage(t);
+  if (!setup) return;
+  const { page, port } = setup;
+  await page.goto(`http://127.0.0.1:${port}/docs/design/production/settings.html`);
+  await page.locator('.board').evaluate((board) => board.replaceChildren());
+
+  let releaseRequest;
+  let requested;
+  const nbRequested = new Promise((resolve) => { requested = resolve; });
+  const nbResponse = new Promise((resolve) => { releaseRequest = resolve; });
+  await page.route('**/translations/nb.json', async (route) => {
+    requested();
+    await nbResponse;
+    await route.continue();
+  });
+
+  await page.evaluate(async () => {
+    const { mountBoard } = await import('/docs/design/production/kit.mjs');
+    window.testFallbackMarkers = [];
+    await mountBoard({
+      build({ markFallback }) {
+        window.testFallbackMarkers.push(markFallback);
+      },
+    });
+  });
+  await page.selectOption('#locale', 'nb');
+  await nbRequested;
+
+  await page.evaluate(() => window.testFallbackMarkers[0]('en'));
+  const fallback = page.locator('.board > .fallback-status');
+  assert.equal(await fallback.isHidden(), true,
+    'fallback callbacks from the previous draw are ignored');
+  assert.equal(await fallback.textContent(), '');
+
+  releaseRequest();
+  await page.waitForFunction(() => [...document.querySelectorAll('.phone')].length === 2
+    && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === 'nb'));
 });

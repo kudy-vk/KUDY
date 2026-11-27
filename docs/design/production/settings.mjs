@@ -130,7 +130,7 @@ await mountBoard({
       hideHeading.id = `settings-guides-label-${body.closest('.phone')?.dataset.theme ?? 'phone'}`;
       const chips = el('div', { className: 'chips' }, ...Object.entries(TAGS).map(([id, name]) => {
         const off = prefs.hidden.has(id);
-        const chip = el('button', { className: 'chip', type: 'button' }, off && icon('eye-off', 16), name);
+        const chip = el('button', { className: 'chip', type: 'button', lang: 'be' }, off && icon('eye-off', 16), name);
         chip.setAttribute('aria-pressed', String(off));
         chip.dataset.key = `tag-${id}`;
         chip.addEventListener('click', () => {

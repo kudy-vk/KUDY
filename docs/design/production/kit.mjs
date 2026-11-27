@@ -165,17 +165,18 @@ export async function mountBoard({ controls = [], stringIds = [], locales = LOCA
   const phones = el('div', { className: 'phones' });
   const say = (text) => { event.textContent = text; };
   const fallbackLanguages = new Set();
-  const markFallback = (language) => {
-    fallbackLanguages.add(language);
-    fallback.hidden = false;
-    fallback.textContent = `Draft text: ${[...fallbackLanguages].map((code) => LOCALES[code] ?? code).join(', ')}`;
-  };
   let cleanups = [];
   let latest = 0;
 
   // A newer redraw supersedes one still in progress, so the board never shows stale phones.
   async function draw() {
     const run = (latest += 1);
+    const markForRun = (language) => {
+      if (run !== latest) return;
+      fallbackLanguages.add(language);
+      fallback.hidden = false;
+      fallback.textContent = `Draft text: ${[...fallbackLanguages].map((code) => LOCALES[code] ?? code).join(', ')}`;
+    };
     fallbackLanguages.clear();
     fallback.hidden = true;
     fallback.textContent = '';
@@ -191,7 +192,7 @@ export async function mountBoard({ controls = [], stringIds = [], locales = LOCA
         made.frame.lang = state.locale;
         made.frame.style.setProperty('--fs', state.scale);
         phones.append(el('figure', {}, el('figcaption', { textContent: theme === 'dark' ? 'Цёмная тэма' : 'Светлая тэма' }), made.frame));
-        const cleanup = await build({ ...made, theme, state, strings, say, markFallback });
+        const cleanup = await build({ ...made, theme, state, strings, say, markFallback: markForRun });
         if (run !== latest) {
           if (typeof cleanup === 'function') cleanup();
           return;
