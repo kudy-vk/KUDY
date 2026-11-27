@@ -10,7 +10,7 @@ node --test --test-reporter=dot test/design-critical-locales-browser.test.mjs
 ```
 
 ```output
-...................
+..............
 ```
 
 ```bash {image}
