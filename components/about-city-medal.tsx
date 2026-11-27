@@ -14,6 +14,7 @@ import { Circle, Path, Svg } from "react-native-svg";
 
 import { CanonIcon, type CanonGlyph } from "./canon-icon";
 import { darkTokens, tokens } from "./design-tokens";
+import { ScaledText } from "./scaled-text";
 import { useThemeScheme, useThemeTokens } from "./theme";
 
 // xorshift32 with a fixed seed: the same rim on every load (kit.mjs idiom).
@@ -64,10 +65,12 @@ const DISC_PATH = wobblyCirclePath(28, RIM_JITTER, 7);
 
 export const AboutCityMedal = memo(function AboutCityMedal({
   glyph,
+  code,
   label,
   near,
 }: {
-  glyph: CanonGlyph;
+  glyph?: CanonGlyph;
+  code?: string;
   // Canon §9: the sign's word for the screen reader, required like on every
   // icon rendering.
   label: string;
@@ -77,6 +80,7 @@ export const AboutCityMedal = memo(function AboutCityMedal({
 }) {
   const palette = useThemeTokens();
   const theme = useThemeScheme();
+  const inkColor = theme === "dark" ? palette.colorInk : tokens.colorMedalInk;
   return (
     <View style={styles.box} pointerEvents="none">
       <Svg viewBox="-36 -36 72 72" style={styles.svg}>
@@ -86,7 +90,11 @@ export const AboutCityMedal = memo(function AboutCityMedal({
         <Circle cx={0} cy={0} r={24.4} fill="none" stroke={tokens.colorMedalRim} strokeWidth={0.7} opacity={0.45} />
       </Svg>
       <View style={styles.glyph} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-        <CanonIcon glyph={glyph} label={label} color={theme === "dark" ? palette.colorInk : tokens.colorMedalInk} size={28} />
+        {glyph ? (
+          <CanonIcon glyph={glyph} label={label} color={inkColor} size={28} />
+        ) : (
+          <ScaledText style={[styles.codeText, { color: inkColor }]}>{code}</ScaledText>
+        )}
       </View>
     </View>
   );
@@ -102,5 +110,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
+  },
+  codeText: {
+    fontFamily: tokens.fontFamilyUiStrong,
+    fontSize: 16,
+    fontWeight: tokens.fontWeightStrong,
+    letterSpacing: 0.6,
   },
 });

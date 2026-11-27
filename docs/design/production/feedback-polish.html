@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Форма ацэнкі / Прапанова паліроўкі</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 80ch; }
+  .fb-scroll { padding: 0 16px 16px; }
+  .fb-scroll > * + * { margin-top: 16px; }
+
+  .fb-skip-btn {
+    min-height: 36px; padding: 4px 10px; border: 0; border-radius: 8px;
+    background: none; color: var(--muted); font-size: calc(14px * var(--fs)); font-weight: 600; cursor: pointer;
+  }
+  .fb-skip-btn:active { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+  .fb-target { display: grid; justify-items: start; gap: 6px; }
+  .fb-target-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fb-target .name { font-size: calc(20px * var(--fs)); overflow-wrap: anywhere; }
+  .fb-target .name:not(.t-display) { font-weight: 600; }
+  .fb-question { margin: 4px 0 0; font-size: calc(23px * var(--fs)); font-weight: 600; line-height: 1.2; text-wrap: balance; }
+
+  .fb-conflict { display: flex; gap: 8px; font-size: calc(15px * var(--fs)); }
+  .fb-conflict > .icon { margin-top: 2px; color: var(--warn); }
+  .fb-conflict > div { display: grid; justify-items: start; gap: 10px; }
+
+  .fb-star-card { padding: 12px; }
+  .fb-stars { display: flex; justify-content: center; gap: 4px; }
+  .fb-star {
+    flex: none; display: grid; place-items: center; width: 52px; height: 52px; padding: 0;
+    border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer;
+  }
+  .fb-star.on { color: var(--accent); }
+  .fb-star.on .icon { fill: currentColor; }
+  .fb-star[aria-disabled="true"] { color: var(--disabled-ink); cursor: default; }
+  .fb-ends { display: flex; justify-content: space-between; gap: 16px; margin-top: 4px; }
+  .fb-ends span { flex: 1; }
+  .fb-ends span:last-child { text-align: right; }
+
+  .fb-reasons-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .fb-section { margin: 0; font-size: calc(15px * var(--fs)); font-weight: 600; }
+  .fb-reasons-count { font-size: calc(12px * var(--fs)); color: var(--muted); font-weight: 600; }
+  .fb-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fb-chips .chip { min-height: 42px; text-align: left; }
+  .fb-chips .chip[aria-disabled="true"] { border-color: var(--disabled-line); background: transparent; color: var(--disabled-ink); cursor: default; }
+  .fb-chips .chip[aria-pressed="true"] .icon { margin-left: -4px; }
+
+  .fb-foot {
+    flex: none; display: flex; align-items: center; gap: 12px; min-height: 76px;
+    padding: 10px 16px; border-top: 1px solid var(--line);
+    background: color-mix(in srgb, var(--card) 85%, var(--paper));
+  }
+  .fb-why { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .fb-why p { margin: 0; }
+  .fb-hint { position: absolute; z-index: 4; top: calc(var(--status) + 52px); right: 12px; left: 48px; box-shadow: 0 8px 24px rgb(34 38 43 / 22%); }
+  .fb-hint p { margin: 0; }
+  .fb-hint p + p { margin-top: 6px; }
+  .fb-review { font-family: inherit; display: block; width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); font-size: calc(16px * var(--fs)); resize: none; caret-color: var(--accent); }
+  .fb-review::placeholder { color: var(--muted); }
+  .fb-write-note { display: flex; justify-content: space-between; gap: 12px; margin: 6px 0 0; }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Форма ацэнкі — прапанова паліроўкі</h1>
+  <p class="lead">Прапанова паліроўкі экрана «Форма ацэнкі» ў адзіным HTML-каталогу (базавы макет <code>feedback.html</code> захаваны без змен).</p>
+  <ul class="based">
+    <li><b>Яўная кнопка «Прапусціць» у шапцы:</b> паводле схем пераходаў, форму можна пакінуць праз Back або «Прапусціць» без запісу адзнакі — кнопка стаіць справа ў шапцы.</li>
+    <li><b>Лічыльнік выбраных прычын (<code>1 з 3</code>):</b> каля загалоўка «Што запомнілася?» паказваецца ліміт, каб чалавек разумеў, чаму пасля трох выбраных чыпаў астатнія блакуюцца.</li>
+    <li><b>Чалавечая назва мовы замест тэхнічнага <code>be · 1.2.0</code>:</b> у шапцы карткі стаіць акуратная бірка <code>Беларуская</code>, а версія пакета перанесеная ў інфармацыйную падказку <code>(i)</code>.</li>
+    <li><b>Падпісаная ніжняя паліца пасля выбару зорак:</b> калі зоркі выбраныя, злева ад круглай кнопкі адпраўкі напісана <code>Адправіць · 4 з 5 ★ · Гатова да адпраўкі</code>, а не пустая паласа.</li>
+  </ul>
+</main>
+<script type="module">
+  import './feedback.mjs';
+  import { mountPolishEnhancer } from './polish-enhancers.mjs';
+  mountPolishEnhancer('feedback');
+</script>
+</body>
+</html>

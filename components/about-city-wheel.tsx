@@ -21,7 +21,7 @@ import {
   View,
 } from "react-native";
 import type { SharedValue } from "react-native-reanimated";
-import Svg, { Line } from "react-native-svg";
+import Svg, { Defs, Line, LinearGradient, Rect, Stop } from "react-native-svg";
 
 import { AboutCityMedal } from "./about-city-medal";
 import type { CanonGlyph } from "./canon-icon";
@@ -81,12 +81,12 @@ export function slotOffset(i: number, at: number, slot: number, ring: number): n
   return distance;
 }
 
-export type AboutCityWheelItem = { id: string; icon: CanonGlyph; label: string };
+export type AboutCityWheelItem = { id: string; icon?: CanonGlyph; code?: string; label: string };
 
 const MEDAL_BOX = 80;
 const SLOT_TOP = 6;
 const LABEL_LINES = 2.4; // em of the label box (the mockup's .label height)
-const WHEEL_BOTTOM = 14;
+const WHEEL_BOTTOM = 8;
 // The mockup's .wheel height: the medal box, the two label lines at the
 // app's big-text cap and the bottom mark — every wheel width reuses it.
 const WHEEL_HEIGHT = 92 + LABEL_LINES * 12 * tokens.fontBigTextFactor + WHEEL_BOTTOM;
@@ -275,7 +275,7 @@ export function AboutCityWheel({
               testID={`wheel-item-${item.id}`}
             >
               <View style={{ transform: [{ scale: 0.72 + 0.28 * near }] }}>
-                <AboutCityMedal glyph={item.icon} label={item.label} near={near} />
+                <AboutCityMedal glyph={item.icon} code={item.code} label={item.label} near={near} />
               </View>
               <ScaledText style={[styles.slotLabel, { color: palette.colorInk, opacity: 0.45 + 0.55 * near }]}>
                 {item.label}
@@ -284,6 +284,22 @@ export function AboutCityWheel({
           </View>
         );
       })}
+      {/* Soft edge fade matching the mockup's mask-image so side medallions
+          and labels fade smoothly into the screen background. */}
+      <Svg style={styles.ring} pointerEvents="none">
+        <Defs>
+          <LinearGradient id="wheel-fade-left" x1="0" y1="0" x2="1" y2="0">
+            <Stop offset="0" stopColor={palette.colorPaper} stopOpacity="1" />
+            <Stop offset="1" stopColor={palette.colorPaper} stopOpacity="0" />
+          </LinearGradient>
+          <LinearGradient id="wheel-fade-right" x1="0" y1="0" x2="1" y2="0">
+            <Stop offset="0" stopColor={palette.colorPaper} stopOpacity="0" />
+            <Stop offset="1" stopColor={palette.colorPaper} stopOpacity="1" />
+          </LinearGradient>
+        </Defs>
+        <Rect x={0} y={0} width={28} height="100%" fill="url(#wheel-fade-left)" />
+        <Rect x="100%" y={0} width={28} height="100%" transform="translate(-28, 0)" fill="url(#wheel-fade-right)" />
+      </Svg>
       {/* The mark under the middle item: this section is open below. */}
       <View style={styles.mark} />
     </View>

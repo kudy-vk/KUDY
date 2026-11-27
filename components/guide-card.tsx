@@ -90,6 +90,17 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     overflow: "hidden",
     width: PHOTO_PLACE_SIZE,
   },
+  cardFooter: {
+    alignItems: "center",
+    borderTopColor: palette.colorLine,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: palette.spaceS,
+    justifyContent: "space-between",
+    marginTop: palette.spaceS,
+    paddingTop: palette.spaceS,
+  },
   locales: {
     color: palette.colorMuted,
     fontSize: palette.fontBaseSize,
@@ -338,8 +349,10 @@ export function GuideCard({
           <ScaledText style={styles.cardTitle}>{card.title}</ScaledText>
         </View>
         {card.summary ? <ScaledText style={styles.cardSummary}>{card.summary}</ScaledText> : null}
-        <AccessBadge access={card.access} locale={locale} />
-        <GuideCardLocales card={card} locale={locale} />
+        <View style={styles.cardFooter}>
+          <GuideCardLocales card={card} locale={locale} />
+          <AccessBadge access={card.access} locale={locale} />
+        </View>
       </PressableSurface>
     </Link>
   );

@@ -31,6 +31,8 @@ export interface UiLocaleSwitch {
   readonly current: () => UiLocaleSwitchCode;
   readonly set: (locale: string) => void;
   readonly subscribe: (listener: () => void) => () => void;
+  readonly needsOnboarding?: () => boolean;
+  readonly confirm?: (locale?: string) => void;
 }
 
 // The optional durable seam: read the stored choice at composition, write it
@@ -61,23 +63,33 @@ export function createUiLocaleStore(
   // is not overwritten and nothing throws; a later read may restore the code
   // once the flag opens it.
   let current: UiLocaleSwitchCode = stored !== null && open.includes(stored) ? stored : 'be';
+  // G21.50 (#496): any valid stored locale counts as an existing user choice
+  // even when closed by the release flag, so onboarding is not re-opened and
+  // confirming the 'be' session fallback never overwrites the stored closed code.
+  let confirmed = stored !== null;
   const listeners = new Set<() => void>();
+
+  const validate = (locale: string): UiLocaleSwitchCode => {
+    if (!(open as readonly string[]).includes(locale)) {
+      throw new UiLocaleError(
+        (COMPLETE_UI_LOCALES as readonly string[]).includes(locale) ? 'ui-locale-closed' : 'ui-locale-unknown',
+        locale,
+      );
+    }
+    return locale as UiLocaleSwitchCode;
+  };
 
   return {
     current: () => current,
+    needsOnboarding: () => persistence !== undefined && !confirmed,
     set: (locale: string) => {
       // G21.50: the switch vocabulary is the open set. A code that is
       // registered but closed is a named refusal of its own — it is not
       // `ui-locale-unknown` (the registry knows it) and not a silent state.
-      if (!(open as readonly string[]).includes(locale)) {
-        throw new UiLocaleError(
-          (COMPLETE_UI_LOCALES as readonly string[]).includes(locale) ? 'ui-locale-closed' : 'ui-locale-unknown',
-          locale,
-        );
-      }
-      const next = locale as UiLocaleSwitchCode;
+      const next = validate(locale);
       if (next === current) return;
       current = next;
+      confirmed = true;
       // The write happens before the listeners run: a listener that reads
       // back through current() sees the value that fired the event.
       // G21.15 (issue #549): the durable write is best-effort — a failed
@@ -91,6 +103,21 @@ export function createUiLocaleStore(
         // the in-memory switch stands; the durable row is not the session's truth
       }
       for (const listener of listeners) listener();
+    },
+    confirm: (locale?: string) => {
+      const next = locale !== undefined ? validate(locale) : current;
+      if (confirmed && next === current) return;
+      const changed = next !== current || !confirmed;
+      current = next;
+      confirmed = true;
+      try {
+        persistence?.write(next);
+      } catch {
+        // best-effort durable write
+      }
+      if (changed) {
+        for (const listener of listeners) listener();
+      }
     },
     subscribe: (listener: () => void) => {
       listeners.add(listener);

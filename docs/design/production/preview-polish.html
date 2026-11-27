@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KUDY — Прэв'ю гіда / Прапанова паліроўкі</title>
+<link rel="stylesheet" href="kit.css">
+<style>
+  .pv-scroll { padding: 0 16px 16px; }
+  .pv-title { margin: 4px 0 8px; font-size: calc(28px * var(--fs)); font-weight: 400; overflow-wrap: anywhere; }
+  .pv-summary { margin: 0 0 12px; color: var(--muted); line-height: 1.45; }
+  .pv-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; }
+  .pv-row .tag { border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+  .board .based { margin: 0 0 16px; padding-left: 20px; color: #6b7280; font-size: 14px; max-width: 80ch; }
+
+  /* Fact pills under the map */
+  .pv-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; }
+  .pv-fact-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--card);
+    font-size: calc(13px * var(--fs)); font-weight: 600;
+  }
+  .pv-fact-pill .icon { color: var(--accent); }
+  .pv-more { min-height: 28px; padding: 2px 10px; border: 1px solid var(--line); border-radius: 99px; background: none; color: var(--accent); font-size: calc(12px * var(--fs)); cursor: pointer; }
+
+  /* Route map with starting-point caption bar */
+  .pv-map { position: relative; height: 156px; margin: 0 0 10px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: #eef3ee; }
+  .pv-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pv-map .street { fill: none; stroke: #dfe7df; stroke-width: 7; stroke-linecap: round; }
+  .pv-map .route { fill: none; stroke: #67707a; stroke-width: 2; stroke-dasharray: 1 5; stroke-linecap: round; }
+  .pv-map .street, .pv-map .route { vector-effect: non-scaling-stroke; }
+  .pv-map .marker { position: absolute; translate: -50% -50%; }
+  .pv-map .pv-zoom { position: absolute; top: 8px; right: 8px; width: 40px; height: 40px; background: #ffffff; color: #1d6b4f; box-shadow: 0 1px 3px rgb(34 38 43 / 30%); }
+  .pv-map-bar {
+    position: absolute; left: 8px; bottom: 8px; right: 56px;
+    display: inline-flex; align-items: center; gap: 6px; width: fit-content; max-width: calc(100% - 64px);
+    padding: 4px 10px; border-radius: 8px;
+    background: rgb(255 255 255 / 92%); border: 1px solid #d8d2c6;
+    color: #22262b; font-size: calc(12px * min(var(--fs), 1.25)); font-weight: 600;
+  }
+  .pv-map-bar .icon { color: #1d6b4f; flex: none; }
+  .pv-map-bar span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pv-full { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; background: var(--paper-fill); }
+  .pv-full .pv-map { flex: 1; height: auto; margin: 0; border: 0; border-radius: 0; }
+
+  /* Structured language picker card with explicit visible labels («Тэкст» / «Аўдыё») */
+  .pv-lang-card { display: grid; gap: 10px; padding: 10px 12px; margin: 0 0 12px; }
+  .pv-lang-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .pv-lang-row + .pv-lang-row { padding-top: 8px; border-top: 1px solid color-mix(in srgb, var(--line) 60%, transparent); }
+  .pv-lang-label { display: inline-flex; align-items: center; gap: 6px; font-size: calc(14px * var(--fs)); font-weight: 600; color: var(--ink); }
+  .pv-lang-label .icon { color: var(--accent); }
+  .pv-lang-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pv-lang-chip { min-height: 36px; padding: 4px 12px; font-size: calc(13px * var(--fs)); }
+
+  /* Stops list with numbered rows and explicit «Паказаць усе кропкі (N) ⌄» button */
+  .pv-list { padding: 0; }
+  .pv-stops { margin: 0; padding: 0 12px; list-style: none; }
+  .pv-stops li { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+  .pv-stops li + li { border-top: 1px solid var(--line); }
+  .pv-stop-num { color: var(--muted); font-size: calc(13px * var(--fs)); font-weight: 600; min-width: 18px; }
+  .pv-stops p { margin: 0; overflow-wrap: anywhere; flex: 1; }
+  .pv-all {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; min-height: 44px; padding: 8px 12px;
+    border: 0; border-top: 1px solid var(--line); background: none;
+    color: var(--accent); font-size: calc(14px * var(--fs)); font-weight: 600; cursor: pointer;
+  }
+
+  .pv-notice { margin: 4px 0 12px; }
+  .pv-notice p { margin: 0; }
+  .pv-notice p + p { margin-top: 4px; }
+  .pv-notice .t-strong { display: flex; align-items: flex-start; gap: 8px; }
+  .pv-notice .btn { margin-top: 12px; }
+
+  .pv-offer { margin: 4px 0 12px; }
+  .pv-offer h3 { margin: 0; font-size: inherit; }
+  .pv-offer p { margin: 8px 0 12px; color: var(--muted); }
+  .pv-quiet { display: block; width: 100%; min-height: 48px; margin-top: 4px; border: 0; background: none; color: var(--muted); cursor: pointer; }
+
+  /* Bottom action bar: names the action («Загрузіць» / «Пачаць») alongside the round icon button */
+  .pv-foot {
+    flex: none; display: flex; align-items: center; gap: 12px;
+    min-height: 76px; padding: 10px 16px; border-top: 1px solid var(--line);
+    background: color-mix(in srgb, var(--card) 85%, var(--paper));
+  }
+  .pv-foot .pv-why { flex: 1; min-width: 0; display: grid; gap: 2px; }
+  .pv-foot p { margin: 0; }
+  .pv-progress { margin-top: 6px; }
+  .pv-progress i { width: 40%; border-radius: 99px; animation: pv-run 1.2s ease-in-out infinite alternate; }
+  @keyframes pv-run { from { translate: 0; } to { translate: 150%; } }
+  @media (prefers-reduced-motion: reduce) { .pv-progress i { animation: none; } }
+</style>
+</head>
+<body>
+<main class="board">
+  <h1>Прэв'ю гіда — прапанова паліроўкі</h1>
+  <p class="lead">Прапанова паліроўкі экрана «Прэв'ю гіда» ў адзіным HTML-каталогу (базавы макет <code>preview.html</code> захаваны без змен). Паспрабуй пераключыць уверсе «Стан» і «Кропак: 10».</p>
+  <ul class="based">
+    <li><b>Зразумелы выбар мовы («Тэкст» і «Аўдыё»):</b> замест двух непадпісаных радоў аднолькавых чыпаў толькі з шэрымі іконкамі — акуратная картка, дзе кожны радок мае яўны подпіс (<code>📖 Тэкст</code> і <code>🎧 Аўдыё</code>) і мятны значок.</li>
+    <li><b>Стартавы арыенцір на карце маршруту:</b> унізе міні-карты дададзеная плашка са стартавай кропкай (<code>📍 Старт: Złota Brama</code>), каб карта адразу паказвала, адкуль пачынаецца шлях.</li>
+    <li><b>Колькасць кропак на кнопцы разгортвання:</b> замест самотнай стрэлкі <code>⌄</code> унізе спіса кропак кнопка яўна піша <code>Паказаць усе кропкі (7) ⌄</code> / <code>Згарнуць спіс ^</code>, а самі кропкі пранумараваныя па парадку маршруту.</li>
+    <li><b>Падпісаная ніжняя паліца галоўнага дзеяння:</b> злева ад круглай кнопкі-іконкі яўна напісана назва дзеяння (<code>Загрузіць · 24 МБ</code> альбо <code>Пачаць прагулку · Пакет правераны</code>), каб карыстальнік не гадаў сэнс круглай кнопкі па адным значку.</li>
+  </ul>
+</main>
+<script type="module">
+  import './preview.mjs';
+  import { mountPolishEnhancer } from './polish-enhancers.mjs';
+  mountPolishEnhancer('preview');
+</script>
+</body>
+</html>

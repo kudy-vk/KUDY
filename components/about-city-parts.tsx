@@ -17,7 +17,7 @@ import { CanonIcon, type CanonGlyph } from "./canon-icon";
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { PressableSurface } from "./pressable-surface";
 import { ScaledText } from "./scaled-text";
-import { useThemeStyles } from "./theme";
+import { useThemeStyles, useThemeTokens } from "./theme";
 
 // A small heading inside a section.
 export function SubHeading({ children }: { children: ReactNode }) {
@@ -63,12 +63,14 @@ export function Steps({ items }: { items: readonly (readonly [title: string, bod
   return (
     <View>
       {items.map(([title, body], i) => (
-        <View key={title} style={[styles.step, i === items.length - 1 ? null : styles.stepSpaced]}>
+        <View key={title} style={styles.step}>
           <View style={styles.stepNumberBox}>
-            <ScaledText style={styles.stepNumber}>{i + 1}</ScaledText>
+            <View style={styles.stepCircle}>
+              <ScaledText style={styles.stepNumber}>{i + 1}</ScaledText>
+            </View>
             {i === items.length - 1 ? null : <View style={styles.stepLine} />}
           </View>
-          <View style={styles.stepBody}>
+          <View style={[styles.stepBody, i === items.length - 1 ? null : styles.stepSpaced]}>
             {body}
           </View>
         </View>
@@ -95,11 +97,12 @@ export function LineBadge({ kind, line, kindName }: {
 // Short facts with a sign each.
 export function Facts({ items }: { items: readonly (readonly [sign: CanonGlyph, text: string])[] }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   return (
     <View style={styles.facts}>
       {items.map(([sign, text], i) => (
         <View key={`${text}-${i}`} style={styles.fact}>
-          <CanonIcon glyph={sign} label={text} size={16} style={styles.factIcon} />
+          <CanonIcon glyph={sign} label={text} size={16} color={palette.colorAccent} style={styles.factIcon} />
           <ScaledText style={styles.factText}>{text}</ScaledText>
         </View>
       ))}
@@ -132,13 +135,14 @@ const REMARK_GLYPHS = {
 
 export function Remark({ tone, text }: { tone: "warn" | "tip" | "error"; text: string }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   return (
     <View
       accessibilityLiveRegion={tone === "error" ? "polite" : undefined}
       style={[styles.remark, styles[`remark_${tone}`]]}
       testID={`remark-${tone}`}
     >
-      <CanonIcon glyph={REMARK_GLYPHS[tone]} label={text} size={18} color={tone === "tip" ? tokens.colorAccent : undefined} style={styles.remarkIcon} />
+      <CanonIcon glyph={REMARK_GLYPHS[tone]} label={text} size={18} color={tone === "tip" ? palette.colorAccent : undefined} style={styles.remarkIcon} />
       <ScaledText style={styles.remarkText}>{text}</ScaledText>
     </View>
   );
@@ -159,6 +163,7 @@ export function Fold({ id, open, lead, title, meta, body, onToggle, trailingActi
   onToggle: (id: string, open: boolean) => void;
 }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   const header = (
       <PressableSurface
         accessibilityRole="button"
@@ -173,11 +178,9 @@ export function Fold({ id, open, lead, title, meta, body, onToggle, trailingActi
           <ScaledText style={styles.foldName}>{title}</ScaledText>
           {typeof meta === "string" ? <ScaledText style={styles.foldMeta}>{meta}</ScaledText> : meta}
         </View>
-        {trailingAction ? null : (
-          <View style={[styles.foldChevron, open ? styles.foldChevronOpen : null]} pointerEvents="none">
-            <CanonIcon glyph={ChevronDownIcon} label={title} size={20} />
-          </View>
-        )}
+        <View style={[styles.foldChevron, open ? styles.foldChevronOpen : null]} pointerEvents="none">
+          <CanonIcon glyph={ChevronDownIcon} label={title} size={20} color={palette.colorAccent} />
+        </View>
       </PressableSurface>
   );
   return (
@@ -191,9 +194,10 @@ export function Fold({ id, open, lead, title, meta, body, onToggle, trailingActi
 // A tile with a sign, a name and one line of text.
 export function Tile({ glyph, title, text }: { glyph: CanonGlyph; title: string; text: string }) {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   return (
     <View style={styles.tile}>
-      <CanonIcon glyph={glyph} label={title} size={20} color={tokens.colorAccent} style={styles.tileIcon} />
+      <CanonIcon glyph={glyph} label={title} size={20} color={palette.colorAccent} style={styles.tileIcon} />
       <ScaledText style={styles.tileTitle}>{title}</ScaledText>
       <ScaledText style={styles.tileText}>{text}</ScaledText>
     </View>
@@ -243,30 +247,34 @@ const createStyles = (palette: ThemeTokens) => StyleSheet.create({
     flexDirection: "row",
   },
   stepSpaced: {
-    marginBottom: 12,
+    paddingBottom: 12,
   },
   stepNumberBox: {
     alignItems: "center",
     alignSelf: "stretch",
     width: 32,
-    paddingTop: 10,
+    paddingTop: 12,
   },
-  stepNumber: {
+  stepCircle: {
     alignItems: "center",
     borderColor: palette.colorAccent,
     borderRadius: 16,
     borderWidth: 2,
+    height: 32,
+    justifyContent: "center",
+    width: 32,
+  },
+  stepNumber: {
     color: palette.colorAccent,
     fontSize: 15,
     fontWeight: tokens.fontWeightStrong,
-    height: 32,
-    lineHeight: 28,
+    lineHeight: 18,
     textAlign: "center",
-    width: 32,
   },
   stepLine: {
     backgroundColor: palette.colorLine,
     flexGrow: 1,
+    marginBottom: -12,
     marginTop: 4,
     width: 2,
   },

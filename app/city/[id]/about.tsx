@@ -134,7 +134,7 @@ export default function AboutCity() {
       testID="screen-AboutCity"
     >
       <View style={styles.header}>
-        <BackButton label={chrome.back} testID="btn-about-back" />
+        <BackButton compact label={chrome.back} testID="btn-about-back" />
         {/* The screen title rides the chrome word the menu piece carries —
             the mockup's topbar title. */}
         <ScaledText style={styles.title} accessibilityRole="header">{chrome.aboutCity}</ScaledText>

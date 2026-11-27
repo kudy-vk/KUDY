@@ -1,9 +1,8 @@
 name: android-e2e
 # Manual only (owner decision 2026-11-04): the emulator job takes up to 90
 # minutes on the hosted 2-core runner, so pull requests, pushes to main and
-# the nightly schedule no longer start it. Before each push, an agent runs
-# the same suites on a local emulator when the change touches project code:
-# docs/agent-rules/android-e2e-local.md, scope in tools/ci/android-e2e-scope.mjs.
+# the nightly schedule no longer start it. For risk-based PR verification,
+# see docs/agent-rules/android-e2e-local.md.
 on:
   workflow_dispatch:
 permissions:

@@ -12,8 +12,7 @@ import Menu from "./menu";
 import { CanonIcon } from "../components/canon-icon";
 import { darkTokens } from "../components/design-tokens";
 import { createServices } from "../controllers/createServices";
-import { CATALOG_FIXTURES, CATALOG_POINTER, flatStyle, frameRoutes, layoutWith, serve, sha256 } from "../test/render-helpers";
-import { getByType } from "../test/render-helpers";
+import { CATALOG_FIXTURES, CATALOG_POINTER, flatStyle, frameRoutes, getByType, layoutWith, serve, sha256 } from "../test/render-helpers";
 
 
 // React Native re-exports this hook from its Utilities module. Mocking that
@@ -104,4 +103,15 @@ test("Collection place member card uses dark background and text", async () => {
 test("CanonIcon default glyph color resolves from the dark palette", async () => {
   const icon = await render(<CanonIcon glyph={MapPinIcon} label="Кропка" />);
   expect(getByType(icon, "RNSVGSvgView").props.stroke).toBe(darkTokens.colorInk);
+});
+
+test("AboutCity dark theme lights the selected airport direction card and uses mint accent icons", async () => {
+  await renderRouter(frameRoutes(), { initialUrl: "/city/gdansk/about" });
+  const fromCard = await screen.findByTestId("seg-direction-from");
+  const toCard = screen.getByTestId("seg-direction-to");
+  expect(flatStyle(fromCard).backgroundColor).toBe(darkTokens.colorBadgePaid);
+  expect(flatStyle(toCard).backgroundColor).toBe(darkTokens.colorCard);
+
+  const officialBtn = screen.getByTestId("official-card", { includeHiddenElements: true });
+  expect(getByType(officialBtn, "RNSVGSvgView").props.stroke).toBe(darkTokens.colorAccent);
 });

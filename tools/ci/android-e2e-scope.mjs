@@ -1,7 +1,6 @@
-// Decides whether a change set needs the Android E2E suites (emulator smoke,
-// walk, discovery + visual:check). Since 2026-11-04 they run on a local
-// emulator before each push (docs/agent-rules/android-e2e-local.md); the
-// hosted workflow is manual-only and does not call this. Deny by default:
+// Lets an explicitly requested full local Android E2E run skip docs-only
+// changes. PR verification follows docs/agent-rules/android-e2e-local.md;
+// the hosted manual workflow does not call this script. Deny by default:
 // the suites are skipped only when EVERY changed file matches the shared
 // docs-only allowlist (tools/ci/docs-only-scope.mjs) — the paths the Android
 // app and its E2E/visual tooling never read. Any other path — including a new

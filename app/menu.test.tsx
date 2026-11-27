@@ -1,17 +1,28 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
 import { act, fireEvent, renderRouter, screen, within } from "expo-router/testing-library";
+import RootLayout from "./_layout";
 import Menu, { menuTopBlockHeight } from "./menu";
 import AboutCity from "./city/[id]/about";
 import { frameRoutes } from "../test/render-helpers";
 import { cityMenuConfig } from "../components/city-map-menu";
 import { uiStrings } from "../components/ui-strings";
-import { OPEN_UI_LOCALES } from "../contracts/ui-locales";
+import { OPEN_UI_LOCALES, releaseOpenUiLocales, type CompleteUiLocaleCode } from "../contracts/ui-locales";
 import { createServices } from "../controllers/createServices";
 import { layoutWith } from "../test/render-helpers";
 import manifest from "../docs/design/brand/outputs/menu-map-city-only/manifest.json";
 import { StyleSheet } from "react-native";
 
-afterEach(() => { jest.restoreAllMocks(); jest.useRealTimers(); });
+let mockInsets = { top: 0, bottom: 0, left: 0, right: 0 };
+jest.mock("react-native-safe-area-context", () => ({
+  ...(jest.requireActual("react-native-safe-area-context") as Record<string, unknown>),
+  useSafeAreaInsets: () => mockInsets,
+}));
+
+afterEach(() => {
+  mockInsets = { top: 0, bottom: 0, left: 0, right: 0 };
+  jest.restoreAllMocks();
+  jest.useRealTimers();
+});
 
 async function openMenu() {
   jest.spyOn(Math, "random").mockReturnValue(0.5);
@@ -172,3 +183,115 @@ test("the map block height is 5/8 of the screen height minus the status inset", 
   expect(menuTopBlockHeight(932, 47)).toBeCloseTo(535.5);
 });
 
+test("first-run language carousel sheet shows when cache is empty and caches the chosen locale on confirm", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  mockInsets = { top: 24, bottom: 48, left: 0, right: 0 };
+  let cached: "be" | "en" | null = null;
+  const uiLocalePersistence = {
+    read: () => cached,
+    write: (locale: string) => {
+      cached = locale as "be" | "en";
+    },
+  };
+  const services = createServices({ uiLocalePersistence });
+  await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+
+  // First launch with empty cache shows the language carousel sheet above the 48dp system nav inset
+  // and hides the background menu subtree from accessibility while the modal sheet is open.
+  const sheet = screen.getByTestId("language-onboarding-sheet");
+  const card = screen.getByTestId("language-onboarding-card");
+  const background = screen.getByTestId("menu-background", { includeHiddenElements: true });
+  expect(sheet).toBeTruthy();
+  expect(StyleSheet.flatten(sheet.props.style).paddingBottom).toBe(48);
+  expect(StyleSheet.flatten(card.props.style).paddingBottom).toBe(64);
+  expect(card.props.accessibilityViewIsModal).toBe(true);
+  expect(background.props.accessibilityElementsHidden).toBe(true);
+  expect(background.props.importantForAccessibility).toBe("no-hide-descendants");
+  expect(background.props.pointerEvents).toBe("none");
+  expect(screen.queryByTestId("btn-menu-settings", { includeHiddenElements: false })).toBeNull();
+  expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("Беларуская");
+
+  // Step to the next language on the carousel ('en' -> English) and confirm.
+  await fireEvent.press(screen.getByTestId("btn-language-next"));
+  expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("English");
+  await fireEvent.press(screen.getByTestId("btn-language-onboarding-confirm"));
+
+  // Sheet dismisses, cache holds 'en', background accessibility is restored, and the menu heading updates to English.
+  expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
+  expect(cached).toBe("en");
+  const restoredBg = screen.getByTestId("menu-background");
+  expect(restoredBg.props.accessibilityElementsHidden).toBe(false);
+  expect(restoredBg.props.importantForAccessibility).toBe("auto");
+  expect(restoredBg.props.pointerEvents).toBe("auto");
+  expect(screen.getByTestId("btn-menu-settings", { includeHiddenElements: false })).toBeTruthy();
+  expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+});
+
+test("language carousel sheet is skipped on launch when a locale is already cached", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  const services = createServices({
+    uiLocalePersistence: { read: () => "en", write: () => {} },
+  });
+  await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+  expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
+  expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+});
+
+test("RootLayout initializes locale persistence and shows the onboarding sheet even when no catalog source is configured", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  const prevOrigin = process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  const prevDemo = process.env.EXPO_PUBLIC_DEMO_MODE;
+  const prevSandbox = process.env.EXPO_PUBLIC_SANDBOX;
+  delete process.env.EXPO_PUBLIC_CATALOG_ORIGIN;
+  delete process.env.EXPO_PUBLIC_DEMO_MODE;
+  delete process.env.EXPO_PUBLIC_SANDBOX;
+  try {
+    await renderRouter({ _layout: RootLayout, menu: Menu }, { initialUrl: "/menu" });
+    expect(screen.getByTestId("language-onboarding-sheet")).toBeTruthy();
+    await fireEvent.press(screen.getByTestId("btn-language-next"));
+    expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("English");
+    await fireEvent.press(screen.getByTestId("btn-language-onboarding-confirm"));
+    expect(screen.queryByTestId("language-onboarding-sheet")).toBeNull();
+    expect(screen.getAllByText(uiStrings("en").whereToToday).length).toBeGreaterThan(0);
+  } finally {
+    if (prevOrigin !== undefined) process.env.EXPO_PUBLIC_CATALOG_ORIGIN = prevOrigin;
+    if (prevDemo !== undefined) process.env.EXPO_PUBLIC_DEMO_MODE = prevDemo;
+    if (prevSandbox !== undefined) process.env.EXPO_PUBLIC_SANDBOX = prevSandbox;
+  }
+});
+
+test("flag-opened locale (fi) is offered on the carousel and omits the motto instead of falling back to English", async () => {
+  jest.spyOn(Math, "random").mockReturnValue(0.5);
+  const mutableOpen = OPEN_UI_LOCALES as CompleteUiLocaleCode[];
+  const originalOpen = [...mutableOpen];
+  const withFi = releaseOpenUiLocales("fi");
+  mutableOpen.length = 0;
+  mutableOpen.push(...withFi);
+  try {
+    let cached: CompleteUiLocaleCode | null = null;
+    const services = createServices({
+      uiLocalePersistence: {
+        read: () => cached,
+        write: (locale) => {
+          cached = locale;
+        },
+      },
+    });
+    await renderRouter({ ...frameRoutes(), _layout: layoutWith(services), menu: Menu }, { initialUrl: "/menu" });
+    expect(screen.getByTestId("language-onboarding-sheet")).toBeTruthy();
+    expect(screen.getByTestId("language-onboarding-motto")).toBeTruthy();
+
+    // Step backward from index 0 ('be') to the last item ('fi' -> Suomi).
+    await fireEvent.press(screen.getByTestId("btn-language-prev"));
+    expect(screen.getByTestId("language-onboarding-picked").props.children).toBe("Suomi");
+    expect(screen.queryByTestId("language-onboarding-motto")).toBeNull();
+    expect(screen.queryByText(/Let’s go and see/)).toBeNull();
+
+    await fireEvent.press(screen.getByTestId("btn-language-onboarding-confirm"));
+    expect(cached).toBe("fi");
+    expect(screen.getAllByText(uiStrings("fi").whereToToday).length).toBeGreaterThan(0);
+  } finally {
+    mutableOpen.length = 0;
+    mutableOpen.push(...originalOpen);
+  }
+});

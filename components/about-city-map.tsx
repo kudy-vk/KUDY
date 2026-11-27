@@ -41,7 +41,7 @@ import { Fold, Remark } from "./about-city-parts";
 import { CanonIcon } from "./canon-icon";
 import { darkTokens, tokens, type ThemeTokens } from "./design-tokens";
 import { ScaledText } from "./scaled-text";
-import { useThemeStyles } from "./theme";
+import { useThemeStyles, useThemeTokens } from "./theme";
 
 import { bounds } from "../docs/design/production/kit-geo.mjs";
 import { SHAPES, nearestStop, pickAt, formatMapKilometres } from "../docs/design/production/about-map-geo.mjs";
@@ -173,6 +173,7 @@ function zoneWayRows(zone: (typeof SHAPES.zones)[number], t: AboutCityText, lang
 // The zone card body (the mockup's pickCard, zone branch).
 function ZoneCardBody({ zone, t, lang }: { zone: (typeof SHAPES.zones)[number]; t: AboutCityText; lang: "be" | "en" }) {
   const styles = useThemeStyles(pickCardLight, pickCardDark);
+  const palette = useThemeTokens();
   const rows = zoneWayRows(zone, t, lang);
   return (
     <>
@@ -182,7 +183,7 @@ function ZoneCardBody({ zone, t, lang }: { zone: (typeof SHAPES.zones)[number]; 
           <ScaledText style={styles.note}>{`${t("city.get")}:`}</ScaledText>
           {rows.map(({ glyph, text }, index) => (
             <View key={`${index}-${text}`} style={styles.wayRow}>
-              <CanonIcon glyph={glyph} label={text} size={16} color={tokens.colorMuted} />
+              <CanonIcon glyph={glyph} label={text} size={16} color={palette.colorAccent} />
               <ScaledText style={styles.wayText}>{text}</ScaledText>
             </View>
           ))}
@@ -412,6 +413,7 @@ export type AboutCityMapProps = {
 
 export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold, onOpenSection }: AboutCityMapProps): ReactNode {
   const styles = useThemeStyles(lightStyles, darkStyles);
+  const palette = useThemeTokens();
   const [boxW, setBoxW] = useState(0);
   const [zoomed, setZoomed] = useState(atlas.zoom > ZOOMED_AT);
   // The live camera (the local copy of the atlas camera; the atlas copy
@@ -957,6 +959,20 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
         </GestureHandlerRootView>
       </View>
 
+      {/* The card of what is picked sits immediately under the map so a tap
+          on the map answers right under the finger, before the layer switches. */}
+      <View accessibilityLiveRegion="polite" style={[styles.card, styles.placeCard]} testID="city-map-card">
+        {picked === null ? (
+          <View style={styles.hintRow}>
+            <CanonIcon glyph={MapPinIcon} label={t("map.hint")} size={18} color={palette.colorAccent} />
+            <ScaledText style={styles.hintText}>{t("map.hint")}</ScaledText>
+          </View>
+        ) : (
+          <PickCard onOpenSection={onOpenSection} pick={picked} t={t} lang={lang} />
+        )}
+      </View>
+      {googleFailed ? <Remark tone="error" text={t("link.failed", { url: googleFailed })} /> : null}
+
       {/* The layer switches: the zone kinds with how many zones each holds,
           the running trains, the planned line. */}
       <View accessibilityLabel={t("map.layers")} style={styles.chips} testID="city-map-layers">
@@ -984,20 +1000,6 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
         ))}
       </View>
 
-      {/* The card of what is picked: a hint, or the zone, the station or
-          the airport (the mockup's pickCard). */}
-      <View accessibilityLiveRegion="polite" style={[styles.card, styles.placeCard]} testID="city-map-card">
-        {picked === null ? (
-          <View style={styles.hintRow}>
-            <CanonIcon glyph={MapPinIcon} label={t("map.hint")} size={18} color={tokens.colorAccent} />
-            <ScaledText style={styles.hintText}>{t("map.hint")}</ScaledText>
-          </View>
-        ) : (
-          <PickCard onOpenSection={onOpenSection} pick={picked} t={t} lang={lang} />
-        )}
-      </View>
-      {googleFailed ? <Remark tone="error" text={t("link.failed", { url: googleFailed })} /> : null}
-
       {/* The zones, the stations and the airport as a list: a press picks
           the shape and brings it into view (the mockup's atlas-list fold).
           This list is the screen reader's path to every selectable sign on
@@ -1006,7 +1008,7 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
         id="atlas-list"
         open={foldOpen}
         onToggle={onToggleFold}
-        lead={<CanonIcon glyph={ListIcon} label={t("map.list")} size={22} color={tokens.colorAccent} />}
+        lead={<CanonIcon glyph={ListIcon} label={t("map.list")} size={22} color={palette.colorAccent} />}
         title={t("map.list")}
         meta={t("map.listMeta", { visit: countZones("visit"), stay: countZones("stay") })}
         body={
@@ -1040,7 +1042,7 @@ export function AboutCityMap({ t, lang, atlas, setAtlas, foldOpen, onToggleFold,
                 { kind: "airport", id: "airport" },
                 "airport",
                 SHAPES.airport.name,
-                <CanonIcon glyph={PlaneIcon} label={SHAPES.airport.name} size={18} color={tokens.colorAccent} />,
+                <CanonIcon glyph={PlaneIcon} label={SHAPES.airport.name} size={18} color={palette.colorAccent} />,
                 "city-map-airport",
               )}
             </View>
