@@ -83,6 +83,41 @@ test('fallback accessible names do not change the language inherited by localize
   }
 });
 
+test('Settings theme radiogroup uses its visible heading language', async (t) => {
+  const setup = await openMockupPage(t);
+  if (!setup) return;
+  const { page, port } = setup;
+  await page.goto(`http://127.0.0.1:${port}/docs/design/production/settings.html`);
+
+  for (const [locale, expectedHeading, expectedLanguage] of [
+    ['nb', 'Appearance', 'en'],
+    ['be', 'Выгляд', null],
+  ]) {
+    await t.test(locale, async () => {
+      await page.selectOption('#locale', locale);
+      await page.waitForFunction((code) => [...document.querySelectorAll('.phone')]
+        .length === 2 && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === code), locale);
+
+      const phone = page.locator('.phone[data-theme="light"]');
+      const heading = phone.locator('.pad > .sec').filter({ hasText: expectedHeading }).first();
+      await heading.waitFor();
+      assert.equal((await heading.textContent()).trim(), expectedHeading, `${locale}: visible theme heading`);
+
+      const group = phone.locator('[role="radiogroup"]');
+      await group.waitFor();
+      assert.equal(await heading.getAttribute('lang'), expectedLanguage,
+        `${locale}: visible heading language metadata`);
+      assert.notEqual(await group.getAttribute('lang'), 'en',
+        `${locale}: the English fallback heading does not retag the radiogroup`);
+
+      const headingId = await heading.getAttribute('id');
+      assert.ok(headingId, `${locale}: visible theme heading has an id for the accessible name`);
+      assert.equal(await group.getAttribute('aria-labelledby'), headingId,
+        `${locale}: radiogroup accessible name comes from the visible heading`);
+    });
+  }
+});
+
 test('an obsolete draw cannot restore a fallback status after a locale switch', async (t) => {
   const setup = await openMockupPage(t);
   if (!setup) return;
