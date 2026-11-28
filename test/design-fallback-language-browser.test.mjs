@@ -171,6 +171,49 @@ test('manual themes keep Settings and Guides headings unique and phone-local', a
   }
 });
 
+test('issue #509: a failed locale switch preserves old fallback status until a local-draft locale loads', async (t) => {
+  const setup = await openMockupPage(t);
+  if (!setup) return;
+  const { page, port } = setup;
+  await page.goto(`http://127.0.0.1:${port}/docs/design/production/settings.html`);
+  await page.selectOption('#locale', 'nb');
+
+  const fallback = page.locator('.board > .fallback-status');
+  await page.waitForFunction(() => /Draft text:\s*English/i.test(document.querySelector('.board')?.innerText ?? ''));
+  await page.waitForFunction(() => [...document.querySelectorAll('.phone')].length === 2
+    && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === 'nb'));
+
+  let requestStarted;
+  const contractRequested = new Promise((resolve) => { requestStarted = resolve; });
+  await page.route('**/translations/pl.json', async (route) => {
+    requestStarted();
+    await route.fulfill({ status: 503, body: 'temporarily unavailable' });
+  });
+  await page.selectOption('#locale', 'pl');
+  await contractRequested;
+  await page.waitForFunction(() => /Не ўдалося паказаць экран: translations\/pl\.json: 503/i
+    .test(document.querySelector('.board .event')?.textContent ?? ''));
+
+  const retainedLocales = await page.locator('.phone').evaluateAll((phones) => phones.map((phone) => phone.lang));
+  const fallbackVisibleAfterFailure = await fallback.isVisible();
+  const fallbackTextAfterFailure = await fallback.textContent();
+  assert.match(await page.locator('.board .event').textContent(), /translations\/pl\.json: 503/,
+    'the visible contract-load error remains visible');
+
+  await page.selectOption('#locale', 'be');
+  await page.waitForFunction(() => [...document.querySelectorAll('.phone')].length === 2
+    && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === 'be'));
+  assert.equal(await fallback.isVisible(), false,
+    'a successful switch to a locale with local drafts clears fallback status');
+  assert.equal(await fallback.textContent(), '');
+  assert.equal(await page.locator('.board .event').textContent(), '');
+  if (retainedLocales.length > 0 && retainedLocales.every((locale) => locale === 'nb')) {
+    assert.equal(fallbackVisibleAfterFailure, true,
+      'English fallback status remains visible while the previous locale frames remain');
+    assert.match(fallbackTextAfterFailure, /Draft text:\s*English/i);
+  }
+});
+
 test('an obsolete draw cannot restore a fallback status after a locale switch', async (t) => {
   const setup = await openMockupPage(t);
   if (!setup) return;
