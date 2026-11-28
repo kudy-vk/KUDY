@@ -214,6 +214,56 @@ test('issue #509: a failed locale switch preserves old fallback status until a l
   }
 });
 
+test('issue #512: retained Walk frames keep their own draft locale after a failed redraw', async (t) => {
+  const setup = await openMockupPage(t);
+  if (!setup) return;
+  const { page, port } = setup;
+  const url = `http://127.0.0.1:${port}/docs/design/production/run.html`;
+  page.setDefaultTimeout(5000);
+  await page.goto(url);
+  await page.waitForFunction(() => [...document.querySelectorAll('.phone')].length === 2
+    && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === 'be'));
+
+  const failNorwegianContract = (route) => route.fulfill({ status: 503, body: 'temporarily unavailable' });
+  await page.route('**/translations/nb.json', failNorwegianContract);
+  await page.selectOption('#locale', 'nb');
+  await page.waitForFunction(() => /Не ўдалося паказаць экран: translations\/nb\.json: 503/i
+    .test(document.querySelector('.board .event')?.textContent ?? ''));
+  assert.deepEqual(await page.locator('.phone').evaluateAll((phones) => phones.map((phone) => phone.lang)),
+    ['be', 'be'], 'a failed redraw keeps both Belarusian Walk frames');
+
+  await page.locator('.phone[data-theme="light"] .run-dock [data-k="menu"]')
+    .evaluate((button) => button.click());
+  const retainedMenu = page.locator('.phone[data-theme="light"] .run-menu');
+  await retainedMenu.waitFor();
+  const retainedMenuLabel = page.locator(`#${await retainedMenu.getAttribute('aria-labelledby')}`);
+  assert.equal((await retainedMenuLabel.textContent()).trim(), 'Меню прагулкі',
+    'the old frame resolves its menu draft from its captured Belarusian locale');
+  assert.equal(await retainedMenuLabel.evaluate((label) => label.closest('.phone').lang), 'be',
+    'the Belarusian menu label inherits the retained phone language');
+  const fallback = page.locator('.board > .fallback-status');
+  assert.equal(await fallback.isVisible(), false, 'the Belarusian local menu has no fallback status');
+  assert.equal(await fallback.textContent(), '');
+
+  await page.unroute('**/translations/nb.json', failNorwegianContract);
+  await page.goto(url);
+  await page.waitForFunction(() => [...document.querySelectorAll('.phone')].length === 2
+    && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === 'be'));
+  await page.selectOption('#locale', 'nb');
+  await page.waitForFunction(() => [...document.querySelectorAll('.phone')].length === 2
+    && [...document.querySelectorAll('.phone')].every((phone) => phone.lang === 'nb'));
+  assert.equal(await fallback.isVisible(), true, 'a successful Norwegian draw reports its English drafts');
+  assert.match(await fallback.textContent(), /Draft text:\s*English/i);
+
+  await page.locator('.phone[data-theme="light"] .run-dock [data-k="menu"]')
+    .evaluate((button) => button.click());
+  const norwegianMenu = page.locator('.phone[data-theme="light"] .run-menu');
+  await norwegianMenu.waitFor();
+  const norwegianMenuLabel = page.locator(`#${await norwegianMenu.getAttribute('aria-labelledby')}`);
+  assert.equal((await norwegianMenuLabel.textContent()).trim(), 'Walk menu');
+  assert.equal(await norwegianMenuLabel.getAttribute('lang'), 'en');
+});
+
 test('an obsolete draw cannot restore a fallback status after a locale switch', async (t) => {
   const setup = await openMockupPage(t);
   if (!setup) return;
