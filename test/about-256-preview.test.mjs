@@ -242,8 +242,15 @@ test('#256: brand-asset inventory names what both components actually render', (
     assert.ok(existsSync(new URL('../docs/design/production/food-logos/' + mark + '.svg', import.meta.url)),
       mark + ' ships a bundled SVG file');
   }
+  // Attribution split: the clause before ';' names the vector brands, the one
+  // after names the text marks. Moving a title across the split while keeping
+  // all names present must fail, not only dropping a name entirely.
+  const [vectorClause, textClause] = inventory.split(';');
+  assert.ok(vectorClause && textClause, 'inventory separates vector and text attribution with ;');
   for (const [logo, title] of nativeTitle) {
-    assert.ok(inventory.includes(title), 'inventory names the ' + logo + ' asset as the components render it');
+    const clause = paths.has(logo) ? vectorClause : textClause;
+    assert.ok(clause.includes(title),
+      'inventory attributes the ' + (paths.has(logo) ? 'vector' : 'text') + ' mark ' + logo + ' (' + title + ') in its own clause');
   }
   assert.ok(!inventory.includes('Just Eat'), 'inventory does not claim a Just Eat SVG for Pyszne.pl');
 });
