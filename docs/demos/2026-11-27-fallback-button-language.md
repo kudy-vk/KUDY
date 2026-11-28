@@ -10,5 +10,5 @@ node --test --test-reporter=dot test/design-fallback-language-browser.test.mjs
 ```
 
 ```output
-......
+..........
 ```
