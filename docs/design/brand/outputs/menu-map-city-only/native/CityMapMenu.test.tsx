@@ -115,18 +115,23 @@ test.each([false,true])('real native drags reveal five usable fragments (reduced
     expect(revealed).not.toHaveBeenCalled();
     await act(()=>jest.advanceTimersByTime(900));
     expect(decoration('joint-sparks')).toBeTruthy();
-    expect(decoration('inner-wave').props.opacity).toBeGreaterThan(0);
-    expect(decoration('outer-wave').props.opacity).toBeGreaterThan(0);
-    await act(()=>jest.advanceTimersByTime(4000));
+    expect(StyleSheet.flatten(decoration('inner-wave').props.style).opacity).toBeGreaterThan(0);
+    expect(StyleSheet.flatten(decoration('outer-wave').props.style).opacity).toBeGreaterThan(0);
+    await act(()=>jest.advanceTimersByTime(1000));
+    const revealStyle=StyleSheet.flatten(decoration('reveal-radius').props.style);
+    expect(revealStyle.opacity).toBe(1);
+    expect(revealStyle.borderRadius).toBeGreaterThan(0);
+    expect(revealStyle.borderRadius).toBeLessThan(1000*scale);
+    await act(()=>jest.advanceTimersByTime(3000));
   }
   expect(screen.getByTestId('city-menu-scene-water')).toBeTruthy();
   expect(screen.queryByTestId('city-menu-watermark',{includeHiddenElements:true})).toBeNull();
   expect(screen.queryByTestId('city-menu-paper-rim-nearby',{includeHiddenElements:true})).toBeNull();
   expect(decoration('revealed-scenery').props.clipPath).toMatch(/front-wall/);
   expect(decoration('seams')).toBeTruthy();
-  expect(decoration('aura').props.opacity).toBe(0.42);
-  expect(decoration('inner-wave').props.opacity).toBe(0.22);
-  expect(decoration('outer-wave').props.opacity).toBe(0.14);
+  expect(StyleSheet.flatten(decoration('aura').props.style).opacity).toBe(0.42);
+  expect(StyleSheet.flatten(decoration('inner-wave').props.style).opacity).toBe(0.22);
+  expect(StyleSheet.flatten(decoration('outer-wave').props.style).opacity).toBe(0.14);
   expect(revealed).toHaveBeenCalledTimes(1);
   expect(screen.getByTestId('city-menu-access-guides').props.pointerEvents).toBe('none');
   for(const [id,x,y] of [['nearby',330,485],['guides',650,520],['discovery',850,420],['reserve-1',360,800],['kudy',650,880]] as const){
@@ -136,6 +141,7 @@ test.each([false,true])('real native drags reveal five usable fragments (reduced
   select.mockClear();
   await act(()=>{canvas.props.onResponderGrant(event(775*scale,530*scale),gesture);canvas.props.onResponderRelease(event(775*scale,530*scale),gesture);});
   await fireEvent(screen.getByTestId('city-menu-scene-water'),'accessibilityTap');
+  await act(()=>jest.advanceTimersByTime(400));
   expect(select).not.toHaveBeenCalled();
 });
 
@@ -251,7 +257,7 @@ test.each([false,true])('held fragment shows stronger grab feedback (reduced mot
   jest.spyOn(Math,'random').mockReturnValue(.5);jest.useFakeTimers();
   await render(<CityMapMenu {...props} reduceMotion={reduceMotion} layout={cityMenuConfig.layout} items={cityMenuConfig.items} onSelect={()=>{}}/>);
   const canvas=()=>screen.getByTestId('city-menu-canvas');
-  const veil=()=>screen.getByTestId('city-menu-veil-nearby',{includeHiddenElements:true}).props.opacity;
+  const veil=()=>StyleSheet.flatten(screen.getByTestId('city-menu-veil-layer-nearby',{includeHiddenElements:true}).props.style).opacity;
   await fireEvent(screen.getByTestId('city-menu-ribbon-nearby',{includeHiddenElements:true}),'layout',{nativeEvent:{layout:{width:90,height:30}}});
   const rim=()=>screen.getByTestId('city-menu-ribbon-body-nearby',{includeHiddenElements:true}).props.strokeWidth;
   const x=338*360/1600,y=236*360/1600;

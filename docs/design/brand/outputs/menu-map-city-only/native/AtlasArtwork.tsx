@@ -11,12 +11,27 @@ import {tokens} from '../../../../../../components/design-tokens';
 export type AtlasPalette = typeof atlasColors.light;
 export type RibbonSize = {width:number;height:number};
 
-export function AtlasRibbon({id,label,size,fontScale,canvasWidth,palette,highlight,disabled,position,onLayout}:{
+const RibbonSvg = memo(function RibbonSvg({id,size,fontScale,palette,ActiveRim,strokeWidth}:{
+  id:string;size:RibbonSize;fontScale:number;palette:AtlasPalette;ActiveRim:string;strokeWidth:number;
+}) {
+  const wing=(ribbonTail+1)*fontScale;
+  const path=ribbonPaths(Math.max(1,size.width-2*wing),Math.max(1,size.height-8*fontScale),fontScale);
+  return <Svg style={StyleSheet.absoluteFill} width={size.width} height={size.height}
+    viewBox={`${-size.width/2} ${-size.height/2} ${size.width} ${size.height}`}>
+    <Path d={path.tail} fill={palette.tail} stroke={ActiveRim} strokeWidth={1.25} strokeLinejoin="round"/>
+    <Path d={path.fold} fill={ActiveRim} opacity={0.52}/>
+    <Path testID={`city-menu-ribbon-body-${id}`} d={path.body} fill={palette.fill} stroke={ActiveRim}
+      strokeWidth={strokeWidth} strokeLinejoin="round"/>
+    <Path d={path.inner} fill="none" stroke={palette.inner} strokeWidth={0.75}/>
+    <Path d={path.leftDot} fill={ActiveRim}/><Path d={path.rightDot} fill={ActiveRim}/>
+  </Svg>;
+});
+
+export const AtlasRibbon = memo(function AtlasRibbon({id,label,size,fontScale,canvasWidth,palette,highlight,disabled,position,onLayout}:{
   id:string;label:string;size?:RibbonSize;fontScale:number;canvasWidth:number;palette:AtlasPalette;
   highlight:number;disabled:boolean;position:ViewStyle;onLayout:(event:LayoutChangeEvent)=>void;
 }) {
   const wing=(ribbonTail+1)*fontScale;
-  const path=size&&ribbonPaths(Math.max(1,size.width-2*wing),Math.max(1,size.height-8*fontScale),fontScale);
   const rim=highlight>0?'#bd852c':palette.rim;
   return <View testID={`city-menu-ribbon-${id}`} pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants"
     onLayout={onLayout}
@@ -25,25 +40,17 @@ export function AtlasRibbon({id,label,size,fontScale,canvasWidth,palette,highlig
       minHeight:30*fontScale,paddingHorizontal:Math.min(canvasWidth/4,wing+ribbonPadding*fontScale/2),
       paddingVertical:4*fontScale,opacity:disabled?0.75:1,
     }]}>
-    {path&&size&&<Svg style={StyleSheet.absoluteFill} width={size.width} height={size.height}
-      viewBox={`${-size.width/2} ${-size.height/2} ${size.width} ${size.height}`}>
-      <Path d={path.tail} fill={palette.tail} stroke={rim} strokeWidth={1.25} strokeLinejoin="round"/>
-      <Path d={path.fold} fill={rim} opacity={0.52}/>
-      <Path testID={`city-menu-ribbon-body-${id}`} d={path.body} fill={palette.fill} stroke={rim}
-        strokeWidth={1.45+1.7*highlight} strokeLinejoin="round"/>
-      <Path d={path.inner} fill="none" stroke={palette.inner} strokeWidth={0.75}/>
-      <Path d={path.leftDot} fill={rim}/><Path d={path.rightDot} fill={rim}/>
-    </Svg>}
+    {size&&<RibbonSvg id={id} size={size} fontScale={fontScale} palette={palette} ActiveRim={rim} strokeWidth={1.45+1.7*highlight}/>}
     <ScaledText style={[styles.label,{color:palette.ink}]}>{label}</ScaledText>
   </View>;
-}
+},(prev,next)=>prev.id===next.id&&prev.label===next.label&&prev.size===next.size&&prev.fontScale===next.fontScale&&prev.canvasWidth===next.canvasWidth&&prev.palette===next.palette&&prev.highlight===next.highlight&&prev.disabled===next.disabled&&JSON.stringify(prev.position.transform)===JSON.stringify(next.position.transform));
 
 export const AtlasBastions = memo(function AtlasBastions({clipId}:{clipId:string}) {
   return <ClipPath id={clipId}><Path d={BASTION_CLIP_PATH}/></ClipPath>;
 });
 
 export const AtlasScenery = memo(function AtlasScenery({clipId,testID}:{clipId:string;testID:string}) {
-  return <G testID={testID} clipPath={`url(#${clipId})`}>
+  return <G testID={testID} clipPath={`url(#${clipId})`} clipRule="evenodd">
     {nativeLayout.layers.map(({id,x,y,width,height})=><SvgImage key={id} href={citySceneAssets[id]} x={x} y={y} width={width} height={height}/>)}
   </G>;
 });
@@ -60,7 +67,7 @@ export const AtlasBackdrop = memo(function AtlasBackdrop({ratio,origin,maskId,cl
   ratio:number;origin:{x:number;y:number};maskId:string;clipId:string;palette:AtlasPalette;revealed:boolean;
 }) {
   return <G mask={`url(#${maskId})`} pointerEvents="none">
-    <G testID="city-menu-cosmos" stroke={palette.engrave} fill="none" opacity={palette.engraving*(revealed?1.25:1)}>
+    <G testID="city-menu-cosmos" stroke={palette.engrave} strokeOpacity={palette.engraving*(revealed?1.25:1)} fill="none">
       {bearingMarks(drawMark,origin.x+675,origin.y+582,ratio).map((mark,index)=>React.cloneElement(mark,{key:index}))}
       <G transform={`translate(${origin.x} ${origin.y})`}>{cosmosEngravings(drawMark,ratio)}</G>
     </G>
