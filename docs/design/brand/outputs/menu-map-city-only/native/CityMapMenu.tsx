@@ -350,6 +350,11 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const revealCenterX=(origin.x+675)*scale,revealCenterY=(origin.y+582)*scale;
   const revealRadiusPx=(revealed?1050:model.radius)*scale;
   const revealLeft=revealCenterX-revealRadiusPx,revealTop=revealCenterY-revealRadiusPx;
+  // The glow and waves scale about the reveal center, not the View midpoint:
+  // the assembled artwork sits at cy=704 of the 1600×1600 production layout
+  // while the canvas midpoint is y=800, so an unpinned scale would drift the
+  // effects off the reveal circle (issue #517).
+  const effectOrigin=`${revealCenterX}px ${revealCenterY}px`;
   const sparkProgress=!reduced&&light.seam>0&&!revealed&&model.effectElapsed>=0&&model.effectElapsed<650
     ? 1-model.effectElapsed/650:0;
   const rippleRadiusPx=feedback.current?(reduced?55:40+(1-pulseProgress)*140)*scale:0;
@@ -357,13 +362,13 @@ export function CityMapMenu(props:CityMapMenuProps) {
     <View testID="city-menu-canvas" collapsable={false} style={StyleSheet.absoluteFill} {...responder.panHandlers}>
       <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={StyleSheet.absoluteFill}>
         <BackdropLayer width={width} sceneHeight={sceneHeight} scale={scale} origin={origin} backClip={backClip} vignette={vignette} maskId={maskId} palette={palette} revealed={revealed}/>
-        <View testID="city-menu-aura" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.glow,transform:[{scale:0.45+light.glow*0.7}]}]}>
+        <View testID="city-menu-aura" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.glow,transformOrigin:effectOrigin,transform:[{scale:0.45+light.glow*0.7}]}]}>
           <AuraSvg width={width} sceneHeight={sceneHeight} lightId={lightId} cy={origin.y+582}/>
         </View>
-        <View testID="city-menu-inner-wave" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.inner,transform:[{scale:light.innerScale}]}]}>
+        <View testID="city-menu-inner-wave" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.inner,transformOrigin:effectOrigin,transform:[{scale:light.innerScale}]}]}>
           <WaveSvg width={width} sceneHeight={sceneHeight} cy={origin.y+582} rx={610} ry={510} stroke="#ffcf66" strokeWidth={14}/>
         </View>
-        <View testID="city-menu-outer-wave" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.outer,transform:[{scale:light.outerScale}]}]}>
+        <View testID="city-menu-outer-wave" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.outer,transformOrigin:effectOrigin,transform:[{scale:light.outerScale}]}]}>
           <WaveSvg width={width} sceneHeight={sceneHeight} cy={origin.y+582} rx={740} ry={630} stroke="#e59a28" strokeWidth={8} dashed/>
         </View>
         <View testID="city-menu-light-threads" pointerEvents="none" style={StyleSheet.absoluteFill}>

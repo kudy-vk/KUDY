@@ -311,3 +311,16 @@ test('keyboard arrows and Escape share the non-pointer movement path',async()=>{
   expect(position()).toEqual(before);
   expect(select).not.toHaveBeenCalled();
 });
+
+test.each([320,360,428] as const)('glow and waves scale about the reveal center at width %i',async(width)=>{
+  // Production layout (1600×1600, assembledLift 96): the artwork center is
+  // y=704 while the View midpoint is y=800 — the scale pivot must follow the
+  // artwork center at every width (issue #517).
+  await render(<CityMapMenu width={width} layout={cityMenuConfig.layout} labels={labels} hint={props.hint} sceneLabels={props.sceneLabels} reduceMotion={true} onSelect={()=>{}}/>);
+  const pivotX=(125+675)*width/1600,pivotY=(Math.max(0,(1600-1164)/2-96)+582)*width/1600;
+  for(const id of ['city-menu-aura','city-menu-inner-wave','city-menu-outer-wave']){
+    const origin=String(StyleSheet.flatten(screen.getByTestId(id,{includeHiddenElements:true}).props.style).transformOrigin).split(' ');
+    expect(parseFloat(origin[0])).toBeCloseTo(pivotX,6);
+    expect(parseFloat(origin[1])).toBeCloseTo(pivotY,6);
+  }
+});
