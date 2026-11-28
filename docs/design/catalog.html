@@ -129,7 +129,7 @@
   </section>
 </main>
 <script type="module">
-import { parseCatalog } from './catalog-data.mjs';
+import { fragmentOf, parseCatalog, parseFragment, viewIndexOf } from './catalog-data.mjs';
 
 const FILTERS = [
   ['all', 'Усе'],
@@ -225,7 +225,7 @@ function renderMeta() {
   item.views.forEach((view, index) => {
     const tab = el('button', { className: 'tab', type: 'button', textContent: view.label });
     tab.setAttribute('aria-pressed', String(index === viewIndex));
-    tab.addEventListener('click', () => { viewIndex = index; renderMeta(); showView(); });
+    tab.addEventListener('click', () => { viewIndex = index; writeFragment(); renderMeta(); showView(); });
     row.append(tab);
   });
   const view = item.views[viewIndex];
@@ -236,10 +236,15 @@ function renderMeta() {
   if (row.children.length > 0) meta.append(row);
 }
 
-function select(section, item) {
+function writeFragment() {
+  const view = current.item.views[viewIndex];
+  history.replaceState(null, '', `#${fragmentOf(keyOf(current.section, current.item), view ? view.href : '')}`);
+}
+
+function select(section, item, viewHref = null) {
   current = { section, item };
-  viewIndex = 0;
-  history.replaceState(null, '', `#${encodeURIComponent(keyOf(section, item))}`);
+  viewIndex = viewIndexOf(item, viewHref);
+  writeFragment();
   renderList();
   renderMeta();
   showView();
@@ -249,11 +254,14 @@ try {
   const response = await fetch('catalog.md');
   if (!response.ok) throw new Error(`catalog.md: ${response.status}`);
   sections = parseCatalog(await response.text());
-  const wanted = decodeURIComponent(location.hash.slice(1));
-  const start = all().find(({ section, item }) => keyOf(section, item) === wanted)
-    ?? all().find(({ item }) => item.views.length > 0);
+  const wanted = parseFragment(location.hash.slice(1));
+  const pool = all();
+  // The view key applies only to the item it came with; an unknown item falls
+  // back to the catalog's default first viewable item at its first view.
+  const known = wanted ? pool.find(({ section, item }) => keyOf(section, item) === wanted.item) : null;
+  const start = known ?? pool.find(({ item }) => item.views.length > 0);
   renderFilters();
-  if (start) select(start.section, start.item);
+  if (start) select(start.section, start.item, known ? wanted.view : null);
   else stage.replaceChildren(el('div', { className: 'blank', textContent: 'У каталогу няма макетаў для прагляду.' }));
 } catch (error) {
   stage.replaceChildren(

@@ -17,6 +17,40 @@ export function statusKind(status) {
   return hit ? hit[1] : 'other';
 }
 
+// The gallery fragment carries the item key and the registered view href:
+// `v2/<item>/<view>`, each part encodeURIComponent-ed, so a raw '/' inside the
+// fragment can only be the separator. Older item-only fragments (no raw '/')
+// keep working and open the item's first view. URL text is only decoded and
+// matched, never trusted: the page renders hrefs that parseCatalog returned.
+function tryDecode(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return null;
+  }
+}
+
+export function fragmentOf(itemKey, viewHref = '') {
+  return ['v2', itemKey, viewHref].map(encodeURIComponent).join('/');
+}
+
+// Returns { item, view } for a fragment, or null when the fragment cannot be
+// decoded at all and the page must fall back to its default item.
+export function parseFragment(raw) {
+  const parts = (raw ?? '').split('/');
+  const versioned = parts[0] === 'v2' && parts.length === 3;
+  const item = tryDecode(versioned ? parts[1] : raw ?? '');
+  const view = versioned ? tryDecode(parts[2]) : null;
+  if (item === null || (versioned && view === null)) return null;
+  return { item, view };
+}
+
+// The view is matched by its registered href, so reordering the catalog.md
+// links of a row does not move an already-created link's target.
+export function viewIndexOf(item, viewHref) {
+  return Math.max(0, item.views.findIndex((view) => view.href === viewHref));
+}
+
 function plain(cell) {
   return cell
     .replace(LINK, '$1')
