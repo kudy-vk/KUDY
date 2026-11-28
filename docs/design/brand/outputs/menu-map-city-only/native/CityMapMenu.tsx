@@ -1,7 +1,7 @@
 import React,{memo,useCallback,useEffect,useId,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {AccessibilityInfo,AppState,PanResponder,Pressable,StyleSheet,useWindowDimensions,View} from 'react-native';
 import type {GestureResponderEvent,StyleProp,ViewStyle} from 'react-native';
-import Svg,{Circle,ClipPath,Defs,Ellipse,G,Image as SvgImage,Line,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
+import Svg,{Defs,Ellipse,G,Image as SvgImage,Line,Mask,Path,RadialGradient,Rect,Stop} from 'react-native-svg';
 import {amberPalette,lightThreads} from '../amber-light.mjs';
 import {atlasColors,atlasLight} from '../atlas-art.mjs';
 import manifest from '../manifest.json';
@@ -33,29 +33,129 @@ export interface CityMapMenuProps {
 
 const DIM_OPACITY = 0.55;
 const LIT_MS = 700;
+const STATIC_THREADS = lightThreads(0.5, 1);
 const anchors = Object.fromEntries(manifest.pieces.map(piece=>[piece.id,{x:piece.anchor[0]-piece.x,y:piece.anchor[1]-piece.y}])) as Record<PieceId,Point>;
 const piecePaths = Object.fromEntries(manifest.pieces.map(piece=>[piece.id,piece.path])) as Record<PieceId,string>;
 const movementActions: readonly MapAccessibilityAction[] = ['moveLeft','moveRight','moveUp','moveDown','snap','cancel'];
 const keyboardActions: Readonly<Partial<Record<string,MapAccessibilityAction>>> = {ArrowLeft:'moveLeft',ArrowRight:'moveRight',ArrowUp:'moveUp',ArrowDown:'moveDown',s:'snap',S:'snap',Escape:'cancel'};
 
-// Keep each piece's SVG local and memoized: translating a native View does
-// not invalidate the other pieces' masks and full-canvas SVG on every drag frame.
-const PieceArtwork = memo(function PieceArtwork({item,scale,complete,pressed,disabled,lit,veil,palette,joined}:{
-  item:typeof nativeLayout.pieces[number];scale:number;complete:boolean;pressed:boolean;disabled:boolean;lit:boolean;veil:number;palette:AtlasPalette;joined:boolean;
+// Keep each piece's base SVG local and memoized separately from the animated
+// amber veil so holding/charging never re-rasterizes city bitmaps or rims.
+const PieceBase = memo(function PieceBase({item,scale,complete,disabled,lit,palette,joined}:{
+  item:typeof nativeLayout.pieces[number];scale:number;complete:boolean;disabled:boolean;lit:boolean;palette:AtlasPalette;joined:boolean;
 }){
   const {id,width,height,padding}=item;
-  const maskId=`city-menu-veil-${id}`;
+  const dimMaskId=`city-menu-dim-mask-${id}`;
   return <Svg width={(width+2*padding)*scale} height={(height+2*padding)*scale} viewBox={`${-padding} ${-padding} ${width+2*padding} ${height+2*padding}`}>
-    <Defs><Mask id={maskId} maskUnits="userSpaceOnUse" x={0} y={0} width={width} height={height}><SvgImage href={cityMenuAssets[id].light} width={width} height={height}/></Mask></Defs>
-    <G opacity={pressed?0.86:1}>
+    {disabled&&<Defs><Mask id={dimMaskId} maskUnits="userSpaceOnUse" x={0} y={0} width={width} height={height}><SvgImage href={cityMenuAssets[id].light} width={width} height={height}/></Mask></Defs>}
+    <G>
       {!complete&&<G fill="none" strokeLinejoin="round" strokeLinecap="round">
-        <Path testID={`city-menu-outer-rim-${id}`} d={piecePaths[id]} stroke={palette.brass} strokeWidth={6.5/scale} opacity={joined?0.65:1}/>
-        <Path testID={`city-menu-paper-rim-${id}`} d={piecePaths[id]} stroke={palette.paper} strokeWidth={3.4/scale} opacity={joined?0.35:1}/>
+        <Path testID={`city-menu-outer-rim-${id}`} d={piecePaths[id]} stroke={palette.brass} strokeWidth={6.5/scale} strokeOpacity={joined?0.65:1}/>
+        <Path testID={`city-menu-paper-rim-${id}`} d={piecePaths[id]} stroke={palette.paper} strokeWidth={3.4/scale} strokeOpacity={joined?0.35:1}/>
       </G>}
       <SvgImage href={cityMenuAssets[id].city} width={width} height={height}/>
       {!joined&&!complete&&<SvgImage href={cityMenuAssets[id].ui} x={-padding} y={-padding} width={width+2*padding} height={height+2*padding}/>}
-      <Rect testID={maskId} x={0} y={0} width={width} height={height} fill={amberPalette.veil} mask={`url(#${maskId})`} opacity={veil}/>
-      {disabled&&<Rect testID={`city-menu-dim-${id}`} x={0} y={0} width={width} height={height} fill={tokens.colorPaper} mask={`url(#${maskId})`} opacity={lit?0:DIM_OPACITY}/>}
+      {disabled&&<Rect testID={`city-menu-dim-${id}`} x={0} y={0} width={width} height={height} fill={tokens.colorPaper} mask={`url(#${dimMaskId})`} opacity={lit?0:DIM_OPACITY}/>}
+    </G>
+  </Svg>;
+});
+
+// Static SVG path per piece; the parent native View animates opacity on the GPU
+// without invalidating or re-allocating the SvgView software bitmap.
+const PieceVeil = memo(function PieceVeil({item,scale}:{
+  item:typeof nativeLayout.pieces[number];scale:number;
+}){
+  const {id,width,height,padding}=item;
+  return <Svg style={StyleSheet.absoluteFill} width={(width+2*padding)*scale} height={(height+2*padding)*scale} viewBox={`${-padding} ${-padding} ${width+2*padding} ${height+2*padding}`}>
+    <Path testID={`city-menu-veil-${id}`} d={piecePaths[id]} fill={amberPalette.veil}/>
+  </Svg>;
+});
+
+const BackdropLayer = memo(function BackdropLayer({width,sceneHeight,scale,origin,backClip,vignette,maskId,palette,revealed}:{
+  width:number;sceneHeight:number;scale:number;origin:Point;backClip:string;vignette:string;maskId:string;palette:AtlasPalette;revealed:boolean;
+}){
+  return <Svg width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <Defs>
+      <AtlasBastions clipId={backClip}/>
+      <RadialGradient id={vignette} cx="50%" cy="50%" rx="52%" ry="52%">
+        <Stop offset={0} stopColor="white"/><Stop offset={0.62} stopColor="white" stopOpacity={0.88}/>
+        <Stop offset={0.86} stopColor="white" stopOpacity={0.32}/><Stop offset={1} stopColor="white" stopOpacity={0}/>
+      </RadialGradient>
+      <Mask id={maskId} maskUnits="userSpaceOnUse" x={-200} y={-200} width={2000} height={sceneHeight+400}>
+        <Rect x={-200} y={-200} width={2000} height={sceneHeight+400} fill={`url(#${vignette})`}/>
+      </Mask>
+    </Defs>
+    <AtlasBackdrop ratio={scale} origin={origin} maskId={maskId} clipId={backClip} palette={palette} revealed={revealed}/>
+  </Svg>;
+});
+
+const AuraSvg = memo(function AuraSvg({width,sceneHeight,lightId,cy}:{
+  width:number;sceneHeight:number;lightId:string;cy:number;
+}){
+  return <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <Defs>
+      <RadialGradient id={lightId}><Stop offset={0} stopColor="#fff6cf"/><Stop offset={0.28} stopColor="#ffca57" stopOpacity={0.95}/><Stop offset={0.62} stopColor={amberPalette.glow} stopOpacity={0.72}/><Stop offset={1} stopColor={amberPalette.edge} stopOpacity={0}/></RadialGradient>
+    </Defs>
+    <Ellipse cx={800} cy={cy} rx={940} ry={840} fill={`url(#${lightId})`}/>
+  </Svg>;
+});
+
+const WaveSvg = memo(function WaveSvg({width,sceneHeight,cy,rx,ry,stroke,strokeWidth,dashed}:{
+  width:number;sceneHeight:number;cy:number;rx:number;ry:number;stroke:string;strokeWidth:number;dashed?:boolean;
+}){
+  return <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <Ellipse cx={800} cy={cy} rx={rx} ry={ry} fill="none" stroke={stroke} strokeWidth={strokeWidth} strokeDasharray={dashed?[28,18]:undefined}/>
+  </Svg>;
+});
+
+const ThreadSvg = memo(function ThreadSvg({width,sceneHeight,sceneTransform,d,core}:{
+  width:number;sceneHeight:number;sceneTransform:string;d:string;core:string;
+}){
+  return <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <G transform={sceneTransform} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <Path d={d} stroke={amberPalette.glow} strokeWidth={18} strokeOpacity={0.14}/>
+      <Path d={d} stroke={amberPalette.edge} strokeWidth={7} strokeOpacity={0.45}/>
+      <Path d={d} stroke={core} strokeWidth={2.5} strokeOpacity={0.95}/>
+    </G>
+  </Svg>;
+});
+
+const StaticScenerySvg = memo(function StaticScenerySvg({width,sceneHeight,frontClip,sceneTransform}:{
+  width:number;sceneHeight:number;frontClip:string;sceneTransform:string;
+}){
+  return <Svg width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <Defs><AtlasBastions clipId={frontClip}/></Defs>
+    <G transform={sceneTransform}>
+      <AtlasScenery clipId={frontClip} testID="city-menu-revealed-scenery"/>
+    </G>
+  </Svg>;
+});
+
+const SeamsLayer = memo(function SeamsLayer({width,sceneHeight,pieceKey}:{width:number;sceneHeight:number;pieceKey:string}){
+  const ids=pieceKey.split(',') as PieceId[];
+  return <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <G testID="city-menu-seams" fill="none" strokeLinejoin="round" strokeLinecap="round">
+      {ids.map(id=>{
+        const piece=nativeLayout.pieces.find(item=>item.id===id)!;
+        return <G key={id} transform={`translate(${125+piece.x} ${320+piece.y})`}>
+          <Path d={piecePaths[id]} stroke="#ffae2b" strokeWidth={22} strokeOpacity={0.45}/>
+          <Path d={piecePaths[id]} stroke="#fff2c2" strokeWidth={7}/>
+        </G>;
+      })}
+    </G>
+  </Svg>;
+});
+
+const SparksLayer = memo(function SparksLayer({width,sceneHeight,sceneTransform}:{
+  width:number;sceneHeight:number;sceneTransform:string;
+}){
+  return <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
+    <G transform={sceneTransform} stroke="#ffcf5c" strokeWidth={7} strokeLinecap="round">
+      {manifest.joints.flatMap(({port:[x,y]},index)=>Array.from({length:5},(_,ray)=>{
+        const angle=ray*2*Math.PI/5;
+        const dx=Math.cos(angle),dy=Math.sin(angle);
+        return <Line key={`${index}-${ray}`} x1={x+dx*45} y1={y+dy*45} x2={x+dx*75} y2={y+dy*75}/>;
+      }))}
     </G>
   </Svg>;
 });
@@ -74,7 +174,6 @@ export function CityMapMenu(props:CityMapMenuProps) {
   const svgId=useId();
   const [ribbonSizes,setRibbonSizes]=useState<Partial<Record<PieceId,RibbonSize>>>({});
   const ribbonHits=useRef(new Map<PieceId,RibbonHit>());
-  const backgroundOrigin=useMemo(()=>({x:125,y:(sceneHeight-1164)/2}),[sceneHeight]);
   const [focused,setFocused]=useState<PieceId|null>(null);
   const [litId,setLitId]=useState<PieceId|null>(null);
   const [,setRevision]=useState(0);
@@ -237,84 +336,80 @@ export function CityMapMenu(props:CityMapMenuProps) {
   });
   const grab=(id:PieceId)=>model.active?.held&&model.active.group===model.pieces.get(id)?.group
     ? (reduced?1:model.grabProgress(clock.current)):0;
-  const origin=model.sceneOrigin;
+  const origin=useMemo(()=>({x:model.sceneOrigin.x,y:model.sceneOrigin.y}),[model]);
   const sceneTransform=`translate(${origin.x} ${origin.y})`;
   const pulseProgress=feedback.current?Math.max(0,Math.min(1,(feedback.current.until-clock.current)/380)):0;
   const passivePress=(id:SceneId)=>{const part=model.scenery.find(p=>p.id===id)!;pulse({x:origin.x+part.x+part.width/2,y:origin.y+part.y+part.height/2});};
   const light=atlasLight(model.effectElapsed,{light:model.light,progress:model.effectProgress},revealed);
+  const threads=model.light>0&&!reduced?lightThreads(model.effectProgress,model.light):null;
   const lightId=`${svgId}-amber`,backClip=`${svgId}-back-wall`,frontClip=`${svgId}-front-wall`;
-  const vignette=`${svgId}-vignette`,maskId=`${svgId}-paper-mask`,revealId=`${svgId}-reveal`;
-  return <View style={[styles.host,style,{width,height:width*sceneHeight/1600}]}>
+  const vignette=`${svgId}-vignette`,maskId=`${svgId}-paper-mask`;
+  const firstGroup=pieces.length>0?model.pieces.get(pieces[0].id)?.group:undefined;
+  const seamDx=(firstGroup?.dx??0)*scale,seamDy=(firstGroup?.dy??0)*scale;
+  const canvasHeight=width*sceneHeight/1600;
+  const revealCenterX=(origin.x+675)*scale,revealCenterY=(origin.y+582)*scale;
+  const revealRadiusPx=(revealed?1050:model.radius)*scale;
+  const revealLeft=revealCenterX-revealRadiusPx,revealTop=revealCenterY-revealRadiusPx;
+  const sparkProgress=!reduced&&light.seam>0&&!revealed&&model.effectElapsed>=0&&model.effectElapsed<650
+    ? 1-model.effectElapsed/650:0;
+  const rippleRadiusPx=feedback.current?(reduced?55:40+(1-pulseProgress)*140)*scale:0;
+  return <View style={[styles.host,style,{width,height:canvasHeight}]}>
     <View testID="city-menu-canvas" collapsable={false} style={StyleSheet.absoluteFill} {...responder.panHandlers}>
       <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={StyleSheet.absoluteFill}>
-        <Svg width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
-          <Defs>
-            <AtlasBastions clipId={backClip}/>
-            <RadialGradient id={vignette} cx="50%" cy="50%" rx="52%" ry="52%">
-              <Stop offset={0} stopColor="white"/><Stop offset={0.62} stopColor="white" stopOpacity={0.88}/>
-              <Stop offset={0.86} stopColor="white" stopOpacity={0.32}/><Stop offset={1} stopColor="white" stopOpacity={0}/>
-            </RadialGradient>
-            <Mask id={maskId} maskUnits="userSpaceOnUse" x={-200} y={-200} width={2000} height={sceneHeight+400}>
-              <Rect x={-200} y={-200} width={2000} height={sceneHeight+400} fill={`url(#${vignette})`}/>
-            </Mask>
-            <RadialGradient id={lightId}><Stop offset={0} stopColor="#fff6cf"/><Stop offset={0.28} stopColor="#ffca57" stopOpacity={0.95}/><Stop offset={0.62} stopColor={amberPalette.glow} stopOpacity={0.72}/><Stop offset={1} stopColor={amberPalette.edge} stopOpacity={0}/></RadialGradient>
-          </Defs>
-          <AtlasBackdrop ratio={scale} origin={backgroundOrigin} maskId={maskId} clipId={backClip} palette={palette} revealed={revealed}/>
-          <G testID="city-menu-aura" opacity={light.glow}>
-            <Ellipse cx={800} cy={origin.y+582} rx={940*(0.45+light.glow*0.7)} ry={840*(0.45+light.glow*0.7)} fill={`url(#${lightId})`}/>
-          </G>
-          <G fill="none">
-            <Ellipse testID="city-menu-inner-wave" cx={800} cy={origin.y+582} rx={610*light.innerScale} ry={510*light.innerScale} stroke="#ffcf66" strokeWidth={14} opacity={light.inner}/>
-            <Ellipse testID="city-menu-outer-wave" cx={800} cy={origin.y+582} rx={740*light.outerScale} ry={630*light.outerScale} stroke="#e59a28" strokeWidth={8} strokeDasharray={[28,18]} opacity={light.outer}/>
-          </G>
-          <G testID="city-menu-light-threads" pointerEvents="none" transform={sceneTransform} opacity={reduced?0:1}>
-            {(model.light>0?lightThreads(model.effectProgress,model.light):[]).map((thread,i)=><G key={i} transform={`translate(${thread.x} ${thread.y})`} opacity={thread.opacity}>
-              <Path d={thread.d} fill="none" stroke={amberPalette.glow} strokeWidth={18} strokeOpacity={0.1} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
-              <Path d={thread.d} fill="none" stroke={amberPalette.edge} strokeWidth={7} strokeOpacity={0.4} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
-              <Path d={thread.d} fill="none" stroke={thread.core} strokeWidth={thread.width} strokeOpacity={0.95} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={[1700,1500]} strokeDashoffset={thread.offset}/>
-            </G>)}
-          </G>
-        </Svg>
+        <BackdropLayer width={width} sceneHeight={sceneHeight} scale={scale} origin={origin} backClip={backClip} vignette={vignette} maskId={maskId} palette={palette} revealed={revealed}/>
+        <View testID="city-menu-aura" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.glow,transform:[{scale:0.45+light.glow*0.7}]}]}>
+          <AuraSvg width={width} sceneHeight={sceneHeight} lightId={lightId} cy={origin.y+582}/>
+        </View>
+        <View testID="city-menu-inner-wave" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.inner,transform:[{scale:light.innerScale}]}]}>
+          <WaveSvg width={width} sceneHeight={sceneHeight} cy={origin.y+582} rx={610} ry={510} stroke="#ffcf66" strokeWidth={14}/>
+        </View>
+        <View testID="city-menu-outer-wave" pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:light.outer,transform:[{scale:light.outerScale}]}]}>
+          <WaveSvg width={width} sceneHeight={sceneHeight} cy={origin.y+582} rx={740} ry={630} stroke="#e59a28" strokeWidth={8} dashed/>
+        </View>
+        <View testID="city-menu-light-threads" pointerEvents="none" style={StyleSheet.absoluteFill}>
+          {STATIC_THREADS.map((base,i)=>{
+            const active=threads?.[i];
+            return <View key={i} pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:active?active.opacity:0,transform:[{translateX:(active?.x??0)*scale},{translateY:(active?.y??0)*scale}]}]}>
+              <ThreadSvg width={width} sceneHeight={sceneHeight} sceneTransform={sceneTransform} d={base.d} core={base.core}/>
+            </View>;
+          })}
+        </View>
+        <View testID="city-menu-reveal-radius" pointerEvents="none" style={revealed?StyleSheet.absoluteFill:{
+          position:'absolute',left:0,top:0,width:revealRadiusPx*2,height:revealRadiusPx*2,borderRadius:revealRadiusPx,
+          overflow:'hidden',opacity:model.radius>0?1:0,transform:[{translateX:revealLeft},{translateY:revealTop}],
+        }}>
+          <View style={revealed?StyleSheet.absoluteFill:{width,height:canvasHeight,transform:[{translateX:-revealLeft},{translateY:-revealTop}]}}>
+            <StaticScenerySvg width={width} sceneHeight={sceneHeight} frontClip={frontClip} sceneTransform={sceneTransform}/>
+          </View>
+        </View>
         {pieces.map(item=>{
           const at=model.position(item.id),entry=items.find(entry=>entry.id===item.id)!;
           const joined=(model.pieces.get(item.id)?.group.members.size??0)>1;
-          return <View key={item.id} testID={`city-menu-piece-${item.id}`} pointerEvents="none" style={[styles.piece,{left:0,top:0,transform:[{translateX:(at.x-item.padding)*scale},{translateY:(at.y-item.padding)*scale}]}]}>
-            <PieceArtwork item={item} scale={scale} complete={complete} joined={joined} palette={palette} pressed={model.active?.hit.id===item.id&&!model.active?.held} disabled={entry.disabled===true} lit={litId===item.id} veil={Math.max(model.silhouette,0.38*grab(item.id))}/>
+          const pressed=model.active?.hit.id===item.id&&!model.active?.held;
+          const veil=Math.max(model.silhouette,0.38*grab(item.id));
+          return <View key={item.id} testID={`city-menu-piece-${item.id}`} pointerEvents="none" style={[styles.piece,{left:0,top:0,opacity:pressed?0.86:1,transform:[{translateX:(at.x-item.padding)*scale},{translateY:(at.y-item.padding)*scale}]}]}>
+            <PieceBase item={item} scale={scale} complete={complete} joined={joined} palette={palette} disabled={entry.disabled===true} lit={litId===item.id}/>
+            <View testID={`city-menu-veil-layer-${item.id}`} pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:veil}]}>
+              <PieceVeil item={item} scale={scale}/>
+            </View>
           </View>;
         })}
-        <Svg style={StyleSheet.absoluteFill} width={width} height={width*sceneHeight/1600} viewBox={`0 0 1600 ${sceneHeight}`}>
-          <Defs>
-            <AtlasBastions clipId={frontClip}/>
-            <ClipPath id={revealId}><Circle cx="675" cy="582" r={model.radius}/></ClipPath>
-          </Defs>
-          {model.radius>0&&<G transform={sceneTransform} clipPath={`url(#${revealId})`}>
-            <AtlasScenery clipId={frontClip} testID="city-menu-revealed-scenery"/>
-          </G>}
-          {complete&&<G testID="city-menu-seams" fill="none" strokeLinejoin="round" strokeLinecap="round">
-            {pieces.map(({id})=>{
-              const at=model.position(id);
-              return <G key={id} transform={`translate(${at.x} ${at.y})`}>
-                <Path d={piecePaths[id]} stroke="#ffae2b" strokeWidth={22} opacity={light.seam*0.6}/>
-                <Path d={piecePaths[id]} stroke={light.seam>0.5?'#fff7d6':'#f3bc52'} strokeWidth={7}
-                  opacity={Math.max(0.55,light.seam)}/>
-              </G>;
-            })}
-          </G>}
-          {!reduced&&light.seam>0&&!revealed&&model.effectElapsed<650&&
-            <G testID="city-menu-joint-sparks" transform={sceneTransform} stroke="#ffcf5c" strokeWidth={7} strokeLinecap="round"
-              opacity={Math.max(0,1-model.effectElapsed/650)}>
-              {manifest.joints.flatMap(({port:[x,y]},index)=>Array.from({length:5},(_,ray)=>{
-                const angle=ray*2*Math.PI/5,dist=50+model.effectElapsed/12;
-                const dx=Math.cos(angle),dy=Math.sin(angle);
-                return <Line key={`${index}-${ray}`} x1={x+dx*(dist-20)} y1={y+dy*(dist-20)} x2={x+dx*dist} y2={y+dy*dist}/>;
-              }))}
-            </G>}
-          {feedback.current&&<Circle cx={feedback.current.point.x} cy={feedback.current.point.y} r={reduced?55:40+(1-pulseProgress)*140} stroke="#bd852c" strokeWidth={6} fill="#f4d68a" fillOpacity={.2} opacity={pulseProgress}/>}
-        </Svg>
+        <View pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:complete?Math.max(0.55,light.seam):0,transform:[{translateX:seamDx},{translateY:seamDy}]}]}>
+          <SeamsLayer width={width} sceneHeight={sceneHeight} pieceKey={pieceKey}/>
+        </View>
+        <View testID={sparkProgress>0?'city-menu-joint-sparks':undefined} pointerEvents="none" style={[StyleSheet.absoluteFill,{opacity:sparkProgress,transform:[{scale:0.92+(1-sparkProgress)*0.16}]}]}>
+          <SparksLayer width={width} sceneHeight={sceneHeight} sceneTransform={sceneTransform}/>
+        </View>
+        {feedback.current&&<View pointerEvents="none" style={{
+          position:'absolute',left:0,top:0,width:rippleRadiusPx*2,height:rippleRadiusPx*2,borderRadius:rippleRadiusPx,
+          borderWidth:6*scale,borderColor:'#bd852c',backgroundColor:'rgba(244,214,138,0.2)',opacity:pulseProgress,
+          transform:[{translateX:feedback.current.point.x*scale-rippleRadiusPx},{translateY:feedback.current.point.y*scale-rippleRadiusPx}],
+        }}/>}
         {pieces.map(({id})=>{
           const ribbon=ribbons.get(id)!;
+          const held=model.active?.held&&model.active.group===model.pieces.get(id)?.group;
           return <AtlasRibbon key={id} id={id} label={labels[id]} size={ribbonSizes[id]} fontScale={fontScale}
-            canvasWidth={width} palette={palette} highlight={Math.max(grab(id),focused===id?1:0)}
+            canvasWidth={width} palette={palette} highlight={held||focused===id?1:0}
             disabled={items.find(item=>item.id===id)?.disabled===true}
             position={{left:0,top:0,transform:[{translateX:ribbon.x},{translateY:ribbon.y}]}}
             onLayout={({nativeEvent:{layout:{width,height}}})=>setRibbonSizes(previous=>
