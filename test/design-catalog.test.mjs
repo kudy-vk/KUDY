@@ -4,7 +4,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { parseCatalog, statusKind } from '../docs/design/catalog-data.mjs';
+import { fragmentOf, parseCatalog, parseFragment, statusKind, viewIndexOf } from '../docs/design/catalog-data.mjs';
 
 // The catalogue and the gallery parser live in docs/design; links in the catalogue resolve from there.
 const here = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'design');
@@ -98,4 +98,46 @@ test('single canonical HTML catalog: every production HTML mockup and test is re
     assert(views.has(`production/${name}`), `Unregistered HTML mockup/test: production/${name}`);
   }
   assert(views.has('production/about.html'), 'The approved About City baseline must remain in the catalog');
+});
+
+const catalogItem = (title) => parseCatalog(fs.readFileSync(path.join(here, 'catalog.md'), 'utf8'))
+  .flatMap((section) => section.items.map((item) => ({ section, item })))
+  .find(({ item }) => item.title === title);
+
+test('the fragment round-trips the chosen tab of a multi-tab HTML item and of an image item', () => {
+  for (const title of ['Гіды', 'app-entry-2026-10-19, варыянты, апісанне']) {
+    const pair = catalogItem(title);
+    assert.ok(pair, `${title} is registered with mockups`);
+    assert.ok(pair.item.views.length >= 2, `${title} has several tabs`);
+    for (const view of pair.item.views) {
+      const key = `${pair.section.title}/${pair.item.title}`;
+      assert.deepEqual(parseFragment(fragmentOf(key, view.href)), { item: key, view: view.href });
+      assert.equal(viewIndexOf(pair.item, view.href), pair.item.views.indexOf(view));
+    }
+  }
+});
+
+test('an old item-only fragment and a stale view key keep the item at its first view', () => {
+  const pair = catalogItem('Гіды');
+  const key = `${pair.section.title}/${pair.item.title}`;
+  assert.deepEqual(parseFragment(encodeURIComponent(key)), { item: key, view: null });
+  const stale = parseFragment(fragmentOf(key, 'production/gone.html'));
+  assert.deepEqual(stale, { item: key, view: 'production/gone.html' });
+  assert.equal(viewIndexOf(pair.item, stale.view), 0, 'a stale tab opens the first view');
+});
+
+test('an undecodable fragment reports a reset instead of throwing', () => {
+  assert.equal(parseFragment('%'), null);
+  assert.equal(parseFragment('v2/%/production%2Fguides.html'), null);
+  assert.equal(parseFragment(`${encodeURIComponent('Экраны/Гіды')}%`), null);
+  assert.equal(parseFragment('v2/%D0%AD%D0%BA%D1%80%D0%B0%D0%BD%D1%8B%2F%D0%93%D1%96%D0%B4%D1%8B/%'), null);
+});
+
+test('reordering tabs does not move a created link: the view is matched by its href', () => {
+  const pair = catalogItem('Гіды');
+  const [first, second] = pair.item.views;
+  const reordered = { views: [second, first] };
+  assert.equal(viewIndexOf(reordered, second.href), 0, 'the link still names the same view');
+  assert.equal(viewIndexOf(reordered, first.href), 1);
+  assert.equal(fragmentOf('k', second.href), `v2/${encodeURIComponent('k')}/${encodeURIComponent(second.href)}`);
 });
