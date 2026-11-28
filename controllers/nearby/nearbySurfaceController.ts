@@ -116,21 +116,34 @@ export function nearbyOrder(
   });
 }
 
+// The status poll preserves the previous object for equivalent states.
+export function sameNearbyLocationView(a: NearbyLocationView, b: NearbyLocationView): boolean {
+  return a.state === b.state &&
+    (a.state !== 'proximity' || (b.state === 'proximity' && a.note === b.note));
+}
+
 // --- React bindings (hooks as controllers, 19 §2.2) ---------------------------
 
 const STATUS_POLL_MS = 500;
 
 export function useNearbySurface(
   binding: NearbySurfaceBinding | undefined,
-): { surface: NearbySurfaceState | null; locationView: NearbyLocationView; locale: string } {
+): { surface: NearbySurfaceState | null; locationView: NearbyLocationView; position: readonly [number, number] | null; locale: string } {
   const store = binding?.store;
   const surface = useStoreState(store);
   const location = binding?.location;
   const locale = binding?.locale ?? 'be';
   const [locationView, setLocationView] = useState<NearbyLocationView>({ state: 'absent' });
+  const [position, setPosition] = useState<readonly [number, number] | null>(null);
   useEffect(() => {
+    // Polling is necessary for a walk's mode handover, but equal location
+    // snapshots must not re-render the entire list every 500 ms.
+    const updateView = (next: NearbyLocationView) => setLocationView(previous =>
+      sameNearbyLocationView(previous, next) ? previous : next,
+    );
     if (!location) {
-      setLocationView({ state: 'absent' });
+      updateView({ state: 'absent' });
+      setPosition(null);
       return;
     }
     let armedByUs = false;
@@ -144,7 +157,8 @@ export function useNearbySurface(
       if (disposed) return;
       if (!foreground) {
         releaseLocation();
-        setLocationView({ state: 'absent' });
+        updateView({ state: 'absent' });
+        setPosition(null);
         return;
       }
       // The arming decision is re-evaluated every tick, not only on mount: a
@@ -159,7 +173,10 @@ export function useNearbySurface(
         location.setMode('city-surface');
         armedByUs = true;
       }
-      setLocationView(nearbyLocationView(location));
+      const view = nearbyLocationView(location);
+      updateView(view);
+      // Watchdog recovery/stall invalidates the displayed GPS position.
+      if (view.state !== 'proximity' || view.note !== null) setPosition(null);
     };
     // Pure Node consumers call controller decisions without a native runtime;
     // React mounts this lifecycle observer only on the rendered surface.
@@ -169,10 +186,19 @@ export function useNearbySurface(
       foreground = state === 'active';
       read();
     });
+    // Handle watchdog and permission changes immediately. Polling still
+    // handles mode handovers whose status value does not change.
+    const unwatchStatus = location.onStatusChange(read);
+    const unwatchFix = location.onRawFix(fix => {
+      if (!foreground || location.currentMode() !== 'city-surface') return;
+      if (!Number.isFinite(fix.lat) || fix.lat < -90 || fix.lat > 90 ||
+          !Number.isFinite(fix.lng) || fix.lng < -180 || fix.lng > 180) return;
+      setPosition(previous => previous?.[0] === fix.lng && previous[1] === fix.lat
+        ? previous : [fix.lng, fix.lat]);
+    });
     read();
-    // The service emits no status change event; the surface polls its
-    // status() read while open (a permission answer, a grant or a watchdog
-    // step land within one poll — the render suite's waits rely on it).
+    // Status changes arrive through the observer above. Polling remains the
+    // fallback for walk-mode handovers that do not change the status value.
     const timer = setInterval(read, STATUS_POLL_MS);
     return () => {
       disposed = true;
@@ -180,10 +206,12 @@ export function useNearbySurface(
       // 09 §20: the subscription is released when the surface closes — only
       // what this surface armed, never a walk's own mode.
       appStateSubscription.remove();
+      unwatchFix();
+      unwatchStatus();
       releaseLocation();
     };
   }, [location]);
-  return { surface, locationView, locale };
+  return { surface, locationView, position, locale };
 }
 
 // --- Words (BE/EN; the language canon is 09 §0 — be + en) ---------------------

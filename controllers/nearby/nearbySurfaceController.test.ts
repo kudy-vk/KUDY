@@ -11,6 +11,7 @@ import {
   nearbyArmingDecision,
   nearbyOrder,
   nearbyStrings,
+  sameNearbyLocationView,
 } from './nearbySurfaceController.ts';
 
 function offer(
@@ -36,6 +37,15 @@ function offer(
     content_locale: null,
   };
 }
+
+describe('nearby location state stability', () => {
+  it('retains equal polling snapshots but updates when permission or fix changes', () => {
+    assert.equal(sameNearbyLocationView({ state: 'proximity', note: 'acquiring' }, { state: 'proximity', note: 'acquiring' }), true);
+    assert.equal(sameNearbyLocationView({ state: 'proximity', note: 'acquiring' }, { state: 'proximity', note: null }), false);
+    assert.equal(sameNearbyLocationView({ state: 'proximity', note: null }, { state: 'denied' }), false);
+    assert.equal(sameNearbyLocationView({ state: 'held-by-walk' }, { state: 'held-by-walk' }), true);
+  });
+});
 
 describe('nearbyArmingDecision (criterion 4)', () => {
   it('arms the city subscription only when no walk holds the mode', () => {

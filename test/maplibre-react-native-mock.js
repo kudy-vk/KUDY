@@ -7,9 +7,9 @@ const cameraCalls = [];
 const Map = ({ children, ...props }) => React.createElement(View, props, children);
 const Marker = ({ children, id, lngLat, ...props }) =>
   React.createElement(View, { ...props, testID: `mock-map-marker-${id}`, lngLat }, children);
-const Camera = ({ ref }) => {
+const Camera = ({ ref, initialViewState }) => {
   React.useImperativeHandle(ref, () => ({ easeTo: (options) => cameraCalls.push(options) }));
-  return null;
+  return React.createElement(View, { testID: 'mock-map-camera', initialViewState });
 };
 
 module.exports = { Map, Marker, Camera, cameraCalls };
