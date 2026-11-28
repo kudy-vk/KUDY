@@ -177,15 +177,15 @@ export async function mountBoard({ controls = [], stringIds = [], locales = LOCA
       fallback.hidden = false;
       fallback.textContent = `Draft text: ${[...fallbackLanguages].map((code) => LOCALES[code] ?? code).join(', ')}`;
     };
-    fallbackLanguages.clear();
-    fallback.hidden = true;
-    fallback.textContent = '';
     try {
       const strings = await appStrings(state.locale, stringIds);
       if (run !== latest) return;
       for (const cleanup of cleanups) cleanup();
       cleanups = [];
       phones.replaceChildren();
+      fallbackLanguages.clear();
+      fallback.hidden = true;
+      fallback.textContent = '';
       say('');
       for (const theme of ['light', 'dark']) {
         const made = phone(state.device, theme);
