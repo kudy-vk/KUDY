@@ -27,7 +27,7 @@ const CATALOG = path.join(REPO, 'docs', 'design', 'catalog.md');
 // before interpolation into the word-boundary pattern below.
 const ENTRY = /\{ id: "([a-z0-9-]+)", labelKey: "[^"]+", destination: (null|"[^"]+") \}/g;
 
-export function parseMenuPieces(source) {
+function parseMenuPieces(source) {
   const pieces = [];
   for (const match of source.matchAll(ENTRY)) {
     pieces.push({ id: match[1], destination: match[2] === 'null' ? null : match[2].slice(1, -1) });
@@ -35,7 +35,7 @@ export function parseMenuPieces(source) {
   return pieces;
 }
 
-export function findStaleInactiveClaims(catalogText, pieces) {
+function findStaleInactiveClaims(catalogText, pieces) {
   const hits = [];
   catalogText.split(/\r?\n/).forEach((line, index) => {
     for (const piece of pieces) {
