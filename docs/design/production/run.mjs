@@ -4,7 +4,7 @@
 // swipes change only the open card, one button in the bottom row controls the
 // sound, the ad sits under the control row. Both phones on the board share one
 // state, so a tap in one theme is mirrored in the other.
-import { adZone, button, el, icon, iconButton, marker as stateMark, mountBoard, registerIcons, svg, topbar } from './kit.mjs';
+import { adZone, button, el, icon, iconButton, markDraftLanguages, marker as stateMark, mountBoard, registerIcons, resolveDraftString, svg, topbar } from './kit.mjs';
 
 // Lucide shapes this screen alone needs (lucide-react-native 1.49.0, ISC).
 registerIcons({
@@ -309,13 +309,15 @@ function overlay(c) {
       c.say('Прагулка прыпынена: гук гіда спынены, пазіцыя больш не сочыцца, прагрэс захаваны.');
     };
     const guide = () => { close(); c.say('Адкрываецца спіс гідаў. Іншы гід пачынаецца толькі праз пытанне-пацвярджэнне; да яго прагулка не мяняецца.'); };
+    const menuTitle = el('span', { textContent: c.n('menu') });
+    menuTitle.id = `run-menu-label-${c.root.closest('.phone')?.dataset.theme ?? 'phone'}`;
     const panel = el('div', { className: 'run-menu' },
-      el('div', { className: 'run-menu-head' }, el('span', { textContent: c.n('menu') }), keyed(iconButton('x', c.w('close'), close), 'x')),
+      el('div', { className: 'run-menu-head' }, menuTitle, keyed(iconButton('x', c.w('close'), close), 'x')),
       !s.walkPaused && button(c.w('pauseWalk'), { iconName: 'circle-pause', block: true, onPress: pause }),
       button(c.w('endWalk'), { iconName: 'flag', block: true, onPress: () => c.set({ over: 'end' }) }),
       button(c.n('changeGuide'), { iconName: 'route', block: true, onPress: guide }));
     panel.setAttribute('role', 'dialog');
-    panel.setAttribute('aria-label', c.n('menu'));
+    panel.setAttribute('aria-labelledby', menuTitle.id);
     const layer = el('div', { className: 'run-over' }, panel);
     layer.addEventListener('click', (event) => { if (event.target === layer) close(); });
     return layer;
@@ -372,7 +374,7 @@ await mountBoard({
     { id: 'ad', label: 'Банер', options: [['loaded', 'Загрузіўся'], ['none', 'Не загрузіўся']] },
   ],
   stringIds: STRING_IDS,
-  build({ body, state, strings, say, theme }) {
+  build({ body, state, strings, say, theme, markFallback }) {
     if (theme === 'light' || !shared) {
       const preset = PRESETS[state.state];
       shared = { ...preset, origin: state.state, heard: new Set(preset.heard), fired: new Set(preset.fired), audioPaused: false,
@@ -386,12 +388,21 @@ await mountBoard({
     const sync = (id, value) => { state[id] = value; const select = document.getElementById(id); if (select) select.value = value; };
     const set = (patch) => { Object.assign(s, patch); if (state.panel !== s.panel) sync('panel', s.panel); for (const view of s.views) view(); };
     const c = {
-      root, s, set, sync, say, strings, locale: state.locale, ad: state.ad === 'loaded',
+      root, s, set, sync, say, strings, locale: state.locale, ad: state.ad === 'loaded', draftLanguages: new Map(),
       w: (key) => strings[RUN(key)],
-      n: (key, number) => NEW[key][state.locale].replace('{n}', number).replace('{total}', PHOTOS),
+      n: (key, number) => {
+        const draft = resolveDraftString(NEW[key], c.locale);
+        if (draft.language !== c.locale) markFallback(draft.language);
+        const text = draft.value.replace('{n}', number).replace('{total}', PHOTOS);
+        if (draft.language !== c.locale) c.draftLanguages.set(text, draft.language);
+        return text;
+      },
       lower: () => { if (s.panel !== 'peek') set({ panel: s.panel === 'full' ? 'half' : 'peek', list: s.panel === 'full' && s.list }); },
     };
-    const view = () => render(c);
+    const view = () => {
+      render(c);
+      markDraftLanguages(root, c.draftLanguages);
+    };
     s.views.add(view);
     view();
     return () => s.views.delete(view);

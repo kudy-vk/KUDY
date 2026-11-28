@@ -3,7 +3,7 @@
 // знаходкі», comfort, help and data — and the separate exclusions screen of
 // «Гіды для мяне» (S2). Choices made inside the phone are real: they redraw
 // both phones, because both show the same app with one stored preference.
-import { button, el, icon, LOCALES, mountBoard, registerIcons, topbar, walkButton } from './kit.mjs';
+import { button, el, icon, LOCALES, markDraftLanguages, mountBoard, registerIcons, resolveDraftString, topbar, walkButton } from './kit.mjs';
 
 // Lucide shapes this screen alone needs (lucide-react-native, ISC).
 registerIcons({
@@ -105,8 +105,15 @@ await mountBoard({
     { id: 'sounds', label: 'Гукі дракона', options: [['no', 'Не выпушчаныя'], ['yes', 'Выпушчаныя']] },
   ],
   stringIds: [BACK, WALK, LANGUAGE, SOON, PRIVACY],
-  build({ frame, body, theme, state, strings, say }) {
-    const t = (key, values = {}) => T[key][ORDER.indexOf(state.locale)].replace(/\$\{(\w+)\}/g, (_, name) => values[name]);
+  build({ frame, body, theme, state, strings, say, markFallback }) {
+    const draftLanguages = new Map();
+    const t = (key, values = {}) => {
+      const draft = resolveDraftString(T[key], state.locale, ORDER);
+      if (draft.language !== state.locale) markFallback(draft.language);
+      const text = draft.value.replace(/\$\{(\w+)\}/g, (_, name) => values[name]);
+      if (draft.language !== state.locale) draftLanguages.set(text, draft.language);
+      return text;
+    };
     const act = (text, focus, control, value) => apply(text, theme, focus, control, value);
     const walk = state.walk === 'yes' && walkButton(strings[WALK], () => say(`Вяртанне да бягучай прагулкі («${strings[WALK]}»): панэль у ранейшым становішчы.`));
     const hidden = prefs.hidden.size;
@@ -119,9 +126,11 @@ await mountBoard({
 
     if (state.view === 'guides') {
       // The exclusions screen: everything is shown by default, a pressed chip hides its group.
+      const hideHeading = heading(t('hide'));
+      hideHeading.id = `settings-guides-label-${theme}`;
       const chips = el('div', { className: 'chips' }, ...Object.entries(TAGS).map(([id, name]) => {
         const off = prefs.hidden.has(id);
-        const chip = el('button', { className: 'chip', type: 'button' }, off && icon('eye-off', 16), name);
+        const chip = el('button', { className: 'chip', type: 'button', lang: 'be' }, off && icon('eye-off', 16), name);
         chip.setAttribute('aria-pressed', String(off));
         chip.dataset.key = `tag-${id}`;
         chip.addEventListener('click', () => {
@@ -131,10 +140,12 @@ await mountBoard({
         return chip;
       }));
       chips.setAttribute('role', 'group');
-      chips.setAttribute('aria-label', t('hide'));
-      content.append(heading(t('hide')), chips, el('p', { className: 'hide-status', textContent: guidesStatus }),
-        hidden > 0 && button(t('reset'), { onPress: () => { prefs.hidden.clear(); act('Нічога не схавана: зноў паказваюцца ўсе гіды.', '.chip'); } }),
-        el('p', { className: 't-small keep', textContent: t('keep') }));
+      chips.setAttribute('aria-labelledby', hideHeading.id);
+      content.append(hideHeading, chips, el('p', { className: 'hide-status', textContent: guidesStatus }));
+      if (hidden > 0) {
+        content.append(button(t('reset'), { onPress: () => { prefs.hidden.clear(); act('Нічога не схавана: зноў паказваюцца ўсе гіды.', '.chip'); } }));
+      }
+      content.append(el('p', { className: 't-small keep', textContent: t('keep') }));
     } else {
       // 1. Language: self-names; the choice changes the interface at once.
       const languages = el('div', { className: 'chips' }, ...Object.entries(LOCALES).map(([code, name]) => {
@@ -157,7 +168,9 @@ await mountBoard({
         return option;
       }));
       segments.setAttribute('role', 'radiogroup');
-      segments.setAttribute('aria-label', t('look'));
+      const appearanceHeading = heading(t('look'));
+      appearanceHeading.id = `settings-appearance-label-${theme}`;
+      segments.setAttribute('aria-labelledby', appearanceHeading.id);
 
       // 4. «Мае знаходкі»: shown in the first release as a «soon» placeholder (S3).
       const finds = row('gem', t('finds'), { note: t('findsReason'), trailing: el('span', { className: 'tag' }, icon('hourglass', 12), strings[SOON]) });
@@ -171,7 +184,7 @@ await mountBoard({
           trailing: icon('chevron-right', 20),
           onPress: () => say('Адкрываецца тлумачэнне: мова гісторый выбіраецца для гіда асобна. Бягучую прагулку гэта не пераключае.'),
         })),
-        heading(t('look')),
+        appearanceHeading,
         // The control alone: the screen itself shows which theme is on, and nothing shifts when the choice changes.
         el('div', { className: 'card theme' }, segments),
         // 3. «Гіды для мяне»: the summary; the exclusions live on their own screen.
@@ -216,6 +229,7 @@ await mountBoard({
         right: walk ? [walk] : [],
       }),
       scroller);
+    markDraftLanguages(body, draftLanguages);
 
     // After a choice: keep the place, the focus and the report of what happened.
     const place = `${theme}:${state.view}`;
