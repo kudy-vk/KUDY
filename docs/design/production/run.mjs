@@ -391,10 +391,10 @@ await mountBoard({
       root, s, set, sync, say, strings, locale: state.locale, ad: state.ad === 'loaded', draftLanguages: new Map(),
       w: (key) => strings[RUN(key)],
       n: (key, number) => {
-        const draft = resolveDraftString(NEW[key], state.locale);
-        if (draft.language !== state.locale) markFallback(draft.language);
+        const draft = resolveDraftString(NEW[key], c.locale);
+        if (draft.language !== c.locale) markFallback(draft.language);
         const text = draft.value.replace('{n}', number).replace('{total}', PHOTOS);
-        if (draft.language !== state.locale) c.draftLanguages.set(text, draft.language);
+        if (draft.language !== c.locale) c.draftLanguages.set(text, draft.language);
         return text;
       },
       lower: () => { if (s.panel !== 'peek') set({ panel: s.panel === 'full' ? 'half' : 'peek', list: s.panel === 'full' && s.list }); },
